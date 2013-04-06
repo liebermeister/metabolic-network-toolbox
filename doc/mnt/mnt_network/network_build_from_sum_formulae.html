@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_build_from_sum_formulae</title>
+  <meta name="keywords" content="network_build_from_sum_formulae">
+  <meta name="description" content="network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="index.html">mnt_network</a> &gt; network_build_from_sum_formulae.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>network_build_from_sum_formulae
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)
+
+ build matlab network network structure from reactions contained in file
+
+ attention: the syntax of the sum formulas is very strict
+ example: 'A + 2 B &lt;=&gt; C'
+ the metabolite names must not contain any spaces; double spaces or missing 
+ spaces will not be recognised
+
+ to import the data directly from a matlab structure, the arguments 
+ 'filename_reactions' 'filename_compounds' need to be empty 
+ and the formulas have to be given in 'columns.SumFormula'; 
+ other network entries can also be given</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="sbtab_to_network.html" class="code" title="function [network, kinetic_data] = sbtab_to_network(filename,options)">sbtab_to_network</a>	function network = sbtab_to_network(filename,kinetic_law)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [rstoic,rmetab] = analyse_regulation(regulation)</a></li><li><a href="#_sub2" class="code">function [sstoic,smetab] = analyse_one_side(substrate_side)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</a>
+0002 
+0003 <span class="comment">% network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% build matlab network network structure from reactions contained in file</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% attention: the syntax of the sum formulas is very strict</span>
+0008 <span class="comment">% example: 'A + 2 B &lt;=&gt; C'</span>
+0009 <span class="comment">% the metabolite names must not contain any spaces; double spaces or missing</span>
+0010 <span class="comment">% spaces will not be recognised</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% to import the data directly from a matlab structure, the arguments</span>
+0013 <span class="comment">% 'filename_reactions' 'filename_compounds' need to be empty</span>
+0014 <span class="comment">% and the formulas have to be given in 'columns.SumFormula';</span>
+0015 <span class="comment">% other network entries can also be given</span>
+0016 
+0017 eval(default(<span class="string">'filename_compounds'</span>,<span class="string">'[]'</span>,<span class="string">'columns'</span>,<span class="string">'[]'</span>));
+0018 
+0019 <span class="keyword">if</span> length(filename_reactions), 
+0020   reaction_table = sbtab_load_table(filename_reactions); 
+0021   columns        = reaction_table.column.column;
+0022   <span class="keyword">if</span> length(filename_compounds), 
+0023     compound_table   = sbtab_load_table(filename_compounds); 
+0024     compound_columns = compound_table.column.column;
+0025   <span class="keyword">end</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 metab_collect = {};
+0029 
+0030 <span class="keyword">for</span> it = 1:length(columns.SumFormula),
+0031   sum_formula              = columns.SumFormula{it};
+0032   <span class="keyword">if</span> sum(findstr(sum_formula,<span class="string">','</span>)) + sum(findstr(sum_formula,<span class="string">'-'</span>)),
+0033     error(sprintf(<span class="string">'Malformed formula &quot;%s&quot;'</span>,sum_formula));
+0034   <span class="keyword">end</span>
+0035   pos                      = findstr(sum_formula,<span class="string">'&lt;=&gt;'</span>);
+0036   substrate_side           = [sum_formula(1:pos-2) <span class="string">' + '</span>];
+0037   product_side             = [sum_formula(pos+4:end) <span class="string">' + '</span>];
+0038   [sstoich{it},smetab{it}] = <a href="#_sub2" class="code" title="subfunction [sstoic,smetab] = analyse_one_side(substrate_side)">analyse_one_side</a>(substrate_side);
+0039   [pstoich{it},pmetab{it}] = <a href="#_sub2" class="code" title="subfunction [sstoic,smetab] = analyse_one_side(substrate_side)">analyse_one_side</a>(product_side);
+0040   metab_collect            = [metab_collect; column(smetab{it}); column(pmetab{it})];
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> isfield(columns,<span class="string">'MetabolicRegulation'</span>),
+0044   <span class="keyword">for</span> it = 1:length(columns.MetabolicRegulation),
+0045     regulation_formula       = columns.MetabolicRegulation{it};
+0046     [rstoich{it,1},rmetab{it,1}] = <a href="#_sub1" class="code" title="subfunction [rstoic,rmetab] = analyse_regulation(regulation)">analyse_regulation</a>(regulation_formula);
+0047   <span class="keyword">end</span>
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">if</span> exist(<span class="string">'compound_columns'</span>,<span class="string">'var'</span>),
+0051   metabolites = compound_columns.Compound;
+0052 <span class="keyword">else</span>,  
+0053   metabolites = unique(metab_collect);
+0054 <span class="keyword">end</span>
+0055 
+0056 N = zeros(length(metabolites),length(columns.SumFormula));
+0057 <span class="keyword">for</span> it = 1:length(columns.SumFormula),
+0058   ls = label_names(smetab{it},metabolites);
+0059   lp = label_names(pmetab{it},metabolites);
+0060   <span class="keyword">if</span> sum([ls;lp]==0),   
+0061     table(smetab{it}')
+0062     table(pmetab{it}')
+0063     error(sprintf(<span class="string">'Unknown substance'</span>)); 
+0064   <span class="keyword">end</span>
+0065   N(ls,it) = - sstoich{it};
+0066   N(lp,it) = pstoich{it};
+0067 <span class="keyword">end</span>
+0068 
+0069 regulation_matrix = zeros(length(columns.SumFormula),length(metabolites));
+0070 
+0071 <span class="keyword">if</span> isfield(columns,<span class="string">'MetabolicRegulation'</span>),
+0072 <span class="keyword">for</span> it = 1:length(columns.SumFormula),
+0073   l = label_names(rmetab{it},metabolites);
+0074   regulation_matrix(it,l) = rstoich{it};
+0075 <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="keyword">if</span> exist(<span class="string">'compound_columns'</span>,<span class="string">'var'</span>),
+0079   ll = label_names(metabolites,compound_columns.Compound);
+0080   <span class="keyword">if</span> isfield(compound_columns,<span class="string">'External'</span>),
+0081     external_ind = find(cell_string2num(compound_columns.External(ll)));
+0082   <span class="keyword">else</span>
+0083   external_ind = [];
+0084   <span class="keyword">end</span>
+0085 <span class="keyword">else</span>, 
+0086   external_ind = [];
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> isfield(columns,<span class="string">'Reaction'</span>),
+0090   actions = columns.Reaction;
+0091 <span class="keyword">else</span>
+0092   actions = numbered_names(<span class="string">'R'</span>,length(columns.SumFormula));
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="keyword">if</span> isfield(columns,<span class="string">'IsReversible'</span>),
+0096   reversible = cell_string2num(columns.IsReversible);
+0097 <span class="keyword">else</span>
+0098   reversible = ones(length(actions),1);
+0099 <span class="keyword">end</span>
+0100 
+0101 network = <a href="network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>(N,reversible,external_ind,metabolites,actions,0,regulation_matrix);
+0102 network.formulae = columns.SumFormula;
+0103 
+0104 <span class="keyword">if</span> exist(<span class="string">'compound_columns'</span>,<span class="string">'var'</span>),
+0105   <span class="keyword">if</span> isfield(compound_columns,<span class="string">'SBML__species__ID'</span>),
+0106     network.sbml_id_species  = compound_columns.SBML__species__ID(ll);
+0107   <span class="keyword">end</span>
+0108   <span class="keyword">if</span> isfield(compound_columns,<span class="string">'Name'</span>),
+0109     network.metabolite_names  = compound_columns.Name(ll);
+0110   <span class="keyword">end</span>
+0111   <span class="keyword">if</span> isfield(compound_columns,<span class="string">'MiriamID__urn_miriam_kegg_compound'</span>),
+0112     network.metabolite_KEGGID = compound_columns.MiriamID__urn_miriam_kegg_compound(ll);
+0113   <span class="keyword">end</span>
+0114   <span class="keyword">if</span> isfield(compound_columns,<span class="string">'IsCofactor'</span>),
+0115     network.is_cofactor = cell_string2num(compound_columns.IsCofactor(ll));
+0116   <span class="keyword">end</span>
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="keyword">if</span> isfield(columns,<span class="string">'Name'</span>),
+0120   network.reaction_names  = columns.Name;
+0121 <span class="keyword">end</span>
+0122 <span class="keyword">if</span> isfield(columns,<span class="string">'Gene'</span>),
+0123   network.genes  = columns.Gene;
+0124 <span class="keyword">end</span>
+0125 <span class="keyword">if</span> isfield(columns,<span class="string">'SBML__reaction__ID'</span>),
+0126   network.sbml_id_reaction  = columns.SBML__reaction__ID;
+0127 <span class="keyword">end</span>
+0128 <span class="keyword">if</span> isfield(columns,<span class="string">'MiriamID__urn_miriam_kegg_reaction'</span>),
+0129   network.reaction_KEGGID = columns.MiriamID__urn_miriam_kegg_reaction;
+0130 <span class="keyword">end</span>
+0131 <span class="keyword">if</span> isfield(columns,<span class="string">'MiriamID__urn_miriam_ec_code'</span>),
+0132   network.EC = columns.MiriamID__urn_miriam_ec_code;
+0133 <span class="keyword">end</span>
+0134 
+0135 network.formulae = columns.SumFormula;
+0136 
+0137 network = join_struct(network,columns);
+0138 
+0139 <span class="keyword">if</span> exist(<span class="string">'compound_columns'</span>,<span class="string">'var'</span>),
+0140   network = join_struct(network,compound_columns);
+0141 <span class="keyword">end</span>
+0142 
+0143 <a name="_sub1" href="#_subfunctions" class="code">function [rstoic,rmetab] = analyse_regulation(regulation)</a>
+0144 
+0145 rstoic = [];
+0146 rmetab = [];
+0147 dum = [<span class="string">' '</span> regulation];
+0148 dum = strrep(dum,<span class="string">' + '</span>,<span class="string">' | '</span>);
+0149 dum = strrep(dum,<span class="string">' - '</span>,<span class="string">' | '</span>);
+0150 signs = regulation(findstr(dum,<span class="string">'|'</span>)-1);
+0151 <span class="keyword">for</span> it = 1:length(signs), 
+0152   <span class="keyword">if</span> strcmp(signs(it),<span class="string">'+'</span>), rstoic(it)  =  1; <span class="keyword">end</span>
+0153   <span class="keyword">if</span> strcmp(signs(it),<span class="string">'-'</span>), rstoic(it)  = -1; <span class="keyword">end</span>
+0154 <span class="keyword">end</span>
+0155 
+0156 A = strsplit(<span class="string">' | '</span>,dum); rmetab = A(2:end)';
+0157 
+0158 <a name="_sub2" href="#_subfunctions" class="code">function [sstoic,smetab] = analyse_one_side(substrate_side)</a>
+0159 
+0160 spos = findstr(substrate_side, <span class="string">' + '</span>);
+0161 it2 = 1;
+0162 clear sterm
+0163 <span class="keyword">while</span> length(spos),
+0164   <span class="keyword">try</span>
+0165   sterm{it2} = substrate_side(1:spos(1)-1);
+0166     wpos = findstr(sterm{it2},<span class="string">' '</span>);
+0167     <span class="keyword">if</span> wpos, 
+0168       sstoic(it2) = eval(sterm{it2}(1:wpos(1)-1));
+0169       smetab{it2} = sterm{it2}(wpos(1)+1:end);
+0170     <span class="keyword">else</span>,       
+0171       sstoic(it2) = 1;
+0172       smetab{it2} = sterm{it2};
+0173     <span class="keyword">end</span>
+0174     substrate_side = substrate_side(spos(1)+3:end);
+0175     spos = findstr(substrate_side, <span class="string">' + '</span>);
+0176     it2 = it2+1;
+0177   <span class="keyword">catch</span>
+0178     substrate_side(1:spos(1)-1)
+0179     error(<span class="string">'Parsing error'</span>);
+0180   <span class="keyword">end</span>
+0181 <span class="keyword">end</span>
+0182</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

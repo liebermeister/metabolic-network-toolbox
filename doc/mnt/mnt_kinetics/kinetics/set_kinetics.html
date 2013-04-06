@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of set_kinetics</title>
+  <meta name="keywords" content="set_kinetics">
+  <meta name="description" content="kinetics = set_kinetics(network,type,parameters)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">kinetics</a> &gt; set_kinetics.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/kinetics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>set_kinetics
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>kinetics = set_kinetics(network,type,parameters)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function kinetics = set_kinetics(network,type,parameters) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> kinetics = set_kinetics(network,type,parameters)
+
+ construct a 'kinetics' field for a metabolic network
+
+ type can be {'mass-action','standard','numeric'}
+ depending on the type, this function calls one of the following m-files
+  set_mass_action_kinetics
+  set_numeric_kinetics
+  set_standard_kinetics,
+
+ parameters: structure containing parameters to be used for the kinetics
+ the subfields required depend on the kinetics type
+ (see the respective functions)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_kinetics/convenience/set_convenience_kinetics.html" class="code" title="function kinetics = set_convenience_kinetics(network,parameters)">set_convenience_kinetics</a>	kinetics = set_convenience_kinetics(network,parameters)</li><li><a href="../../../mnt/mnt_kinetics/mass_action/set_mass_action_kinetics.html" class="code" title="function kinetics = set_mass_action_kinetics(network,parameters)">set_mass_action_kinetics</a>	kinetics = set_mass_action_kinetics(network,parameters)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/set_cs_kinetics.html" class="code" title="function kinetics = set_cs_kinetics(network,parameters)">set_cs_kinetics</a>	kinetics = set_cs_kinetics(network,parameters)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/dm_rate_law/set_ds_kinetics.html" class="code" title="function kinetics = set_ds_kinetics(network,parameters)">set_ds_kinetics</a>	kinetics = set_ds_kinetics(network,parameters)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/pm_rate_law/set_rp_kinetics.html" class="code" title="function kinetics = set_rp_kinetics(network,parameters)">set_rp_kinetics</a>	kinetics = set_rp_kinetics(network,parameters)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/set_ms_kinetics.html" class="code" title="function kinetics = set_ms_kinetics(network,parameters)">set_ms_kinetics</a>	kinetics = set_ms_kinetics(network,parameters)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li><li><a href="../../../mnt/mnt_graphics/netgraph_define_module.html" class="code" title="function [m,n] = netgraph_define_module(network)">netgraph_define_module</a>	m = netgraph_define_module(network)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/sbtab_to_modular_rate_law.html" class="code" title="function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)">sbtab_to_modular_rate_law</a>	[kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)</li><li><a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% kinetics = set_kinetics(network,type,parameters)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% construct a 'kinetics' field for a metabolic network</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% type can be {'mass-action','standard','numeric'}</span>
+0006 <span class="comment">% depending on the type, this function calls one of the following m-files</span>
+0007 <span class="comment">%  set_mass_action_kinetics</span>
+0008 <span class="comment">%  set_numeric_kinetics</span>
+0009 <span class="comment">%  set_standard_kinetics,</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% parameters: structure containing parameters to be used for the kinetics</span>
+0012 <span class="comment">% the subfields required depend on the kinetics type</span>
+0013 <span class="comment">% (see the respective functions)</span>
+0014 
+0015 <a name="_sub0" href="#_subfunctions" class="code">function kinetics = set_kinetics(network,type,parameters)</a>
+0016 
+0017 <span class="keyword">if</span> ~exist(<span class="string">'parameters'</span>,<span class="string">'var'</span>), parameters = []; <span class="keyword">end</span>
+0018 <span class="keyword">if</span> ~exist(<span class="string">'type'</span>,<span class="string">'var'</span>),       type = <span class="string">'mass-action'</span>; <span class="keyword">end</span> 
+0019 
+0020 <span class="keyword">switch</span> type,
+0021   <span class="keyword">case</span> <span class="string">'mass-action'</span>,      kinetics = <a href="../../../mnt/mnt_kinetics/mass_action/set_mass_action_kinetics.html" class="code" title="function kinetics = set_mass_action_kinetics(network,parameters)">set_mass_action_kinetics</a>(network,parameters);
+0022   <span class="keyword">case</span> <span class="string">'standard'</span>,         kinetics = set_standard_kinetics(network,parameters);
+0023   <span class="keyword">case</span> <span class="string">'ready_made'</span>,       parameters.ready_made = 1; kinetics = set_standard_kinetics(network,parameters);
+0024   <span class="keyword">case</span> <span class="string">'numeric'</span>,  kinetics = set_numeric_kinetics(network,parameters);
+0025   <span class="keyword">case</span> <span class="string">'convenience'</span>,      kinetics = <a href="../../../mnt/mnt_kinetics/convenience/set_convenience_kinetics.html" class="code" title="function kinetics = set_convenience_kinetics(network,parameters)">set_convenience_kinetics</a>(network,parameters);
+0026   <span class="keyword">case</span> <span class="string">'cs'</span>,               kinetics = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/set_cs_kinetics.html" class="code" title="function kinetics = set_cs_kinetics(network,parameters)">set_cs_kinetics</a>(network,parameters);
+0027   <span class="keyword">case</span> <span class="string">'ds'</span>,               kinetics = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/dm_rate_law/set_ds_kinetics.html" class="code" title="function kinetics = set_ds_kinetics(network,parameters)">set_ds_kinetics</a>(network,parameters);
+0028   <span class="keyword">case</span> <span class="string">'ms'</span>,               kinetics = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/set_ms_kinetics.html" class="code" title="function kinetics = set_ms_kinetics(network,parameters)">set_ms_kinetics</a>(network,parameters);
+0029   <span class="keyword">case</span> <span class="string">'rp'</span>,               kinetics = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/pm_rate_law/set_rp_kinetics.html" class="code" title="function kinetics = set_rp_kinetics(network,parameters)">set_rp_kinetics</a>(network,parameters);
+0030   <span class="keyword">case</span> <span class="string">'fd'</span>,               kinetics = set_fd_kinetics(network,parameters);
+0031   <span class="keyword">otherwise</span>,  error(<span class="string">'rate law unknown'</span>);
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

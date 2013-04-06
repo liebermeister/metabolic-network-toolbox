@@ -1,0 +1,1 @@
+% Functions for rate laws of type 'numeric' (with rate law formulae given by strings) 

@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of numerical_elasticities</title>
+  <meta name="keywords" content="numerical_elasticities">
+  <meta name="description" content="[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">util</a> &gt; numerical_elasticities.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>numerical_elasticities
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);
+
+ calculate the first- and second-order elasticities
+
+ x                : variables       (vector)
+ p                : parameters      (structure array)
+ velocity_function: function handle to kinetics function</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% calculate the first- and second-order elasticities</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% x                : variables       (vector)</span>
+0006 <span class="comment">% p                : parameters      (structure array)</span>
+0007 <span class="comment">% velocity_function: function handle to kinetics function</span>
+0008 
+0009 <a name="_sub0" href="#_subfunctions" class="code">function [epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</a>
+0010 
+0011 v = feval(velocity_function,x,p);
+0012 
+0013 <span class="keyword">for</span> i=1:length(x), dx(i) =  max(x(i)*0.01,0.001); <span class="keyword">end</span>  
+0014 
+0015 f=fields(p);
+0016 
+0017 <span class="keyword">for</span> i=1:length(f), p_i = getfield(p,f{i}); dp(i) = max(p_i * 0.001,0.001); <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">for</span> i=1:length(x),
+0020     dx_i     = zeros(size(x));
+0021     dx_i(i)  = dx(i);
+0022     vv_plus  = feval(velocity_function,x+dx_i,p);
+0023     vv_minus = feval(velocity_function,x-dx_i,p);
+0024     epsilon_1(:,i) = (vv_plus - vv_minus) / (2 * dx_i(i));
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">for</span> i=1:length(f)
+0028   p_i  = getfield(p,f{i});
+0029   dp_i = dp(i);
+0030   vv_plus  = feval(velocity_function,x,setfield(p,f{i}, p_i + dp_i ));
+0031   vv_minus = feval(velocity_function,x,setfield(p,f{i}, p_i - dp_i ));
+0032   pi_1(:,i) = (vv_plus - vv_minus) / ( 2 * dp_i );
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">if</span> nargout&gt;2,
+0036 
+0037 <span class="comment">% --- epsilon_2</span>
+0038 
+0039 <span class="keyword">for</span> i=1:length(x),
+0040   dx_i = zeros(size(x));
+0041   dx_i(i) = dx(i);
+0042   
+0043   <span class="keyword">for</span> k=i:length(x),
+0044     dx_k = zeros(size(x));
+0045     dx_k(k) = dx(k);
+0046     vv_plus  = feval(velocity_function,x+dx_i+dx_k,p);
+0047     vv_minus = feval(velocity_function,x-dx_i-dx_k,p);
+0048     h(:,i,k) = ( vv_plus - 2 * v + vv_minus ) / 2;
+0049     h(:,k,i) = h(:,i,k);
+0050   <span class="keyword">end</span>
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">for</span> i=1:length(x),
+0054   epsilon_2(:,i,i)= h(:,i,i) / (4 * dx(i)^2 );
+0055   <span class="keyword">for</span> k=1:i-1;
+0056     epsilon_2(:,i,k) = ( h(:,i,k) - 1/4 * h(:,i,i) - 1/4 * h(:,k,k) ) / ( 2 * dx(i) * dx(k) );
+0057     epsilon_2(:,k,i) = epsilon_2(:,i,k);
+0058   <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% --- pi_2</span>
+0062 
+0063 clear h
+0064   
+0065 <span class="keyword">for</span> i=1:length(f)
+0066   p_i  = getfield(p,f{i});
+0067   dp_i = dp(i);
+0068 
+0069   <span class="keyword">for</span> k=i:length(f)
+0070     p_k  = getfield(p,f{k});
+0071     dp_k = dp(k);
+0072     vv_plus  = feval(velocity_function,x,setfield(setfield(p,f{i}, p_i + dp_i ),f{k}, p_k + dp_k ));
+0073     vv_minus = feval(velocity_function,x,setfield(setfield(p,f{i}, p_i - dp_i ),f{k}, p_k - dp_k ));
+0074     h(:,i,k) = 2 * ( vv_plus - 2*v + vv_minus ) / 2;
+0075     h(:,k,i) = h(:,i,k);
+0076   <span class="keyword">end</span>
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">for</span> i=1:length(f)
+0080   pi_2(:,i,i)= h(:,i,i) / ( 4 * dp(i)^2 );
+0081   <span class="keyword">for</span> k=1:i-1
+0082     pi_2(:,i,k) = ( h(:,i,k) - h(:,i,i) - h(:,k,k) ) / ( 2 * dp(i) * dp(k) );
+0083     pi_2(:,k,i) = pi_2(:,i,k);
+0084   <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 
+0088 <span class="comment">% --- rho_2</span>
+0089 
+0090 clear h
+0091 
+0092 <span class="keyword">for</span> i=1:length(x)
+0093   dx_i    = zeros(size(x));
+0094   dx_i(i) = dx(i);
+0095 
+0096   <span class="keyword">for</span> k=1:length(f)
+0097    p_k = getfield(p,f{k});
+0098    vv_plus  = feval(velocity_function, x+dx_i, setfield(p,f{k}, p_k + dp(k) ));
+0099    vv_minus = feval(velocity_function, x-dx_i, setfield(p,f{k}, p_k - dp(k) ));
+0100    h(:,i,k) = ( vv_plus - 2 * v + vv_minus ) / 2;
+0101   <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 
+0104 <span class="keyword">for</span> i=1:length(x)
+0105   <span class="keyword">for</span> k=1:length(f)
+0106     rho_2(:,i,k) = ( 2 * h(:,i,k) - epsilon_2(:,i,i) * dx(i)^2 - pi_2(:,k,k) * dp(k)^2 ) / ( 2 * dx(i) * dp(k) );
+0107    <span class="keyword">end</span>
+0108 <span class="keyword">end</span>
+0109  
+0110 <span class="comment">% set small values to zero</span>
+0111 
+0112 epsilon_2( find( abs( epsilon_2)&lt;(10^-10))) = 0;
+0113 pi_2(find(abs(pi_2)&lt;(10^-10)))              = 0;
+0114 rho_2(find(abs(rho_2)&lt;(10^-10)))            = 0;
+0115 
+0116 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

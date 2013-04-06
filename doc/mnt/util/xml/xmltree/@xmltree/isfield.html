@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of isfield</title>
+  <meta name="keywords" content="isfield">
+  <meta name="description" content="XMLTREE/ISFIELD Is parameter a field of tree{uid} ?">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; isfield.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>isfield
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/ISFIELD Is parameter a field of tree{uid} ?</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function F = isfield(tree,uid,parameter) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/ISFIELD Is parameter a field of tree{uid} ?
+ FORMAT F = isfield(tree,uid,parameter)
+
+ tree      - a tree
+ uid       - uid of the element
+ parameter - a field of the root tree
+ F         - 1 if present, 0 otherwise
+_______________________________________________________________________
+
+ Is parameter a field of tree{uid} ?
+_______________________________________________________________________
+ @(#)isfield.m               Guillaume Flandin                01/10/31</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>	XMLTREE/ISFIELD Is parameter a field of tree{uid} ?</li><li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="add.html" class="code" title="function varargout = add(tree,uid,type,parameter)">add</a>	XMLTREE/ADD Method (add childs to elements of an XML Tree)</li><li><a href="branch.html" class="code" title="function subtree = branch(tree,uid)">branch</a>	XMLTREE/BRANCH Branch Method</li><li><a href="convert.html" class="code" title="function s = convert(tree,uid)">convert</a>	XMLTREE/CONVERT Converter an XML tree in a Matlab structure</li><li><a href="copy.html" class="code" title="function tree = copy(tree,subuid,uid)">copy</a>	XMLTREE/COPY Copy Method (copy a subtree in another branch)</li><li><a href="delete.html" class="code" title="function tree = delete(tree,uid)">delete</a>	XMLTREE/DELETE Delete (delete a subtree given its UID)</li><li><a href="find.html" class="code" title="function list = find(varargin)">find</a>	XMLTREE/FIND Find elements in a tree with specified characteristics</li><li><a href="flush.html" class="code" title="function tree = flush(tree,uid)">flush</a>	XMLTREE/FLUSH Flush (Clear a subtree given its UID)</li><li><a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>	XMLTREE/ISFIELD Is parameter a field of tree{uid} ?</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function F = isfield(tree,uid,parameter)</a>
+0002 <span class="comment">% XMLTREE/ISFIELD Is parameter a field of tree{uid} ?</span>
+0003 <span class="comment">% FORMAT F = isfield(tree,uid,parameter)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree      - a tree</span>
+0006 <span class="comment">% uid       - uid of the element</span>
+0007 <span class="comment">% parameter - a field of the root tree</span>
+0008 <span class="comment">% F         - 1 if present, 0 otherwise</span>
+0009 <span class="comment">%_______________________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Is parameter a field of tree{uid} ?</span>
+0012 <span class="comment">%_______________________________________________________________________</span>
+0013 <span class="comment">% @(#)isfield.m               Guillaume Flandin                01/10/31</span>
+0014 
+0015 error(nargchk(3,3,nargin));
+0016 
+0017 F = zeros(1,<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(uid));
+0018 <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(uid)
+0019     <span class="keyword">if</span> <a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>(tree.tree{uid(i)},parameter)
+0020         F(i) = 1;
+0021     <span class="keyword">end</span>
+0022 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

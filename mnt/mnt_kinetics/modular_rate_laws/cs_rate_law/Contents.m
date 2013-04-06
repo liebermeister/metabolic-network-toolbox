@@ -1,0 +1,1 @@
+% Functions for common modular rate law

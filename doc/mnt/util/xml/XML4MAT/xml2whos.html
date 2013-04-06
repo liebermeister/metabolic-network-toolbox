@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xml2whos</title>
+  <meta name="keywords" content="xml2whos">
+  <meta name="description" content="XML2WHOS identifies WHOS-type structured variable from xml descriptor">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">XML4MAT</a> &gt; xml2whos.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/XML4MAT&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>xml2whos
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>XML2WHOS identifies WHOS-type structured variable from xml descriptor</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function w=xml2whos(w_xml) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">XML2WHOS identifies WHOS-type structured variable from xml descriptor
+
+Syntax: w=xml2whos(w_xml)
+
+Description
+ w is a structured variable with the information that would have benn
+   returned by a WHOS command of the structured variable
+ w_xml is the corresponding xml descriptor, e.g. '&lt;name class size&gt;'
+
+ See Also: <a href="xml2mat.html" class="code" title="function [MAT,VARNAME,tag_contents]=xml2mat(XML)">xml2mat</a>, whos
+
+ Jonas Almeida, almeidaj@mussc.edu, 20 Aug 2002, XML4MAT Tbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="xml2mat.html" class="code" title="function [MAT,VARNAME,tag_contents]=xml2mat(XML)">xml2mat</a>	XML2MAT converts XML string into matlab structure variable</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function w=xml2whos(w_xml)</a>
+0002 
+0003 <span class="comment">%XML2WHOS identifies WHOS-type structured variable from xml descriptor</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%Syntax: w=xml2whos(w_xml)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%Description</span>
+0008 <span class="comment">% w is a structured variable with the information that would have benn</span>
+0009 <span class="comment">%   returned by a WHOS command of the structured variable</span>
+0010 <span class="comment">% w_xml is the corresponding xml descriptor, e.g. '&lt;name class size&gt;'</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% See Also: xml2mat, whos</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Jonas Almeida, almeidaj@mussc.edu, 20 Aug 2002, XML4MAT Tbox</span>
+0015 
+0016 w_xml=[w_xml,<span class="string">' '</span>];
+0017 <span class="comment">% extract name</span>
+0018 i=1;<span class="keyword">while</span> ~isspace(w_xml(i));i=i+1;<span class="keyword">end</span>;w.name=w_xml(1:i-1);
+0019 <span class="comment">% extract properties</span>
+0020 i=i+1;i_1=i;is_value=0;
+0021 <span class="keyword">while</span> i&lt;length(w_xml)
+0022     <span class="keyword">while</span> ((~isspace(w_xml(i)))|is_value);i=i+1;<span class="keyword">if</span> w_xml(i)==<span class="string">'&quot;'</span>;is_value=~is_value;<span class="keyword">end</span>;<span class="keyword">end</span>;i_end=i-1;descrp=w_xml(i_1:i_end); <span class="comment">% extract description</span>
+0023     j=1;<span class="keyword">while</span> descrp(j)~=<span class="string">'='</span>;j=j+1;<span class="keyword">end</span>;propt=descrp(1:j-1); <span class="comment">%extract property name</span>
+0024     j=j+1;<span class="keyword">if</span> descrp(j)~=<span class="string">'&quot;'</span>;error([<span class="string">'XML error 03: property value is not delimited by &quot; &quot; :'</span>,w_xml]);<span class="keyword">end</span>;j=j+1;
+0025     j_1=j;<span class="keyword">while</span> descrp(j)~=<span class="string">'&quot;'</span>;j=j+1;<span class="keyword">end</span>;j_end=j-1;propt_value=descrp(j_1:j_end); <span class="comment">%extract property value</span>
+0026     <span class="comment">%disp(['descriptor: ',descrp]);disp(['name: ',propt]);disp(['value: ',propt_value])</span>
+0027     eval([<span class="string">'w.'</span>,propt,<span class="string">'='''</span>,propt_value,<span class="string">''';'</span>])
+0028     i=i+1;i_1=i;
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> isfield(w,<span class="string">'size'</span>);w.size=str2num(w.size);<span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

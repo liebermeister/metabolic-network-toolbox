@@ -1,0 +1,1 @@
+% Functions for direct binding modular rate law

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of response_coefficients_sparse</title>
+  <meta name="keywords" content="response_coefficients_sparse">
+  <meta name="description" content="[RS, RJ, RS2, RJ2] = response_coefficients_sparse(CS, Ec, Ep, Ecc, Ecp, Epp, split)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; response_coefficients_sparse.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>response_coefficients_sparse
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[RS, RJ, RS2, RJ2] = response_coefficients_sparse(CS, Ec, Ep, Ecc, Ecp, Epp, split)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [RS,RJ,RS2,RJ2] = response_coefficients_sparse(CS,Ec,Ep,Ecc,Ecp,Epp,split) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[RS, RJ, RS2, RJ2] = response_coefficients_sparse(CS, Ec, Ep, Ecc, Ecp, Epp, split)
+
+ Response coefficients (first and second order), using sparse tensors
+ for second order; otherwise same as 'response_coefficients'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/util/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>	C = tensor_product(A,B,index_A,index_B)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%[RS, RJ, RS2, RJ2] = response_coefficients_sparse(CS, Ec, Ep, Ecc, Ecp, Epp, split)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Response coefficients (first and second order), using sparse tensors</span>
+0004 <span class="comment">% for second order; otherwise same as 'response_coefficients'</span>
+0005 
+0006 <a name="_sub0" href="#_subfunctions" class="code">function [RS,RJ,RS2,RJ2] = response_coefficients_sparse(CS,Ec,Ep,Ecc,Ecp,Epp,split)</a>
+0007 
+0008 nr = size(CS,2);
+0009 CJ = eye(nr) + Ec * CS ;
+0010 
+0011 <span class="comment">% first order</span>
+0012 
+0013 RS    = CS * Ep;
+0014 RJ    = CJ * Ep;
+0015 
+0016 
+0017 <span class="comment">% second order</span>
+0018 
+0019 <span class="keyword">if</span> nargout &gt; 2,
+0020 
+0021   <span class="comment">%% convert back to full tensors</span>
+0022   <span class="comment">%% Ecc = double(full(Ecc));</span>
+0023   <span class="comment">%% Ecp = double(full(Ecp));</span>
+0024   <span class="comment">%%</span>
+0025   <span class="comment">%% Gamma =  ...</span>
+0026   <span class="comment">%%     tensor_product(tensor_product(Ecc,RS,3,1),RS,2,1) ...</span>
+0027   <span class="comment">%%     + tensor_product(Ecp,RS,2,1) ...</span>
+0028   <span class="comment">%%     + permute(tensor_product(Ecp,RS,2,1),[1,3,2])...</span>
+0029   <span class="comment">%%     + Epp;</span>
+0030 
+0031   <span class="comment">%% .. or go on computing with sparse tensors</span>
+0032   
+0033   Gamma = ttt(ttt(Ecc,sptensor(RS),2,1),sptensor(RS),2,1) <span class="keyword">...</span>
+0034           + ttt(Ecp,sptensor(RS),2,1) <span class="keyword">...</span>
+0035           + permute(ttt(Ecp,sptensor(RS),2,1),[1,3,2]) <span class="keyword">...</span>
+0036           + Epp;
+0037 
+0038   Gamma = double(full(Gamma));
+0039   
+0040   RS2 = <a href="../../mnt/util/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS,Gamma);
+0041   RJ2 = <a href="../../mnt/util/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ,Gamma);
+0042 
+0043 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

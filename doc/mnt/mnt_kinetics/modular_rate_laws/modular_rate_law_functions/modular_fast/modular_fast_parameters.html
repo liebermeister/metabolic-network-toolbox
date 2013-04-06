@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modular_fast_parameters</title>
+  <meta name="keywords" content="modular_fast_parameters">
+  <meta name="description" content="pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="../../../../index.html">mnt</a> &gt; <a href="../../../index.html">mnt_kinetics</a> &gt; <a href="../../index.html">modular_rate_laws</a> &gt; <a href="../index.html">modular_rate_law_functions</a> &gt; <a href="index.html">modular_fast</a> &gt; modular_fast_parameters.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_fast&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>modular_fast_parameters
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_compute_Kcat.html" class="code" title="function [Kplus,Kminus] = ms_compute_Kcat(N,KM,KV,Keq);">ms_compute_Kcat</a>	[Kplus,Kminus] = ms_compute_Kcat(N,KM,KV,Keq);</li><li><a href="../../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>	[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)</a>
+0002 
+0003 <span class="comment">% pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)</span>
+0004 
+0005 [pars.Mplus, pars.Mminus, pars.Wplus, pars.Wminus, nm, nr] = <a href="../../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(N,W,ind_ext,h);
+0006 
+0007 pars.nm = nm;
+0008 pars.nr = nr;
+0009 
+0010 pars.N = N;
+0011 
+0012 pars.KM = KM;
+0013 pars.KI = KI;
+0014 pars.KA = KA;
+0015 
+0016 pars.ind_KM        = find(pars.Mplus + pars.Mminus);
+0017 pars.ind_KA        = find(pars.Wplus);
+0018 pars.ind_KI        = find(pars.Wminus);
+0019 
+0020 [dummi,pars.ind_KM_metabolite_index] = ind2sub([nr,nm],pars.ind_KM);
+0021 [dummi,pars.ind_KA_metabolite_index] = ind2sub([nr,nm],pars.ind_KA);
+0022 [dummi,pars.ind_KI_metabolite_index] = ind2sub([nr,nm],pars.ind_KI);
+0023 
+0024 pars.KM_rel        = KM(pars.ind_KM);
+0025 pars.KA_rel        = KA(pars.ind_KA); 
+0026 pars.KI_rel        = KI(pars.ind_KI);
+0027 
+0028 pars.Keq = Keq;
+0029 
+0030 [pars.Kplus,pars.Kminus] = <a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_compute_Kcat.html" class="code" title="function [Kplus,Kminus] = ms_compute_Kcat(N,KM,KV,Keq);">ms_compute_Kcat</a>(N,KM,KV,Keq);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

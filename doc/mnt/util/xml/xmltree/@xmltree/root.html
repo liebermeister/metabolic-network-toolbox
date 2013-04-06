@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of root</title>
+  <meta name="keywords" content="root">
+  <meta name="description" content="XMLTREE/ROOT Root Method">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; root.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>root
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/ROOT Root Method</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function uid = root(tree) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/ROOT Root Method
+ FORMAT uid = root(tree)
+ 
+ tree   - XMLTree object
+ uid    - UID of the root element of tree
+_______________________________________________________________________
+
+ Return the uid of the root element of the tree.
+_______________________________________________________________________
+ @(#)root.m                   Guillaume Flandin               02/04/17</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>	XMLTREE/GET Get Method (get object properties)</li><li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="branch.html" class="code" title="function subtree = branch(tree,uid)">branch</a>	XMLTREE/BRANCH Branch Method</li><li><a href="convert.html" class="code" title="function s = convert(tree,uid)">convert</a>	XMLTREE/CONVERT Converter an XML tree in a Matlab structure</li><li><a href="find.html" class="code" title="function list = find(varargin)">find</a>	XMLTREE/FIND Find elements in a tree with specified characteristics</li><li><a href="flush.html" class="code" title="function tree = flush(tree,uid)">flush</a>	XMLTREE/FLUSH Flush (Clear a subtree given its UID)</li><li><a href="save.html" class="code" title="function save(tree, filename)">save</a>	XMLTREE/SAVE Save an XML tree in an XML file</li><li><a href="view.html" class="code" title="function view(tree)">view</a>	XMLTREE/VIEW View Method</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function uid = root(tree)</a>
+0002 <span class="comment">% XMLTREE/ROOT Root Method</span>
+0003 <span class="comment">% FORMAT uid = root(tree)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree   - XMLTree object</span>
+0006 <span class="comment">% uid    - UID of the root element of tree</span>
+0007 <span class="comment">%_______________________________________________________________________</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Return the uid of the root element of the tree.</span>
+0010 <span class="comment">%_______________________________________________________________________</span>
+0011 <span class="comment">% @(#)root.m                   Guillaume Flandin               02/04/17</span>
+0012 
+0013 <span class="comment">% Actually root is necessarily the element whos UID is 1, by</span>
+0014 <span class="comment">% construction. However, xml_parser should return a tree with a ROOT</span>
+0015 <span class="comment">% element with as many children as needed but only ONE *element* child</span>
+0016 <span class="comment">% who would be the real root (and this method should return the UID of</span>
+0017 <span class="comment">% this element).</span>
+0018 
+0019 uid = 1;
+0020 
+0021 <span class="comment">% Update:</span>
+0022 <span class="comment">% xml_parser has been modified (not as explained above) to handle the</span>
+0023 <span class="comment">% case when several nodes are at the top level of the XML.</span>
+0024 <span class="comment">% Example: &lt;!-- beginning --&gt;&lt;root&gt;blah blah&lt;/root&gt;&lt;!-- end --&gt;</span>
+0025 <span class="comment">% Now root is the first element node of the tree.</span>
+0026 
+0027 <span class="comment">% Look for the first element in the XML Tree</span>
+0028 <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree)
+0029     <span class="keyword">if</span> strcmp(<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,i,<span class="string">'type'</span>),<span class="string">'element'</span>)
+0030         uid = i;
+0031         <span class="keyword">break</span>
+0032     <span class="keyword">end</span>
+0033 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

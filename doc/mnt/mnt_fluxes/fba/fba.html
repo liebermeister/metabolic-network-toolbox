@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fba</title>
+  <meta name="keywords" content="fba">
+  <meta name="description" content="[v,benefit] = fba(network,fba_constraints)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">fba</a> &gt; fba.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/fba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fba
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[v,benefit] = fba(network,fba_constraints)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [v,value] = fba(network,fba_constraints) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [v,benefit] = fba(network,fba_constraints)
+
+ flux balance analysis; solves
+ max = z' * v  where N_internal * v = 0  and vmin &lt;= v &lt;= vmax
+
+ fba_constraints: see fba_default_options
+
+ fba_constraints.zv:       linear weights in the objective function  
+ fba_constraints.v_min:    vector of lower bounds
+ fba_constraints.v_max:    vector of upper bounds
+ fba_constraints.v_sign:   vector of signs, overrides v_min and v_max
+ fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else
+ fba_constraints.ext_sign: sign vector for external metabolite production
+                             undefined signs: nan
+
+ simple usage:
+ fba_constraints = fba_default_options(network);
+ fba_constraints.zv = zeros(size(fba_constraints.zv));
+ fba_constraints.zv(#biomass_reaction) = 1;
+ [v,value] = fba(network,fba_constraints)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_fluxes/eba/es_mu_simple_guess.html" class="code" title="function [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)">es_mu_simple_guess</a>	[A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)</li><li><a href="fba_interactions.html" class="code" title="function [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)">fba_interactions</a>	[f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)</li><li><a href="fba_screen_inhibitions.html" class="code" title="function [v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)">fba_screen_inhibitions</a>	[v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,value] = fba(network,fba_constraints)</a>
+0002 
+0003 <span class="comment">% [v,benefit] = fba(network,fba_constraints)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% flux balance analysis; solves</span>
+0006 <span class="comment">% max = z' * v  where N_internal * v = 0  and vmin &lt;= v &lt;= vmax</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% fba_constraints: see fba_default_options</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% fba_constraints.zv:       linear weights in the objective function</span>
+0011 <span class="comment">% fba_constraints.v_min:    vector of lower bounds</span>
+0012 <span class="comment">% fba_constraints.v_max:    vector of upper bounds</span>
+0013 <span class="comment">% fba_constraints.v_sign:   vector of signs, overrides v_min and v_max</span>
+0014 <span class="comment">% fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else</span>
+0015 <span class="comment">% fba_constraints.ext_sign: sign vector for external metabolite production</span>
+0016 <span class="comment">%                             undefined signs: nan</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% simple usage:</span>
+0019 <span class="comment">% fba_constraints = fba_default_options(network);</span>
+0020 <span class="comment">% fba_constraints.zv = zeros(size(fba_constraints.zv));</span>
+0021 <span class="comment">% fba_constraints.zv(#biomass_reaction) = 1;</span>
+0022 <span class="comment">% [v,value] = fba(network,fba_constraints)</span>
+0023 
+0024 
+0025 <span class="comment">%fprintf('FBA: ');</span>
+0026 [nm,nr] = size(network.N);
+0027 
+0028 fba_constraints = <a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>(fba_constraints);
+0029 
+0030 ind_fix = find(isfinite(fba_constraints.v_fix));
+0031 ind_notfix = find(~isfinite(fba_constraints.v_fix));
+0032 dd      = eye(nr);
+0033 
+0034 c  = fba_constraints.zv;
+0035 
+0036 A  = [network.N(find(network.external==0),:); <span class="keyword">...</span>
+0037      dd(ind_fix,:)];
+0038 
+0039 b  = [zeros(sum(network.external==0),1);<span class="keyword">...</span>
+0040       fba_constraints.v_fix(ind_fix)];
+0041 
+0042 my_eye = eye(nr);
+0043 
+0044 <span class="keyword">if</span> sum(isfinite(fba_constraints.ext_sign)),
+0045 
+0046   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
+0047 
+0048   G  = [  my_eye(ind_notfix,:); <span class="keyword">...</span>
+0049         - my_eye(ind_notfix,:); <span class="keyword">...</span>
+0050         - diag(fba_constraints.ext_sign(ind_ext_sign))*network.N(ind_ext_sign,:); <span class="keyword">...</span>
+0051        ];
+0052   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
+0053           - fba_constraints.v_min(ind_notfix,:); <span class="keyword">...</span>
+0054             zeros(length(ind_ext_sign),1);];
+0055 <span class="keyword">else</span>,
+0056 
+0057   G  = [    my_eye(ind_notfix,:);<span class="keyword">...</span>
+0058           - my_eye(ind_notfix,:)];
+0059   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
+0060           - fba_constraints.v_min(ind_notfix,:)];  
+0061 
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">%[v,s,z,y,status] = lp236a(-c,G,h,A,b);</span>
+0065 [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>));
+0066 
+0067 <span class="comment">% Check if at least zero flux is a solution</span>
+0068 <span class="comment">%[G * zeros(size(fba_constraints.v_min)),h]</span>
+0069 <span class="comment">%[A * zeros(size(fba_constraints.v_min)),b]</span>
+0070 <span class="comment">%fba_constraints.v_min</span>
+0071 <span class="comment">%fba_constraints.v_max</span>
+0072 
+0073 <span class="keyword">if</span> exitflag~=1,
+0074   value = nan; v = nan;
+0075   <span class="keyword">if</span> exitflag == -4,
+0076     error(<span class="string">'Nan value encountered.'</span>);
+0077   <span class="keyword">end</span>
+0078   exitflag
+0079   error(<span class="string">'No FBA solution found.'</span>); 
+0080 <span class="keyword">else</span>, 
+0081   value = c'*v;
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="comment">% check: [v &gt;= fba_constraints.v_min, v &lt;= fba_constraints.v_max]</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_move2</title>
+  <meta name="keywords" content="netgraph_move2">
+  <meta name="description" content="network = netgraph_move2(network,flag_draw_details)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_move2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_move2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>network = netgraph_move2(network,flag_draw_details)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = netgraph_move2(network,flag_draw_details) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">network = netgraph_move2(network,flag_draw_details)
+
+move nodes of metabolic network graph with the mouse
+
+ left button:     first click: choose node
+                 second click: choose new position
+ center button:   relax positions
+ right button:    quit
+
+ flag_draw_details (optional): 
+  'none': only reaction lines
+  'regulation': also regulation lines
+  'text': also node names</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>	netgraph_draw_simple(network)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%network = netgraph_move2(network,flag_draw_details)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%move nodes of metabolic network graph with the mouse</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% left button:     first click: choose node</span>
+0006 <span class="comment">%                 second click: choose new position</span>
+0007 <span class="comment">% center button:   relax positions</span>
+0008 <span class="comment">% right button:    quit</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% flag_draw_details (optional):</span>
+0011 <span class="comment">%  'none': only reaction lines</span>
+0012 <span class="comment">%  'regulation': also regulation lines</span>
+0013 <span class="comment">%  'text': also node names</span>
+0014 
+0015 <a name="_sub0" href="#_subfunctions" class="code">function x = netgraph_move2(network,flag_draw_details)</a>
+0016 
+0017 <span class="keyword">if</span> ~isfield(network,<span class="string">'graphics_par'</span>),
+0018   network=<a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network);
+0019 <span class="keyword">end</span>
+0020 
+0021 gridsize = 0.01; <span class="comment">% distance between discrete x values</span>
+0022 k1 = 0.005;  <span class="comment">% overall repulsion strength</span>
+0023 k2 = 0.5  *sqrt(1/length(network.graphics_par.metnames));  <span class="comment">% overall repulsion scale</span>
+0024 k3 = 0.2;  <span class="comment">% neighbour attraction strength</span>
+0025 
+0026 <span class="keyword">if</span> ~exist(<span class="string">'flag_draw_details'</span>,<span class="string">'var'</span>), flag_draw_details = <span class="string">'none'</span>;  <span class="keyword">end</span>;
+0027 
+0028 <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'fixed'</span>), 
+0029   network.graphics_par.fixed = zeros(size(network.graphics_par.x,2),1); <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'N'</span>), network.graphics_par.N = network.N; <span class="keyword">end</span>
+0032 
+0033 p   = network.graphics_par;
+0034 
+0035 splitted = 0;
+0036 <span class="keyword">if</span> isfield(p,<span class="string">'display_split'</span>),   <span class="keyword">if</span> p.display_split,     splitted =1;   <span class="keyword">end</span>;  <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> splitted,
+0039   fixed = zeros(size(p.N_split,1),1);
+0040   N  = p.N_split;
+0041   x   = p.x_split;
+0042   db  = p.db_split;
+0043   m   = p.m_split;
+0044   n_met = length(p.split_back_mapping);
+0045 <span class="keyword">else</span>,
+0046   fixed = p.fixed;
+0047   N  = p.N;
+0048   x   = p.x;
+0049   db  = p.db;
+0050   m   = p.m;
+0051   n_met = length(p.metnames);
+0052 <span class="keyword">end</span>
+0053 
+0054 names=[p.metnames; p.actnames];
+0055 
+0056 <span class="keyword">switch</span> flag_draw_details,
+0057  <span class="keyword">case</span> <span class="string">'regulation'</span>,
+0058    <span class="keyword">if</span> ~isfield(p,<span class="string">'regulation_matrix'</span>); flag_draw_details = <span class="string">'none'</span>; <span class="keyword">end</span>
+0059 <span class="keyword">end</span>
+0060 
+0061 p.arrowstyle=<span class="string">'none'</span>;
+0062 <span class="keyword">switch</span> flag_draw_details,
+0063  <span class="keyword">case</span> <span class="string">'none'</span>, <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network); <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;
+0064  <span class="keyword">case</span> <span class="string">'regulation'</span>, <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network,1); <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;
+0065  <span class="keyword">case</span> <span class="string">'text'</span>, <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p); <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;
+0066 <span class="keyword">end</span>
+0067 title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
+0068 
+0069 <span class="comment">% noticks;</span>
+0070 
+0071 cont = 1;
+0072 
+0073 [Ni,Nj]=ind2sub(size(N),find((N~=0)));
+0074 Nj = Nj+n_met;
+0075 edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
+0076 hold on;      <span class="comment">%     plot(edgecenters(1,:),edgecenters(2,:),'g.');</span>
+0077 fixed_ind = find(fixed);
+0078 plot(x(1,fixed_ind),x(2,fixed_ind),<span class="string">'k.'</span>);
+0079 hold off;
+0080 
+0081 <span class="keyword">for</span> itt=1:10
+0082 x = x + 0.001*randn(size(x));
+0083       <span class="keyword">for</span> it=1:3
+0084     edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
+0085     <span class="keyword">for</span> i=1:size(x,2);
+0086       distances = repmat(x(:,i),1,size(x,2)+length(Ni)) - [x, edgecenters]; <span class="comment">%</span>
+0087       f1 = sum(distances.^2)+10^-10;
+0088       f1 = exp(-f1/(2*k2^2))./sqrt(f1);
+0089       dummy = x(:,find(db(i,:)==1));
+0090       <span class="keyword">if</span> length(dummy),           xdum = mean(dummy,2);
+0091       <span class="keyword">else</span>,                     xdum = x(:,i);           <span class="keyword">end</span>
+0092       xnew(:,i)= x(:,i) + k1 * sum(distances.*repmat(f1,2,1),2) <span class="keyword">...</span>
+0093           + k3 * ( xdum - x(:,i) );
+0094     <span class="keyword">end</span>
+0095     loose=find(1-fixed);
+0096     <span class="keyword">if</span> length(loose),
+0097       x(:,loose) = xnew(:,loose);
+0098       x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
+0099       x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);
+0100       x(:,loose) = gridsize * round(x(:,loose)/gridsize);
+0101     <span class="keyword">end</span>
+0102       <span class="keyword">end</span>
+0103  <span class="keyword">end</span>
+0104   
+0105      loose = find(1-fixed);
+0106      <span class="keyword">if</span> length(loose),
+0107        x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
+0108        x(:,loose) = diag(min(1,1./(max(x(:,loose)')')))*x(:,loose);
+0109        x(:,loose) = gridsize * round(x(:,loose)/gridsize);
+0110      <span class="keyword">end</span>
+0111      edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
+0112 
+0113      <span class="keyword">if</span> splitted,     p.x_split = x;
+0114      <span class="keyword">else</span>,            p.x = x;
+0115      <span class="keyword">end</span>
+0116 
+0117      <span class="keyword">switch</span> flag_draw_details,
+0118      <span class="keyword">case</span> <span class="string">'none'</span>,      network.graphics_par=p; <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network);   <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;
+0119      <span class="keyword">case</span> <span class="string">'regulation'</span>,  network.graphics_par=p;    <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network,1);   <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;
+0120      <span class="keyword">case</span> <span class="string">'text'</span>,     <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p);  <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;  <span class="keyword">end</span>
+0121      title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
+0122 
+0123       hold on; <span class="comment">%           plot(edgecenters(1,:),edgecenters(2,:),'g.');</span>
+0124       fixed_ind = find(fixed);
+0125       plot(x(1,fixed_ind),x(2,fixed_ind),<span class="string">'k.'</span>); hold off
+0126       hold off;
+0127 
+0128 <span class="keyword">end</span>
+0129 
+0130 x = x-repmat(min(x')',1,size(x,2));
+0131 x = diag(min(1,1./(max(x')')))*x;
+0132 x = gridsize * round(x/gridsize);
+0133 
+0134 title(<span class="string">'New positions confirmed'</span>);
+0135 
+0136 <span class="keyword">if</span> splitted,     p.x_split = x;
+0137 <span class="keyword">else</span>,            p.x = x;
+0138 <span class="keyword">end</span>
+0139  
+0140 network.graphics_par = p;
+0141 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

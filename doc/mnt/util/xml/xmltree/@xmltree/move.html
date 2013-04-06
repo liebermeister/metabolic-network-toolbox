@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of move</title>
+  <meta name="keywords" content="move">
+  <meta name="description" content="XMLTREE/MOVE Move (move a subtree inside a tree from A to B)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; move.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>move
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/MOVE Move (move a subtree inside a tree from A to B)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function tree = move(tree,uida, uidb) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/MOVE Move (move a subtree inside a tree from A to B)
+ 
+ tree   - XMLTree object
+ uida   - initial position of the subtree
+ uidb   - parent of the final position of the subtree
+_______________________________________________________________________
+
+ Move a subtree inside a tree from A to B.
+ The tree parameter must be in input AND in output
+_______________________________________________________________________
+ @(#)move.m                  Guillaume Flandin                02/04/08</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="find.html" class="code" title="function list = find(varargin)">find</a>	XMLTREE/FIND Find elements in a tree with specified characteristics</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function tree = move(tree,uida, uidb)</a>
+0002 <span class="comment">% XMLTREE/MOVE Move (move a subtree inside a tree from A to B)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% tree   - XMLTree object</span>
+0005 <span class="comment">% uida   - initial position of the subtree</span>
+0006 <span class="comment">% uidb   - parent of the final position of the subtree</span>
+0007 <span class="comment">%_______________________________________________________________________</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Move a subtree inside a tree from A to B.</span>
+0010 <span class="comment">% The tree parameter must be in input AND in output</span>
+0011 <span class="comment">%_______________________________________________________________________</span>
+0012 <span class="comment">% @(#)move.m                  Guillaume Flandin                02/04/08</span>
+0013 
+0014 error(nargchk(3,3,nargin));
+0015 
+0016 p = tree.tree{uida}.parent;
+0017 tree.tree{p}.contents(<a href="find.html" class="code" title="function list = find(varargin)">find</a>(tree.tree{p}.contents==uida)) = [];
+0018 tree.tree(uidb).contents = [tree.tree(uidb).contents uida];</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sbtab_to_network</title>
+  <meta name="keywords" content="sbtab_to_network">
+  <meta name="description" content="function network = sbtab_to_network(filename,kinetic_law)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="index.html">mnt_network</a> &gt; sbtab_to_network.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>sbtab_to_network
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function network = sbtab_to_network(filename,kinetic_law)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [network, kinetic_data] = sbtab_to_network(filename,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">function network = sbtab_to_network(filename,kinetic_law)
+
+Read network structure and kinetic data from SBtab files
+Insert kinetic parameters that *directly* appear in the rate law
+specified in &quot;options.kinetic_law&quot;
+
+ Assumes three input files: 
+  [filename]_Reaction.tsv
+  [filename]_Compound.tsv
+  [filename]_QuantityData.tsv
+
+ the last one can be omitted if options.load_quantity_table = 0;
+ also see network_to_sbtab.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>	network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network, kinetic_data] = sbtab_to_network(filename,options)</a>
+0002 
+0003 <span class="comment">%function network = sbtab_to_network(filename,kinetic_law)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%Read network structure and kinetic data from SBtab files</span>
+0006 <span class="comment">%Insert kinetic parameters that *directly* appear in the rate law</span>
+0007 <span class="comment">%specified in &quot;options.kinetic_law&quot;</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Assumes three input files:</span>
+0010 <span class="comment">%  [filename]_Reaction.tsv</span>
+0011 <span class="comment">%  [filename]_Compound.tsv</span>
+0012 <span class="comment">%  [filename]_QuantityData.tsv</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% the last one can be omitted if options.load_quantity_table = 0;</span>
+0015 <span class="comment">% also see network_to_sbtab.m</span>
+0016 
+0017 eval(default(<span class="string">'options'</span>,<span class="string">'struct'</span>));
+0018 
+0019 options_default.verbose             = 0;
+0020 options_default.kinetic_law         = <span class="string">'cs'</span>;
+0021 options_default.use_compound_table  = 1;
+0022 options_default.load_quantity_table = 1;
+0023 options_default.use_sbml_ids        = 0;
+0024 
+0025 options = join_struct(options_default,options);
+0026 
+0027 <span class="keyword">if</span> options.use_compound_table,
+0028   network = <a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>([filename <span class="string">'_Reaction.tsv'</span>],[filename <span class="string">'_Compound.tsv'</span>]);
+0029 <span class="keyword">else</span>,
+0030   network = <a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>([filename <span class="string">'_Reaction.tsv'</span>]);
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="keyword">if</span> options.load_quantity_table,
+0034   [network.kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,[filename <span class="string">'_QuantityData.tsv'</span>],options);
+0035 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

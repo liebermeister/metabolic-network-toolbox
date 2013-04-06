@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of basic_control_analysis</title>
+  <meta name="keywords" content="basic_control_analysis">
+  <meta name="description" content="R = basic_control_analysis(network,s,options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; basic_control_analysis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>basic_control_analysis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>R = basic_control_analysis(network,s,options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function R = basic_control_analysis(network,s,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> R = basic_control_analysis(network,s,options)
+
+ compute some standard control properties (in fields of R)
+
+ - Fluxes J
+ - non-normalised elasticity matrices: epsilon_1, pi_1
+ - non-normalised control coefficients: CS CJ
+ - non-normalised response coefficients: RS RJ
+ -     normalised response coefficients: RS_norm RJ_norm
+
+ options.split (Boolean) split reactions into forward and backward part?
+
+ parameter values and names are listed in 'parameter_values' and 'parameters'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_kinetics/kinetics/network_get_parameter_values.html" class="code" title="function [parameter_values,names,types] = network_get_parameter_values(network,s,only_enzyme_levels)">network_get_parameter_values</a>	[parameter_values,names,types] = network_get_parameter_values(network,s,only_enzyme_levels)</li><li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li><li><a href="response_coefficients.html" class="code" title="function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)">response_coefficients</a>	[RS, RJ, RS2, RJ2] = response_coefficients(CS, Ec, Ep, Ecc, Ecp, Epp)</li><li><a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% R = basic_control_analysis(network,s,options)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% compute some standard control properties (in fields of R)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% - Fluxes J</span>
+0006 <span class="comment">% - non-normalised elasticity matrices: epsilon_1, pi_1</span>
+0007 <span class="comment">% - non-normalised control coefficients: CS CJ</span>
+0008 <span class="comment">% - non-normalised response coefficients: RS RJ</span>
+0009 <span class="comment">% -     normalised response coefficients: RS_norm RJ_norm</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% options.split (Boolean) split reactions into forward and backward part?</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% parameter values and names are listed in 'parameter_values' and 'parameters'</span>
+0014 
+0015 <a name="_sub0" href="#_subfunctions" class="code">function R = basic_control_analysis(network,s,options)</a>
+0016 
+0017 eval(<a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>));
+0018 
+0019 options_default = struct(<span class="string">'split'</span>,0,<span class="string">'only_enzyme_levels'</span>,1,<span class="string">'dilution_rate'</span>,[]);
+0020 options         = join_struct(options_default,options);
+0021 
+0022 <span class="keyword">if</span> isfield(options,<span class="string">'used'</span>),
+0023   used = options.used;
+0024 <span class="keyword">else</span>,
+0025   <span class="keyword">switch</span> network.kinetics.type,
+0026     <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>},   used = real(network.kinetics.u&gt;0);
+0027     <span class="keyword">otherwise</span>,  used = [];
+0028   <span class="keyword">end</span>
+0029 <span class="keyword">end</span>
+0030 
+0031 [R.s,R.j] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network,s,1000,[],[],[], options.dilution_rate);
+0032 
+0033 R.s = real(R.s);
+0034 <span class="keyword">if</span> find(R.s&lt;0), 
+0035   warning(<span class="string">'Negative concentrations encountered; replacing them by small values.'</span>);  R.s(R.s&lt;0) = 10^-10; 
+0036 <span class="keyword">end</span>
+0037 
+0038 [R.parameter_values,R.parameters,R.parameter_types] = <a href="../../mnt/mnt_kinetics/kinetics/network_get_parameter_values.html" class="code" title="function [parameter_values,names,types] = network_get_parameter_values(network,s,only_enzyme_levels)">network_get_parameter_values</a>(network,s,options.only_enzyme_levels);
+0039 [R.epsilon_1,R.pi_1]           = <a href="elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>(network,R.s,options);
+0040 [R.CJ, R.CS, L, NR , R.M]      = <a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>(network.N, R.epsilon_1,network.external,used);
+0041 [R.RS,R.RJ]                    = <a href="response_coefficients.html" class="code" title="function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)">response_coefficients</a>(R.CS,R.epsilon_1,R.pi_1);
+0042 R.RS(find(network.external),:) = 0;
+0043 
+0044 n_ext = sum(network.external);
+0045 <span class="keyword">switch</span>(network.kinetics.type),
+0046   <span class="keyword">case</span> <span class="string">'convenience'</span>,
+0047     R.RS(find(network.external),end-length(network.metabolites)+find(network.external)) = eye(n_ext);
+0048   <span class="keyword">otherwise</span>,
+0049     R.RS(find(network.external),end-n_ext+1:end) = eye(n_ext);
+0050 <span class="keyword">end</span>
+0051 R.RS_norm = [];
+0052 R.RJ_norm = [];
+0053 <span class="keyword">if</span> sum(R.s==0), 
+0054   warning(<span class="string">'Attempt to normalise by vanishing concentration value'</span>); 
+0055 <span class="keyword">else</span>, 
+0056   R.RS_norm = diag(1./R.s) * R.RS * diag(R.parameter_values);
+0057 <span class="keyword">end</span>
+0058 <span class="keyword">if</span> sum(R.j==0), 
+0059   warning(<span class="string">'Attempt to normalise by vanishing flux value'</span>); 
+0060 <span class="keyword">else</span>,
+0061   R.RJ_norm = diag(1./R.j) * R.RJ * diag(R.parameter_values);
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="keyword">if</span> options.split,
+0065   R.j_split                        = <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network,network.kinetics, 1);
+0066   [R.epsilon_1_split,R.pi_1_split] = <a href="elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>(network,s,1);
+0067   [R.CJ_split, R.CS_split ]        = <a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>([network.N, -network.N], R.epsilon_1_split,network.external);
+0068   [dummy,R.RJ_split]               = <a href="response_coefficients.html" class="code" title="function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)">response_coefficients</a>(R.CS_split,R.epsilon_1_split,R.pi_1_split);
+0069   R.RJ_split_norm                  = diag(1./R.j_split)*R.RJ_split*diag(R.parameter_values);
+0070 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

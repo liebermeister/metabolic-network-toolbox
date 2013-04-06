@@ -1,0 +1,978 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_draw</title>
+  <meta name="keywords" content="netgraph_draw">
+  <meta name="description" content="netgraph_draw(network,varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_draw.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_draw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>netgraph_draw(network,varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function  network = netgraph_draw(network,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">netgraph_draw(network,varargin)
+
+Draw a metabolic network according to settings in the field 'graphics_par'
+These settings can be overridden by the contents of 'varargin'
+
+varargin is either a list of pairs 'fieldname','fieldvalue',...
+ or a structure (as 'graphics_par') struct('parname1', parvalue1, 'parname2', parvalue2, ...)
+
+PARAMETER SETTINGS:
+
+METABOLITE SYMBOLS
+ metvalues
+ metvalues_std
+ metstyle       {'fixed','box','box_std','none'}
+ metcolstyle    {'fixed','values'}
+ metvaluesmax
+ metvaluesmin
+ metprintnames
+ metprintvalues
+ omitmetabolites
+ squaresize ( also holds for reaction symbols)
+ no_points ( also holds for reaction symbols)
+ flag_edges (holds also for reaction and regulation symbols)
+
+REACTION SYMBOLS
+ actvalues
+ actvalues_std
+ actstyle       {'fixed','box','box_std','none'}
+ actcolstyle    {'fixed','values'}
+ actvaluesmax
+ actvaluesmin
+ actprintnames
+ actprintvalues
+ omitreactions     reactions to be omitted in graphics
+
+STYLE OF ARROWS
+ arrowstyle     {'fluxes','directions','none'}
+ arrowvalues
+ arrowvaluesmax
+ arrowvaluesmin
+ arrow_stoichiometries [0,1] scale arrows with stoichiometric coefficients?
+ arrowsize
+ arrow_shift     [0..1]
+ arrowprintvalues (overrides actprintvalues);
+ straightlines
+ arrowcolor
+ single_arrow [0,1] Draw only one arrow per reaction, on top of the reaction symbol
+
+STYLE OF EDGE SYMBOLS
+
+ edgevalues     (sparse matrix, size of stoichiometric matrix N)
+ edgevalues_std (sparse matrix, size of stoichiometric matrix N)
+ edgestyle {'normal',fixed'}
+ edgevaluesmax
+ edgevaluesmin
+
+REGULATION ARROWS
+ show_regulation (flag)
+ regulationvalues (sparse matrix of size of regulation_matrix)
+ regulationstyle {'normal',fixed'}
+ rlinecolor
+
+TEXT ITEMS
+ chop_names     (length)
+ split_names (length)
+ FontSize 
+ Rotation  (for all text items)
+ text_offset
+
+COLORSCALE
+ colorbar (0/1)
+ colorbar_numbers
+ linecolor 
+ colormap        (default rb_colors)
+ black_and_white (default 0)
+ showsign
+
+ figure_axis
+ figure_position
+ subplot_position
+ YDir ('normal','reverse')
+ hold_on (flag)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li><li><a href="../../mnt/util/plot_square.html" class="code" title="function plot_square(x,y,l,col)">plot_square</a>	plot_square(x,y,l,col)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li><li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="netgraph_fluxes.html" class="code" title="function netgraph_fluxes(network,J)">netgraph_fluxes</a>	netgraph_fluxes(network,J)</li><li><a href="netgraph_mark_metabolites.html" class="code" title="function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)">netgraph_mark_metabolites</a>	[choice,p] = netgraph_mark_metabolites(network,choice,draw_only)</li><li><a href="netgraph_mark_reactions.html" class="code" title="function [choice,p] = netgraph_mark_reactions(network,choice,draw_only)">netgraph_mark_reactions</a>	[choice,p] = netgraph_mark_reactions(network,choice,draw_only)</li><li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_move2.html" class="code" title="function x = netgraph_move2(network,flag_draw_details)">netgraph_move2</a>	network = netgraph_move2(network,flag_draw_details)</li><li><a href="netgraph_regulation.html" class="code" title="function   netgraph_regulation(network)">netgraph_regulation</a>	netgraph_regulation(network)</li><li><a href="netgraph_remove.html" class="code" title="function [network,keep_tot,keep_actions_tot] = netgraph_remove(network)">netgraph_remove</a>	[network,keep_tot,keep_actions_tot] = netgraph_remove(network)</li><li><a href="../../mnt/mnt_network/network_import_export/network_sbml_import.html" class="code" title="function [network,s] = network_sbml_import(s,dirname)">network_sbml_import</a>	[network,s] = network_sbml_import(s,dirname)</li><li><a href="../../mnt/mnt_network/network_import_export/sbml2network.html" class="code" title="function network = sbml2network(file,graphics_flag);">sbml2network</a>	network = sbml2network(file,graphics_flag);</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function plot_square(x,y,l,std,squaresize,col,flag_edges)</a></li><li><a href="#_sub2" class="code">function plot_circle(x,y,l,std,squaresize,col,flag_edges)</a></li><li><a href="#_sub3" class="code">function plot_diamond(x,y,l,std,squaresize,col,flag_edges)</a></li><li><a href="#_sub4" class="code">function plot_octagon(x,y,l,std,squaresize,col,flag_edges)</a></li><li><a href="#_sub5" class="code">function plot_triangle(x, y, phi, l, col, forward,flag_edges)</a></li><li><a href="#_sub6" class="code">function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);</a></li><li><a href="#_sub7" class="code">function  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)</a></li><li><a href="#_sub8" class="code">function p = netgraph_draw_set_parameters(network,vararg)</a></li><li><a href="#_sub9" class="code">function name2 = split_name(name,l)</a></li><li><a href="#_sub10" class="code">function [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);</a></li><li><a href="#_sub11" class="code">function this_colorbar(num,colmap)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%netgraph_draw(network,varargin)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%Draw a metabolic network according to settings in the field 'graphics_par'</span>
+0004 <span class="comment">%These settings can be overridden by the contents of 'varargin'</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%varargin is either a list of pairs 'fieldname','fieldvalue',...</span>
+0007 <span class="comment">% or a structure (as 'graphics_par') struct('parname1', parvalue1, 'parname2', parvalue2, ...)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%PARAMETER SETTINGS:</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%METABOLITE SYMBOLS</span>
+0012 <span class="comment">% metvalues</span>
+0013 <span class="comment">% metvalues_std</span>
+0014 <span class="comment">% metstyle       {'fixed','box','box_std','none'}</span>
+0015 <span class="comment">% metcolstyle    {'fixed','values'}</span>
+0016 <span class="comment">% metvaluesmax</span>
+0017 <span class="comment">% metvaluesmin</span>
+0018 <span class="comment">% metprintnames</span>
+0019 <span class="comment">% metprintvalues</span>
+0020 <span class="comment">% omitmetabolites</span>
+0021 <span class="comment">% squaresize ( also holds for reaction symbols)</span>
+0022 <span class="comment">% no_points ( also holds for reaction symbols)</span>
+0023 <span class="comment">% flag_edges (holds also for reaction and regulation symbols)</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%REACTION SYMBOLS</span>
+0026 <span class="comment">% actvalues</span>
+0027 <span class="comment">% actvalues_std</span>
+0028 <span class="comment">% actstyle       {'fixed','box','box_std','none'}</span>
+0029 <span class="comment">% actcolstyle    {'fixed','values'}</span>
+0030 <span class="comment">% actvaluesmax</span>
+0031 <span class="comment">% actvaluesmin</span>
+0032 <span class="comment">% actprintnames</span>
+0033 <span class="comment">% actprintvalues</span>
+0034 <span class="comment">% omitreactions     reactions to be omitted in graphics</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%STYLE OF ARROWS</span>
+0037 <span class="comment">% arrowstyle     {'fluxes','directions','none'}</span>
+0038 <span class="comment">% arrowvalues</span>
+0039 <span class="comment">% arrowvaluesmax</span>
+0040 <span class="comment">% arrowvaluesmin</span>
+0041 <span class="comment">% arrow_stoichiometries [0,1] scale arrows with stoichiometric coefficients?</span>
+0042 <span class="comment">% arrowsize</span>
+0043 <span class="comment">% arrow_shift     [0..1]</span>
+0044 <span class="comment">% arrowprintvalues (overrides actprintvalues);</span>
+0045 <span class="comment">% straightlines</span>
+0046 <span class="comment">% arrowcolor</span>
+0047 <span class="comment">% single_arrow [0,1] Draw only one arrow per reaction, on top of the reaction symbol</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%STYLE OF EDGE SYMBOLS</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% edgevalues     (sparse matrix, size of stoichiometric matrix N)</span>
+0052 <span class="comment">% edgevalues_std (sparse matrix, size of stoichiometric matrix N)</span>
+0053 <span class="comment">% edgestyle {'normal',fixed'}</span>
+0054 <span class="comment">% edgevaluesmax</span>
+0055 <span class="comment">% edgevaluesmin</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%REGULATION ARROWS</span>
+0058 <span class="comment">% show_regulation (flag)</span>
+0059 <span class="comment">% regulationvalues (sparse matrix of size of regulation_matrix)</span>
+0060 <span class="comment">% regulationstyle {'normal',fixed'}</span>
+0061 <span class="comment">% rlinecolor</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">%TEXT ITEMS</span>
+0064 <span class="comment">% chop_names     (length)</span>
+0065 <span class="comment">% split_names (length)</span>
+0066 <span class="comment">% FontSize</span>
+0067 <span class="comment">% Rotation  (for all text items)</span>
+0068 <span class="comment">% text_offset</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">%COLORSCALE</span>
+0071 <span class="comment">% colorbar (0/1)</span>
+0072 <span class="comment">% colorbar_numbers</span>
+0073 <span class="comment">% linecolor</span>
+0074 <span class="comment">% colormap        (default rb_colors)</span>
+0075 <span class="comment">% black_and_white (default 0)</span>
+0076 <span class="comment">% showsign</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% figure_axis</span>
+0079 <span class="comment">% figure_position</span>
+0080 <span class="comment">% subplot_position</span>
+0081 <span class="comment">% YDir ('normal','reverse')</span>
+0082 <span class="comment">% hold_on (flag)</span>
+0083 
+0084 <a name="_sub0" href="#_subfunctions" class="code">function  network = netgraph_draw(network,varargin)</a>
+0085 
+0086 <span class="keyword">if</span> sum(size(network.N)) &gt; 1000, warning(<span class="string">'Network too large for drawing'</span>); <span class="keyword">return</span>; <span class="keyword">end</span>
+0087 
+0088 p     = <a href="#_sub8" class="code" title="subfunction p = netgraph_draw_set_parameters(network,vararg)">netgraph_draw_set_parameters</a>(network,varargin);
+0089 
+0090 n_met = length(network.metabolites);
+0091 n_act = length(network.actions);
+0092 m     = p.m;
+0093 x     = p.x;
+0094 
+0095 <span class="keyword">if</span> p.hold_on==1, hold on; <span class="keyword">else</span>, cla;  <span class="keyword">end</span>
+0096 <span class="keyword">if</span> ~isempty(p.figure_position), set(gcf,<span class="string">'Position'</span>,p.figure_position); <span class="keyword">end</span>
+0097 <span class="keyword">if</span> ~isempty(p.subplot_position), 
+0098   subplot(<span class="string">'Position'</span>,p.subplot_position); 
+0099 <span class="keyword">end</span>
+0100 
+0101 hold on;
+0102 
+0103 x_arrowlistN = zeros(n_met,n_act,2);
+0104 
+0105 <span class="keyword">if</span> p.colorbar,
+0106   <span class="keyword">if</span> isempty(p.colorbar_numbers),
+0107     <span class="keyword">if</span> length(p.metvaluesmax),
+0108       p.colorbar_numbers = [p.metvaluesmin,p.metvaluesmax]; 
+0109     <span class="keyword">elseif</span> length(p.actvaluesmax),
+0110       p.colorbar_numbers = [p.actvaluesmin,p.actvaluesmax]; 
+0111     <span class="keyword">elseif</span> p.edgevaluesmax,
+0112       p.colorbar_numbers = [p.edgevaluesmin,p.edgevaluesmax]; 
+0113     <span class="keyword">end</span>
+0114   <span class="keyword">end</span>
+0115   <a href="#_sub11" class="code" title="subfunction this_colorbar(num,colmap)">this_colorbar</a>(p.colorbar_numbers, p.colormap);
+0116 <span class="keyword">end</span>
+0117   
+0118 <span class="comment">% ------------------------------------------------------------------------------</span>
+0119 <span class="comment">% only lines</span>
+0120 
+0121 <span class="keyword">if</span> p.straightlines,   <span class="comment">% straight lines</span>
+0122   [i2,j2] = find(triu(m));
+0123   <span class="keyword">for</span> itt = 1:length(i2),
+0124     <span class="keyword">if</span> sum(j2(itt)-n_met==p.actindshow) * sum(i2(itt)==p.metindshow)
+0125       line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],<span class="string">'color'</span>,p.linecolor); 
+0126     <span class="keyword">end</span>
+0127   <span class="keyword">end</span>
+0128 <span class="keyword">end</span>
+0129 
+0130 
+0131 <span class="comment">% ---------------------------------------------------</span>
+0132 <span class="comment">% little dots at all nodes</span>
+0133 
+0134 <span class="keyword">if</span> ~p.no_points, 
+0135   dd = [p.metindshow, n_met + p.actindshow];
+0136   plot(x(1,dd),x(2,dd), <span class="string">'b.'</span>); 
+0137 <span class="keyword">end</span>
+0138 
+0139 
+0140 <span class="comment">% ---------------------------------------------------</span>
+0141 <span class="comment">% metabolites</span>
+0142 
+0143 <span class="keyword">if</span> p.show_metvalues,
+0144   
+0145   <span class="keyword">switch</span> p.metcolstyle
+0146     <span class="keyword">case</span> <span class="string">'fixed'</span>,  c = repmat(p.metcol,n_met,1);
+0147     <span class="keyword">case</span> <span class="string">'values'</span>, c = get_color(p.norm_metvalues,-1,1,p.colormap);
+0148   <span class="keyword">end</span>
+0149   
+0150   p.norm_metvalues = abs(p.norm_metvalues);
+0151   
+0152   <span class="keyword">switch</span> p.metstyle
+0153     <span class="keyword">case</span> <span class="string">'box'</span>,    p.norm_metvalues_std = 0*p.norm_metvalues_std;
+0154     <span class="keyword">case</span> <span class="string">'none'</span>,   p.show_actvalues = 0;
+0155     <span class="keyword">case</span> <span class="string">'fixed'</span>,  p.norm_metvalues(isfinite(p.norm_metvalues)) = 1;
+0156   <span class="keyword">end</span>
+0157   
+0158   <span class="keyword">for</span> it=p.metindshow, 
+0159     <a href="#_sub2" class="code" title="subfunction plot_circle(x,y,l,std,squaresize,col,flag_edges)">plot_circle</a>(x(1,it),x(2,it),p.norm_metvalues(it),p.norm_metvalues_std(it),p.squaresize,c(it,:),p.flag_edges); 
+0160   <span class="keyword">end</span>; 
+0161 
+0162 <span class="keyword">end</span>
+0163 
+0164 <span class="comment">% ------------------------------------------------------------------------------</span>
+0165 <span class="comment">% lines and triangles</span>
+0166 
+0167 <span class="keyword">if</span> strcmp(p.arrowstyle,<span class="string">'none'</span>),
+0168   p.single_arrow = 0;
+0169 <span class="keyword">end</span>
+0170 
+0171 <span class="keyword">if</span> p.single_arrow,
+0172   p.show_arrowvalues = 0; 
+0173   p.arrow_shift = 1; 
+0174 <span class="keyword">end</span>
+0175 
+0176 <span class="keyword">if</span> p.straightlines,   <span class="comment">% straight lines</span>
+0177   
+0178   [ind_met,ind_act] = find(m(p.metindshow,end-n_act+p.actindshow));
+0179   ind_met = p.metindshow(ind_met);
+0180   <span class="keyword">for</span> k = 1:length(ind_met),
+0181     stoich_coeff = p.N(ind_met(k),ind_act(k));
+0182     x_met = x(:,ind_met(k));
+0183     x_act = x(:,ind_act(k)+n_met);
+0184     
+0185     <span class="keyword">if</span> p.show_arrowvalues,
+0186       scale   = p.arrowsize * sqrt(abs(p.norm_arrowvalues( ind_act(k) )));
+0187       <span class="keyword">if</span> p.arrow_stoichiometries, scale = scale  * abs(stoich_coeff); <span class="keyword">end</span>
+0188       forward = -sign(stoich_coeff) * sign(p.arrowvalues( ind_act(k) ));      
+0189       <span class="comment">%% forward can be 1 or -1</span>
+0190       arrow_shift = (forward==1) * p.arrow_shift + (forward==-1) * (1-p.arrow_shift);
+0191       <span class="keyword">if</span> isnan(forward), arrow_shift = 0.5; <span class="keyword">end</span> 
+0192       x_arr = x_met + arrow_shift * (x_act-x_met);
+0193       <span class="keyword">switch</span> p.arrowstyle, 
+0194         <span class="keyword">case</span> {<span class="string">'fluxes'</span>,<span class="string">'directions'</span>},
+0195           phi  = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
+0196           <a href="#_sub5" class="code" title="subfunction plot_triangle(x, y, phi, l, col, forward,flag_edges)">plot_triangle</a>(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward,p.flag_edges);
+0197       <span class="keyword">end</span>        
+0198     <span class="keyword">end</span>
+0199     
+0200     x_arrowlistN(ind_met(k),ind_act(k),:) =  x_met + .5 * (x_act-x_met);
+0201   <span class="keyword">end</span>
+0202   
+0203 <span class="keyword">else</span>,  <span class="comment">% curved lines</span>
+0204   
+0205   <span class="keyword">for</span> q1=1:n_act,
+0206     <span class="keyword">if</span> sum(q1==p.actindshow),
+0207     substrates   = find(p.N(:,q1)&lt;0);
+0208     products     = find(p.N(:,q1)&gt;0);
+0209     reactants    = find(p.N(:,q1)~=0);
+0210     x_act        = x(:,n_met+q1);
+0211     x_substrates = x(:,substrates);
+0212     x_products   = x(:,products);
+0213     x_reactants  = x(:,reactants);
+0214     x_substrate_mean = mean(x_substrates,2);
+0215     x_product_mean   = mean(x_products,2);
+0216 
+0217     <span class="keyword">if</span> p.show_arrowvalues,
+0218       <span class="keyword">for</span> q2 = 1:length(reactants),
+0219         x_met = x_reactants(:,q2);
+0220         stoich_coeff = p.N(reactants(q2),q1);
+0221         forward = -sign(stoich_coeff)*sign(p.arrowvalues(q1)); 
+0222 <span class="comment">% forward can be 1 or -1</span>
+0223         straight = 0;
+0224         <span class="keyword">if</span>  forward==1 &amp; isempty(products),   straight = 1; <span class="keyword">end</span>
+0225         <span class="keyword">if</span> forward==-1 &amp; isempty(substrates), straight = 1; <span class="keyword">end</span>
+0226         arrow_shift = (forward==-1) * p.arrow_shift + (forward==+1) * (1-p.arrow_shift);
+0227         <span class="keyword">if</span> straight,
+0228           line([x_met(1),x_act(1)],[x_met(2),x_act(2)],<span class="string">'color'</span>,p.linecolor);
+0229           
+0230           x_arr = x_met + arrow_shift * (x_act-x_met);
+0231         <span class="keyword">else</span>,
+0232           <span class="keyword">switch</span> forward,
+0233             <span class="keyword">case</span> 1,    [x_arr(1),x_arr(2)] = <a href="#_sub7" class="code" title="subfunction  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)">tri_arc</a>(x_met,x_act,  x_product_mean,p.linecolor,arrow_shift);
+0234             <span class="keyword">case</span> -1,   [x_arr(1),x_arr(2)] = <a href="#_sub7" class="code" title="subfunction  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)">tri_arc</a>(x_met,x_act,x_substrate_mean,p.linecolor,arrow_shift);
+0235         <span class="keyword">end</span>
+0236         <span class="keyword">end</span>
+0237         x_arrowlistN(ind_met(k),ind_act(k),:) =  x_arr;
+0238         <span class="keyword">switch</span> p.arrowstyle,
+0239           <span class="keyword">case</span> {<span class="string">'fluxes'</span>,<span class="string">'directions'</span>},
+0240             phi   = angle( x_act(1)-x_met(1) + i *(x_act(2)-x_met(2)));
+0241             scale = p.arrowsize*sqrt(abs( p.norm_arrowvalues( q1 ) ));
+0242             <a href="#_sub5" class="code" title="subfunction plot_triangle(x, y, phi, l, col, forward,flag_edges)">plot_triangle</a>(x_arr(1),x_arr(2),phi,scale, <span class="string">'b'</span>, forward,p.flag_edges);    
+0243         <span class="keyword">end</span>
+0244       <span class="keyword">end</span>
+0245       <span class="keyword">end</span>
+0246     <span class="keyword">end</span>
+0247   <span class="keyword">end</span>
+0248   
+0249 <span class="keyword">end</span>
+0250 
+0251 <span class="keyword">if</span> p.single_arrow,
+0252   [ind_met,ind_act] = find(m(p.metindshow,end-n_act+p.actindshow));
+0253   ind_met = p.metindshow(ind_met);
+0254   <span class="keyword">for</span> k = 1:length(ind_met),
+0255     stoich_coeff = p.N(ind_met(k),ind_act(k));
+0256     <span class="keyword">if</span> [stoich_coeff * p.norm_arrowvalues( ind_act(k) )]&lt; 0,
+0257       x_met = x(:,ind_met(k));
+0258       x_act = x(:,ind_act(k)+n_met);
+0259       scale   = p.arrowsize * sqrt(abs(p.norm_arrowvalues( ind_act(k) )));
+0260       <span class="keyword">if</span> p.arrow_stoichiometries, scale = scale  * abs(stoich_coeff); <span class="keyword">end</span>
+0261       forward = -sign(stoich_coeff) * sign(p.arrowvalues( ind_act(k) ));      
+0262       <span class="comment">%% forward can be 1 or -1</span>
+0263       arrow_shift = (forward==1) * p.arrow_shift + (forward==-1) * (1-p.arrow_shift);
+0264       <span class="keyword">if</span> isnan(forward), arrow_shift = 0.5; <span class="keyword">end</span> 
+0265       x_arr = x_met + arrow_shift * (x_act-x_met);
+0266       <span class="keyword">switch</span> p.arrowstyle, 
+0267         <span class="keyword">case</span> {<span class="string">'fluxes'</span>,<span class="string">'directions'</span>},
+0268           phi  = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
+0269         <a href="#_sub5" class="code" title="subfunction plot_triangle(x, y, phi, l, col, forward,flag_edges)">plot_triangle</a>(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward,p.flag_edges);
+0270       <span class="keyword">end</span>        
+0271       x_arrowlistN(ind_met(k),ind_act(k),:) = x_met + .5 * (x_act-x_met);
+0272     <span class="keyword">end</span>
+0273   <span class="keyword">end</span>
+0274 
+0275 <span class="keyword">end</span>
+0276 
+0277 
+0278 <span class="comment">% ---------------------------------------------------</span>
+0279 <span class="comment">% edges</span>
+0280 
+0281 <span class="keyword">if</span> p.show_edgevalues,
+0282   <span class="keyword">for</span> ind_m = p.metindshow, 
+0283     <span class="keyword">for</span> r = 1:length(p.actindshow),
+0284       ind_r = p.actindshow(r);
+0285       <span class="keyword">if</span> network.N(ind_m,ind_r) ~=0,
+0286         x_pos  = squeeze(x_arrowlistN(ind_m,ind_r,:));
+0287         value  = p.norm_edgevalues(ind_m,ind_r);
+0288         stddev = p.norm_edgevalues_std(ind_m,ind_r);
+0289         c      = get_color(value,-1,1,p.colormap);
+0290         <span class="keyword">switch</span> p.edgestyle,          
+0291           <span class="keyword">case</span> <span class="string">'fixed'</span>,           <span class="keyword">if</span> isfinite(value),  value = 1; <span class="keyword">end</span>;       
+0292         <span class="keyword">end</span>
+0293         <a href="#_sub3" class="code" title="subfunction plot_diamond(x,y,l,std,squaresize,col,flag_edges)">plot_diamond</a>(x_pos(1),x_pos(2),value, stddev,p.squaresize,c,p.flag_edges);
+0294         <span class="keyword">if</span> p.edgeprintvalues, 
+0295           <span class="keyword">if</span> isnan(p.edgevalues(ind_m,ind_r)), my_ss = <span class="string">''</span>; <span class="keyword">else</span>, my_ss = num2str(p.edgevalues(ind_m,ind_r),3); <span class="keyword">end</span>
+0296           offset = 0.5*p.squaresize;
+0297           text(x_pos(1)+ offset, x_pos(2)+offset, my_ss,<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle);
+0298         <span class="keyword">end</span>
+0299       <span class="keyword">end</span>
+0300     <span class="keyword">end</span>
+0301   <span class="keyword">end</span>
+0302 <span class="keyword">end</span>
+0303 
+0304 <span class="comment">% ---------------------------------------------------</span>
+0305 <span class="comment">% regulation edges</span>
+0306 
+0307 x_arrowlistW = zeros(n_act,n_met,2);
+0308 <span class="keyword">if</span> p.show_regulation,
+0309   [indr,indm] = find(tril(p.regulation_matrix));
+0310   <span class="keyword">for</span> itt=1:length(indr),
+0311     <span class="keyword">if</span> sum(indr(itt)-n_met == p.actindshow) * sum(indm(itt) == p.metindshow) ,
+0312       this_sign = sign(p.regulation_matrix(indr(itt),indm(itt)));
+0313       <span class="keyword">if</span> this_sign&gt;0, linecolor = [0 1 0];
+0314       <span class="keyword">else</span>,           linecolor = [1 0 0]; 
+0315       <span class="keyword">end</span>
+0316       [x3,arcx,arcy] = <a href="#_sub6" class="code" title="subfunction [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x(:,indr(itt)),x(:,indm(itt)),0.2,0.5);
+0317       plot(x3(1,:),x3(2,:),<span class="string">'color'</span>,linecolor);
+0318       <span class="keyword">if</span> p.show_regulationvalues,
+0319         val    = p.norm_regulationvalues(indr(itt)-n_met,indm(itt));
+0320         stddev =     p.norm_regulationvalues_std(indr(itt)-n_met,indm(itt));
+0321         c      = get_color(val,-1,1,p.colormap);
+0322         <span class="keyword">switch</span> p.regulationstyle,  <span class="keyword">case</span> <span class="string">'fixed'</span>, <span class="keyword">if</span> isfinite(val), val = 1;  <span class="keyword">end</span>; <span class="keyword">end</span>
+0323         <a href="#_sub3" class="code" title="subfunction plot_diamond(x,y,l,std,squaresize,col,flag_edges)">plot_diamond</a>( arcx,arcy, val,stddev,p.squaresize,c,p.flag_edges);
+0324       <span class="keyword">end</span>
+0325       <span class="keyword">if</span> p.regulationprintvalues, 
+0326         ddd = p.regulationvalues(indr(itt)-n_met,indm(itt));
+0327         <span class="keyword">if</span> isnan(ddd), my_ss = <span class="string">''</span>; <span class="keyword">else</span>,  my_ss = num2str(ddd,3); <span class="keyword">end</span>
+0328         offset=0.5*p.squaresize;
+0329         text(arcx+ offset, arcy+offset, my_ss,<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle); 
+0330       <span class="keyword">end</span>
+0331     <span class="keyword">end</span>
+0332   <span class="keyword">end</span>
+0333 <span class="keyword">end</span>
+0334 
+0335 <span class="comment">% ---------------------------------------------------</span>
+0336 <span class="comment">% reactions</span>
+0337 
+0338 <span class="keyword">if</span> p.show_actvalues,
+0339   
+0340   <span class="keyword">switch</span> p.actcolstyle
+0341     <span class="keyword">case</span> <span class="string">'fixed'</span>,  c = repmat(p.actcol,n_act,1);
+0342     <span class="keyword">case</span> <span class="string">'values'</span>, c = get_color(p.norm_actvalues,-1,1,p.colormap);
+0343   <span class="keyword">end</span>
+0344   
+0345   <span class="keyword">switch</span> p.actstyle,
+0346     <span class="keyword">case</span> <span class="string">'box'</span>,    p.norm_actvalues_std = 0*p.norm_actvalues_std;
+0347     <span class="keyword">case</span> <span class="string">'fixed'</span>,  p.norm_actvalues(isfinite(p.norm_actvalues)) = 1;
+0348   <span class="keyword">end</span>
+0349   
+0350   <span class="keyword">switch</span> p.actstyle,
+0351     <span class="keyword">case</span> {<span class="string">'box'</span>,<span class="string">'box_std'</span>,<span class="string">'fixed'</span>},  
+0352       <span class="keyword">for</span> r=1:length(p.actindshow),    
+0353         it = p.actindshow(r);
+0354         <a href="../../mnt/util/plot_square.html" class="code" title="function plot_square(x,y,l,col)">plot_square</a>(x(1,it+n_met),x(2,it+n_met),abs(p.norm_actvalues(it)),p.norm_actvalues_std(it),p.squaresize,c(it,:),p.flag_edges); 
+0355       <span class="keyword">end</span>
+0356   <span class="keyword">end</span>
+0357 <span class="keyword">end</span>
+0358 
+0359 <span class="comment">% ---------------------------------------------------</span>
+0360 <span class="comment">% text</span>
+0361 
+0362 <span class="keyword">if</span> p.metprintnames, 
+0363   tx = x(1,1:n_met) + p.text_offset(1);
+0364   ty = x(2,1:n_met) + p.text_offset(2);
+0365   text(tx(p.metindshow),ty(p.metindshow), p.metnames(p.metindshow),<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle); 
+0366 <span class="comment">%  text(tx,ty, p.metnames,'FontSize',p.FontSize,'Rotation',p.fontangle);</span>
+0367 <span class="keyword">end</span>
+0368 
+0369 <span class="keyword">if</span> p.actprintnames, 
+0370   tx = x(1,n_met+1:end) + p.text_offset(1);
+0371   ty = x(2,n_met+1:end) + p.text_offset(2);
+0372   text(tx(p.actindshow),ty(p.actindshow), p.actnames(p.actindshow),<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle); 
+0373 <span class="keyword">end</span>
+0374 
+0375 <span class="keyword">if</span> p.metprintvalues, 
+0376   <span class="keyword">if</span> ~length(p.metvalues), error(<span class="string">'No metabolite values given'</span>); <span class="keyword">end</span>
+0377  <span class="keyword">if</span> find(p.metvalues_std~=0), 
+0378    strings = [num2str(p.metvalues,3) repmat(<span class="string">' \pm '</span>,n_met,1) num2str(p.metvalues_std,2)];
+0379  <span class="keyword">else</span> 
+0380    strings = num2str(p.metvalues,3); 
+0381  <span class="keyword">end</span>
+0382  offset=0.5*p.squaresize;<span class="comment">%*(0.5+p.metvalues_std');</span>
+0383 <span class="comment">% text(x(1,p.metindshow) + offset,x(2,p.metindshow)+offset,strings(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);</span>
+0384  text(x(1,1:n_met) + offset,x(2,1:n_met)+offset,strings,<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle); 
+0385 <span class="keyword">end</span>
+0386 
+0387 <span class="keyword">if</span> p.actprintvalues, 
+0388   <span class="keyword">if</span> ~length(p.actvalues), error(<span class="string">'No reaction values given'</span>); <span class="keyword">end</span>
+0389   <span class="keyword">if</span> find(p.actvalues_std~=0),
+0390     strings = [num2str(p.actvalues,3) repmat(<span class="string">' \pm '</span>,n_act,1) num2str(p.actvalues_std,2)];
+0391   <span class="keyword">else</span> strings = num2str(p.actvalues,3); <span class="keyword">end</span>
+0392   strings = cellstr(strings);
+0393   <span class="keyword">for</span> it = 1:length(strings), strings{it} = strrep(strings{it},<span class="string">'NaN'</span>,<span class="string">''</span>); <span class="keyword">end</span>   
+0394   ppos = x(:,n_met+1:end);
+0395   offset=0.5*p.squaresize;<span class="comment">%*(0.5+p.actvalues_std(p.actindshow)');</span>
+0396   text(ppos(1,p.actindshow) + offset, ppos(2,p.actindshow)+offset, strings(p.actindshow)',<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle); 
+0397 <span class="keyword">end</span>
+0398 
+0399 <span class="keyword">if</span> p.arrowprintvalues, 
+0400   <span class="keyword">if</span> ~length(p.arrowvalues), error(<span class="string">'No arrow values given'</span>); <span class="keyword">end</span>
+0401   <span class="keyword">if</span> find(p.arrowvalues_std~=0),
+0402     strings = [num2str(p.arrowvalues,3) repmat(<span class="string">' \pm '</span>,n_act,1) num2str(p.arrowvalues_std,2)];
+0403   <span class="keyword">else</span> strings = num2str(p.arrowvalues,3); <span class="keyword">end</span>
+0404   strings = cellstr(strings);
+0405   <span class="keyword">for</span> it = 1:length(strings), strings{it} = strrep(strings{it},<span class="string">'NaN'</span>,<span class="string">''</span>); <span class="keyword">end</span>   
+0406   ppos = x(:,n_met+1:end);
+0407   offset=0.5*p.squaresize;<span class="comment">%*(0.5+p.arrowvalues_std(p.actindshow)');</span>
+0408   text(ppos(1,p.actindshow) + offset, ppos(2,p.actindshow)+offset, strings(p.actindshow)',<span class="string">'FontSize'</span>,p.FontSize,<span class="string">'Rotation'</span>,p.fontangle); 
+0409 <span class="keyword">end</span>
+0410 
+0411 <span class="comment">% ---------------------------------------------------</span>
+0412 
+0413 <span class="comment">% figure general layout</span>
+0414 
+0415 set(gca,<span class="string">'YDir'</span>,p.YDir);
+0416 
+0417 <a href="../../mnt/util/noticks.html" class="code" title="function noticks();">noticks</a>;
+0418 
+0419 a = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),<span class="keyword">...</span>
+0420      -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)),<span class="keyword">...</span>
+0421      1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),<span class="keyword">...</span>
+0422      -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:))];
+0423 
+0424 <span class="keyword">if</span> ~isempty(p.figure_axis), a = p.figure_axis;
+0425 <span class="keyword">end</span> 
+0426 
+0427 axis(a);
+0428 axis off;
+0429 axis equal;
+0430 
+0431 
+0432 
+0433 network.graphics_par = p;
+0434 
+0435 
+0436 <span class="comment">% END MAIN PROGRAM</span>
+0437 <span class="comment">% -----------------------------------------------------</span>
+0438 
+0439 
+0440 
+0441 <span class="comment">% -------------------------</span>
+0442 <a name="_sub1" href="#_subfunctions" class="code">function plot_square(x,y,l,std,squaresize,col,flag_edges)</a>
+0443 
+0444 stdcol = .7+.3*col;
+0445 <span class="keyword">if</span> isnan(l),     l = 0.2; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
+0446 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
+0447 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
+0448 <span class="keyword">if</span> std,
+0449   l_max = squaresize*(l+std); 
+0450   fill(x + 0.5 * l_max*[-1 1 1 -1], y + 0.5*l_max*[-1 -1 1 1],stdcol,<span class="string">'EdgeColor'</span>,secol)
+0451 <span class="keyword">end</span>
+0452 l_min = squaresize*(max(0,l));
+0453 fill(x + 0.5 * l_min*[-1 1 1 -1], y + 0.5*l_min*[-1 -1 1 1],col,<span class="string">'EdgeColor'</span>,ecol)
+0454 
+0455 
+0456 <a name="_sub2" href="#_subfunctions" class="code">function plot_circle(x,y,l,std,squaresize,col,flag_edges)</a>
+0457 
+0458 stdcol = .7+.3*col;
+0459 <span class="keyword">if</span> isnan(l), l = 0.2 ; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
+0460 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
+0461 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
+0462 <span class="keyword">if</span> std,
+0463   l_max = squaresize*(l+std); 
+0464   fill(x + 0.5 * l_max * cos(0:0.1:2*pi), y + 0.5*l_max * sin(0:0.1:2*pi),stdcol,<span class="string">'EdgeColor'</span>,secol)
+0465 <span class="keyword">end</span>
+0466 l_min = squaresize * (max(0,l));
+0467 fill(x + 0.5 * l_min * cos(0:0.1:2*pi), y + 0.5*l_min * sin(0:0.1:2*pi),col,<span class="string">'EdgeColor'</span>,ecol)
+0468 
+0469 
+0470 <a name="_sub3" href="#_subfunctions" class="code">function plot_diamond(x,y,l,std,squaresize,col,flag_edges)</a>
+0471 
+0472 stdcol = .7+.3*col;
+0473 <span class="keyword">if</span> isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
+0474 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
+0475 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
+0476 <span class="keyword">if</span> std,
+0477   l_max = squaresize*(l+std); 
+0478   fill(x + 0.5 * l_max * 4/pi* [-1 0 1 0 -1], y + 0.5*l_max*4/pi*[0 -1 0 1 0],stdcol,<span class="string">'EdgeColor'</span>,secol)
+0479 <span class="keyword">end</span>
+0480 l_min = squaresize*(max(0,l));
+0481 fill(x + 0.5 * l_min * 4/pi* [-1 0 1 0 -1], y + 0.5*l_min*4/pi*[0 -1 0 1 0],col,<span class="string">'EdgeColor'</span>,ecol)
+0482 
+0483 
+0484 <a name="_sub4" href="#_subfunctions" class="code">function plot_octagon(x,y,l,std,squaresize,col,flag_edges)</a>
+0485 
+0486 stdcol = .7+.3*col;
+0487 <span class="keyword">if</span> isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
+0488 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
+0489 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
+0490 <span class="keyword">if</span> std,
+0491   l_max = squaresize*(l+std); 
+0492   fill(x + 0.5 * l_max * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_max*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],stdcol,<span class="string">'EdgeColor'</span>,secol)
+0493 <span class="keyword">end</span>
+0494 l_min = squaresize*(max(0,l));
+0495 fill(x + 0.5 * l_min * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_min*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],col,<span class="string">'EdgeColor'</span>,ecol)
+0496 
+0497 
+0498 <a name="_sub5" href="#_subfunctions" class="code">function plot_triangle(x, y, phi, l, col, forward,flag_edges)</a>
+0499 
+0500 <span class="keyword">if</span> isnan(l), l = l*0.5; forward = 1; col = [.7 .7 .7]; 
+0501   points = repmat([x; y],1,4) +  l * [-1 0 1 0; 0 -1 0 1];
+0502 <span class="keyword">else</span>,
+0503   points = repmat([x; y],1,3) + forward * [cos(phi) -sin(phi); sin(phi) cos(phi)] * l * [-0.5 .5 -0.5; -0.3 0 0.3];
+0504 <span class="keyword">end</span>
+0505 fill(points(1,:),points(2,:),col);
+0506 
+0507 
+0508 <span class="comment">% -------------------------</span>
+0509 <span class="comment">% compute positions on an arc: x3 all points for drawing;</span>
+0510 <span class="comment">% arcx,arcy: positions of one point (used for arrow)</span>
+0511  
+0512  <a name="_sub6" href="#_subfunctions" class="code">function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);</a>
+0513  
+0514  s = 0:0.1:pi;
+0515  x3 = repmat(mean([x1,x2],2),1,length(s)) <span class="keyword">...</span>
+0516       + 0.5 * [x2-x1] * cos(s) + height * 0.5 * [0 -1; 1 0] * [x2-x1] * sin(s);
+0517  nn = max(1,ceil(arrow_shift * size(x3,2)));
+0518  arcx = x3(1,nn); 
+0519  arcy = x3(2,nn); 
+0520  
+0521  <a name="_sub7" href="#_subfunctions" class="code">function  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)</a>
+0522  
+0523  <span class="comment">% compute height:</span>
+0524  
+0525  R90 = [ 0 -1; 1 0];
+0526  lambda = 0.5* R90*[x2-x1, x3-x2] * (x1-x3);
+0527  f = 0.5*(x1+x2)+lambda(1)*R90*(x2-x1);
+0528  height = sqrt(sum((f - x1).^2)) - sqrt(sum ( (f - (0.5*(x1+x2))) .^2));
+0529  height = - height * sign ( (x3-x2)'*R90*(x2-x1));
+0530  
+0531  [x3,arcx,arcy] = <a href="#_sub6" class="code" title="subfunction [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x1,x2, height,arrow_shift);
+0532  plot(x3(1,:),x3(2,:),<span class="string">'color'</span>,linecolor); 
+0533 
+0534 
+0535 <span class="comment">% -------------------------</span>
+0536  
+0537 <a name="_sub8" href="#_subfunctions" class="code">function p = netgraph_draw_set_parameters(network,vararg)</a>
+0538 
+0539 [nm,nr] = size(network.N);
+0540 
+0541 <span class="comment">% -------------------------</span>
+0542 <span class="comment">% use parameters from network</span>
+0543 
+0544 <span class="keyword">if</span> isfield(network,<span class="string">'graphics_par'</span>), 
+0545   p = network.graphics_par;
+0546 <span class="keyword">else</span>
+0547   network = <a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network);
+0548   p = network.graphics_par;
+0549 <span class="keyword">end</span>
+0550 
+0551 
+0552 <span class="comment">% -------------------------</span>
+0553 <span class="comment">% use parameters in argument list</span>
+0554 
+0555 <span class="keyword">if</span> length(vararg),
+0556 input_arg = vararg{1};
+0557 
+0558 <span class="keyword">switch</span> length(input_arg),
+0559   <span class="keyword">case</span> 0,
+0560   <span class="keyword">case</span> 1,
+0561     <span class="keyword">if</span> isstruct(input_arg),
+0562       fn = fieldnames(input_arg);
+0563       <span class="keyword">for</span> i=1:length(fn), p=setfield( p, fn{i},getfield(input_arg,fn{i})); <span class="keyword">end</span>
+0564     <span class="keyword">end</span>
+0565   <span class="keyword">otherwise</span>,
+0566     <span class="keyword">for</span> i=1:length(input_arg)/2,
+0567       p = setfield( p, input_arg{2*(i-1)+1},input_arg{2*i}); 
+0568     <span class="keyword">end</span>
+0569 <span class="keyword">end</span>
+0570 <span class="keyword">end</span>
+0571 
+0572 <span class="comment">% -------------------------</span>
+0573 <span class="comment">% add missing parameters</span>
+0574 
+0575 p_default = struct(<span class="keyword">...</span>
+0576     <span class="string">'N'</span>,               network.N, <span class="keyword">...</span>
+0577     <span class="string">'show_regulation'</span>, 0, <span class="keyword">...</span>
+0578     <span class="string">'showsign'</span>,        1, <span class="keyword">...</span>
+0579     <span class="string">'omit_zeros'</span>,      0, <span class="keyword">...</span>
+0580     <span class="string">'show_metvalues'</span>, 1, <span class="keyword">...</span>
+0581     <span class="string">'show_actvalues'</span>, 1, <span class="keyword">...</span>
+0582     <span class="string">'show_arrowvalues'</span>, 1, <span class="keyword">...</span>
+0583     <span class="string">'show_edgevalues'</span>, 0, <span class="keyword">...</span>
+0584     <span class="string">'show_regulationvalues'</span>, 0, <span class="keyword">...</span>
+0585     <span class="string">'metvalues_std'</span>,   zeros(size(p.metvalues)),  <span class="keyword">...</span><span class="comment"> </span>
+0586     <span class="string">'metvaluesmax'</span>,    [], <span class="keyword">...</span>
+0587     <span class="string">'metvaluesmin'</span>,    [], <span class="keyword">...</span>
+0588     <span class="string">'metstyle'</span>, <span class="string">'fixed'</span>, <span class="keyword">...</span>
+0589     <span class="string">'actvalues_std'</span>,   zeros(size(p.actvalues)),  <span class="keyword">...</span>
+0590     <span class="string">'actvaluesmax'</span>,    [], <span class="keyword">...</span>
+0591     <span class="string">'actvaluesmin'</span>,    [], <span class="keyword">...</span>
+0592     <span class="string">'actstyle'</span>, <span class="string">'fixed'</span>, <span class="keyword">...</span>
+0593     <span class="string">'omitreactions'</span>,   {<span class="string">'omitthisreaction'</span>}, <span class="keyword">...</span>
+0594     <span class="string">'omitmetabolites'</span>, {<span class="string">'omitthismetabolite'</span>}, <span class="keyword">...</span>
+0595     <span class="string">'arrowstyle'</span>,      <span class="string">'none'</span>, <span class="keyword">...</span>
+0596     <span class="string">'arrowvalues'</span>,     [], <span class="keyword">...</span>
+0597     <span class="string">'arrowprintvalues'</span>,   0, <span class="keyword">...</span>
+0598     <span class="string">'arrowvaluesmax'</span>,  [], <span class="keyword">...</span>
+0599     <span class="string">'arrowvaluesmin'</span>,  [], <span class="keyword">...</span>
+0600     <span class="string">'arrow_stoichiometries'</span>, 1, <span class="keyword">...</span>
+0601     <span class="string">'arrowvalues_std'</span>,     zeros(size(p.arrowvalues)), <span class="keyword">...</span>
+0602     <span class="string">'arrow_shift'</span>,     0.7,  <span class="keyword">...</span>
+0603     <span class="string">'arrowcolor'</span>,      [0.7 0.7 0.7],  <span class="keyword">...</span>
+0604     <span class="string">'single_arrow'</span>, 0, <span class="keyword">...</span>
+0605     <span class="string">'edgevalues'</span>,      [],  <span class="keyword">...</span>
+0606     <span class="string">'edgevalues_std'</span>,  [], <span class="keyword">...</span>
+0607     <span class="string">'edgevaluesmax'</span>,   [], <span class="keyword">...</span>
+0608     <span class="string">'edgevaluesmin'</span>,   [], <span class="keyword">...</span>
+0609     <span class="string">'edgeprintvalues'</span>,      [],  <span class="keyword">...</span>
+0610     <span class="string">'edgestyle'</span>,      <span class="string">'normal'</span>,  <span class="keyword">...</span>
+0611     <span class="string">'regulationvalues'</span>,    [],  <span class="keyword">...</span>
+0612     <span class="string">'regulationprintvalues'</span>,    [],  <span class="keyword">...</span>
+0613     <span class="string">'regulationvalues_std'</span>,[], <span class="keyword">...</span>
+0614     <span class="string">'regulationvaluesmax'</span>, [], <span class="keyword">...</span>
+0615     <span class="string">'regulationvaluesmin'</span>, [], <span class="keyword">...</span>
+0616     <span class="string">'regulationstyle'</span>,      <span class="string">'normal'</span>,  <span class="keyword">...</span>
+0617     <span class="string">'hold_on'</span>,         0, <span class="keyword">...</span>
+0618     <span class="string">'FontSize'</span>,        8, <span class="keyword">...</span>
+0619     <span class="string">'fontangle'</span>,       0, <span class="keyword">...</span>
+0620     <span class="string">'YDir'</span>,            <span class="string">'normal'</span>, <span class="keyword">...</span>
+0621     <span class="string">'figure_axis'</span>,     [], <span class="keyword">...</span>
+0622     <span class="string">'black_and_white'</span>, 0, <span class="keyword">...</span>
+0623     <span class="string">'colormap'</span>,        rb_colors(250), <span class="keyword">...</span>
+0624     <span class="string">'linecolor'</span>,       [0 0 1], <span class="keyword">...</span>
+0625     <span class="string">'rlinecolor'</span>,      [1 .3 0.], <span class="keyword">...</span>
+0626     <span class="string">'text_offset'</span>,     [0.01,-0.01], <span class="keyword">...</span>
+0627     <span class="string">'straightlines'</span>,   1,       <span class="keyword">...</span>
+0628     <span class="string">'arrowsize'</span>,       0.03,        <span class="keyword">...</span>
+0629     <span class="string">'figure_position'</span>, [],  <span class="keyword">...</span>
+0630     <span class="string">'subplot_position'</span>,[], <span class="keyword">...</span>
+0631     <span class="string">'no_points'</span>,       0, <span class="keyword">...</span>
+0632     <span class="string">'colorbar'</span>,        0,<span class="keyword">...</span>
+0633     <span class="string">'colorbar_numbers'</span>, [],<span class="keyword">...</span>
+0634     <span class="string">'flag_edges'</span>, 1 );
+0635    
+0636 p = join_struct(p_default,p);
+0637 
+0638 <span class="keyword">if</span> ~isempty(p.edgevalues),       p.show_edgevalues = 1; <span class="keyword">end</span> 
+0639 <span class="keyword">if</span> ~isempty(p.regulationvalues), p.show_regulationvalues = 1; <span class="keyword">end</span> 
+0640 <span class="keyword">if</span> p.show_regulationvalues,      p.show_regulation = 1; <span class="keyword">end</span> 
+0641 
+0642 <span class="keyword">if</span> p.arrowprintvalues, p.actprintvalues = 0; <span class="keyword">end</span>
+0643 
+0644 <span class="comment">% if length(p.metvalues_std)</span>
+0645 <span class="comment">%   if sum(p.metvalues_std~=0), p.metstyle = 'box_std';</span>
+0646 <span class="comment">%   end</span>
+0647 <span class="comment">% end</span>
+0648 <span class="comment">%</span>
+0649 <span class="comment">% if length(p.actvalues_std)</span>
+0650 <span class="comment">%   if sum(p.actvalues_std~=0), p.actstyle = 'box_std';</span>
+0651 <span class="comment">%   end</span>
+0652 <span class="comment">% end</span>
+0653 
+0654 
+0655 <span class="comment">% ----------</span>
+0656 <span class="comment">% correct parameters</span>
+0657 
+0658 <span class="keyword">switch</span> p.arrowstyle,
+0659   <span class="keyword">case</span> <span class="string">'directions'</span>,
+0660     p.arrowvalues = ones(length(network.actions),1);
+0661     <span class="keyword">if</span> isfield(p,<span class="string">'reaction_mapping'</span>),
+0662         p.arrowvalues = ones(max(p.reaction_mapping),1);
+0663     <span class="keyword">end</span>  
+0664 <span class="keyword">end</span>
+0665 
+0666 <span class="keyword">if</span> isempty(p.metvalues),          p.show_metvalues = 0; <span class="keyword">end</span>
+0667 <span class="keyword">if</span> strcmp(p.metstyle,<span class="string">'none'</span>),     p.show_metvalues = 0; <span class="keyword">end</span>
+0668 <span class="keyword">if</span> isempty(p.actvalues),          p.show_actvalues = 0; <span class="keyword">end</span>
+0669 <span class="keyword">if</span> strcmp(p.actstyle,<span class="string">'none'</span>),     p.show_actvalues = 0; <span class="keyword">end</span>
+0670 <span class="keyword">if</span> isempty(p.arrowvalues),        p.show_arrowvalues = 0; <span class="keyword">end</span>
+0671 <span class="keyword">if</span> isempty(p.edgevalues),         p.show_edgevalues = 0; <span class="keyword">end</span>
+0672 <span class="keyword">if</span> isempty(p.regulationvalues),   p.show_regulationvalues = 0; <span class="keyword">end</span>
+0673 <span class="keyword">if</span> strcmp(p.arrowstyle,<span class="string">'none'</span>),  p.show_arrowvalues = 0; <span class="keyword">end</span>
+0674 
+0675 <span class="keyword">if</span> p.show_regulationvalues,
+0676   <span class="keyword">if</span> isempty(p.regulationvalues_std),
+0677     p.regulationvalues_std = zeros(size(p.regulationvalues));
+0678   <span class="keyword">end</span>
+0679 <span class="keyword">end</span>
+0680 
+0681 <span class="keyword">if</span> p.show_edgevalues,
+0682   <span class="keyword">if</span> isempty(p.edgevalues_std),
+0683     p.edgevalues_std = zeros(size(p.edgevalues));
+0684   <span class="keyword">end</span>
+0685 <span class="keyword">end</span>
+0686 
+0687 <span class="comment">% ----------</span>
+0688 <span class="comment">% split metabolites?</span>
+0689 
+0690 <span class="keyword">if</span> isfield(p,<span class="string">'metabolite_mapping'</span>),
+0691   <span class="keyword">if</span> p.show_metvalues,
+0692     p.metvalues       = p.metvalues(p.metabolite_mapping);
+0693     p.metvalues_std   = p.metvalues_std(p.metabolite_mapping); 
+0694   <span class="keyword">end</span>
+0695   <span class="keyword">if</span> p.show_edgevalues,
+0696     p.edgevalues     = p.edgevalues(p.metabolite_mapping,:); 
+0697     p.edgevalues_std = p.edgevalues_std(p.metabolite_mapping,:); 
+0698   <span class="keyword">end</span>
+0699   <span class="keyword">if</span> p.show_regulationvalues,
+0700     p.regulationvalues     = p.regulationvalues(:,p.metabolite_mapping); 
+0701     p.regulationvalues_std = p.regulationvalues_std(:,p.metabolite_mapping); 
+0702   <span class="keyword">end</span>
+0703 <span class="keyword">end</span>
+0704 
+0705 <span class="keyword">if</span> isfield(p,<span class="string">'reaction_mapping'</span>),
+0706   <span class="keyword">if</span> p.show_actvalues,
+0707     p.actvalues       = p.actvalues(p.reaction_mapping);
+0708     p.actvalues_std   = p.actvalues_std(p.reaction_mapping);
+0709   <span class="keyword">end</span>
+0710   <span class="keyword">if</span> p.show_arrowvalues,
+0711     p.arrowvalues       = p.arrowvalues(p.reaction_mapping);
+0712   <span class="keyword">end</span>
+0713   <span class="keyword">if</span> p.show_edgevalues,
+0714     p.edgevalues     = p.edgevalues(:,p.reaction_mapping); 
+0715     p.edgevalues_std = p.edgevalues_std(:,p.reaction_mapping); 
+0716   <span class="keyword">end</span>
+0717   <span class="keyword">if</span> p.show_regulationvalues,
+0718     p.regulationvalues     = p.regulationvalues(p.reaction_mapping,:); 
+0719     p.regulationvalues_std = p.regulationvalues_std(p.reaction_mapping,:); 
+0720   <span class="keyword">end</span>
+0721 <span class="keyword">end</span>
+0722 
+0723 <span class="comment">% ---------------------------------------------------------------------</span>
+0724 <span class="comment">% showsign = 1  -&gt; normalise all values to values between -1 and 1</span>
+0725 <span class="comment">% showsign = 0  -&gt; normalise all values to values between  0 and 1</span>
+0726 
+0727 <span class="keyword">if</span> p.show_metvalues,
+0728   [p.norm_metvalues, p.norm_metvalues_std,p.metvaluesmax,p.metvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.metvalues,p.metvalues_std,p.metvaluesmax,p.metvaluesmin,p);
+0729 <span class="keyword">end</span>
+0730 
+0731 <span class="keyword">if</span> p.show_actvalues,
+0732   [p.norm_actvalues, p.norm_actvalues_std,p.actvaluesmax,p.actvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.actvalues,p.actvalues_std,p.actvaluesmax,p.actvaluesmin,p);
+0733 <span class="keyword">end</span>
+0734 
+0735 <span class="keyword">if</span> p.show_arrowvalues,  
+0736   p.norm_arrowvalues = p.arrowvalues;
+0737   <span class="keyword">if</span> ~isempty(p.arrowvaluesmax),
+0738     <span class="keyword">if</span> isempty(p.arrowvaluesmin),
+0739       p.arrowvaluesmin = -p.arrowvaluesmax;
+0740     <span class="keyword">end</span>
+0741     p.norm_arrowvalues(p.norm_arrowvalues&gt;p.arrowvaluesmax) = p.arrowvaluesmax;
+0742     p.norm_arrowvalues(p.norm_arrowvalues&lt;p.arrowvaluesmin) = p.arrowvaluesmin;
+0743     p.norm_arrowvalues = p.norm_arrowvalues / max(p.arrowvaluesmax, abs(p.arrowvaluesmin));
+0744   <span class="keyword">end</span>
+0745 <span class="keyword">end</span>
+0746 
+0747 <span class="keyword">if</span> p.show_edgevalues,
+0748   [p.norm_edgevalues, p.norm_edgevalues_std,p.edgevaluesmax,p.edgevaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.edgevalues,p.edgevalues_std,p.edgevaluesmax,p.edgevaluesmin,p); 
+0749 <span class="keyword">end</span>
+0750 
+0751 <span class="keyword">if</span> p.show_regulationvalues,
+0752   [p.norm_regulationvalues, p.norm_regulationvalues_std,p.regulationvaluesmax,p.regulationvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.regulationvalues,p.regulationvalues_std,p.regulationvaluesmax,p.regulationvaluesmin,p);
+0753 <span class="keyword">end</span>
+0754 
+0755 <span class="comment">% --- some more stuff</span>
+0756 
+0757 <span class="keyword">if</span> p.black_and_white,        p.colormap = 0.5-0.5*sign(gray(250)-0.5); <span class="keyword">end</span>
+0758 
+0759 
+0760 <span class="comment">% omit metabolites that are not connected anymore once reactions have been omitted</span>
+0761 ll = setdiff(1:nr,<a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitreactions,network.actions));
+0762 p.omitmetabolites = union(p.omitmetabolites, network.metabolites(find(sum(abs(network.N(:,ll)),2)==0)));
+0763 
+0764 
+0765 p.actindshow = setdiff(1:length(network.actions),<a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitreactions,network.actions));
+0766 p.metindshow = setdiff(1:length(network.metabolites),<a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitmetabolites,network.metabolites));
+0767 
+0768 <span class="comment">% ----------</span>
+0769 
+0770 <span class="keyword">if</span> isfield(p,<span class="string">'chop_names'</span>),
+0771   <span class="keyword">for</span> it = 1:length(p.metnames),
+0772     <span class="keyword">if</span> length(p.metnames{it}) &gt; p.chop_names,
+0773       p.metnames{it} = [p.metnames{it}(1:p.chop_names) <span class="string">'...'</span>];
+0774     <span class="keyword">end</span>
+0775   <span class="keyword">end</span>
+0776   <span class="keyword">for</span> it = 1:length(p.actnames),
+0777     <span class="keyword">if</span> length(p.actnames{it}) &gt; p.chop_names,
+0778       p.actnames{it} = [p.actnames{it}(1:p.chop_names) <span class="string">'...'</span> ];
+0779     <span class="keyword">end</span>
+0780   <span class="keyword">end</span>
+0781 <span class="keyword">end</span>
+0782 
+0783 <span class="keyword">if</span> isfield(p,<span class="string">'split_names'</span>),
+0784   <span class="keyword">if</span> p.split_names,
+0785   <span class="keyword">for</span> it = 1:length(p.metnames),
+0786     p.metnames{it} =  <a href="#_sub9" class="code" title="subfunction name2 = split_name(name,l)">split_name</a>(p.metnames{it},p.split_names);
+0787   <span class="keyword">end</span>
+0788   <span class="keyword">for</span> it = 1:length(p.actnames),
+0789      p.actnames{it} =  <a href="#_sub9" class="code" title="subfunction name2 = split_name(name,l)">split_name</a>(p.actnames{it},p.split_names);
+0790   <span class="keyword">end</span>
+0791   <span class="keyword">end</span>
+0792 <span class="keyword">end</span>
+0793 
+0794 <span class="keyword">if</span> size(p.x,2) == 0, error(<span class="string">'No point positions found'</span>); <span class="keyword">end</span>
+0795 
+0796 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0797 
+0798 <a name="_sub9" href="#_subfunctions" class="code">function name2 = split_name(name,l)</a>
+0799 
+0800 name2 = name;
+0801 <span class="keyword">if</span> length(name) &gt; l,
+0802   ll = ceil(length(name)/2);
+0803   name  = [name repmat(<span class="string">' '</span>,1,ll - mod(length(name),ll))];
+0804   name1 = [reshape(name,ll,length(name)/ll)', repmat(<span class="string">'\n'</span>,length(name)/ll,1)];
+0805   name1 = reshape(name1',prod(size(name1)),1)';
+0806   name2 = sprintf(name1(1:end-2));
+0807 <span class="keyword">end</span>
+0808 
+0809 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0810 
+0811 <a name="_sub10" href="#_subfunctions" class="code">function [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);</a>
+0812 
+0813 normvalues     = [];
+0814 normvalues_std = [];
+0815 
+0816 <span class="keyword">if</span> p.omit_zeros, nonzero = (values~=0); <span class="keyword">end</span>
+0817 
+0818 <span class="keyword">if</span> p.showsign,
+0819   <span class="keyword">if</span> isempty(valuesmax),   valuesmax  = max(10^-10,max(abs(values(:)))); <span class="keyword">end</span>
+0820   <span class="keyword">if</span> isempty(valuesmin),   valuesmin  = - valuesmax   ; <span class="keyword">end</span>
+0821 <span class="keyword">else</span>,
+0822   <span class="keyword">if</span> isempty(valuesmax),   valuesmax  = max(values(:)); <span class="keyword">end</span>
+0823   <span class="keyword">if</span> isempty(valuesmin),   valuesmin  = min(values(:)); <span class="keyword">end</span>  
+0824 <span class="keyword">end</span>
+0825 <span class="keyword">if</span> valuesmin == valuesmax,  valuesmax = 10^-10 +  valuesmin; <span class="keyword">end</span>
+0826 <span class="keyword">if</span> p.showsign,
+0827   normvalues     = values / valuesmax;
+0828 <span class="keyword">else</span>
+0829   normvalues     = 2*[(values -  valuesmin)   / ( valuesmax- valuesmin)]-1;
+0830 <span class="keyword">end</span>
+0831 
+0832 normvalues_std = real(values_std /  ( valuesmax- valuesmin));
+0833 normvalues(find(normvalues&gt;1)) = 1;  
+0834 normvalues(find(normvalues&lt;-1))=-1;
+0835 
+0836 <span class="keyword">if</span> p.omit_zeros, 
+0837   normvalues     = normvalues .* nonzero;
+0838   <span class="keyword">if</span> ~isempty(normvalues_std), normvalues_std = normvalues_std .* nonzero;  <span class="keyword">end</span>
+0839 <span class="keyword">end</span>
+0840 
+0841 <span class="comment">% ----------------------------------------</span>
+0842 
+0843 <a name="_sub11" href="#_subfunctions" class="code">function this_colorbar(num,colmap)</a>
+0844 
+0845 colorbar(<span class="string">'off'</span>); colormap(colmap); h = colorbar; nc = size(colmap,1);
+0846 this_xtick = 1+ceil([nc-1]*(0:1:length(num)-1)/(length(num)-1));
+0847 <span class="comment">%set(h,'Location','SouthOutside','XLim',[1 nc],'XTick',this_xtick,'XTickLabel',[0],'Position', [0.25 0.05 0.50.015]);</span>
+0848 set(h,<span class="string">'YLim'</span>,[1 nc],<span class="string">'YTick'</span>,this_xtick,<span class="string">'YTickLabel'</span>,num);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xmldemo2</title>
+  <meta name="keywords" content="xmldemo2">
+  <meta name="description" content="XMLDEMO2 Demonstrate how to read an XML file, modify it and save it">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">xmltree</a> &gt; xmldemo2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>xmldemo2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>XMLDEMO2 Demonstrate how to read an XML file, modify it and save it</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">XMLDEMO2 Demonstrate how to read an XML file, modify it and save it
+
+   Description
+   This script demonstrates the use of the xmltree class to
+   open an XML file, access data stored in it, modify a value
+   and save the new XML file.
+
+   This demonstration script need the file 'example.xml' created
+   in the first demonstration script xmldemo1.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%XMLDEMO2 Demonstrate how to read an XML file, modify it and save it</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%   Description</span>
+0004 <span class="comment">%   This script demonstrates the use of the xmltree class to</span>
+0005 <span class="comment">%   open an XML file, access data stored in it, modify a value</span>
+0006 <span class="comment">%   and save the new XML file.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   This demonstration script need the file 'example.xml' created</span>
+0009 <span class="comment">%   in the first demonstration script xmldemo1.</span>
+0010 
+0011 <span class="comment">%   Copyright (C) 2003  Guillaume Flandin</span>
+0012 
+0013 clc;
+0014 disp(<span class="string">'This demonstration illustrates the use of the xmltree class.'</span>)
+0015 disp(<span class="string">' '</span>)
+0016 disp(<span class="string">'Let''s open the address book previously created and modify an entry.'</span>)
+0017 disp(<span class="string">' '</span>)
+0018 disp(<span class="string">'Press any key to open the XML file ''example.xml''.'</span>)
+0019 disp(<span class="string">' '</span>)
+0020 pause;
+0021 
+0022 disp(<span class="string">'&gt;&gt; t = xmltree(''example.xml'')'</span>)
+0023 <span class="keyword">try</span>,
+0024     t = xmltree(<span class="string">'example.xml'</span>)
+0025 <span class="keyword">catch</span>,
+0026     disp(<span class="string">'Please first launch xmldemo1'</span>)
+0027 <span class="keyword">end</span>
+0028 
+0029 disp(<span class="string">' '</span>)
+0030 disp(<span class="string">'Now you have several methods implemented to deal with the xmltree object:'</span>)
+0031 methods xmltree
+0032 
+0033 disp(<span class="string">'Press any key to continue.'</span>)
+0034 pause; clc;
+0035 
+0036 <span class="comment">% Extract the first name</span>
+0037 disp(<span class="string">'Extract the first name.'</span>)
+0038 disp(<span class="string">' '</span>)
+0039 disp(<span class="string">'Press any key to continue.'</span>)
+0040 disp(<span class="string">' '</span>)
+0041 pause;
+0042 
+0043 disp(<span class="string">'&gt;&gt; first_name = children(t,find(t,''/addressBook/entry[1]/firstName''))'</span>)
+0044 disp(<span class="string">'&gt;&gt; get(t,first_name,''value'')'</span>)
+0045 firstname_tag = find(t,<span class="string">'/addressBook/entry[1]/firstName'</span>);
+0046 first_name = children(t,firstname_tag);
+0047 get(t,first_name,<span class="string">'value'</span>)
+0048 
+0049 <span class="comment">% Modify the first name</span>
+0050 disp(<span class="string">'Modify the first name.'</span>)
+0051 disp(<span class="string">' '</span>)
+0052 disp(<span class="string">'Press any key to continue.'</span>)
+0053 disp(<span class="string">' '</span>)
+0054 pause;
+0055 
+0056 disp(<span class="string">'t = set(t,first_name,''value'',''Joe'');'</span>)
+0057 t = set(t,first_name,<span class="string">'value'</span>,<span class="string">'Joe'</span>);
+0058 
+0059 <span class="comment">% Modify the last name</span>
+0060 disp(<span class="string">' '</span>)
+0061 disp(<span class="string">'Modify the last name.'</span>)
+0062 disp(<span class="string">' '</span>)
+0063 disp(<span class="string">'Press any key to modify the last name.'</span>)
+0064 disp(<span class="string">' '</span>)
+0065 pause;
+0066 
+0067 disp(<span class="string">'&gt;&gt; t = set(t,children(t,find(t,''//lastName'')),''value'',''Bloggs'');'</span>)
+0068 t = set(t,children(t,find(t,<span class="string">'//lastName'</span>)),<span class="string">'value'</span>,<span class="string">'Bloggs'</span>);
+0069 
+0070 <span class="comment">% Save the modified XML file</span>
+0071 disp(<span class="string">' '</span>)
+0072 disp(<span class="string">'Press any key to save the xmltree in example2.xml.'</span>)
+0073 disp(<span class="string">' '</span>)
+0074 pause;
+0075 
+0076 disp(<span class="string">'&gt;&gt; save(t,''example2.xml'');'</span>)
+0077 save(t,<span class="string">'example2.xml'</span>);
+0078 disp([<span class="string">'Saved in:'</span> fullfile(pwd,<span class="string">'example2.xml'</span>)]);
+0079 
+0080 disp(<span class="string">' '</span>);
+0081 disp(<span class="string">'Press any key to end.'</span>)
+0082 pause; clc; close all;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

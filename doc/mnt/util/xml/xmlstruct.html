@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xmlstruct</title>
+  <meta name="keywords" content="xmlstruct">
+  <meta name="description" content="XMLSTRUCT - Reads XML data from file and list as structures.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">util</a> &gt; <a href="index.html">xml</a> &gt; xmlstruct.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>xmlstruct
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>XMLSTRUCT - Reads XML data from file and list as structures.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [st,p]=xmlstruct(str,par,p) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLSTRUCT - Reads XML data from file and list as structures.
+
+ st=xmlstruct('xmlstring');
+
+  This returns a long array of struct describing all XML tags and
+  and text between the tags. All parameters belonging to the tag
+  are stored in an a sub structure '___.data'. 
+
+
+ st=xmlstruct('xmlstring','sub');
+
+  This organizes all structure in a tree shape with sub structures.
+  Then a opening tag (type=1) opens up a sub level and puts them
+  all following data in '__.sub' and the corresponding closing
+  tag exits that sub level.
+  
+
+ SMALL EXAMPLE 1:
+
+   st=xmlstruct('&lt;creator type=&quot;composer&quot;&gt;Franz Schubert&lt;/creator&gt;')
+
+-st
+ |-st(1)
+ | |-name .............. creator
+ | |-data
+ | | \-type .............. composer
+ | \-type ..............      1
+ |-st(2)
+ | |-name .............. []
+ | |-data .............. Franz Schubert
+ | \-type ..............      0
+ \-st(3)
+   |-name .............. creator
+   |-data .............. []
+   \-type ..............      3
+
+ SMALL EXAMPLE 2:
+   
+   st=xmlstruct('&lt;creator type=&quot;composer&quot;&gt;Franz Schubert&lt;/creator&gt;','sub')
+
+-st
+ |-name .............. creator
+ |-data
+ | \-type .............. composer
+ |-type ..............      1
+ \-sub
+   |-sub(1)
+   | |-name .............. []
+   | |-data .............. Franz Schubert
+   | \-type ..............      0
+   \-sub(2)
+     |-name .............. creator
+     |-data .............. []
+     \-type ..............      3
+     
+ Tip, You can quick and easy read a XML-file into a matlab string with:
+
+   f=fopen('myfile.xml');
+   xmlstring=char(fread(f,[1 inf],'uint8'));
+   fclose(f);
+   
+ SE ALSO: XMLDATA
+
+ Look at:  http://www.rydesater.com/tools OR http://petrydpc.ite.mh.se/tools
+
+
+   LICENSE:
+  ========= 
+
+   Copyright (C) Peter Rydes�er 2002, Mitth�skolan, SWEDEN
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+   
+
+   Please, send me an e-mail if you use this and/or improve it. 
+   If you think this is usful fore your work, please remember me and my
+   hard work with it!
+
+   Peter.Rydesater@mh.se
+
+   Peter Rydes�er
+   Mitth�skolan (Mid Sweden University)
+   SE-831 25 �TERSUND
+   SWEDEN</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="xmldata.html" class="code" title="">xmldata</a>	XMLDATA   - Read a XML tag or text at a given position in a XML file.</li><li><a href="xmlstruct.html" class="code" title="function [st,p]=xmlstruct(str,par,p)">xmlstruct</a>	XMLSTRUCT - Reads XML data from file and list as structures.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="xmlstruct.html" class="code" title="function [st,p]=xmlstruct(str,par,p)">xmlstruct</a>	XMLSTRUCT - Reads XML data from file and list as structures.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% XMLSTRUCT - Reads XML data from file and list as structures.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% st=xmlstruct('xmlstring');</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%  This returns a long array of struct describing all XML tags and</span>
+0006 <span class="comment">%  and text between the tags. All parameters belonging to the tag</span>
+0007 <span class="comment">%  are stored in an a sub structure '___.data'.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% st=xmlstruct('xmlstring','sub');</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%  This organizes all structure in a tree shape with sub structures.</span>
+0013 <span class="comment">%  Then a opening tag (type=1) opens up a sub level and puts them</span>
+0014 <span class="comment">%  all following data in '__.sub' and the corresponding closing</span>
+0015 <span class="comment">%  tag exits that sub level.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% SMALL EXAMPLE 1:</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%   st=xmlstruct('&lt;creator type=&quot;composer&quot;&gt;Franz Schubert&lt;/creator&gt;')</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%-st</span>
+0023 <span class="comment">% |-st(1)</span>
+0024 <span class="comment">% | |-name .............. creator</span>
+0025 <span class="comment">% | |-data</span>
+0026 <span class="comment">% | | \-type .............. composer</span>
+0027 <span class="comment">% | \-type ..............      1</span>
+0028 <span class="comment">% |-st(2)</span>
+0029 <span class="comment">% | |-name .............. []</span>
+0030 <span class="comment">% | |-data .............. Franz Schubert</span>
+0031 <span class="comment">% | \-type ..............      0</span>
+0032 <span class="comment">% \-st(3)</span>
+0033 <span class="comment">%   |-name .............. creator</span>
+0034 <span class="comment">%   |-data .............. []</span>
+0035 <span class="comment">%   \-type ..............      3</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% SMALL EXAMPLE 2:</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%   st=xmlstruct('&lt;creator type=&quot;composer&quot;&gt;Franz Schubert&lt;/creator&gt;','sub')</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%-st</span>
+0042 <span class="comment">% |-name .............. creator</span>
+0043 <span class="comment">% |-data</span>
+0044 <span class="comment">% | \-type .............. composer</span>
+0045 <span class="comment">% |-type ..............      1</span>
+0046 <span class="comment">% \-sub</span>
+0047 <span class="comment">%   |-sub(1)</span>
+0048 <span class="comment">%   | |-name .............. []</span>
+0049 <span class="comment">%   | |-data .............. Franz Schubert</span>
+0050 <span class="comment">%   | \-type ..............      0</span>
+0051 <span class="comment">%   \-sub(2)</span>
+0052 <span class="comment">%     |-name .............. creator</span>
+0053 <span class="comment">%     |-data .............. []</span>
+0054 <span class="comment">%     \-type ..............      3</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Tip, You can quick and easy read a XML-file into a matlab string with:</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%   f=fopen('myfile.xml');</span>
+0059 <span class="comment">%   xmlstring=char(fread(f,[1 inf],'uint8'));</span>
+0060 <span class="comment">%   fclose(f);</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% SE ALSO: XMLDATA</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% Look at:  http://www.rydesater.com/tools OR http://petrydpc.ite.mh.se/tools</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">%   LICENSE:</span>
+0068 <span class="comment">%  =========</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">%   Copyright (C) Peter Rydes�er 2002, Mitth�skolan, SWEDEN</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">%   This program is free software; you can redistribute it and/or</span>
+0073 <span class="comment">%   modify it under the terms of the GNU General Public License</span>
+0074 <span class="comment">%   as published by the Free Software Foundation; either version 2</span>
+0075 <span class="comment">%   of the License, or (at your option) any later version.</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">%   This program is distributed in the hope that it will be useful,</span>
+0078 <span class="comment">%   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0079 <span class="comment">%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0080 <span class="comment">%   GNU General Public License for more details.</span>
+0081 <span class="comment">%</span>
+0082 <span class="comment">%   You should have received a copy of the GNU General Public License</span>
+0083 <span class="comment">%   along with this program; if not, write to the Free Software</span>
+0084 <span class="comment">%   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">%</span>
+0087 <span class="comment">%   Please, send me an e-mail if you use this and/or improve it.</span>
+0088 <span class="comment">%   If you think this is usful fore your work, please remember me and my</span>
+0089 <span class="comment">%   hard work with it!</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%   Peter.Rydesater@mh.se</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">%   Peter Rydes�er</span>
+0094 <span class="comment">%   Mitth�skolan (Mid Sweden University)</span>
+0095 <span class="comment">%   SE-831 25 �TERSUND</span>
+0096 <span class="comment">%   SWEDEN</span>
+0097 <span class="comment">%</span>
+0098 
+0099 
+0100 <a name="_sub0" href="#_subfunctions" class="code">function [st,p]=xmlstruct(str,par,p)</a>
+0101     <span class="keyword">if</span> nargin&lt;3,
+0102       p=1;
+0103     <span class="keyword">end</span>
+0104     n=0;
+0105     <span class="keyword">while</span> p,
+0106       n=n+1;
+0107       <span class="keyword">if</span> mod(n,500)==1,
+0108     st(n+501).name=<span class="string">''</span>;
+0109       <span class="keyword">end</span>      
+0110       [a,b,c,p]=<a href="xmldata.html" class="code" title="">xmldata</a>(str,p)  ;    
+0111       st(n).name=a;
+0112       st(n).data=b;
+0113       st(n).type=c;      
+0114       <span class="keyword">if</span> nargin&gt;1,
+0115     <span class="keyword">if</span> c==1,
+0116       [st(n).sub,p]=<a href="xmlstruct.html" class="code" title="function [st,p]=xmlstruct(str,par,p)">xmlstruct</a>(str,<span class="string">'sub'</span>,p);
+0117     <span class="keyword">elseif</span> c==3,
+0118       <span class="keyword">if</span> nargin==3, <span class="keyword">break</span>; <span class="keyword">end</span>      
+0119     <span class="keyword">end</span>
+0120       <span class="keyword">end</span>
+0121     <span class="keyword">end</span>
+0122     <span class="keyword">if</span> ischar(st(n).name),
+0123       st=st(1:n);
+0124     <span class="keyword">else</span>
+0125       st=st(1:n-1);
+0126     <span class="keyword">end</span>
+0127     <span class="keyword">return</span>;
+0128</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

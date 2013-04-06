@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fba_interactions</title>
+  <meta name="keywords" content="fba_interactions">
+  <meta name="description" content="[f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">fba</a> &gt; fba_interactions.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/fba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>fba_interactions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)</a>
+0002 
+0003 <span class="comment">% [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)</span>
+0004 
+0005 [nm,nr] = size(network.N);
+0006 [v_ref,f_ref] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints);
+0007 
+0008 <span class="keyword">for</span> it1 = 1:nr,
+0009 
+0010   <span class="comment">%% first order</span>
+0011   fba_constraints_1 = fba_constraints;
+0012   <span class="keyword">if</span> v_ref(it1)&gt;0,
+0013     fba_constraints_1.v_max(it1) = inhibition_factor * v_ref(it1);
+0014   <span class="keyword">end</span>
+0015   <span class="keyword">if</span> v_ref(it1)&lt;0,
+0016     fba_constraints_1.v_min(it1) = inhibition_factor * v_ref(it1);
+0017   <span class="keyword">end</span>
+0018 
+0019   <span class="comment">%% second order</span>
+0020   [v_single(:,it1),f_single(it1,1)] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints_1);
+0021   <span class="keyword">for</span> it2 = 1:it1-1,
+0022     fba_constraints_2 = fba_constraints_1;
+0023     <span class="keyword">if</span> v_ref(it2)&gt;0,
+0024       fba_constraints_2.v_max(it2) = inhibition_factor * v_ref(it2);
+0025     <span class="keyword">end</span>
+0026     <span class="keyword">if</span> v_ref(it2)&lt;0,
+0027       fba_constraints_2.v_min(it2) = inhibition_factor * v_ref(it2);
+0028     <span class="keyword">end</span>
+0029     [v_double(:,it1,it2),f_double(it1,it2)] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints_2);
+0030   <span class="keyword">end</span>
+0031 
+0032   <span class="comment">% diagonal elements (square perturbation!)</span>
+0033   it2 = it1;
+0034   fba_constraints_2 = fba_constraints_1;
+0035   <span class="keyword">if</span> v_ref(it2)&gt;0,
+0036     fba_constraints_2.v_max(it2) = inhibition_factor^2 * v_ref(it2);
+0037   <span class="keyword">end</span>
+0038   <span class="keyword">if</span> v_ref(it2)&lt;0,
+0039     fba_constraints_2.v_min(it2) = inhibition_factor^2 * v_ref(it2);
+0040   <span class="keyword">end</span>
+0041   [v_double(:,it1,it2),f_double(it1,it2)] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints_2);
+0042 <span class="keyword">end</span>
+0043 
+0044 f_double = f_double + f_double' - diag(diag(f_double));
+0045 
+0046 df1 = f_single-f_ref; 
+0047 df2 = f_double-f_ref-repmat(df1,1,nr)-repmat(df1',nr,1);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

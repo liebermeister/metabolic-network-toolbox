@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_find_x</title>
+  <meta name="keywords" content="netgraph_find_x">
+  <meta name="description" content="x = netgraph_find_x(network,fixed_positions)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_find_x.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_find_x
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>x = netgraph_find_x(network,fixed_positions)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> x = netgraph_find_x(network,fixed_positions)
+ fixed_positions: indices (first column) and positions (2nd and 3rd column)
+ of metabolites with fixed positions</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/util/netgraph_find_x_old.html" class="code" title="function x = netgraph_find_x_old(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);">netgraph_find_x_old</a>	x = netgraph_find_x(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_calculate_positions.html" class="code" title="function [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);">netgraph_calculate_positions</a>	[x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% x = netgraph_find_x(network,fixed_positions)</span>
+0002 <span class="comment">% fixed_positions: indices (first column) and positions (2nd and 3rd column)</span>
+0003 <span class="comment">% of metabolites with fixed positions</span>
+0004 
+0005 <a name="_sub0" href="#_subfunctions" class="code">function x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions)</a>
+0006 
+0007 randn(<span class="string">'state'</span>,0) 
+0008 
+0009 <span class="keyword">if</span> ~exist(<span class="string">'fixed_positions'</span>,<span class="string">'var'</span>),
+0010   indices_fixed = []; 
+0011   x_fixed       = []; 
+0012 <span class="keyword">else</span>,
+0013   indices_fixed = uint8(fixed_positions(:,1));
+0014   x_fixed       = fixed_positions(:,2:3)';
+0015 <span class="keyword">end</span>
+0016 
+0017 <span class="comment">%gridsize = 0.01; % distance between discrete x values</span>
+0018 <span class="comment">%k1 = 0.005;  % overall repulsion strength</span>
+0019 <span class="comment">%k2 = 0.5  *sqrt(1/length(network.graphics_par.metnames));  % overall repulsion scale</span>
+0020 <span class="comment">%k3 = 0.2;  % neighbour attraction strength</span>
+0021 
+0022 <span class="comment">% first guess</span>
+0023 
+0024 
+0025 x = <a href="../../mnt/util/netgraph_find_x_old.html" class="code" title="function x = netgraph_find_x_old(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);">netgraph_find_x_old</a>(network.graphics_par,gridsize,k1,k2,k3,network.graphics_par.db,indices_fixed,x_fixed);
+0026 network.graphics_par.x = x;
+0027 
+0028 <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'fixed'</span>), 
+0029   network.graphics_par.fixed = zeros(size(network.graphics_par.x,2),1); 
+0030 <span class="keyword">end</span>
+0031 network.graphics_par.fixed(indices_fixed) = 1;
+0032 
+0033 <span class="keyword">if</span> length(indices_fixed),
+0034   network.graphics_par.x(:,indices_fixed) =  x_fixed;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'N'</span>), network.graphics_par.N = network.N; <span class="keyword">end</span>
+0038 
+0039 p   = network.graphics_par;
+0040 
+0041 splitted = 0;
+0042 <span class="keyword">if</span> isfield(p,<span class="string">'display_split'</span>),   <span class="keyword">if</span> p.display_split,     splitted =1;   <span class="keyword">end</span>;  <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> splitted,
+0045   fixed = zeros(size(p.N_split,1),1);
+0046   N  = p.N_split;
+0047   x   = p.x_split;
+0048   db  = p.db_split;
+0049   m   = p.m_split;
+0050   n_met = length(p.split_back_mapping);
+0051 <span class="keyword">else</span>,
+0052   fixed = p.fixed;
+0053   N   = p.N;
+0054   x   = p.x;
+0055   db  = p.db;
+0056   m   = p.m;
+0057   n_met = length(p.metnames);
+0058 <span class="keyword">end</span>
+0059 
+0060 names=[p.metnames; p.actnames];
+0061 
+0062 <span class="comment">% move points a little</span>
+0063 
+0064 cont = 1;
+0065 
+0066 [Ni,Nj]=ind2sub(size(N),find((N~=0)));
+0067 Nj = Nj+n_met;
+0068 edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
+0069 fixed_ind = find(fixed);
+0070 
+0071 <span class="keyword">for</span> itt=1:10
+0072   x = x + 0.001*randn(size(x));
+0073   <span class="keyword">for</span> it=1:3
+0074     edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
+0075     <span class="keyword">for</span> i=1:size(x,2);
+0076       distances = repmat(x(:,i),1,size(x,2)+length(Ni)) - [x, edgecenters]; <span class="comment">%</span>
+0077       f1 = sum(distances.^2)+10^-10;
+0078       f1 = exp(-f1/(2*k2^2))./sqrt(f1);
+0079       dummy = x(:,find(db(i,:)==1));
+0080       <span class="keyword">if</span> length(dummy),           xdum = mean(dummy,2);
+0081       <span class="keyword">else</span>,                    xdum = x(:,i);           <span class="keyword">end</span>
+0082       xnew(:,i)= x(:,i) + k1 * sum(distances.*repmat(f1,2,1),2) <span class="keyword">...</span>
+0083       + k3 * ( xdum - x(:,i) );
+0084     <span class="keyword">end</span>
+0085     loose=find(1-fixed);
+0086     <span class="keyword">if</span> length(loose),
+0087       x(:,loose) = xnew(:,loose);
+0088       x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
+0089       x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);
+0090       x(:,loose) = gridsize * round(x(:,loose)/gridsize);
+0091     <span class="keyword">end</span>
+0092   <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094   
+0095 loose = find(1-fixed);
+0096 <span class="keyword">if</span> length(loose),
+0097   x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
+0098   x(:,loose) = diag(min(1,1./(max(x(:,loose)')')))*x(:,loose);
+0099   x(:,loose) = gridsize * round(x(:,loose)/gridsize);
+0100 <span class="keyword">end</span>
+0101 edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
+0102 
+0103 <span class="keyword">if</span> splitted,     p.x_split = x;
+0104 <span class="keyword">else</span>,            p.x       = x;
+0105 <span class="keyword">end</span>
+0106 
+0107 x = x-repmat(min(x')',1,size(x,2));
+0108 x = diag(min(1,1./(max(x')')))*x;
+0109 x = gridsize * round(x/gridsize);
+0110 
+0111 <span class="keyword">if</span> splitted,     p.x_split = x;
+0112 <span class="keyword">else</span>,            p.x = x;
+0113 <span class="keyword">end</span>
+0114  
+0115 network.graphics_par = p;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

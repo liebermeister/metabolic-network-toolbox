@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modular_kinetic_formulae</title>
+  <meta name="keywords" content="modular_kinetic_formulae">
+  <meta name="description" content="[formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">modular_rate_law_functions</a> &gt; modular_kinetic_formulae.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>modular_kinetic_formulae
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>[formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_get_formula.html" class="code" title="function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">cs_get_formula</a>	r_name reaction name (for naming the parameters)</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>	keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/ms_get_formula.html" class="code" title="function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">ms_get_formula</a>	formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)</li><li><a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</a>
+0002 
+0003 <span class="comment">% [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</span>
+0004 
+0005 global_assignment = struct;
+0006 local_assignment  = {};
+0007 
+0008 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
+0009 
+0010 metnames = network.metabolites;      
+0011 kk       = network.kinetics;
+0012  
+0013 <span class="keyword">for</span> it = 1:nr,
+0014 
+0015   r_name = [<span class="string">'R'</span> num2str(it) ];
+0016 
+0017   sub = find(network.N(:,it) &lt; 0);
+0018   pro = find(network.N(:,it) &gt; 0);
+0019   rea = find(kk.KM(it,:)~=0);
+0020   act = find(kk.KA(it,:)~=0);
+0021   inh = find(kk.KI(it,:)~=0);
+0022         
+0023   m_sub           = abs(network.N(sub,it));
+0024   m_pro           = abs(network.N(pro,it));
+0025 
+0026   <span class="keyword">switch</span> network.kinetics.type,
+0027     <span class="keyword">case</span> <span class="string">'ms'</span>,
+0028       formula{it,1} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/ms_get_formula.html" class="code" title="function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">ms_get_formula</a>(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+0029       kk.KVratio{it} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>(network.N,kk.KM,kk.Keq);
+0030     <span class="keyword">case</span> <span class="string">'cs'</span>,
+0031       formula{it,1} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_get_formula.html" class="code" title="function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">cs_get_formula</a>(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+0032       kk.KVratio{it} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>(network.N,kk.KM,kk.Keq);
+0033     <span class="keyword">otherwise</span> 
+0034       error(<span class="string">'Rate law not supported'</span>);
+0035   <span class="keyword">end</span>
+0036   
+0037   local_assignment{it,1}.([<span class="string">'u_'</span> r_name ])   = kk.u(it);  
+0038   local_assignment{it,1}.([<span class="string">'kC_'</span> r_name ])  = kk.KV(it);
+0039   local_assignment{it,1}.([<span class="string">'kEQ_'</span> r_name ]) = kk.Keq(it);
+0040   
+0041   <span class="keyword">for</span> itt = 1:length(rea),
+0042     local_assignment{it,1}.([<span class="string">'kM_'</span> r_name <span class="string">'_'</span> metnames{rea(itt)} ])  = kk.KM(it,rea(itt));
+0043   <span class="keyword">end</span>
+0044   
+0045   <span class="keyword">for</span> itt = 1:length(act),
+0046     local_assignment{it,1}.([<span class="string">'kA_'</span> r_name <span class="string">'_'</span> metnames{act(itt)} ]) = kk.KA(it,act(itt));
+0047   <span class="keyword">end</span>
+0048   
+0049   <span class="keyword">for</span> itt = 1:length(inh),
+0050     local_assignment{it,1}.([<span class="string">'kI_'</span> r_name <span class="string">'_'</span> metnames{inh(itt)} ]) = kk.KI(it,inh(itt));
+0051   <span class="keyword">end</span>
+0052   
+0053 <span class="keyword">end</span>
+0054 
+0055</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flux2entropy_production</title>
+  <meta name="keywords" content="flux2entropy_production">
+  <meta name="description" content="[mu,A,R] = flux2entropy_production(network,v,mu_ext)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">eba</a> &gt; flux2entropy_production.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/eba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>flux2entropy_production
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[mu,A,R] = flux2entropy_production(network,v,mu_ext)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mu,A,R] = flux2entropy_production(network,v,mu_ext) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [mu,A,R] = flux2entropy_production(network,v,mu_ext)
+
+ Determine all mu and A from fluxes and external mu</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="../../../mnt/mnt_graphics/netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li><li><a href="../../../mnt/mnt_network/network_query/network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>	NETWORK_ANALYSE - Analyse a metabolic network structure</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mu,A,R] = flux2entropy_production(network,v,mu_ext)</a>
+0002 
+0003 <span class="comment">% [mu,A,R] = flux2entropy_production(network,v,mu_ext)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Determine all mu and A from fluxes and external mu</span>
+0006 
+0007 <span class="keyword">if</span> 0,
+0008   N             = [-1 0; 1 -1; 0 1];
+0009   reversible    = [1 1]';
+0010   external_ind  = [1 3 ];
+0011   network       = <a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>(N,reversible,external_ind);
+0012   K             = <a href="../../../mnt/mnt_network/network_query/network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>(network);
+0013   v             = full(K);
+0014   mu_ext        = [1 0]';
+0015   [mu,A,R] = <a href="flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>(network,v,mu_ext)
+0016   sum(1./R)
+0017   <a href="../../../mnt/mnt_graphics/netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,mu);
+0018 <span class="keyword">end</span>
+0019 
+0020 [nm,nr] = size(network.N);
+0021 
+0022 ind_int = find(network.external==0);
+0023 ind_ext = find(network.external);
+0024 N_int = network.N(ind_int,:); 
+0025 N_ext = network.N(ind_ext,:); 
+0026 
+0027 n_int = length(ind_int);
+0028 
+0029 <span class="comment">% assume v = - diag(1/R) * [ N_int' * mu_int + N_ext' * mu_ext]</span>
+0030 <span class="comment">%  &lt;=&gt;    diag(v) * R + N_int' * mu_int = - N_ext' * mu_ext</span>
+0031 <span class="comment">%  &lt;=&gt;    [diag(v), N_int'] * x = - N_ext' * mu_ext             where x = [R; mu_int]</span>
+0032 <span class="comment">% and  sum(R.^2) -&gt; min</span>
+0033 <span class="comment">% and  R &gt;= 0</span>
+0034 
+0035 M   = matrix_add_block(eye(nr),zeros(n_int));
+0036 f   = zeros(nr+n_int,1);
+0037 Aeq = [diag(v), N_int'];
+0038 beq = - N_ext' * mu_ext;
+0039 lb  = [zeros(nr,1); -inf*ones(n_int,1)];
+0040 x   = quadprog(M,f,[],[],Aeq,beq,lb);
+0041 R   = x(1:nr);
+0042 mu(ind_ext,1) = mu_ext;
+0043 mu(ind_int,1) = x(nr+1:end);
+0044 A   = -network.N' * mu;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

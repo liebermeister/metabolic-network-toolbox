@@ -1,0 +1,1 @@
+% Functions for power-law modular rate law

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xmldemo3</title>
+  <meta name="keywords" content="xmldemo3">
+  <meta name="description" content="XMLDEMO3 Demonstrate how to convert an XMLtree in a simple structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">xmltree</a> &gt; xmldemo3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>xmldemo3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>XMLDEMO3 Demonstrate how to convert an XMLtree in a simple structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">XMLDEMO3 Demonstrate how to convert an XMLtree in a simple structure
+
+   Description
+   This script demonstrates the use of the xmltree class to
+   convert an XMLtree (when possible) in a simple structure.
+   This can only be performed when the XML file is simple enough
+   (one element cannot have more than one chardata child).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%XMLDEMO3 Demonstrate how to convert an XMLtree in a simple structure</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%   Description</span>
+0004 <span class="comment">%   This script demonstrates the use of the xmltree class to</span>
+0005 <span class="comment">%   convert an XMLtree (when possible) in a simple structure.</span>
+0006 <span class="comment">%   This can only be performed when the XML file is simple enough</span>
+0007 <span class="comment">%   (one element cannot have more than one chardata child).</span>
+0008 
+0009 <span class="comment">%   Copyright (C) 2003  Guillaume Flandin</span>
+0010 
+0011 clc;
+0012 disp(<span class="string">'This demonstration illustrates the use of the xmltree class'</span>)
+0013 disp(<span class="string">'to convert an xmltree in a simple Matlab structure.'</span>)
+0014 disp(<span class="string">' '</span>)
+0015 disp(<span class="string">'Press any key to open the XML file ''example.xml''.'</span>)
+0016 pause;
+0017 
+0018 disp(<span class="string">'&gt;&gt; t = xmltree(''example.xml'')'</span>)
+0019 <span class="keyword">try</span>,
+0020     t = xmltree(<span class="string">'example.xml'</span>);
+0021 <span class="keyword">catch</span>,
+0022     disp(<span class="string">'Please first launch xmldemo1'</span>)
+0023 <span class="keyword">end</span>
+0024 
+0025 disp(<span class="string">' '</span>)
+0026 disp(<span class="string">'Press any key to display the XML file.'</span>)
+0027 pause;
+0028 
+0029 save(t);
+0030 
+0031 disp(<span class="string">' '</span>)
+0032 disp(<span class="string">'Convert the xmltree in a Matlab structure.'</span>)
+0033 disp(<span class="string">' '</span>)
+0034 disp(<span class="string">'Press any key to continue.'</span>)
+0035 disp(<span class="string">' '</span>)
+0036 pause; clc;
+0037 
+0038 disp(<span class="string">'&gt;&gt; s = convert(tree);'</span>)
+0039 s = convert(t);
+0040 
+0041 disp(<span class="string">' '</span>)
+0042 disp(<span class="string">'Display the content of the structure.'</span>)
+0043 disp(<span class="string">' '</span>)
+0044 disp(<span class="string">'Press any key to continue.'</span>)
+0045 disp(<span class="string">' '</span>)
+0046 pause;
+0047 
+0048 disp(<span class="string">'&gt;&gt; s.entry'</span>);
+0049 s.entry
+0050 disp(<span class="string">'&gt;&gt; s.entry.address'</span>);
+0051 s.entry.address
+0052 disp(<span class="string">'&gt;&gt; s.entry.address.institute'</span>);
+0053 s.entry.address.institute
+0054 
+0055 disp(<span class="string">' '</span>);
+0056 disp(<span class="string">'Press any key to end.'</span>)
+0057 pause; clc; close all;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

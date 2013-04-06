@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of time_response_coefficients</title>
+  <meta name="keywords" content="time_response_coefficients">
+  <meta name="description" content="[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; time_response_coefficients.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>time_response_coefficients
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)
+
+ Parameter sensitivities of time-dependent metabolite concentrations (see [1])
+ 
+ RS: the time-dependent response coefficients matrices are returned
+     as array RS of dimensions [concentrations] x [parameters] x [time points]
+
+ s              : concentrations
+ RS_ind, s_ind  : the same, for independent metabolites only
+ parameters,    : values and names of parameters q 
+ par_names      : the parameters comprise the kinetic parameters, 
+                  followed by the initial concentrations
+
+ [1] Ingalls, B. P. and Sauro, H.M.,  Sensitivity Analysis of 
+ Stoichiometric Networks: An Extension of Metabolic Control Analysis
+ to Non-equilibrium Trajectories , Journal of Theoretical Biology, 
+ 222 (2003) pp. 23-36.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li><li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li><li><a href="../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li><li><a href="../../mnt/util/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>	C = tensor_product(A,B,index_A,index_B)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li><li><a href="time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function dz_dt = integrate_network_der(t,z,network,L,NR_int,N_ind,T,indep_metabolites,dep_metabolites,na,nb,n_par,dT_dq)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% [t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Parameter sensitivities of time-dependent metabolite concentrations (see [1])</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% RS: the time-dependent response coefficients matrices are returned</span>
+0006 <span class="comment">%     as array RS of dimensions [concentrations] x [parameters] x [time points]</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% s              : concentrations</span>
+0009 <span class="comment">% RS_ind, s_ind  : the same, for independent metabolites only</span>
+0010 <span class="comment">% parameters,    : values and names of parameters q</span>
+0011 <span class="comment">% par_names      : the parameters comprise the kinetic parameters,</span>
+0012 <span class="comment">%                  followed by the initial concentrations</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% [1] Ingalls, B. P. and Sauro, H.M.,  Sensitivity Analysis of</span>
+0015 <span class="comment">% Stoichiometric Networks: An Extension of Metabolic Control Analysis</span>
+0016 <span class="comment">% to Non-equilibrium Trajectories , Journal of Theoretical Biology,</span>
+0017 <span class="comment">% 222 (2003) pp. 23-36.</span>
+0018 
+0019 <a name="_sub0" href="#_subfunctions" class="code">function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)</a>
+0020 
+0021  <span class="keyword">if</span> ~exist(<span class="string">'s_init'</span>,<span class="string">'var'</span>),             s_init = ones(size(network.metabolites)); <span class="keyword">end</span>
+0022  <span class="keyword">if</span> ~exist(<span class="string">'t_final'</span>,<span class="string">'var'</span>),   t_final = 1; <span class="keyword">end</span>
+0023 
+0024  [n_S,n_A] = size(network.N);
+0025 
+0026  external  = find(network.external);
+0027  internal  = setdiff(1:n_S,external);
+0028 
+0029  [L_int, NR_int,indep_metabolites_int, N1_int, dep_metabolites_int ] = <a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>(network.N(internal,:));
+0030  
+0031  L = sparse(zeros(n_S,length(indep_metabolites_int)));
+0032  L(internal,:) = L_int;
+0033  indep_metabolites = internal(indep_metabolites_int);
+0034  dep_metabolites   = setdiff(1:n_S,indep_metabolites);
+0035  
+0036  s_init_ind = s_init(indep_metabolites);
+0037  s_init_dep = s_init(dep_metabolites);
+0038 
+0039  T = s_init_dep - L(dep_metabolites,:)* s_init_ind;
+0040 
+0041  N_ind = network.N(indep_metabolites,:);
+0042  
+0043  [parameters,parameter_names] = <a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(network.kinetics);
+0044 
+0045  parameter_names = [ parameter_names; network.metabolites];
+0046  n_par = length(parameters);
+0047  parameters = [ parameters; s_init];
+0048  
+0049  dT_dq = zeros(length(T), n_par+n_S);
+0050  dT_dq(:,n_par+dep_metabolites) = eye(length(T));
+0051  
+0052  RS_ind0 = zeros(length(indep_metabolites),n_par+n_S);
+0053  RS_ind0(:,n_par+indep_metabolites) = eye(length(indep_metabolites));
+0054  
+0055  [na, nb] = size(RS_ind0);
+0056  
+0057  z = [s_init_ind; reshape(RS_ind0,na*nb,1)]; 
+0058 
+0059 <span class="comment">% the vector z contains the independent concentrations</span>
+0060 <span class="comment">% and the respective response coefficients</span>
+0061  
+0062  [t,zlist] = ode23(@<a href="#_sub1" class="code" title="subfunction dz_dt = integrate_network_der(t,z,network,L,NR_int,N_ind,T,indep_metabolites,dep_metabolites,na,nb,n_par,dT_dq)">integrate_network_der</a>,[0,t_final],z,[],network,L,NR_int,N_ind,T,indep_metabolites,dep_metabolites,na,nb,n_par,dT_dq);
+0063  
+0064 s_ind  = zlist(:,1:length(indep_metabolites))';
+0065 s      = L*s_ind;
+0066 s(dep_metabolites,:)= s(dep_metabolites,:) + repmat(T,1,length(t));
+0067 RS_ind = permute(reshape(zlist(:,length(indep_metabolites)+1:end),length(t),na,nb),[2,3,1]);
+0068 RS     = <a href="../../mnt/util/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(L,RS_ind);
+0069 <span class="keyword">for</span> tt=1:size(RS,3),
+0070 RS(external,n_par+external,tt)=eye(length(external));
+0071 <span class="keyword">end</span>
+0072 <span class="comment">% --------------------------------------------------------------------</span>
+0073 
+0074 <a name="_sub1" href="#_subfunctions" class="code">function dz_dt = integrate_network_der(t,z,network,L,NR_int,N_ind,T,indep_metabolites,dep_metabolites,na,nb,n_par,dT_dq)</a>
+0075 
+0076  s_ind   = z(1:length(indep_metabolites));
+0077  RS_ind  = reshape(z(length(indep_metabolites)+1:end),na,nb);
+0078  s       = L * s_ind;
+0079  s(dep_metabolites) =  s(dep_metabolites) + T;
+0080  f       = N_ind * <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network); <span class="comment">% derivative of concentrations</span>
+0081  [epsilon_S, epsilon_P, parameter_names ] = <a href="elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>(network,s); 
+0082  fRS_ind = NR_int * ( epsilon_S * L * RS_ind + epsilon_S(:,dep_metabolites) * dT_dq  + [epsilon_P(:,1:n_par) zeros(size(epsilon_S))]);
+0083  dz_dt   = [f; reshape(fRS_ind,na*nb,1)];
+0084 
+0085 <span class="comment">% --------------------------------------------------------------------</span>
+0086 
+0087 <span class="keyword">return</span>
+0088 
+0089 <span class="comment">% Test example from Ingalls and Sauro (2002)</span>
+0090 
+0091 N            = [1 -1 0; 0 1 -1];
+0092 reversible   = [0 1 0]';
+0093 metabolites  = {<span class="string">'S1'</span>,<span class="string">'S2'</span>}';
+0094 external_ind = [];
+0095 network      = <a href="../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>(N,reversible,external_ind,metabolites);
+0096 
+0097 network.kinetics.k_fwd = [4;   3; 2];
+0098 network.kinetics.k_bwd = [0; 0.5; 0];
+0099 
+0100 s_init = [5/3; 2];  <span class="comment">% stable steady state</span>
+0101 
+0102 [t, s, RS, s_ind, RS_ind, parameters, parameter_names] = <a href="time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>(network, s_init, 4);
+0103 
+0104 parameter_names
+0105 
+0106 figure(1); plot(t,squeeze(RS(:,2,:))) <span class="comment">% k2+ (called k1)</span>
+0107 figure(2); plot(t,squeeze(RS(:,5,:))) <span class="comment">% k2- (called k-1)</span>
+0108 
+0109 figure(3); plot(t,squeeze(RS(:,7,:))) <span class="comment">% S1</span>
+0110</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

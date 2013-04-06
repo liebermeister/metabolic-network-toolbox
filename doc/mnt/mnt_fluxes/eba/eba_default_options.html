@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of eba_default_options</title>
+  <meta name="keywords" content="eba_default_options">
+  <meta name="description" content="[options,constraints] = eba_default_options(network)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">eba</a> &gt; eba_default_options.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/eba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>eba_default_options
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[options,constraints] = eba_default_options(network)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [options,constraints] = eba_default_options(network) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [options,constraints] = eba_default_options(network)
+
+ set default values for structures 'options' and 'constraints' 
+ used to define an eba task
+
+ constraints.z:           linear weights in the objective function  
+ constraints.v_fix:       vector predetermined fluxes
+ constraints.v_min:       vector of lower bounds
+ constraints.v_max:       vector of upper bounds
+ constraints.v_sign:      predetermined flux signs
+ constraints.ext_sign:    sign vector for external metabolite production
+ constraints.mu_fix:      given mu values        
+ constraints.mu_min:      lower bounds for mu values  
+ constraints.mu_max:      upper bounds for mu values
+ constraints.dmu_fix:     given delta mu values        
+ constraints.dmu_min:     lower bounds for delta mu values  
+ constraints.dmu_max:     upper bounds for delta mu values  
+
+ options.seed             random seed
+ options.compute_mu       'mu', 'delta_mu'
+ options.verbose
+ options.optimality_criterion 'z','minimum_norm'
+ options.n_trials          repeat eba from differemt starting points, take best result</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [options,constraints] = eba_default_options(network)</a>
+0002 
+0003 <span class="comment">% [options,constraints] = eba_default_options(network)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% set default values for structures 'options' and 'constraints'</span>
+0006 <span class="comment">% used to define an eba task</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% constraints.z:           linear weights in the objective function</span>
+0009 <span class="comment">% constraints.v_fix:       vector predetermined fluxes</span>
+0010 <span class="comment">% constraints.v_min:       vector of lower bounds</span>
+0011 <span class="comment">% constraints.v_max:       vector of upper bounds</span>
+0012 <span class="comment">% constraints.v_sign:      predetermined flux signs</span>
+0013 <span class="comment">% constraints.ext_sign:    sign vector for external metabolite production</span>
+0014 <span class="comment">% constraints.mu_fix:      given mu values</span>
+0015 <span class="comment">% constraints.mu_min:      lower bounds for mu values</span>
+0016 <span class="comment">% constraints.mu_max:      upper bounds for mu values</span>
+0017 <span class="comment">% constraints.dmu_fix:     given delta mu values</span>
+0018 <span class="comment">% constraints.dmu_min:     lower bounds for delta mu values</span>
+0019 <span class="comment">% constraints.dmu_max:     upper bounds for delta mu values</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% options.seed             random seed</span>
+0022 <span class="comment">% options.compute_mu       'mu', 'delta_mu'</span>
+0023 <span class="comment">% options.verbose</span>
+0024 <span class="comment">% options.optimality_criterion 'z','minimum_norm'</span>
+0025 <span class="comment">% options.n_trials          repeat eba from differemt starting points, take best result</span>
+0026 
+0027 [nm,nr] = size(network.N);
+0028 
+0029 constraints.zv           = nan * ones(nr,1);
+0030 constraints.v_fix        = nan * ones(nr,1);
+0031 constraints.v_min        = - ones(nr,1);
+0032 constraints.v_max        =   ones(nr,1);
+0033 constraints.v_sign       = nan * ones(nr,1);
+0034 constraints.ext_sign     = nan * ones(nm,1);
+0035 constraints.mu_fix       = nan * ones(nm,1);
+0036 constraints.mu_min       = - ones(nm,1);
+0037 constraints.mu_max       =   ones(nm,1);
+0038 constraints.muconmat     = [];
+0039 constraints.muconmax     = [];
+0040 constraints.dmu_fix      = nan * ones(nr,1);
+0041 constraints.dmu_min      = - ones(nr,1);
+0042 constraints.dmu_max      =   ones(nr,1);
+0043 
+0044 options.seed         = nan;
+0045 options.compute_mu   = <span class="string">'delta_mu'</span>;
+0046 options.verbose      = 0;
+0047 options.optimality_criterion = <span class="string">'z'</span>;
+0048 options.n_trials     = 1;
+0049 options.relax_eba_constraint = 1;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

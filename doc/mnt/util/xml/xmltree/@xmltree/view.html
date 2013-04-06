@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of view</title>
+  <meta name="keywords" content="view">
+  <meta name="description" content="XMLTREE/VIEW View Method">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; view.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>view
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/VIEW View Method</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function view(tree) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/VIEW View Method
+ FORMAT view(tree)
+ 
+ tree   - XMLTree object
+_______________________________________________________________________
+
+ Display an XML tree in a graphical interface
+_______________________________________________________________________
+ @(#)view.m                  Guillaume Flandin                02/04/08</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>	XMLTREE/GET Get Method (get object properties)</li><li><a href="getfilename.html" class="code" title="function filename = getfilename(tree)">getfilename</a>	XMLTREE/GETFILENAME Get filename method</li><li><a href="root.html" class="code" title="function uid = root(tree)">root</a>	XMLTREE/ROOT Root Method</li><li><a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>	XMLTREE/SET Method (set object properties)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function handleStruct = xmltree_build_ui</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function view(tree)</a>
+0002 <span class="comment">% XMLTREE/VIEW View Method</span>
+0003 <span class="comment">% FORMAT view(tree)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree   - XMLTree object</span>
+0006 <span class="comment">%_______________________________________________________________________</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Display an XML tree in a graphical interface</span>
+0009 <span class="comment">%_______________________________________________________________________</span>
+0010 <span class="comment">% @(#)view.m                  Guillaume Flandin                02/04/08</span>
+0011 
+0012 error(nargchk(1,1,nargin));
+0013 
+0014 <span class="comment">%-Build the Graphical User Interface</span>
+0015 <span class="comment">%-----------------------------------------------------------------------</span>
+0016 figH = findobj(<span class="string">'Tag'</span>,<span class="string">'mlBatchFigure'</span>); <span class="comment">%this tag doesn't exist so a new</span>
+0017 <span class="comment">% window is created ....</span>
+0018 <span class="keyword">if</span> isempty(figH)
+0019     h = <a href="#_sub1" class="code" title="subfunction handleStruct = xmltree_build_ui">xmltree_build_ui</a>;
+0020     figH = h.fig;
+0021 <span class="keyword">else</span>
+0022    <a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>(figH,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0023    <span class="comment">% recover all the handles</span>
+0024    <span class="comment">% h = struct(...);</span>
+0025 <span class="keyword">end</span>
+0026 drawnow;
+0027 
+0028 <span class="comment">%-New title for the main window</span>
+0029 <span class="comment">%-----------------------------------------------------------------------</span>
+0030 <a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>(figH,<span class="string">'Name'</span>,[<span class="string">'XML TreeViewer:'</span> <a href="getfilename.html" class="code" title="function filename = getfilename(tree)">getfilename</a>(tree)]);
+0031 
+0032 
+0033 <span class="comment">%-Initialize batch listbox</span>
+0034 <span class="comment">%-----------------------------------------------------------------------</span>
+0035 tree = <a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>(tree,<a href="root.html" class="code" title="function uid = root(tree)">root</a>(tree),<span class="string">'show'</span>,1);
+0036 builtin(<span class="string">'set'</span>,figH,<span class="string">'UserData'</span>,tree);
+0037 
+0038 view_ui(<span class="string">'update'</span>,figH);
+0039 
+0040 <span class="comment">%=======================================================================</span>
+0041 <a name="_sub1" href="#_subfunctions" class="code">function handleStruct = xmltree_build_ui</a>
+0042 
+0043 <span class="comment">%- Create Figure</span>
+0044 pixfactor = 72 / <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(0,<span class="string">'screenpixelsperinch'</span>);
+0045 <span class="comment">%- Figure window size and position</span>
+0046 oldRootUnits   = <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(0,<span class="string">'Units'</span>);
+0047 <a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>(0, <span class="string">'Units'</span>, <span class="string">'points'</span>);
+0048 figurePos      = <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(0,<span class="string">'DefaultFigurePosition'</span>);
+0049 figurePos(3:4) = [560 420];
+0050 figurePos      = figurePos * pixfactor;
+0051 rootScreenSize = <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(0,<span class="string">'ScreenSize'</span>);
+0052 <span class="keyword">if</span> ((figurePos(1) &lt; 1) <span class="keyword">...</span>
+0053       | (figurePos(1)+figurePos(3) &gt; rootScreenSize(3)))
+0054    figurePos(1) = 30;
+0055 <span class="keyword">end</span>
+0056 <a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>(0, <span class="string">'Units'</span>, oldRootUnits);
+0057 <span class="keyword">if</span> ((figurePos(2)+figurePos(4)+60 &gt; rootScreenSize(4)) <span class="keyword">...</span>
+0058       | (figurePos(2) &lt; 1))
+0059    figurePos(2) = rootScreenSize(4) - figurePos(4) - 60;
+0060 <span class="keyword">end</span>
+0061 <span class="comment">%- Create Figure Window</span>
+0062 handleStruct.fig = figure(<span class="keyword">...</span>
+0063     <span class="string">'Name'</span>,<span class="string">'XML TreeViewer'</span>, <span class="keyword">...</span>
+0064     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0065     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>, <span class="keyword">...</span>
+0066     <span class="string">'Resize'</span>,<span class="string">'on'</span>, <span class="keyword">...</span>
+0067     <span class="string">'Color'</span>,[0.8 0.8 0.8],<span class="keyword">...</span>
+0068     <span class="string">'Position'</span>,figurePos, <span class="keyword">...</span>
+0069     <span class="string">'MenuBar'</span>,<span class="string">'none'</span>, <span class="keyword">...</span><span class="comment"> </span>
+0070     <span class="string">'Tag'</span>, <span class="string">'BatchFigure'</span>, <span class="keyword">...</span>
+0071     <span class="string">'CloseRequestFcn'</span>,<span class="string">'view_ui close'</span>);
+0072 
+0073 <span class="comment">%- Build batch listbox</span>
+0074 batchListPos = [20 55 160 345] * pixfactor;
+0075 batchString = <span class="string">' '</span>;
+0076 handleStruct.batchList = uicontrol( <span class="keyword">...</span>
+0077     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0078     <span class="string">'Style'</span>, <span class="string">'listbox'</span>, <span class="keyword">...</span>
+0079     <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>, <span class="keyword">...</span>
+0080     <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0081     <span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0082     <span class="string">'BackgroundColor'</span>, [1 1 1], <span class="keyword">...</span>
+0083     <span class="string">'Max'</span>, 1, <span class="keyword">...</span>
+0084     <span class="string">'Value'</span>, 1 , <span class="keyword">...</span>
+0085     <span class="string">'Enable'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0086     <span class="string">'Position'</span>, batchListPos, <span class="keyword">...</span>
+0087     <span class="string">'Callback'</span>, <span class="string">'view_ui batchlist'</span>, <span class="keyword">...</span>
+0088     <span class="string">'String'</span>, batchString, <span class="keyword">...</span>
+0089     <span class="string">'Tag'</span>, <span class="string">'BatchListbox'</span>);
+0090 
+0091 <span class="comment">%- Build About listbox</span>
+0092 aboutListPos = [200 220 340 180] * pixfactor;
+0093 aboutString = <span class="string">' '</span>;
+0094 handleStruct.aboutList = uicontrol( <span class="keyword">...</span>
+0095     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0096     <span class="string">'Style'</span>, <span class="string">'list'</span>, <span class="keyword">...</span>
+0097     <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>, <span class="keyword">...</span>
+0098     <span class="string">'Units'</span>,<span class="string">'points'</span>, <span class="keyword">...</span>
+0099     <span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0100     <span class="string">'BackgroundColor'</span>, [0.8 0.8 0.8], <span class="keyword">...</span>
+0101     <span class="string">'Min'</span>, 0, <span class="keyword">...</span>
+0102     <span class="string">'Max'</span>, 2, <span class="keyword">...</span>
+0103     <span class="string">'Value'</span>, [], <span class="keyword">...</span>
+0104     <span class="string">'Enable'</span>, <span class="string">'inactive'</span>, <span class="keyword">...</span>
+0105     <span class="string">'Position'</span>, aboutListPos, <span class="keyword">...</span>
+0106     <span class="string">'Callback'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0107     <span class="string">'String'</span>, aboutString, <span class="keyword">...</span>
+0108     <span class="string">'Tag'</span>, <span class="string">'AboutListbox'</span>);
+0109 
+0110 <span class="comment">%- The Add button</span>
+0111 addBtnPos = [20 20 70 25] * pixfactor;
+0112 handleStruct.add = uicontrol( <span class="keyword">...</span>
+0113     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0114     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0115     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0116     <span class="string">'Position'</span>, addBtnPos, <span class="keyword">...</span>
+0117     <span class="string">'String'</span>, <span class="string">'Add'</span>, <span class="keyword">...</span>
+0118    <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0119    <span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0120     <span class="string">'Tag'</span>, <span class="string">'Add'</span>, <span class="keyword">...</span>
+0121     <span class="string">'Callback'</span>, <span class="string">'view_ui add'</span>);
+0122     <span class="comment">%'TooltipString', 'Add batch', ...</span>
+0123    
+0124 <span class="comment">%- The modify button</span>
+0125 modifyBtnPos = [95 20 70 25] * pixfactor;
+0126 handleStruct.modify = uicontrol( <span class="keyword">...</span>
+0127     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0128     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0129     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0130     <span class="string">'Position'</span>, modifyBtnPos, <span class="keyword">...</span>
+0131     <span class="string">'String'</span>, <span class="string">'Modify'</span>, <span class="keyword">...</span>
+0132    <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0133    <span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0134     <span class="string">'Tag'</span>, <span class="string">'Modify'</span>, <span class="keyword">...</span>
+0135     <span class="string">'Callback'</span>, <span class="string">'view_ui modify'</span>);
+0136     <span class="comment">%'TooltipString', 'Modify batch', ...</span>
+0137 
+0138 <span class="comment">%- The Copy button</span>
+0139 copyBtnPos = [170 20 70 25] * pixfactor;
+0140 handleStruct.copy = uicontrol( <span class="keyword">...</span>
+0141     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0142     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0143     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0144     <span class="string">'Position'</span>, copyBtnPos, <span class="keyword">...</span>
+0145     <span class="string">'String'</span>, <span class="string">'Copy'</span>, <span class="keyword">...</span>
+0146    <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0147    <span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0148     <span class="string">'Tag'</span>, <span class="string">'Copy'</span>, <span class="keyword">...</span>
+0149     <span class="string">'Callback'</span>, <span class="string">'view_ui copy'</span>);
+0150     <span class="comment">%'TooltipString', 'Copy batch', ...</span>
+0151 
+0152 <span class="comment">%- The delete button</span>
+0153 deleteBtnPos = [245 20 70 25] * pixfactor;
+0154 handleStruct.delete = uicontrol( <span class="keyword">...</span>
+0155     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0156     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0157     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0158     <span class="string">'Position'</span>, deleteBtnPos, <span class="keyword">...</span>
+0159     <span class="string">'String'</span>, <span class="string">'Delete'</span>, <span class="keyword">...</span>
+0160    <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0161    <span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0162     <span class="string">'Tag'</span>, <span class="string">'Delete'</span>, <span class="keyword">...</span>
+0163     <span class="string">'Callback'</span>, <span class="string">'view_ui delete'</span>);
+0164     <span class="comment">%'TooltipString', 'Delete batch', ...</span>
+0165 
+0166 <span class="comment">%- The save button</span>
+0167 saveBtnPos = [320 20 70 25] * pixfactor;
+0168 handleStruct.save = uicontrol( <span class="keyword">...</span>
+0169     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0170     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0171     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0172     <span class="string">'Position'</span>, saveBtnPos, <span class="keyword">...</span>
+0173     <span class="string">'String'</span>, <span class="string">'Save'</span>, <span class="keyword">...</span>
+0174    <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0175    <span class="string">'UserData'</span>,0,<span class="keyword">...</span>
+0176     <span class="string">'Tag'</span>, <span class="string">'Save'</span>, <span class="keyword">...</span>
+0177     <span class="string">'Callback'</span>, <span class="string">'view_ui save'</span>);
+0178     <span class="comment">%'TooltipString', 'Save batch', ...</span>
+0179 
+0180 <span class="comment">%- The run button</span>
+0181 runBtnPos = [395 20 70 25] * pixfactor;
+0182 handleStruct.run = uicontrol( <span class="keyword">...</span>
+0183     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0184     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0185     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0186     <span class="string">'Position'</span>, runBtnPos, <span class="keyword">...</span>
+0187     <span class="string">'String'</span>, <span class="string">'Run'</span>, <span class="keyword">...</span>
+0188     <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0189     <span class="string">'Enable'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0190     <span class="string">'Tag'</span>, <span class="string">'Run'</span>, <span class="keyword">...</span>
+0191     <span class="string">'Callback'</span>, <span class="string">'view_ui run'</span>);
+0192     <span class="comment">%'TooltipString', 'Run batch', ...</span>
+0193 
+0194 <span class="comment">%- The close button</span>
+0195 closeBtnPos = [470 20 70 25] * pixfactor;
+0196 handleStruct.close = uicontrol( <span class="keyword">...</span>
+0197     <span class="string">'Parent'</span>,handleStruct.fig, <span class="keyword">...</span>
+0198     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0199     <span class="string">'Units'</span>, <span class="string">'points'</span>, <span class="keyword">...</span>
+0200     <span class="string">'Position'</span>, closeBtnPos, <span class="keyword">...</span>
+0201     <span class="string">'String'</span>, <span class="string">'Close'</span>, <span class="keyword">...</span>
+0202     <span class="string">'Visible'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0203     <span class="string">'Tag'</span>, <span class="string">'Close'</span>, <span class="keyword">...</span>
+0204     <span class="string">'Callback'</span>, <span class="string">'view_ui close'</span>);
+0205     <span class="comment">%'TooltipString', 'Close window', ...</span>
+0206 
+0207 handleArray = [handleStruct.fig handleStruct.batchList handleStruct.aboutList handleStruct.add handleStruct.modify handleStruct.copy handleStruct.delete handleStruct.save handleStruct.run handleStruct.close];
+0208 
+0209 <a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>(handleArray,<span class="string">'Units'</span>, <span class="string">'normalized'</span>);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

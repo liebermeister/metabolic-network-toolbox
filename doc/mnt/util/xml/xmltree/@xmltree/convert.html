@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of convert</title>
+  <meta name="keywords" content="convert">
+  <meta name="description" content="XMLTREE/CONVERT Converter an XML tree in a Matlab structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; convert.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>convert
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/CONVERT Converter an XML tree in a Matlab structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function s = convert(tree,uid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/CONVERT Converter an XML tree in a Matlab structure
+ 
+ tree      - XMLTree object
+ uid       - uid of the root of the subtree, if provided.
+             Default is root
+ s         - converted structure
+_______________________________________________________________________
+
+ Convert an xmltree into a Matlab structure, when possible.
+ When several identical tags are present, a cell array is used.
+ The root tag is not saved in the structure.
+ If provided, only the structure corresponding to the subtree defined
+ by the uid UID is returned.
+_______________________________________________________________________
+ @(#)convert.m                 Guillaume Flandin              02/04/11</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="children.html" class="code" title="function child = children(tree,uid)">children</a>	XMLTREE/CHILDREN Return children's UIDs of node uid</li><li><a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>	XMLTREE/GET Get Method (get object properties)</li><li><a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>	XMLTREE/ISFIELD Is parameter a field of tree{uid} ?</li><li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li><li><a href="root.html" class="code" title="function uid = root(tree)">root</a>	XMLTREE/ROOT Root Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function s = sub_convert(tree,s,uid,arg)</a></li><li><a href="#_sub2" class="code">function s = sub_setfield(s,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s = convert(tree,uid)</a>
+0002 <span class="comment">% XMLTREE/CONVERT Converter an XML tree in a Matlab structure</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% tree      - XMLTree object</span>
+0005 <span class="comment">% uid       - uid of the root of the subtree, if provided.</span>
+0006 <span class="comment">%             Default is root</span>
+0007 <span class="comment">% s         - converted structure</span>
+0008 <span class="comment">%_______________________________________________________________________</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Convert an xmltree into a Matlab structure, when possible.</span>
+0011 <span class="comment">% When several identical tags are present, a cell array is used.</span>
+0012 <span class="comment">% The root tag is not saved in the structure.</span>
+0013 <span class="comment">% If provided, only the structure corresponding to the subtree defined</span>
+0014 <span class="comment">% by the uid UID is returned.</span>
+0015 <span class="comment">%_______________________________________________________________________</span>
+0016 <span class="comment">% @(#)convert.m                 Guillaume Flandin              02/04/11</span>
+0017 
+0018 <span class="comment">% Exemple:</span>
+0019 <span class="comment">% tree: &lt;toto&gt;&lt;titi&gt;field1&lt;/titi&gt;&lt;tutu&gt;field2&lt;/tutu&gt;&lt;titi&gt;field3&lt;/titi&gt;&lt;/toto&gt;</span>
+0020 <span class="comment">% toto = convert(tree);</span>
+0021 <span class="comment">% &lt;=&gt; toto = struct('titi',{{'field1', 'field3'}},'tutu','field2')</span>
+0022 
+0023 error(nargchk(1,2,nargin));
+0024 
+0025 <span class="comment">% Get the root uid of the output structure</span>
+0026 <span class="keyword">if</span> nargin == 1
+0027     <span class="comment">% Get the root uid of the XML tree</span>
+0028     root_uid = <a href="root.html" class="code" title="function uid = root(tree)">root</a>(tree);
+0029 <span class="keyword">else</span>
+0030     <span class="comment">% Uid provided by user</span>
+0031     root_uid = uid;
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% Initialize the output structure</span>
+0035 <span class="comment">% struct([]) should be used but this only works with Matlab 6</span>
+0036 <span class="comment">% So we create a field that we delete at the end</span>
+0037 <span class="comment">%s = struct(get(tree,root_uid,'name'),''); % struct([])</span>
+0038 s = struct(<span class="string">'deletedummy'</span>,<span class="string">''</span>);
+0039 
+0040 <span class="comment">%s = sub_convert(tree,s,root_uid,{get(tree,root_uid,'name')});</span>
+0041 s = <a href="#_sub1" class="code" title="subfunction s = sub_convert(tree,s,uid,arg)">sub_convert</a>(tree,s,root_uid,{});
+0042 
+0043 s = rmfield(s,<span class="string">'deletedummy'</span>);
+0044 
+0045 <span class="comment">%=======================================================================</span>
+0046 <a name="_sub1" href="#_subfunctions" class="code">function s = sub_convert(tree,s,uid,arg)</a>
+0047     type = <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'type'</span>);
+0048     <span class="keyword">switch</span> type
+0049         <span class="keyword">case</span> <span class="string">'element'</span>
+0050             child = <a href="children.html" class="code" title="function child = children(tree,uid)">children</a>(tree,uid);
+0051             l = {};
+0052             ll = {};
+0053             <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(child)
+0054                 <span class="keyword">if</span> <a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>(tree,child(i),<span class="string">'name'</span>)
+0055                     ll = { ll{:}, <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,child(i),<span class="string">'name'</span>) };
+0056                 <span class="keyword">end</span>
+0057             <span class="keyword">end</span>
+0058             <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(child)
+0059                 <span class="keyword">if</span> <a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>(tree,child(i),<span class="string">'name'</span>)
+0060                     name = <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,child(i),<span class="string">'name'</span>);
+0061                     nboccur = sum(ismember(l,name));
+0062                     nboccur2 = sum(ismember(ll,name));
+0063                     l = { l{:}, name };
+0064                     <span class="keyword">if</span> nboccur | (nboccur2&gt;1)
+0065                         arg2 = { arg{:}, name, {nboccur+1} };
+0066                     <span class="keyword">else</span>
+0067                         arg2 = { arg{:}, name};
+0068                     <span class="keyword">end</span>
+0069                 <span class="keyword">else</span>
+0070                     arg2 = arg;
+0071                 <span class="keyword">end</span>
+0072                 s = <a href="#_sub1" class="code" title="subfunction s = sub_convert(tree,s,uid,arg)">sub_convert</a>(tree,s,child(i),arg2);
+0073             <span class="keyword">end</span>
+0074             <span class="keyword">if</span> isempty(child)
+0075                 s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},<span class="string">''</span>);
+0076             <span class="keyword">end</span>
+0077         <span class="keyword">case</span> <span class="string">'chardata'</span>
+0078             s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>));
+0079         <span class="keyword">case</span> <span class="string">'cdata'</span>
+0080             s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>));
+0081         <span class="keyword">case</span> <span class="string">'pi'</span>
+0082             <span class="comment">% Processing instructions are evaluated if possible</span>
+0083             app = <a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'target'</span>);
+0084             <span class="keyword">switch</span> app
+0085                 <span class="keyword">case</span> {<span class="string">'matlab'</span>,<span class="string">''</span>}
+0086                     s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},eval(<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>)));
+0087                 <span class="keyword">case</span> <span class="string">'unix'</span>
+0088                     s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},unix(<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>)));
+0089                 <span class="keyword">case</span> <span class="string">'dos'</span>
+0090                     s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},dos(<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>)));
+0091                 <span class="keyword">case</span> <span class="string">'system'</span>
+0092                     s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},system(<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>)));
+0093                 <span class="keyword">otherwise</span>
+0094                     <span class="keyword">try</span>,
+0095                         s = <a href="#_sub2" class="code" title="subfunction s = sub_setfield(s,varargin)">sub_setfield</a>(s,arg{:},feval(app,<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'value'</span>)));
+0096                     <span class="keyword">catch</span>,
+0097                         warning(<span class="string">'[Xmltree/convert] Unknown target application'</span>);
+0098                     <span class="keyword">end</span>
+0099             <span class="keyword">end</span>
+0100         <span class="keyword">case</span> <span class="string">'comment'</span>
+0101             <span class="comment">% Comments are forgotten</span>
+0102         <span class="keyword">otherwise</span>
+0103             warning(sprintf(<span class="string">'Type %s unknown : not saved'</span>,<a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>(tree,uid,<span class="string">'type'</span>)));
+0104     <span class="keyword">end</span>
+0105     
+0106 <span class="comment">%=======================================================================</span>
+0107 <a name="_sub2" href="#_subfunctions" class="code">function s = sub_setfield(s,varargin)</a>
+0108 <span class="comment">% Same as setfield but using '{}' rather than '()'</span>
+0109 <span class="comment">%if (isempty(varargin) | length(varargin) &lt; 2)</span>
+0110 <span class="comment">%    error('Not enough input arguments.');</span>
+0111 <span class="comment">%end</span>
+0112 
+0113 subs = varargin(1:end-1);
+0114 <span class="keyword">for</span> i = 1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(varargin)-1
+0115     <span class="keyword">if</span> (isa(varargin{i}, <span class="string">'cell'</span>))
+0116         types{i} = <span class="string">'{}'</span>;
+0117     <span class="keyword">elseif</span> isstr(varargin{i})
+0118         types{i} = <span class="string">'.'</span>;
+0119         subs{i} = varargin{i}; <span class="comment">%strrep(varargin{i},' ',''); % deblank field name</span>
+0120     <span class="keyword">else</span>
+0121         error(<span class="string">'Inputs must be either cell arrays or strings.'</span>);
+0122     <span class="keyword">end</span>
+0123 <span class="keyword">end</span>
+0124 
+0125 <span class="comment">% Perform assignment</span>
+0126 <span class="keyword">try</span>
+0127    s = builtin(<span class="string">'subsasgn'</span>, s, struct(<span class="string">'type'</span>,types,<span class="string">'subs'</span>,subs), varargin{end});
+0128 <span class="keyword">catch</span>
+0129    error(lasterr)
+0130 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modular_rate_law_to_sbtab</title>
+  <meta name="keywords" content="modular_rate_law_to_sbtab">
+  <meta name="description" content="quantity_table = modular_rate_law_to_sbtab(network,filename,options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">modular_rate_law_functions</a> &gt; modular_rate_law_to_sbtab.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>modular_rate_law_to_sbtab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>quantity_table = modular_rate_law_to_sbtab(network,filename,options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function quantity_table = modular_rate_law_to_sbtab(network,filename,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> quantity_table = modular_rate_law_to_sbtab(network,filename,options)
+ 
+ Requires the SBtab toolbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_network/network_import_export/network_adjust_names_for_sbml_export.html" class="code" title="function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)">network_adjust_names_for_sbml_export</a>	[metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)</li><li><a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_network/network_import_export/network_to_sbtab.html" class="code" title="function sbtab_document = network_to_sbtab(network,options)">network_to_sbtab</a>	sbtab_document = network_to_sbtab(network,options)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function quantity_table = modular_rate_law_to_sbtab(network,filename,options)</a>
+0002 
+0003 <span class="comment">% quantity_table = modular_rate_law_to_sbtab(network,filename,options)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Requires the SBtab toolbox</span>
+0006 
+0007 eval(<a href="../../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>,<span class="string">'filename'</span>,<span class="string">'[]'</span>));
+0008 options_default = struct(<span class="string">'use_sbml_ids'</span>,1);
+0009 options         = join_struct(options_default,options);
+0010 
+0011 <span class="keyword">switch</span> network.kinetics.type
+0012   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>,<span class="string">'rp'</span>,<span class="string">'ma'</span>,<span class="string">'fm'</span>}, <span class="comment">% UPDATE rate law names!</span>
+0013   <span class="keyword">otherwise</span>, error(<span class="string">'Conversion is only possible for modular rate law'</span>);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="keyword">if</span> options.use_sbml_ids, 
+0017   metabolites = network.sbml_id_species; 
+0018   reactions   = network.sbml_id_reaction; 
+0019 <span class="keyword">else</span>
+0020   metabolites = network.metabolites; 
+0021   reactions   = network.actions; 
+0022   [metabolites,reactions] = <a href="../../../../mnt/mnt_network/network_import_export/network_adjust_names_for_sbml_export.html" class="code" title="function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)">network_adjust_names_for_sbml_export</a>(metabolites,reactions);
+0023 <span class="keyword">end</span>
+0024 
+0025 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
+0026 
+0027 
+0028 column_quantity = [ repmat({<span class="string">'equilibrium constant'</span>},nr,1); <span class="keyword">...</span>
+0029                     repmat({<span class="string">'catalytic rate constant geometric mean'</span>},nr,1); <span class="keyword">...</span>
+0030                     repmat({<span class="string">'Michaelis constant'</span>},nKM,1); <span class="keyword">...</span>
+0031                     repmat({<span class="string">'activation constant'</span>},nKA,1); <span class="keyword">...</span>
+0032                     repmat({<span class="string">'inhibitory constant'</span>},nKI,1); <span class="keyword">...</span>
+0033                     repmat({<span class="string">'concentration'</span>},nm,1); <span class="keyword">...</span>
+0034                     repmat({<span class="string">'concentration of enzyme'</span>},nr,1); <span class="keyword">...</span>
+0035                    ];
+0036 
+0037 column_value =full( [ network.kinetics.Keq; <span class="keyword">...</span>
+0038                 network.kinetics.KV; <span class="keyword">...</span>
+0039                 network.kinetics.KM(KM_indices); <span class="keyword">...</span>
+0040                 network.kinetics.KA(KA_indices); <span class="keyword">...</span>
+0041                 network.kinetics.KI(KI_indices); <span class="keyword">...</span>
+0042                 network.kinetics.c ; <span class="keyword">...</span>
+0043                 network.kinetics.u; <span class="keyword">...</span>
+0044               ]);
+0045 
+0046 column_unit = [ repmat({<span class="string">'-'</span>},nr,1); <span class="keyword">...</span>
+0047                     repmat({<span class="string">'1/s'</span>},nr,1); <span class="keyword">...</span>
+0048                     repmat({<span class="string">'mM'</span>},nKM,1); <span class="keyword">...</span>
+0049                     repmat({<span class="string">'mM'</span>},nKA,1); <span class="keyword">...</span>
+0050                     repmat({<span class="string">'mM'</span>},nKI,1); <span class="keyword">...</span>
+0051                     repmat({<span class="string">'mM'</span>},nm,1); <span class="keyword">...</span>
+0052                     repmat({<span class="string">'mM'</span>},nr,1); <span class="keyword">...</span>
+0053                    ];    
+0054 [iKM,jKM] = ind2sub([nr,nm],KM_indices);
+0055 [iKA,jKA] = ind2sub([nr,nm],KA_indices);
+0056 [iKI,jKI] = ind2sub([nr,nm],KI_indices);
+0057  
+0058 column_reaction = [ reactions; <span class="keyword">...</span>
+0059                     reactions; <span class="keyword">...</span>
+0060                     reactions(iKM); <span class="keyword">...</span>
+0061                     reactions(iKA); <span class="keyword">...</span>
+0062                     reactions(iKI); <span class="keyword">...</span>
+0063                     repmat({<span class="string">''</span>},nm,1); <span class="keyword">...</span>
+0064                     reactions; <span class="keyword">...</span>
+0065                    ];    
+0066 
+0067 column_compound = [ repmat({<span class="string">''</span>},nr,1); <span class="keyword">...</span>
+0068                     repmat({<span class="string">''</span>},nr,1); <span class="keyword">...</span>
+0069                     metabolites(jKM); <span class="keyword">...</span>
+0070                     metabolites(jKA); <span class="keyword">...</span>
+0071                     metabolites(jKI); <span class="keyword">...</span>
+0072                     metabolites; <span class="keyword">...</span>
+0073                     repmat({<span class="string">''</span>},nr,1); <span class="keyword">...</span>
+0074                   ];
+0075 
+0076 quantity_table = sbtab_table_construct(struct(<span class="string">'Type'</span>,<span class="string">'QuantityData'</span>),<span class="keyword">...</span>
+0077                      {<span class="string">'QuantityType'</span>,<span class="string">'Value'</span>,<span class="string">'SBMLSpeciesID'</span>,<span class="string">'SBMLReactionID'</span>},<span class="keyword">...</span>
+0078                      {column_quantity,column_value,column_compound,column_reaction});
+0079 
+0080 <span class="keyword">if</span> length(filename), 
+0081   sbtab_save_table(quantity_table,struct(<span class="string">'filename'</span>,filename)); 
+0082 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

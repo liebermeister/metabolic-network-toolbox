@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of spcharin</title>
+  <meta name="keywords" content="spcharin">
+  <meta name="description" content="SPCHARIN replaces special characters by their codes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">XML4MAT</a> &gt; spcharin.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/XML4MAT&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>spcharin
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>SPCHARIN replaces special characters by their codes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function y=spcharin(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">SPCHARIN replaces special characters by their codes
+
+ Syntax y=spcharin(x)
+
+ Description
+   x is a character or 2D cell array of characters
+   y is the corresponding version with reserved (special) characters 
+   replaced by '%ascii;' codes
+
+ See also: <a href="spcharout.html" class="code" title="function y=spcharout(x)">SPCHAROUT</a>
+
+ Jonas Almeida, almeidaj@musc.edu, 8 Oct 2002, MAT4NAT Tbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="spcharin.html" class="code" title="function y=spcharin(x)">spcharin</a>	SPCHARIN replaces special characters by their codes</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="mat2xml.html" class="code" title="function XML=mat2xml(MAT,VARNAME)">mat2xml</a>	MAT2XML converts structured variable MAT into XML string</li><li><a href="spcharin.html" class="code" title="function y=spcharin(x)">spcharin</a>	SPCHARIN replaces special characters by their codes</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y=spcharin(x)</a>
+0002 
+0003 <span class="comment">%SPCHARIN replaces special characters by their codes</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax y=spcharin(x)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Description</span>
+0008 <span class="comment">%   x is a character or 2D cell array of characters</span>
+0009 <span class="comment">%   y is the corresponding version with reserved (special) characters</span>
+0010 <span class="comment">%   replaced by '%ascii;' codes</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% See also: SPCHAROUT</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Jonas Almeida, almeidaj@musc.edu, 8 Oct 2002, MAT4NAT Tbox</span>
+0015 
+0016 
+0017 <span class="keyword">if</span> iscell(x)
+0018     [n,m]=size(x);
+0019     <span class="keyword">for</span> i=1:n
+0020         <span class="keyword">for</span> j=1:m
+0021             y(i,j)={<a href="spcharin.html" class="code" title="function y=spcharin(x)">spcharin</a>(x{i,j})};
+0022         <span class="keyword">end</span>
+0023     <span class="keyword">end</span>   
+0024 <span class="keyword">elseif</span> ischar(x)
+0025     x=[<span class="string">'AAA'</span>,x,<span class="string">'AAA'</span>];<span class="comment">% add polyA header and tail</span>
+0026     <span class="comment">% replace delimiters first (% and ;)</span>
+0027     x=strrep(x,<span class="string">';'</span>,<span class="string">'*59;'</span>);
+0028     x=strrep(x,<span class="string">'^'</span>,<span class="string">'^94;'</span>);
+0029     x=strrep(x,<span class="string">'*59;'</span>,<span class="string">'^59;'</span>);
+0030     ascii=x*1;<span class="comment">% Find special characters</span>
+0031     sp=find(~(((x&gt;47)&amp;(x&lt;58))|((x&gt;96)&amp;(x&lt;123))|((x&gt;64)&amp;(x&lt;91))|(x==59)|(x==94)));
+0032     <span class="comment">% Replace them by ascii code delimited by % and ;</span>
+0033     <span class="keyword">for</span> i=length(sp):-1:1
+0034         x=[x(1:(sp(i)-1)),<span class="string">'^'</span>,num2str(ascii(sp(i))),<span class="string">';'</span>,x((sp(i)+1):end)];
+0035     <span class="keyword">end</span>
+0036     y=x(4:end-3); <span class="comment">% note plyA head and tail are removed</span>
+0037     <span class="comment">%y=x;</span>
+0038 <span class="keyword">else</span>
+0039     w=whos(<span class="string">'x'</span>)
+0040     error([<span class="string">'string expected, '</span>,w.class',<span class="string">' found instead'</span>])
+0041 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of choose_period</title>
+  <meta name="keywords" content="choose_period">
+  <meta name="description" content="[t,x,v,T_period] = choose_period(t,x,threshold,v,Nt);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">util</a> &gt; choose_period.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>choose_period
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[t,x,v,T_period] = choose_period(t,x,threshold,v,Nt);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function  [t,x,T_period,v] = choose_period(t,x,threshold,v,Nt); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[t,x,v,T_period] = choose_period(t,x,threshold,v,Nt);
+
+select one period from a metabolic time course
+and interpolate time points
+
+t, x, v        vectors of time points, concentrations, fluxes
+Nt (optional)  number of (equally sized) time points for the
+               resampled data</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%[t,x,v,T_period] = choose_period(t,x,threshold,v,Nt);</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%select one period from a metabolic time course</span>
+0004 <span class="comment">%and interpolate time points</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%t, x, v        vectors of time points, concentrations, fluxes</span>
+0007 <span class="comment">%Nt (optional)  number of (equally sized) time points for the</span>
+0008 <span class="comment">%               resampled data</span>
+0009 
+0010 <a name="_sub0" href="#_subfunctions" class="code">function  [t,x,T_period,v] = choose_period(t,x,threshold,v,Nt);</a>
+0011 
+0012 dif =sum( (x-repmat(x(1,:),size(x,1),1)).^2,2);
+0013 rel = dif&lt;threshold;
+0014 
+0015 <span class="comment">% find the region around the first minimum</span>
+0016 
+0017 it=1;
+0018 <span class="keyword">while</span> rel(it)==1,
+0019  rel(it)=0; it =it+1;
+0020 <span class="keyword">end</span>
+0021 it=min(find(rel));
+0022 <span class="keyword">while</span> rel(it), it=it+1; <span class="keyword">end</span>
+0023 rel(it:end)=0;
+0024 [dummy,index] = max(rel.*1./(1+dif));
+0025 T_period = t(index)-t(1);
+0026 
+0027 <span class="comment">% ---</span>
+0028 
+0029 t=t(find(t&lt;T_period));
+0030 x=x(find(t&lt;T_period),:);
+0031 
+0032 [dum,index]=max(sum(x-repmat(mean(x),size(x,1),1).^2,2));
+0033 x=circshift(x,-index+1);
+0034 
+0035 <span class="keyword">if</span> nargin&gt;3,
+0036  v = v(find(t&lt;T_period),:);
+0037  v = circshift(v,-index+1);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> exist(<span class="string">'Nt'</span>,<span class="string">'var'</span>), 
+0041  dt=t(end)/Nt;
+0042  tE=(0:dt:(t(end)-dt))';
+0043  xE=interp1(t,x,tE,<span class="string">'spline'</span>);
+0044  vE=interp1(t,v,tE,<span class="string">'spline'</span>);
+0045  x=xE;
+0046  v=vE;
+0047  t=tE;
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

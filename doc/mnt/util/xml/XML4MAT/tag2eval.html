@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tag2eval</title>
+  <meta name="keywords" content="tag2eval">
+  <meta name="description" content="TAG2EVAL Extacts statements for evaluation by XML2MAT">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">XML4MAT</a> &gt; tag2eval.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/XML4MAT&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>tag2eval
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>TAG2EVAL Extacts statements for evaluation by XML2MAT</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">TAG2EVAL Extacts statements for evaluation by XML2MAT
+
+Syntax: [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,j)
+
+Description:
+ Autorecursive function that parses tag_contents structure
+ generated within XML2MAT (see %RECOVER STRUCTURE while loop)
+
+ See Also: <a href="xml2whos.html" class="code" title="function w=xml2whos(w_xml)">xml2whos</a>
+
+ Jonas Almeida, almeidaj@musc.edu 20 Aug 2002, XML4MAT Tbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="tag2eval.html" class="code" title="function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags)">tag2eval</a>	TAG2EVAL Extacts statements for evaluation by XML2MAT</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="tag2eval.html" class="code" title="function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags)">tag2eval</a>	TAG2EVAL Extacts statements for evaluation by XML2MAT</li><li><a href="xml2mat.html" class="code" title="function [MAT,VARNAME,tag_contents]=xml2mat(XML)">xml2mat</a>	XML2MAT converts XML string into matlab structure variable</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags)</a>
+0002 
+0003 <span class="comment">%TAG2EVAL Extacts statements for evaluation by XML2MAT</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%Syntax: [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,j)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%Description:</span>
+0008 <span class="comment">% Autorecursive function that parses tag_contents structure</span>
+0009 <span class="comment">% generated within XML2MAT (see %RECOVER STRUCTURE while loop)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% See Also: xml2whos</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Jonas Almeida, almeidaj@musc.edu 20 Aug 2002, XML4MAT Tbox</span>
+0014 
+0015 i=tags(j);
+0016 w=tag_contents{i,2};<span class="comment">%disp(i)</span>
+0017 <span class="keyword">if</span> ~isfield(w,<span class="string">'class'</span>);w.class=<span class="string">'struct'</span>;w.size=[1 1];tag_contents{i,2}=w;<span class="keyword">end</span>
+0018 <span class="keyword">if</span> strcmp(w.class,<span class="string">'struct'</span>)
+0019     <span class="keyword">if</span> ~isfield(w,<span class="string">'size'</span>)
+0020         n_fields=length(w.fields);
+0021         <span class="keyword">for</span> f_i=1:n_fields
+0022             field_names{f_i}=tag_contents{w.fields(f_i),2}.name;
+0023         <span class="keyword">end</span>
+0024         unique_names=unique(field_names);
+0025         n_unique=length(unique_names);
+0026         n_certo=(n_fields/n_unique);
+0027         w.size=[1 n_certo];
+0028     <span class="keyword">end</span>
+0029     nn=prod(w.size); <span class="comment">%number of elements</span>
+0030     nf=length(w.fields); <span class="comment">%number of fields per element</span>
+0031     iis=<span class="string">'i1'</span>;<span class="keyword">for</span> ii=2:length(w.size);iis=[iis,<span class="string">',i'</span>,num2str(ii)];<span class="keyword">end</span> <span class="comment">%indexes</span>
+0032     eval([<span class="string">'['</span>,iis,<span class="string">']=ind2sub(w.size,[1:nn]);'</span>]); <span class="comment">% assigning values to indexes</span>
+0033     iis=<span class="string">'i1(ind)'</span>;<span class="keyword">for</span> ii=2:length(w.size);iis=[iis,<span class="string">',i'</span>,num2str(ii),<span class="string">'(ind)'</span>];<span class="keyword">end</span> <span class="comment">% indexes of indexes</span>
+0034     <span class="comment">%disp(iis)</span>
+0035     <span class="keyword">for</span> ind=1:nn    
+0036         <span class="keyword">for</span> ind_f=1:(nf/nn)
+0037             <span class="comment">%disp(['ind=',num2str(ind),' nf=',num2str(nf)])</span>
+0038             j=j+1;<span class="comment">%disp(['j=',num2str(j)])</span>
+0039             i=tags(j);
+0040             field_name=tag_contents{w.fields(ind_f),2}.name;iis_val=num2str(eval([<span class="string">'['</span>,iis,<span class="string">']'</span>]));
+0041             iis_val(findstr(iis_val,<span class="string">'  '</span>))=[];iis_val(isspace(iis_val))=<span class="string">','</span>;
+0042             eval_i{length(eval_i)+1}=[<span class="string">'('</span>,iis_val,<span class="string">').'</span>,field_name];
+0043             [to_eval,eval_i,j]=<a href="tag2eval.html" class="code" title="function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags)">tag2eval</a>(tag_contents,to_eval,eval_i,j,tags);
+0044             <span class="comment">%eval_i_str='';for eval_i_j=1:length(eval_i);eval_i_str=[eval_i_str,eval_i{eval_i_j}];end;eval_i_str=[eval_i_str,'=tag_contents{',num2str(i),',4};'];disp(eval_i_str)</span>
+0045             <span class="comment">%to_eval{length(to_eval)+1}=eval_i_str;</span>
+0046             eval_i(end)=[];
+0047         <span class="keyword">end</span>
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">elseif</span> strcmp(w.class,<span class="string">'cell'</span>)
+0050     <span class="keyword">if</span> ~isfield(w,<span class="string">'size'</span>)
+0051         w.size=[1,length(w.fields)];
+0052     <span class="keyword">end</span>
+0053     nn=prod(w.size); <span class="comment">%number of elements</span>
+0054     nf=length(w.fields); <span class="comment">%number of fields per element</span>
+0055     iis=<span class="string">'i1'</span>;<span class="keyword">for</span> ii=2:length(w.size);iis=[iis,<span class="string">',i'</span>,num2str(ii)];<span class="keyword">end</span> <span class="comment">%indexes</span>
+0056     eval([<span class="string">'['</span>,iis,<span class="string">']=ind2sub(w.size,[1:nn]);'</span>]); <span class="comment">% assigning values to indexes</span>
+0057     iis=<span class="string">'i1(ind)'</span>;<span class="keyword">for</span> ii=2:length(w.size);iis=[iis,<span class="string">',i'</span>,num2str(ii),<span class="string">'(ind)'</span>];<span class="keyword">end</span> <span class="comment">% indexes of indexes</span>
+0058     <span class="comment">%disp(iis)</span>
+0059     <span class="keyword">for</span> ind=1:nn
+0060         <span class="keyword">for</span> ind_f=1:(nf/nn)
+0061             <span class="comment">%disp(['ind=',num2str(ind),' nf=',num2str(nf)])</span>
+0062             j=j+1;<span class="comment">%disp(['j=',num2str(j)])</span>
+0063             i=tags(j);
+0064             <span class="comment">%disp(iis)</span>
+0065             
+0066             field_name=tag_contents{w.fields(ind_f),2}.name;iis_val=num2str(eval([<span class="string">'['</span>,iis,<span class="string">']'</span>]));
+0067             iis_val(findstr(iis_val,<span class="string">'  '</span>))=[];iis_val(isspace(iis_val))=<span class="string">','</span>;
+0068             eval_i{length(eval_i)+1}=[<span class="string">'{'</span>,iis_val,<span class="string">'}'</span>];
+0069             [to_eval,eval_i,j]=<a href="tag2eval.html" class="code" title="function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags)">tag2eval</a>(tag_contents,to_eval,eval_i,j,tags);
+0070             <span class="comment">%eval_i_str='';for eval_i_j=1:length(eval_i);eval_i_str=[eval_i_str,eval_i{eval_i_j}];end;eval_i_str=[eval_i_str,'=tag_contents{',num2str(i),',4};'];disp(eval_i_str)</span>
+0071             <span class="comment">%to_eval{length(to_eval)+1}=eval_i_str;</span>
+0072             eval_i(end)=[];
+0073         <span class="keyword">end</span>
+0074     <span class="keyword">end</span>
+0075 <span class="keyword">elseif</span> strcmp(w.class,<span class="string">'cellstruct'</span>)
+0076     <span class="comment">%disp(w)</span>
+0077     eval_i{end+1}={};
+0078     <span class="keyword">for</span> i=1:length(w.fields)
+0079         ww=tag_contents{w.fields(i),2};
+0080         field_exist{i}=ww.name;
+0081         n=sum(strcmp(ww.name,field_exist));
+0082         <span class="comment">%disp(['field [',ww.name,'] ',num2str(n)]);</span>
+0083         <span class="comment">%eval_i{length(eval_i)+(i==1)}=['.',ww.name,'{',num2str(n),'}'];</span>
+0084         eval_i{length(eval_i)}=[<span class="string">'.'</span>,ww.name,<span class="string">'{'</span>,num2str(n),<span class="string">'}'</span>];
+0085         j=j+1;
+0086         [to_eval,eval_i,j]=<a href="tag2eval.html" class="code" title="function [to_eval,eval_i,j]=tag2eval(tag_contents,to_eval,eval_i,j,tags)">tag2eval</a>(tag_contents,to_eval,eval_i,j,tags);
+0087         <span class="comment">%if ((i&gt;1)&amp;(n==1));to_eval(end)=[];end</span>
+0088         <span class="comment">%disp([eval_i,'.',ww.name])</span>
+0089         <span class="comment">%disp(BM_tag2eval(</span>
+0090     <span class="keyword">end</span>
+0091     eval_i(end)=[];
+0092     clear field_exist;
+0093 <span class="keyword">else</span> <span class="comment">% str or double</span>
+0094     <span class="comment">%disp('not struct')</span>
+0095     eval_i_str=<span class="string">''</span>;<span class="keyword">for</span> eval_i_j=1:length(eval_i);eval_i_str=[eval_i_str,eval_i{eval_i_j}];<span class="keyword">end</span>;eval_i_str=[eval_i_str,<span class="string">'=tag_contents{'</span>,num2str(i),<span class="string">',4};'</span>];<span class="comment">%disp(eval_i_str)</span>
+0096     to_eval{length(to_eval)+1}=eval_i_str;
+0097 <span class="keyword">end</span>
+0098     
+0099 
+0100 
+0101 
+0102 <span class="comment">%j=j+1;</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sample_feasible_dmu</title>
+  <meta name="keywords" content="sample_feasible_dmu">
+  <meta name="description" content="[mu, success_flag] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">flux_sampling</a> &gt; sample_feasible_dmu.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/flux_sampling&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>sample_feasible_dmu
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[mu, success_flag] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [dmu, success_flag] = sample_feasible_dmu(N,ind_ext,v,es_constraints,es_options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [mu, success_flag] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)
+
+ Sample dmu vectors that agree with a given flux vector v
+ and with further es_constraints given in 'es_constraints':
+
+ Input: dmu_min, dmu_max, sign(v), rho, dmu_limit, dmu_fix, and dmu_eqconstraint
+
+ But DISREGARD all other entries in 'es_constraints' (about mu, c, c0, Keq)
+
+ Compute some dmu vectors at the boundaries of the feasible region
+ set by the (previously sampled or determined) flux directions 
+ compute the corresponding mu vectors using the pseudoinverse of N'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [dmu, success_flag] = sample_feasible_dmu(N,ind_ext,v,es_constraints,es_options)</a>
+0002 
+0003 <span class="comment">% [mu, success_flag] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Sample dmu vectors that agree with a given flux vector v</span>
+0006 <span class="comment">% and with further es_constraints given in 'es_constraints':</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Input: dmu_min, dmu_max, sign(v), rho, dmu_limit, dmu_fix, and dmu_eqconstraint</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% But DISREGARD all other entries in 'es_constraints' (about mu, c, c0, Keq)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Compute some dmu vectors at the boundaries of the feasible region</span>
+0013 <span class="comment">% set by the (previously sampled or determined) flux directions</span>
+0014 <span class="comment">% compute the corresponding mu vectors using the pseudoinverse of N'</span>
+0015 
+0016 dmu          = []; 
+0017 success_flag = 1;
+0018 [nm,nr]      = size(N);
+0019 
+0020 <span class="keyword">if</span> ~isfield(es_options,<span class="string">'seed'</span>), es_options.seed = 0; <span class="keyword">end</span>
+0021 <span class="keyword">if</span> ~isnan(es_options.seed), randn(<span class="string">'state'</span>,es_options.seed); <span class="keyword">end</span>
+0022 
+0023 epsilon     = <a href="../../../mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>/es_constraints.rho;
+0024 v_signs     = sign(v);
+0025 
+0026 <span class="comment">% update lower and upper bounds for dmu</span>
+0027 
+0028 dmu_min = es_constraints.dmu_min;
+0029 dmu_max = es_constraints.dmu_max;
+0030 dmu_min(~isfinite(dmu_min))                   = - es_constraints.dmu_limit;
+0031 dmu_max(~isfinite(dmu_max))                   =   es_constraints.dmu_limit;
+0032 dmu_max(v_signs&gt;0)                            = - epsilon;
+0033 dmu_min(v_signs&lt;0)                            =   epsilon;
+0034 dmu_min(dmu_min &lt; - es_constraints.dmu_limit) = - es_constraints.dmu_limit;
+0035 dmu_max(dmu_max &gt;   es_constraints.dmu_limit) =   es_constraints.dmu_limit;
+0036 
+0037 ee   = eye(length(v));
+0038 
+0039 A_ineq = [  ee; <span class="keyword">...</span>
+0040           - ee; <span class="keyword">...</span>
+0041          ];
+0042 
+0043 b_ineq = [ dmu_max; <span class="keyword">...</span>
+0044           -dmu_min; <span class="keyword">...</span>
+0045          ];
+0046 
+0047 
+0048 A_eq = [ee(find(isfinite(es_constraints.dmu_fix)),:); <span class="keyword">...</span>
+0049         es_constraints.dmu_eqconstraint.matrix;<span class="keyword">...</span>
+0050        ];
+0051 
+0052 b_eq = [ es_constraints.dmu_fix(find(isfinite(es_constraints.dmu_fix))); <span class="keyword">...</span>
+0053          es_constraints.dmu_eqconstraint.vector; <span class="keyword">...</span>
+0054        ];
+0055 
+0056 [dmu, success_flag] = sample_convex(A_ineq, b_ineq, A_eq, b_eq, es_options.n_dmu_samples);
+0057 
+0058 <span class="comment">% check inequality constraints and equality constraints</span>
+0059 <span class="comment">% if success_flag,</span>
+0060 <span class="comment">%   [A_ineq * dmu, b_ineq]</span>
+0061 <span class="comment">%   [A_eq * dmu, b_eq]</span>
+0062 <span class="comment">% end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

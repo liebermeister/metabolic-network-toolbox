@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of kinetics_string</title>
+  <meta name="keywords" content="kinetics_string">
+  <meta name="description" content="s = kinetics_string(kinetics,n,actions,network)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">kinetics</a> &gt; kinetics_string.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/kinetics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>kinetics_string
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>s = kinetics_string(kinetics,n,actions,network)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function s = kinetics_string(kinetics,n,actions,network) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">s = kinetics_string(kinetics,n,actions,network)
+
+represent kinetics of the nth reaction as a string
+
+n can also be a list of reaction indices (default for n: all reactions)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_kinetics/convenience/convenience_print.html" class="code" title="function  s = convenience_print(kinetics,n,actions,network)">convenience_print</a>	s = convenience_print(kinetics,n,actions,network)</li><li><a href="../../../mnt/mnt_kinetics/mass_action/mass_action_print.html" class="code" title="function       s = mass_action_print(kinetics,n,actions,network)">mass_action_print</a>	s = mass_action_print(kinetics,n,actions,network)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_print.html" class="code" title="function s = cs_print(kinetics,n,actions,network)">cs_print</a>	</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/pm_rate_law/rp_print.html" class="code" title="function s = rp_print(kinetics,n,actions,network)">rp_print</a>	s = rp_print(kinetics,n,actions,network)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/ms_print.html" class="code" title="function s = ms_print(kinetics,n,actions,network)">ms_print</a>	s = ms_print(kinetics,n,actions,network)</li><li><a href="../../../mnt/mnt_kinetics/numeric/numeric_print.html" class="code" title="function s = numeric_print(kinetics,n,actions,network)">numeric_print</a>	s = numeric_print(kinetics,n,actions,network)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="network_print_kinetics.html" class="code" title="function s = network_print_kinetics(network)">network_print_kinetics</a>	s = network_print_kinetics(network)</li><li><a href="../../../mnt/mnt_network/network_import_export/network2sbml.html" class="code" title="function s = network2sbml(network,verbose,name,filename,write_equilibrium_constants)">network2sbml</a>	string = network2sbml(network,verbose,name,filename,write_equilibrium_constants)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%s = kinetics_string(kinetics,n,actions,network)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%represent kinetics of the nth reaction as a string</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%n can also be a list of reaction indices (default for n: all reactions)</span>
+0006 
+0007 <a name="_sub0" href="#_subfunctions" class="code">function s = kinetics_string(kinetics,n,actions,network)</a>
+0008 
+0009 <span class="keyword">if</span> ~exist(<span class="string">'n'</span>,<span class="string">'var'</span>),             n = [];      <span class="keyword">end</span>
+0010 <span class="keyword">if</span> ~exist(<span class="string">'actions'</span>,<span class="string">'var'</span>), actions = []; <span class="keyword">end</span>
+0011 
+0012 s = [];
+0013 
+0014 <span class="keyword">if</span> isempty(n),  
+0015   <span class="keyword">switch</span> kinetics.type,            
+0016     <span class="keyword">case</span> <span class="string">'convenience'</span>,
+0017       nmax     = length(kinetics.r);
+0018       n        = 1:nmax;
+0019   <span class="keyword">end</span>
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="keyword">switch</span> kinetics.type,  
+0023   <span class="keyword">case</span> <span class="string">'ms'</span>,               s = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/ms_print.html" class="code" title="function s = ms_print(kinetics,n,actions,network)">ms_print</a>(kinetics,n,actions,network);
+0024   <span class="keyword">case</span> <span class="string">'cs'</span>,               s = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_print.html" class="code" title="function s = cs_print(kinetics,n,actions,network)">cs_print</a>(kinetics,n,actions,network);
+0025   <span class="keyword">case</span> <span class="string">'ds'</span>,               s = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_print.html" class="code" title="function s = cs_print(kinetics,n,actions,network)">cs_print</a>(kinetics,n,actions,network);
+0026   <span class="keyword">case</span> <span class="string">'rp'</span>,               s = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/pm_rate_law/rp_print.html" class="code" title="function s = rp_print(kinetics,n,actions,network)">rp_print</a>(kinetics,n,actions,network);
+0027   <span class="keyword">case</span> <span class="string">'fd'</span>,               s = fd_print(kinetics,n,actions,network);
+0028   <span class="keyword">case</span> <span class="string">'convenience'</span>,      s = <a href="../../../mnt/mnt_kinetics/convenience/convenience_print.html" class="code" title="function  s = convenience_print(kinetics,n,actions,network)">convenience_print</a>(kinetics,n,actions,network);
+0029   <span class="keyword">case</span> <span class="string">'numeric'</span>,  s = <a href="../../../mnt/mnt_kinetics/numeric/numeric_print.html" class="code" title="function s = numeric_print(kinetics,n,actions,network)">numeric_print</a>(kinetics,n,actions,network);
+0030   <span class="keyword">case</span> <span class="string">'standard'</span>,         s = standard_print(kinetics,n,actions,network);
+0031   <span class="keyword">case</span> <span class="string">'mass-action'</span>,      s = <a href="../../../mnt/mnt_kinetics/mass_action/mass_action_print.html" class="code" title="function       s = mass_action_print(kinetics,n,actions,network)">mass_action_print</a>(kinetics,n,actions,network);
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

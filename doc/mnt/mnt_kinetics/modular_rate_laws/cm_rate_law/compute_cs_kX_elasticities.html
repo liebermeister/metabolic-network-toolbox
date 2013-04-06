@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of compute_cs_kX_elasticities</title>
+  <meta name="keywords" content="compute_cs_kX_elasticities">
+  <meta name="description" content="[E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">cm_rate_law</a> &gt; compute_cs_kX_elasticities.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/cm_rate_law&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>compute_cs_kX_elasticities
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>[E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);
+
+ compute the elasticities for the ms kinetics and replace only the KM elasticities,</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);">k_to_log_alpha</a>	log_alpha_X,log_beta_X: sparse matrices</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/compute_ms_kX_elasticities.html" class="code" title="function [E_kX_sc,kX_names,kX] = compute_ms_kX_elasticities(network, c);">compute_ms_kX_elasticities</a>	[E_kX_sc,kX_names,kX] = compute_ms_kX_elasticities(network, c);</li><li><a href="../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>	[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/compute_modular_kX_elasticities.html" class="code" title="function  [E_kX_sc,kX_names,kX] = compute_modular_kX_elasticities(kinetic_law,network, c);">compute_modular_kX_elasticities</a>	[E_kX_sc,kX_names,kX] = compute_modular_kX_elasticities(kinetic_law,network, c);</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);</a>
+0002 
+0003 <span class="comment">% [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% compute the elasticities for the ms kinetics and replace only the KM elasticities,</span>
+0006 
+0007 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = <a href="../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(network.N,network.regulation_matrix,find(network.external),network.kinetics.h);
+0008 
+0009 ind_N  = find( Mplus + Mminus );
+0010 
+0011 [E_kX_sc,kX_names,kX] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/compute_ms_kX_elasticities.html" class="code" title="function [E_kX_sc,kX_names,kX] = compute_ms_kX_elasticities(network, c);">compute_ms_kX_elasticities</a>(network, c);
+0012 
+0013 <span class="comment">%---------------------------------------------------</span>
+0014 <span class="comment">% KM values</span>
+0015 
+0016 [i1,i2] = ind2sub([nr,nm],ind_N);
+0017 
+0018 E_kM_sc = sparse(nr,length(i1));
+0019 
+0020 [log_alpha_M, log_beta_M ] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);">k_to_log_alpha</a>(network.kinetics.KM,c);
+0021 
+0022 psi_plus  = exp(- sum( Mplus  .* log_alpha_M,2));
+0023 psi_minus = exp(- sum( Mminus .* log_alpha_M,2));
+0024 D         = psi_plus + psi_minus - 1; 
+0025 
+0026 <span class="keyword">for</span> it = 1:length(i1),
+0027   this_beta     = exp(log_beta_M( i1(it),i2(it)) );
+0028   this_Mplus    = Mplus( i1(it),i2(it));
+0029   this_Mminus   = Mminus(i1(it),i2(it));
+0030   this_psi_plus = psi_plus( i1(it));
+0031   this_psi_minus= psi_minus(i1(it));
+0032   this_D        = D(i1(it));
+0033   E_kM_sc(i1(it), it) = ( (this_Mplus * this_psi_plus) + (this_Mminus * this_psi_minus) ) / this_D * this_beta <span class="keyword">...</span>
+0034                        - 1/2 * ( this_Mplus + this_Mminus); 
+0035 <span class="keyword">end</span>
+0036 
+0037 E_kX_sc(:,end-(nr+length(i1))+1:end-nr)  = E_kM_sc;
+0038 
+0039 <span class="comment">% check</span>
+0040 <span class="comment">% v =  network_velocities( c(:,it), sample_network) ;</span>
+0041 <span class="comment">%  [this_E_kX_sc, kX_names, kX] = compute_cs_kX_elasticities(sample_network, c(:,it));</span>
+0042 <span class="comment">%   [parameters,parameter_names] = parameters2vector(sample_network.kinetics);</span>
+0043 <span class="comment">%  [Ec,Ep,parameter_names] = elasticities(sample_network, c(:,it));</span>
+0044 <span class="comment">% Ep = diag(1./v)*Ep*diag(parameters)</span>
+0045 <span class="comment">% Ep = Ep(:,nm+nr+1:end);</span>
+0046 <span class="comment">% full( [ Ep(:,ind_Wp)         - this_E_kX_sc(:,1:length(ind_Wp)) ] )</span>
+0047 <span class="comment">% full( [ Ep(:,nm*nr+ind_Wm)   - this_E_kX_sc(:,length(ind_Wp)+(1:length(ind_Wm))) ] )</span>
+0048 <span class="comment">% full( [ Ep(:,2*nm*nr+ind_N) -   this_E_kX_sc(:,length(ind_Wp)+length(ind_Wm)+(1:length(ind_N))) ] )</span>
+0049 <span class="comment">% full( [ Ep(:,3*nm*nr+(1:nr)) - this_E_kX_sc(:,length(ind_Wp)+length(ind_Wm)+length(ind_N)+(1:nr)) ] )</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

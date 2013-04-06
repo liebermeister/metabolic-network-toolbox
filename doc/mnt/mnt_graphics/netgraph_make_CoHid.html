@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_make_CoHid</title>
+  <meta name="keywords" content="netgraph_make_CoHid">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_make_CoHid.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_make_CoHid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_cofactor_graphs.html" class="code" title="function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)">netgraph_cofactor_graphs</a>	</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 max_met_degree = 6; <span class="comment">% sqrt(nr)</span>
+0002 met_degree = sum(abs(sign(network.N)),2);
+0003 
+0004 cofactors       = network.metabolites(met_degree&gt;max_met_degree);
+0005 network         = <a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network);
+0006 
+0007 network_CoHid   = <a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>(network,cofactors);
+0008 
+0009 <span class="comment">% find_EX         = find(cellfun('length',strfind(network.metabolites,'[e]')));</span>
+0010 <span class="comment">% network_CoHid.graphics_par.x = 0 * network_CoHid.graphics_par.x;</span>
+0011 <span class="comment">% network_CoHid.graphics_par.x(:,find_EX) = [cos(2*pi*1/length(find_EX)*[0:length(find_EX)-1]); sin(2*pi*1/length(find_EX)*[0:length(find_EX)-1]);];</span>
+0012 <span class="comment">% network_CoHid.graphics_par.fixed = 0 * network_CoHid.graphics_par.fixed;</span>
+0013 <span class="comment">% network_CoHid.graphics_par.fixed(find_EX) = 1;</span>
+0014 
+0015 table_positions = <span class="string">'/tmp/network_positions'</span>;
+0016 ! rm /tmp/network_positions
+0017 ! touch /tmp/network_positions
+0018 save(<span class="string">'/tmp/network'</span>,<span class="string">'network'</span>,<span class="string">'network_CoHid'</span>);
+0019 ncsp_change_positions(struct(<span class="string">'network_file'</span>,<span class="string">'/tmp/network'</span>,<span class="string">'table_positions'</span>,table_positions),network.graphics_par,cofactors);
+0020 
+0021 [network_CoHid,network_CoSplit] = <a href="netgraph_cofactor_graphs.html" class="code" title="function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)">netgraph_cofactor_graphs</a>(network, cofactors, table_positions);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of children</title>
+  <meta name="keywords" content="children">
+  <meta name="description" content="XMLTREE/CHILDREN Return children's UIDs of node uid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; children.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>children
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/CHILDREN Return children's UIDs of node uid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function child = children(tree,uid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/CHILDREN Return children's UIDs of node uid
+ FORMAT child = children(tree,uid)
+
+ tree   - a tree
+ uid    - uid of the element
+ child  - array of the UIDs of children of node uid
+_______________________________________________________________________
+
+ Return UID's of children of node uid
+_______________________________________________________________________
+ @(#)children.m              Guillaume Flandin                02/04/09</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="branch.html" class="code" title="function subtree = branch(tree,uid)">branch</a>	XMLTREE/BRANCH Branch Method</li><li><a href="convert.html" class="code" title="function s = convert(tree,uid)">convert</a>	XMLTREE/CONVERT Converter an XML tree in a Matlab structure</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function child = children(tree,uid)</a>
+0002 <span class="comment">% XMLTREE/CHILDREN Return children's UIDs of node uid</span>
+0003 <span class="comment">% FORMAT child = children(tree,uid)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree   - a tree</span>
+0006 <span class="comment">% uid    - uid of the element</span>
+0007 <span class="comment">% child  - array of the UIDs of children of node uid</span>
+0008 <span class="comment">%_______________________________________________________________________</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Return UID's of children of node uid</span>
+0011 <span class="comment">%_______________________________________________________________________</span>
+0012 <span class="comment">% @(#)children.m              Guillaume Flandin                02/04/09</span>
+0013 
+0014 error(nargchk(2,2,nargin));
+0015 
+0016 child = [];
+0017 uid = uid(:);
+0018 l = <a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree);
+0019 <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(uid)
+0020     <span class="keyword">if</span> uid(i) &gt; 0 &amp; uid(i) &lt;= l
+0021         <span class="keyword">if</span> strcmp(tree.tree{uid(i)}.type,<span class="string">'element'</span>)
+0022             child = [child tree.tree{uid(i)}.contents];
+0023         <span class="keyword">end</span>
+0024     <span class="keyword">else</span>
+0025         error(<span class="string">'[XMLTree] Invalid UID.'</span>);
+0026     <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> isempty(child), child = []; <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_remove_action</title>
+  <meta name="keywords" content="network_remove_action">
+  <meta name="description" content="[network1,keep,keep_actions] = network_remove_action(network,ind)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="index.html">mnt_network</a> &gt; network_remove_action.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>network_remove_action
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[network1,keep,keep_actions] = network_remove_action(network,ind)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [network1,keep,keep_actions] = network_remove_action(network,ind) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [network1,keep,keep_actions] = network_remove_action(network,ind)
+
+ remove reactions (and metabolites that become obsolete)
+
+ ind indices of actions to be removed</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="network_reduce_to_active_subnetwork.html" class="code" title="function [network,ind_m,ind_r] = network_reduce_to_active_subnetwork(network,v,epsilon)">network_reduce_to_active_subnetwork</a>	if v is a matrix, choose all reactions for which the flux in any of the states</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% [network1,keep,keep_actions] = network_remove_action(network,ind)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% remove reactions (and metabolites that become obsolete)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% ind indices of actions to be removed</span>
+0006 
+0007 <a name="_sub0" href="#_subfunctions" class="code">function [network1,keep,keep_actions] = network_remove_action(network,ind)</a>
+0008 
+0009 <span class="keyword">if</span> isfield(network,<span class="string">'graphics_par'</span>),
+0010   x=network.graphics_par.x; 
+0011   m=network.graphics_par.m; 
+0012   db=network.graphics_par.db; 
+0013 <span class="keyword">end</span>
+0014 
+0015 n_met=length(network.metabolites);
+0016 
+0017 keep_actions = setdiff(1:length(network.actions), ind)';
+0018 keep = find( sum(network.N(:,keep_actions)~=0 ,2));
+0019 
+0020 <span class="comment">%     fprintf('removing the actions\n');</span>
+0021 <span class="comment">%     network.actions( ind )</span>
+0022 
+0023 network1.metabolites=network.metabolites(keep);
+0024 network1.N=network.N(keep,keep_actions);
+0025  
+0026 network1.reversible=network.reversible(keep_actions);
+0027 network1.actions=network.actions(keep_actions);
+0028 <span class="keyword">if</span> isfield(network,<span class="string">'EC'</span>), network1.EC = network.EC(keep_actions); <span class="keyword">end</span>
+0029 <span class="keyword">if</span> isfield(network,<span class="string">'reaction_names'</span>),  network1.reaction_names=network.reaction_names(keep_actions); <span class="keyword">end</span>
+0030 <span class="keyword">if</span> isfield(network,<span class="string">'formulae'</span>),  network1.formulae=network.formulae(keep_actions); <span class="keyword">end</span>
+0031 <span class="keyword">if</span> isfield(network,<span class="string">'kinetics'</span>), 
+0032   <span class="keyword">switch</span> network.kinetics.type,
+0033     <span class="keyword">case</span> <span class="string">'mass-action'</span>,
+0034       network1.kinetics.k_fwd=network.kinetics.k_fwd(keep_actions);
+0035       network1.kinetics.k_bwd=network.kinetics.k_bwd(keep_actions);
+0036     <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>},
+0037        network1.kinetics.type =  network.kinetics.type;
+0038        network1.kinetics.u    =  network.kinetics.u(keep_actions);
+0039        network1.kinetics.c    =  network.kinetics.c(keep);
+0040        network1.kinetics.KA   =  network.kinetics.KA(keep_actions,keep);
+0041        network1.kinetics.KI   =  network.kinetics.KI(keep_actions,keep);
+0042        network1.kinetics.KM   =  network.kinetics.KM(keep_actions,keep);
+0043        network1.kinetics.KV   =  network.kinetics.KV(keep_actions);
+0044        network1.kinetics.Keq  =  network.kinetics.Keq(keep_actions);
+0045        network1.kinetics.h    =  network.kinetics.h(keep_actions);
+0046     <span class="keyword">otherwise</span>,
+0047       network = rmfield(network,<span class="string">'kinetics'</span>);
+0048   <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 <span class="keyword">if</span> isfield(network,<span class="string">'index'</span>), network.index=network.index(keep_actions); <span class="keyword">end</span>
+0051 
+0052 <span class="comment">% dummi=zeros(1,length(network.metabolites));</span>
+0053 <span class="comment">% dummi(find(network.external))=1;</span>
+0054 <span class="comment">% network1.external = bit_vector(find(dummi(keep)),length(network1.metabolites));</span>
+0055 
+0056  network1.external = network.external(keep);
+0057 
+0058  <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_names'</span>), network1.metabolite_names =network.metabolite_names(keep); <span class="keyword">end</span>
+0059  <span class="keyword">if</span> isfield(network,<span class="string">'is_cofactor'</span>), network1.is_cofactor =network.is_cofactor(keep); <span class="keyword">end</span>
+0060  <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_KEGGID'</span>), network1.metabolite_KEGGID =network.metabolite_KEGGID(keep); <span class="keyword">end</span>
+0061  <span class="keyword">if</span> isfield(network,<span class="string">'metabolites_short'</span>), network1.metabolites_short =network.metabolites_short(keep); <span class="keyword">end</span>
+0062  <span class="keyword">if</span> isfield(network,<span class="string">'orf_indices'</span>), network1.orf_indices =network.orf_indices(keep_actions); <span class="keyword">end</span>
+0063  <span class="keyword">if</span> isfield(network,<span class="string">'cat_ind_2'</span>), network1.cat_ind_2 =network.cat_ind_2(keep_actions); <span class="keyword">end</span>
+0064  <span class="keyword">if</span> isfield(network,<span class="string">'used'</span>), network1.used =network.used(keep_actions); <span class="keyword">end</span>
+0065  <span class="keyword">if</span> isfield(network,<span class="string">'all_orfs'</span>), network1.all_orfs =network.all_orfs; <span class="keyword">end</span>
+0066 
+0067  <span class="keyword">if</span> isfield(network,<span class="string">'regulation_matrix'</span>), network1.regulation_matrix = network.regulation_matrix(keep_actions,keep); <span class="keyword">end</span>
+0068  
+0069  
+0070  <span class="keyword">if</span> isfield(network,<span class="string">'graphics_par'</span>), 
+0071    network1                 = netgraph_make_graph(network1); 
+0072    network1.graphics_par.x  = x(:,[keep; n_met+keep_actions] );
+0073    network1.graphics_par.m  = m([keep; n_met+keep_actions] ,[keep; n_met+keep_actions] );
+0074    network1.graphics_par.db = db([keep; n_met+keep_actions] ,[keep; n_met+keep_actions] );
+0075  <span class="keyword">end</span>
+0076</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

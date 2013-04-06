@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mbmling</title>
+  <meta name="keywords" content="mbmling">
+  <meta name="description" content="MBMLING_CELL converts any XML into MbML (Matlab Markup Language) compliant string">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">XML4MAT</a> &gt; mbmling.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/XML4MAT&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>mbmling
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>MBMLING_CELL converts any XML into MbML (Matlab Markup Language) compliant string</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function yml=mbmling(xml,plt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MBMLING_CELL converts any XML into MbML (Matlab Markup Language) compliant string
+
+Syntax: yml=mbmling(xml,plt)
+
+Description:
+   Converts any XML syntax into Matlab Markup Language (MbML)
+
+ Jonas Almeida, almeidaj@musc.edu, 18 May 2002, MAT4NAT Tbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="xml2cell.html" class="code" title="function [y,varname]=xml2cell(filename_or_xml_string,plt)">xml2cell</a>	XML2CELL reads non-MbML compliant xmlfile into matlab nested cell arrays</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function yml=mbmling(xml,plt)</a>
+0002 
+0003 <span class="comment">%MBMLING_CELL converts any XML into MbML (Matlab Markup Language) compliant string</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%Syntax: yml=mbmling(xml,plt)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%Description:</span>
+0008 <span class="comment">%   Converts any XML syntax into Matlab Markup Language (MbML)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Jonas Almeida, almeidaj@musc.edu, 18 May 2002, MAT4NAT Tbox</span>
+0011 
+0012 <span class="keyword">if</span> nargin&lt;2;plt=0;<span class="keyword">end</span>
+0013 <span class="keyword">if</span> plt==1
+0014     disp(<span class="string">'MbMLing progress report'</span>)
+0015     disp(<span class="string">'-------------------------------------'</span>)
+0016     disp(<span class="string">'To switch off progress report display,'</span>) 
+0017     disp(<span class="string">'call the function with a seccond 0 (zero) input argument,'</span>)
+0018     disp(<span class="string">'e.g. mbmling(xmlfilename,0), xml2struct(xmlfilename,0), etc'</span>)
+0019     disp(<span class="string">'---------BEGIN----(9 steps)----------'</span>)    
+0020 <span class="keyword">end</span>
+0021 <span class="comment">% Remove non-content lines if they exist</span>
+0022 <span class="keyword">if</span> plt==1;disp(<span class="string">'1. Removing non-content lines if they exist'</span>);<span class="keyword">end</span>
+0023 xml=regexprep(xml,<span class="string">'&lt;[?!].*?&gt;'</span>,<span class="string">''</span>);
+0024 <span class="comment">% Remove empty spaces between tags</span>
+0025 <span class="keyword">if</span> plt==1;disp(<span class="string">'2. Removing empty spaces between tags'</span>);<span class="keyword">end</span>
+0026 <span class="comment">%xml=regexprep(xml,'&gt;[ ]+?&lt;','&gt;&lt;');</span>
+0027 n=length(xml)+1;
+0028 <span class="keyword">while</span> n&gt;length(xml)
+0029     n=length(xml);
+0030     xml=strrep(xml,<span class="string">'&gt; '</span>,<span class="string">'&gt;'</span>);
+0031 <span class="keyword">end</span>
+0032 <span class="comment">% Replace symbols that may conflict with matlab variable naming by underscore characters</span>
+0033 <span class="keyword">if</span> plt==1;disp(<span class="string">'3. Replacing symbols that may conflict with matlab variable naming by underscore characters'</span>);<span class="keyword">end</span>
+0034 xml=regexprep(xml,<span class="string">'&lt;[\/]{0,1}(\w*)[^\w\/&gt; ]+(.*?)([ &gt;])'</span>,<span class="string">'&lt;$1_$2$3'</span>,<span class="string">'tokenize'</span>);
+0035 <span class="comment">% Replace one-tag format by open / close tagging</span>
+0036 <span class="keyword">if</span> plt==1;disp(<span class="string">'4. Replace one-tag format by open / close tagging'</span>);<span class="keyword">end</span>
+0037 xml_=regexprep(xml,<span class="string">'&lt;(\w+)([^&gt;]*?)/&gt;'</span>,<span class="string">'&lt;$1$2&gt;&lt;/$1&gt;'</span>,<span class="string">'tokenize'</span>);
+0038 <span class="comment">% Turn attributes into contents</span>
+0039 <span class="keyword">if</span> plt==1;disp(<span class="string">'5. Turn attributes into contents'</span>);<span class="keyword">end</span>
+0040 xml=regexprep(xml_,<span class="string">'&lt;([^&gt;]+) +(\w+)=&quot;(.*?)&quot; *&gt;'</span>,<span class="string">'&lt;$1&gt;&lt;$2&gt;$3&lt;/$2&gt;'</span>,<span class="string">'tokenize'</span>);
+0041 <span class="keyword">while</span> ~strcmp(xml,xml_)
+0042     <span class="comment">%disp('...')</span>
+0043     xml_=xml;xml=regexprep(xml_,<span class="string">'&lt;([^&gt;]+) +(\w+)=&quot;(.*?)&quot; *&gt;'</span>,<span class="string">'&lt;$1&gt;&lt;$2&gt;$3&lt;/$2&gt;'</span>,<span class="string">'tokenize'</span>);
+0044 <span class="keyword">end</span>
+0045 <span class="comment">% remove leftover spaces in tag names</span>
+0046 <span class="keyword">if</span> plt==1;disp(<span class="string">'6. Removing leftover spaces in tag names'</span>);<span class="keyword">end</span>
+0047 xml=regexprep(xml,<span class="string">'(&lt;\w+) +&gt;'</span>,<span class="string">'$1&gt;'</span>,<span class="string">'tokenize'</span>);
+0048 <span class="comment">% Tag untagged contents</span>
+0049 <span class="keyword">if</span> plt==1;disp(<span class="string">'7. Tagging untagged contents'</span>);<span class="keyword">end</span>
+0050 yml=regexprep(xml,<span class="string">'(&lt;/\w+&gt;)([^&lt;&gt;]+)&lt;/(\w+)'</span>,<span class="string">'$1&lt;$3&gt;$2&lt;/$3&gt;&lt;/$3'</span>,<span class="string">'tokenize'</span>);
+0051 <span class="comment">% Tag cell structures</span>
+0052 <span class="keyword">if</span> plt==1;disp(<span class="string">'8. Tag cell structures'</span>);<span class="keyword">end</span>
+0053 yml=regexprep(yml,<span class="string">'&lt;(\w+)&gt;'</span>,<span class="string">'&lt;$1 class=&quot;cell&quot;&gt;&lt;cell&gt;'</span>,<span class="string">'tokenize'</span>);
+0054 yml=regexprep(yml,<span class="string">'&lt;(/\w+)&gt;'</span>,<span class="string">'&lt;/&quot;&quot;&quot;&quot;&gt;&lt;$1&gt;'</span>,<span class="string">'tokenize'</span>);
+0055 yml=regexprep(yml,<span class="string">'&lt;(/\w+)&gt;(&lt;\w+ )'</span>,<span class="string">'&lt;$1&gt;&lt;/&quot;&quot;&quot;&quot;&gt;&lt;cell&gt;$2'</span>,<span class="string">'tokenize'</span>);
+0056 <span class="comment">% Remove cell tag arround content values</span>
+0057 <span class="keyword">if</span> plt==1;disp(<span class="string">'9. Remove cell tag arround content values'</span>);<span class="keyword">end</span>
+0058 yml=regexprep(yml,<span class="string">'class=&quot;cell&quot;&gt;&lt;cell&gt;([^&lt;]*)&lt;/&quot;&quot;&quot;&quot;&gt;'</span>,<span class="string">'class=&quot;char&quot;&gt;$1'</span>,<span class="string">'tokenize'</span>);
+0059 yml=strrep(yml,<span class="string">'&lt;/&quot;&quot;&quot;&quot;&gt;'</span>,<span class="string">'&lt;/cell&gt;'</span>);
+0060 <span class="keyword">if</span> plt==1;disp(<span class="string">'------------END----------------------'</span>);<span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

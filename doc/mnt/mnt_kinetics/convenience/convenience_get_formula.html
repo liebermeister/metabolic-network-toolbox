@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of convenience_get_formula</title>
+  <meta name="keywords" content="convenience_get_formula">
+  <meta name="description" content="formula = convenience_get_formula(rnum,s,p,inh,act,Ns,Np)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">convenience</a> &gt; convenience_get_formula.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/convenience&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>convenience_get_formula
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>formula = convenience_get_formula(rnum,s,p,inh,act,Ns,Np)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function formula = convenience_get_formula(rnum,s,p,act,inh,Ns,Np) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> formula = convenience_get_formula(rnum,s,p,inh,act,Ns,Np)
+
+ s, p, ,inh,act string lists of substrate and product (and inhibitor
+ and activator) names, each in the order of appearance in the
+ stoichiometric matrix</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/util/get_formula.html" class="code" title="function formula = get_formula(reaction,s,p,inh,act,rnum)">get_formula</a>	formula = get_formula(reaction,s,p,inh,act,Ns,Np)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function formula = convenience_get_formula(rnum,s,p,act,inh,Ns,Np)</a>
+0002 
+0003 <span class="comment">% formula = convenience_get_formula(rnum,s,p,inh,act,Ns,Np)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% s, p, ,inh,act string lists of substrate and product (and inhibitor</span>
+0006 <span class="comment">% and activator) names, each in the order of appearance in the</span>
+0007 <span class="comment">% stoichiometric matrix</span>
+0008 
+0009 <span class="comment">% DIE STOICHIOMETRISCHEN KOEFFIZIENTEN SIND NOCH NICHT EINGEBAUT</span>
+0010 
+0011 tail = [<span class="string">'R'</span> num2str(rnum) <span class="string">'_'</span> ];
+0012 
+0013 <span class="keyword">for</span> i1 = 1:length(s);     A{i1} = [s{i1} <span class="string">' / '</span> tail <span class="string">'KMf'</span> num2str(i1)];   <span class="keyword">end</span>
+0014 
+0015 prodA = A{1};
+0016 prodA1 = [<span class="string">'( 1 + '</span> A{1} <span class="string">')'</span>];
+0017 <span class="keyword">for</span> i1 = 2:length(s);
+0018   prodA =  [prodA  <span class="string">' * '</span> A{i1}];    
+0019   prodA1 = [prodA1 <span class="string">' * ( 1 + '</span> A{i1} <span class="string">' )'</span>];
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="keyword">for</span> i1 = 1:length(p);     P{i1} = [p{i1} <span class="string">' / '</span>  tail <span class="string">'KMr'</span> num2str(i1)];   <span class="keyword">end</span>
+0023 
+0024 prodP = P{1};
+0025 prodP1 = [<span class="string">'( 1 + '</span> P{1} <span class="string">')'</span>];
+0026 <span class="keyword">for</span> i1 = 2:length(p);
+0027   prodP  = [prodP  <span class="string">' * '</span> P{i1}];    
+0028   prodP1 = [prodP1 <span class="string">' * ( 1 + '</span> P{i1} <span class="string">' )'</span>];
+0029 <span class="keyword">end</span>
+0030 
+0031 formula =  [ <span class="string">' ( '</span> tail <span class="string">'Vf1 * '</span> prodA <span class="string">' - '</span> tail <span class="string">'Vr1 * '</span> prodP <span class="string">' ) / ( '</span> prodA1 <span class="string">' + '</span> prodP1 <span class="string">' - 1 )'</span>];
+0032 
+0033 <span class="keyword">for</span> it2 = 1:length(act),
+0034   formula  = [ act{it2} <span class="string">' / '</span> tail <span class="string">'KA'</span> num2str(it2) <span class="string">' / ( 1 + '</span> act{it2} <span class="string">' / '</span> tail <span class="string">' KA'</span> num2str(it2) <span class="string">' ) * ( '</span> formula <span class="string">' )'</span>] ;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">for</span> it2 = 1:length(inh),
+0038   formula  = [ <span class="string">'1 / ( 1 + '</span> inh{it2} <span class="string">' / '</span> tail <span class="string">'KI'</span> num2str(it2) <span class="string">') * ( '</span> formula <span class="string">' )'</span>] ;
+0039 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

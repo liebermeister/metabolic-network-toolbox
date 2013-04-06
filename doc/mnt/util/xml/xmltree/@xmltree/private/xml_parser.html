@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of xml_parser</title>
+  <meta name="keywords" content="xml_parser">
+  <meta name="description" content="XML (eXtensible Markup Language) Processor">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../../index.html">util</a> &gt; <a href="../../../index.html">xml</a> &gt; <a href="../../index.html">xmltree</a> &gt; <a href="../index.html">@xmltree</a> &gt; <a href="index.html">private</a> &gt; xml_parser.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>xml_parser
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>XML (eXtensible Markup Language) Processor</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function tree = xml_parser(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XML (eXtensible Markup Language) Processor
+ FORMAT tree = xml_parser(filename)
+
+ filename - XML file to parse
+ tree     - tree structure corresponding to the XML file
+_______________________________________________________________________
+
+ xml_parser.m is an XML 1.0 (http://www.w3.org/TR/REC-xml) parser
+ written in Matlab. It aims to be fully conforming. It is currently not
+ a validating XML processor.
+ (based on a Javascript parser available at http://www.jeremie.com)
+
+ A description of the tree structure provided in output is detailed in 
+ the header of this m-file.
+_______________________________________________________________________
+ @(#)xml_parser.m               Guillaume Flandin           2002/04/04</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>	XML_FINDSTR Find one string within another</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function frag = compile(frag)</a></li><li><a href="#_sub2" class="code">function frag = tag_element(frag)</a></li><li><a href="#_sub3" class="code">function frag = tag_pi(frag)</a></li><li><a href="#_sub4" class="code">function frag = tag_comment(frag)</a></li><li><a href="#_sub5" class="code">function frag = tag_cdata(frag)</a></li><li><a href="#_sub6" class="code">function all = attribution(str)</a></li><li><a href="#_sub7" class="code">function elm = element</a></li><li><a href="#_sub8" class="code">function cdat = chardata</a></li><li><a href="#_sub9" class="code">function cdat = cdata</a></li><li><a href="#_sub10" class="code">function proce = pri</a></li><li><a href="#_sub11" class="code">function commt = comment</a></li><li><a href="#_sub12" class="code">function frg = fragment</a></li><li><a href="#_sub13" class="code">function str = prolog(str)</a></li><li><a href="#_sub14" class="code">function str = strip(str)</a></li><li><a href="#_sub15" class="code">function str = normalize(str)</a></li><li><a href="#_sub16" class="code">function str = entity(str)</a></li><li><a href="#_sub17" class="code">function str = erode(str)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function tree = xml_parser(filename)</a>
+0002 <span class="comment">% XML (eXtensible Markup Language) Processor</span>
+0003 <span class="comment">% FORMAT tree = xml_parser(filename)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% filename - XML file to parse</span>
+0006 <span class="comment">% tree     - tree structure corresponding to the XML file</span>
+0007 <span class="comment">%_______________________________________________________________________</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% xml_parser.m is an XML 1.0 (http://www.w3.org/TR/REC-xml) parser</span>
+0010 <span class="comment">% written in Matlab. It aims to be fully conforming. It is currently not</span>
+0011 <span class="comment">% a validating XML processor.</span>
+0012 <span class="comment">% (based on a Javascript parser available at http://www.jeremie.com)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% A description of the tree structure provided in output is detailed in</span>
+0015 <span class="comment">% the header of this m-file.</span>
+0016 <span class="comment">%_______________________________________________________________________</span>
+0017 <span class="comment">% @(#)xml_parser.m               Guillaume Flandin           2002/04/04</span>
+0018 
+0019 <span class="comment">% XML Processor for MATLAB (The Mathworks, Inc.).</span>
+0020 <span class="comment">% Copyright (C) 2002  Guillaume Flandin</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% This program is free software; you can redistribute it and/or</span>
+0023 <span class="comment">% modify it under the terms of the GNU General Public License</span>
+0024 <span class="comment">% as published by the Free Software Foundation; either version 2</span>
+0025 <span class="comment">% of the License, or any later version.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% This program is distributed in the hope that it will be useful,</span>
+0028 <span class="comment">% but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0029 <span class="comment">% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+0030 <span class="comment">% GNU General Public License for more details.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% You should have received a copy of the GNU General Public License</span>
+0033 <span class="comment">% along with this program; if not, write to the Free Software</span>
+0034 <span class="comment">% Foundation Inc, 59 Temple Pl. - Suite 330, Boston, MA 02111-1307, USA.</span>
+0035 <span class="comment">%-----------------------------------------------------------------------</span>
+0036 
+0037 <span class="comment">% Please feel free to email the author any comment/suggestion/bug report</span>
+0038 <span class="comment">% to improve this XML processor in Matlab.</span>
+0039 <span class="comment">% Email: Guillaume.Flandin@sophia.inria.fr</span>
+0040 <span class="comment">% Check also the latest developments on the following webpage:</span>
+0041 <span class="comment">% http://www-sop.inria.fr/epidaure/personnel/flandin/xml/</span>
+0042 <span class="comment">%-----------------------------------------------------------------------</span>
+0043 
+0044 <span class="comment">% A mex-file xml_findstr.c is also required, to encompass some</span>
+0045 <span class="comment">% limitations of the built-in findstr Matlab function.</span>
+0046 <span class="comment">% Compile it on your architecture using 'mex -O xml_findstr.c' command</span>
+0047 <span class="comment">% if the compiled version for your system is not provided.</span>
+0048 <span class="comment">% If this function behaves badly (crash or wrong results), comment the</span>
+0049 <span class="comment">% line '#define __HACK_MXCHAR__' in xml_findstr.c and compile it again.</span>
+0050 <span class="comment">%-----------------------------------------------------------------------</span>
+0051 
+0052 <span class="comment">% Structure of the output tree:</span>
+0053 <span class="comment">% There are 5 types of nodes in an XML file: element, chardata, cdata,</span>
+0054 <span class="comment">% pi and comment.</span>
+0055 <span class="comment">% Each of them contains an UID (Unique Identifier): an integer between</span>
+0056 <span class="comment">% 1 and the number of nodes of the XML file.</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%    element (a tag &lt;name key=&quot;value&quot;&gt; [contents] &lt;/name&gt;</span>
+0059 <span class="comment">%       |_ type:       'element'</span>
+0060 <span class="comment">%       |_ name:       string</span>
+0061 <span class="comment">%       |_ attributes: cell array of struct 'key' and 'value' or []</span>
+0062 <span class="comment">%       |_ contents:   double array of uid's or [] if empty</span>
+0063 <span class="comment">%       |_ parent:     uid of the parent ([] if root)</span>
+0064 <span class="comment">%       |_ uid:        double</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%    chardata (a character array)</span>
+0067 <span class="comment">%       |_ type:   'chardata'</span>
+0068 <span class="comment">%       |_ value:  string</span>
+0069 <span class="comment">%       |_ parent: uid of the parent</span>
+0070 <span class="comment">%       |_ uid:    double</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">%    cdata (a litteral string &lt;![CDATA[value]]&gt;)</span>
+0073 <span class="comment">%       |_ type:   'cdata'</span>
+0074 <span class="comment">%       |_ value:  string</span>
+0075 <span class="comment">%       |_ parent: uid of the parent</span>
+0076 <span class="comment">%       |_ uid:    double</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">%      pi (a processing instruction &lt;?target value ?&gt;)</span>
+0079 <span class="comment">%       |_ type:   'pi'</span>
+0080 <span class="comment">%       |_ target: string (may be empty)</span>
+0081 <span class="comment">%       |_ value:  string</span>
+0082 <span class="comment">%       |_ parent: uid of the parent</span>
+0083 <span class="comment">%       |_ uid:    double</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">%    comment (a comment &lt;!-- value --&gt;)</span>
+0086 <span class="comment">%       |_ type:   'comment'</span>
+0087 <span class="comment">%       |_ value:  string</span>
+0088 <span class="comment">%       |_ parent: uid of the parent</span>
+0089 <span class="comment">%       |_ uid:    double</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%-----------------------------------------------------------------------</span>
+0092 
+0093 <span class="comment">% TODO/BUG/FEATURES:</span>
+0094 <span class="comment">%  - [compile] only a warning if TagStart is empty</span>
+0095 <span class="comment">%  - [attribution] should look for &quot; and ' rather than only &quot;</span>
+0096 <span class="comment">%  - [main] with normalize as a preprocessing, CDATA are modified</span>
+0097 <span class="comment">%  - [prolog] look for a DOCTYPE in the whole string even if it occurs</span>
+0098 <span class="comment">%    only in a far CDATA tag (for example)...</span>
+0099 <span class="comment">%  - [tag_element] erode should replace normalize here</span>
+0100 <span class="comment">%  - remove globals? uppercase globals  rather persistent (clear mfile)?</span>
+0101 <span class="comment">%  - xml_findst is in fact xml_strfind according to Mathworks vocabulary</span>
+0102 <span class="comment">%  - problem with entity (don't know if the bug is here or in save fct.)</span>
+0103 <span class="comment">%-----------------------------------------------------------------------</span>
+0104 
+0105 <span class="comment">%- XML string to parse and number of tags read</span>
+0106 <span class="keyword">global</span> xmlstring Xparse_count xtree;
+0107 
+0108 <span class="comment">%- Check input arguments</span>
+0109 error(nargchk(1,1,nargin));
+0110 <span class="keyword">if</span> isempty(filename)
+0111     error(<span class="string">'Not enough parameters.'</span>)
+0112 <span class="keyword">elseif</span> ~isstr(filename) | sum(size(filename)&gt;1)&gt;1
+0113     error(<span class="string">'Input must be a string filename.'</span>)
+0114 <span class="keyword">end</span>
+0115 
+0116 <span class="comment">%- Read the entire XML file</span>
+0117 fid = fopen(filename,<span class="string">'rt'</span>);
+0118 <span class="keyword">if</span> (fid==-1) 
+0119     error(sprintf(<span class="string">'Cannot open %s for reading.'</span>,filename))
+0120 <span class="keyword">end</span>
+0121 xmlstring = fscanf(fid,<span class="string">'%c'</span>);
+0122 fclose(fid);
+0123 
+0124 <span class="comment">%- Initialize number of tags (&lt;=&gt; uid)</span>
+0125 Xparse_count = 0;
+0126 
+0127 <span class="comment">%- Remove prolog and white space characters from the XML string</span>
+0128 xmlstring = <a href="#_sub15" class="code" title="subfunction str = normalize(str)">normalize</a>(<a href="#_sub13" class="code" title="subfunction str = prolog(str)">prolog</a>(xmlstring));
+0129 
+0130 <span class="comment">%- Initialize the XML tree</span>
+0131 xtree = {};
+0132 tree = <a href="#_sub12" class="code" title="subfunction frg = fragment">fragment</a>;
+0133 tree.str = 1;
+0134 tree.parent = 0;
+0135 
+0136 <span class="comment">%- Parse the XML string</span>
+0137 tree = <a href="#_sub1" class="code" title="subfunction frag = compile(frag)">compile</a>(tree);
+0138 
+0139 <span class="comment">%- Return the XML tree</span>
+0140 tree = xtree;
+0141 
+0142 <span class="comment">%- Remove global variables from the workspace</span>
+0143 clear <span class="keyword">global</span> xmlstring Xparse_count xtree;
+0144 
+0145 <span class="comment">%=======================================================================</span>
+0146 <span class="comment">% SUBFUNCTIONS</span>
+0147 
+0148 <span class="comment">%-----------------------------------------------------------------------</span>
+0149 <a name="_sub1" href="#_subfunctions" class="code">function frag = compile(frag)</a>
+0150     <span class="keyword">global</span> xmlstring xtree Xparse_count;
+0151     
+0152     <span class="keyword">while</span> 1,
+0153         <span class="keyword">if</span> length(xmlstring)&lt;=frag.str | <span class="keyword">...</span>
+0154            (frag.str == length(xmlstring)-1 &amp; strcmp(xmlstring(frag.str:end),<span class="string">' '</span>))
+0155             <span class="keyword">return</span>
+0156         <span class="keyword">end</span>
+0157         TagStart = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(xmlstring,<span class="string">'&lt;'</span>,frag.str,1);
+0158         <span class="keyword">if</span> isempty(TagStart)
+0159             <span class="comment">%- Character data (should be an error)</span>
+0160             warning(<span class="string">'[XML] Unknown data at the end of the XML file.'</span>);
+0161             fprintf(<span class="string">'Please send me your XML file at gflandin@sophia.inria.fr\n'</span>);
+0162             <span class="comment">%thisary = length(frag.ary) + 1;</span>
+0163             xtree{Xparse_count+1} = <a href="#_sub8" class="code" title="subfunction cdat = chardata">chardata</a>;
+0164             xtree{Xparse_count}.value = <a href="#_sub17" class="code" title="subfunction str = erode(str)">erode</a>(<a href="#_sub16" class="code" title="subfunction str = entity(str)">entity</a>(xmlstring(frag.str:end)));
+0165             xtree{Xparse_count}.parent = frag.parent;
+0166             xtree{frag.parent}.contents = [xtree{frag.parent}.contents Xparse_count];
+0167             <span class="comment">%frag.str = '';</span>
+0168         <span class="keyword">elseif</span> TagStart &gt; frag.str
+0169             <span class="keyword">if</span> strcmp(xmlstring(frag.str:TagStart-1),<span class="string">' '</span>)
+0170                 <span class="comment">%- A single white space before a tag (ignore)</span>
+0171                 frag.str = TagStart;
+0172             <span class="keyword">else</span>
+0173                 <span class="comment">%- Character data</span>
+0174                 xtree{Xparse_count} = <a href="#_sub8" class="code" title="subfunction cdat = chardata">chardata</a>;
+0175                 xtree{Xparse_count}.value = <a href="#_sub17" class="code" title="subfunction str = erode(str)">erode</a>(<a href="#_sub16" class="code" title="subfunction str = entity(str)">entity</a>(xmlstring(frag.str:TagStart-1)));
+0176                 xtree{Xparse_count}.parent = frag.parent;
+0177                 xtree{frag.parent}.contents = [xtree{frag.parent}.contents Xparse_count];
+0178                 frag.str = TagStart;
+0179             <span class="keyword">end</span>
+0180         <span class="keyword">else</span> 
+0181             <span class="keyword">if</span> strcmp(xmlstring(frag.str+1),<span class="string">'?'</span>)
+0182                 <span class="comment">%- Processing instruction</span>
+0183                 frag = <a href="#_sub3" class="code" title="subfunction frag = tag_pi(frag)">tag_pi</a>(frag);
+0184             <span class="keyword">else</span>
+0185                 <span class="keyword">if</span> length(xmlstring)-frag.str&gt;4 &amp; strcmp(xmlstring(frag.str+1:frag.str+3),<span class="string">'!--'</span>)
+0186                     <span class="comment">%- Comment</span>
+0187                     frag = <a href="#_sub4" class="code" title="subfunction frag = tag_comment(frag)">tag_comment</a>(frag);
+0188                 <span class="keyword">else</span>
+0189                     <span class="keyword">if</span> length(xmlstring)-frag.str&gt;9 &amp; strcmp(xmlstring(frag.str+1:frag.str+8),<span class="string">'![CDATA['</span>)
+0190                         <span class="comment">%- Litteral data</span>
+0191                         frag = <a href="#_sub5" class="code" title="subfunction frag = tag_cdata(frag)">tag_cdata</a>(frag);
+0192                     <span class="keyword">else</span>
+0193                         <span class="comment">%- A tag element (empty (&lt;.../&gt;) or not)</span>
+0194                         <span class="keyword">if</span> ~isempty(frag.end)
+0195                             endmk = [<span class="string">'/'</span> frag.end <span class="string">'&gt;'</span>];
+0196                         <span class="keyword">else</span> 
+0197                             endmk = <span class="string">'/&gt;'</span>;
+0198                         <span class="keyword">end</span>
+0199                         <span class="keyword">if</span> strcmp(xmlstring(frag.str+1:frag.str+length(frag.end)+2),endmk) | <span class="keyword">...</span>
+0200                             strcmp(<a href="#_sub14" class="code" title="subfunction str = strip(str)">strip</a>(xmlstring(frag.str+1:frag.str+length(frag.end)+2)),endmk)
+0201                             frag.str = frag.str + length(frag.end)+3;
+0202                             <span class="keyword">return</span>
+0203                         <span class="keyword">else</span>
+0204                             frag = <a href="#_sub2" class="code" title="subfunction frag = tag_element(frag)">tag_element</a>(frag);
+0205                         <span class="keyword">end</span>
+0206                     <span class="keyword">end</span>
+0207                 <span class="keyword">end</span>
+0208             <span class="keyword">end</span>
+0209         <span class="keyword">end</span>
+0210     <span class="keyword">end</span>
+0211 
+0212 <span class="comment">%-----------------------------------------------------------------------</span>
+0213 <a name="_sub2" href="#_subfunctions" class="code">function frag = tag_element(frag)</a>
+0214     <span class="keyword">global</span> xmlstring xtree Xparse_count;
+0215     close =  <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(xmlstring,<span class="string">'&gt;'</span>,frag.str,1);
+0216     <span class="keyword">if</span> isempty(close)
+0217         error(<span class="string">'[XML] Tag &lt; opened but not closed.'</span>);
+0218     <span class="keyword">else</span>
+0219         empty = strcmp(xmlstring(close-1:close),<span class="string">'/&gt;'</span>);
+0220         <span class="keyword">if</span> empty
+0221             close = close - 1;
+0222         <span class="keyword">end</span>
+0223         starttag = <a href="#_sub15" class="code" title="subfunction str = normalize(str)">normalize</a>(xmlstring(frag.str+1:close-1));
+0224         nextspace = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(starttag,<span class="string">' '</span>,1,1);
+0225         attribs = <span class="string">''</span>;
+0226         <span class="keyword">if</span> isempty(nextspace)
+0227             name = starttag;
+0228         <span class="keyword">else</span>
+0229             name = starttag(1:nextspace-1);
+0230             attribs = starttag(nextspace+1:end);
+0231         <span class="keyword">end</span>
+0232         xtree{Xparse_count} = <a href="#_sub7" class="code" title="subfunction elm = element">element</a>;
+0233         xtree{Xparse_count}.name = <a href="#_sub14" class="code" title="subfunction str = strip(str)">strip</a>(name);
+0234         <span class="keyword">if</span> frag.parent
+0235             xtree{Xparse_count}.parent = frag.parent;
+0236             xtree{frag.parent}.contents = [xtree{frag.parent}.contents Xparse_count];
+0237         <span class="keyword">end</span>
+0238         <span class="keyword">if</span> length(attribs) &gt; 0
+0239             xtree{Xparse_count}.attributes = <a href="#_sub6" class="code" title="subfunction all = attribution(str)">attribution</a>(attribs);
+0240         <span class="keyword">end</span>
+0241         <span class="keyword">if</span> ~empty
+0242             contents = <a href="#_sub12" class="code" title="subfunction frg = fragment">fragment</a>;
+0243             contents.str = close+1;
+0244             contents.end = name;
+0245             contents.parent = Xparse_count;
+0246             contents = <a href="#_sub1" class="code" title="subfunction frag = compile(frag)">compile</a>(contents);
+0247             frag.str = contents.str;
+0248         <span class="keyword">else</span>
+0249             frag.str = close+2;
+0250         <span class="keyword">end</span>
+0251     <span class="keyword">end</span>
+0252 
+0253 <span class="comment">%-----------------------------------------------------------------------</span>
+0254 <a name="_sub3" href="#_subfunctions" class="code">function frag = tag_pi(frag)</a>
+0255     <span class="keyword">global</span> xmlstring xtree Xparse_count;
+0256     close = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(xmlstring,<span class="string">'?&gt;'</span>,frag.str,1);
+0257     <span class="keyword">if</span> isempty(close)
+0258         warning(<span class="string">'[XML] Tag &lt;? opened but not closed.'</span>)
+0259     <span class="keyword">else</span>
+0260         nextspace = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(xmlstring,<span class="string">' '</span>,frag.str,1);
+0261         xtree{Xparse_count} = <a href="#_sub10" class="code" title="subfunction proce = pri">pri</a>;
+0262         <span class="keyword">if</span> nextspace &gt; close | nextspace == frag.str+2
+0263             xtree{Xparse_count}.value = <a href="#_sub17" class="code" title="subfunction str = erode(str)">erode</a>(xmlstring(frag.str+2:close-1));
+0264         <span class="keyword">else</span>
+0265             xtree{Xparse_count}.value = <a href="#_sub17" class="code" title="subfunction str = erode(str)">erode</a>(xmlstring(nextspace+1:close-1));
+0266             xtree{Xparse_count}.target = <a href="#_sub17" class="code" title="subfunction str = erode(str)">erode</a>(xmlstring(frag.str+2:nextspace));
+0267         <span class="keyword">end</span>
+0268         <span class="keyword">if</span> frag.parent
+0269             xtree{frag.parent}.contents = [xtree{frag.parent}.contents Xparse_count];
+0270             xtree{Xparse_count}.parent = frag.parent;
+0271         <span class="keyword">end</span>
+0272         frag.str = close+2;
+0273     <span class="keyword">end</span>
+0274 
+0275 <span class="comment">%-----------------------------------------------------------------------</span>
+0276 <a name="_sub4" href="#_subfunctions" class="code">function frag = tag_comment(frag)</a>
+0277     <span class="keyword">global</span> xmlstring xtree Xparse_count;
+0278     close = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(xmlstring,<span class="string">'--&gt;'</span>,frag.str,1);
+0279     <span class="keyword">if</span> isempty(close)
+0280         warning(<span class="string">'[XML] Tag &lt;!-- opened but not closed.'</span>)
+0281     <span class="keyword">else</span>
+0282         xtree{Xparse_count} = <a href="#_sub11" class="code" title="subfunction commt = comment">comment</a>;
+0283         xtree{Xparse_count}.value = <a href="#_sub17" class="code" title="subfunction str = erode(str)">erode</a>(xmlstring(frag.str+4:close-1));
+0284         <span class="keyword">if</span> frag.parent
+0285             xtree{frag.parent}.contents = [xtree{frag.parent}.contents Xparse_count];
+0286             xtree{Xparse_count}.parent = frag.parent;
+0287         <span class="keyword">end</span>
+0288         frag.str = close+3;
+0289     <span class="keyword">end</span>
+0290 
+0291 <span class="comment">%-----------------------------------------------------------------------</span>
+0292 <a name="_sub5" href="#_subfunctions" class="code">function frag = tag_cdata(frag)</a>
+0293     <span class="keyword">global</span> xmlstring xtree Xparse_count;
+0294     close = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(xmlstring,<span class="string">']]&gt;'</span>,frag.str,1);
+0295     <span class="keyword">if</span> isempty(close)
+0296         warning(<span class="string">'[XML] Tag &lt;![CDATA[ opened but not closed.'</span>)
+0297     <span class="keyword">else</span>
+0298         xtree{Xparse_count} = <a href="#_sub9" class="code" title="subfunction cdat = cdata">cdata</a>;
+0299         xtree{Xparse_count}.value = xmlstring(frag.str+9:close-1);
+0300         <span class="keyword">if</span> frag.parent
+0301             xtree{frag.parent}.contents = [xtree{frag.parent}.contents Xparse_count];
+0302             xtree{Xparse_count}.parent = frag.parent;
+0303         <span class="keyword">end</span>
+0304         frag.str = close+3;
+0305     <span class="keyword">end</span>
+0306 
+0307 <span class="comment">%-----------------------------------------------------------------------</span>
+0308 <a name="_sub6" href="#_subfunctions" class="code">function all = attribution(str)</a>
+0309     <span class="comment">%- Initialize attributs</span>
+0310     nbattr = 0;
+0311     all = cell(nbattr);
+0312     <span class="comment">%- Look for 'key=&quot;value&quot;' substrings</span>
+0313     <span class="keyword">while</span> 1,
+0314         eq = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'='</span>,1,1);
+0315         <span class="keyword">if</span> isempty(str) | isempty(eq), <span class="keyword">return</span>; <span class="keyword">end</span>
+0316         id = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'&quot;'</span>,1,1);       <span class="comment">% should also look for ''''</span>
+0317         nextid = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'&quot;'</span>,id+1,1);<span class="comment">% rather than only '&quot;'</span>
+0318         nbattr = nbattr + 1;
+0319         all{nbattr}.key = <a href="#_sub14" class="code" title="subfunction str = strip(str)">strip</a>(str(1:(eq-1)));
+0320         all{nbattr}.val = <a href="#_sub16" class="code" title="subfunction str = entity(str)">entity</a>(str((id+1):(nextid-1)));
+0321         str = str((nextid+1):end);
+0322     <span class="keyword">end</span>
+0323 
+0324 <span class="comment">%-----------------------------------------------------------------------</span>
+0325 <a name="_sub7" href="#_subfunctions" class="code">function elm = element</a>
+0326     <span class="keyword">global</span> Xparse_count;
+0327     Xparse_count = Xparse_count + 1;
+0328     elm = struct(<span class="string">'type'</span>,<span class="string">'element'</span>,<span class="string">'name'</span>,<span class="string">''</span>,<span class="string">'attributes'</span>,[],<span class="string">'contents'</span>,[],<span class="string">'parent'</span>,[],<span class="string">'uid'</span>,Xparse_count);
+0329    
+0330 <span class="comment">%-----------------------------------------------------------------------</span>
+0331 <a name="_sub8" href="#_subfunctions" class="code">function cdat = chardata</a>
+0332     <span class="keyword">global</span> Xparse_count;
+0333     Xparse_count = Xparse_count + 1;
+0334     cdat = struct(<span class="string">'type'</span>,<span class="string">'chardata'</span>,<span class="string">'value'</span>,<span class="string">''</span>,<span class="string">'parent'</span>,[],<span class="string">'uid'</span>,Xparse_count);
+0335    
+0336 <span class="comment">%-----------------------------------------------------------------------</span>
+0337 <a name="_sub9" href="#_subfunctions" class="code">function cdat = cdata</a>
+0338     <span class="keyword">global</span> Xparse_count;
+0339     Xparse_count = Xparse_count + 1;
+0340     cdat = struct(<span class="string">'type'</span>,<span class="string">'cdata'</span>,<span class="string">'value'</span>,<span class="string">''</span>,<span class="string">'parent'</span>,[],<span class="string">'uid'</span>,Xparse_count);
+0341    
+0342 <span class="comment">%-----------------------------------------------------------------------</span>
+0343 <a name="_sub10" href="#_subfunctions" class="code">function proce = pri</a>
+0344     <span class="keyword">global</span> Xparse_count;
+0345     Xparse_count = Xparse_count + 1;
+0346     proce = struct(<span class="string">'type'</span>,<span class="string">'pi'</span>,<span class="string">'value'</span>,<span class="string">''</span>,<span class="string">'target'</span>,<span class="string">''</span>,<span class="string">'parent'</span>,[],<span class="string">'uid'</span>,Xparse_count);
+0347 
+0348 <span class="comment">%-----------------------------------------------------------------------</span>
+0349 <a name="_sub11" href="#_subfunctions" class="code">function commt = comment</a>
+0350     <span class="keyword">global</span> Xparse_count;
+0351     Xparse_count = Xparse_count + 1;
+0352     commt = struct(<span class="string">'type'</span>,<span class="string">'comment'</span>,<span class="string">'value'</span>,<span class="string">''</span>,<span class="string">'parent'</span>,[],<span class="string">'uid'</span>,Xparse_count);
+0353 
+0354 <span class="comment">%-----------------------------------------------------------------------</span>
+0355 <a name="_sub12" href="#_subfunctions" class="code">function frg = fragment</a>
+0356     frg = struct(<span class="string">'str'</span>,<span class="string">''</span>,<span class="string">'parent'</span>,<span class="string">''</span>,<span class="string">'end'</span>,<span class="string">''</span>);
+0357 
+0358 <span class="comment">%-----------------------------------------------------------------------</span>
+0359 <a name="_sub13" href="#_subfunctions" class="code">function str = prolog(str)</a>
+0360     <span class="comment">%- Initialize beginning index of elements tree</span>
+0361     b = 1;
+0362     <span class="comment">%- Initial tag</span>
+0363     start = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'&lt;'</span>,1,1);
+0364     <span class="keyword">if</span> isempty(start) 
+0365         error(<span class="string">'[XML] No tag found.'</span>)
+0366     <span class="keyword">end</span>
+0367     <span class="comment">%- Header (&lt;?xml version=&quot;1.0&quot; ... ?&gt;)</span>
+0368     <span class="keyword">if</span> strcmp(lower(str(start:start+2)),<span class="string">'&lt;?x'</span>)
+0369         close = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'?&gt;'</span>,1,1);
+0370         <span class="keyword">if</span> ~isempty(close) 
+0371             b = close + 2;
+0372         <span class="keyword">else</span> 
+0373             warning(<span class="string">'[XML] Header tag incomplete.'</span>)
+0374         <span class="keyword">end</span>
+0375     <span class="keyword">end</span>
+0376     <span class="comment">%- Doctype (&lt;!DOCTYPE type ... [ declarations ]&gt;)</span>
+0377     start = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'&lt;!DOCTYPE'</span>,b,1);  <span class="comment">% length('&lt;!DOCTYPE') = 9</span>
+0378     <span class="keyword">if</span> ~isempty(start) 
+0379         close = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'&gt;'</span>,start+9,1);
+0380         <span class="keyword">if</span> ~isempty(close)
+0381             b = close + 1;
+0382             dp = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">'['</span>,start+9,1);
+0383             <span class="keyword">if</span> (~isempty(dp) &amp; dp &lt; b)
+0384                 k = <a href="xml_findstr.html" class="code" title="function k = xml_findstr(s,p,i,n)">xml_findstr</a>(str,<span class="string">']&gt;'</span>,start+9,1);
+0385                 <span class="keyword">if</span> ~isempty(k)
+0386                     b = k + 2;
+0387                 <span class="keyword">else</span>
+0388                     warning(<span class="string">'[XML] Tag [ in DOCTYPE opened but not closed.'</span>)
+0389                 <span class="keyword">end</span>
+0390             <span class="keyword">end</span>
+0391         <span class="keyword">else</span>
+0392             warning(<span class="string">'[XML] Tag DOCTYPE opened but not closed.'</span>)
+0393         <span class="keyword">end</span>
+0394     <span class="keyword">end</span>
+0395     <span class="comment">%- Skip prolog from the xml string</span>
+0396     str = str(b:end);
+0397 
+0398 <span class="comment">%-----------------------------------------------------------------------</span>
+0399 <a name="_sub14" href="#_subfunctions" class="code">function str = strip(str)</a>
+0400     a = isspace(str);
+0401     a = find(a==1);
+0402     str(a) = <span class="string">''</span>;
+0403 
+0404 <span class="comment">%-----------------------------------------------------------------------</span>
+0405 <a name="_sub15" href="#_subfunctions" class="code">function str = normalize(str)</a>
+0406     <span class="comment">% Find white characters (space, newline, carriage return, tabs, ...)</span>
+0407     i = isspace(str);
+0408     i = find(i == 1);
+0409     str(i) = <span class="string">' '</span>;
+0410     <span class="comment">% replace several white characters by only one</span>
+0411     <span class="keyword">if</span> ~isempty(i)
+0412         j = i - [i(2:end) i(end)];
+0413         k = find(j == -1);
+0414         str(i(k)) = [];
+0415     <span class="keyword">end</span>
+0416 
+0417 <span class="comment">%-----------------------------------------------------------------------</span>
+0418 <a name="_sub16" href="#_subfunctions" class="code">function str = entity(str)</a>
+0419     str = strrep(str,<span class="string">'&amp;lt;'</span>,<span class="string">'&lt;'</span>);
+0420     str = strrep(str,<span class="string">'&amp;gt;'</span>,<span class="string">'&gt;'</span>);
+0421     str = strrep(str,<span class="string">'&amp;quot;'</span>,<span class="string">'&quot;'</span>);
+0422     str = strrep(str,<span class="string">'&amp;apos;'</span>,<span class="string">''''</span>);
+0423     str = strrep(str,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);
+0424    
+0425 <span class="comment">%-----------------------------------------------------------------------</span>
+0426 <a name="_sub17" href="#_subfunctions" class="code">function str = erode(str)</a>
+0427     <span class="keyword">if</span> ~isempty(str) &amp; str(1)==<span class="string">' '</span> str(1)=<span class="string">''</span>; <span class="keyword">end</span>;
+0428     <span class="keyword">if</span> ~isempty(str) &amp; str(end)==<span class="string">' '</span> str(end)=<span class="string">''</span>; <span class="keyword">end</span>;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of analyse_N</title>
+  <meta name="keywords" content="analyse_N">
+  <meta name="description" content="[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; analyse_N.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>analyse_N
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">  [ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)
+
+ Analyse a stoichiometric matrix N
+ external (optional) column bitvector indicating external metabolites
+ 
+ K        kernel matrix                   Def.   N * K  = 0
+ L        link matrix                     Def.   L * NR = N_internal
+ N_R      reduced stoichiometric matrix 
+          related to the independent metabolites
+ G        left kernel matrix              Def.   G * N = 0
+ pinv_N_R pseudoinverse of NR
+ indep    indices of independent metabolites
+ N_1      stoiciometric matrix for dependent metabolites</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li><li><a href="../../mnt/mnt_fluxes/eba/feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../mnt/mnt_fluxes/eba/optimise_delta_mu_given_signs.html" class="code" title="function [delta_mu, delta_mu_ind_score] = optimize_delta_mu_given_signs(N,parameter_prior,data,v,options)">optimise_delta_mu_given_signs</a>	delta_mu = optimize_delta_mu_given_signs(N,parameter_prior,data,v,options)</li><li><a href="../../mnt/mnt_fluxes/eba/optimise_mu_given_signs.html" class="code" title="function [delta_mu, delta_mu_score, this_mu] = optimize_mu_given_signs(N,parameter_prior,data,v,options,constraints)">optimise_mu_given_signs</a>	[delta_mu,delta_mu_score,this_mu] = optimize_mu_given_signs(N,parameter_prior,data,v,options,constraints)</li><li><a href="../../mnt/mnt_fluxes/flux_feasibility/eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)">eba_feasible_lp</a>	[eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)</li><li><a href="../../mnt/mnt_network/network_query/network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>	NETWORK_ANALYSE - Analyse a metabolic network structure</li><li><a href="../../mnt/mnt_network/network_query/network_equilibrium_reactions.html" class="code" title="function [ind_eq_reactions,ind_responsible_metabolites] = network_equilibrium_reactions(network,verbose)">network_equilibrium_reactions</a>	[ind_eq_reactions,ind_responsible_metabolites] = network_equilibrium_reactions(network,verbose)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%  [ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Analyse a stoichiometric matrix N</span>
+0004 <span class="comment">% external (optional) column bitvector indicating external metabolites</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% K        kernel matrix                   Def.   N * K  = 0</span>
+0007 <span class="comment">% L        link matrix                     Def.   L * NR = N_internal</span>
+0008 <span class="comment">% N_R      reduced stoichiometric matrix</span>
+0009 <span class="comment">%          related to the independent metabolites</span>
+0010 <span class="comment">% G        left kernel matrix              Def.   G * N = 0</span>
+0011 <span class="comment">% pinv_N_R pseudoinverse of NR</span>
+0012 <span class="comment">% indep    indices of independent metabolites</span>
+0013 <span class="comment">% N_1      stoiciometric matrix for dependent metabolites</span>
+0014 
+0015 <a name="_sub0" href="#_subfunctions" class="code">function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</a>
+0016 
+0017 Ntot = N;
+0018 <span class="keyword">if</span> exist(<span class="string">'external'</span>,<span class="string">'var'</span>), N = N(find(external ==0),:); <span class="keyword">end</span>
+0019 
+0020 [n_metab,n_react] = size(N);
+0021 
+0022 <span class="keyword">if</span> prod(size(N)),
+0023   K = null(full(N),<span class="string">'r'</span>);
+0024   K = sparse(K);
+0025 <span class="keyword">else</span>,
+0026   K = []; 
+0027 <span class="keyword">end</span>
+0028 
+0029 [dum,order] = sort(-sum(K~=0));
+0030 <span class="keyword">if</span> length(K),
+0031   K = K(:,order);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="keyword">if</span> nargout&gt;1,
+0035   [L, NR, independent_metabolites, N1,dependent_metabolites] = <a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>(N);
+0036 <span class="keyword">end</span>
+0037  
+0038 <span class="keyword">if</span> nargout&gt;3,
+0039  null_l =  null(full(Ntot'),<span class="string">'r'</span>)';
+0040  pinv_NR = pinv(full(NR));
+0041  N1                    = N(dependent_metabolites,:);
+0042 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

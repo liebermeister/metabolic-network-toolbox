@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of attributes</title>
+  <meta name="keywords" content="attributes">
+  <meta name="description" content="XMLTREE/ATTRIBUTES Method (handle attributes of an element node)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; attributes.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>attributes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/ATTRIBUTES Method (handle attributes of an element node)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = attributes(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/ATTRIBUTES Method (handle attributes of an element node)
+ FORMAT varargout = attributes(varargin)
+ 
+ tree    - XMLTree object
+ method  - 'set','get','add','del' or 'length'
+ uid     - the UID of an element node
+ n       - indice of the attribute
+ key     - string key=&quot;...&quot;
+ val     - string ...=&quot;val&quot;
+ attr    - cell array of struct(key,val) or just struct(key,val)
+ l       - number of attributes of the element node uid
+
+     tree = attributes(tree,'set',uid,n,key,val)
+       attr = attributes(tree,'get',uid[,n])
+       tree = attributes(tree,'add',uid,key,val)
+       tree = attributes(tree,'del',uid[,n])
+       l    = attributes(tree,'length',uid)
+_______________________________________________________________________
+
+ Handle attributes of an element node.
+ The tree parameter must be in input AND in output for 'set', 'add' and
+ 'del' methods.
+_______________________________________________________________________
+ @(#)attributes.m               Guillaume Flandin             02/04/05</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = attributes(varargin)</a>
+0002 <span class="comment">% XMLTREE/ATTRIBUTES Method (handle attributes of an element node)</span>
+0003 <span class="comment">% FORMAT varargout = attributes(varargin)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree    - XMLTree object</span>
+0006 <span class="comment">% method  - 'set','get','add','del' or 'length'</span>
+0007 <span class="comment">% uid     - the UID of an element node</span>
+0008 <span class="comment">% n       - indice of the attribute</span>
+0009 <span class="comment">% key     - string key=&quot;...&quot;</span>
+0010 <span class="comment">% val     - string ...=&quot;val&quot;</span>
+0011 <span class="comment">% attr    - cell array of struct(key,val) or just struct(key,val)</span>
+0012 <span class="comment">% l       - number of attributes of the element node uid</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%     tree = attributes(tree,'set',uid,n,key,val)</span>
+0015 <span class="comment">%       attr = attributes(tree,'get',uid[,n])</span>
+0016 <span class="comment">%       tree = attributes(tree,'add',uid,key,val)</span>
+0017 <span class="comment">%       tree = attributes(tree,'del',uid[,n])</span>
+0018 <span class="comment">%       l    = attributes(tree,'length',uid)</span>
+0019 <span class="comment">%_______________________________________________________________________</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Handle attributes of an element node.</span>
+0022 <span class="comment">% The tree parameter must be in input AND in output for 'set', 'add' and</span>
+0023 <span class="comment">% 'del' methods.</span>
+0024 <span class="comment">%_______________________________________________________________________</span>
+0025 <span class="comment">% @(#)attributes.m               Guillaume Flandin             02/04/05</span>
+0026 
+0027 error(nargchk(3,6,nargin));
+0028 tree = varargin{1};
+0029 <span class="keyword">if</span> ~ischar(varargin{2}) | <span class="keyword">...</span>
+0030    ~any(strcmp(varargin{2},{<span class="string">'set'</span>,<span class="string">'get'</span>,<span class="string">'add'</span>,<span class="string">'del'</span>,<span class="string">'length'</span>}))
+0031     error(<span class="string">'[XMLTree] Unknown method.'</span>);
+0032 <span class="keyword">end</span>
+0033 uid = varargin{3};
+0034 <span class="keyword">if</span> ~isa(uid,<span class="string">'double'</span>) | any(uid&gt;<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree)) | any(uid&lt;1)
+0035     error(<span class="string">'[XMLTree] UID must be a positive integer scalar.'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> ~strcmp(tree.tree{uid}.type,<span class="string">'element'</span>)
+0039     error(<span class="string">'[XMLTree] This node has no attributes.'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">switch</span> varargin{2}
+0043     <span class="keyword">case</span> <span class="string">'set'</span>
+0044         error(nargchk(6,6,nargin));
+0045         <span class="keyword">if</span> ~isa(varargin{4},<span class="string">'double'</span>) | <span class="keyword">...</span>
+0046            any(varargin{4}&gt;<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes)) | <span class="keyword">...</span>
+0047            any(varargin{4}&lt;1)
+0048             error(<span class="string">'[XMLTree] Invalid attribute indice.'</span>);
+0049         <span class="keyword">end</span>
+0050         ind = varargin{4};
+0051         tree.tree{uid}.attributes{ind} = struct(<span class="string">'key'</span>,varargin{5},<span class="string">'val'</span>,varargin{6});
+0052         varargout{1} = tree;
+0053     <span class="keyword">case</span> <span class="string">'get'</span>
+0054         error(nargchk(3,4,nargin));
+0055         <span class="keyword">if</span> nargin == 4
+0056             <span class="keyword">if</span> ~isa(varargin{4},<span class="string">'double'</span>) | <span class="keyword">...</span>
+0057                any(varargin{4}&gt;<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes)) | <span class="keyword">...</span>
+0058                any(varargin{4}&lt;1)
+0059                 error(<span class="string">'[XMLTree] Invalid attribute indice.'</span>);
+0060             <span class="keyword">end</span>
+0061             <span class="keyword">if</span> <a href="length.html" class="code" title="function l = length(tree,r)">length</a>(varargin{4}) == 1
+0062                 varargout{1} = tree.tree{uid}.attributes{varargin{4}(1)};
+0063             <span class="keyword">else</span>
+0064                 varargout{1} = {};
+0065                 <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(varargin{4})
+0066                     varargout{1}{i} = tree.tree{uid}.attributes{varargin{4}(i)};
+0067                 <span class="keyword">end</span>
+0068             <span class="keyword">end</span>
+0069         <span class="keyword">else</span>
+0070             <span class="keyword">if</span> <a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes) == 1
+0071                 varargout{1} = tree.tree{uid}.attributes{1};
+0072             <span class="keyword">else</span>
+0073                 varargout{1} = {};
+0074                 <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes)
+0075                     varargout{1}{i} = tree.tree{uid}.attributes{i};
+0076                 <span class="keyword">end</span>
+0077             <span class="keyword">end</span>
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">case</span> <span class="string">'add'</span>
+0080         error(nargchk(5,5,nargin));
+0081         ind = <a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes) + 1;
+0082         tree.tree{uid}.attributes{ind} = struct(<span class="string">'key'</span>,varargin{4},<span class="string">'val'</span>,varargin{5});
+0083         varargout{1} = tree;
+0084     <span class="keyword">case</span> <span class="string">'del'</span>
+0085         error(nargchk(3,4,nargin));
+0086         <span class="keyword">if</span> nargin == 4
+0087             <span class="keyword">if</span> ~isa(varargin{4},<span class="string">'double'</span>) | <span class="keyword">...</span>
+0088               any(varargin{4}&gt;<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes)) | <span class="keyword">...</span>
+0089               any(varargin{4}&lt;1)
+0090                 error(<span class="string">'[XMLTree] Invalid attribute indice.'</span>);
+0091             <span class="keyword">end</span>
+0092             ind = varargin{4};
+0093             tree.tree{uid}.attributes(ind) = [];
+0094         <span class="keyword">else</span>
+0095             tree.tree{uid}.attributes = [];
+0096         <span class="keyword">end</span>
+0097         varargout{1} = tree;
+0098     <span class="keyword">case</span> <span class="string">'length'</span>
+0099         error(nargchk(3,3,nargin));
+0100         varargout{1} = <a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes);
+0101     <span class="keyword">otherwise</span>
+0102         error(<span class="string">'[XMLTree] Unknown method.'</span>);
+0103 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

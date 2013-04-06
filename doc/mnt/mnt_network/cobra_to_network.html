@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cobra_to_network</title>
+  <meta name="keywords" content="cobra_to_network">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="index.html">mnt_network</a> &gt; cobra_to_network.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>cobra_to_network
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [network, ind_keepm, ind_keepr] = cobra_to_network(model,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites)</li><li><a href="network_set_external.html" class="code" title="function network = network_set_external(network,strict,metabolite_list,internal_list)">network_set_external</a>	network = network_set_external(network,strict,metabolite_list,internal_list )</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network, ind_keepm, ind_keepr] = cobra_to_network(model,options)</a>
+0002 
+0003 options_default = struct(<span class="string">'flag_restrict'</span>,0,<span class="string">'flag_set_external'</span>,0);
+0004 options_default.rem = {};
+0005 
+0006 eval(default(<span class="string">'options'</span>,<span class="string">'struct'</span>));
+0007 options = join_struct(options_default,options);
+0008 
+0009 <span class="comment">% rem = {'h[c]','h[e]','h2o[c]','h2o[e]'};</span>
+0010 
+0011 <span class="keyword">if</span> isfield(model,<span class="string">'subSystems'</span>)
+0012   ind_ext         = find(sum(abs(model.S(:,find(strcmp(model.subSystems,<span class="string">'Exchange'</span>)))),2));
+0013 <span class="keyword">else</span>
+0014   ind_ext = [];
+0015 <span class="keyword">end</span>
+0016 
+0017 <span class="keyword">if</span> options.flag_restrict,
+0018   display(<span class="string">'Removing some metabolites and reactions'</span>);
+0019   ind_rem   = label_names(options.rem,model.mets);
+0020   ind_keepm = setdiff(1:length(model.mets),ind_rem);
+0021   ind_keepr = find(~strcmp(model.subSystems,<span class="string">'Exchange'</span>));
+0022 <span class="keyword">else</span>,
+0023   ind_keepm = 1:length(model.mets);
+0024   ind_keepr = 1:length(model.rxns);
+0025 <span class="keyword">end</span>  
+0026 
+0027 network.metabolites       = model.mets(ind_keepm);
+0028 network.actions           = model.rxns(ind_keepr);
+0029 network.N                 = model.S(ind_keepm,ind_keepr);
+0030 network.reversible        = model.rev(ind_keepr);
+0031 network.external          = zeros(size(model.mets));
+0032 network.external(ind_ext) = 1;
+0033 network.external          = network.external(ind_keepm);
+0034 network.regulation_matrix = sparse(zeros(size(network.N')));
+0035 network.formulae          = <a href="network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites)">network_print_formulae</a>(network);
+0036 network.metabolite_names  = model.metNames(ind_keepm);
+0037 network.reaction_names    = model.rxnNames(ind_keepr);
+0038 <span class="keyword">if</span> isfield(model,<span class="string">'metKeggId'</span>),
+0039   network.metabolite_KEGGID  = model.metKeggId(ind_keepm);
+0040 <span class="keyword">end</span>  
+0041 
+0042 <span class="keyword">if</span> options.flag_set_external,
+0043  network = <a href="network_set_external.html" class="code" title="function network = network_set_external(network,strict,metabolite_list,internal_list)">network_set_external</a>(network,1);
+0044 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

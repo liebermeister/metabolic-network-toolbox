@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_mark_metabolites</title>
+  <meta name="keywords" content="netgraph_mark_metabolites">
+  <meta name="description" content="[choice,p] = netgraph_mark_metabolites(network,choice,draw_only)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_mark_metabolites.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_mark_metabolites
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[choice,p] = netgraph_mark_metabolites(network,choice,draw_only)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)
+
+ left/centre button: add/ remove external
+ right button quit
+ if draw_only (optional argument) = 1, then the choice is only displayed
+
+ choice: bit string denoting marked metabolites
+ p: graphics structure</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_define_module.html" class="code" title="function [m,n] = netgraph_define_module(network)">netgraph_define_module</a>	m = netgraph_define_module(network)</li><li><a href="netgraph_external.html" class="code" title="function [network,p] = netgraph_external(network,draw_only,external)">netgraph_external</a>	[network,p] = netgraph_external(network,draw_only,external)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% left/centre button: add/ remove external</span>
+0004 <span class="comment">% right button quit</span>
+0005 <span class="comment">% if draw_only (optional argument) = 1, then the choice is only displayed</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% choice: bit string denoting marked metabolites</span>
+0008 <span class="comment">% p: graphics structure</span>
+0009 
+0010 <a name="_sub0" href="#_subfunctions" class="code">function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)</a>
+0011 
+0012 <span class="keyword">if</span> ~exist(<span class="string">'choice'</span>,<span class="string">'var'</span>), choice = zeros(size(network.metabolites)); <span class="keyword">end</span> 
+0013 <span class="keyword">if</span> length(choice)~=length(network.metabolites), error(<span class="string">'Wrong size of input argument'</span>); <span class="keyword">end</span>
+0014 
+0015 p = network.graphics_par;
+0016 
+0017 splitted = 0;
+0018 <span class="keyword">if</span> isfield(p,<span class="string">'display_split'</span>),   <span class="keyword">if</span> p.display_split,     splitted =1;   <span class="keyword">end</span>;  <span class="keyword">end</span>
+0019 
+0020 p.metvalues=0.2*ones(size(p.metnames));
+0021 p.arrowvalues=zeros(size(p.arrowvalues));
+0022 p.arrowstyle=<span class="string">'fluxes'</span>;
+0023 p.actvalues=zeros(length(network.actions),1);
+0024 p.metvalues(find(choice))=0.5; 
+0025 p.metvalues_std=zeros(length(p.metvalues),1);
+0026 p.metvaluesmax=1;
+0027 p.actvaluesmax=1;
+0028 p.metstyle=<span class="string">'box'</span>;
+0029 p.actstyle=<span class="string">'none'</span>;
+0030 p.actprintnames=0;
+0031 
+0032 <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p); title(<span class="string">'Left button &gt; mark, Right button &gt; finish'</span>)
+0033 
+0034 <span class="keyword">if</span> ~exist(<span class="string">'draw_only'</span>,<span class="string">'var'</span>), draw_only = 0; <span class="keyword">end</span>
+0035 <span class="keyword">if</span> draw_only,  <span class="keyword">return</span>; <span class="keyword">end</span>
+0036 
+0037 n_met = length(network.metabolites);
+0038 
+0039 <span class="keyword">if</span> splitted, 
+0040  x = p.x_split(:,1:length(p.split_back_mapping));
+0041 <span class="keyword">else</span>
+0042  x = p.x(:,1:n_met);
+0043 <span class="keyword">end</span>
+0044 
+0045 n_met = length(network.metabolites);
+0046 cont = 1;
+0047 
+0048 <span class="keyword">while</span> cont==1,
+0049   [x_old,y_old,button] = ginput(1);
+0050   dist = sum( (repmat([x_old;y_old],1,size(x,2))-x).^2);
+0051   [dum,ind]=min(dist);
+0052   index = ind(1);
+0053   <span class="keyword">if</span> splitted,
+0054     index = p.split_back_mapping(index);
+0055   <span class="keyword">end</span>
+0056   <span class="keyword">switch</span> button
+0057     <span class="keyword">case</span> 3,
+0058       cont = 0; 
+0059     <span class="keyword">otherwise</span>
+0060       <span class="keyword">if</span> index &lt;= n_met, 
+0061     choice(index)=1-choice(index);
+0062       <span class="keyword">end</span>
+0063   <span class="keyword">end</span>
+0064   p.metvalues=0.2*ones(length(p.metnames),1);
+0065   p.metvalues(find(choice))=0.5; 
+0066   p.metvaluesmax = 1;
+0067   p.actvaluesmax = 1;
+0068   <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p);  title(<span class="string">'Left button &gt; mark, Right button &gt; finish'</span>)
+0069 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of length</title>
+  <meta name="keywords" content="length">
+  <meta name="description" content="XMLTREE/LENGTH Length Method">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; length.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>length
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/LENGTH Length Method</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function l = length(tree,r) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/LENGTH Length Method
+ FORMAT l = length(tree,r)
+ 
+ tree - XMLTree object
+ r    - 'real' if present, returns the real number of nodes in the
+         tree (deleted nodes aren't populated)
+ l    - length of the XML tree (number of nodes)
+_______________________________________________________________________
+
+ Return the number of nodes of an XMLTree object.
+_______________________________________________________________________
+ @(#)length.m                 Guillaume Flandin               02/03/27</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="add.html" class="code" title="function varargout = add(tree,uid,type,parameter)">add</a>	XMLTREE/ADD Method (add childs to elements of an XML Tree)</li><li><a href="attributes.html" class="code" title="function varargout = attributes(varargin)">attributes</a>	XMLTREE/ATTRIBUTES Method (handle attributes of an element node)</li><li><a href="branch.html" class="code" title="function subtree = branch(tree,uid)">branch</a>	XMLTREE/BRANCH Branch Method</li><li><a href="char.html" class="code" title="function s = char(tree)">char</a>	XMLTREE/CHAR Converter function from XMLTree to a description string</li><li><a href="children.html" class="code" title="function child = children(tree,uid)">children</a>	XMLTREE/CHILDREN Return children's UIDs of node uid</li><li><a href="convert.html" class="code" title="function s = convert(tree,uid)">convert</a>	XMLTREE/CONVERT Converter an XML tree in a Matlab structure</li><li><a href="copy.html" class="code" title="function tree = copy(tree,subuid,uid)">copy</a>	XMLTREE/COPY Copy Method (copy a subtree in another branch)</li><li><a href="delete.html" class="code" title="function tree = delete(tree,uid)">delete</a>	XMLTREE/DELETE Delete (delete a subtree given its UID)</li><li><a href="display.html" class="code" title="function display(tree)">display</a>	XMLTREE/DISPLAY Command window display of an XMLTree</li><li><a href="find.html" class="code" title="function list = find(varargin)">find</a>	XMLTREE/FIND Find elements in a tree with specified characteristics</li><li><a href="flush.html" class="code" title="function tree = flush(tree,uid)">flush</a>	XMLTREE/FLUSH Flush (Clear a subtree given its UID)</li><li><a href="get.html" class="code" title="function value = get(tree,uid,parameter)">get</a>	XMLTREE/GET Get Method (get object properties)</li><li><a href="isfield.html" class="code" title="function F = isfield(tree,uid,parameter)">isfield</a>	XMLTREE/ISFIELD Is parameter a field of tree{uid} ?</li><li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li><li><a href="root.html" class="code" title="function uid = root(tree)">root</a>	XMLTREE/ROOT Root Method</li><li><a href="save.html" class="code" title="function save(tree, filename)">save</a>	XMLTREE/SAVE Save an XML tree in an XML file</li><li><a href="set.html" class="code" title="function tree = set(tree,uid, parameter, value)">set</a>	XMLTREE/SET Method (set object properties)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function l = length(tree,r)</a>
+0002 <span class="comment">% XMLTREE/LENGTH Length Method</span>
+0003 <span class="comment">% FORMAT l = length(tree,r)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree - XMLTree object</span>
+0006 <span class="comment">% r    - 'real' if present, returns the real number of nodes in the</span>
+0007 <span class="comment">%         tree (deleted nodes aren't populated)</span>
+0008 <span class="comment">% l    - length of the XML tree (number of nodes)</span>
+0009 <span class="comment">%_______________________________________________________________________</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Return the number of nodes of an XMLTree object.</span>
+0012 <span class="comment">%_______________________________________________________________________</span>
+0013 <span class="comment">% @(#)length.m                 Guillaume Flandin               02/03/27</span>
+0014 
+0015 error(nargchk(1,2,nargin));
+0016 
+0017 <span class="comment">% Return the full number of nodes once allocated</span>
+0018 l = <a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree);
+0019 
+0020 <span class="comment">% Substract the number of deleted nodes to the previous length</span>
+0021 <span class="keyword">if</span> nargin == 2
+0022     <span class="keyword">if</span> strcmp(r,<span class="string">'real'</span>)
+0023         ll = 0;
+0024         <span class="keyword">for</span> i=1:l
+0025             <span class="keyword">if</span> ~strcmp(tree.tree{i}.type,<span class="string">'deleted'</span>)
+0026                 ll = ll + 1;
+0027             <span class="keyword">end</span>
+0028         <span class="keyword">end</span>
+0029         l = ll;
+0030     <span class="keyword">else</span>
+0031         error(<span class="string">'[XMLTree] Bad input argument.'</span>);
+0032     <span class="keyword">end</span>
+0033 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

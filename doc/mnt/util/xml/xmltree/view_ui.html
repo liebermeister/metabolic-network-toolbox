@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of view_ui</title>
+  <meta name="keywords" content="view_ui">
+  <meta name="description" content="Used by XMLTREE/VIEW">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">xmltree</a> &gt; view_ui.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>view_ui
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>Used by XMLTREE/VIEW</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = view_ui(action,figHandle) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Used by XMLTREE/VIEW
+ FORMAT varargout = view_ui(action)
+ 
+ action - string
+_______________________________________________________________________
+
+ Callback manager of xmltree-method view
+_______________________________________________________________________
+ @(#)view_ui.m                Guillaume Flandin               02/04/08</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a>	Used by XMLTREE/VIEW</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a>	Used by XMLTREE/VIEW</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [batchString, uidList] = sub_update(tree,uid,o)</a></li><li><a href="#_sub2" class="code">function tree = sub_flip(tree,uid)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = view_ui(action,figHandle)</a>
+0002 <span class="comment">% Used by XMLTREE/VIEW</span>
+0003 <span class="comment">% FORMAT varargout = view_ui(action)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% action - string</span>
+0006 <span class="comment">%_______________________________________________________________________</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Callback manager of xmltree-method view</span>
+0009 <span class="comment">%_______________________________________________________________________</span>
+0010 <span class="comment">% @(#)view_ui.m                Guillaume Flandin               02/04/08</span>
+0011 
+0012 <span class="keyword">if</span> nargin &lt; 2
+0013     figHandle = gcbf;
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="keyword">switch</span> action
+0017     <span class="comment">%- BATCHLIST -%</span>
+0018     <span class="keyword">case</span> <span class="string">'batchlist'</span>
+0019         seltype=get(gcbf,<span class="string">'SelectionType'</span>);
+0020         tree = get(gcbf,<span class="string">'UserData'</span>);
+0021         BatchListboxH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0022         uidList = get(BatchListboxH,<span class="string">'UserData'</span>);
+0023         <span class="comment">% Single mouse click</span>
+0024         <span class="keyword">if</span> strcmp(seltype,<span class="string">'normal'</span>)
+0025             ModifyButtonH = findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'Modify'</span>);
+0026             AboutListboxH = findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'AboutListbox'</span>);
+0027             uid = uidList(get(BatchListboxH,<span class="string">'value'</span>));
+0028             contents = children(tree,uid);
+0029             <span class="keyword">if</span> length(contents) &gt; 0 &amp; <span class="keyword">...</span>
+0030                 strcmp(get(tree,contents(1),<span class="string">'type'</span>),<span class="string">'chardata'</span>)
+0031                 str = get(tree,contents(1),<span class="string">'value'</span>);
+0032                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Add'</span>),<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0033             <span class="keyword">elseif</span> length(contents) == 0
+0034             <span class="comment">% 18/02/02 : definition : une balise vide contient un chardata vide: pas d'accord !!!</span>
+0035                 str = <span class="string">''</span>;
+0036                 tree = add(tree,uid,<span class="string">'chardata'</span>,str);
+0037                 builtin(<span class="string">'set'</span>,gcf,<span class="string">'UserData'</span>,tree);
+0038                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Add'</span>),<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0039             <span class="keyword">else</span>
+0040                 str = [<span class="string">'Tag '</span> get(tree,uid,<span class="string">'name'</span>)]; 
+0041                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Add'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0042             <span class="keyword">end</span>
+0043             <span class="keyword">if</span> get(BatchListboxH,<span class="string">'value'</span>) == 1
+0044                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Copy'</span>),<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0045                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Delete'</span>),<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0046             <span class="keyword">else</span>
+0047                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Copy'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0048                 set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Delete'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0049             <span class="keyword">end</span>
+0050             <span class="comment">%- Trying to keep the slider active</span>
+0051             set(AboutListboxH,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0052             set(AboutListboxH,<span class="string">'String'</span>,<span class="string">' '</span>);
+0053             set(AboutListboxH,<span class="string">'Enable'</span>,<span class="string">'Inactive'</span>);
+0054             set(AboutListboxH,<span class="string">'String'</span>,str);
+0055         <span class="comment">% Double mouse click</span>
+0056         <span class="keyword">else</span>
+0057             tree = <a href="#_sub2" class="code" title="subfunction tree = sub_flip(tree,uid)">sub_flip</a>(tree,uidList(get(BatchListboxH,<span class="string">'value'</span>)));
+0058             [batchString uidList] = <a href="#_sub1" class="code" title="subfunction [batchString, uidList] = sub_update(tree,uid,o)">sub_update</a>(tree);
+0059             set(BatchListboxH,<span class="string">'String'</span>,batchString);
+0060             set(BatchListboxH,<span class="string">'UserData'</span>,uidList);
+0061             builtin(<span class="string">'set'</span>,gcbf,<span class="string">'UserData'</span>,tree);
+0062         <span class="keyword">end</span>
+0063         
+0064     <span class="comment">%- UPDATE -%</span>
+0065     <span class="keyword">case</span> <span class="string">'update'</span>
+0066         <span class="comment">% update is not always called from a callback</span>
+0067         BatchListboxH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0068         <span class="keyword">if</span> isempty(BatchListboxH)
+0069             BatchListboxH = findobj(gcf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0070         <span class="keyword">end</span>
+0071         tree = get(figHandle,<span class="string">'UserData'</span>);
+0072         <span class="keyword">if</span> isempty(tree)
+0073             tree = get(gcf,<span class="string">'UserData'</span>);
+0074         <span class="keyword">end</span>
+0075         [batchString uidList] = <a href="#_sub1" class="code" title="subfunction [batchString, uidList] = sub_update(tree,uid,o)">sub_update</a>(tree);
+0076         set(BatchListboxH,<span class="string">'String'</span>,batchString);
+0077         set(BatchListboxH,<span class="string">'UserData'</span>,uidList);
+0078         
+0079     <span class="comment">%- ADD -%</span>
+0080     <span class="keyword">case</span> <span class="string">'add'</span>
+0081         tree = get(gcbf,<span class="string">'UserData'</span>);
+0082         BatchListboxH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0083         uidList = get(BatchListboxH,<span class="string">'UserData'</span>);
+0084         AboutListboxH = findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'AboutListbox'</span>);
+0085         uid = uidList(get(BatchListboxH,<span class="string">'value'</span>));
+0086         answer = questdlg(<span class="string">'Which kind of element to add ?'</span>,<span class="string">'Add an item'</span>,<span class="string">'Node'</span>,<span class="string">'Leaf'</span>,<span class="string">'Node'</span>);
+0087         <span class="keyword">switch</span> answer
+0088             <span class="keyword">case</span> <span class="string">'Node'</span>
+0089                 tree = add(tree,uid,<span class="string">'element'</span>,<span class="string">'New'</span>);
+0090             <span class="keyword">case</span> <span class="string">'Leaf'</span>
+0091                 tree = add(tree,uid,<span class="string">'element'</span>,<span class="string">'New'</span>);
+0092                 l = length(tree);
+0093                 tree = add(tree,l,<span class="string">'chardata'</span>,<span class="string">'Default'</span>);
+0094             <span class="keyword">otherwise</span>
+0095                 warning(<span class="string">'Bug !'</span>);
+0096         <span class="keyword">end</span>
+0097         tree = set(tree,uid,<span class="string">'show'</span>,1);
+0098         builtin(<span class="string">'set'</span>,gcf,<span class="string">'UserData'</span>,tree);
+0099         set(findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'Save'</span>),<span class="string">'UserData'</span>,1);
+0100         <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> update;
+0101         <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> batchlist;
+0102         
+0103     <span class="comment">%- MODIFY -%</span>
+0104     <span class="keyword">case</span> <span class="string">'modify'</span>
+0105         tree = get(gcbf,<span class="string">'UserData'</span>);
+0106         BatchListboxH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0107         uidList = get(BatchListboxH,<span class="string">'UserData'</span>);
+0108         AboutListboxH = findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'AboutListbox'</span>);
+0109         uid = uidList(get(BatchListboxH,<span class="string">'value'</span>));
+0110         contents = children(tree,uid);
+0111         <span class="keyword">if</span> length(contents) &gt; 0 &amp; <span class="keyword">...</span>
+0112             strcmp(get(tree,contents(1),<span class="string">'type'</span>),<span class="string">'chardata'</span>)
+0113             str = get(tree,contents(1),<span class="string">'value'</span>);
+0114             prompt = {<span class="string">'Name :'</span>,<span class="string">'New value:'</span>};
+0115             def = {get(tree,uid,<span class="string">'name'</span>),str};
+0116             title = sprintf(<span class="string">'Modify %s'</span>,get(tree,uid,<span class="string">'name'</span>));
+0117             lineNo = 1;
+0118             answer = inputdlg(prompt,title,lineNo,def);
+0119             <span class="keyword">if</span> ~isempty(answer)
+0120                 tree = set(tree,uid,<span class="string">'name'</span>,answer{1});
+0121                 str = answer{2};
+0122                 tree = set(tree,contents(1),<span class="string">'value'</span>,str);
+0123                 set(findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'Save'</span>),<span class="string">'UserData'</span>,1);
+0124                 builtin(<span class="string">'set'</span>,gcf,<span class="string">'UserData'</span>,tree);
+0125             <span class="keyword">end</span>
+0126         <span class="keyword">else</span>
+0127             str = [<span class="string">'Tag '</span> get(tree,uid,<span class="string">'name'</span>)];
+0128             prompt = {<span class="string">'Name :'</span>};
+0129             def = {get(tree,uid,<span class="string">'name'</span>),str};
+0130             title = sprintf(<span class="string">'Modify %s tag'</span>,get(tree,uid,<span class="string">'name'</span>));
+0131             lineNo = 1;
+0132             answer = inputdlg(prompt,title,lineNo,def);
+0133             <span class="keyword">if</span> ~isempty(answer)
+0134                 tree = set(tree,uid,<span class="string">'name'</span>,answer{1});
+0135                 str = [<span class="string">'Tag '</span> get(tree,uid,<span class="string">'name'</span>)];
+0136                 set(findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'Save'</span>),<span class="string">'UserData'</span>,1);
+0137                 builtin(<span class="string">'set'</span>,gcf,<span class="string">'UserData'</span>,tree);
+0138             <span class="keyword">end</span>
+0139         <span class="keyword">end</span>
+0140         <span class="comment">%- Trying to keep the slider active</span>
+0141         set(AboutListboxH,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0142         set(AboutListboxH,<span class="string">'String'</span>,<span class="string">' '</span>);
+0143         set(AboutListboxH,<span class="string">'Enable'</span>,<span class="string">'Inactive'</span>);
+0144         set(AboutListboxH,<span class="string">'String'</span>,str);
+0145         <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> update;
+0146         <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> batchlist;
+0147     
+0148     <span class="comment">%- COPY -%</span>
+0149     <span class="keyword">case</span> <span class="string">'copy'</span>
+0150         tree = get(gcbf,<span class="string">'UserData'</span>);
+0151         BatchListboxH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0152         uidList = get(BatchListboxH,<span class="string">'UserData'</span>);
+0153         AboutListboxH = findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'AboutListbox'</span>);
+0154         pos = get(BatchListboxH,<span class="string">'value'</span>);
+0155         <span class="keyword">if</span> pos ~= 1
+0156             uid = uidList(pos);
+0157             tree = copy(tree,uid);
+0158             builtin(<span class="string">'set'</span>,gcf,<span class="string">'UserData'</span>,tree);
+0159             set(findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'Save'</span>),<span class="string">'UserData'</span>,1);
+0160             <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> update;
+0161             <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> batchlist;
+0162         <span class="keyword">end</span>
+0163         
+0164     <span class="comment">%- DELETE -%</span>
+0165     <span class="keyword">case</span> <span class="string">'delete'</span>
+0166         tree = get(gcbf,<span class="string">'UserData'</span>);
+0167         BatchListboxH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'BatchListbox'</span>);
+0168         uidList = get(BatchListboxH,<span class="string">'UserData'</span>);
+0169         AboutListboxH = findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'AboutListbox'</span>);
+0170         uid = uidList(get(BatchListboxH,<span class="string">'value'</span>));
+0171         pos = get(BatchListboxH,<span class="string">'value'</span>);
+0172         <span class="keyword">if</span> pos &gt; 1
+0173             tree = delete(tree,uid);
+0174             set(BatchListboxH,<span class="string">'value'</span>,pos-1);
+0175             set(findobj(gcbf,<span class="string">'Tag'</span>, <span class="string">'Save'</span>),<span class="string">'UserData'</span>,1);
+0176         <span class="keyword">end</span>
+0177         builtin(<span class="string">'set'</span>,gcf,<span class="string">'UserData'</span>,tree);
+0178         <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> update;
+0179         <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> batchlist;
+0180 
+0181     <span class="comment">%- SAVE -%</span>
+0182     <span class="keyword">case</span> <span class="string">'save'</span>
+0183         tree = get(gcbf,<span class="string">'UserData'</span>);
+0184         [filename pathname] = uiputfile(<span class="string">'*.xml'</span>,<span class="string">'Save Batch as'</span>);
+0185         <span class="keyword">if</span> ~(isequal(filename,0)|isequal(pathname,0))
+0186             save(tree,fullfile(pathname,filename));
+0187             set(findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Save'</span>),<span class="string">'UserData'</span>,0);
+0188         <span class="keyword">end</span>
+0189         
+0190     <span class="comment">%- RUN -%</span>
+0191     <span class="keyword">case</span> <span class="string">'run'</span>
+0192         warndlg(<span class="string">'Not implemented'</span>,<span class="string">'XMLtree :: Run'</span>);
+0193         
+0194     <span class="comment">%- CLOSE -%</span>
+0195     <span class="keyword">case</span> <span class="string">'close'</span>
+0196         SaveButtonH = findobj(gcbf,<span class="string">'Tag'</span>,<span class="string">'Save'</span>);
+0197         <span class="keyword">if</span> get(SaveButtonH,<span class="string">'UserData'</span>)
+0198             answer = questdlg(<span class="string">'Save changes ?'</span>, <span class="keyword">...</span>
+0199                 <span class="string">'Quit XML Tree'</span>);
+0200             <span class="keyword">switch</span>(answer)
+0201                 <span class="keyword">case</span> <span class="string">'Yes'</span>
+0202                     <a href="view_ui.html" class="code" title="function varargout = view_ui(action,figHandle)">view_ui</a> save;
+0203                     delete(gcbf);
+0204                 <span class="keyword">case</span> <span class="string">'No'</span>
+0205                     delete(gcbf);
+0206                 <span class="keyword">case</span> <span class="string">'Cancel'</span>
+0207                 <span class="keyword">otherwise</span>,
+0208              <span class="keyword">end</span>
+0209         <span class="keyword">else</span>
+0210             delete(gcbf);
+0211         <span class="keyword">end</span>
+0212         
+0213     <span class="comment">%- OTHERWISE -%</span>
+0214     <span class="keyword">otherwise</span>
+0215         error(<span class="string">'[XMLTree] Unknown action.'</span>);
+0216 <span class="keyword">end</span>
+0217 
+0218 <span class="comment">%=======================================================================</span>
+0219 <a name="_sub1" href="#_subfunctions" class="code">function [batchString, uidList] = sub_update(tree,uid,o)</a>
+0220     <span class="keyword">if</span> nargin &lt; 2
+0221         uid = root(tree);
+0222     <span class="keyword">end</span>
+0223     <span class="keyword">if</span> nargin &lt; 3 | o == 0
+0224         o = 0;
+0225         sep=<span class="string">' '</span>;
+0226     <span class="keyword">else</span>
+0227         sep = blanks(4*o);
+0228     <span class="keyword">end</span>
+0229     batchString = {[sep get(tree,uid,<span class="string">'name'</span>)]};
+0230     uidList = [get(tree,uid,<span class="string">'uid'</span>)];
+0231     haselementchild = 0;
+0232     contents = get(tree,uid,<span class="string">'contents'</span>);
+0233     <span class="keyword">if</span> isfield(tree,uid,<span class="string">'show'</span>) &amp; get(tree,uid,<span class="string">'show'</span>)==1
+0234         <span class="keyword">for</span> i=1:length(contents)
+0235             <span class="keyword">if</span> strcmp(get(tree,contents(i),<span class="string">'type'</span>),<span class="string">'element'</span>)
+0236                 [subbatchString subuidList] = <a href="#_sub1" class="code" title="subfunction [batchString, uidList] = sub_update(tree,uid,o)">sub_update</a>(tree,contents(i),o+1);
+0237                 batchString = {batchString{:} subbatchString{:}};
+0238                 uidList = [uidList subuidList];
+0239                 haselementchild = 1;
+0240             <span class="keyword">end</span>
+0241         <span class="keyword">end</span>
+0242         <span class="keyword">if</span> haselementchild==1, batchString{1}(length(sep)) = <span class="string">'-'</span>; <span class="keyword">end</span>
+0243     <span class="keyword">else</span>
+0244         <span class="keyword">for</span> i=1:length(contents)
+0245             <span class="keyword">if</span> strcmp(get(tree,contents(i),<span class="string">'type'</span>),<span class="string">'element'</span>)
+0246                 haselementchild = 1;
+0247             <span class="keyword">end</span>
+0248         <span class="keyword">end</span>
+0249         <span class="keyword">if</span> haselementchild==1, batchString{1}(length(sep)) = <span class="string">'+'</span>; <span class="keyword">end</span>
+0250     <span class="keyword">end</span>
+0251    
+0252 <span class="comment">%=======================================================================</span>
+0253 <a name="_sub2" href="#_subfunctions" class="code">function tree = sub_flip(tree,uid)</a>
+0254     <span class="keyword">if</span> isfield(tree,uid,<span class="string">'show'</span>)
+0255         show = get(tree,uid,<span class="string">'show'</span>);
+0256     <span class="keyword">else</span>
+0257         show = 0;
+0258     <span class="keyword">end</span>
+0259     tree = set(tree,uid,<span class="string">'show'</span>,~show);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

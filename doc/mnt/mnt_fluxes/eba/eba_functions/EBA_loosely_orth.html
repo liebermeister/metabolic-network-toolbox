@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EBA_loosely_orth</title>
+  <meta name="keywords" content="EBA_loosely_orth">
+  <meta name="description" content="orthogonal = EBA_orth(sign_J,C)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">mnt_fluxes</a> &gt; <a href="../index.html">eba</a> &gt; <a href="index.html">eba_functions</a> &gt; EBA_loosely_orth.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/eba/eba_functions&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>EBA_loosely_orth
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>orthogonal = EBA_orth(sign_J,C)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [feasible,ind_non_orthogonal] = EBA_loosely_orth(sign_J,C) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> orthogonal = EBA_orth(sign_J,C)
+
+ test flux sign vector for thermodynamic feasibility
+
+ sign_J sign vector (column)
+ C matrix of cycle vectors (columns)
+ feasible: flag stating that sign_J is sign-orthogonal to all cycles
+ (i.e. all columns of C)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [feasible,ind_non_orthogonal] = EBA_loosely_orth(sign_J,C)</a>
+0002 
+0003 <span class="comment">% orthogonal = EBA_orth(sign_J,C)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% test flux sign vector for thermodynamic feasibility</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% sign_J sign vector (column)</span>
+0008 <span class="comment">% C matrix of cycle vectors (columns)</span>
+0009 <span class="comment">% feasible: flag stating that sign_J is sign-orthogonal to all cycles</span>
+0010 <span class="comment">% (i.e. all columns of C)</span>
+0011 
+0012 n_cycles           = size(C,2);
+0013 ind_common_support = find(abs(sign_J)' * abs(C));
+0014 CC                 = C(:,ind_common_support);
+0015 ind_non_orthogonal = [];
+0016 <span class="keyword">if</span> size(CC,2),
+0017   ind_non_orthogonal = find(abs(sign_J'*CC) &gt;= abs(diag(sign(CC)'*sign(CC)))');
+0018 <span class="keyword">end</span>
+0019 feasible           = isempty(ind_non_orthogonal);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 14:58:57 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network2sbml</title>
+  <meta name="keywords" content="network2sbml">
+  <meta name="description" content="string = network2sbml(network,verbose,name,filename,write_equilibrium_constants)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_network</a> &gt; <a href="index.html">network_import_export</a> &gt; network2sbml.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network/network_import_export&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network2sbml
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>string = network2sbml(network,verbose,name,filename,write_equilibrium_constants)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function s = network2sbml(network,verbose,name,filename,write_equilibrium_constants) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">string = network2sbml(network,verbose,name,filename,write_equilibrium_constants)
+
+export network to SBML string or SBML file (only SBML level 2)
+
+This script does not depend on libSBML and SBML toolbox
+
+ATTENTION: 
+ 1. Reaction kinetics are only written if the kinetics 
+    is of type 'numeric' or 'mass-action'
+ 2. Names of reactions and metabolites may be altered
+    in order to conform to valid XML syntax
+
+ARGUMENTS
+ network   (network structure)
+ name      (string, optional, can be set '') model name
+ filename  (string, optional) if this argument is given,
+                              the sbml string is written to a file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_kinetics/kinetics/kinetics_string.html" class="code" title="function s = kinetics_string(kinetics,n,actions,network)">kinetics_string</a>	s = kinetics_string(kinetics,n,actions,network)</li><li><a href="../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%string = network2sbml(network,verbose,name,filename,write_equilibrium_constants)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%export network to SBML string or SBML file (only SBML level 2)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%This script does not depend on libSBML and SBML toolbox</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%ATTENTION:</span>
+0008 <span class="comment">% 1. Reaction kinetics are only written if the kinetics</span>
+0009 <span class="comment">%    is of type 'numeric' or 'mass-action'</span>
+0010 <span class="comment">% 2. Names of reactions and metabolites may be altered</span>
+0011 <span class="comment">%    in order to conform to valid XML syntax</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%ARGUMENTS</span>
+0014 <span class="comment">% network   (network structure)</span>
+0015 <span class="comment">% name      (string, optional, can be set '') model name</span>
+0016 <span class="comment">% filename  (string, optional) if this argument is given,</span>
+0017 <span class="comment">%                              the sbml string is written to a file</span>
+0018 
+0019 <a name="_sub0" href="#_subfunctions" class="code">function s = network2sbml(network,verbose,name,filename,write_equilibrium_constants)</a>
+0020 
+0021 eval(<a href="../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'write_equilibrium_constants'</span>,<span class="string">'0'</span>));
+0022 <span class="keyword">if</span> exist(<span class="string">'metnames'</span>,<span class="string">'var'</span>), network.metabolites = metnames;     <span class="keyword">end</span>
+0023 <span class="keyword">if</span> ~exist(<span class="string">'verbose'</span>,<span class="string">'var'</span>),    verbose = 0;       <span class="keyword">end</span>
+0024 <span class="keyword">if</span> ~exist(<span class="string">'name'</span>,<span class="string">'var'</span>), name    = <span class="string">''</span>;      <span class="keyword">end</span>
+0025 <span class="keyword">if</span> isempty(<span class="string">'name'</span>),      name    = <span class="string">'Model'</span>; <span class="keyword">end</span> 
+0026 <span class="keyword">if</span> ~exist(<span class="string">'filename'</span>,<span class="string">'var'</span>),filename = []; <span class="keyword">end</span> 
+0027 
+0028 <span class="keyword">if</span> write_equilibrium_constants,
+0029   <span class="keyword">if</span> ~isfield(network.kinetics,<span class="string">'Keq'</span>),
+0030     error(<span class="string">'No equilibrium constants found'</span>);
+0031   <span class="keyword">end</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 [nm,nr] = size(network.N);
+0035 
+0036 
+0037 <span class="comment">% ----------------------------------------------------------------</span>
+0038 <span class="comment">% prepare model: adjust names to valid XML syntax</span>
+0039 
+0040 name = strrep(name,<span class="string">' '</span>,<span class="string">'_'</span>);
+0041 
+0042 <span class="keyword">for</span> it=1:nm,
+0043   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'-'</span>,<span class="string">'_'</span>);
+0044   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">':'</span>,<span class="string">'_'</span>);
+0045   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">','</span>,<span class="string">'_'</span>);
+0046   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'.'</span>,<span class="string">'_'</span>);
+0047   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">' '</span>,<span class="string">'_'</span>);
+0048   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'+'</span>,<span class="string">'plus'</span>);
+0049   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'('</span>,<span class="string">'_'</span>);
+0050   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">')'</span>,<span class="string">'_'</span>);
+0051   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'&lt;'</span>,<span class="string">'_'</span>);
+0052   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'['</span>,<span class="string">'_'</span>);  
+0053   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">']'</span>,<span class="string">'_'</span>);
+0054   network.metabolites{it} = strrep(network.metabolites{it},<span class="string">'__'</span>,<span class="string">'_'</span>);
+0055 
+0056 <span class="comment">%  network.metabolites{it} = strrep(network.metabolites{it},'_','');</span>
+0057 
+0058   metabolite_id{it} = network.metabolites{it};
+0059   
+0060   <span class="keyword">if</span> length(strfind(<span class="string">'0123456789'</span>,network.metabolites{it}(1)))
+0061     metabolite_id{it} = [<span class="string">'_'</span> metabolite_id{it}];
+0062   <span class="keyword">end</span>
+0063   
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="keyword">for</span> it=1:nr,
+0067   network.actions{it} = strrep(network.actions{it},<span class="string">' '</span>,<span class="string">'_'</span>);
+0068   network.actions{it} = strrep(network.actions{it},<span class="string">'='</span>,<span class="string">'-'</span>);
+0069   network.actions{it} = strrep(network.actions{it},<span class="string">'&lt;-&gt;'</span>,<span class="string">'_rev_'</span>);
+0070   network.actions{it} = strrep(network.actions{it},<span class="string">'-&gt;'</span>,<span class="string">'_irrev_'</span>);
+0071   network.actions{it} = strrep(network.actions{it},<span class="string">':'</span>,<span class="string">'-'</span>);
+0072   network.actions{it} = strrep(network.actions{it},<span class="string">'-'</span>,<span class="string">'_'</span>);
+0073   network.actions{it} = strrep(network.actions{it},<span class="string">','</span>,<span class="string">'_'</span>);
+0074   network.actions{it} = strrep(network.actions{it},<span class="string">'.'</span>,<span class="string">'_'</span>);
+0075   network.actions{it} = strrep(network.actions{it},<span class="string">'('</span>,<span class="string">'_'</span>);
+0076   network.actions{it} = strrep(network.actions{it},<span class="string">')'</span>,<span class="string">'_'</span>);
+0077   network.actions{it} = strrep(network.actions{it},<span class="string">'.'</span>,<span class="string">'_'</span>);
+0078   network.actions{it} = strrep(network.actions{it},<span class="string">'+'</span>,<span class="string">'plus'</span>);
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="comment">% if names are not unique:</span>
+0082 
+0083 <span class="keyword">if</span> length(unique(network.metabolites))&lt;nm,
+0084  <span class="keyword">for</span> it=1:nm, 
+0085   network.metabolites{it} = [<span class="string">'M'</span> num2str(it) <span class="string">'_'</span> network.metabolites{it}];
+0086  <span class="keyword">end</span>
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> length(unique(network.actions))&lt;nr,
+0090   <span class="keyword">for</span> it=1:nr, 
+0091     network.actions{it} = [<span class="string">'A'</span> num2str(it) <span class="string">'_'</span> network.actions{it}];
+0092   <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 
+0096 <span class="comment">% ----------------------------------------------------------------</span>
+0097 <span class="comment">% create SBML</span>
+0098 
+0099 <span class="comment">% header</span>
+0100 
+0101 s = sprintf(<span class="string">'&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\n'</span>); 
+0102 s = [s sprintf(<span class="string">'&lt;sbml xmlns=&quot;http://www.sbml.org/sbml/level2/version3&quot; level=&quot;2&quot; version=&quot;3&quot;&gt;\n'</span>)]; 
+0103 s = [s sprintf(<span class="string">'  &lt;model name=&quot;%s&quot;&gt;\n'</span>,name)]; 
+0104 
+0105 <span class="comment">% notes</span>
+0106 
+0107 <span class="keyword">if</span> verbose,
+0108   s = [s sprintf(<span class="string">'    &lt;notes&gt;\n'</span>)]; 
+0109   s = [s sprintf(<span class="string">'      &lt;body xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;\n'</span>)]; 
+0110   s = [s sprintf(<span class="string">'        &lt;p&gt;Network model %s written by the Matlab Metabolic Network Package&lt;/p&gt;\n'</span>,name)]; 
+0111   s = [s sprintf(<span class="string">'      &lt;/body&gt;\n'</span>)]; 
+0112   s = [s sprintf(<span class="string">'    &lt;/notes&gt;\n'</span>)]; 
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="comment">% compartments</span>
+0116 
+0117 s = [s sprintf(<span class="string">'    &lt;listOfCompartments&gt;\n'</span>)]; 
+0118 s = [s sprintf(<span class="string">'      &lt;compartment id=&quot;compartment&quot; name=&quot;compartment&quot; size=&quot;1&quot;/&gt;\n'</span>)]; 
+0119 s = [s sprintf(<span class="string">'    &lt;/listOfCompartments&gt;\n'</span>)]; 
+0120 
+0121 <span class="comment">% species</span>
+0122 
+0123 <span class="keyword">if</span> isfield(network,<span class="string">'s_init'</span>),  
+0124   initial_amount = network.s_init;
+0125 <span class="keyword">else</span>,
+0126   initial_amount = zeros(nm,1);
+0127 <span class="keyword">end</span>
+0128 
+0129 s = [s sprintf(<span class="string">'    &lt;listOfSpecies&gt;\n'</span>)]; 
+0130 <span class="keyword">for</span> it = 1:nm,
+0131   s = [s sprintf(<span class="string">'      &lt;species id=&quot;%s&quot; name=&quot;%s&quot; '</span>, metabolite_id{it}, network.metabolites{it})]; 
+0132   s = [s sprintf(<span class="string">'initialAmount=&quot;%d&quot; '</span>,initial_amount(it))];  
+0133   s = [s sprintf(<span class="string">'compartment=&quot;compartment&quot; '</span>)];
+0134   s = [s sprintf(<span class="string">'boundaryCondition=&quot;false&quot; '</span>)];
+0135   <span class="keyword">if</span> verbose,
+0136     s = [s sprintf(<span class="string">'&gt;\n      &lt;notes&gt;  &lt;body xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt; Metabolite %s &lt;/body&gt; &lt;/notes&gt;\n    &lt;/species&gt;\n'</span>,network.metabolites{it})]; 
+0137   <span class="keyword">else</span>,
+0138     s = [s sprintf(<span class="string">'/&gt;\n'</span>)];
+0139   <span class="keyword">end</span>
+0140 <span class="keyword">end</span>
+0141 s = [s sprintf(<span class="string">'    &lt;/listOfSpecies&gt;\n'</span>)]; 
+0142 
+0143 
+0144 <span class="comment">% reactions</span>
+0145 
+0146 s = [s sprintf(<span class="string">'    &lt;listOfReactions&gt;\n'</span>)]; 
+0147 
+0148 <span class="keyword">for</span> it = 1:nr,
+0149 
+0150   <span class="keyword">if</span> network.reversible(it),  revstring = <span class="string">'true'</span>;  <span class="keyword">else</span>, revstring = <span class="string">'false'</span>;  <span class="keyword">end</span>
+0151   s = [s sprintf(<span class="string">'      &lt;reaction id=&quot;%s&quot; name=&quot;%s&quot; reversible=&quot;%s&quot;&gt;\n'</span>,network.actions{it},network.actions{it},revstring)]; 
+0152   <span class="keyword">if</span> verbose,
+0153     <span class="keyword">if</span> isfield(network, <span class="string">'kinetics'</span>),
+0154       s = [s sprintf(<span class="string">'        &lt;notes&gt;  &lt;body xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt; %s &lt;/body&gt; &lt;/notes&gt;\n'</span>,<a href="../../../mnt/mnt_kinetics/kinetics/kinetics_string.html" class="code" title="function s = kinetics_string(kinetics,n,actions,network)">kinetics_string</a>(network.kinetics,it,[],network))]; 
+0155     <span class="keyword">else</span>, 
+0156       s = [s sprintf(<span class="string">'        &lt;notes&gt;  &lt;body xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt; &lt;/body&gt; &lt;/notes&gt;\n'</span>)]; 
+0157     <span class="keyword">end</span>
+0158   <span class="keyword">end</span>
+0159 
+0160   sub_ind = find(network.N(:,it)&lt;0); 
+0161   <span class="keyword">if</span> length(sub_ind),
+0162     s = [s sprintf(<span class="string">'        &lt;listOfReactants&gt;\n'</span>)]; 
+0163     <span class="keyword">for</span> itt = 1:length(sub_ind),
+0164       s = [s sprintf(<span class="string">'          &lt;speciesReference species=&quot;%s&quot; stoichiometry=&quot;%d&quot;/&gt;\n'</span>,network.metabolites{sub_ind(itt)},full(abs(network.N(sub_ind(itt),it))))];     
+0165     <span class="keyword">end</span>
+0166     s = [s sprintf(<span class="string">'        &lt;/listOfReactants&gt;\n'</span>)]; 
+0167   <span class="keyword">end</span>
+0168   
+0169   sub_ind = find(network.N(:,it)&gt;0);
+0170   <span class="keyword">if</span> length(sub_ind),
+0171     s = [s sprintf(<span class="string">'        &lt;listOfProducts&gt;\n'</span>)]; 
+0172     <span class="keyword">for</span> itt = 1:length(sub_ind),
+0173       s = [s sprintf(<span class="string">'          &lt;speciesReference species=&quot;%s&quot; stoichiometry=&quot;%d&quot;/&gt;\n'</span>,network.metabolites{sub_ind(itt)},full(network.N(sub_ind(itt),it)))];     
+0174     <span class="keyword">end</span>
+0175     s = [s sprintf(<span class="string">'        &lt;/listOfProducts&gt;\n'</span>)]; 
+0176   <span class="keyword">end</span>
+0177 
+0178  <span class="keyword">if</span> write_equilibrium_constants,
+0179      
+0180      s = [s sprintf(<span class="string">'        &lt;kineticLaw&gt;\n'</span>)]; 
+0181      s = [s sprintf(<span class="string">'          &lt;listOfParameters&gt;\n'</span>)];
+0182      Keq = network.kinetics.Keq(it);
+0183      s = [s sprintf(<span class="string">'            &lt;parameter id=&quot;equilibrium_constant&quot; value=&quot;%f&quot;/&gt;\n'</span>,Keq)]; 
+0184      s = [s sprintf(<span class="string">'          &lt;/listOfParameters&gt;\n'</span>)]; 
+0185      s = [s sprintf(<span class="string">'        &lt;/kineticLaw&gt;\n'</span>)]; 
+0186 <span class="keyword">end</span>
+0187 
+0188   s = [s sprintf(<span class="string">'      &lt;/reaction&gt;\n'</span>)]; 
+0189 <span class="keyword">end</span>
+0190 
+0191 s = [s sprintf(<span class="string">'    &lt;/listOfReactions&gt;\n'</span>)]; 
+0192 
+0193 <span class="comment">% close SBML</span>
+0194 
+0195 s = [s sprintf(<span class="string">'  &lt;/model&gt;\n'</span>)]; 
+0196 s = [s sprintf(<span class="string">'&lt;/sbml&gt;\n'</span>)]; 
+0197 
+0198 
+0199 <span class="comment">%----------------------------------------------------------</span>
+0200 <span class="comment">% write SBML to file</span>
+0201 
+0202 <span class="keyword">if</span> length(filename),
+0203   fid = fopen(filename,<span class="string">'w'</span>);
+0204   fprintf(fid,s);
+0205   fclose(fid);
+0206 <span class="keyword">end</span>
+0207 
+0208 
+0209 <span class="comment">% switch network.kinetics.type,</span>
+0210 <span class="comment">%   case 'numeric',</span>
+0211 <span class="comment">%</span>
+0212 <span class="comment">%     s = [s sprintf('        &lt;kineticLaw formula=&quot;%s&quot;&gt;\n',network.kinetics.reactions{it}.string)];</span>
+0213 <span class="comment">%     s = [s sprintf('          &lt;listOfParameters&gt;\n')];</span>
+0214 <span class="comment">%     parameters = network.kinetics.reactions{it}.parameters;</span>
+0215 <span class="comment">%</span>
+0216 <span class="comment">%     for itt = 1:length(parameters),</span>
+0217 <span class="comment">%       s = [s sprintf('            &lt;parameter name=&quot;%s&quot; value=&quot;%d&quot;/&gt;\n',parameters{itt}.name,network.kinetics.parameter_values(parameters{itt}.index))];</span>
+0218 <span class="comment">%     end</span>
+0219 <span class="comment">%     s = [s sprintf('          &lt;/listOfParameters&gt;\n')];</span>
+0220 <span class="comment">%     s = [s sprintf('        &lt;/kineticLaw&gt;\n')];</span>
+0221 <span class="comment">%</span>
+0222 <span class="comment">%   case 'mass-action',</span>
+0223 <span class="comment">%</span>
+0224 <span class="comment">%     substrate_ind = find(network.N(:,it)&lt;0);</span>
+0225 <span class="comment">%     product_ind   = find(network.N(:,it)&gt;0);</span>
+0226 <span class="comment">%</span>
+0227 <span class="comment">%     substrates='';</span>
+0228 <span class="comment">%     for itt = 1: length(substrate_ind),</span>
+0229 <span class="comment">%       substrates = [substrates ' * ' network.metabolites{substrate_ind(itt)} ];</span>
+0230 <span class="comment">%     end</span>
+0231 <span class="comment">%     products='';</span>
+0232 <span class="comment">%     for itt = 1: length(product_ind),</span>
+0233 <span class="comment">%       products = [products ' * ' network.metabolites{product_ind(itt)} ];</span>
+0234 <span class="comment">%     end</span>
+0235 <span class="comment">%</span>
+0236 <span class="comment">%     s = [s sprintf('        &lt;kineticLaw formula=&quot;kp%s - km%s&quot;&gt;\n',substrates, products  )];</span>
+0237 <span class="comment">%     s = [s sprintf('          &lt;listOfParameters&gt;\n')];</span>
+0238 <span class="comment">%     s = [s sprintf('            &lt;parameter name=&quot;kp&quot; value=&quot;%d&quot;/&gt;\n',network.kinetics.k_fwd(it))];</span>
+0239 <span class="comment">%     s = [s sprintf('            &lt;parameter name=&quot;km&quot; value=&quot;%d&quot;/&gt;\n',network.kinetics.k_bwd(it))];</span>
+0240 <span class="comment">%     s = [s sprintf('          &lt;/listOfParameters&gt;\n')];</span>
+0241 <span class="comment">%     s = [s sprintf('        &lt;/kineticLaw&gt;\n')];</span>
+0242 <span class="comment">%</span>
+0243 <span class="comment">%   case 'standard',</span>
+0244 <span class="comment">%     substrate_ind = find(network.N(:,it)&lt;0);</span>
+0245 <span class="comment">%     product_ind   = find(network.N(:,it)&gt;0);</span>
+0246 <span class="comment">%     substrates= network.metabolites(substrate_ind);</span>
+0247 <span class="comment">%     products= network.metabolites(product_ind);</span>
+0248 <span class="comment">%</span>
+0249 <span class="comment">%     formula = get_formula(network.kinetics.reactions{it},substrates,products);</span>
+0250 <span class="comment">%     s = [s sprintf('        &lt;kineticLaw formula=&quot;%s&quot;&gt;\n',formula)];</span>
+0251 <span class="comment">%     s = [s sprintf('          &lt;listOfParameters&gt;\n')];</span>
+0252 <span class="comment">%     parameters = network.kinetics.reactions{it}.parameters;</span>
+0253 <span class="comment">%</span>
+0254 <span class="comment">%     for itt = 1:length(parameters),</span>
+0255 <span class="comment">%       s = [s sprintf('            &lt;parameter name=&quot;%s&quot; value=&quot;%d&quot;/&gt;\n',parameters{itt},getfield(network.kinetics.reactions{it},parameters{itt}))];</span>
+0256 <span class="comment">%     end</span>
+0257 <span class="comment">%     s = [s sprintf('          &lt;/listOfParameters&gt;\n')];</span>
+0258 <span class="comment">%     s = [s sprintf('        &lt;/kineticLaw&gt;\n')];</span>
+0259 <span class="comment">% end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_to_sbtab</title>
+  <meta name="keywords" content="network_to_sbtab">
+  <meta name="description" content="sbtab_document = network_to_sbtab(network,options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_network</a> &gt; <a href="index.html">network_import_export</a> &gt; network_to_sbtab.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network/network_import_export&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network_to_sbtab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>sbtab_document = network_to_sbtab(network,options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function sbtab_document = network_to_sbtab(network,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sbtab_document = network_to_sbtab(network,options)
+
+ translate 'network' datastructure into 'sbtab' datastructure
+ 
+ If options.filename is given -&gt; write output files: 
+  [filename]_Reaction.tsv
+  [filename]_Compound.tsv
+  [filename]_QuantityData.tsv (only if argument modular_rate_law_table==1)
+
+ Options are given in the structure 'options' with fields:
+
+ only_reaction_table   : (default 0) produce only 'Reactions' table
+ modular_rate_law_table: produce table with modular rate law kinetic constants 
+ filename              : file name for saving the sbtab (extension is added automatically)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>	quantity_table = modular_rate_law_to_sbtab(network,filename,options)</li><li><a href="network_adjust_names_for_sbml_export.html" class="code" title="function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)">network_adjust_names_for_sbml_export</a>	[metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)</li><li><a href="../../../mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites)</li><li><a href="../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function sbtab_document = network_to_sbtab(network,options)</a>
+0002 
+0003 <span class="comment">% sbtab_document = network_to_sbtab(network,options)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% translate 'network' datastructure into 'sbtab' datastructure</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% If options.filename is given -&gt; write output files:</span>
+0008 <span class="comment">%  [filename]_Reaction.tsv</span>
+0009 <span class="comment">%  [filename]_Compound.tsv</span>
+0010 <span class="comment">%  [filename]_QuantityData.tsv (only if argument modular_rate_law_table==1)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Options are given in the structure 'options' with fields:</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% only_reaction_table   : (default 0) produce only 'Reactions' table</span>
+0015 <span class="comment">% modular_rate_law_table: produce table with modular rate law kinetic constants</span>
+0016 <span class="comment">% filename              : file name for saving the sbtab (extension is added automatically)</span>
+0017 
+0018 <span class="keyword">try</span>
+0019   sbtab_version
+0020 <span class="keyword">catch</span> err,
+0021   error(<span class="string">'The SBtab toolbox for matlab must be installed'</span>);
+0022 <span class="keyword">end</span>
+0023 
+0024 eval(<a href="../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>));
+0025 options_default = struct(<span class="string">'filename'</span>,[],<span class="string">'only_reaction_table'</span>,0,<span class="string">'modular_rate_law_table'</span>,1);
+0026 options         = join_struct(options_default,options);
+0027 
+0028 <span class="keyword">if</span> ~isfield(network,<span class="string">'kinetics'</span>),
+0029   options.modular_rate_law_table = 0;
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">% if necessary, make metabolite + reaction names syntactically correct:</span>
+0033 
+0034 [network.metabolites,network.actions] = <a href="network_adjust_names_for_sbml_export.html" class="code" title="function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)">network_adjust_names_for_sbml_export</a>(network.metabolites,network.actions);
+0035 network.formulae = <a href="../../../mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites)">network_print_formulae</a>(network,network.actions,network.metabolites);
+0036 
+0037 reaction_table = sbtab_table_construct(struct(<span class="string">'TableType'</span>,<span class="string">'Reaction'</span>),{<span class="string">'Reaction'</span>,<span class="string">'SumFormula'</span>},{network.actions,network.formulae});
+0038 
+0039 <span class="keyword">if</span> isfield(network, <span class="string">'reaction_names'</span>),
+0040   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'Name'</span>, network.reaction_names);
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> isfield(network, <span class="string">'reaction_KEGGID'</span>),
+0044   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'MiriamID__urn_miriam_kegg_reaction'</span>, network.reaction_KEGGID);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="keyword">if</span> isfield(network, <span class="string">'reversible'</span>),
+0048   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'IsReversible'</span>,network.reversible);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">if</span> isfield(network, <span class="string">'genes'</span>),
+0052   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'Gene'</span>,network.genes);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% metabolic regulation of enzymes</span>
+0056 [nm,nr] = size(network.N);
+0057 <span class="keyword">for</span> it = 1:nr,
+0058   my_line = <span class="string">''</span>;
+0059   ind_pos = find(network.regulation_matrix(it,:)&gt;0);
+0060   ind_neg = find(network.regulation_matrix(it,:)&lt;0);
+0061   <span class="keyword">for</span> itt = 1:length(ind_pos), 
+0062     my_line = [my_line <span class="string">'+ '</span> network.metabolites{ind_pos(itt)} <span class="string">' '</span>];
+0063   <span class="keyword">end</span>
+0064   <span class="keyword">for</span> itt = 1:length(ind_neg), 
+0065     my_line = [my_line <span class="string">'- '</span> network.metabolites{ind_neg(itt)} <span class="string">' '</span>];
+0066   <span class="keyword">end</span>
+0067   <span class="keyword">if</span> length(my_line) , my_line = my_line(1:end-1); <span class="keyword">end</span>
+0068   network.MetabolicRegulation{it,1} = my_line;
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="keyword">if</span> isfield(network, <span class="string">'TranscriptionalRegulation'</span>),
+0072   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'TranscriptionalRegulation'</span>,network.TranscriptionalRegulation);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">if</span> isfield(network, <span class="string">'EC'</span>),
+0076   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'MiriamID__urn_miriam_ec_code'</span>,network.EC);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> isfield(network, <span class="string">'sbml_id_reaction'</span>),
+0080   reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'SBML__reaction__ID'</span>,network.sbml_id_reaction);
+0081 <span class="keyword">end</span>
+0082 
+0083 
+0084 reaction_table = sbtab_table_add_column(reaction_table,<span class="string">'MetabolicRegulation'</span>,network.MetabolicRegulation);
+0085 sbtab_document = sbtab_document_construct(struct,{<span class="string">'Reaction'</span>},{reaction_table});;
+0086 
+0087 <span class="keyword">if</span> ~options.only_reaction_table,
+0088 
+0089   compound_table = sbtab_table_construct(struct(<span class="string">'TableType'</span>,<span class="string">'Compound'</span>),{<span class="string">'Compound'</span>,<span class="string">'External'</span>},{network.metabolites,network.external});
+0090 
+0091   <span class="keyword">if</span> isfield(network, <span class="string">'metabolite_names'</span>),
+0092     compound_table = sbtab_table_add_column(compound_table,<span class="string">'Name'</span>, network.metabolite_names);
+0093   <span class="keyword">end</span>
+0094 
+0095   <span class="keyword">if</span> isfield(network, <span class="string">'metabolite_KEGGID'</span>),
+0096     compound_table = sbtab_table_add_column(compound_table,<span class="string">'MiriamID__urn_miriam_kegg_compound'</span>,network.metabolite_KEGGID);
+0097   <span class="keyword">end</span>
+0098   
+0099   <span class="keyword">if</span> isfield(network, <span class="string">'sbml_id_species'</span>),
+0100     compound_table = sbtab_table_add_column(compound_table,<span class="string">'SBML__species__ID'</span>,network.sbml_id_species);
+0101   <span class="keyword">end</span>
+0102 
+0103   <span class="keyword">if</span> isfield(network, <span class="string">'is_cofactor'</span>),
+0104     compound_table = sbtab_table_add_column(compound_table,<span class="string">'IsCofactor'</span>,network.is_cofactor);
+0105   <span class="keyword">end</span>
+0106 
+0107   sbtab_document = sbtab_document_add_table(sbtab_document,<span class="string">'Compound'</span>,compound_table);
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="keyword">if</span> options.modular_rate_law_table,
+0111   quantity_table = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>(network);
+0112   sbtab_document = sbtab_document_add_table(sbtab_document,<span class="string">'QuantityData'</span>,quantity_table);
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="keyword">if</span> ~isempty(options.filename),
+0116   sbtab_save_document(sbtab_document,options.filename)
+0117 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_print_formulae</title>
+  <meta name="keywords" content="network_print_formulae">
+  <meta name="description" content="all_result = network_print_formulae(network,actions,metabolites)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_network</a> &gt; <a href="index.html">network_query</a> &gt; network_print_formulae.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_network/network_query&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network_print_formulae
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>all_result = network_print_formulae(network,actions,metabolites)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function all_result = network_print_formulae(network,actions,metabolites) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> all_result = network_print_formulae(network,actions,metabolites)
+
+ print the chemical formulae
+
+ actions, metabolites (optional): names to be used in the formulae
+ (column lists of strings)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_graphics/netgraph_flux_in_large_network.html" class="code" title="function [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)">netgraph_flux_in_large_network</a>	[nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</li><li><a href="../../../mnt/mnt_network/network_import_export/cobra_to_network.html" class="code" title="function [network, ind_keepm, ind_keepr] = cobra_to_network(model,options)">cobra_to_network</a>	[network, ind_keepm, ind_keepr] = cobra_to_network(model,options)</li><li><a href="../../../mnt/mnt_network/network_import_export/network_to_sbtab.html" class="code" title="function sbtab_document = network_to_sbtab(network,options)">network_to_sbtab</a>	sbtab_document = network_to_sbtab(network,options)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% all_result = network_print_formulae(network,actions,metabolites)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% print the chemical formulae</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% actions, metabolites (optional): names to be used in the formulae</span>
+0006 <span class="comment">% (column lists of strings)</span>
+0007 
+0008 <a name="_sub0" href="#_subfunctions" class="code">function all_result = network_print_formulae(network,actions,metabolites)</a>
+0009 
+0010 <span class="keyword">if</span> ~exist(<span class="string">'actions'</span>,<span class="string">'var'</span>), actions=[]; <span class="keyword">end</span>
+0011 <span class="keyword">if</span> ~exist(<span class="string">'metabolites'</span>,<span class="string">'var'</span>), metabolites=network.metabolites; <span class="keyword">end</span>
+0012 
+0013 <span class="keyword">if</span> isempty(actions), actions=network.actions; <span class="keyword">end</span>
+0014 
+0015 all_result = {};
+0016 <span class="keyword">for</span> i=1:length(actions)
+0017   result = <span class="string">''</span>;
+0018 <span class="comment">%  result =  [result sprintf('%i:\t',i)];</span>
+0019 <span class="comment">%  result =  [result sprintf('%s:\t',actions{i})];</span>
+0020   dum = find(network.N(:,i)&lt;0);
+0021   <span class="keyword">for</span> j=1:length(dum); 
+0022     <span class="keyword">if</span> j&gt;1, result = [result  sprintf(<span class="string">' + '</span>) ];  <span class="keyword">end</span>
+0023     coeff =  full(abs(network.N(dum(j),i)));
+0024     <span class="keyword">if</span> coeff ~= 1,
+0025       <span class="keyword">if</span> coeff == ceil(coeff),
+0026           result = [result sprintf(<span class="string">'%d '</span>,coeff) ];       
+0027       <span class="keyword">else</span>,
+0028           result = [result sprintf(<span class="string">'%2.2f '</span>,coeff) ]; 
+0029       <span class="keyword">end</span>
+0030     <span class="keyword">end</span>
+0031     result = [result sprintf(<span class="string">'%s'</span>, metabolites{dum(j)}) ];     
+0032   <span class="keyword">end</span>
+0033   
+0034   <span class="keyword">if</span> network.reversible(i), 
+0035     result = [result  sprintf(<span class="string">' &lt;=&gt; '</span>)]; 
+0036   <span class="keyword">else</span> 
+0037     result = [result sprintf(<span class="string">' =&gt; '</span>) ]; 
+0038   <span class="keyword">end</span>
+0039 
+0040   dum = find(network.N(:,i)&gt;0);
+0041   <span class="keyword">for</span> j=1:length(dum); 
+0042     <span class="keyword">if</span> j&gt;1, result = [result  sprintf(<span class="string">' + '</span>) ];  <span class="keyword">end</span>
+0043 
+0044     coeff =  full(network.N(dum(j),i));
+0045     <span class="keyword">if</span> coeff ~= 1,
+0046       <span class="keyword">if</span> coeff == ceil(coeff),
+0047           result = [result sprintf(<span class="string">'%d '</span>,coeff) ];       
+0048       <span class="keyword">else</span>,
+0049         result = [result sprintf(<span class="string">'%2.2f '</span>,coeff) ]; 
+0050       <span class="keyword">end</span>
+0051     <span class="keyword">end</span>
+0052     
+0053     result = [result sprintf(<span class="string">'%s'</span>, metabolites{dum(j)}) ];     
+0054   <span class="keyword">end</span>
+0055 
+0056   all_result{i,1} = result;
+0057 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

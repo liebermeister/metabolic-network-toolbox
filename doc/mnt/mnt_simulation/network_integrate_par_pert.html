@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_integrate_par_pert</title>
+  <meta name="keywords" content="network_integrate_par_pert">
+  <meta name="description" content="[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_simulation</a> &gt; network_integrate_par_pert.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_simulation&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>network_integrate_par_pert
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [t, s_t, v, p, s_int_t, met_int]= network_integrate_par_pert(network, s, T, graphics_flag,par_osc,dt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)
+
+solve differential equations for metabolic network with field 'kinetics'
+
+INPUT
+network    network data structure (see 'metabolic_networks')
+s          initial concentrations (row vector)
+T          integration time
+dt       time step in output of results
+par_osc    list of structures describing oscillatory parameters,
+           each with:  
+             name             parameter name
+             type             'values' (interpolation between values)
+                              'complex' (complex exponential), 'cos' (cosine), 'sin' (sine)
+             if type = 'values' 
+               t                time points
+               values           values
+             else
+               mean             mean value of oscillation
+               amplitude        amplitude of oscillation
+               omega            circular frequency
+               phase            phase angle at time t=0
+gf         graphics flag
+
+OUTPUT
+t          vector of time points
+s_int, s   (matrices) timecourses of internal/all metabolite concentrations
+met_int    list of internal metabolites
+
+ for visualising the results at one time point, type
+ i=1;  % (number of time point)
+ netgraph_draw(network,'metvalues',s_t(:,i),'actvalues',...
+               network_velocities(s_t(:,i),network,network.kinetics));
+
+For extracting a single oscillation period, see 'choose_period'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function f = integrate_network_der_MA(t,s_int,s_ext,Nf_int,Nb_int,network,par_osc)</a></li><li><a href="#_sub2" class="code">function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,po)</a></li><li><a href="#_sub3" class="code">function [network,p] = compute_parameters(network,t,po)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%solve differential equations for metabolic network with field 'kinetics'</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%INPUT</span>
+0006 <span class="comment">%network    network data structure (see 'metabolic_networks')</span>
+0007 <span class="comment">%s          initial concentrations (row vector)</span>
+0008 <span class="comment">%T          integration time</span>
+0009 <span class="comment">%dt       time step in output of results</span>
+0010 <span class="comment">%par_osc    list of structures describing oscillatory parameters,</span>
+0011 <span class="comment">%           each with:</span>
+0012 <span class="comment">%             name             parameter name</span>
+0013 <span class="comment">%             type             'values' (interpolation between values)</span>
+0014 <span class="comment">%                              'complex' (complex exponential), 'cos' (cosine), 'sin' (sine)</span>
+0015 <span class="comment">%             if type = 'values'</span>
+0016 <span class="comment">%               t                time points</span>
+0017 <span class="comment">%               values           values</span>
+0018 <span class="comment">%             else</span>
+0019 <span class="comment">%               mean             mean value of oscillation</span>
+0020 <span class="comment">%               amplitude        amplitude of oscillation</span>
+0021 <span class="comment">%               omega            circular frequency</span>
+0022 <span class="comment">%               phase            phase angle at time t=0</span>
+0023 <span class="comment">%gf         graphics flag</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%OUTPUT</span>
+0026 <span class="comment">%t          vector of time points</span>
+0027 <span class="comment">%s_int, s   (matrices) timecourses of internal/all metabolite concentrations</span>
+0028 <span class="comment">%met_int    list of internal metabolites</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% for visualising the results at one time point, type</span>
+0031 <span class="comment">% i=1;  % (number of time point)</span>
+0032 <span class="comment">% netgraph_draw(network,'metvalues',s_t(:,i),'actvalues',...</span>
+0033 <span class="comment">%               network_velocities(s_t(:,i),network,network.kinetics));</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%For extracting a single oscillation period, see 'choose_period'</span>
+0036 
+0037 <a name="_sub0" href="#_subfunctions" class="code">function [t, s_t, v, p, s_int_t, met_int]= network_integrate_par_pert(network, s, T, graphics_flag,par_osc,dt)</a>
+0038 
+0039  <span class="keyword">if</span> ~exist(<span class="string">'s'</span>,<span class="string">'var'</span>),                         s = rand(size(network.metabolites)); <span class="keyword">end</span>
+0040  <span class="keyword">if</span> ~exist(<span class="string">'T'</span>,<span class="string">'var'</span>),                         T = 1; <span class="keyword">end</span>
+0041  <span class="keyword">if</span> ~exist(<span class="string">'dt'</span>,<span class="string">'var'</span>),                        dt = 0.005*max(T); <span class="keyword">end</span>
+0042  <span class="keyword">if</span> ~exist(<span class="string">'par_osc'</span>,<span class="string">'var'</span>),                   par_osc = {}; <span class="keyword">end</span>
+0043  <span class="keyword">if</span> ~exist(<span class="string">'graphics_flag'</span>,<span class="string">'var'</span>), graphics_flag = 0; <span class="keyword">end</span>
+0044 
+0045  [n_S,n_A] = size(network.N);
+0046  external  = find(network.external);
+0047  internal  = setdiff(1:n_S,external)';
+0048  s_int     = s(internal);
+0049  s_ext     = s(external);
+0050 
+0051     N     = network.N;
+0052    N_int = N(internal,:);
+0053 
+0054  <span class="keyword">switch</span> network.kinetics.type,
+0055 
+0056    <span class="keyword">case</span> <span class="string">'mass-action'</span>,
+0057      [n_met,n_A] = size(N);
+0058      
+0059      <span class="keyword">if</span> isfield(network.kinetics,<span class="string">'exponents'</span>),
+0060        Nf = network.kinetics.exponents.*(N&lt;0);
+0061        Nb = network.kinetics.exponents.*(N&gt;0);
+0062      <span class="keyword">else</span>,
+0063        Nf  = abs(N.*(N&lt;0));
+0064        Nb  =     N.*(N&gt;0);      
+0065      <span class="keyword">end</span>
+0066      Nfint = Nf(internal,:);
+0067      Nbint = Nb(internal,:);
+0068      
+0069      <span class="keyword">if</span> ~isfield(network.kinetics,<span class="string">'used_fwd'</span>), 
+0070        network.kinetics.used_fwd = ones(size(network.kinetics.k_fwd));
+0071        network.kinetics.used_bwd = ones(size(network.kinetics.k_bwd));
+0072      <span class="keyword">end</span>
+0073      
+0074      df = prod( repmat(s(external),1,n_A) .^ Nf(external,:))';
+0075      db = prod( repmat(s(external),1,n_A) .^ Nb(external,:))';
+0076      
+0077      [t,s_int_t] = ode23(@<a href="#_sub1" class="code" title="subfunction f = integrate_network_der_MA(t,s_int,s_ext,Nf_int,Nb_int,network,par_osc)">integrate_network_der_MA</a>,[0:dt:T],s_int,[],s_ext,Nfint,Nbint,network,par_osc);
+0078    
+0079 <span class="comment">%   case 'numeric',</span>
+0080 <span class="comment">%     N_internal = N;</span>
+0081 <span class="comment">%     N_internal(find(network.external),:) = 0;</span>
+0082 <span class="comment">%     [t,s_t] = network_integrate_kin(s,network.kinetics.parameters,0,T,...</span>
+0083 <span class="comment">%                     N_internal,network.kinetics.velocity_function);</span>
+0084 <span class="comment">%      s_int_t=s_t(:,internal);</span>
+0085    <span class="keyword">otherwise</span>,
+0086      <span class="keyword">if</span> length(T)==1,
+0087        t = [0:dt:T]'; 
+0088      <span class="keyword">else</span>,
+0089        t = T;
+0090      <span class="keyword">end</span>
+0091      <span class="keyword">if</span> length(s_int),
+0092        [t,s_int_t] = ode15s(@<a href="#_sub2" class="code" title="subfunction f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,po)">integrate_network_der</a>,t,s_int,[],network,internal,external,s_ext,N_int,par_osc);
+0093      <span class="keyword">else</span>,
+0094       s_int_t = zeros(0,length(t));
+0095      <span class="keyword">end</span>
+0096  <span class="keyword">end</span>    
+0097  
+0098 s_int_t = s_int_t';
+0099 
+0100 s_t=ones(n_S,length(t)); 
+0101 s_t(internal,:)=s_int_t; 
+0102 
+0103 <span class="keyword">if</span> length(external), s_t(external,:) = repmat(s_ext,1,length(t)); <span class="keyword">end</span>
+0104 
+0105 met_int = network.metabolites(internal);
+0106 
+0107 <span class="keyword">if</span> graphics_flag,
+0108   [ni,nk]=subplot_n(size(s_t,1));
+0109   <span class="keyword">for</span> i=1:size(s,1), 
+0110     subplot(ni,nk,i);
+0111     plot(t,s_t(i,:));
+0112     axis([t(1) t(end) 0 max(s_t(i,:)) ]);
+0113     title(network.metabolites{i});
+0114   <span class="keyword">end</span>
+0115 <span class="keyword">end</span>;
+0116 
+0117 <span class="keyword">for</span> it = 1:length(t),
+0118   [n,pp]  = <a href="#_sub3" class="code" title="subfunction [network,p] = compute_parameters(network,t,po)">compute_parameters</a>(network,t(it),par_osc);
+0119   v(:,it)= <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_t(:,it),n);
+0120   <span class="keyword">if</span> length(pp),  p(:,it) = pp'; <span class="keyword">else</span> p=[]; <span class="keyword">end</span>
+0121 <span class="keyword">end</span>
+0122 
+0123 <span class="comment">% --------------------------------------------------------------------</span>
+0124 
+0125 <a name="_sub1" href="#_subfunctions" class="code">function f = integrate_network_der_MA(t,s_int,s_ext,Nf_int,Nb_int,network,par_osc)</a>
+0126 
+0127 <span class="comment">% vector f contains time derivative of the internal metabolites</span>
+0128 
+0129   k_fwdT = network.kinetics.used_fwd' .* network.kinetics.k_fwd' .* df';
+0130   k_bwdT = network.kinetics.used_bwd' .* network.kinetics.k_bwd' .* db';
+0131   Nk_fwdT = N_int * sparse(diag(k_fwdT));
+0132   Nk_bwdT = N_int * sparse(diag(k_bwdT));
+0133    
+0134  log_s_int = log(s_int+10^-14);
+0135  f = Nk_fwdT *  exp(Nf_int' * log_s_int )   -   Nk_bwdT *  exp(Nb_int' * log_s_int);
+0136 
+0137 <span class="comment">% --------------------------------------------------------------------</span>
+0138 
+0139 <a name="_sub2" href="#_subfunctions" class="code">function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,po)</a>
+0140 
+0141 <span class="comment">% vector f contains time derivative of the internal metabolites</span>
+0142 
+0143 network = <a href="#_sub3" class="code" title="subfunction [network,p] = compute_parameters(network,t,po)">compute_parameters</a>(network,t,po);
+0144 
+0145  s(internal)  = s_int;
+0146  s(external)  = s_ext;
+0147  f            = N_int * <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network);
+0148 
+0149 <span class="comment">%-----------------------------------------------------------------------</span>
+0150  
+0151 <a name="_sub3" href="#_subfunctions" class="code">function [network,p] = compute_parameters(network,t,po)</a>
+0152 
+0153 <span class="keyword">switch</span> network.kinetics.type,
+0154   <span class="keyword">case</span> <span class="string">'numeric'</span>,
+0155     p = [];
+0156     <span class="keyword">for</span> it = 1:length(po),
+0157       <span class="keyword">switch</span> po{it}.type,
+0158     <span class="keyword">case</span> <span class="string">'complex'</span>,
+0159       p(it) = po{it}.mean + po{it}.amplitude * exp(i * (po{it}.phase +  po{it}.omega * t ));
+0160     <span class="keyword">case</span> <span class="string">'cos'</span>,
+0161       p(it) = po{it}.mean + po{it}.amplitude * cos( po{it}.phase +  po{it}.omega * t );
+0162     <span class="keyword">case</span> <span class="string">'sin'</span>,
+0163       p(it) = po{it}.mean + po{it}.amplitude * sin( po{it}.phase +  po{it}.omega * t );
+0164     <span class="keyword">case</span> <span class="string">'values'</span>,
+0165           p(it) = interp1(po{it}.t,po{it}.values,t,<span class="string">'spline'</span>);
+0166       <span class="keyword">end</span>       
+0167       network.kinetics.parameters = setfield(network.kinetics.parameters,po{it}.name,p(it));
+0168     <span class="keyword">end</span>
+0169   <span class="keyword">otherwise</span>, fprintf(<span class="string">'Parameter oscillations not supported for this kinetics type\n'</span>);
+0170 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

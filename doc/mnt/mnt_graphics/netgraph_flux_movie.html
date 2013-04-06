@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_flux_movie</title>
+  <meta name="keywords" content="netgraph_flux_movie">
+  <meta name="description" content="M = netgraph_flux_movie(network,S,J,text_flag,goptions);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_flux_movie.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_flux_movie
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>M = netgraph_flux_movie(network,S,J,text_flag,goptions);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function M = netgraph_flux_movie(network,S,J,text_flag,goptions); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> M = netgraph_flux_movie(network,S,J,text_flag,goptions);
+
+ S and J : vectors of concentrations and fluxes
+ the number of frames can be set by 'n_frames' within goptions
+
+ to save a movie as an animated gif, use movie_save(filename,M)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../demo/demo_glycolysis.html" class="code" title="">demo_glycolysis</a>	DEMO_GLYCOLYSIS - Demo for Metabolic Network Toolbox</li><li><a href="netgraph_flux_in_large_network.html" class="code" title="function [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)">netgraph_flux_in_large_network</a>	[nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% M = netgraph_flux_movie(network,S,J,text_flag,goptions);</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% S and J : vectors of concentrations and fluxes</span>
+0004 <span class="comment">% the number of frames can be set by 'n_frames' within goptions</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% to save a movie as an animated gif, use movie_save(filename,M)</span>
+0007 
+0008 <a name="_sub0" href="#_subfunctions" class="code">function M = netgraph_flux_movie(network,S,J,text_flag,goptions);</a>
+0009 
+0010 <span class="keyword">if</span> ~exist(<span class="string">'text_flag'</span>,<span class="string">'var'</span>),  text_flag=0; <span class="keyword">end</span>
+0011 <span class="keyword">if</span> ~exist(<span class="string">'goptions'</span>,<span class="string">'var'</span>), goptions=struct; <span class="keyword">end</span>
+0012 
+0013 arrow_shift = 0;
+0014 
+0015 <span class="comment">%if ~isfield(goptions,'arrowsize'), goptions.arrowsize = 0.03; end</span>
+0016 <span class="keyword">if</span> ~isfield(goptions,<span class="string">'n_frames'</span>),  goptions.n_frames  = 10;   <span class="keyword">end</span>
+0017 
+0018 goptions.actstyle    =<span class="string">'none'</span>;
+0019 goptions.arrow_shift = arrow_shift;
+0020 
+0021 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,S,J,text_flag,goptions); a = axis;
+0022 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,S,J,text_flag,goptions); axis(a); axis off;
+0023 M(1) = getframe;
+0024 
+0025 <span class="keyword">for</span> it = 1:goptions.n_frames,
+0026   arrow_shift            = it/(goptions.n_frames+1);
+0027   goptions.arrow_shift   = arrow_shift;
+0028   <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,S,J,text_flag,goptions); 
+0029   axis(a);  axis off;
+0030   M(it+1) = getframe;
+0031 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

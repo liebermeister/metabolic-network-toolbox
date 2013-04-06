@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of save</title>
+  <meta name="keywords" content="save">
+  <meta name="description" content="XMLTREE/SAVE Save an XML tree in an XML file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../../index.html">util</a> &gt; <a href="../../index.html">xml</a> &gt; <a href="../index.html">xmltree</a> &gt; <a href="index.html">@xmltree</a> &gt; save.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/xmltree/@xmltree&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>save
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>XMLTREE/SAVE Save an XML tree in an XML file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function save(tree, filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> XMLTREE/SAVE Save an XML tree in an XML file
+ FORMAT save(tree,filename)
+
+ tree     - XMLTree
+ filename - XML output filename
+_______________________________________________________________________
+
+ Convert an XML tree into a well-formed XML string and write it into
+ a file or display it (send it to standard output) if no filename is 
+ given.
+
+-----------------------------------------------------------------------
+ SUBFUNCTIONS:
+
+ FORMAT print_subtree(tree,fid,order)
+ Send tree entity XML formatted string to fid using 'order' blanks
+ tree  - XML tree
+ fid   - file identifier
+ uid   - uid of the current element
+ order - order of recursivity
+
+ FORMAT str = entity(str)
+ Tool to replace input string in internal entities
+ str  - string to modify
+_______________________________________________________________________
+ @(#)save.m                 Guillaume Flandin                 01/07/11</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="length.html" class="code" title="function l = length(tree,r)">length</a>	XMLTREE/LENGTH Length Method</li><li><a href="root.html" class="code" title="function uid = root(tree)">root</a>	XMLTREE/ROOT Root Method</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function print_subtree(tree,fid,uid,order)</a></li><li><a href="#_sub2" class="code">function str = entity(str)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function save(tree, filename)</a>
+0002 <span class="comment">% XMLTREE/SAVE Save an XML tree in an XML file</span>
+0003 <span class="comment">% FORMAT save(tree,filename)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% tree     - XMLTree</span>
+0006 <span class="comment">% filename - XML output filename</span>
+0007 <span class="comment">%_______________________________________________________________________</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Convert an XML tree into a well-formed XML string and write it into</span>
+0010 <span class="comment">% a file or display it (send it to standard output) if no filename is</span>
+0011 <span class="comment">% given.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%-----------------------------------------------------------------------</span>
+0014 <span class="comment">% SUBFUNCTIONS:</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% FORMAT print_subtree(tree,fid,order)</span>
+0017 <span class="comment">% Send tree entity XML formatted string to fid using 'order' blanks</span>
+0018 <span class="comment">% tree  - XML tree</span>
+0019 <span class="comment">% fid   - file identifier</span>
+0020 <span class="comment">% uid   - uid of the current element</span>
+0021 <span class="comment">% order - order of recursivity</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% FORMAT str = entity(str)</span>
+0024 <span class="comment">% Tool to replace input string in internal entities</span>
+0025 <span class="comment">% str  - string to modify</span>
+0026 <span class="comment">%_______________________________________________________________________</span>
+0027 <span class="comment">% @(#)save.m                 Guillaume Flandin                 01/07/11</span>
+0028 
+0029 error(nargchk(1,2,nargin));
+0030 
+0031 prolog = <span class="string">'&lt;?xml version=&quot;1.0&quot; ?&gt;\n'</span>;
+0032 
+0033 <span class="comment">%- Standard output</span>
+0034 <span class="keyword">if</span> nargin==1
+0035     fid = 1;
+0036 <span class="comment">%- Output specified</span>
+0037 <span class="keyword">elseif</span> nargin==2
+0038     <span class="comment">%- Filename provided</span>
+0039     <span class="keyword">if</span> isstr(filename)
+0040         [fid, msg] = fopen(filename,<span class="string">'w'</span>);
+0041         <span class="keyword">if</span> fid==-1, error(msg);<span class="keyword">end</span>
+0042         <span class="keyword">if</span> isempty(tree.filename), tree.filename = filename; <span class="keyword">end</span>
+0043     <span class="comment">%- File identifier provided</span>
+0044     <span class="keyword">elseif</span> isnumeric(filename) &amp; prod(size(filename)) == 1
+0045         fid = filename;
+0046         prolog = <span class="string">''</span>; <span class="comment">%- In this option, do not write any prolog</span>
+0047     <span class="comment">%- Rubbish provided</span>
+0048     <span class="keyword">else</span>
+0049         error(<span class="string">'[XMLTree] Invalid argument.'</span>);
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">end</span>
+0052 
+0053 fprintf(fid,prolog);
+0054 <a href="#_sub1" class="code" title="subfunction print_subtree(tree,fid,uid,order)">print_subtree</a>(tree,fid);
+0055 
+0056 <span class="keyword">if</span> nargin==2 &amp; isstr(filename), fclose(fid); <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> nargout==1, varargout{1} = tree; <span class="keyword">end</span>
+0059 
+0060 <span class="comment">%=======================================================================</span>
+0061 <a name="_sub1" href="#_subfunctions" class="code">function print_subtree(tree,fid,uid,order)</a>
+0062     <span class="keyword">if</span> nargin &lt;3, uid = <a href="root.html" class="code" title="function uid = root(tree)">root</a>(tree); <span class="keyword">end</span>
+0063     <span class="keyword">if</span> nargin &lt; 4, order = 0; <span class="keyword">end</span>
+0064     fprintf(fid,blanks(3*order));
+0065     <span class="keyword">switch</span> tree.tree{uid}.type
+0066         <span class="keyword">case</span> <span class="string">'element'</span>
+0067             fprintf(fid,<span class="string">'&lt;%s'</span>,tree.tree{uid}.name);
+0068             <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.attributes)
+0069                 fprintf(fid,<span class="string">' %s=&quot;%s&quot;'</span>,<span class="keyword">...</span>
+0070                 tree.tree{uid}.attributes{i}.key,<span class="keyword">...</span>
+0071                 tree.tree{uid}.attributes{i}.val);
+0072             <span class="keyword">end</span>
+0073             fprintf(fid,<span class="string">'&gt;\n'</span>);
+0074             <span class="keyword">for</span> i=1:<a href="length.html" class="code" title="function l = length(tree,r)">length</a>(tree.tree{uid}.contents)
+0075                 <a href="#_sub1" class="code" title="subfunction print_subtree(tree,fid,uid,order)">print_subtree</a>(tree,fid,tree.tree{uid}.contents(i),order+1)
+0076               <span class="keyword">end</span>
+0077             <span class="keyword">for</span> i=1:order, fprintf(fid,<span class="string">'   '</span>); <span class="keyword">end</span>
+0078             fprintf(fid,<span class="string">'&lt;/%s&gt;\n'</span>,tree.tree{uid}.name);
+0079         <span class="keyword">case</span> <span class="string">'chardata'</span>
+0080             fprintf(fid,<span class="string">'%s\n'</span>,<a href="#_sub2" class="code" title="subfunction str = entity(str)">entity</a>(tree.tree{uid}.value));
+0081         <span class="keyword">case</span> <span class="string">'cdata'</span>
+0082                 fprintf(fid,<span class="string">'&lt;![CDATA[%s]]&gt;\n'</span>,tree.tree{uid}.value);
+0083         <span class="keyword">case</span> <span class="string">'pi'</span>
+0084             fprintf(fid,<span class="string">'&lt;?%s %s?&gt;\n'</span>,tree.tree{uid}.target,tree.tree{uid}.value);
+0085         <span class="keyword">case</span> <span class="string">'comment'</span>
+0086             fprintf(fid,<span class="string">'&lt;!-- %s --&gt;\n'</span>,tree.tree{uid}.value);
+0087         <span class="keyword">otherwise</span>
+0088             warning(sprintf(<span class="string">'Type %s unknown : not saved'</span>,tree.tree{uid}.type));
+0089     <span class="keyword">end</span>
+0090    
+0091 <span class="comment">%=======================================================================</span>
+0092 <a name="_sub2" href="#_subfunctions" class="code">function str = entity(str)</a>
+0093     str = strrep(str,<span class="string">'&amp;'</span>,<span class="string">'&amp;amp;'</span>);
+0094     str = strrep(str,<span class="string">'&lt;'</span>,<span class="string">'&amp;lt;'</span>);
+0095     str = strrep(str,<span class="string">'&gt;'</span>,<span class="string">'&amp;gt;'</span>);
+0096     str = strrep(str,<span class="string">'&quot;'</span>,<span class="string">'&amp;quot;'</span>);
+0097     str = strrep(str,<span class="string">'\'</span>,<span class="string">'&amp;apos;'</span>);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

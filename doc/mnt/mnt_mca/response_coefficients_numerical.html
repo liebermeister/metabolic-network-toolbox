@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of response_coefficients_numerical</title>
+  <meta name="keywords" content="response_coefficients_numerical">
+  <meta name="description" content="[RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; response_coefficients_numerical.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>response_coefficients_numerical
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)
+
+ Unscaled Response coefficients (first and second order)
+
+ network    : network with kinetic information in field 'kinetics'
+ c          : starting point for computing steady-state concnetrations
+ ind_rel_par: indices of parameters to be considered</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li><li><a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%[RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Unscaled Response coefficients (first and second order)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% network    : network with kinetic information in field 'kinetics'</span>
+0006 <span class="comment">% c          : starting point for computing steady-state concnetrations</span>
+0007 <span class="comment">% ind_rel_par: indices of parameters to be considered</span>
+0008 
+0009 <a name="_sub0" href="#_subfunctions" class="code">function [RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)</a>
+0010 
+0011 kinetics     = network.kinetics;
+0012 [nm,nr]      = size(network.N);
+0013 ind_ext      = find(network.external);
+0014 n_ext        = length(ind_ext);
+0015 delta        = 10^-5;
+0016 T            = 10000;
+0017 
+0018 <span class="comment">%v = network_velocities(c,network);</span>
+0019 [s,v,dum1,dum2,L_int,NR_int,indep_met_int] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network,c,T);
+0020 c           = s;
+0021 
+0022 S_ext       = c(ind_ext);
+0023 S_ext_names = network.metabolites(ind_ext);
+0024 par         = <a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(kinetics,S_ext,S_ext_names,network);
+0025 
+0026 eval(<a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'ind_rel_par'</span>,<span class="string">'1:length(par)'</span>));
+0027 
+0028 np          = length(ind_rel_par);
+0029 
+0030 
+0031 <span class="comment">% ------------------------------------------------------------------------------</span>
+0032 <span class="comment">% first-order response coefficients and</span>
+0033 <span class="comment">% diagonal elements for second order response coefficients</span>
+0034 
+0035 RS = nan * zeros(nm,np);
+0036 RJ = nan * zeros(nr,np);
+0037 
+0038 RJ2      = nan * zeros(nr,np,np);
+0039 RS2      = nan * zeros(nm,np,np);
+0040 RJ2diag  = nan * zeros(nr,np);  <span class="comment">%  diagonal elements from RJ2</span>
+0041 RS2diag  = nan * zeros(nm,np);  <span class="comment">%  diagonal elements from RJ2</span>
+0042 
+0043 network1 = network;
+0044 network2 = network;
+0045 
+0046 nc = length(c);
+0047 nv = length(v);  
+0048 
+0049 <span class="keyword">for</span> itt=1:np,
+0050   it = ind_rel_par(itt);
+0051   display(sprintf(<span class="string">'%d/%d'</span>,itt,np));
+0052 
+0053   par_pert1  = par; par_pert1(it) = par(it)*(1+delta);
+0054   par_pert2  = par; par_pert2(it) = par(it)*(1-delta);
+0055   <span class="keyword">if</span> par_pert1(it) == 0, par_pert(it) =  10^-8; <span class="keyword">end</span>
+0056   <span class="keyword">if</span> par_pert2(it) == 0, par_pert(it) = -10^-8; <span class="keyword">end</span>
+0057 
+0058   [nkinetics1, Sext_pert1] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert1,ind_ext,network);
+0059   [nkinetics2, Sext_pert2] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert2,ind_ext,network);
+0060   s_pert1  = c;
+0061   s_pert2  = c;
+0062   s_pert1(ind_ext) = Sext_pert1;
+0063   s_pert2(ind_ext) = Sext_pert2;
+0064   network1.kinetics = nkinetics1;
+0065   network2.kinetics = nkinetics2;
+0066   [s_pert1, v_pert1] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert1,T,L_int,NR_int,indep_met_int);
+0067   [s_pert2, v_pert2] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network2,s_pert2,T,L_int,NR_int,indep_met_int);
+0068 
+0069   delta_par_pert1 = par_pert1(it) - par(it);
+0070   delta_par_pert2 = par_pert2(it )- par(it);
+0071 
+0072   As = [ s_pert1 - c; <span class="keyword">...</span>
+0073          s_pert2 - c  ];
+0074   
+0075   Bs = [ delta_par_pert1 * eye(nc), 1/2 * delta_par_pert1.^2 * eye(nc); <span class="keyword">...</span>
+0076          delta_par_pert2 * eye(nc), 1/2 * delta_par_pert2.^2 * eye(nc)];        
+0077   
+0078   my_RS_both = pinv(full(Bs)) * As;
+0079   my_RS  = my_RS_both(1:nc);
+0080   my_RS2 = my_RS_both(nc+1:end);
+0081 
+0082   Av = [ v_pert1 - v; <span class="keyword">...</span>
+0083          v_pert2 - v  ];
+0084   
+0085   Bv = [ delta_par_pert1 * eye(nv), 1/2 * delta_par_pert1.^2 * eye(nv); <span class="keyword">...</span>
+0086          delta_par_pert2 * eye(nv), 1/2 * delta_par_pert2.^2 * eye(nv)];        
+0087 
+0088   my_RJ_both = pinv(full(Bv)) * Av;
+0089   my_RJ  = my_RJ_both(1:nv);
+0090   my_RJ2 = my_RJ_both(nv+1:end);
+0091 
+0092   RS(:,it) = my_RS;
+0093   RJ(:,it) = my_RJ;
+0094   RS2diag(:,it) = my_RS2;
+0095   RJ2diag(:,it) = my_RJ2;
+0096 
+0097   RS2(:,it,it) = my_RS2;
+0098   RJ2(:,it,it) = my_RJ2;
+0099 
+0100 <span class="keyword">end</span>
+0101 
+0102 
+0103 <span class="comment">% ------------------------------------------------------------------------------</span>
+0104 <span class="comment">% second-order response coefficients, off-diagonal elements</span>
+0105 <span class="comment">% compute the value twice: for two increased parameters and two decreased parameters</span>
+0106 
+0107 delta     = 10^-4;
+0108 
+0109 <span class="keyword">for</span> itt=1:np,
+0110   <span class="keyword">for</span> kt=1:itt-1,
+0111 
+0112     display(sprintf(<span class="string">'%d/%d %d/%d'</span>,itt,np,kt,itt-1));
+0113     it = ind_rel_par(itt);
+0114     k  = ind_rel_par(kt);
+0115 
+0116     <span class="comment">%% -----------------------------------------</span>
+0117     <span class="comment">%% both parameters increased</span>
+0118     par_pert1     = par; 
+0119     par_pert1(it) = par(it)*(1+delta); 
+0120     par_pert1(k)  = par(k) *(1+delta);
+0121     <span class="keyword">if</span> par_pert1(it)== 0, par_pert1(it) = 10^-5; <span class="keyword">end</span> 
+0122     <span class="keyword">if</span> par_pert1(k) == 0, par_pert1(k)  = 10^-5; <span class="keyword">end</span>
+0123     delta_par1    = par_pert1 - par;
+0124 
+0125     [nkinetics, Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert1,ind_ext,network);
+0126     s_pert1            = c + RS * delta_par1(ind_rel_par) + 0. * RS2diag(:,it) * delta_par1(it)^2 + 0. * RS2diag(:,k) * delta_par1(k)^2; 
+0127     s_pert1(ind_ext)   = Sext_pert;
+0128     network1.kinetics = nkinetics;
+0129     [s_pert1,v_pert1]   = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert1,T,L_int,NR_int,indep_met_int);    
+0130 
+0131     my_RJ2_1 = [v_pert1 - v - RJ * delta_par1(ind_rel_par) <span class="keyword">...</span>
+0132                 - 1/2 * RJ2diag(:,[it,k]) *  delta_par1([it,k]).^2] <span class="keyword">...</span>
+0133         / prod(delta_par1([it,k]));
+0134     
+0135     my_RS2_1 = [s_pert1 - c - RS * delta_par1(ind_rel_par) <span class="keyword">...</span>
+0136                 - 1/2 * RS2diag(:,[it,k]) * delta_par1([it,k]).^2] <span class="keyword">...</span>
+0137         / prod(delta_par1([it,k]));
+0138 
+0139     <span class="comment">%% -----------------------------------------</span>
+0140     <span class="comment">%% both parameters decreased</span>
+0141 
+0142     par_pert2     = par; 
+0143     par_pert2(it) = par(it)*(1-delta); 
+0144     par_pert2(k)  = par(k) *(1-delta);
+0145     <span class="keyword">if</span> par_pert2(it)==0, par_pert2(it) = -10^-5; <span class="keyword">end</span> 
+0146     <span class="keyword">if</span> par_pert2(k) ==0, par_pert2(k)  = -10^-5; <span class="keyword">end</span>
+0147     delta_par2      = par_pert2 - par;
+0148     [nkinetics, Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert2,ind_ext,network);
+0149     s_pert2            = c + RS * delta_par2(ind_rel_par) + 0. * RS2diag(:,it) * delta_par2(it)^2 + 0. * RS2diag(:,k) * delta_par2(k)^2; 
+0150     s_pert2(ind_ext)   = Sext_pert;
+0151     network1.kinetics  = nkinetics;
+0152     [s_pert2,v_pert2]  = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert2,T,L_int,NR_int,indep_met_int);
+0153 
+0154     my_RS2_2 = [s_pert1 - c - RS * delta_par1(ind_rel_par) <span class="keyword">...</span>
+0155                 - 1/2 * RS2diag(:,[it,k]) *  delta_par2([it,k]).^2] <span class="keyword">...</span>
+0156         / prod(delta_par2([it,k]));
+0157 
+0158     my_RJ2_2 = [v_pert2 - v - RJ * delta_par2(ind_rel_par) <span class="keyword">...</span>
+0159                 - 1/2 * RJ2diag(:,[it,k]) * delta_par2([it,k]).^2] <span class="keyword">...</span>
+0160         / prod(delta_par2([it,k]));
+0161 
+0162     my_RS2 = 1/2 * [my_RS2_1 + my_RS2_2];
+0163     my_RJ2 = 1/2 * [my_RJ2_1 + my_RJ2_2];
+0164 
+0165     RS2(:,it,k) = my_RS2;
+0166     RJ2(:,it,k) = my_RJ2;
+0167     RS2(:,k,it) = my_RS2;
+0168     RJ2(:,k,it) = my_RJ2;
+0169  
+0170   <span class="keyword">end</span>
+0171 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

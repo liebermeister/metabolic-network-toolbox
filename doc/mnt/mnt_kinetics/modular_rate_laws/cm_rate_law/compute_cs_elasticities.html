@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of compute_cs_elasticities</title>
+  <meta name="keywords" content="compute_cs_elasticities">
+  <meta name="description" content="E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">cm_rate_law</a> &gt; compute_cs_elasticities.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/cm_rate_law&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>compute_cs_elasticities
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>	[beta_A, gamma_A] = alpha_to_betagamma(alpha_A)</li><li><a href="../../../../mnt/mnt_mca/second_derivative_scaled2unscaled.html" class="code" title="function D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)">second_derivative_scaled2unscaled</a>	D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)</li><li><a href="../../../../mnt/mnt_mca/second_derivative_unscaled2scaled.html" class="code" title="function D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)">second_derivative_unscaled2scaled</a>	D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)</li><li><a href="../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>	[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</a>
+0002 
+0003 <span class="comment">% E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</span>
+0004 
+0005 <span class="comment">% THIS SCRIPT HAS NOT BEEEN CAREFULLY TESTED YET!!!!!</span>
+0006 
+0007 [nm,nr] = size(N);
+0008 v       = vplus  - vminus;
+0009 zeta    = vplus ./ vminus;
+0010 
+0011 <span class="comment">% -----------------------------------------------</span>
+0012 <span class="comment">% structure matrices and saturation values</span>
+0013 
+0014 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = <a href="../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(N,W,ext_ind);
+0015 
+0016 [beta_A,gamma_A] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_A);
+0017 [beta_I,gamma_I] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_I);
+0018 [beta_M,gamma_M] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_M);
+0019 
+0020 <span class="comment">% -----------------------------------------------</span>
+0021 <span class="comment">% scaled first-order metabolite elasticities</span>
+0022 
+0023 alpha_M( find((Mplus==0).*(Mminus==0)) ) = 1;       <span class="comment">% irrelevant elements</span>
+0024 psi_plus          = prod((1./alpha_M) .^ Mplus,2);
+0025 psi_minus         = prod((1./alpha_M) .^ Mminus,2);
+0026 D                 = psi_plus + psi_minus - 1;
+0027 
+0028 <span class="comment">% -----------------------------------------------</span>
+0029 <span class="comment">% fraction in formula for elasticities (arises from denominator term in kinetics)</span>
+0030 
+0031 saturation_term =  diag(1./D) * [ diag(psi_plus) * Mplus + diag(psi_minus) *  Mminus ];
+0032 
+0033 E.sc_E_plus_c  =  Wplus .* alpha_A - Wminus .* beta_I + Mplus  - beta_M .* saturation_term;
+0034 E.sc_E_minus_c =  Wplus .* alpha_A - Wminus .* beta_I + Mminus - beta_M .* saturation_term;
+0035 E.sc_E_c       = repmat(1./(zeta-1),1,nm) .* [repmat(zeta,1,nm) .* E.sc_E_plus_c - E.sc_E_minus_c];
+0036 
+0037 <span class="comment">% -----------------------------------------------------------------------------------</span>
+0038 <span class="comment">% unscaled first-order elasticities</span>
+0039 
+0040 E.un_E_plus_c   = diag(vplus)  * E.sc_E_plus_c  * diag(1./c)  ;
+0041 E.un_E_minus_c  = diag(vminus) * E.sc_E_minus_c * diag(1./c)  ;
+0042 E.un_E_c        = E.un_E_plus_c - E.un_E_minus_c;
+0043 
+0044 <span class="comment">% -----------------------------------------------</span>
+0045 <span class="comment">% scaled, directed second-order metabolite elasticities</span>
+0046 
+0047 E.sc_E_plus_cc   = zeros(nr,nm,nm);
+0048 E.sc_E_minus_cc  = zeros(nr,nm,nm);
+0049 
+0050 <span class="comment">% 2nd term</span>
+0051 
+0052 <span class="keyword">for</span> it = 1:nr,
+0053   E.sc_E_plus_cc(it,:,:) = - [ beta_M(it,:)' * beta_M(it,:) ] .* <span class="keyword">...</span>
+0054       [ [psi_plus(it) * Mplus(it,:)' * Mplus(it,:) + <span class="keyword">...</span>
+0055          psi_minus(it) * Mminus(it,:)'* Mminus(it,:)] <span class="keyword">...</span>
+0056         ./ D(it) <span class="keyword">...</span>
+0057       - <span class="keyword">...</span>
+0058       [ [psi_plus(it) * Mplus(it,:) + psi_minus(it) * Mminus(it,:)]' * <span class="keyword">...</span>
+0059         [psi_plus(it) * Mplus(it,:) + psi_minus(it) * Mminus(it,:)] ] <span class="keyword">...</span>
+0060         ./ D(it) ^2 <span class="keyword">...</span>
+0061       ];
+0062 <span class="keyword">end</span>
+0063 
+0064 E.sc_E_plus_cc = E.sc_E_minus_cc;
+0065 
+0066 <span class="comment">% 1st, diagonal term</span>
+0067 diagonal_plus  =  Wplus .* gamma_A + Wminus .* gamma_I + gamma_M .* saturation_term;
+0068 diagonal_minus =  Wplus .* gamma_A + Wminus .* gamma_I + gamma_M .* saturation_term;
+0069 
+0070 <span class="keyword">for</span> it = 1:nm,  
+0071   E.sc_E_plus_cc(:,it,it)  = E.sc_E_plus_cc(:,it,it)  - diagonal_plus(:,it); 
+0072   E.sc_E_minus_cc(:,it,it) = E.sc_E_minus_cc(:,it,it) - diagonal_minus(:,it); 
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% -----------------------------------------------------------------------------------</span>
+0076 <span class="comment">% second order metabolite elasticities</span>
+0077 
+0078 E.un_E_plus_cc  = <a href="../../../../mnt/mnt_mca/second_derivative_scaled2unscaled.html" class="code" title="function D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)">second_derivative_scaled2unscaled</a>(E.sc_E_plus_cc,E.sc_E_plus_c,vplus,c);
+0079 E.un_E_minus_cc = <a href="../../../../mnt/mnt_mca/second_derivative_scaled2unscaled.html" class="code" title="function D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)">second_derivative_scaled2unscaled</a>(E.sc_E_minus_cc,E.sc_E_minus_c,vminus,c);
+0080 E.un_E_cc       = E.un_E_plus_cc - E.un_E_minus_cc;                        
+0081 E.sc_E_cc       = <a href="../../../../mnt/mnt_mca/second_derivative_unscaled2scaled.html" class="code" title="function D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)">second_derivative_unscaled2scaled</a>(E.un_E_cc,E.un_E_c,v,c);
+0082 
+0083 <span class="comment">% -----------------------------------------------</span>
+0084 <span class="comment">% first order enzyme elasticities</span>
+0085 
+0086 E.sc_E_plus_u    = speye(nr);
+0087 E.sc_E_minus_u   = speye(nr);
+0088 E.sc_E_u         = speye(nr);
+0089 
+0090 E.un_E_plus_u   = diag(vplus./u);
+0091 E.un_E_minus_u  = diag(vminus./u);
+0092 E.un_E_u        = diag(v./u);
+0093 
+0094 <span class="comment">% -----------------------------------------------</span>
+0095 <span class="comment">% second order mixed metabolite/enzyme elasticities</span>
+0096 
+0097 E.un_E_plus_cu   = zeros(nr,nm,nr);
+0098 E.un_E_minus_cu  = zeros(nr,nm,nr);
+0099 E.un_E_cu        = zeros(nr,nm,nr);
+0100 
+0101 <span class="keyword">for</span> it = 1:nr,
+0102   E.un_E_plus_cu(it,:,it)  = E.un_E_plus_c(it,:)  / u(it);
+0103   E.un_E_minus_cu(it,:,it) = E.un_E_minus_c(it,:) / u(it);
+0104   E.un_E_cu(it,:,it)       = E.un_E_c(it,:)       / u(it);
+0105 <span class="keyword">end</span>
+0106 
+0107 E.sc_E_plus_cu  = zeros(nr,nm,nr);
+0108 E.sc_E_minus_cu = zeros(nr,nm,nr);
+0109 E.sc_E_cu       = zeros(nr,nm,nr);
+0110 
+0111 <span class="comment">% -----------------------------------------------</span>
+0112 <span class="comment">% second order enzyme elasticities</span>
+0113 
+0114 E.sc_E_plus_uu   = zeros(nr,nr,nr);
+0115 E.sc_E_minus_uu  = zeros(nr,nr,nr);
+0116 E.sc_E_plus_uu   = zeros(nr,nr,nr);
+0117 E.sc_E_minus_uu  = zeros(nr,nr,nr);
+0118 E.sc_E_uu        = zeros(nr,nr,nr);
+0119 
+0120 E.un_E_plus_uu   = zeros(nr,nr,nr);
+0121 E.un_E_minus_uu  = zeros(nr,nr,nr);
+0122 E.un_E_plus_uu   = zeros(nr,nr,nr);
+0123 E.un_E_minus_uu  = zeros(nr,nr,nr);
+0124 E.un_E_uu        = zeros(nr,nr,nr);</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

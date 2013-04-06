@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of file2str</title>
+  <meta name="keywords" content="file2str">
+  <meta name="description" content="FILE2STR reads textfile intoa single long string">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">util</a> &gt; <a href="../index.html">xml</a> &gt; <a href="index.html">XML4MAT</a> &gt; file2str.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/util/xml/XML4MAT&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>file2str
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>FILE2STR reads textfile intoa single long string</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function y=file2str(x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">FILE2STR reads textfile intoa single long string
+
+ Syntax: y=file2str(x)
+
+ Description
+   x is a filename
+   y is the long string with all contents
+
+ Jonas Almeida, almeidaj@musc.edu, 30 June 2003, MAT4NAT Tbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="xml2cell.html" class="code" title="function [y,varname]=xml2cell(filename_or_xml_string,plt)">xml2cell</a>	XML2CELL reads non-MbML compliant xmlfile into matlab nested cell arrays</li><li><a href="xml2mat.html" class="code" title="function [MAT,VARNAME,tag_contents]=xml2mat(XML)">xml2mat</a>	XML2MAT converts XML string into matlab structure variable</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y=file2str(x)</a>
+0002 
+0003 <span class="comment">%FILE2STR reads textfile intoa single long string</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax: y=file2str(x)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Description</span>
+0008 <span class="comment">%   x is a filename</span>
+0009 <span class="comment">%   y is the long string with all contents</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Jonas Almeida, almeidaj@musc.edu, 30 June 2003, MAT4NAT Tbox</span>
+0012 
+0013 
+0014 fid=fopen(x,<span class="string">'r'</span>);
+0015 i=1;
+0016 <span class="keyword">while</span> ~feof(fid)
+0017    y{i}=fgetl(fid);
+0018    i=i+1;
+0019 <span class="keyword">end</span>
+0020 fclose(fid);
+0021 y=strcat(y{:});</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 15:19:47 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

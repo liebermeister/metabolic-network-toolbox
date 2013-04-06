@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of compute_modular_response_second</title>
+  <meta name="keywords" content="compute_modular_response_second">
+  <meta name="description" content="[Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">modular_rate_law_functions</a> &gt; compute_modular_response_second.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>compute_modular_response_second
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>[Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)
+
+ Efficient calculation of scaled response coefficients for a target function z
+
+ The LOGARITHM of z must be a LINEAR function of the LOGARITHMIC 
+ concentrations and fluxes
+
+ zc_scaled, zv_scaled: scaled derivatives of target function by c and v
+ v_plus_fallback and v_minus_fallback must be given whenever v contains zero values</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="compute_modular_elasticities.html" class="code" title="function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, flag_second_order)">compute_modular_elasticities</a>	E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback,flag_second_order)</li><li><a href="compute_modular_elasticities_second.html" class="code" title="function E_target = compute_modular_elasticities_second(z,kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback)">compute_modular_elasticities_second</a>	E_target = compute_modular_elasticities_second(z,kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback)</li><li><a href="../../../../mnt/mnt_mca/control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="../../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function X = lim(X,maxv);</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)</a>
+0002 
+0003 <span class="comment">% [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Efficient calculation of scaled response coefficients for a target function z</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% The LOGARITHM of z must be a LINEAR function of the LOGARITHMIC</span>
+0008 <span class="comment">% concentrations and fluxes</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% zc_scaled, zv_scaled: scaled derivatives of target function by c and v</span>
+0011 <span class="comment">% v_plus_fallback and v_minus_fallback must be given whenever v contains zero values</span>
+0012 
+0013 <span class="comment">% upper limit for elasticities and other stuff (to avoid numerical trouble)</span>
+0014 
+0015 eval(<a href="../../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'v_plus_fallback'</span>,<span class="string">'1'</span>, <span class="string">'v_minus_fallback'</span>,<span class="string">'1'</span>));
+0016 
+0017 maxv = 10^20; 
+0018 
+0019 [nm,nr] = size(N);
+0020 
+0021 <span class="keyword">if</span> ~length(zc_scaled), zc_scaled = 0 * c; <span class="keyword">end</span>
+0022 <span class="keyword">if</span> ~length(zc_scaled), zv_scaled = 0 * v; <span class="keyword">end</span>
+0023 
+0024 zy = [c .* zc_scaled; v .* zv_scaled];
+0025 
+0026 z = sum(zy); 
+0027 
+0028 Elasticities = <a href="compute_modular_elasticities.html" class="code" title="function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, flag_second_order)">compute_modular_elasticities</a>(<span class="keyword">...</span>
+0029     kinetic_law,N,W,ind_ext,alpha_A,alpha_I,alpha_M, <span class="keyword">...</span>
+0030     v,A,u,c,h,v_plus_fallback,v_minus_fallback,0);
+0031 
+0032 Ec_sc  = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(Elasticities.sc_E_c, maxv);  <span class="comment">% lim : dirty fix</span>
+0033 Eu_sc  = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(Elasticities.sc_E_u, maxv);  <span class="comment">% lim : dirty fix</span>
+0034 ext    = zeros(nm,1); ext(ind_ext) = 1;
+0035 
+0036 <span class="keyword">if</span> ~exist(<span class="string">'CS_un'</span>,<span class="string">'var'</span>),
+0037   ext = zeros(size(N,1));
+0038   ext(ind_ext) = 1;
+0039   [CJ_un, CS_un] = <a href="../../../../mnt/mnt_mca/control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>(N, Elasticities.un_E_c, ext);
+0040 <span class="keyword">end</span>
+0041 
+0042 CS_sc  = diag(1./c) * CS_un * diag(v); 
+0043 CJ_sc  = diag(1./v) * CJ_un * diag(v); 
+0044 RSu_sc = CS_sc * Eu_sc;
+0045 RJu_sc = CJ_sc * Eu_sc;
+0046 
+0047 a      = zy' * [CS_sc; CJ_sc];
+0048 
+0049 E_target = <a href="compute_modular_elasticities_second.html" class="code" title="function E_target = compute_modular_elasticities_second(z,kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback)">compute_modular_elasticities_second</a>(<span class="keyword">...</span>
+0050     a',kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, <span class="keyword">...</span>
+0051     A, u, c, h, v_plus_fallback, v_minus_fallback);
+0052 
+0053 bc     = a * Ec_sc;
+0054 bu     = a * Eu_sc;
+0055 Bcc    = E_target.sc_E_cc;
+0056 Bcu    = E_target.sc_E_cu;
+0057 Buc    = E_target.sc_E_cu';
+0058 Buu    = E_target.sc_E_uu;
+0059 
+0060 <span class="comment">% Limit values (it would be better to understand their reasons ..)</span>
+0061 
+0062 a      = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(a,  maxv);
+0063 bc     = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(bc, maxv);
+0064 bu     = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(bu, maxv);
+0065 Bcc    = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(Bcc,maxv);
+0066 Bcu    = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(Bcu,maxv);
+0067 Buc    = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(Buc,maxv);
+0068 Buu    = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(Buu,maxv);
+0069 RSu_sc = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(RSu_sc,maxv);
+0070 RJu_sc = <a href="#_sub1" class="code" title="subfunction X = lim(X,maxv);">lim</a>(RJu_sc,maxv);
+0071 
+0072 Rtarget_sc_u = 1/z * column([zy' * [RSu_sc; RJu_sc] * diag(u)])';
+0073 
+0074 Rtarget_sc_uu = 1/z * <span class="keyword">...</span>
+0075     RSu_sc' * [Bcc + Ec_sc' * diag(a) * Ec_sc - diag(bc)] * RSu_sc <span class="keyword">...</span>
+0076     + RSu_sc' * [Bcu + Ec_sc' * diag(a) * Eu_sc] <span class="keyword">...</span>
+0077     + [Buc + Eu_sc' * diag(a) * Ec_sc] * RSu_sc <span class="keyword">...</span>
+0078     + [Buu + Eu_sc' * diag(a) * Eu_sc - diag(bu)] <span class="keyword">...</span>
+0079     - [RSu_sc; RJu_sc]' * diag(zy) * [RSu_sc; RJu_sc] <span class="keyword">...</span>
+0080     + diag( zy' * [RSu_sc; RJu_sc] );
+0081 
+0082 
+0083 <span class="comment">% ---------------------------------------------------</span>
+0084 <span class="comment">% limit values in X to absolute values below maxv</span>
+0085 <span class="comment">% replace missing or infinite values by 0</span>
+0086 
+0087 <a name="_sub1" href="#_subfunctions" class="code">function X = lim(X,maxv);</a>
+0088 
+0089 <span class="keyword">if</span> find(abs(X)&gt;maxv), 
+0090   warning(<span class="string">'Extremely large values encountered; replaing them by threshold values'</span>);
+0091 <span class="keyword">end</span>
+0092   
+0093 X(~isfinite(X)) = 0;
+0094 X(X&gt;maxv)       = maxv;
+0095 X(X&lt;-maxv)      = -maxv;</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
