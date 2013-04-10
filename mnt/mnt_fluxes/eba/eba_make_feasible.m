@@ -19,7 +19,7 @@ eval(default('eba_condition','''strict''','C','nan','ind_ignore','[]','cycle_met
 v_orig = v;
 
 if isnan(C),
-  display('Computing elementary cycles. This may take a while');
+  display(sprintf('\n  Computing elementary cycles. This may take a while'));
   switch cycle_method,
     case 'beard',
       C = eba_my_cycles(N,C,ind_ignore);
@@ -63,4 +63,4 @@ while ~feasible,
   ind_violated
 end
 
-if feasible, display('Feasible flux distribution found'); end
+if feasible, display('  Feasible flux distribution found'); end

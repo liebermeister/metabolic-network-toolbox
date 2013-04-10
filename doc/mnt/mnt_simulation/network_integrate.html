@@ -50,10 +50,10 @@ x_assign   values of variables giuven by assignment rules
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="network_integrate_kin.html" class="code" title="function [t,x,v,t_pre,x_pre,p,p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external)">network_integrate_kin</a>	[t,x,v,t_pre,x_pre,p_p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external)</li><li><a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="network_integrate_kin.html" class="code" title="function [t,x,v,t_pre,x_pre,p,p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external)">network_integrate_kin</a>	[t,x,v,t_pre,x_pre,p_p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li><li><a href="network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li></ul>
+<li><a href="../../demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -97,7 +97,7 @@ This function is called by:
 0034 
 0035 <span class="keyword">if</span> ~isempty(network.kinetics.assignment_function),
 0036   [dd,ddd] = feval(network.kinetics.assignment_function,s_init,network.kinetics.parameters);
-0037   ind_assignment = <a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(ddd, network.metabolites);
+0037   ind_assignment = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(ddd, network.metabolites);
 0038   ind_assignment = ind_assignment(find(ind_assignment));
 0039   network.external(ind_assignment) = 1;
 0040 <span class="keyword">else</span>
@@ -177,7 +177,7 @@ This function is called by:
 0114   <span class="keyword">for</span> it = 1:length(t),
 0115     this_s = s_t(:,it);
 0116     [this_assignment,ddd] = feval(network.kinetics.assignment_function,this_s,network.kinetics.parameters);
-0117     ii = <a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(ddd,network.metabolites); ii = ii(find(ii));
+0117     ii = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(ddd,network.metabolites); ii = ii(find(ii));
 0118     s_t(ind_assignment,it) = this_assignment(ii);
 0119    <span class="keyword">end</span>
 0120 <span class="keyword">end</span>
@@ -254,6 +254,6 @@ This function is called by:
 0191 
 0192 display(<span class="string">'Calculation time exceeded'</span>);
 0193 error</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -15,6 +15,10 @@
 
 function [network,s] = network_sbml_import(s,dirname,verbose)
 
+if ~exist('TranslateSBML','file'),
+  error('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.');
+end
+
 eval(default('verbose','0'));
 
 create_annotations = 0;   % CONSTRUCT UNIQUE ANNOTATIONS ?

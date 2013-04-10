@@ -38,7 +38,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/mnt_network/network_build_edit/network_subnetwork.html" class="code" title="function [subnetwork,ind_m] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>	subnetwork = network_subnetwork(network,ind_m,ind_r, omit_isolated_metabolites)</li><li><a href="../../mnt/mnt_network/network_query/network_find_metabolites.html" class="code" title="function ind = network_find_metabolites(network,metabolite)">network_find_metabolites</a>	indices = network_find_metabolites(network,metabolites)</li></ul>
+<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/mnt_network/network_build_edit/network_subnetwork.html" class="code" title="function [subnetwork,ind_m] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>	subnetwork = network_subnetwork(network,ind_m,ind_r, omit_isolated_metabolites)</li><li><a href="../../mnt/mnt_network/network_query/network_find_metabolites.html" class="code" title="function ind = network_find_metabolites(network,metabolite)">network_find_metabolites</a>	indices = network_find_metabolites(network,metabolites)</li><li><a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="netgraph_cofactor_graphs.html" class="code" title="function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)">netgraph_cofactor_graphs</a>	[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</li><li><a href="netgraph_flux_in_large_network.html" class="code" title="function [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)">netgraph_flux_in_large_network</a>	[nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</li></ul>
@@ -76,8 +76,8 @@ This function is called by:
 0027   n2 = <a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(n2);
 0028 <span class="keyword">end</span>
 0029   
-0030 n2.graphics_par.metabolite_mapping = column(keep_met);
-0031 n2.graphics_par.reaction_mapping   = column(keep_react);
+0030 n2.graphics_par.metabolite_mapping = <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(keep_met);
+0031 n2.graphics_par.reaction_mapping   = <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(keep_react);
 0032 n2.graphics_par.metvalues = [];
 0033 n2.graphics_par.actvalues = [];
 0034 
@@ -89,6 +89,6 @@ This function is called by:
 0040   n2.graphics_par.figure_position  = n1.graphics_par.figure_position;
 0041 <span class="keyword">end</span>
 0042 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

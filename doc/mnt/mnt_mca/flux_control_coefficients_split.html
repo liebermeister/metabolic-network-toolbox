@@ -52,7 +52,7 @@ OUTPUTS
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../../mnt/util/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li></ul>
+<li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -107,8 +107,8 @@ This function is called by:
 0044 CCS = zeros(n_metab_int+length(external),n_react); 
 0045 CCS(internal,:) = C_S; C_S = CCS; 
 0046 
-0047 C_J = <a href="../../mnt/util/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_J);
-0048 C_S = <a href="../../mnt/util/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_S);
+0047 C_J = <a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_J);
+0048 C_S = <a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_S);
 0049 
 0050 C_J(:,find(1-used))=0;
 0051 C_J(find(1-used),:)=0;
@@ -125,6 +125,6 @@ This function is called by:
 0062 <span class="comment">%    C_S2 =   tensor_product(C_S,Gamma);</span>
 0063 <span class="comment">%    C_J2 =   tensor_product(C_J,Gamma);</span>
 0064 <span class="comment">%end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

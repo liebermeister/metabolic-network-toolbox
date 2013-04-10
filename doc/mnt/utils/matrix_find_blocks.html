@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of matrix_find_blocks</title>
+  <meta name="keywords" content="matrix_find_blocks">
+  <meta name="description" content="find blocks in matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">utils</a> &gt; matrix_find_blocks.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>matrix_find_blocks
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>find blocks in matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function blocks = matrix_find_blocks(L_act) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> find blocks in matrix</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function blocks = matrix_find_blocks(L_act)</a>
+0002 
+0003 <span class="comment">% find blocks in matrix</span>
+0004 
+0005 jj_list = 1:size(L_act,2);
+0006 blocks = {};
+0007 <span class="keyword">while</span> length(jj_list),
+0008   it = jj_list(1);
+0009   ii = find(L_act(:,it)); 
+0010   <span class="keyword">if</span> length(ii)==1,
+0011     my_ii = ii;
+0012     my_jj = it;
+0013   <span class="keyword">else</span>,
+0014     my_ii = ii;
+0015     my_jj = find(sum(L_act(ii,:)~=0));
+0016     <span class="keyword">while</span> length(it)~=length(my_jj),
+0017       it = my_jj;
+0018       my_ii = find(sum(L_act(:,it)~=0,2)); 
+0019       my_jj = find(sum(L_act(ii,:)~=0));
+0020     <span class="keyword">end</span>
+0021   <span class="keyword">end</span>
+0022   blocks = [blocks;struct(<span class="string">'columns'</span>,my_jj,<span class="string">'rows'</span>,my_ii)];
+0023   jj_list = setdiff(jj_list,my_jj);
+0024 <span class="keyword">end</span>
+0025</pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

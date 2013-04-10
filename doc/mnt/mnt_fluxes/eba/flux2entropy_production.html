@@ -35,7 +35,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="../../../mnt/mnt_graphics/netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li><li><a href="../../../mnt/mnt_network/network_query/network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>	NETWORK_ANALYSE - Analyse a metabolic network structure</li></ul>
+<li><a href="flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="../../../mnt/mnt_graphics/netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li><li><a href="../../../mnt/mnt_network/network_query/network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>	NETWORK_ANALYSE - Analyse a metabolic network structure</li><li><a href="../../../mnt/utils/matrix_add_block.html" class="code" title="function M = matrix_add_block(A,B);">matrix_add_block</a>	M = matrix_add_block(A,B);</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li></ul>
@@ -78,7 +78,7 @@ This function is called by:
 0032 <span class="comment">% and  sum(R.^2) -&gt; min</span>
 0033 <span class="comment">% and  R &gt;= 0</span>
 0034 
-0035 M   = matrix_add_block(eye(nr),zeros(n_int));
+0035 M   = <a href="../../../mnt/utils/matrix_add_block.html" class="code" title="function M = matrix_add_block(A,B);">matrix_add_block</a>(eye(nr),zeros(n_int));
 0036 f   = zeros(nr+n_int,1);
 0037 Aeq = [diag(v), N_int'];
 0038 beq = - N_ext' * mu_ext;
@@ -88,6 +88,6 @@ This function is called by:
 0042 mu(ind_ext,1) = mu_ext;
 0043 mu(ind_int,1) = x(nr+1:end);
 0044 A   = -network.N' * mu;</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

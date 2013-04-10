@@ -1,11 +1,13 @@
-function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);
+function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network,verbose)
 
 % kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);
 
-eval(default('flag_pseudo_values','0'));
+eval(default('flag_pseudo_values','0','verbose','1'));
 
 if flag_pseudo_values,
-  display('Replacing missing data values by pseudo values');
+  if verbose, 
+    display('  Replacing missing data values by pseudo values');
+  end
 end
 
 fn = fieldnames(kinetic_data);

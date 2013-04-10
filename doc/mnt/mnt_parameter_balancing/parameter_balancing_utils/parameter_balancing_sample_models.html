@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_sample_models</title>
+  <meta name="keywords" content="parameter_balancing_sample_models">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_parameter_balancing</a> &gt; <a href="index.html">parameter_balancing_utils</a> &gt; parameter_balancing_sample_models.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_parameter_balancing/parameter_balancing_utils&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_sample_models
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [v, kinetics_list] = parameter_balancing_sample_models(task,kinetics_sample,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/cs_rate_law/set_cs_kinetics.html" class="code" title="function kinetics = set_cs_kinetics(network,parameters)">set_cs_kinetics</a>	kinetics = set_cs_kinetics(network,parameters)</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_kcat_to_Keq_KV.html" class="code" title="function [Keq,KV] = ms_KM_kcat_to_Keq_KV(N,kinetics,KM,kcatplus,kcatminus);">ms_KM_kcat_to_Keq_KV</a>	[Keq,KV] = ms_KM_kcat_to_Keq_KV(N,kinetics,KM,kcatplus,kcatminus);</li><li><a href="../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="parameter_balancing_constrained_sampling.html" class="code" title="function [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)">parameter_balancing_constrained_sampling</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v, kinetics_list] = parameter_balancing_sample_models(task,kinetics_sample,options)</a>
+0002 
+0003 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>));
+0004 options_default = struct(<span class="string">'compute_v'</span>,1,<span class="string">'construct_models'</span>,<span class="string">'1'</span>,<span class="string">'ind_samples'</span>,[],<span class="string">'n_sample'</span>,[]);
+0005 options = <a href="../../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(options_default,options);
+0006 
+0007 v = [];
+0008   
+0009 [nr,nm,nx,KM_indices,KA_indices,KI_indices] = <a href="../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(task.network);
+0010 
+0011 <span class="keyword">if</span> isempty(options.n_sample),    options.n_sample = size(kinetics_sample.c,2); <span class="keyword">end</span> 
+0012 <span class="keyword">if</span> isempty(options.ind_samples), options.ind_samples = 1:options.n_sample; <span class="keyword">end</span> 
+0013 
+0014 <span class="keyword">for</span> it1 = 1:length(options.ind_samples),
+0015   it = options.ind_samples(it1);
+0016   nn = task.network;
+0017   kinetics                = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/cs_rate_law/set_cs_kinetics.html" class="code" title="function kinetics = set_cs_kinetics(network,parameters)">set_cs_kinetics</a>(nn);
+0018   <span class="keyword">if</span> isfield(kinetics_sample,<span class="string">'Kcatf'</span>),
+0019     kcatplus                = kinetics_sample.Kcatf(:,it);
+0020     kcatminus               = kinetics_sample.Kcatr(:,it);
+0021     [kinetics.Keq,kinetics.KV] = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_kcat_to_Keq_KV.html" class="code" title="function [Keq,KV] = ms_KM_kcat_to_Keq_KV(N,kinetics,KM,kcatplus,kcatminus);">ms_KM_kcat_to_Keq_KV</a>(task.network.N,kinetics,kinetics.KM,kcatplus,kcatminus);
+0022     kinetics.Kcatf = kcatplus;
+0023     kinetics.Kcatr = kcatminus;
+0024   <span class="keyword">else</span>,
+0025     kinetics.Keq            = kinetics_sample.Keq(:,it);
+0026     kinetics.KV             = kinetics_sample.KV(:,it);
+0027   <span class="keyword">end</span>
+0028   kinetics.KM(KM_indices) = kinetics_sample.KM(:,it);
+0029   kinetics.KA(KA_indices) = kinetics_sample.KA(:,it);
+0030   kinetics.KI(KI_indices) = kinetics_sample.KI(:,it);
+0031   <span class="keyword">if</span> isfield(kinetics_sample,<span class="string">'u'</span>),
+0032     kinetics.u   =  kinetics_sample.u(:,it);
+0033   <span class="keyword">end</span>
+0034   <span class="keyword">if</span> isfield(kinetics_sample,<span class="string">'c'</span>),
+0035     kinetics.c   =  kinetics_sample.c(:,it); 
+0036   <span class="keyword">end</span>
+0037   <span class="keyword">if</span> options.compute_v, 
+0038     v(:,it1)  = <a href="../../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(kinetics.c,task.network,kinetics);
+0039    <span class="keyword">end</span> 
+0040   <span class="keyword">if</span> options.construct_models, 
+0041     kinetics_list{it1} = kinetics;
+0042   <span class="keyword">end</span> 
+0043   
+0044 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

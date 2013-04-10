@@ -108,7 +108,7 @@ This function is called by:
 0048 b_eq = [fba_constraints.v_fix(ind_fix); benefit];
 0049 
 0050 g1   = inline(<span class="string">'sum(abs(K*vred))'</span>,<span class="string">'vred'</span>,<span class="string">'K'</span>);
-0051 opt  = optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'MaxIter'</span>,10^10,<span class="string">'MaxFunEvals'</span>,10^10);
+0051 opt  = optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'MaxIter'</span>,10^10,<span class="string">'MaxFunEvals'</span>,10^10,<span class="string">'Algorithm'</span>,<span class="string">'active-set'</span>);
 0052 
 0053 <span class="comment">% check</span>
 0054 <span class="comment">%  v0 &gt;= v_min</span>
@@ -128,6 +128,6 @@ This function is called by:
 0068 <span class="keyword">end</span>
 0069 
 0070 v = K * vred;</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

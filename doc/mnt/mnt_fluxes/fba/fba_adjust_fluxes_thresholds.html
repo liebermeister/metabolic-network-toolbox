@@ -4,7 +4,7 @@
 <head>
   <title>Description of fba_adjust_fluxes_thresholds</title>
   <meta name="keywords" content="fba_adjust_fluxes_thresholds">
-  <meta name="description" content="constraints = fba_adjust_fluxes_thresholds(network,constraints)">
+  <meta name="description" content="fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,19 +21,19 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>constraints = fba_adjust_fluxes_thresholds(network,constraints)</strong></div>
+<div class="box"><strong>fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function constraints = fba_adjust_fluxes_thresholds(network,constraints) </strong></div>
+<div class="box"><strong>function fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> constraints = fba_adjust_fluxes_thresholds(network,constraints)</pre></div>
+<div class="fragment"><pre class="comment"> fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -42,25 +42,25 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function constraints = fba_adjust_fluxes_thresholds(network,constraints)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)</a>
 0002 
-0003 <span class="comment">% constraints = fba_adjust_fluxes_thresholds(network,constraints)</span>
+0003 <span class="comment">% fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)</span>
 0004 
-0005 <span class="keyword">if</span> isfield(constraints,<span class="string">'vrange'</span>),
-0006   constraints.v_min = constraints.vrange(:,1);
-0007   constraints.v_max = constraints.vrange(:,2);
+0005 <span class="keyword">if</span> isfield(fba_constraints,<span class="string">'vrange'</span>),
+0006   fba_constraints.v_min = fba_constraints.vrange(:,1);
+0007   fba_constraints.v_max = fba_constraints.vrange(:,2);
 0008 <span class="keyword">end</span>
 0009 
-0010 <span class="keyword">if</span> isfield(constraints,<span class="string">'v_sign'</span>),
-0011   constraints.v_max(constraints.v_sign&lt;0)=0;
-0012   constraints.v_min(constraints.v_sign&gt;0)=0;
+0010 <span class="keyword">if</span> isfield(fba_constraints,<span class="string">'v_sign'</span>),
+0011   fba_constraints.v_max(fba_constraints.v_sign&lt;0)=0;
+0012   fba_constraints.v_min(fba_constraints.v_sign&gt;0)=0;
 0013 <span class="keyword">end</span>
 0014 
-0015 ind_zero_conc = <a href="../../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(constraints.zero_metab,network.metabolites);
+0015 ind_zero_conc = <a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(fba_constraints.zero_metab,network.metabolites);
 0016 
 0017 ind_zero_conc = ind_zero_conc(find(ind_zero_conc));
-0018 constraints.v_max(find(sum(network.N(ind_zero_conc,:)&lt;0,1))) = 0;
-0019 constraints.v_min(find(sum(network.N(ind_zero_conc,:)&gt;0,1))) = 0;</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0018 fba_constraints.v_max(find(sum(network.N(ind_zero_conc,:)&lt;0,1))) = 0;
+0019 fba_constraints.v_min(find(sum(network.N(ind_zero_conc,:)&gt;0,1))) = 0;</pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

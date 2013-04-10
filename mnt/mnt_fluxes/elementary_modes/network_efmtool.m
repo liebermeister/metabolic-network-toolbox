@@ -14,7 +14,7 @@ function [C, mnet] = network_efmtool(network, method, ind_ignore, zv)
 a = pwd;
 
 if ~exist('CalculateFluxModes','file')
-  error('Please install efmtool for computing elementary flux modes');
+  error('Please install the efmtool Toolbox (http://www.csb.ethz.ch/tools/efmtool) - Otherwise certain flux analysis functions will not work.');
 end
   
 cd /home/wolfram/matlab_fixed/packages/efmtool/

@@ -1,36 +1,36 @@
-%SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
-%
-%Export network (data type from mnt) to libSBML's SBMLModel data type
-%
-%ARGUMENTS
-% network   (network structure) network
-% name      (string, optional)  model name
-% notes     (string, optional)
-%
-%If the argument filename (string) is given, the
-%model is directly written to an SBML (.xml) file
-%(in the present directory. no path can be given)
-%
-%You can also use SaveSBMLModel(SBMLmodel) from the SBMLToolbox
-%to save the model to a .mat file, or OutputSBML(SBMLmodel,filename);
-%to export it to an SBML (.xml) file
-%
-%This function requiers the SBMLToolbox
-%(see http://sbml.org/software/sbmltoolbox/)
+% SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
+% 
+% Export network (data type from mnt) to libSBML's SBMLModel data type
+% 
+% ARGUMENTS
+%  network   (network structure) network
+%  name      (string, optional)  model name
+%  notes     (string, optional)
+% 
+% If the argument filename (string) is given, the model is directly written 
+% to an SBML (.xml) file (in the present directory; no path can be given)
+% 
+% You can also use SaveSBMLModel(SBMLmodel) from the SBMLToolbox
+% to save the model to a .mat file, or OutputSBML(SBMLmodel,filename);
+% to export it to an SBML (.xml) file
+% 
+% This function requires the SBMLToolbox (see http://sbml.org/software/sbmltoolbox/)
 
 
 function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
 
-eval(default('verbose','0','name','[]','notes','[]','sbml_level','2','sbml_version','2'));
-if isempty('name'),       name = 'Model'; end 
-if isempty('notes'),       notes = ''; end 
+if ~exist('TranslateSBML','file'),
+  error('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.');
+end
+
+eval(default('verbose','0','name','''Model''','notes','''''','sbml_level','2','sbml_version','2'));
 
 name = strrep(name,' ','_');
 name = strrep(name,'.','_');
 
 
 % -------------------------------------------------------------
-% adjust names to SBML conventions
+% Adjust names to SBML conventions
 
 [network.metabolites,network.actions] = network_adjust_names_for_sbml_export(network.metabolites,network.actions);
 
@@ -52,7 +52,6 @@ if length(unique(network.actions))<length(network.actions),
 end
 
 
-
 % -------------------------------------------------------------
 % SBML object
 
@@ -64,16 +63,19 @@ SBMLmodel = Model_setId(SBMLmodel,name);
 compartment = Compartment_create(sbml_level,sbml_version);
 compartment = Compartment_setId(compartment,'compartment');
 compartment = Compartment_setName(compartment,'compartment');
+if sbml_level >2,
+  compartment = Compartment_setVolume(compartment,1);
+end
 SBMLmodel   = Model_addCompartment(SBMLmodel,compartment);
 
 % notes
-% Model %s written by the Matlab Metabolic Network Toolbox</p>\n',name)]; 
+% Model %s written by the Metabolic Network Toolbox</p>\n',name)]; 
 
 
 % ----------------------------------------------------------------
 % metabolites
 
-if verbose, fprintf('Converting the metabolites: ',it); end
+if verbose, fprintf('  Converting the metabolites: '); end
 
 for it = 1:length(network.metabolites),
   if verbose,  fprintf('%d ',it); end 
@@ -81,6 +83,9 @@ for it = 1:length(network.metabolites),
   species{it} = Species_setId(species{it},metabolite_id{it});
   species{it} = Species_setName(species{it},network.metabolites{it});
   species{it} = Species_setCompartment(species{it},'compartment');
+  if sbml_level >2,
+    species{it} = Species_setUnits(species{it},'mmol/l');
+  end
   species{it} = Species_setBoundaryCondition(species{it},network.external(it));
   if isfield(network,'s_init'),  
     species{it} = Species_setInitialConcentration(species{it},network.s_init(it));
@@ -89,8 +94,6 @@ for it = 1:length(network.metabolites),
   end
 end
 
-if verbose, fprintf('\n',it); end
-
 
 % ----------------------------------------------------------------
 % kinetic laws 
@@ -98,7 +101,7 @@ if verbose, fprintf('\n',it); end
 if isfield(network,'kinetics'),
   switch network.kinetics.type,
 
-    case {'ms','cs'},	
+    case {'ms','cs','ds','rp'},	
       
       for it = 1:length(network.metabolites),
         species{it} = Species_setInitialConcentration(species{it},network.kinetics.c(it));
@@ -106,9 +109,13 @@ if isfield(network,'kinetics'),
 
       metnames = network.metabolites;      
       kk       = network.kinetics;
-      
+
+      if verbose, fprintf('\n  Converting the rate laws: '); end
+
       for it = 1:length(network.actions),
-	
+
+      if verbose, fprintf('%d ',it); end
+
         r_name = ['R' num2str(it) ];
         
         sub = find(network.N(:,it) < 0);
@@ -122,10 +129,16 @@ if isfield(network,'kinetics'),
         
         switch network.kinetics.type,
           case 'ms',
-            formula         = ms_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+            formula    = ms_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
             kk.KVratio = ms_KM_KVratio_to_Keq(network.N,kk.KM,kk.Keq);
           case 'cs',
-            formula         = cs_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+            formula    = cs_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+            kk.KVratio = ms_KM_KVratio_to_Keq(network.N,kk.KM,kk.Keq);
+          case 'rp',
+            formula    = ms_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+            kk.KVratio = ms_KM_KVratio_to_Keq(network.N,kk.KM,kk.Keq);
+          case 'ds',
+            formula    = cs_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
             kk.KVratio = ms_KM_KVratio_to_Keq(network.N,kk.KM,kk.Keq);
         end
         
@@ -137,18 +150,27 @@ if isfield(network,'kinetics'),
         parameter       = Parameter_setName(parameter, ['u_' r_name ]);
         parameter       = Parameter_setId(  parameter, ['u_' r_name ]);
         parameter       = Parameter_setValue(parameter,kk.u(it));
+        parameter       = Parameter_setConstant(parameter,1);
+        if sbml_level >2,
+          parameter       = Parameter_setUnits(parameter,'mmol/l');
+        end
         kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
         
         parameter       = Parameter_create(sbml_level,sbml_version);
         parameter       = Parameter_setName(parameter, ['kC_' r_name ]);
         parameter       = Parameter_setId(  parameter, ['kC_' r_name ]);
         parameter       = Parameter_setValue(parameter,kk.KV(it));
+        parameter       = Parameter_setConstant(parameter,1);
+        if sbml_level >2,
+          parameter       = Parameter_setUnits(parameter,'1/s');         
+        end        
         kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
 
         parameter       = Parameter_create(sbml_level,sbml_version);
         parameter       = Parameter_setName(parameter, ['kEQ_' r_name ]);
         parameter       = Parameter_setId(  parameter, ['kEQ_' r_name ]);
         parameter       = Parameter_setValue(parameter,kk.Keq(it));
+        parameter       = Parameter_setConstant(parameter,1);
         kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
         
 	for itt = 1:length(rea),
@@ -156,7 +178,11 @@ if isfield(network,'kinetics'),
           parameter       = Parameter_setName(parameter, ['kM_' r_name '_' metnames{rea(itt)} ]);
           parameter       = Parameter_setId(  parameter, ['kM_' r_name '_' metnames{rea(itt)} ]);
           parameter       = Parameter_setValue(parameter,kk.KM(it,rea(itt)));
-          kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
+          parameter       = Parameter_setConstant(parameter,1);
+        if sbml_level >2,
+          parameter       = Parameter_setUnits(parameter,'mmol/l');        
+        end
+        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
         end
 
         for itt = 1:length(act),
@@ -164,7 +190,11 @@ if isfield(network,'kinetics'),
           parameter       = Parameter_setName(parameter, ['kA_' r_name '_' metnames{act(itt)} ]);
           parameter       = Parameter_setId(  parameter, ['kA_' r_name '_' metnames{act(itt)} ]);
           parameter       = Parameter_setValue(parameter,kk.KA(it,act(itt)));
-          kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
+          parameter       = Parameter_setConstant(parameter,1);
+        if sbml_level >2,
+          parameter       = Parameter_setUnits(parameter,'mmol/l');        
+        end          
+        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
         end
 
         for itt = 1:length(inh),
@@ -172,6 +202,10 @@ if isfield(network,'kinetics'),
           parameter       = Parameter_setName(parameter, ['kI_' r_name '_' metnames{inh(itt)} ]);
           parameter       = Parameter_setId(  parameter, ['kI_' r_name '_' metnames{inh(itt)} ]);
           parameter       = Parameter_setValue(parameter,kk.KI(it,inh(itt)));
+          parameter       = Parameter_setConstant(parameter,1);
+          if sbml_level >2,
+            parameter       = Parameter_setUnits(parameter,'mmol/l');
+          end
           kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);
         end
       
@@ -206,7 +240,7 @@ end
 % -----------------------------------------------------------
 % reactions
 
-if verbose, fprintf('Converting the reactions: ',it); end
+if verbose, fprintf('\n  Converting the reactions: '); end
 
 for it = 1:length(network.actions),
 
@@ -242,8 +276,8 @@ for it = 1:length(network.actions),
     end
   end
 
-  mod_ind = find(network.regulation_matrix(it,:) ~=0);
-
+  mod_ind = find(network.regulation_matrix(it,:));
+  
   if length(mod_ind),
     for itt = 1:length(mod_ind),
       modifier = ModifierSpeciesReference_create(sbml_level,sbml_version);

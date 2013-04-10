@@ -4,7 +4,7 @@
 <head>
   <title>Description of numeric_par2vector</title>
   <meta name="keywords" content="numeric_par2vector">
-  <meta name="description" content="function v=par2vector(p)">
+  <meta name="description" content="function v = par2vector(p)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,15 +21,15 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function v=par2vector(p)</strong></div>
+<div class="box"><strong>function v = par2vector(p)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function [v,names]=numeric_par2vector(p) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> function v=par2vector(p)
+<div class="fragment"><pre class="comment"> function v = par2vector(p)
 
- extract parameter vector from parameter structure</pre></div>
+ Extract parameter vector from parameter structure</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -44,11 +44,11 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% function v=par2vector(p)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% extract parameter vector from parameter structure</span>
-0004 
-0005 <a name="_sub0" href="#_subfunctions" class="code">function [v,names]=numeric_par2vector(p)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,names]=numeric_par2vector(p)</a>
+0002 
+0003 <span class="comment">% function v = par2vector(p)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Extract parameter vector from parameter structure</span>
 0006 
 0007 f = fields(p);
 0008 <span class="keyword">for</span> i=1:length(f)
@@ -60,6 +60,6 @@ This function is called by:
 0014 <span class="keyword">end</span>
 0015 v=v';
 0016 names=f;</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

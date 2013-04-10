@@ -48,7 +48,7 @@ A_eq = [K(ind_fix,:); zv' * K];
 b_eq = [fba_constraints.v_fix(ind_fix); benefit];
 
 g1   = inline('sum(abs(K*vred))','vred','K');
-opt  = optimset('Display','off','MaxIter',10^10,'MaxFunEvals',10^10);
+opt  = optimset('Display','off','MaxIter',10^10,'MaxFunEvals',10^10,'Algorithm','active-set');
 
 % check
 %  v0 >= v_min 

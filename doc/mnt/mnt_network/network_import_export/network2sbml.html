@@ -49,7 +49,7 @@ ARGUMENTS
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_kinetics/kinetics/kinetics_string.html" class="code" title="function s = kinetics_string(kinetics,n,actions,network)">kinetics_string</a>	s = kinetics_string(kinetics,n,actions,network)</li><li><a href="../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../../mnt/mnt_kinetics/kinetics/kinetics_string.html" class="code" title="function s = kinetics_string(kinetics,n,actions,network)">kinetics_string</a>	s = kinetics_string(kinetics,n,actions,network)</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -78,7 +78,7 @@ This function is called by:
 0018 
 0019 <a name="_sub0" href="#_subfunctions" class="code">function s = network2sbml(network,verbose,name,filename,write_equilibrium_constants)</a>
 0020 
-0021 eval(<a href="../../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'write_equilibrium_constants'</span>,<span class="string">'0'</span>));
+0021 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'write_equilibrium_constants'</span>,<span class="string">'0'</span>));
 0022 <span class="keyword">if</span> exist(<span class="string">'metnames'</span>,<span class="string">'var'</span>), network.metabolites = metnames;     <span class="keyword">end</span>
 0023 <span class="keyword">if</span> ~exist(<span class="string">'verbose'</span>,<span class="string">'var'</span>),    verbose = 0;       <span class="keyword">end</span>
 0024 <span class="keyword">if</span> ~exist(<span class="string">'name'</span>,<span class="string">'var'</span>), name    = <span class="string">''</span>;      <span class="keyword">end</span>
@@ -221,7 +221,7 @@ This function is called by:
 0161   <span class="keyword">if</span> length(sub_ind),
 0162     s = [s sprintf(<span class="string">'        &lt;listOfReactants&gt;\n'</span>)]; 
 0163     <span class="keyword">for</span> itt = 1:length(sub_ind),
-0164       s = [s sprintf(<span class="string">'          &lt;speciesReference species=&quot;%s&quot; stoichiometry=&quot;%d&quot;/&gt;\n'</span>,network.metabolites{sub_ind(itt)},full(abs(network.N(sub_ind(itt),it))))];     
+0164       s = [s sprintf(<span class="string">'          &lt;speciesReference species=&quot;%s&quot; stoichiometry=&quot;%d&quot;/&gt;\n'</span>,metabolite_id{sub_ind(itt)},full(abs(network.N(sub_ind(itt),it))))];     
 0165     <span class="keyword">end</span>
 0166     s = [s sprintf(<span class="string">'        &lt;/listOfReactants&gt;\n'</span>)]; 
 0167   <span class="keyword">end</span>
@@ -230,7 +230,7 @@ This function is called by:
 0170   <span class="keyword">if</span> length(sub_ind),
 0171     s = [s sprintf(<span class="string">'        &lt;listOfProducts&gt;\n'</span>)]; 
 0172     <span class="keyword">for</span> itt = 1:length(sub_ind),
-0173       s = [s sprintf(<span class="string">'          &lt;speciesReference species=&quot;%s&quot; stoichiometry=&quot;%d&quot;/&gt;\n'</span>,network.metabolites{sub_ind(itt)},full(network.N(sub_ind(itt),it)))];     
+0173       s = [s sprintf(<span class="string">'          &lt;speciesReference species=&quot;%s&quot; stoichiometry=&quot;%d&quot;/&gt;\n'</span>,metabolite_id{sub_ind(itt)},full(network.N(sub_ind(itt),it)))];     
 0174     <span class="keyword">end</span>
 0175     s = [s sprintf(<span class="string">'        &lt;/listOfProducts&gt;\n'</span>)]; 
 0176   <span class="keyword">end</span>
@@ -317,6 +317,6 @@ This function is called by:
 0257 <span class="comment">%     s = [s sprintf('          &lt;/listOfParameters&gt;\n')];</span>
 0258 <span class="comment">%     s = [s sprintf('        &lt;/kineticLaw&gt;\n')];</span>
 0259 <span class="comment">% end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

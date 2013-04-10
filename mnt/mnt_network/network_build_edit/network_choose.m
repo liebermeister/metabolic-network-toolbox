@@ -52,16 +52,16 @@ if isfield(network,'kinetics'),
  
   switch subnetwork.kinetics.type,
     case 'mass-action',
-      subnetwork.kinetics.k_fwd = subnetwork.kinetics.k_fwd(indices_act_int);
-      subnetwork.kinetics.k_bwd = subnetwork.kinetics.k_bwd(indices_act_int);
+      subnetwork.kinetics.k_fwd = subnetwork.kinetics.k_fwd(indr);
+      subnetwork.kinetics.k_bwd = subnetwork.kinetics.k_bwd(indr);
     case 'numeric',
       subnetwork.kinetics.use_only_act = indr; 
       subnetwork.kinetics.use_only_met = indm; 
       subnetwork.kinetics.n_met_tot    = length(indm);
     case 'saturated',
-      subnetwork.kinetics.reactions = subnetwork.kinetics.reactions(indices_act_int); 
+      subnetwork.kinetics.reactions = subnetwork.kinetics.reactions(indr); 
     case 'numeric',
-      subnetwork.kinetics = submodel_numeric(subnetwork.kinetics,length(subnetwork.metabolites),indices_met_sub,indices_act_int);
+      subnetwork.kinetics = submodel_numeric(subnetwork.kinetics,length(subnetwork.metabolites),indices_met_sub,indr);
     case {'cs','ms','rp','ma','fm'},
       subnetwork.kinetics = modular_reduce_to_subnetwork(network.kinetics,indm,indr);
     otherwise,

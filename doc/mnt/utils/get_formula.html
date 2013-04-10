@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of get_formula</title>
+  <meta name="keywords" content="get_formula">
+  <meta name="description" content="formula = get_formula(reaction,s,p,inh,act,Ns,Np)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">utils</a> &gt; get_formula.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>get_formula
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>formula = get_formula(reaction,s,p,inh,act,Ns,Np)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function formula = get_formula(reaction,s,p,inh,act,rnum) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> formula = get_formula(reaction,s,p,inh,act,Ns,Np)
+
+ s, p, string lists of substrate and product names, each in the
+ order of appearance in the stoichiometric matrix</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_kinetics/convenience/convenience_get_formula.html" class="code" title="function formula = convenience_get_formula(rnum,s,p,act,inh,Ns,Np)">convenience_get_formula</a>	formula = convenience_get_formula(rnum,s,p,inh,act,Ns,Np)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% formula = get_formula(reaction,s,p,inh,act,Ns,Np)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% s, p, string lists of substrate and product names, each in the</span>
+0004 <span class="comment">% order of appearance in the stoichiometric matrix</span>
+0005 
+0006 <a name="_sub0" href="#_subfunctions" class="code">function formula = get_formula(reaction,s,p,inh,act,rnum)</a>
+0007 
+0008 prod_S = [<span class="string">'('</span> s{1}]; <span class="keyword">for</span> it =2:length(s), prod_S = [prod_S <span class="string">'*'</span> s{it}]; <span class="keyword">end</span>
+0009 prod_S = [prod_S <span class="string">')'</span>];
+0010 
+0011 prod_P = [<span class="string">'('</span> p{1}]; <span class="keyword">for</span> it =2:length(p), prod_P = [prod_P <span class="string">'*'</span> p{it}]; <span class="keyword">end</span>
+0012 prod_P = [prod_P <span class="string">')'</span>];
+0013 
+0014 <span class="keyword">switch</span> reaction.type,
+0015 
+0016   
+0017   <span class="keyword">case</span> {<span class="string">'convenience'</span>},
+0018     
+0019         formula = <a href="../../mnt/mnt_kinetics/convenience/convenience_get_formula.html" class="code" title="function formula = convenience_get_formula(rnum,s,p,act,inh,Ns,Np)">convenience_get_formula</a>(rnum,reaction,s,p,act,inh,Ns,Np)           
+0020    
+0021   <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>}, 
+0022     formula = [ <span class="string">'( Vf*'</span> s{1} <span class="string">'/kA  ) / ( 1 +  '</span> s{1} <span class="string">'/kA  )'</span>]; 
+0023     
+0024   <span class="keyword">case</span> {<span class="string">'standard_irrev_bi'</span>},
+0025     formula = [ <span class="string">'( Vf*'</span> s{1} <span class="string">'/kA*'</span> s{2} <span class="string">'/kB ) / ( 1 + '</span> s{1} <span class="string">'/kA + '</span> s{2} <span class="string">'/kB + '</span> s{1} <span class="string">'/kA*'</span> s{2} <span class="string">'/kB )'</span>];
+0026     
+0027   <span class="keyword">case</span> {<span class="string">'standard_rev_uni_uni'</span>},
+0028     An = [s{1} <span class="string">'/kA'</span>];
+0029     Pn = [p{1} <span class="string">'/kP'</span>];
+0030     formula = [ <span class="string">'( Vf*'</span> An <span class="string">' - Vr*'</span> Pn <span class="string">' ) / ( 1 + '</span> An <span class="string">' + '</span> Pn <span class="string">' )'</span>];
+0031  <span class="keyword">case</span> {<span class="string">'standard_rev_uni_bi'</span>},
+0032    An = [s{1} <span class="string">'/kA'</span>];
+0033    Pn = [p{1} <span class="string">'/kP'</span>];
+0034    Qn = [p{2} <span class="string">'/kQ'</span>];
+0035    formula = [ <span class="string">'( Vf*'</span> An <span class="string">' - Vr*'</span> Pn <span class="string">'*'</span> Qn <span class="string">' ) / ( 1 + '</span> An <span class="string">' + '</span> Pn <span class="string">' + '</span> Qn <span class="string">' + '</span> An <span class="string">'*'</span> Qn <span class="string">' + '</span> Pn <span class="string">'*'</span> Qn <span class="string">' )'</span>];
+0036   <span class="keyword">case</span> {<span class="string">'standard_rev_bi_uni'</span>},
+0037     An = [s{1} <span class="string">'/kA'</span>];
+0038     Bn = [s{2} <span class="string">'/kB'</span>];
+0039     Pn = [p{1} <span class="string">'/kP'</span>];
+0040     formula = [ <span class="string">'( Vf*'</span> An <span class="string">'*'</span> Bn <span class="string">' - Vr*'</span> Pn <span class="string">' ) / ( 1 + '</span> An <span class="string">' + '</span> Bn <span class="string">' + '</span> Pn <span class="string">' + '</span> An <span class="string">'*'</span> Bn <span class="string">' + '</span> An <span class="string">'*'</span> Pn <span class="string">' )'</span>];
+0041   
+0042   <span class="keyword">case</span> {<span class="string">'standard_rev_bi_bi'</span>},
+0043     An = [s{1} <span class="string">'/kA'</span>];
+0044     Bn = [s{2} <span class="string">'/kB'</span>];
+0045     Pn = [p{1} <span class="string">'/kP'</span>];
+0046     Qn = [p{2} <span class="string">'/kQ'</span>];
+0047     formula = [ <span class="string">'( Vf*'</span> An <span class="string">'*'</span> Bn <span class="string">' - Vr*'</span> Pn <span class="string">'*'</span> Qn <span class="string">' ) / ( 1 + '</span> An <span class="string">' + '</span> Bn <span class="string">' + '</span> Pn <span class="string">' + '</span> Qn <span class="string">' + '</span> An <span class="string">'*'</span> Bn <span class="string">' + '</span> Pn <span class="string">'*'</span> Qn <span class="string">' + '</span> An <span class="string">'*'</span> Pn <span class="string">' + '</span> Bn <span class="string">'*'</span> Qn <span class="string">' + '</span> An <span class="string">'*'</span> Bn <span class="string">'*'</span> Pn <span class="string">' + '</span> Bn <span class="string">'*'</span> Pn <span class="string">'*'</span> Qn <span class="string">' )'</span>];
+0048   
+0049   <span class="keyword">case</span> {<span class="string">'standard_rev_multiple'</span>},
+0050     
+0051     <span class="keyword">for</span> i1 = 1:length(s);     A{i1} = [s{i1} <span class="string">'/kf'</span> num2str(i1)];   <span class="keyword">end</span>
+0052 
+0053     prodA = A{1};
+0054     prodA1 = [<span class="string">'(1+'</span> A{1} <span class="string">')'</span>];
+0055     <span class="keyword">for</span> i1 = 2:length(s);
+0056       prodA = [prodA <span class="string">' * '</span> A{i1}];    
+0057       prodA1 = [prodA1 <span class="string">'* (1+'</span> A{i1} <span class="string">')'</span>];
+0058     <span class="keyword">end</span>
+0059     
+0060    <span class="keyword">for</span> i1 = 1:length(p);     P{i1} = [p{1} <span class="string">'/kr'</span> num2str(i1)];   <span class="keyword">end</span>
+0061    
+0062    prodP = P{1};
+0063    prodP1 = [<span class="string">'(1+'</span> P{1} <span class="string">')'</span>];
+0064    <span class="keyword">for</span> i1 = 2:length(p);
+0065      prodP = [prodP <span class="string">' * '</span> P{i1}];    
+0066      prodP1 = [prodP1 <span class="string">'* (1+'</span> P{i1} <span class="string">')'</span>];
+0067    <span class="keyword">end</span>
+0068    
+0069    formula =  [ <span class="string">' ( Vf * '</span> prodA <span class="string">' - Vr * '</span> prodP <span class="string">' ) / ( '</span> prodA1 <span class="string">' + '</span> prodP1 <span class="string">' - 1)'</span>];
+0070    
+0071   <span class="keyword">case</span> {<span class="string">'ready_made'</span>},
+0072 
+0073     tail = [<span class="string">'R'</span> num2str(rnum) <span class="string">'_'</span> ];
+0074     
+0075    <span class="keyword">for</span> i1 = 1:length(s);     A{i1} = [s{i1} <span class="string">'/ '</span> tail <span class="string">'KMf'</span> num2str(i1)];   <span class="keyword">end</span>
+0076    
+0077    prodA = A{1};
+0078    prodA1 = [<span class="string">'(1+'</span> A{1} <span class="string">')'</span>];
+0079    <span class="keyword">for</span> i1 = 2:length(s);
+0080      prodA = [prodA <span class="string">' * '</span> A{i1}];    
+0081      prodA1 = [prodA1 <span class="string">'* (1+'</span> A{i1} <span class="string">')'</span>];
+0082    <span class="keyword">end</span>
+0083    
+0084    <span class="keyword">for</span> i1 = 1:length(p);     P{i1} = [p{1} <span class="string">'/ '</span>  tail <span class="string">'KMr'</span> num2str(i1)];   <span class="keyword">end</span>
+0085 
+0086    prodP = P{1};
+0087    prodP1 = [<span class="string">'(1+'</span> P{1} <span class="string">')'</span>];
+0088    <span class="keyword">for</span> i1 = 2:length(p);
+0089      prodP = [prodP <span class="string">' * '</span> P{i1}];    
+0090      prodP1 = [prodP1 <span class="string">'* (1+'</span> P{i1} <span class="string">')'</span>];
+0091    <span class="keyword">end</span>
+0092    
+0093    formula =  [ <span class="string">' ( '</span> tail <span class="string">'Vf1 * '</span> prodA <span class="string">' - '</span> tail <span class="string">'Vr1 * '</span> prodP <span class="string">' ) / ( '</span> prodA1 <span class="string">' + '</span> prodP1 <span class="string">' - 1)'</span>];
+0094    
+0095    <span class="keyword">for</span> it2 = 1:length(reaction.KA),
+0096      formula  = [ act{it2} <span class="string">'/ '</span> tail <span class="string">' KA'</span> num2str(it2) <span class="string">' / ( 1 + '</span> act{it2} <span class="string">'/ '</span> tail <span class="string">' KA'</span> num2str(it2) <span class="string">') * ('</span> formula <span class="string">')'</span>] ;
+0097    <span class="keyword">end</span>
+0098    
+0099    <span class="keyword">for</span> it2 = 1:length(reaction.KI),
+0100      formula  = [ <span class="string">'1 / ( 1 + '</span> inh{it2} <span class="string">'/ '</span> tail <span class="string">'KI'</span> num2str(it2) <span class="string">') * ('</span> formula <span class="string">')'</span>] ;
+0101    <span class="keyword">end</span>
+0102    
+0103   <span class="keyword">otherwise</span>,
+0104     formula = <span class="string">''</span>;
+0105     warning(<span class="string">'Reaction kinetics type %s is not supported by network2sbml\n'</span>,reaction.type );
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="keyword">switch</span> reaction.type,
+0109   <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>,<span class="string">'standard_irrev_bi'</span>,<span class="string">'standard_rev_uni_uni'</span>,<span class="keyword">...</span>
+0110     <span class="string">'standard_rev_uni_bi'</span>,<span class="string">'standard_rev_bi_uni'</span>,<span class="string">'standard_rev_bi_bi'</span>,<span class="string">'standard_rev_multiple'</span>},
+0111     <span class="keyword">if</span> isfield(reaction,<span class="string">'Kact'</span>),
+0112       <span class="keyword">for</span> it2 = 1:length(reaction.Kact),
+0113     formula  = [  act{it2} <span class="string">'/ Kact'</span> num2str(it2) <span class="string">' /( 1 + '</span> act{it2} <span class="string">'/ Kact'</span> num2str(it2) <span class="string">') * ('</span> formula <span class="string">')'</span>] ;
+0114       <span class="keyword">end</span>
+0115     <span class="keyword">end</span>
+0116     <span class="keyword">if</span> isfield(reaction,<span class="string">'Krep'</span>),
+0117       <span class="keyword">for</span> it2 = 1:length(reaction.Krep),
+0118     formula  = [ <span class="string">'1 / ( 1 + '</span> inh{it2} <span class="string">'/ Krep'</span> num2str(it2) <span class="string">') * ('</span> formula <span class="string">')'</span>] ;
+0119       <span class="keyword">end</span>
+0120     <span class="keyword">end</span>
+0121     
+0122 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

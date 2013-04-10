@@ -35,7 +35,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, linewidth)">draw_metabolite_arcs</a>	draw_metabolite_arcs(network, colors, linewidth)</li><li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, linewidth)">draw_metabolite_arcs</a>	draw_metabolite_arcs(network, colors, linewidth)</li><li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -53,13 +53,13 @@ This function is called by:
 0007 
 0008 <span class="comment">% to make this script nicer, update it according to interaction_network_plot</span>
 0009 
-0010 eval(<a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'col'</span>,<span class="string">'my_colors(250)'</span>,<span class="string">'gp'</span>,<span class="string">'struct'</span>));
+0010 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'col'</span>,<span class="string">'my_colors(250)'</span>,<span class="string">'gp'</span>,<span class="string">'struct'</span>));
 0011 
 0012 plot_parameters = struct(<span class="string">'actprintnames'</span>,0,<span class="string">'metprintnames'</span>,1,<span class="string">'arrowsize'</span>,0.03,<span class="keyword">...</span>
 0013     <span class="string">'linecolor'</span>,[0 0 0],<span class="string">'arrowcolor'</span>,[.7 .7 .7],<span class="string">'colorbar'</span>,0,<span class="keyword">...</span>
 0014     <span class="string">'FontSize'</span>,8,<span class="string">'text_offset'</span>,[.01,-.01],<span class="string">'colormap'</span>,col,<span class="string">'hold_on'</span>,1);
 0015 
-0016 plot_parameters = join_struct(plot_parameters,gp);
+0016 plot_parameters = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(plot_parameters,gp);
 0017 
 0018 [nm,nr] = size(network.N);
 0019 
@@ -81,6 +81,6 @@ This function is called by:
 0035 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,influence_values,[],1,plot_parameters); hold on;
 0036 <a href="draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, linewidth)">draw_metabolite_arcs</a>(network,colors,2);   
 0037 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,influence_values,[],1,plot_parameters); hold off;</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

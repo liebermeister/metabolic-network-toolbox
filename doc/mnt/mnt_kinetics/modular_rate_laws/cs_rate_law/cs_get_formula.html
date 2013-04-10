@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cs_get_formula</title>
+  <meta name="keywords" content="cs_get_formula">
+  <meta name="description" content="r_name reaction name (for naming the parameters)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">cs_rate_law</a> &gt; cs_get_formula.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/cs_rate_law&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>cs_get_formula
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>r_name reaction name (for naming the parameters)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> r_name reaction name (for naming the parameters)
+ mn: list of metabolite names
+ sub, pro, act, inh indices of substrates, products, activators and inhibitors
+ m_sub, m_pro  absolute values of stoichiometric coefficients for substrates and products</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_kinetic_formulae.html" class="code" title="function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)">modular_kinetic_formulae</a>	[formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</li><li><a href="../../../../mnt/mnt_network/network_import_export/network_sbml_export.html" class="code" title="function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)">network_sbml_export</a>	SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)           </a>
+0002 
+0003 <span class="comment">% r_name reaction name (for naming the parameters)</span>
+0004 <span class="comment">% mn: list of metabolite names</span>
+0005 <span class="comment">% sub, pro, act, inh indices of substrates, products, activators and inhibitors</span>
+0006 <span class="comment">% m_sub, m_pro  absolute values of stoichiometric coefficients for substrates and products</span>
+0007 
+0008 kCratio      = <span class="string">''</span>;
+0009 numerator_fw = <span class="string">''</span>;
+0010 numerator_bw = <span class="string">''</span>;
+0011 denominator  = <span class="string">''</span>;
+0012 activation   = <span class="string">''</span>;
+0013 inhibition   = <span class="string">''</span>;
+0014 
+0015 m_sub = full(m_sub);
+0016 m_pro = full(m_pro);
+0017 
+0018 <span class="keyword">if</span> length(sub),
+0019   <span class="keyword">for</span> it = 1:length(sub),
+0020     <span class="keyword">if</span> m_sub(it) == 1,
+0021       kCratio      = [ kCratio,  sprintf(<span class="string">' * kM_%s_%s'</span>, r_name, mn{sub(it)})];
+0022       numerator_fw = [ numerator_fw, sprintf(<span class="string">' * ( %s / kM_%s_%s )'</span>, <span class="keyword">...</span>
+0023                                              mn{sub(it)}, r_name, mn{sub(it)})];  
+0024       denominator = [ denominator, sprintf(<span class="string">' * ( 1 + %s / kM_%s_%s )'</span>, <span class="keyword">...</span>
+0025                                            mn{sub(it)}, r_name, mn{sub(it)})];  
+0026     <span class="keyword">else</span>,
+0027       kCratio      = [ kCratio,  sprintf(<span class="string">' * power( kM_%s_%s , %d )'</span>, r_name, mn{sub(it)}, m_sub(it))];
+0028       numerator_fw = [ numerator_fw,  sprintf(<span class="string">' * power( %s / kM_%s_%s , %d )'</span>, <span class="keyword">...</span>
+0029                                               mn{sub(it)}, r_name, mn{sub(it)}, m_sub(it))];  
+0030       denominator = [ denominator, sprintf(<span class="string">' * power( 1 + %s / kM_%s_%s , %d )'</span>, <span class="keyword">...</span>
+0031                                            mn{sub(it)}, r_name, mn{sub(it)},m_sub(it))];        
+0032     <span class="keyword">end</span>
+0033   <span class="keyword">end</span>
+0034   denominator = denominator(4:end);
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">if</span> length(pro),
+0038   <span class="keyword">for</span> it = 1:length(pro),
+0039     <span class="keyword">if</span> m_pro(it) == 1,
+0040       kCratio      = [ kCratio,  sprintf(<span class="string">' / kM_%s_%s'</span>, r_name, mn{pro(it)})];
+0041       numerator_bw = [ numerator_bw <span class="keyword">...</span>
+0042                        sprintf(<span class="string">' * ( %s / kM_%s_%s )'</span>, mn{pro(it)}, r_name, mn{pro(it)})];  
+0043       denominator = [ denominator <span class="keyword">...</span>
+0044                       sprintf(<span class="string">' * ( 1 + %s / kM_%s_%s )'</span>, mn{pro(it)}, r_name, mn{pro(it)})];  
+0045     <span class="keyword">else</span>,
+0046       kCratio      = [ kCratio,  sprintf(<span class="string">' / power( kM_%s_%s , %d )'</span>, r_name, mn{pro(it)}, m_pro(it))];
+0047       numerator_bw = [ numerator_bw <span class="keyword">...</span>
+0048                        sprintf(<span class="string">' * power( %s / kM_%s_%s , %d )'</span>, mn{pro(it)}, r_name, mn{pro(it)}, m_pro(it))];  
+0049       
+0050       denominator = [ denominator <span class="keyword">...</span>
+0051                       sprintf(<span class="string">' * power( 1 + %s / kM_%s_%s , %d )'</span>, mn{pro(it)}, r_name, mn{pro(it)},m_pro(it))];        
+0052     <span class="keyword">end</span>
+0053   <span class="keyword">end</span>
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="keyword">if</span> length(act),
+0057   <span class="keyword">for</span> it = 1:length(act),
+0058     activation = [ activation <span class="keyword">...</span>
+0059                    sprintf(<span class="string">'(%s / kA_%s_%s ) / ( 1 + %s / kA_%s_%s ) * '</span>, mn{act(it)}, r_name, mn{act(it)}, mn{act(it)}, r_name, mn{act(it)})]; 
+0060   <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="keyword">if</span> length(inh),
+0064   <span class="keyword">for</span> it = 1:length(inh),
+0065     inhibition = [ inhibition <span class="keyword">...</span>
+0066                    sprintf(<span class="string">'1 / ( 1 + %s / kI_%s_%s ) * '</span>, mn{inh(it)}, r_name, mn{inh(it)})]; 
+0067   <span class="keyword">end</span>
+0068 <span class="keyword">end</span>
+0069 
+0070 formula = [ <span class="string">'u_'</span>, r_name ,<span class="string">' * '</span>, activation, inhibition, <span class="string">'( '</span>, <span class="keyword">...</span>
+0071             [<span class="string">'kC_'</span> r_name <span class="string">' * sqrt( kEQ_'</span> r_name <span class="string">' '</span> kCratio <span class="string">' )'</span>], numerator_fw, <span class="keyword">...</span>
+0072             <span class="string">' - '</span>, [<span class="string">'kC_'</span> r_name <span class="string">' / sqrt( kEQ_'</span> r_name <span class="string">' '</span> kCratio <span class="string">' )'</span>] ,numerator_bw, <span class="string">' ) / ( '</span>, denominator, <span class="string">' )'</span>];</pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -37,7 +37,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_reduce_to_subnetwork.html" class="code" title="function kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)">modular_reduce_to_subnetwork</a>	kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)</li><li><a href="../../../mnt/mnt_kinetics/numeric/submodel_numeric.html" class="code" title="function sub_kinetics = submodel_numeric(kinetics,n_met,met_indices,act_indices)">submodel_numeric</a>	sub_kinetics = submodel_numeric(kinetics,n_met,met_indices,act_indices)</li></ul>
+<li><a href="../../../mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_reduce_to_subnetwork.html" class="code" title="function kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)">modular_reduce_to_subnetwork</a>	kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)</li><li><a href="../../../mnt/mnt_kinetics/numeric/submodel_numeric.html" class="code" title="function sub_kinetics = submodel_numeric(kinetics,n_met,met_indices,act_indices)">submodel_numeric</a>	sub_kinetics = submodel_numeric(kinetics, n_met, met_indices, act_indices)</li><li><a href="../../../mnt/utils/bit_vector.html" class="code" title="function b = bit_vector(ind,l)">bit_vector</a>	b = bit_vector(ind,l)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="../../../mnt/mnt_graphics/netgraph_define_module.html" class="code" title="function [m,n] = netgraph_define_module(network)">netgraph_define_module</a>	m = netgraph_define_module(network)</li><li><a href="network_choose_from_list.html" class="code" title="function [n_sub,metindices_chosen,metindices,actindices] = network_choose_from_list(network,metnames,indices)">network_choose_from_list</a>	[n_sub,metindices_chosen,metindices,actindes] = network_choose_from_list(network,metnames,indices)</li><li><a href="network_listchoose_actions.html" class="code" title="function [n_sub,actindices,metindices] = network_listchoose_actions(network,actnames,indices)">network_listchoose_actions</a>	[n_sub,actindices] = network_listchoose_actions(network,actnames,indices)</li><li><a href="network_listchoose_metabolites.html" class="code" title="function [n_sub,met,actindices,metindices] = network_listchoose_metabolites(network,metnames,indices)">network_listchoose_metabolites</a>	[n_sub,metindices] = network_listchoose_metabolites(network,metnames,indices)</li><li><a href="../../../mnt/mnt_network/network_query/network_choose_reactions_from_list.html" class="code" title="function [n_sub,actindices_chosen,metindices] = network_choose_reactions_from_list(network,actnames,indices)">network_choose_reactions_from_list</a>	[n_sub,actindices_chosen,metindices,actindes] = network_choose_from_list(network,actnames,indices)</li></ul>
@@ -75,7 +75,7 @@ This function is called by:
 0027 subnetwork.N           = network.N(indm,indr);
 0028 subnetwork.reversible  = network.reversible(indr);
 0029 dummi(find(network.external))=1;
-0030 subnetwork.external   = bit_vector(find(dummi(indm)),length(subnetwork.metabolites));
+0030 subnetwork.external   = <a href="../../../mnt/utils/bit_vector.html" class="code" title="function b = bit_vector(ind,l)">bit_vector</a>(find(dummi(indm)),length(subnetwork.metabolites));
 0031 
 0032 <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_KEGGID'</span>), subnetwork.metabolite_KEGGID = network.metabolite_KEGGID(indm); <span class="keyword">end</span>
 0033 <span class="keyword">if</span> isfield(network,<span class="string">'reaction_KEGGID'</span>),   subnetwork.reaction_KEGGID   = network.reaction_KEGGID(indr); <span class="keyword">end</span>
@@ -100,22 +100,22 @@ This function is called by:
 0052  
 0053   <span class="keyword">switch</span> subnetwork.kinetics.type,
 0054     <span class="keyword">case</span> <span class="string">'mass-action'</span>,
-0055       subnetwork.kinetics.k_fwd = subnetwork.kinetics.k_fwd(indices_act_int);
-0056       subnetwork.kinetics.k_bwd = subnetwork.kinetics.k_bwd(indices_act_int);
+0055       subnetwork.kinetics.k_fwd = subnetwork.kinetics.k_fwd(indr);
+0056       subnetwork.kinetics.k_bwd = subnetwork.kinetics.k_bwd(indr);
 0057     <span class="keyword">case</span> <span class="string">'numeric'</span>,
 0058       subnetwork.kinetics.use_only_act = indr; 
 0059       subnetwork.kinetics.use_only_met = indm; 
 0060       subnetwork.kinetics.n_met_tot    = length(indm);
 0061     <span class="keyword">case</span> <span class="string">'saturated'</span>,
-0062       subnetwork.kinetics.reactions = subnetwork.kinetics.reactions(indices_act_int); 
+0062       subnetwork.kinetics.reactions = subnetwork.kinetics.reactions(indr); 
 0063     <span class="keyword">case</span> <span class="string">'numeric'</span>,
-0064       subnetwork.kinetics = <a href="../../../mnt/mnt_kinetics/numeric/submodel_numeric.html" class="code" title="function sub_kinetics = submodel_numeric(kinetics,n_met,met_indices,act_indices)">submodel_numeric</a>(subnetwork.kinetics,length(subnetwork.metabolites),indices_met_sub,indices_act_int);
+0064       subnetwork.kinetics = <a href="../../../mnt/mnt_kinetics/numeric/submodel_numeric.html" class="code" title="function sub_kinetics = submodel_numeric(kinetics,n_met,met_indices,act_indices)">submodel_numeric</a>(subnetwork.kinetics,length(subnetwork.metabolites),indices_met_sub,indr);
 0065     <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>,<span class="string">'rp'</span>,<span class="string">'ma'</span>,<span class="string">'fm'</span>},
 0066       subnetwork.kinetics = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_reduce_to_subnetwork.html" class="code" title="function kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)">modular_reduce_to_subnetwork</a>(network.kinetics,indm,indr);
 0067     <span class="keyword">otherwise</span>,
 0068       error(sprintf(<span class="string">'Kinetics type %s not supported in subnetwork selection'</span>,subnetwork.kinetics.type));
 0069   <span class="keyword">end</span>
 0070 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

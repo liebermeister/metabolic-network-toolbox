@@ -19,7 +19,7 @@ if size(v_mean,2)>1,
   return
 end
 
-default_pars = struct('method','euclidean','ind_ignore',[],'remove_eba_cycles',0);
+default_pars = struct('method','euclidean','ind_ignore',[],'remove_eba_cycles',0,'verbose',0);
 pars = join_struct(default_pars,pars);
 
 if isempty(v_std),  v_std  = ones(size(v_mean)); end 
@@ -35,7 +35,9 @@ v_mean(find(v_mean.*v_sign)<0) = nan;
 external          = zeros(size(N,1),1); 
 external(ind_ext) = 1;
 
-display(sprintf('Projecting fluxes using "%s" method', pars.method));
+if pars.verbose,
+  display(sprintf('\n  Projecting fluxes using "%s" method', pars.method));
+end
 
 switch pars.method,
 
@@ -88,7 +90,8 @@ switch pars.method,
     ind_signs = find(abs(v_sign_finite)==1);
     A         = -diag(v_sign_finite(ind_signs)) * K(ind_signs,:);
     b         = -epsilon * ones(length(ind_signs),1);
-    rho_mean  = quadprog(rho_cov_inv,-y_mean,A,b);
+    opt  = optimset('Display','off','Algorithm','active-set');
+    rho_mean  = quadprog(rho_cov_inv,-y_mean,A,b,[],[],[],[],[],opt);
     v_projected = zeros(nr,1);
     v_projected(ind_nonzeros,1) = K * rho_mean;
   

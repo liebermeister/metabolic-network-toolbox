@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/util/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>	b = print_matrix(matrix,rownames,colnames)</li></ul>
+<li><a href="../../mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>	b = print_matrix(matrix,rownames,colnames)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li></ul>
@@ -50,12 +50,12 @@ This function is called by:
 0006   network.graphics_par.x = network.graphics_par.x + repmat(offsets',1,size(network.graphics_par.x,2));
 0007 <span class="keyword">end</span>
 0008 
-0009 ss = <a href="../../mnt/util/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>([network.graphics_par.x(:,1:length(network.metabolites))',network.graphics_par.fixed(1:length(network.metabolites))],network.metabolites);
+0009 ss = <a href="../../mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>([network.graphics_par.x(:,1:length(network.metabolites))',network.graphics_par.fixed(1:length(network.metabolites))],network.metabolites);
 0010 file = fopen(filename,<span class="string">'w'</span>);
 0011 <span class="keyword">for</span> it = 1:size(ss,1),
 0012   fprintf(file,<span class="string">'%s\n'</span>,ss(it,:));
 0013 <span class="keyword">end</span>
 0014 fclose(file);</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

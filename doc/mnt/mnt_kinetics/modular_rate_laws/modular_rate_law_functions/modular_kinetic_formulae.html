@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_get_formula.html" class="code" title="function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">cs_get_formula</a>	r_name reaction name (for naming the parameters)</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>	keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/ms_get_formula.html" class="code" title="function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">ms_get_formula</a>	formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)</li><li><a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
+<li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/cs_rate_law/cs_get_formula.html" class="code" title="function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">cs_get_formula</a>	r_name reaction name (for naming the parameters)</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>	keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/ms_rate_law/ms_get_formula.html" class="code" title="function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">ms_get_formula</a>	formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)</li><li><a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
 </ul>
@@ -69,10 +69,10 @@ This function is called by:
 0025 
 0026   <span class="keyword">switch</span> network.kinetics.type,
 0027     <span class="keyword">case</span> <span class="string">'ms'</span>,
-0028       formula{it,1} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/sm_rate_law/ms_get_formula.html" class="code" title="function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">ms_get_formula</a>(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+0028       formula{it,1} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/ms_rate_law/ms_get_formula.html" class="code" title="function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">ms_get_formula</a>(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
 0029       kk.KVratio{it} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>(network.N,kk.KM,kk.Keq);
 0030     <span class="keyword">case</span> <span class="string">'cs'</span>,
-0031       formula{it,1} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/cm_rate_law/cs_get_formula.html" class="code" title="function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">cs_get_formula</a>(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
+0031       formula{it,1} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/cs_rate_law/cs_get_formula.html" class="code" title="function formula = cs_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)">cs_get_formula</a>(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
 0032       kk.KVratio{it} = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>(network.N,kk.KM,kk.Keq);
 0033     <span class="keyword">otherwise</span> 
 0034       error(<span class="string">'Rate law not supported'</span>);
@@ -97,6 +97,6 @@ This function is called by:
 0053 <span class="keyword">end</span>
 0054 
 0055</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

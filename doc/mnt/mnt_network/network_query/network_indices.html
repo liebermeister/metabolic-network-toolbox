@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -55,13 +55,13 @@ This function is called by:
 0011   metname = strrep(metname,<span class="string">')'</span>,<span class="string">''</span>);
 0012   metname = strrep(metname,<span class="string">'-'</span>,<span class="string">''</span>);
 0013   metname = strrep(metname,<span class="string">'+'</span>,<span class="string">'plus'</span>);
-0014   ind_met = setfield(ind_met,metname,<a href="../../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(network.metabolites(it),network.metabolites));
+0014   ind_met = setfield(ind_met,metname,<a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(network.metabolites(it),network.metabolites));
 0015 <span class="keyword">end</span>
 0016 
 0017 ind_act = struct;
 0018 <span class="keyword">for</span> it = 1:nr,
-0019   ind_act = setfield(ind_act,strrep(network.actions{it},<span class="string">' '</span>,<span class="string">''</span>),<a href="../../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(network.actions(it),network.actions));
+0019   ind_act = setfield(ind_act,strrep(network.actions{it},<span class="string">' '</span>,<span class="string">''</span>),<a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(network.actions(it),network.actions));
 0020 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

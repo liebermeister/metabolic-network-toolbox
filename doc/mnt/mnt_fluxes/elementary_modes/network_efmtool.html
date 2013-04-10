@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_efmtool</title>
+  <meta name="keywords" content="network_efmtool">
+  <meta name="description" content="[C,mnet] = network_efmtool(network, method, ind_ignore, zv)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">elementary_modes</a> &gt; network_efmtool.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/elementary_modes&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network_efmtool
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[C,mnet] = network_efmtool(network, method, ind_ignore, zv)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [C, mnet] = network_efmtool(network, method, ind_ignore, zv) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [C,mnet] = network_efmtool(network, method, ind_ignore, zv)
+
+ Compute the elementary flux modes by call the efmtool function &quot;CalculateFluxModes&quot;
+
+ Function arguments:
+   method: 'internal': (default) consider only internal metabolites (-&gt; all stationary modes)
+           'total': consider also external metabolites (-&gt; all stationary, eba-unfeasible modes)
+   ind_ignore: indices of reactions (e.g. biomass production) to be neglected
+   zv (optional [used if non-empty]): vector of flux benefit values.
+      if zv is given, only modes without a flux benefit are given back</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../../mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [C, mnet] = network_efmtool(network, method, ind_ignore, zv)</a>
+0002 
+0003 <span class="comment">% [C,mnet] = network_efmtool(network, method, ind_ignore, zv)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute the elementary flux modes by call the efmtool function &quot;CalculateFluxModes&quot;</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Function arguments:</span>
+0008 <span class="comment">%   method: 'internal': (default) consider only internal metabolites (-&gt; all stationary modes)</span>
+0009 <span class="comment">%           'total': consider also external metabolites (-&gt; all stationary, eba-unfeasible modes)</span>
+0010 <span class="comment">%   ind_ignore: indices of reactions (e.g. biomass production) to be neglected</span>
+0011 <span class="comment">%   zv (optional [used if non-empty]): vector of flux benefit values.</span>
+0012 <span class="comment">%      if zv is given, only modes without a flux benefit are given back</span>
+0013 
+0014 a = pwd;
+0015 
+0016 <span class="keyword">if</span> ~exist(<span class="string">'CalculateFluxModes'</span>,<span class="string">'file'</span>)
+0017   error(<span class="string">'Please install the efmtool Toolbox (http://www.csb.ethz.ch/tools/efmtool) - Otherwise certain flux analysis functions will not work.'</span>);
+0018 <span class="keyword">end</span>
+0019   
+0020 cd /home/wolfram/matlab_fixed/packages/efmtool/
+0021 
+0022 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'method'</span>,<span class="string">'''internal'''</span>,<span class="string">'ind_ignore'</span>,<span class="string">'[]'</span>,<span class="string">'zv'</span>,<span class="string">'[]'</span>));
+0023 
+0024 <span class="keyword">switch</span> method,
+0025   <span class="keyword">case</span> <span class="string">'internal'</span>,
+0026     ind_balances = find(network.external==0);
+0027   <span class="keyword">case</span> <span class="string">'total'</span>,
+0028     ind_balances = 1:length(network.metabolites);
+0029   <span class="keyword">otherwise</span>, 
+0030     error(<span class="string">'unknown method'</span>);
+0031 <span class="keyword">end</span>
+0032 
+0033 ind_reactions = setdiff(1:length(network.actions),ind_ignore);
+0034 
+0035 stru.stoich          = full(network.N(ind_balances,ind_reactions));
+0036 stru.reversibilities = full(network.reversible(ind_reactions));
+0037 
+0038 use_KEGG_id = 0;
+0039 <span class="keyword">if</span> isfield( network,<span class="string">'metabolite_KEGGID'</span>),
+0040   <span class="keyword">if</span> length(unique(network.metabolite_KEGGID)) == length(network.metabolite_KEGGID),
+0041     use_KEGG_id = 1;
+0042   <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> use_KEGG_id,
+0046    stru.metaboliteNames = network.metabolite_KEGGID(ind_balances);
+0047 <span class="keyword">else</span>,
+0048    stru.metaboliteNames = network.metabolites(ind_balances);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">%stru.reactionNames   = network.reaction_KEGGID(ind_reactions);</span>
+0052 n_max = length(ind_reactions); list=cell(n_max,1); <span class="keyword">for</span> it=1:n_max,  list{it} = [<span class="string">'R'</span> num2str(it)]; <span class="keyword">end</span>
+0053 stru.reactionNames = list;
+0054 
+0055 ind_keep = find(sum(abs(stru.stoich),2)&gt;0);
+0056 stru.stoich = stru.stoich(ind_keep,:);
+0057 stru.metaboliteNames = stru.metaboliteNames(ind_keep);
+0058 
+0059 <span class="keyword">if</span> ~isempty(zv),
+0060   stru.stoich          = full([stru.stoich; <a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(zv)']);
+0061   stru.metaboliteNames = [stru.metaboliteNames; {<span class="string">'Flux_benefit'</span>}]; 
+0062   <span class="keyword">if</span> size(zv,2)&gt;1, stru.metaboliteNames = [stru.metaboliteNames; repmat({<span class="string">'Constraint'</span>},size(zv,2)-1,1)]; <span class="keyword">end</span>
+0063 <span class="keyword">end</span>
+0064 
+0065 opts = CreateFluxModeOpts(<span class="string">'arithmetic'</span>, <span class="string">'fractional'</span>);
+0066 mnet = CalculateFluxModes(stru,opts);
+0067 
+0068 cd(a);
+0069 
+0070 <span class="keyword">if</span> ~all(all(abs(mnet.stoich*mnet.efms) &lt; 1e-10)),
+0071   error(<span class="string">'Computed elementary modes violate stationarity condition'</span>);
+0072 <span class="keyword">end</span>
+0073 
+0074 C = zeros(length(network.actions),size(mnet.efms,2));
+0075 C(ind_reactions,:) = mnet.efms;
+0076 
+0077 <span class="keyword">switch</span> method,
+0078   <span class="keyword">case</span> <span class="string">'internal'</span>,
+0079     <span class="keyword">if</span> norm(network.N(find(network.external==0),:) * C)&gt;10^-10,
+0080       error(<span class="string">'Computed cycles are not stationary'</span>);
+0081     <span class="keyword">end</span>
+0082   <span class="keyword">case</span> <span class="string">'total'</span>,
+0083     <span class="keyword">if</span> norm(network.N * C)&gt;10^-10,
+0084       error(<span class="string">'Computed cycles are not stationary'</span>);
+0085     <span class="keyword">end</span>
+0086 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

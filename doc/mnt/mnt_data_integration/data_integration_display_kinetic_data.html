@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of data_integration_display_kinetic_data</title>
+  <meta name="keywords" content="data_integration_display_kinetic_data">
+  <meta name="description" content="T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_data_integration</a> &gt; data_integration_display_kinetic_data.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_data_integration&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>data_integration_display_kinetic_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function T = data_integration_display_kinetic_data(kinetic_data,network,flag_display) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)">data_integration_load_quantity_info</a>	quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/table.html" class="code" title="function res = table(names,rownumbers,filename)">table</a>	result = table(names,rownumbers,filename)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="data_integration_save_kinetic_data.html" class="code" title="function M = data_integration_save_kinetic_data(kinetic_data, network, filename, options_style)">data_integration_save_kinetic_data</a>	M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)</a>
+0002 
+0003 <span class="comment">% T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)</span>
+0004 
+0005 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'flag_display'</span>,<span class="string">'1'</span>));
+0006 
+0007 fn = fieldnames(kinetic_data);
+0008 
+0009 <span class="keyword">for</span> it = 1:length(fn),
+0010 
+0011   xx = kinetic_data.(fn{it});
+0012   
+0013   <span class="comment">%ii = find(isfinite(xx.median) + isfinite(xx.mean) + isfinite(xx.std));</span>
+0014   ii = find(isfinite(xx.median) + isfinite(xx.mean) + isfinite(xx.std) + isfinite(xx.lower) + isfinite(xx.upper));
+0015   nii = length(ii);
+0016   
+0017   T{it} = [{<span class="string">'!Median'</span>,<span class="string">'!Mean'</span>,<span class="string">'!Std'</span>,<span class="string">'!Lower'</span>,<span class="string">'!Upper'</span>}; <span class="keyword">...</span>
+0018            num2cell([xx.median(ii), <span class="keyword">...</span>
+0019                      xx.mean(ii), <span class="keyword">...</span>
+0020                      xx.std(ii), <span class="keyword">...</span>
+0021                      xx.lower(ii), <span class="keyword">...</span>
+0022                      xx.upper(ii)])];
+0023   
+0024     quantity_info   = <a href="data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)">data_integration_load_quantity_info</a>;
+0025     ind = find(strcmp(fn{it},quantity_info.Symbol));
+0026     related_element      = quantity_info.RelatedElement{ind};
+0027     quantity_type        = quantity_info.QuantityType{ind};
+0028     quantity_type_column = [{<span class="string">'!QuantityType'</span>}; repmat({quantity_type},size(T{it},1)-1,1)];
+0029     unit                 = quantity_info.Unit{ind};
+0030     unit_column          = [{<span class="string">'!Unit'</span>}; repmat({unit},size(T{it},1)-1,1)];
+0031     
+0032     [nm,nr] = size(network.N);
+0033     
+0034     species_kegg_column  = [];
+0035     reaction_kegg_column = [];
+0036     
+0037     <span class="keyword">switch</span> related_element,
+0038       
+0039       <span class="keyword">case</span> <span class="string">'Species'</span>,
+0040         species_column       = [ {<span class="string">'!Compound'</span>};  network.metabolites(ii)];
+0041         <span class="keyword">if</span> isfield(network, <span class="string">'metabolite_KEGGID'</span>),
+0042           species_kegg_column = [{<span class="string">'!CompoundID:urn.miriam.kegg.compound'</span>}; network.metabolite_KEGGID(ii)];
+0043         <span class="keyword">end</span>
+0044         reaction_column      = [{<span class="string">'!Reaction'</span>}; repmat({<span class="string">''</span>},nii,1)];
+0045         <span class="keyword">if</span> isfield(network, <span class="string">'MiriamID_urn_miriam_kegg_reaction'</span>),
+0046           reaction_kegg_column = [{<span class="string">'!ReactionID:urn.miriam.kegg.reaction'</span>}; repmat({<span class="string">''</span>},nii,1)];
+0047         <span class="keyword">end</span>
+0048         
+0049       <span class="keyword">case</span> <span class="string">'Reaction'</span>, 
+0050         species_column  = [{<span class="string">'!Compound'</span>}; repmat({<span class="string">''</span>},nii,1)];
+0051         reaction_column = [{<span class="string">'!Reaction'</span>}; network.actions(ii)];
+0052         <span class="keyword">if</span> isfield(network, <span class="string">'metabolite_KEGGID'</span>),
+0053           species_kegg_column = [{<span class="string">'!CompoundID:urn.miriam.kegg.compound'</span>}; repmat({<span class="string">''</span>},nii,1)];
+0054         <span class="keyword">end</span>
+0055         <span class="keyword">if</span> isfield(network, <span class="string">'MiriamID_urn_miriam_kegg_reaction'</span>),
+0056           reaction_kegg_column = [{<span class="string">'!ReactionID:urn.miriam.kegg.reaction'</span>}; network.MiriamID_urn_miriam_kegg_reaction];
+0057         <span class="keyword">end</span>
+0058     
+0059       <span class="keyword">case</span> <span class="string">'Reaction/Species'</span>,
+0060         [ij,ik] = ind2sub(size(network.N),ii);
+0061         species_column       = [ {<span class="string">'!Compound'</span>};  network.metabolites(ij)];
+0062         <span class="keyword">if</span> isfield(network, <span class="string">'metabolite_KEGGID'</span>),
+0063           species_kegg_column = [{<span class="string">'!CompoundID:urn.miriam.kegg.compound'</span>}; network.metabolite_KEGGID(ij)];
+0064         <span class="keyword">end</span>
+0065         reaction_column = [{<span class="string">'!Reaction'</span>}; network.actions(ik)];
+0066         <span class="keyword">if</span> isfield(network, <span class="string">'MiriamID_urn_miriam_kegg_reaction'</span>),
+0067           reaction_kegg_column = [{<span class="string">'!ReactionID:urn.miriam.kegg.reaction'</span>}; network.MiriamID_urn_miriam_kegg_reaction(ik)];
+0068         <span class="keyword">end</span>
+0069         
+0070       <span class="keyword">case</span> <span class="string">'None'</span>,
+0071         species_kegg_column  = [];
+0072         reaction_kegg_column = [];
+0073 
+0074     <span class="keyword">end</span>
+0075     <span class="keyword">if</span> nii,
+0076       T{it} = [ quantity_type_column, species_column, reaction_column, unit_column, T{it}, species_kegg_column, reaction_kegg_column];
+0077     <span class="keyword">end</span>
+0078   <span class="keyword">if</span> flag_display, 
+0079     <a href="../../mnt/utils/table.html" class="code" title="function res = table(names,rownumbers,filename)">table</a>(T{it},0)
+0080   <span class="keyword">end</span>
+0081 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

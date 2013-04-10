@@ -37,7 +37,7 @@ ind      indices of metabolites to be removed</pre></div>
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li></ul>
+<li><a href="../../../mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../../mnt/utils/bit_vector.html" class="code" title="function b = bit_vector(ind,l)">bit_vector</a>	b = bit_vector(ind,l)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="../../../mnt/mnt_graphics/netgraph_remove.html" class="code" title="function [network,keep_tot,keep_actions_tot] = netgraph_remove(network)">netgraph_remove</a>	[network,keep_tot,keep_actions_tot] = netgraph_remove(network)</li></ul>
@@ -98,7 +98,7 @@ This function is called by:
 0050 
 0051  <span class="keyword">if</span> isfield(network,<span class="string">'index'</span>), network1.index=network.index(keep_actions); <span class="keyword">end</span>
 0052  dummi(find(network.external)) = 1;
-0053  network1.external=bit_vector(find(dummi(keep)),length(network1.metabolites));
+0053  network1.external=<a href="../../../mnt/utils/bit_vector.html" class="code" title="function b = bit_vector(ind,l)">bit_vector</a>(find(dummi(keep)),length(network1.metabolites));
 0054  
 0055  <span class="keyword">if</span> isfield(network,<span class="string">'MiriamID__urn_miriam_kegg_reaction'</span>), network1.MiriamID__urn_miriam_kegg_reaction = network.MiriamID__urn_miriam_kegg_reaction(keep_actions); <span class="keyword">end</span>
 0056  <span class="keyword">if</span> isfield(network,<span class="string">'orf_indices'</span>), network1.orf_indices = network.orf_indices(keep_actions); <span class="keyword">end</span>
@@ -114,6 +114,6 @@ This function is called by:
 0066    network1.graphics_par.db = db([keep; n_met+keep_actions] ,[keep; n_met+keep_actions] );
 0067  <span class="keyword">end</span>
 0068</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

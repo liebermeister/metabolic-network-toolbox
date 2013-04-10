@@ -11,6 +11,9 @@ numerator_bw = '';
 activation   = '';
 inhibition   = '';
 
+m_sub = full(m_sub);
+m_pro = full(m_pro);
+
 if length(sub),
   for it = 1:length(sub),
     if m_sub(it) == 1,

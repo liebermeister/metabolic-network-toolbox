@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
+<li><a href="../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="network_add_reaction.html" class="code" title="function network = network_add_reaction(network,reactants,stoich_coeffs,name,reversible,external);">network_add_reaction</a>	network = network_add_reaction(network,reactants,stoich_coeffs,name,reversible);</li></ul>
@@ -46,7 +46,7 @@ This function is called by:
 0002 
 0003 <span class="comment">% network = network_add_metabolites(network,new_metabolites,new_external);</span>
 0004 
-0005 new_metabolites = column(setdiff(new_metabolites,network.metabolites));
+0005 new_metabolites = <a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(setdiff(new_metabolites,network.metabolites));
 0006 
 0007 [nr,nm] = <a href="../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
 0008 nn = length(new_metabolites);
@@ -71,6 +71,6 @@ This function is called by:
 0027 <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_KEGGID'</span>),
 0028   network.metabolite_KEGGID = [network.metabolite_KEGGID; repmat({<span class="string">'unknown_KEGG_ID'</span>},nn,1)];
 0029 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

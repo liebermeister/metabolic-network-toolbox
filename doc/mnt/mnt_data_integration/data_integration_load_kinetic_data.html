@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of data_integration_load_kinetic_data</title>
+  <meta name="keywords" content="data_integration_load_kinetic_data">
+  <meta name="description" content="kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_data_integration</a> &gt; data_integration_load_kinetic_data.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_data_integration&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>data_integration_load_kinetic_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)
+
+ construct data structure with kinetic quantities relevant for a model
+ for display: use parameter_balancing_kinetic_data_show(kinetic_data);
+
+ data are read from file 'file_kinetic_data' and 
+
+ the data structure 'kinetic_data' contains a field for every quantity type listed in 'data_quantities'
+
+ fill in values from &quot;kinetic_data_table&quot;
+ take logarithms where necessary
+ values are NOT averaged yet (FIX!!!)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)">data_integration_load_kinetic_data</a>	kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)</li><li><a href="data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)">data_integration_load_quantity_info</a>	quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)</li><li><a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../mnt/utils/lognormal_normal2log.html" class="code" title="function [mu_log,sigma_log] = lognormal_normal2log(mu,sigma,convention)">lognormal_normal2log</a>	function [mu_log,sigma_log] = lognormal_normal2log(mu,sigma,convention)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)">data_integration_load_kinetic_data</a>	kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)</li><li><a href="../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/sbtab_to_modular_rate_law.html" class="code" title="function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)">sbtab_to_modular_rate_law</a>	[kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(network, v, filename, options)">parameter_balancing_thermodynamic</a>	[c, v, mu0, Keq, A, my_kinetic_data] = parameter_balancing_theromdynamic(network, v, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_Keq.html" class="code" title="function [Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename, options)">parameter_balancing_Keq</a>	[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_kinetic.html" class="code" title="function [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);">parameter_balancing_kinetic</a>	[r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)</a>
+0002 
+0003 <span class="comment">% kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% construct data structure with kinetic quantities relevant for a model</span>
+0006 <span class="comment">% for display: use parameter_balancing_kinetic_data_show(kinetic_data);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% data are read from file 'file_kinetic_data' and</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% the data structure 'kinetic_data' contains a field for every quantity type listed in 'data_quantities'</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% fill in values from &quot;kinetic_data_table&quot;</span>
+0013 <span class="comment">% take logarithms where necessary</span>
+0014 <span class="comment">% values are NOT averaged yet (FIX!!!)</span>
+0015 
+0016 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'quantity_info'</span>,<span class="string">'[]'</span>,<span class="string">'use_sbml_ids'</span>,<span class="string">'1'</span>,<span class="string">'use_kegg_ids'</span>,<span class="string">'1'</span>,<span class="string">'flag_invent_std'</span>,<span class="string">'1'</span>,<span class="string">'verbose'</span>,<span class="string">'1'</span>));
+0017 
+0018 <span class="keyword">if</span> isempty(quantity_info), quantity_info = <a href="data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)">data_integration_load_quantity_info</a>; <span class="keyword">end</span>
+0019 
+0020 <span class="keyword">if</span> iscell(file_kinetic_data),
+0021   <span class="comment">%% several files; read them one after the other, each time</span>
+0022   <span class="comment">%% overriding information from previous files.</span>
+0023   kinetic_data = <a href="data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)">data_integration_load_kinetic_data</a>(data_quantities, quantity_info, network, file_kinetic_data{1}, use_sbml_ids, use_kegg_ids);
+0024   fn = fieldnames(kinetic_data);
+0025   <span class="keyword">for</span> it = 2:length(file_kinetic_data),
+0026     my_kinetic_data = <a href="data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)">data_integration_load_kinetic_data</a>(data_quantities, quantity_info, network, file_kinetic_data{it}, use_sbml_ids, use_kegg_ids);
+0027     <span class="keyword">for</span> it2 = 1:length(fn)
+0028       ii = isfinite(my_kinetic_data.(fn{it2}).median);
+0029       kinetic_data.(fn{it2}).median(ii) = my_kinetic_data.(fn{it2}).median(ii);
+0030       ii = isfinite(my_kinetic_data.(fn{it2}).mean);
+0031       kinetic_data.(fn{it2}).mean(ii) = my_kinetic_data.(fn{it2}).mean(ii);
+0032       ii = isfinite(my_kinetic_data.(fn{it2}).std);
+0033       kinetic_data.(fn{it2}).std(ii) = my_kinetic_data.(fn{it2}).std(ii);
+0034       ii = isfinite(my_kinetic_data.(fn{it2}).lower);
+0035       kinetic_data.(fn{it2}).lower(ii) = my_kinetic_data.(fn{it2}).lower(ii);
+0036       ii = isfinite(my_kinetic_data.(fn{it2}).upper);
+0037       kinetic_data.(fn{it2}).upper(ii) = my_kinetic_data.(fn{it2}).upper(ii);       
+0038 
+0039       <span class="keyword">if</span> isfield(my_kinetic_data.(fn{it2}),<span class="string">'mean_ln'</span>),
+0040         ii = isfinite(my_kinetic_data.(fn{it2}).mean_ln);
+0041         kinetic_data.(fn{it2}).mean_ln(ii) = my_kinetic_data.(fn{it2}).mean_ln(ii);
+0042         ii = isfinite(my_kinetic_data.(fn{it2}).std_ln);
+0043         kinetic_data.(fn{it2}).std_ln(ii) = my_kinetic_data.(fn{it2}).std_ln(ii);
+0044         ii = isfinite(my_kinetic_data.(fn{it2}).lower_ln);
+0045         kinetic_data.(fn{it2}).lower_ln(ii) = my_kinetic_data.(fn{it2}).lower_ln(ii);
+0046         ii = isfinite(my_kinetic_data.(fn{it2}).upper);
+0047         kinetic_data.(fn{it2}).upper_ln(ii) = my_kinetic_data.(fn{it2}).upper_ln(ii); 
+0048       <span class="keyword">end</span>
+0049     <span class="keyword">end</span>
+0050   <span class="keyword">end</span>
+0051   <span class="keyword">return</span>
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="keyword">if</span> use_sbml_ids * isfield(network,<span class="string">'sbml_id_species'</span>), 
+0055   metabolites = network.sbml_id_species;
+0056 <span class="keyword">else</span>,
+0057   metabolites = network.metabolites;
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">if</span> use_sbml_ids * isfield(network,<span class="string">'sbml_id_reaction'</span>), 
+0061   reactions   = network.sbml_id_reaction;
+0062 <span class="keyword">else</span>,
+0063   reactions   = network.actions;
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% ------------------------------------------</span>
+0067 
+0068 <span class="keyword">if</span> length(file_kinetic_data),
+0069   kinetic_data_sbtab = sbtab_load_table(file_kinetic_data);
+0070   kinetic_data_table = kinetic_data_sbtab.column.column;
+0071 <span class="keyword">else</span>
+0072   kinetic_data_table = struct(<span class="string">'QuantityType'</span>,[],<span class="string">'SBMLSpeciesID'</span>,[]);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% ------------------------------------------</span>
+0076 
+0077 <span class="keyword">if</span> use_kegg_ids, 
+0078   <span class="keyword">if</span> ~isfield(network,<span class="string">'metabolite_KEGGID'</span>), 
+0079     use_kegg_ids = 0;
+0080     warning(<span class="string">'Kegg IDs missing in network; matching elements by SBML ids'</span>);
+0081   <span class="keyword">elseif</span> ~isfield(kinetic_data_table,<span class="string">'Compound_MiriamID__urn_miriam_kegg_compound'</span>), 
+0082     use_kegg_ids= 0; 
+0083     warning(<span class="string">'Kegg IDs missing in data set; matching elements by SBML ids'</span>);
+0084   <span class="keyword">else</span>,
+0085     metabolites = network.metabolite_KEGGID;
+0086   <span class="keyword">end</span>
+0087 
+0088   <span class="keyword">if</span> isfield(network,<span class="string">'reaction_KEGGID'</span>), 
+0089     reactions = network.reaction_KEGGID;
+0090   <span class="keyword">elseif</span>  isfield(network,<span class="string">'MiriamID__urn_miriam_kegg_reaction'</span>), 
+0091     reactions = network.MiriamID__urn_miriam_kegg_reaction;
+0092   <span class="keyword">else</span>
+0093     use_kegg_ids = 0; 
+0094     warning(<span class="string">'Kegg IDs missing in network; matching elements by SBML ids'</span>);
+0095   <span class="keyword">end</span>
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="comment">% ------------------------------------------</span>
+0099 
+0100 [nm,nr] = size(network.N);
+0101 
+0102 kinetic_data = struct;
+0103 
+0104 <span class="keyword">for</span> it = 1:length(data_quantities),
+0105   
+0106   flag_is_mean = 0;
+0107   
+0108   ind                     = find(strcmp(data_quantities{it},quantity_info.QuantityType));
+0109   <span class="keyword">if</span> isempty(ind), error(sprintf(<span class="string">'Unknown quantity &quot;%s&quot;'</span>,data_quantities{it})); <span class="keyword">end</span>
+0110   symbol                  = quantity_info.Symbol{ind};
+0111   scaling                 = quantity_info.Scaling{ind};
+0112   related_element         = quantity_info.RelatedElement{ind};
+0113   errstd                  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(quantity_info.ErrorStd(ind));
+0114   quantity_entry          = struct;
+0115   quantity_entry.scaling  = scaling;
+0116   
+0117   <span class="comment">% construct empty vectors/matrices</span>
+0118 
+0119   <span class="keyword">switch</span> quantity_info.RelatedElement{ind},
+0120     <span class="keyword">case</span> <span class="string">'Species'</span>,          ss = [nm,1];
+0121     <span class="keyword">case</span> <span class="string">'Reaction'</span>,         ss = [nr,1];
+0122     <span class="keyword">case</span> <span class="string">'Reaction/Species'</span>, ss = [nr,nm];
+0123     <span class="keyword">case</span> <span class="string">'None'</span>,             ss = [1];
+0124   <span class="keyword">end</span>
+0125   
+0126   quantity_entry.median = nan * zeros(ss);
+0127   quantity_entry.mean   = nan * zeros(ss);
+0128   quantity_entry.std    = nan * zeros(ss);
+0129   quantity_entry.lower  = nan * zeros(ss);
+0130   quantity_entry.upper  = nan * zeros(ss);
+0131 
+0132   <span class="comment">% extract relevant kinetic data</span>
+0133   ind = find( strcmp(kinetic_data_table.QuantityType,data_quantities{it}));
+0134 
+0135   <span class="keyword">if</span> isfield(kinetic_data_table,<span class="string">'Mean'</span>),
+0136     my_mean   = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.Mean(ind));
+0137     my_median = nan * my_mean;
+0138     flag_is_mean = 1;
+0139   <span class="keyword">elseif</span> isfield(kinetic_data_table,<span class="string">'Median'</span>),
+0140     my_median = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.Median(ind));
+0141     my_mean   = nan * my_median;
+0142   <span class="keyword">elseif</span> isfield(kinetic_data_table,<span class="string">'Value'</span>),
+0143     my_median = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.Value(ind));
+0144     my_mean   = nan * my_median;
+0145   <span class="keyword">else</span> 
+0146     warning(<span class="string">'No column with values found'</span>);
+0147     my_median = [];
+0148   <span class="keyword">end</span>
+0149 
+0150   my_std    = nan* ones(length(ind),1);    
+0151   my_std_ln = nan* ones(length(ind),1);    
+0152 
+0153    <span class="keyword">switch</span> scaling,
+0154     
+0155     <span class="keyword">case</span> <span class="string">'Original'</span>,
+0156       <span class="comment">%% mean and median are the same</span>
+0157       <span class="keyword">if</span> flag_is_mean,
+0158         my_median = my_mean;
+0159       <span class="keyword">else</span>,
+0160         my_mean = my_median;
+0161       <span class="keyword">end</span>
+0162     
+0163     <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0164       my_mean_ln = nan * my_mean;
+0165       my_std_ln  = nan * my_std;
+0166 
+0167   <span class="keyword">end</span>
+0168 
+0169   <span class="keyword">if</span> isfield(kinetic_data_table,<span class="string">'Std'</span>),
+0170     <span class="keyword">switch</span> scaling,
+0171       <span class="keyword">case</span> <span class="string">'Original'</span>,
+0172         my_std    = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.Std(ind));
+0173       <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0174         my_std_ln  = log(10) * <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.Std(ind));
+0175     <span class="keyword">end</span>
+0176   <span class="keyword">end</span>
+0177     
+0178   <span class="keyword">if</span> flag_invent_std,
+0179     <span class="keyword">if</span> verbose, 
+0180       display(<span class="string">'Inventing standard deviations'</span>); 
+0181     <span class="keyword">end</span>
+0182     <span class="keyword">if</span> length(my_mean),
+0183     <span class="keyword">switch</span> scaling,
+0184       <span class="keyword">case</span> <span class="string">'Original'</span>,
+0185         indices = find( [isfinite(my_mean) + isfinite(my_median)] .* [~isfinite(my_std)]);
+0186         my_std(indices) = errstd;
+0187       <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0188         <span class="comment">%% PRELIMINARY SOLUTION. FIX!</span>
+0189         indices = find( [isfinite(my_mean) + isfinite(my_median)] .* [~isfinite(my_std_ln)]);
+0190         my_std_ln(indices)   = log(1+errstd);
+0191     <span class="keyword">end</span>
+0192     <span class="keyword">end</span>    
+0193   <span class="keyword">end</span>
+0194   
+0195   <span class="keyword">if</span> isfield(kinetic_data_table,<span class="string">'LowerBound'</span>),
+0196     my_lower = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.LowerBound(ind));
+0197   <span class="keyword">else</span>,
+0198     my_lower = nan * my_median;
+0199   <span class="keyword">end</span>
+0200 
+0201   <span class="keyword">if</span> isfield(kinetic_data_table,<span class="string">'UpperBound'</span>),
+0202     my_upper = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(kinetic_data_table.UpperBound(ind));
+0203   <span class="keyword">else</span>
+0204     my_upper = nan * my_median;
+0205   <span class="keyword">end</span>
+0206 
+0207   <span class="keyword">switch</span> related_element,
+0208     <span class="keyword">case</span> <span class="string">'Species'</span>,   
+0209       <span class="keyword">if</span> use_kegg_ids, 
+0210         rindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.Compound_MiriamID__urn_miriam_kegg_compound(ind),metabolites,<span class="string">'multiple'</span>);
+0211       <span class="keyword">else</span>,
+0212         rindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.SBMLSpeciesID(ind),metabolites,<span class="string">'multiple'</span>);
+0213       <span class="keyword">end</span>
+0214       cindices = repmat({1},length(rindices),1);
+0215 
+0216     <span class="keyword">case</span> <span class="string">'Reaction'</span>,  
+0217 
+0218       <span class="keyword">if</span> use_kegg_ids, 
+0219         <span class="keyword">if</span> isfield(kinetic_data_table,<span class="string">'Reaction_MiriamID__urn_miriam_kegg_reaction'</span>),
+0220           rindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.Reaction_MiriamID__urn_miriam_kegg_reaction(ind),reactions,<span class="string">'multiple'</span>);
+0221           cindices = repmat({1},length(rindices),1);      
+0222         <span class="keyword">else</span>
+0223           warning(<span class="string">'IDs cannot be matched'</span>);
+0224           rindices = repmat({},length(ind));
+0225           cindices = repmat({},length(rindices),1);
+0226         <span class="keyword">end</span>
+0227       <span class="keyword">elseif</span> isfield(kinetic_data_table,<span class="string">'SBMLReactionID'</span>),
+0228         rindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.SBMLReactionID(ind),reactions,<span class="string">'multiple'</span>);
+0229         cindices = repmat({1},length(rindices),1);
+0230       <span class="keyword">else</span>
+0231         warning(<span class="string">'IDs cannot be matched'</span>);
+0232         rindices = repmat({},length(ind));
+0233         cindices = repmat({},length(rindices),1);
+0234       <span class="keyword">end</span>
+0235   
+0236     <span class="keyword">case</span> <span class="string">'Reaction/Species'</span>,   
+0237       
+0238       <span class="keyword">if</span> use_kegg_ids, 
+0239         <span class="keyword">if</span> isfield(kinetic_data_table,<span class="string">'Reaction_MiriamID__urn_miriam_kegg_reaction'</span>),
+0240           rindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.Reaction_MiriamID__urn_miriam_kegg_reaction(ind),reactions,<span class="string">'multiple'</span>);
+0241           cindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.Compound_MiriamID__urn_miriam_kegg_compound(ind),metabolites,<span class="string">'multiple'</span>);
+0242         <span class="keyword">else</span>
+0243           warning(<span class="string">'IDs cannot be matched'</span>);
+0244           rindices = repmat({},length(ind));
+0245           cindices = repmat({},length(rindices),1);
+0246         <span class="keyword">end</span>
+0247       <span class="keyword">elseif</span> isfield(kinetic_data_table,<span class="string">'SBMLReactionID'</span>),
+0248         rindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.SBMLReactionID(ind),reactions,<span class="string">'multiple'</span>);
+0249         cindices = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(kinetic_data_table.SBMLSpeciesID(ind),metabolites,<span class="string">'multiple'</span>);
+0250       <span class="keyword">else</span>
+0251         warning(<span class="string">'IDs cannot be matched'</span>);
+0252         rindices = repmat({},length(ind));
+0253         cindices = repmat({},length(rindices),1);
+0254       <span class="keyword">end</span>
+0255 
+0256     <span class="keyword">case</span> <span class="string">'None'</span>,   
+0257       rindices = {};
+0258       cindices = {};
+0259 
+0260   <span class="keyword">end</span>
+0261   
+0262   ind_ok = find([cellfun(<span class="string">'length'</span>,rindices)~=0].*[cellfun(<span class="string">'length'</span>,cindices)~=0]);
+0263   
+0264   <span class="keyword">switch</span> scaling,
+0265     <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0266       quantity_entry.mean_ln = nan * quantity_entry.mean;
+0267       quantity_entry.std_ln  = nan * quantity_entry.mean;
+0268   <span class="keyword">end</span>
+0269   
+0270   <span class="comment">%% this doesn't work for duplicate values: only the last value is accepted</span>
+0271   <span class="comment">%% also doesn't work for values that have to appear in several places in the model</span>
+0272   
+0273   <span class="keyword">for</span> itt = 1:length(ind_ok),
+0274     my_ind = ind_ok(itt);
+0275     quantity_entry.mean(rindices{my_ind},cindices{my_ind})   = my_mean(my_ind);
+0276     quantity_entry.median(rindices{my_ind},cindices{my_ind}) = my_median(my_ind);
+0277     quantity_entry.std(rindices{my_ind}, cindices{my_ind})   = my_std(my_ind);
+0278     quantity_entry.lower(rindices{my_ind},cindices{my_ind})  = my_lower(my_ind);
+0279     quantity_entry.upper(rindices{my_ind}, cindices{my_ind}) = my_upper(my_ind);
+0280     <span class="keyword">switch</span> scaling,
+0281       <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0282         quantity_entry.mean_ln(rindices{my_ind}, cindices{my_ind}) = my_mean_ln(my_ind);
+0283         quantity_entry.std_ln(rindices{my_ind}, cindices{my_ind})  = my_std_ln(my_ind);
+0284     <span class="keyword">end</span>
+0285   <span class="keyword">end</span>
+0286   
+0287   <span class="keyword">switch</span> scaling,    
+0288     <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0289       <span class="keyword">if</span> flag_is_mean,
+0290         [quantity_entry.mean_ln, quantity_entry.std_ln] = <a href="../../mnt/utils/lognormal_normal2log.html" class="code" title="function [mu_log,sigma_log] = lognormal_normal2log(mu,sigma,convention)">lognormal_normal2log</a>(quantity_entry.mean, quantity_entry.std);
+0291         quantity_entry.median = exp(quantity_entry.mean_ln);
+0292       <span class="keyword">else</span>,
+0293         quantity_entry.mean_ln = log(quantity_entry.median);
+0294         ii = find(isfinite(quantity_entry.std_ln));
+0295         [quantity_entry.mean(ii), quantity_entry.std(ii)] = lognormal_log2normal(quantity_entry.mean_ln(ii), quantity_entry.std_ln(ii));
+0296       <span class="keyword">end</span>
+0297       quantity_entry.lower_ln = log(quantity_entry.lower);
+0298       quantity_entry.upper_ln = log(quantity_entry.upper);
+0299   <span class="keyword">end</span>
+0300   
+0301   kinetic_data.(symbol) = quantity_entry; 
+0302   
+0303 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -16,8 +16,9 @@ REQUIREMENTS
 
   The functions were developed and tested with matlab6.
   Other MATLAB toolboxes required:
-   SBMLtoolbox  - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
-   efmtool      - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
+    SBMLtoolbox  - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
+    efmtool      - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
+
 
 STATE OF THE SOFTWARE.
 

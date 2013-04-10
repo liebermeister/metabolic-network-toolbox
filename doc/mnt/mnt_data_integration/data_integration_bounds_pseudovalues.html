@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of data_integration_bounds_pseudovalues</title>
+  <meta name="keywords" content="data_integration_bounds_pseudovalues">
+  <meta name="description" content="kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_data_integration</a> &gt; data_integration_bounds_pseudovalues.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_data_integration&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>data_integration_bounds_pseudovalues
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network,verbose) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(network, v, filename, options)">parameter_balancing_thermodynamic</a>	[c, v, mu0, Keq, A, my_kinetic_data] = parameter_balancing_theromdynamic(network, v, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_Keq.html" class="code" title="function [Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename, options)">parameter_balancing_Keq</a>	[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_kinetic.html" class="code" title="function [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);">parameter_balancing_kinetic</a>	[r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network,verbose)</a>
+0002 
+0003 <span class="comment">% kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);</span>
+0004 
+0005 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'flag_pseudo_values'</span>,<span class="string">'0'</span>,<span class="string">'verbose'</span>,<span class="string">'1'</span>));
+0006 
+0007 <span class="keyword">if</span> flag_pseudo_values,
+0008   <span class="keyword">if</span> verbose, 
+0009     display(<span class="string">'  Replacing missing data values by pseudo values'</span>);
+0010   <span class="keyword">end</span>
+0011 <span class="keyword">end</span>
+0012 
+0013 fn = fieldnames(kinetic_data);
+0014 
+0015 <span class="keyword">for</span> it = 1:length(fn),
+0016 
+0017  clear my_lower my_upper
+0018  
+0019  ind_lower  = find(~isfinite(kinetic_data.(fn{it}).lower));
+0020  ind_upper  = find(~isfinite(kinetic_data.(fn{it}).upper));
+0021  my_scaling =  quantity_info.Scaling{quantity_info.symbol_index.(fn{it})};
+0022 
+0023  <span class="keyword">switch</span> my_scaling,
+0024    
+0025    <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0026      
+0027      my_mean_ln   = log(eval(quantity_info.PriorMedian{quantity_info.symbol_index.(fn{it})}));
+0028      my_std_ln    = log(10) * eval(quantity_info.PriorStd{quantity_info.symbol_index.(fn{it})});
+0029      [my_mean, my_std] = lognormal_log2normal(my_mean_ln,my_std_ln);
+0030      <span class="comment">%% my_lower_ln  = my_mean_ln -  n_sigma * my_std_ln;</span>
+0031      <span class="comment">%% my_upper_ln  = my_mean_ln +  n_sigma * my_std_ln;</span>
+0032      <span class="comment">%% my_lower     = exp(my_lower_ln);</span>
+0033      <span class="comment">%% my_upper     = exp(my_upper_ln);</span>
+0034 
+0035      my_lower     = eval(quantity_info.LowerBound{quantity_info.symbol_index.(fn{it})});
+0036      my_upper     = eval(quantity_info.UpperBound{quantity_info.symbol_index.(fn{it})});
+0037      my_lower_ln  = log(my_lower);
+0038      my_upper_ln  = log(my_upper);
+0039 
+0040      kinetic_data.(fn{it}).lower(ind_lower)    = my_lower;
+0041      kinetic_data.(fn{it}).upper(ind_upper)    = my_upper;
+0042      kinetic_data.(fn{it}).lower_ln(ind_lower) = my_lower_ln;
+0043      kinetic_data.(fn{it}).upper_ln(ind_upper) = my_upper_ln;
+0044    
+0045    <span class="keyword">case</span> <span class="string">'Original'</span>,
+0046 
+0047      my_mean    = eval(quantity_info.PriorMedian{quantity_info.symbol_index.(fn{it})});
+0048      my_std     = eval(quantity_info.PriorStd{quantity_info.symbol_index.(fn{it})});
+0049      <span class="comment">%% my_lower = my_mean - n_sigma * my_std;</span>
+0050      <span class="comment">%% my_upper = my_mean + n_sigma * my_std;</span>
+0051 
+0052      my_lower     = eval(quantity_info.LowerBound{quantity_info.symbol_index.(fn{it})});
+0053      my_upper     = eval(quantity_info.UpperBound{quantity_info.symbol_index.(fn{it})});
+0054      kinetic_data.(fn{it}).lower(ind_lower) = my_lower;
+0055      kinetic_data.(fn{it}).upper(ind_upper) = my_upper;
+0056  <span class="keyword">end</span>
+0057   
+0058  <span class="keyword">if</span> flag_pseudo_values,
+0059 
+0060    <span class="keyword">if</span> strcmp(<span class="string">'Derived'</span>,quantity_info.Dependence{quantity_info.symbol_index.(fn{it})}),
+0061      ind_mean  = find(~isfinite(kinetic_data.(fn{it}).mean));
+0062      kinetic_data.(fn{it}).mean(ind_mean) = my_mean;
+0063      kinetic_data.(fn{it}).std(ind_mean)  = my_std;
+0064  
+0065      <span class="keyword">switch</span> my_scaling,
+0066        <span class="keyword">case</span> <span class="string">'Original'</span>,
+0067          kinetic_data.(fn{it}).median = kinetic_data.(fn{it}).mean;         
+0068        <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0069          kinetic_data.(fn{it}).median(ind_mean)  = exp(my_mean_ln);
+0070          kinetic_data.(fn{it}).mean_ln(ind_mean) = my_mean_ln;
+0071          kinetic_data.(fn{it}).std_ln(ind_mean)  = my_std_ln;
+0072      <span class="keyword">end</span> 
+0073    
+0074    <span class="keyword">end</span>
+0075  
+0076  <span class="keyword">end</span>
+0077  
+0078 <span class="keyword">end</span>
+0079 
+0080 
+0081 <span class="keyword">if</span> exist(<span class="string">'network'</span>,<span class="string">'var'</span>),
+0082 <span class="keyword">if</span> isfield(kinetic_data,<span class="string">'KM'</span>), 
+0083   kinetic_data.KM.lower(network.N'==0) = nan;
+0084   kinetic_data.KM.upper(network.N'==0) = nan;
+0085 <span class="keyword">end</span>
+0086 <span class="keyword">if</span> isfield(kinetic_data,<span class="string">'KA'</span>), 
+0087   kinetic_data.KA.lower(network.regulation_matrix &lt;=0) = nan;
+0088   kinetic_data.KA.upper(network.regulation_matrix &lt;=0) = nan;
+0089 <span class="keyword">end</span>
+0090 <span class="keyword">if</span> isfield(kinetic_data,<span class="string">'KM'</span>), 
+0091   kinetic_data.KI.lower(network.regulation_matrix &gt;=0) = nan;
+0092   kinetic_data.KI.upper(network.regulation_matrix &gt;=0) = nan;
+0093 <span class="keyword">end</span>
+0094 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

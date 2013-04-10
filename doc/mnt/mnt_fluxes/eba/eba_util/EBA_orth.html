@@ -41,7 +41,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-</ul>
+<li><a href="../../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
 <li><a href="../../../../mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="../../../../mnt/mnt_fluxes/flux_sampling/sample_feasible_v.html" class="code" title="function v = sample_feasible_v(N, ind_ext, constraints, options)">sample_feasible_v</a>	v = sample_feasible_v(N, ind_ext, constraints, options)</li></ul>
@@ -63,7 +63,7 @@ This function is called by:
 0011 <span class="comment">% (i.e. all columns of C)</span>
 0012 
 0013 n_cycles       = size(C,2);
-0014 ind_common_support = find(column(abs(sign_J))' * abs(C));
+0014 ind_common_support = find(<a href="../../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(abs(sign_J))' * abs(C));
 0015 
 0016 CC              = C(:,ind_common_support);
 0017 A              = diag(sign_J)*CC;
@@ -72,6 +72,6 @@ This function is called by:
 0020 
 0021 ind_non_orthogonal = [];
 0022 <span class="keyword">if</span> ~feasible, ind_non_orthogonal = ind_common_support(find(orthogonal_list==0)); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

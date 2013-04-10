@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of convex_sampling_rejection_no_eq</title>
+  <meta name="keywords" content="convex_sampling_rejection_no_eq">
+  <meta name="description" content="[x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,options);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">utils</a> &gt; convex_sampling_rejection_no_eq.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>convex_sampling_rejection_no_eq
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,options);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,n_sample,xl,xu,verbose,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,options);
+
+ Uniform sampling of column vectors x in convex polytope by Rejection Method
+ Draw uniformly from the box defined by [x_lower x_upper]
+ and discard all vectors that violate the inequality constraints
+ The polytope is defined by 
+
+ A_ineq * x &lt; b_ineq
+
+ Default values: n_sample = 1
+ Compute lower and upper bounds for solutions (by linear programming)
+
+ for sampling with equality constraints, see convex_sampling_rejection_method</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="convex_sampling.html" class="code" title="function [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,method,options)">convex_sampling</a>	[x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu);</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,n_sample,xl,xu,verbose,options)</a>
+0002 
+0003 <span class="comment">% [x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,options);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Uniform sampling of column vectors x in convex polytope by Rejection Method</span>
+0006 <span class="comment">% Draw uniformly from the box defined by [x_lower x_upper]</span>
+0007 <span class="comment">% and discard all vectors that violate the inequality constraints</span>
+0008 <span class="comment">% The polytope is defined by</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% A_ineq * x &lt; b_ineq</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Default values: n_sample = 1</span>
+0013 <span class="comment">% Compute lower and upper bounds for solutions (by linear programming)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% for sampling with equality constraints, see convex_sampling_rejection_method</span>
+0016 
+0017 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'n_sample'</span>,<span class="string">'1'</span>,<span class="string">'xl'</span>,<span class="string">'[]'</span>,<span class="string">'xu'</span>,<span class="string">'[]'</span>,<span class="string">'verbose'</span>,<span class="string">'0'</span>));
+0018 
+0019 lx = size(A_ineq,2);
+0020 
+0021 opt = optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>);
+0022 success_flag = 1;
+0023 
+0024 <span class="keyword">for</span> it = 1:lx,
+0025   <span class="keyword">if</span> verbose, 
+0026     display(sprintf(<span class="string">'Checking dimension %d/%d'</span>, it, lx))
+0027   <span class="keyword">end</span>
+0028   vec = zeros(lx,1);
+0029   vec(it) = 1;
+0030   [x_low,f_low,status1] = linprog( vec, A_ineq, b_ineq,[],[],[],[],[],opt);
+0031   [x_upp,f_upp,status2] = linprog(-vec, A_ineq, b_ineq,[],[],[],[],[],opt);  
+0032   <span class="keyword">if</span> ([status1 == -2]+[status2 == -2]), error(<span class="string">'No feasible point found'</span>); <span class="keyword">end</span>
+0033   <span class="keyword">if</span> ~double([status1 == 1]*[status2 == 1]), 
+0034     [status1, status2]
+0035     error(<span class="string">'linprog returned error'</span>);
+0036   <span class="keyword">end</span>
+0037   x_lower(it,1) = x_low(it);
+0038   x_upper(it,1) = x_upp(it);
+0039   x_lower_list(:,it) = x_low; 
+0040   x_upper_list(:,it) = x_upp; 
+0041 <span class="keyword">end</span>
+0042 
+0043 x = [];
+0044 z = 0;
+0045 <span class="keyword">while</span> z&lt;n_sample,
+0046   this_x = x_lower + rand(size(x_lower)) .* [x_upper-x_lower];
+0047   <span class="keyword">if</span> verbose, 
+0048     display(sprintf(<span class="string">'Found  %d/%d feasible samples'</span>, z, n_sample))
+0049   <span class="keyword">end</span>
+0050   <span class="keyword">if</span> A_ineq * this_x &lt; b_ineq,
+0051     z = z+1;
+0052     x(:,z) = this_x;
+0053   <span class="keyword">end</span>
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

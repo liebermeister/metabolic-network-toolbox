@@ -45,10 +45,10 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../mnt/utils/circle.html" class="code" title="function circle(x,y,r,col)">circle</a>	circle(x,y,r,col)</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li></ul>
+<li><a href="../../demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li></ul>
 <!-- crossreference -->
 
 
@@ -70,7 +70,7 @@ This function is called by:
 0014 
 0015 <a name="_sub0" href="#_subfunctions" class="code">function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);</a>
 0016 
-0017 eval(<a href="../../mnt/util/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>,<span class="string">'data_type'</span>,<span class="string">'''concentrations'''</span>,<span class="string">'n_frames'</span>,<span class="string">'[]'</span>,<span class="string">'text_flag'</span>,<span class="string">'0'</span>,<span class="string">'timebar'</span>,<span class="string">'1'</span>));
+0017 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>,<span class="string">'data_type'</span>,<span class="string">'''concentrations'''</span>,<span class="string">'n_frames'</span>,<span class="string">'[]'</span>,<span class="string">'text_flag'</span>,<span class="string">'0'</span>,<span class="string">'timebar'</span>,<span class="string">'1'</span>));
 0018 
 0019 <span class="keyword">if</span> ~exist(<span class="string">'options'</span>,<span class="string">'var'</span>), options = struct; <span class="keyword">end</span>
 0020 
@@ -128,7 +128,7 @@ This function is called by:
 0072 options_default.metprintvalues = 0; 
 0073 options_default.arrowstyle     = <span class="string">'none'</span>;
 0074 
-0075 options = join_struct(options_default,options);
+0075 options = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(options_default,options);
 0076 
 0077 <span class="keyword">if</span> isfield(options,<span class="string">'timebar'</span>), timebar = options.timebar; <span class="keyword">end</span>
 0078 a = axis;
@@ -146,8 +146,8 @@ This function is called by:
 0090     hold on;  
 0091     ss = network.graphics_par.squaresize;
 0092     plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],<span class="string">'-'</span>,<span class="string">'Color'</span>,[0.4 0.7 1]); 
-0093     circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0.2 0.5 1]);
-0094     circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/3,[0.4 0.7 1]);
+0093     <a href="../../mnt/utils/circle.html" class="code" title="function circle(x,y,r,col)">circle</a>( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0.2 0.5 1]);
+0094     <a href="../../mnt/utils/circle.html" class="code" title="function circle(x,y,r,col)">circle</a>( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/3,[0.4 0.7 1]);
 0095   <span class="keyword">end</span>
 0096   axis(a);
 0097 
@@ -162,6 +162,6 @@ This function is called by:
 0106 <span class="keyword">if</span> isfield(options,<span class="string">'rest_frames'</span>),
 0107   M = [ repmat(M(1),1,options.rest_frames), M, repmat(M(end),1,options.rest_frames)];
 0108 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

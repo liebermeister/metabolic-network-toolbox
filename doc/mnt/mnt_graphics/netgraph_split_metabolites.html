@@ -39,7 +39,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/mnt_network/network_build_edit/network_subnetwork.html" class="code" title="function [subnetwork,ind_m] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>	subnetwork = network_subnetwork(network,ind_m,ind_r, omit_isolated_metabolites)</li><li><a href="../../mnt/util/graph_shortest_path.html" class="code" title="function r = graph_shortest_path(A,maxdist,check)">graph_shortest_path</a>	r = graph_shortest_path(A,maxdist,check)</li></ul>
+<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/mnt_network/network_build_edit/network_subnetwork.html" class="code" title="function [subnetwork,ind_m] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>	subnetwork = network_subnetwork(network,ind_m,ind_r, omit_isolated_metabolites)</li><li><a href="../../mnt/utils/graph_shortest_path.html" class="code" title="function r = graph_shortest_path(A,maxdist,check)">graph_shortest_path</a>	r = graph_shortest_path(A,maxdist,check)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="netgraph_cofactor_graphs.html" class="code" title="function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)">netgraph_cofactor_graphs</a>	[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</li></ul>
@@ -146,7 +146,7 @@ This function is called by:
 0096      sparse(network_split.N'~=0) sparse(zeros(length(network_split.actions)))];
 0097 
 0098 m = m-diag(diag(m));
-0099 db = <a href="../../mnt/util/graph_shortest_path.html" class="code" title="function r = graph_shortest_path(A,maxdist,check)">graph_shortest_path</a>(m,4,0);
+0099 db = <a href="../../mnt/utils/graph_shortest_path.html" class="code" title="function r = graph_shortest_path(A,maxdist,check)">graph_shortest_path</a>(m,4,0);
 0100 db(find(~isfinite(db)))=5; 
 0101 
 0102 network_split.graphics_par.m  = m;
@@ -166,6 +166,6 @@ This function is called by:
 0116     sparse(network_split.regulation_matrix)'; <span class="keyword">...</span>
 0117     sparse(network_split.regulation_matrix) <span class="keyword">...</span>
 0118     sparse(zeros(length(network_split.actions)))];</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

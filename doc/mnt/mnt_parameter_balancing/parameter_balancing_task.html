@@ -1,0 +1,383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_task</title>
+  <meta name="keywords" content="parameter_balancing_task">
+  <meta name="description" content="Prepare vectors and matrices for parameter balancing">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_parameter_balancing</a> &gt; parameter_balancing_task.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt_parameter_balancing&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_task
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Prepare vectors and matrices for parameter balancing</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Prepare vectors and matrices for parameter balancing
+
+ Mandatory inputs: network, kinetic_data
+
+ All q and x values are given in natural scaling!
+
+ 'prior' has the same data format as kinetic_data (for export to table files)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt/mnt_data_integration/data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)">data_integration_load_quantity_info</a>	quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)</li><li><a href="../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>	Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantities.html" class="code" title="function [model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(quantity_info,network,options)">parameter_balancing_quantities</a>	[model_quantities, basic_quantities, data_quantities] = parameter_balancing_relevant_quantities(quantity_info,network,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantity_numbers.html" class="code" title="function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)">parameter_balancing_quantity_numbers</a>	count how many quantities of a certain type appear in a model</li><li><a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(network, v, filename, options)">parameter_balancing_thermodynamic</a>	[c, v, mu0, Keq, A, my_kinetic_data] = parameter_balancing_theromdynamic(network, v, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_Keq.html" class="code" title="function [Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename, options)">parameter_balancing_Keq</a>	[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_kinetic.html" class="code" title="function [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);">parameter_balancing_kinetic</a>	[r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities)</a>
+0002 
+0003 <span class="comment">% Prepare vectors and matrices for parameter balancing</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Mandatory inputs: network, kinetic_data</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% All q and x values are given in natural scaling!</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% 'prior' has the same data format as kinetic_data (for export to table files)</span>
+0010 
+0011 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'quantity_info'</span>,<span class="string">'[]'</span>));
+0012 
+0013 <span class="keyword">if</span> isempty(quantity_info),
+0014   quantity_info =   <a href="../../mnt/mnt_data_integration/data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)">data_integration_load_quantity_info</a>;
+0015 <span class="keyword">end</span>
+0016 
+0017 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = <a href="../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
+0018 
+0019 <span class="keyword">if</span> ~exist(<span class="string">'model_quantities'</span>,<span class="string">'var'</span>),
+0020   [model_quantities, basic_quantities] = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantities.html" class="code" title="function [model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(quantity_info,network,options)">parameter_balancing_quantities</a>(quantity_info,network); 
+0021 <span class="keyword">end</span>
+0022 
+0023 
+0024 <span class="comment">% -------------------------------------------------------------</span>
+0025 <span class="comment">% initialise data structure 'task'</span>
+0026 
+0027 <span class="comment">% for which quantities are data available?</span>
+0028 
+0029 data_quantities = quantity_info.QuantityType(<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(fieldnames(kinetic_data),quantity_info.Symbol));
+0030 
+0031 
+0032 task.network          = network;
+0033 task.model_quantities = model_quantities;
+0034 task.basic_quantities = basic_quantities;
+0035 task.data_quantities  = data_quantities;
+0036 task.q.names          = {};
+0037 task.q.scaling        = {};
+0038 task.q.indices        = struct;
+0039 task.q.prior.mean     = [];
+0040 task.q.prior.std      = [];
+0041 
+0042 
+0043 <span class="comment">% -------------------------------------------------------------</span>
+0044 <span class="comment">% build description of basic quantities</span>
+0045 
+0046 num_basic = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantity_numbers.html" class="code" title="function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)">parameter_balancing_quantity_numbers</a>(basic_quantities,quantity_info,network);
+0047 
+0048 <span class="keyword">for</span> it = 1:length(basic_quantities),
+0049   my_quantity = basic_quantities{it};
+0050   ind = find(strcmp(my_quantity,quantity_info.QuantityType));
+0051   my_scaling      = quantity_info.Scaling{ind};
+0052   my_symbol       = quantity_info.Symbol{ind};
+0053   my_prior_median = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(quantity_info.PriorMedian(ind));
+0054   my_prior_std    = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(quantity_info.PriorStd(ind));
+0055   my_rel_element  = quantity_info.RelatedElement{ind};
+0056   
+0057   <span class="comment">%% make data structure &quot;prior&quot;</span>
+0058 
+0059   prior.(my_symbol).scaling = my_scaling;
+0060   prior.(my_symbol).median  = my_prior_median;
+0061 
+0062   <span class="keyword">switch</span> my_rel_element, 
+0063     <span class="keyword">case</span> <span class="string">'Species'</span>,   ee = ones(length(network.metabolites), 1);
+0064     <span class="keyword">case</span> <span class="string">'Reaction'</span>,  ee = ones(length(network.actions), 1);
+0065     <span class="keyword">case</span> <span class="string">'Reaction/Species'</span>, ee = ones(length(network.actions), length(network.metabolites));
+0066   <span class="keyword">end</span>
+0067   
+0068   <span class="keyword">if</span> strcmp(my_scaling, <span class="string">'Logarithmic'</span>),
+0069     prior.(my_symbol).mean_ln = log(my_prior_median) * ee;
+0070     prior.(my_symbol).std_ln  = log(10) * my_prior_std * ee;
+0071     [prior.(my_symbol).mean, prior.(my_symbol).std] = lognormal_log2normal(prior.(my_symbol).mean_ln, prior.(my_symbol).std_ln);
+0072   <span class="keyword">else</span>,
+0073     prior.(my_symbol).mean = my_prior_median * ee;
+0074     prior.(my_symbol).std  = my_prior_std * ee;
+0075   <span class="keyword">end</span>
+0076   
+0077   
+0078   <span class="keyword">if</span> strcmp(my_scaling, <span class="string">'Logarithmic'</span>),
+0079       my_prior_median = log(my_prior_median);
+0080       my_prior_std    = log(10) * my_prior_std;
+0081   <span class="keyword">end</span>
+0082   my_indices = length(task.q.prior.mean) + [1:num_basic(it)]';
+0083   task.q.names(my_indices,:)   = repmat(basic_quantities(it), num_basic(it),1);
+0084   task.q.scaling(my_indices,:) = repmat({my_scaling}, num_basic(it),1);
+0085   task.q.indices.(my_symbol)   = my_indices;
+0086   task.q.prior.mean            = [task.q.prior.mean; my_prior_median * ones(num_basic(it),1)];
+0087   task.q.prior.std             = [task.q.prior.std ; my_prior_std    * ones(num_basic(it),1)];
+0088 
+0089 <span class="keyword">end</span>
+0090 
+0091 task.q.numbers = num_basic;
+0092 
+0093 
+0094 <span class="comment">% -------------------------------------------------------------</span>
+0095 <span class="comment">% build description of model quantities</span>
+0096 
+0097 task.xmodel.names    = {};
+0098 task.xmodel.scaling  = {};
+0099 task.xmodel.indices  = struct;
+0100 
+0101 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = <a href="../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
+0102 
+0103 num_model = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantity_numbers.html" class="code" title="function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)">parameter_balancing_quantity_numbers</a>(model_quantities,quantity_info,network);
+0104 
+0105 <span class="keyword">for</span> it = 1:length(model_quantities),
+0106   my_quantity     = model_quantities{it};
+0107   ind             = find(strcmp(my_quantity,quantity_info.QuantityType));
+0108   my_scaling      = quantity_info.Scaling{ind};
+0109   my_symbol       = quantity_info.Symbol{ind};
+0110   my_indices      = length(task.xmodel.names) + [1:num_model(it)]';
+0111   task.xmodel.names(my_indices,:)   = repmat(model_quantities(it), num_model(it),1);
+0112   task.xmodel.scaling(my_indices,:) = repmat({my_scaling}, num_model(it),1);
+0113   task.xmodel.indices.(my_symbol)   = my_indices;      
+0114 <span class="keyword">end</span>
+0115 
+0116 task.xmodel.numbers = num_model;
+0117 
+0118 Q_model = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>(model_quantities, basic_quantities, quantity_info, network);
+0119 
+0120 task.Q_xmodel_q = Q_model;
+0121 
+0122 
+0123 <span class="comment">% -------------------------------------------------------------</span>
+0124 <span class="comment">% build description of all potential relevant quantities</span>
+0125 <span class="comment">% (for pseudo values and general constraints)</span>
+0126 
+0127 all_quantities = unique([model_quantities; basic_quantities; data_quantities]);
+0128 num_all        = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantity_numbers.html" class="code" title="function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)">parameter_balancing_quantity_numbers</a>(all_quantities,quantity_info,network);
+0129 
+0130 x_all.names       = {};
+0131 x_all.scaling     = {};
+0132 x_all.pseudo      = struct;
+0133 x_all.pseudo.mean = [];
+0134 x_all.pseudo.std  = [];
+0135 x_all.upper_nat   = [];
+0136 x_all.lower_nat   = [];
+0137 x_all.indices     = struct;
+0138 
+0139 <span class="keyword">for</span> it = 1:length(all_quantities),
+0140 
+0141   my_quantity                 = all_quantities{it};
+0142   ind                         = find(strcmp(my_quantity,quantity_info.QuantityType));
+0143   my_scaling                  = quantity_info.Scaling{ind};
+0144   my_symbol                   = quantity_info.Symbol{ind};
+0145   my_indices                  = length(x_all.names) + [1:num_all(it)]';
+0146   x_all.names(my_indices,:)   = repmat(all_quantities(it), num_all(it),1);
+0147   x_all.scaling(my_indices,:) = repmat({my_scaling}, num_all(it),1);
+0148   x_all.indices.(my_symbol)   = my_indices;
+0149 
+0150   my_all_upper    = eval(quantity_info.UpperBound{ind});
+0151   my_all_lower    = eval(quantity_info.LowerBound{ind});
+0152   my_pseudo_median= <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(quantity_info.PriorMedian(ind));
+0153   my_pseudo_std   = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(quantity_info.PriorStd(ind));
+0154 
+0155   <span class="keyword">switch</span> my_scaling, <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0156     my_all_lower = log(my_all_lower);
+0157     my_all_upper = log(my_all_upper);
+0158     my_pseudo_median = log(my_pseudo_median);
+0159     my_pseudo_std    = log(10) * my_pseudo_std;
+0160   <span class="keyword">end</span>
+0161   
+0162   x_all.pseudo.mean = [x_all.pseudo.mean; my_pseudo_median * ones(num_all(it),1)];
+0163   x_all.pseudo.std  = [x_all.pseudo.std ; my_pseudo_std    * ones(num_all(it),1)];
+0164   x_all.upper_nat   = [x_all.upper_nat;   my_all_upper * ones(num_all(it),1)];
+0165   x_all.lower_nat   = [x_all.lower_nat;   my_all_lower * ones(num_all(it),1)];
+0166 
+0167 <span class="keyword">end</span>
+0168 
+0169 
+0170 <span class="comment">% -------------------------------------------------------------</span>
+0171 <span class="comment">% build description of data quantities</span>
+0172 
+0173 x_data_mean  = [];
+0174 x_data_std   = [];
+0175 x_data_lower = [];
+0176 x_data_upper = [];
+0177 
+0178 x_data.names   = {};
+0179 x_data.scaling = {};
+0180 num_data     = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_quantity_numbers.html" class="code" title="function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)">parameter_balancing_quantity_numbers</a>(data_quantities,quantity_info,network);
+0181 
+0182 <span class="keyword">for</span> it = 1:length(data_quantities),
+0183   
+0184   my_quantity                   = data_quantities{it};
+0185   ind                           = find(strcmp(my_quantity,quantity_info.QuantityType));
+0186   my_scaling                    = quantity_info.Scaling{ind};
+0187   my_symbol                     = quantity_info.Symbol{ind};
+0188   my_indices                    = length(x_data.names) + [1:num_data(it)]';
+0189   x_data.names(my_indices,:)    = repmat(data_quantities(it), num_data(it),1);
+0190   x_data.scaling(my_indices,:)  = repmat({my_scaling}, num_data(it),1);
+0191   x_data.indices.(my_symbol)    = my_indices;
+0192 
+0193   <span class="keyword">switch</span> my_scaling,
+0194     
+0195     <span class="keyword">case</span> <span class="string">'Original'</span>,
+0196       my_x_mean  = kinetic_data.(my_symbol).mean;
+0197       my_x_std   = kinetic_data.(my_symbol).std;
+0198       my_x_lower = kinetic_data.(my_symbol).lower;
+0199       my_x_upper = kinetic_data.(my_symbol).upper;
+0200     
+0201     <span class="keyword">case</span> <span class="string">'Logarithmic'</span>,
+0202       my_x_mean  = kinetic_data.(my_symbol).mean_ln;
+0203       my_x_std   = kinetic_data.(my_symbol).std_ln;
+0204       my_x_lower = kinetic_data.(my_symbol).lower_ln;
+0205       my_x_upper = kinetic_data.(my_symbol).upper_ln;
+0206   <span class="keyword">end</span>
+0207   
+0208   <span class="keyword">switch</span> my_symbol, 
+0209     
+0210     <span class="keyword">case</span> <span class="string">'KM'</span>, 
+0211       my_x_mean  = my_x_mean(ind_KM);
+0212       my_x_std   = my_x_std(ind_KM);
+0213       my_x_lower = my_x_lower(ind_KM);
+0214       my_x_upper = my_x_upper(ind_KM);
+0215     
+0216     <span class="keyword">case</span> <span class="string">'KA'</span>, 
+0217       my_x_mean  = my_x_mean(ind_KA);
+0218       my_x_std   = my_x_std(ind_KA);
+0219       my_x_lower = my_x_lower(ind_KA);
+0220       my_x_upper = my_x_upper(ind_KA);
+0221     
+0222     <span class="keyword">case</span> <span class="string">'KI'</span>, 
+0223       my_x_mean  = my_x_mean(ind_KI);
+0224       my_x_std   = my_x_std(ind_KI);
+0225       my_x_lower = my_x_lower(ind_KI);
+0226       my_x_upper = my_x_upper(ind_KI);
+0227   
+0228   <span class="keyword">end</span>
+0229 
+0230   x_data_mean  = [x_data_mean;  <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(my_x_mean(:))  ];
+0231   x_data_std   = [x_data_std ;  <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(my_x_std(:))   ];
+0232   x_data_lower = [x_data_lower; <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(my_x_lower(:)) ];
+0233   x_data_upper = [x_data_upper; <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(my_x_upper(:)) ];
+0234 
+0235 <span class="keyword">end</span>
+0236 
+0237 
+0238 <span class="comment">% -------------------------------------------------------------------</span>
+0239 <span class="comment">% construct the matrix for all relevant quantities</span>
+0240 
+0241 Q_all  = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>(all_quantities, basic_quantities, quantity_info, network);
+0242 Q_data = <a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>(data_quantities, basic_quantities, quantity_info, network);
+0243 
+0244 
+0245 <span class="comment">% -------------------------------------------------------------------</span>
+0246 <span class="comment">% reduce vectors and matrix to existing data</span>
+0247 
+0248 ind_rel = find(isfinite(x_data_mean));
+0249 task.Q_xdata_q     = Q_data(ind_rel,:);
+0250 
+0251 task.xdata.names   = x_data.names(ind_rel);
+0252 task.xdata.scaling = x_data.scaling(ind_rel);
+0253 task.xdata.mean    = x_data_mean(ind_rel);
+0254 task.xdata.std     = x_data_std(ind_rel);
+0255 task.xdata.mean    = x_data_mean(ind_rel);
+0256 task.xdata.indices = struct;
+0257 task.xdata.numbers = [];
+0258 
+0259 <span class="keyword">for</span> it = 1:length(data_quantities),
+0260   my_quantity = data_quantities{it};
+0261   ind         = find(strcmp(my_quantity,quantity_info.QuantityType));
+0262   my_symbol   = quantity_info.Symbol{ind};
+0263   my_ind      = find(strcmp(my_quantity,task.xdata.names));
+0264   <span class="keyword">if</span> length(my_ind), 
+0265     task.xdata.indices.(my_symbol) = my_ind;
+0266     task.xdata.numbers = [task.xdata.numbers; length(my_ind)];
+0267   <span class="keyword">end</span>
+0268 <span class="keyword">end</span>
+0269 
+0270 
+0271 task.xall       = x_all;
+0272 task.Q_xall_q   = Q_all;
+0273 
+0274 
+0275 
+0276 <span class="comment">% -------------------------------------------------------------------</span>
+0277 <span class="comment">% reduce vectors and matrix to existing data, for lower bounds</span>
+0278 
+0279 ind_rel = isfinite(x_data_lower);
+0280 
+0281 task.xlower.names     = x_data.names(ind_rel);
+0282 task.xlower.scaling   = x_data.scaling(ind_rel);
+0283 task.xlower.value_nat = x_data_lower(ind_rel);
+0284 task.xlower.indices   = struct;
+0285 task.xlower.numbers   = [];
+0286 
+0287 <span class="keyword">for</span> it = 1:length(data_quantities),
+0288   my_quantity = data_quantities{it};
+0289   ind         = find(strcmp(my_quantity,quantity_info.QuantityType));
+0290   my_symbol   = quantity_info.Symbol{ind};
+0291   my_ind      = find(strcmp(my_quantity,task.xlower.names));
+0292   <span class="keyword">if</span> length(my_ind), 
+0293     task.xlower.indices.(my_symbol) = my_ind;
+0294     task.xlower.numbers = [task.xlower.numbers; length(my_ind)];
+0295   <span class="keyword">end</span>
+0296 <span class="keyword">end</span>
+0297 
+0298 task.Q_xlower_q   = Q_data(ind_rel,:);
+0299 
+0300 
+0301 <span class="comment">% -------------------------------------------------------------------</span>
+0302 <span class="comment">% reduce vectors and matrix to existing data, for upper bounds</span>
+0303 
+0304 ind_rel = isfinite(x_data_upper);
+0305 
+0306 task.xupper.names   = x_data.names(ind_rel);
+0307 task.xupper.scaling = x_data.scaling(ind_rel);
+0308 task.xupper.value_nat = x_data_upper(ind_rel);
+0309 task.xupper.indices = struct;
+0310 task.xupper.numbers = [];
+0311 
+0312 <span class="keyword">for</span> it = 1:length(data_quantities),
+0313   my_quantity = data_quantities{it};
+0314   ind         = find(strcmp(my_quantity,quantity_info.QuantityType));
+0315   my_symbol   = quantity_info.Symbol{ind};
+0316   my_ind      = find(strcmp(my_quantity,task.xupper.names));
+0317   <span class="keyword">if</span> length(my_ind),
+0318     task.xupper.indices.(my_symbol) = my_ind;
+0319     task.xupper.numbers = [task.xupper.numbers; length(my_ind)];
+0320   <span class="keyword">end</span>
+0321 <span class="keyword">end</span>
+0322 
+0323 task.Q_xupper_q = Q_data(ind_rel,:);
+0324 
+0325 <span class="comment">% --------------------------------------------------------------------</span>
+0326 
+0327 <span class="keyword">if</span> find(isnan(task.xdata.std)), 
+0328   warning(<span class="string">'Some standard deviations are missing; replacing them by 1.'</span>);
+0329   task.xdata.std(find(isnan(task.xdata.std))) = 1; 
+0330 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

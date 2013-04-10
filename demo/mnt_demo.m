@@ -1,6 +1,8 @@
 
 data_dir = [fileparts(which(mfilename)) '/data'];
 
+mnt_dependencies;
+
 echo on;
 clc
 %----------------------------------------------
@@ -220,6 +222,14 @@ M = netgraph_movie(network,t,s_t);
  
 figure(4); 
 movie(M,1);
+
+% Press any key to continue
+pause
+
+% --------------------------------------------------------------------
+% Finally, we can export the model to SBML format
+ 
+SBMLmodel = network_sbml_export(network,1);
  
 % Press any key to finish
 pause

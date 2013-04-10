@@ -4,7 +4,7 @@
 <head>
   <title>Description of eba</title>
   <meta name="keywords" content="eba">
-  <meta name="description" content="[j,delta_mu] = eba(network,constraints)">
+  <meta name="description" content="[j,delta_mu] = eba(network,eba_constraints)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,17 +21,17 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>[j,delta_mu] = eba(network,constraints)</strong></div>
+<div class="box"><strong>[j,delta_mu] = eba(network,eba_constraints)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function [j,delta_mu] = eba(network,constraints) </strong></div>
+<div class="box"><strong>function [j,delta_mu] = eba(network,eba_constraints) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [j,delta_mu] = eba(network,constraints)
+<div class="fragment"><pre class="comment"> [j,delta_mu] = eba(network,eba_constraints)
 
  Energy balance analysis (extension of FBA for simultaneous prediction of v and mu/delta mu)
 
- depending on options.compute_mu (possible values 'mu','delta_mu'),
+ depending on eba_options.compute_mu (possible values 'mu','delta_mu'),
  either mu or delta_mu are included in the variable vector 
 
  if mu is chosen, delta_mu is expressed by  N_all' * mu in all above formulas
@@ -57,7 +57,7 @@
                 v_min &lt;=         j &lt;=  v_max
          delta_mu_min &lt;=  delta_mu &lt;=  delta_mu_max
 
- for fields of 'constraints' and 'options', see 'eba_default_options'</pre></div>
+ for fields of 'eba_constraints' and 'eba_options', see 'eba_default_options'</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -72,13 +72,13 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [j,delta_mu] = eba(network,constraints)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [j,delta_mu] = eba(network,eba_constraints)</a>
 0002 
-0003 <span class="comment">% [j,delta_mu] = eba(network,constraints)</span>
+0003 <span class="comment">% [j,delta_mu] = eba(network,eba_constraints)</span>
 0004 <span class="comment">%</span>
 0005 <span class="comment">% Energy balance analysis (extension of FBA for simultaneous prediction of v and mu/delta mu)</span>
 0006 <span class="comment">%</span>
-0007 <span class="comment">% depending on options.compute_mu (possible values 'mu','delta_mu'),</span>
+0007 <span class="comment">% depending on eba_options.compute_mu (possible values 'mu','delta_mu'),</span>
 0008 <span class="comment">% either mu or delta_mu are included in the variable vector</span>
 0009 <span class="comment">%</span>
 0010 <span class="comment">% if mu is chosen, delta_mu is expressed by  N_all' * mu in all above formulas</span>
@@ -104,21 +104,21 @@ This function is called by:
 0030 <span class="comment">%                v_min &lt;=         j &lt;=  v_max</span>
 0031 <span class="comment">%         delta_mu_min &lt;=  delta_mu &lt;=  delta_mu_max</span>
 0032 <span class="comment">%</span>
-0033 <span class="comment">% for fields of 'constraints' and 'options', see 'eba_default_options'</span>
+0033 <span class="comment">% for fields of 'eba_constraints' and 'eba_options', see 'eba_default_options'</span>
 0034 
 0035 
 0036  [nm,nr] = size(network.N);
 0037  
-0038  c  = constraints.z;
+0038  c  = eba_constraints.z;
 0039  
-0040  ind_ext_signs = find(isfinite(constraints.ext_signs));
+0040  ind_ext_signs = find(isfinite(eba_constraints.ext_signs));
 0041  
 0042  G  = [  eye(nr); <span class="keyword">...</span>
 0043        - eye(nr); <span class="keyword">...</span>
-0044        - diag(constraints.ext_signs(ind_ext_signs))*network.N(ind_ext_signs,:); <span class="keyword">...</span>
+0044        - diag(eba_constraints.ext_signs(ind_ext_signs))*network.N(ind_ext_signs,:); <span class="keyword">...</span>
 0045       ];
-0046  h  = [  constraints.vmax; <span class="keyword">...</span>
-0047        - constraints.vmin; <span class="keyword">...</span>
+0046  h  = [  eba_constraints.vmax; <span class="keyword">...</span>
+0047        - eba_constraints.vmin; <span class="keyword">...</span>
 0048        zeros(length(ind_ext_signs),1);];
 0049  A  = network.N(find(network.external==0),:);
 0050  b  = zeros(sum(network.external==0),1);
@@ -127,6 +127,6 @@ This function is called by:
 0053  
 0054  <span class="keyword">if</span> isempty(j), warning(<span class="string">'No FBA solution found.'</span>); <span class="keyword">end</span>
 0055</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -49,10 +49,10 @@ move nodes of metabolic network graph with the mouse
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>	netgraph_save_positions(network,filename,offsets)</li><li><a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>	netgraph_save_positions(network,filename,offsets)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../demo/demo_small_network.html" class="code" title="">demo_small_network</a>	DEMO_SMALL_NETWORK - Demo for Metabolic Network Toolbox</li><li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</li></ul>
+<li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -103,7 +103,7 @@ This function is called by:
 0041   <span class="keyword">end</span>
 0042   fclose(file);
 0043   names= names';
-0044   ll = <a href="../../mnt/util/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(names,network.metabolites);
+0044   ll = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(names,network.metabolites);
 0045   network.graphics_par.x(:,ll) = x;
 0046   network.graphics_par.fixed(ll) = fixed;
 0047 <span class="keyword">end</span>
@@ -213,132 +213,137 @@ This function is called by:
 0151 <span class="comment">% m is the adjacency matrix</span>
 0152 
 0153 <span class="keyword">while</span> cont==1,
-0154 
-0155   [x_old,y_old,button] = ginput(1);
-0156 
-0157   <span class="keyword">switch</span> button
-0158     
-0159     <span class="keyword">case</span> 1,
-0160       dist    = sum( (repmat([x_old;y_old],1,size(x,2))-x).^2);
-0161       [dum,i] = min(dist);
-0162       index   = i(1);
-0163       title(<span class="string">'Left &gt; place node. Center &gt; place and fix node'</span>);
-0164       [x_new,y_new,button] = ginput(1);
-0165             x(:,index) = [x_new;y_new];
-0166 <span class="comment">%      factors = exp(-db(index,:)/p.lambda);</span>
-0167 <span class="comment">%      x(:,loose) = x(:,loose) + [x_new-x_old; y_new-y_old] * factors(:,loose);</span>
-0168       <span class="keyword">if</span>  button-1 ~= fixed(index),
-0169     fixed(index) = button-1;
-0170     loose = find(1-fixed);
-0171       <span class="keyword">end</span>
-0172       
-0173     <span class="keyword">case</span> 2,  <span class="keyword">for</span> it = 1:20, x = <a href="#_sub2" class="code" title="subfunction  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)">netgraph_relaxation_step</a>(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); <span class="keyword">end</span>
-0174 
-0175     <span class="keyword">case</span> 3,   cont = 0; 
-0176   <span class="keyword">end</span>
+0154   button = 0;
+0155   
+0156   <span class="keyword">while</span> isempty(button),
+0157     [x_old,y_old,button] = ginput(1);
+0158   <span class="keyword">end</span>
+0159 
+0160   <span class="keyword">switch</span> button
+0161     
+0162     <span class="keyword">case</span> 1,
+0163       dist    = sum( (repmat([x_old;y_old],1,size(x,2))-x).^2);
+0164       [dum,i] = min(dist);
+0165       index   = i(1);
+0166       title(<span class="string">'Left &gt; place node. Center &gt; place and fix node'</span>);
+0167       [x_new,y_new,button] = ginput(1);
+0168             x(:,index) = [x_new;y_new];
+0169 <span class="comment">%      factors = exp(-db(index,:)/p.lambda);</span>
+0170 <span class="comment">%      x(:,loose) = x(:,loose) + [x_new-x_old; y_new-y_old] * factors(:,loose);</span>
+0171       <span class="keyword">if</span>  button-1 ~= fixed(index),
+0172     fixed(index) = button-1;
+0173     loose = find(1-fixed);
+0174       <span class="keyword">end</span>
+0175       
+0176     <span class="keyword">case</span> 2,  <span class="keyword">for</span> it = 1:20, x = <a href="#_sub2" class="code" title="subfunction  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)">netgraph_relaxation_step</a>(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); <span class="keyword">end</span>
 0177 
-0178 <span class="comment">%  edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
+0178     <span class="keyword">case</span> 3,   cont = 0; 
 0179   
-0180   <span class="keyword">if</span> splitted,     p.x_split = x;
-0181   <span class="keyword">else</span>,            p.x = x;
-0182   <span class="keyword">end</span>
+0180   <span class="keyword">end</span>
+0181 
+0182 <span class="comment">%  edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
 0183   
-0184   network.graphics_par=p;
-0185 
-0186   <a href="#_sub1" class="code" title="subfunction display_graphics(picture,network,p,opt,x,fixed)">display_graphics</a>(picture,network,p,opt,x,fixed);  
+0184   <span class="keyword">if</span> splitted,     p.x_split = x;
+0185   <span class="keyword">else</span>,            p.x = x;
+0186   <span class="keyword">end</span>
 0187   
-0188 <span class="keyword">end</span>
+0188   network.graphics_par=p;
 0189 
-0190 <span class="keyword">if</span> exist(<span class="string">'filename_out'</span>,<span class="string">'var'</span>), <a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>(network,filename_out); <span class="keyword">end</span>
-0191 <span class="keyword">if</span> opt.manual, title(<span class="string">'New positions confirmed'</span>); <span class="keyword">end</span>
-0192 
-0193 p.x      = x; 
-0194 p.fixed = fixed; 
-0195 
-0196 <span class="keyword">if</span> splitted,
-0197   p.x_split     = x; 
-0198   p.fixed_split = fixed; 
-0199 <span class="keyword">end</span>
-0200 
-0201 network.graphics_par = p;
-0202 
-0203 <span class="comment">% --------------------------------------------------------------------------------</span>
+0190   <a href="#_sub1" class="code" title="subfunction display_graphics(picture,network,p,opt,x,fixed)">display_graphics</a>(picture,network,p,opt,x,fixed);  
+0191   
+0192 <span class="keyword">end</span>
+0193 
+0194 <span class="keyword">if</span> exist(<span class="string">'filename_out'</span>,<span class="string">'var'</span>), <a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>(network,filename_out); <span class="keyword">end</span>
+0195 <span class="keyword">if</span> opt.manual, title(<span class="string">'New positions confirmed'</span>); <span class="keyword">end</span>
+0196 
+0197 p.x      = x; 
+0198 p.fixed = fixed; 
+0199 
+0200 <span class="keyword">if</span> splitted,
+0201   p.x_split     = x; 
+0202   p.fixed_split = fixed; 
+0203 <span class="keyword">end</span>
 0204 
-0205 <a name="_sub1" href="#_subfunctions" class="code">function display_graphics(picture,network,p,opt,x,fixed)</a>
+0205 network.graphics_par = p;
 0206 
-0207 <span class="keyword">if</span> opt.manual,
+0207 <span class="comment">% --------------------------------------------------------------------------------</span>
 0208 
-0209 network.graphics_par = p;
-0210 network.graphics_par.x = x;
-0211 
-0212 <span class="keyword">if</span> exist(<span class="string">'picture'</span>,<span class="string">'var'</span>), 
-0213   image(picture); 
-0214   hold on;
-0215 <span class="keyword">end</span>;
-0216 
-0217 <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,opt); hold on;
-0218 title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
-0219 
-0220 fixed_ind = find(fixed);
-0221 plot(x(1,fixed_ind),x(2,fixed_ind),<span class="string">'k.'</span>); 
-0222 hold off;
-0223 <span class="keyword">if</span> isfield(opt,<span class="string">'Axis'</span>), 
-0224   axis(opt.Axis); 
-0225 <span class="keyword">else</span>,
-0226   axis(opt.frame);
-0227 <span class="keyword">end</span>
-0228 axis tight
-0229 <span class="keyword">end</span>
-0230 
-0231 <span class="comment">% --------------------------------------------------------------------------------</span>
-0232 
-0233 <a name="_sub2" href="#_subfunctions" class="code">function  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)</a>
-0234 
-0235 x(:,loose) = x(:,loose) + 0.001*randn(2,length(loose));
-0236 
-0237 <span class="comment">% spring forces:</span>
-0238 f2 = (( m(loose,:)*x')- repmat(sum(m(loose,:),2),1,2).*x(:,loose)')';
+0209 <a name="_sub1" href="#_subfunctions" class="code">function display_graphics(picture,network,p,opt,x,fixed)</a>
+0210 
+0211 <span class="keyword">if</span> opt.manual,
+0212 
+0213 network.graphics_par = p;
+0214 network.graphics_par.x = x;
+0215 
+0216 <span class="keyword">if</span> exist(<span class="string">'picture'</span>,<span class="string">'var'</span>), 
+0217   image(picture); 
+0218   hold on;
+0219 <span class="keyword">end</span>;
+0220 
+0221 <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,opt); hold on;
+0222 title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
+0223 drawnow; 
+0224 
+0225 fixed_ind = find(fixed);
+0226 plot(x(1,fixed_ind),x(2,fixed_ind),<span class="string">'k.'</span>); 
+0227 hold off;
+0228 <span class="keyword">if</span> isfield(opt,<span class="string">'Axis'</span>), 
+0229   axis(opt.Axis); 
+0230 <span class="keyword">else</span>,
+0231   axis(opt.frame);
+0232 <span class="keyword">end</span>
+0233 axis tight
+0234 <span class="keyword">end</span>
+0235 
+0236 <span class="comment">% --------------------------------------------------------------------------------</span>
+0237 
+0238 <a name="_sub2" href="#_subfunctions" class="code">function  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)</a>
 0239 
-0240 <span class="comment">% nonlinear springs</span>
+0240 x(:,loose) = x(:,loose) + 0.001*randn(2,length(loose));
 0241 
-0242 f2_norm = sqrt(sum(f2.^2))/k4;
-0243 f2      = f2 .*repmat( 0.5*f2_norm+1./(0.2+f2_norm),2,1);
+0242 <span class="comment">% spring forces:</span>
+0243 f2 = (( m(loose,:)*x')- repmat(sum(m(loose,:),2),1,2).*x(:,loose)')';
 0244 
-0245 <span class="comment">% repelling forces</span>
-0246 thresh = 10*k2;
-0247 d1 = abs( repmat(x(1,:),length(loose),1)-repmat(x(1,loose)',1,size(x,2))) &lt; thresh;
-0248 d2 = abs( repmat(x(2,:),length(loose),1)-repmat(x(2,loose)',1,size(x,2))) &lt; thresh;
-0249 <span class="comment">%d_non_neighb =</span>
-0250 d3 = d1.*d2.*(1-m(loose,:));
-0251 d3(:,1:size(d3,1)) = d3(:,1:size(d3,1)) - speye( size(d3,1));
-0252 has_neighbours = find(sum(d3,2));
-0253 
-0254 f0 = zeros(2,size(d3,1));      
-0255 <span class="comment">%      for it=1:1,</span>
-0256 <span class="comment">%    edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
-0257 
-0258 <span class="keyword">for</span> ittt=1:length(has_neighbours);
-0259   itt = has_neighbours(ittt);
-0260   neighbours = find(d3(itt,:));
-0261   distances = repmat(x(:,loose(itt)),1,length(neighbours)) - x(:,neighbours);
-0262   f1 = sum(distances.^2)+10^-10;
-0263   f1 = exp(-f1/(2*k2^2))./sqrt(f1);
-0264   f0(:,itt) = sum(distances.*repmat(f1,2,1),2);      
-0265 <span class="keyword">end</span>
-0266 <span class="comment">%      end</span>
-0267 
-0268 <span class="comment">%f2(:,ind_hub_metabolites) = 0;</span>
-0269 
-0270 <span class="keyword">if</span> length(loose),
-0271   force_loose = 0*k3 * f2 + k1 * f0;
-0272   x(:,loose) = x(:,loose) + force_loose;
-0273   x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
-0274 <span class="comment">%  x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);</span>
-0275 <span class="comment">%  x(:,loose) = gridsize * round(x(:,loose)/gridsize);</span>
-0276 <span class="keyword">end</span>
-0277 
-0278  x(1,:) = x(1,:)-min(x(1,:)); x(1,:) = x(1,:)/max(x(1,:));
-0279  x(2,:) = x(2,:)-min(x(2,:)); x(2,:) = x(2,:)/max(x(2,:));</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 16:43:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0245 <span class="comment">% nonlinear springs</span>
+0246 
+0247 f2_norm = sqrt(sum(f2.^2))/k4;
+0248 f2      = f2 .*repmat( 0.5*f2_norm+1./(0.2+f2_norm),2,1);
+0249 
+0250 <span class="comment">% repelling forces</span>
+0251 thresh = 10*k2;
+0252 d1 = abs( repmat(x(1,:),length(loose),1)-repmat(x(1,loose)',1,size(x,2))) &lt; thresh;
+0253 d2 = abs( repmat(x(2,:),length(loose),1)-repmat(x(2,loose)',1,size(x,2))) &lt; thresh;
+0254 <span class="comment">%d_non_neighb =</span>
+0255 d3 = d1.*d2.*(1-m(loose,:));
+0256 d3(:,1:size(d3,1)) = d3(:,1:size(d3,1)) - speye( size(d3,1));
+0257 has_neighbours = find(sum(d3,2));
+0258 
+0259 f0 = zeros(2,size(d3,1));      
+0260 <span class="comment">%      for it=1:1,</span>
+0261 <span class="comment">%    edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
+0262 
+0263 <span class="keyword">for</span> ittt=1:length(has_neighbours);
+0264   itt = has_neighbours(ittt);
+0265   neighbours = find(d3(itt,:));
+0266   distances = repmat(x(:,loose(itt)),1,length(neighbours)) - x(:,neighbours);
+0267   f1 = sum(distances.^2)+10^-10;
+0268   f1 = exp(-f1/(2*k2^2))./sqrt(f1);
+0269   f0(:,itt) = sum(distances.*repmat(f1,2,1),2);      
+0270 <span class="keyword">end</span>
+0271 <span class="comment">%      end</span>
+0272 
+0273 <span class="comment">%f2(:,ind_hub_metabolites) = 0;</span>
+0274 
+0275 <span class="keyword">if</span> length(loose),
+0276   force_loose = 0*k3 * f2 + k1 * f0;
+0277   x(:,loose) = x(:,loose) + force_loose;
+0278   x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
+0279 <span class="comment">%  x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);</span>
+0280 <span class="comment">%  x(:,loose) = gridsize * round(x(:,loose)/gridsize);</span>
+0281 <span class="keyword">end</span>
+0282 
+0283  x(1,:) = x(1,:)-min(x(1,:)); x(1,:) = x(1,:)/max(x(1,:));
+0284  x(2,:) = x(2,:)-min(x(2,:)); x(2,:) = x(2,:)/max(x(2,:));</pre></div>
+<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

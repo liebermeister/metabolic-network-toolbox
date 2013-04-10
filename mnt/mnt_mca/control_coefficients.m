@@ -86,7 +86,7 @@ end
 if rank(M) == size(M,1), 
   CS_int  = - L_int * [ full(M) \ NR_int ];  
 else
-  display(' * Jacobian is rank-deficient; using pseudoinverse instead of inverse (in control_coefficients.m)');
+  display('  * Jacobian is rank-deficient; using pseudoinverse instead of inverse (in control_coefficients.m)');
   %% sprintf('size of NR_int * Ec_int:')
   %% size(NR_int * Ec_int)
   %% sprintf('rank of NR_int * Ec_int:')
