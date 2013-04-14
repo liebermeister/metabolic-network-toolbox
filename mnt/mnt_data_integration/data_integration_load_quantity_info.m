@@ -9,8 +9,8 @@ end
 eval(default('omit_quantities','[]','quantity_info_filename','[]'));
 
 if isempty(quantity_info_filename),
-data_integration_dir = [fileparts(which(mfilename))];
-quantity_info_filename = [ data_integration_dir '/quantity_info.tsv'];
+ data_integration_dir = [fileparts(which(mfilename))];
+ quantity_info_filename = [ data_integration_dir '/quantity_info.tsv'];
 end
 
 quantity_info_sbtab = sbtab_table_load(quantity_info_filename);
