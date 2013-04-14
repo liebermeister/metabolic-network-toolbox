@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/lognormal_log2normal.html" class="code" title="function [mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)">lognormal_log2normal</a>	[mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(network, v, filename, options)">parameter_balancing_thermodynamic</a>	[c, v, mu0, Keq, A, my_kinetic_data] = parameter_balancing_theromdynamic(network, v, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_Keq.html" class="code" title="function [Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename, options)">parameter_balancing_Keq</a>	[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)</li><li><a href="../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_kinetic.html" class="code" title="function [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);">parameter_balancing_kinetic</a>	[r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);</li></ul>
@@ -70,7 +70,7 @@ This function is called by:
 0026      
 0027      my_mean_ln   = log(eval(quantity_info.PriorMedian{quantity_info.symbol_index.(fn{it})}));
 0028      my_std_ln    = log(10) * eval(quantity_info.PriorStd{quantity_info.symbol_index.(fn{it})});
-0029      [my_mean, my_std] = lognormal_log2normal(my_mean_ln,my_std_ln);
+0029      [my_mean, my_std] = <a href="../../mnt/utils/lognormal_log2normal.html" class="code" title="function [mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)">lognormal_log2normal</a>(my_mean_ln,my_std_ln);
 0030      <span class="comment">%% my_lower_ln  = my_mean_ln -  n_sigma * my_std_ln;</span>
 0031      <span class="comment">%% my_upper_ln  = my_mean_ln +  n_sigma * my_std_ln;</span>
 0032      <span class="comment">%% my_lower     = exp(my_lower_ln);</span>
@@ -136,6 +136,6 @@ This function is called by:
 0092   kinetic_data.KI.upper(network.regulation_matrix &gt;=0) = nan;
 0093 <span class="keyword">end</span>
 0094 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

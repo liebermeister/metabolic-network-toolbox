@@ -52,42 +52,47 @@ This function is called by:
 0005 
 0006 <a name="_sub0" href="#_subfunctions" class="code">function [RS,RJ,RS2,RJ2] = response_coefficients_sparse(CS,Ec,Ep,Ecc,Ecp,Epp,split)</a>
 0007 
-0008 nr = size(CS,2);
-0009 CJ = eye(nr) + Ec * CS ;
-0010 
-0011 <span class="comment">% first order</span>
-0012 
-0013 RS    = CS * Ep;
-0014 RJ    = CJ * Ep;
-0015 
+0008 <span class="keyword">if</span> ~exist(<span class="string">'tensor'</span>,<span class="string">'file'</span>)
+0009   error(<span class="string">'Please install the tensor toolbox (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)'</span>)
+0010 <span class="keyword">end</span>
+0011 
+0012 nr = size(CS,2);
+0013 CJ = eye(nr) + Ec * CS ;
+0014 
+0015 <span class="comment">% first order</span>
 0016 
-0017 <span class="comment">% second order</span>
-0018 
-0019 <span class="keyword">if</span> nargout &gt; 2,
+0017 RS    = CS * Ep;
+0018 RJ    = CJ * Ep;
+0019 
 0020 
-0021   <span class="comment">%% convert back to full tensors</span>
-0022   <span class="comment">%% Ecc = double(full(Ecc));</span>
-0023   <span class="comment">%% Ecp = double(full(Ecp));</span>
-0024   <span class="comment">%%</span>
-0025   <span class="comment">%% Gamma =  ...</span>
-0026   <span class="comment">%%     tensor_product(tensor_product(Ecc,RS,3,1),RS,2,1) ...</span>
-0027   <span class="comment">%%     + tensor_product(Ecp,RS,2,1) ...</span>
-0028   <span class="comment">%%     + permute(tensor_product(Ecp,RS,2,1),[1,3,2])...</span>
-0029   <span class="comment">%%     + Epp;</span>
-0030 
-0031   <span class="comment">%% .. or go on computing with sparse tensors</span>
-0032   
-0033   Gamma = ttt(ttt(Ecc,sptensor(RS),2,1),sptensor(RS),2,1) <span class="keyword">...</span>
-0034           + ttt(Ecp,sptensor(RS),2,1) <span class="keyword">...</span>
-0035           + permute(ttt(Ecp,sptensor(RS),2,1),[1,3,2]) <span class="keyword">...</span>
-0036           + Epp;
-0037 
-0038   Gamma = double(full(Gamma));
-0039   
-0040   RS2 = <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS,Gamma);
-0041   RJ2 = <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ,Gamma);
+0021 <span class="comment">% second order</span>
+0022 
+0023 <span class="keyword">if</span> nargout &gt; 2,
+0024 
+0025   <span class="comment">%% convert back to full tensors</span>
+0026   <span class="comment">%% Ecc = double(full(Ecc));</span>
+0027   <span class="comment">%% Ecp = double(full(Ecp));</span>
+0028   <span class="comment">%% Epp = double(full(Epp));</span>
+0029   <span class="comment">%%</span>
+0030   <span class="comment">%% Gamma =  ...</span>
+0031   <span class="comment">%%     tensor_product(tensor_product(Ecc,RS,3,1),RS,2,1) ...</span>
+0032   <span class="comment">%%     + tensor_product(Ecp,RS,2,1) ...</span>
+0033   <span class="comment">%%     + permute(tensor_product(Ecp,RS,2,1),[1,3,2])...</span>
+0034   <span class="comment">%%     + Epp;</span>
+0035 
+0036   <span class="comment">%% .. or go on computing with sparse tensors</span>
+0037   
+0038   Gamma = ttt(ttt(Ecc,sptensor(RS),2,1),sptensor(RS),2,1) <span class="keyword">...</span>
+0039           + ttt(Ecp,sptensor(RS),2,1) <span class="keyword">...</span>
+0040           + permute(ttt(Ecp,sptensor(RS),2,1),[1,3,2]) <span class="keyword">...</span>
+0041           + Epp;
 0042 
-0043 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0043   Gamma = double(full(Gamma));
+0044   
+0045   RS2 = <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS,Gamma);
+0046   RJ2 = <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ,Gamma);
+0047 
+0048 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

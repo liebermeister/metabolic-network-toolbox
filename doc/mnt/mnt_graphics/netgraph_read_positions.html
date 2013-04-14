@@ -52,8 +52,8 @@ This function is called by:
 0008 fixed = zeros(1,length(network.metabolites)+length(network.actions));
 0009 
 0010 <span class="keyword">if</span> exist(<span class="string">'sbtab_version'</span>,<span class="string">'file'</span>), 
-0011   sbtab_table = sbtab_load_table(table_positions);
-0012   columns = sbtab_table.column.column;
+0011   sbtab_table = sbtab_table_load(table_positions);
+0012   columns = sbtab_table_get_all_columns(sbtab_table);
 0013   A{1} = columns.Element;
 0014   A{2} = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(columns.PositionX);
 0015   A{3} = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(columns.PositionY);
@@ -101,6 +101,6 @@ This function is called by:
 0057 <span class="keyword">end</span>
 0058 network.graphics_par.x = x;
 0059 network.graphics_par.fixed = fixed;</pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

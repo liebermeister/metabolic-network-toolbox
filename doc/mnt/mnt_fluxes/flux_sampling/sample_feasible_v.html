@@ -47,7 +47,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_fluxes/eba/eba_util/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>	C = cycles(N);</li><li><a href="../../../mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>	correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</li></ul>
+<li><a href="../../../mnt/mnt_fluxes/eba/eba_util/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>	C = cycles(N);</li><li><a href="../../../mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>	isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -89,7 +89,7 @@ This function is called by:
 0031   
 0032   display(<span class="string">' Using fixed flux distribution'</span>);
 0033   v       = constraints.v_fix;
-0034   correct = <a href="../../../mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>(v,N,ind_ext,constraints,0,options.epsilon_stationary,options.cycles);
+0034   correct = <a href="../../../mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>(v,N,ind_ext,constraints,0,options.epsilon_stationary,options.cycles);
 0035   <span class="keyword">if</span> ~correct, 
 0036     warning(<span class="string">'Unfeasible flux'</span>)
 0037     <span class="comment">%correct = es_check_flux_constraints(v,N,ind_ext,constraints,1,options.epsilon_stationary,options.cycles);</span>
@@ -192,6 +192,6 @@ This function is called by:
 0134     <span class="keyword">end</span>
 0135     
 0136 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

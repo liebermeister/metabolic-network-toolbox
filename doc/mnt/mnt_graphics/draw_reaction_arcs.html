@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../mnt/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>	-------------------------</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="interaction_network_plot.html" class="code" title="function interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)">interaction_network_plot</a>	interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)</li></ul>
@@ -54,17 +54,17 @@ This function is called by:
 0010 
 0011 hold on
 0012 <span class="keyword">for</span> i1 = 1:nr,
-0013   <span class="keyword">for</span> i2 = 2:i1,
+0013   <span class="keyword">for</span> i2 = i1+1:nr,
 0014    x1 = network.graphics_par.x(:,nm+i1);
 0015    x2 = network.graphics_par.x(:,nm+i2);
 0016    arcsign = det([((x1+x2)/2 -xcentre), x1-x2]) &gt;=0;
-0017    x = arc(x1,x2, 2*(arcsign-0.5)*.2);
+0017    x = <a href="../../mnt/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x1,x2, 2*(arcsign-0.5)*.2);
 0018    col = squeeze(colors(:,i1,i2));
 0019    <span class="keyword">if</span> sum(isnan(col))==0,
 0020      plot(x(1,:),x(2,:),<span class="string">'color'</span>,col,<span class="string">'Linewidth'</span>,linewidth); 
 0021    <span class="keyword">end</span>
 0022   <span class="keyword">end</span>
 0023 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

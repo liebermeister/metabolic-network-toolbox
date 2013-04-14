@@ -114,7 +114,7 @@ COLORSCALE
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/utils/get_color.html" class="code" title="function c = get_color(values, minvalue,maxvalue,cmap);">get_color</a>	c = get_color(values, minvalue,maxvalue,cmap);</li><li><a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li><li><a href="../../mnt/utils/plot_square.html" class="code" title="function plot_square(x,y,l,col)">plot_square</a>	plot_square(x,y,l,col)</li><li><a href="../../mnt/utils/rb_colors.html" class="code" title="function c = rb_colors(ncol)">rb_colors</a>	c = rb_colors(ncol)</li></ul>
+<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>	-------------------------</li><li><a href="../../mnt/utils/get_color.html" class="code" title="function c = get_color(values, minvalue,maxvalue,cmap);">get_color</a>	c = get_color(values, minvalue,maxvalue,cmap);</li><li><a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li><li><a href="../../mnt/utils/plot_square.html" class="code" title="function plot_square(x,y,l,col)">plot_square</a>	plot_square(x,y,l,col)</li><li><a href="../../mnt/utils/rb_colors.html" class="code" title="function c = rb_colors(ncol)">rb_colors</a>	c = rb_colors(ncol)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="../../demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="netgraph_fluxes.html" class="code" title="function netgraph_fluxes(network,J)">netgraph_fluxes</a>	netgraph_fluxes(network,J)</li><li><a href="netgraph_mark_metabolites.html" class="code" title="function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)">netgraph_mark_metabolites</a>	[choice,p] = netgraph_mark_metabolites(network,choice,draw_only)</li><li><a href="netgraph_mark_reactions.html" class="code" title="function [choice,p] = netgraph_mark_reactions(network,choice,draw_only)">netgraph_mark_reactions</a>	[choice,p] = netgraph_mark_reactions(network,choice,draw_only)</li><li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_move2.html" class="code" title="function x = netgraph_move2(network,flag_draw_details)">netgraph_move2</a>	network = netgraph_move2(network,flag_draw_details)</li><li><a href="netgraph_regulation.html" class="code" title="function   netgraph_regulation(network)">netgraph_regulation</a>	netgraph_regulation(network)</li><li><a href="netgraph_remove.html" class="code" title="function [network,keep_tot,keep_actions_tot] = netgraph_remove(network)">netgraph_remove</a>	[network,keep_tot,keep_actions_tot] = netgraph_remove(network)</li><li><a href="../../mnt/mnt_network/network_import_export/network_sbml_import.html" class="code" title="function [network,s] = network_sbml_import(s,dirname,verbose)">network_sbml_import</a>	[network,s] = network_sbml_import(s,dirname,verbose)</li></ul>
@@ -440,7 +440,7 @@ This function is called by:
 0313       <span class="keyword">if</span> this_sign&gt;0, linecolor = [0 1 0];
 0314       <span class="keyword">else</span>,           linecolor = [1 0 0]; 
 0315       <span class="keyword">end</span>
-0316       [x3,arcx,arcy] = <a href="#_sub6" class="code" title="subfunction [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x(:,indr(itt)),x(:,indm(itt)),0.2,0.5);
+0316       [x3,arcx,arcy] = <a href="../../mnt/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x(:,indr(itt)),x(:,indm(itt)),0.2,0.5);
 0317       plot(x3(1,:),x3(2,:),<span class="string">'color'</span>,linecolor);
 0318       <span class="keyword">if</span> p.show_regulationvalues,
 0319         val    = p.norm_regulationvalues(indr(itt)-n_met,indm(itt));
@@ -591,392 +591,394 @@ This function is called by:
 0464   fill(x + 0.5 * l_max * cos(0:0.1:2*pi), y + 0.5*l_max * sin(0:0.1:2*pi),stdcol,<span class="string">'EdgeColor'</span>,secol)
 0465 <span class="keyword">end</span>
 0466 l_min = squaresize * (max(0,l));
-0467 fill(x + 0.5 * l_min * cos(0:0.1:2*pi), y + 0.5*l_min * sin(0:0.1:2*pi),col,<span class="string">'EdgeColor'</span>,ecol)
-0468 
-0469 
-0470 <a name="_sub3" href="#_subfunctions" class="code">function plot_diamond(x,y,l,std,squaresize,col,flag_edges)</a>
+0467 <span class="keyword">if</span> l_min, 
+0468 fill(x + 0.5 * l_min * cos(0:0.1:2*pi), y + 0.5*l_min * sin(0:0.1:2*pi),col,<span class="string">'EdgeColor'</span>,ecol)
+0469 <span class="keyword">end</span>
+0470 
 0471 
-0472 stdcol = .7+.3*col;
-0473 <span class="keyword">if</span> isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
-0474 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
-0475 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
-0476 <span class="keyword">if</span> std,
-0477   l_max = squaresize*(l+std); 
-0478   fill(x + 0.5 * l_max * 4/pi* [-1 0 1 0 -1], y + 0.5*l_max*4/pi*[0 -1 0 1 0],stdcol,<span class="string">'EdgeColor'</span>,secol)
-0479 <span class="keyword">end</span>
-0480 l_min = squaresize*(max(0,l));
-0481 fill(x + 0.5 * l_min * 4/pi* [-1 0 1 0 -1], y + 0.5*l_min*4/pi*[0 -1 0 1 0],col,<span class="string">'EdgeColor'</span>,ecol)
-0482 
-0483 
-0484 <a name="_sub4" href="#_subfunctions" class="code">function plot_octagon(x,y,l,std,squaresize,col,flag_edges)</a>
+0472 <a name="_sub3" href="#_subfunctions" class="code">function plot_diamond(x,y,l,std,squaresize,col,flag_edges)</a>
+0473 
+0474 stdcol = .7+.3*col;
+0475 <span class="keyword">if</span> isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
+0476 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
+0477 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
+0478 <span class="keyword">if</span> std,
+0479   l_max = squaresize*(l+std); 
+0480   fill(x + 0.5 * l_max * 4/pi* [-1 0 1 0 -1], y + 0.5*l_max*4/pi*[0 -1 0 1 0],stdcol,<span class="string">'EdgeColor'</span>,secol)
+0481 <span class="keyword">end</span>
+0482 l_min = squaresize*(max(0,l));
+0483 fill(x + 0.5 * l_min * 4/pi* [-1 0 1 0 -1], y + 0.5*l_min*4/pi*[0 -1 0 1 0],col,<span class="string">'EdgeColor'</span>,ecol)
+0484 
 0485 
-0486 stdcol = .7+.3*col;
-0487 <span class="keyword">if</span> isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
-0488 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
-0489 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
-0490 <span class="keyword">if</span> std,
-0491   l_max = squaresize*(l+std); 
-0492   fill(x + 0.5 * l_max * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_max*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],stdcol,<span class="string">'EdgeColor'</span>,secol)
-0493 <span class="keyword">end</span>
-0494 l_min = squaresize*(max(0,l));
-0495 fill(x + 0.5 * l_min * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_min*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],col,<span class="string">'EdgeColor'</span>,ecol)
-0496 
-0497 
-0498 <a name="_sub5" href="#_subfunctions" class="code">function plot_triangle(x, y, phi, l, col, forward,flag_edges)</a>
+0486 <a name="_sub4" href="#_subfunctions" class="code">function plot_octagon(x,y,l,std,squaresize,col,flag_edges)</a>
+0487 
+0488 stdcol = .7+.3*col;
+0489 <span class="keyword">if</span> isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; <span class="keyword">end</span>
+0490 <span class="keyword">if</span> isnan(std), std = .1; <span class="keyword">end</span>
+0491 <span class="keyword">if</span>  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; <span class="keyword">else</span>, ecol = col; secol =  stdcol; <span class="keyword">end</span>
+0492 <span class="keyword">if</span> std,
+0493   l_max = squaresize*(l+std); 
+0494   fill(x + 0.5 * l_max * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_max*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],stdcol,<span class="string">'EdgeColor'</span>,secol)
+0495 <span class="keyword">end</span>
+0496 l_min = squaresize*(max(0,l));
+0497 fill(x + 0.5 * l_min * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_min*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],col,<span class="string">'EdgeColor'</span>,ecol)
+0498 
 0499 
-0500 <span class="keyword">if</span> isnan(l), l = l*0.5; forward = 1; col = [.7 .7 .7]; 
-0501   points = repmat([x; y],1,4) +  l * [-1 0 1 0; 0 -1 0 1];
-0502 <span class="keyword">else</span>,
-0503   points = repmat([x; y],1,3) + forward * [cos(phi) -sin(phi); sin(phi) cos(phi)] * l * [-0.5 .5 -0.5; -0.3 0 0.3];
-0504 <span class="keyword">end</span>
-0505 fill(points(1,:),points(2,:),col);
-0506 
-0507 
-0508 <span class="comment">% -------------------------</span>
-0509 <span class="comment">% compute positions on an arc: x3 all points for drawing;</span>
-0510 <span class="comment">% arcx,arcy: positions of one point (used for arrow)</span>
-0511  
-0512  <a name="_sub6" href="#_subfunctions" class="code">function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);</a>
+0500 <a name="_sub5" href="#_subfunctions" class="code">function plot_triangle(x, y, phi, l, col, forward,flag_edges)</a>
+0501 
+0502 <span class="keyword">if</span> isnan(l), l = l*0.5; forward = 1; col = [.7 .7 .7]; 
+0503   points = repmat([x; y],1,4) +  l * [-1 0 1 0; 0 -1 0 1];
+0504 <span class="keyword">else</span>,
+0505   points = repmat([x; y],1,3) + forward * [cos(phi) -sin(phi); sin(phi) cos(phi)] * l * [-0.5 .5 -0.5; -0.3 0 0.3];
+0506 <span class="keyword">end</span>
+0507 fill(points(1,:),points(2,:),col);
+0508 
+0509 
+0510 <span class="comment">% -------------------------</span>
+0511 <span class="comment">% compute positions on an arc: x3 all points for drawing;</span>
+0512 <span class="comment">% arcx,arcy: positions of one point (used for arrow)</span>
 0513  
-0514  s = 0:0.1:pi;
-0515  x3 = repmat(mean([x1,x2],2),1,length(s)) <span class="keyword">...</span>
-0516       + 0.5 * [x2-x1] * cos(s) + height * 0.5 * [0 -1; 1 0] * [x2-x1] * sin(s);
-0517  nn = max(1,ceil(arrow_shift * size(x3,2)));
-0518  arcx = x3(1,nn); 
-0519  arcy = x3(2,nn); 
-0520  
-0521  <a name="_sub7" href="#_subfunctions" class="code">function  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)</a>
+0514  <a name="_sub6" href="#_subfunctions" class="code">function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);</a>
+0515  
+0516  s = 0:0.1:pi;
+0517  x3 = repmat(mean([x1,x2],2),1,length(s)) <span class="keyword">...</span>
+0518       + 0.5 * [x2-x1] * cos(s) + height * 0.5 * [0 -1; 1 0] * [x2-x1] * sin(s);
+0519  nn = max(1,ceil(arrow_shift * size(x3,2)));
+0520  arcx = x3(1,nn); 
+0521  arcy = x3(2,nn); 
 0522  
-0523  <span class="comment">% compute height:</span>
+0523  <a name="_sub7" href="#_subfunctions" class="code">function  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)</a>
 0524  
-0525  R90 = [ 0 -1; 1 0];
-0526  lambda = 0.5* R90*[x2-x1, x3-x2] * (x1-x3);
-0527  f = 0.5*(x1+x2)+lambda(1)*R90*(x2-x1);
-0528  height = sqrt(sum((f - x1).^2)) - sqrt(sum ( (f - (0.5*(x1+x2))) .^2));
-0529  height = - height * sign ( (x3-x2)'*R90*(x2-x1));
-0530  
-0531  [x3,arcx,arcy] = <a href="#_sub6" class="code" title="subfunction [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x1,x2, height,arrow_shift);
-0532  plot(x3(1,:),x3(2,:),<span class="string">'color'</span>,linecolor); 
-0533 
-0534 
-0535 <span class="comment">% -------------------------</span>
-0536  
-0537 <a name="_sub8" href="#_subfunctions" class="code">function p = netgraph_draw_set_parameters(network,vararg)</a>
-0538 
-0539 [nm,nr] = size(network.N);
+0525  <span class="comment">% compute height:</span>
+0526  
+0527  R90 = [ 0 -1; 1 0];
+0528  lambda = 0.5* R90*[x2-x1, x3-x2] * (x1-x3);
+0529  f = 0.5*(x1+x2)+lambda(1)*R90*(x2-x1);
+0530  height = sqrt(sum((f - x1).^2)) - sqrt(sum ( (f - (0.5*(x1+x2))) .^2));
+0531  height = - height * sign ( (x3-x2)'*R90*(x2-x1));
+0532  
+0533  [x3,arcx,arcy] = <a href="../../mnt/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x1,x2, height,arrow_shift);
+0534  plot(x3(1,:),x3(2,:),<span class="string">'color'</span>,linecolor); 
+0535 
+0536 
+0537 <span class="comment">% -------------------------</span>
+0538  
+0539 <a name="_sub8" href="#_subfunctions" class="code">function p = netgraph_draw_set_parameters(network,vararg)</a>
 0540 
-0541 <span class="comment">% -------------------------</span>
-0542 <span class="comment">% use parameters from network</span>
-0543 
-0544 <span class="keyword">if</span> isfield(network,<span class="string">'graphics_par'</span>), 
-0545   p = network.graphics_par;
-0546 <span class="keyword">else</span>
-0547   network = <a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network);
-0548   p = network.graphics_par;
-0549 <span class="keyword">end</span>
-0550 
-0551 
-0552 <span class="comment">% -------------------------</span>
-0553 <span class="comment">% use parameters in argument list</span>
-0554 
-0555 <span class="keyword">if</span> length(vararg),
-0556   <span class="keyword">if</span> length(vararg) == 1, 
-0557     input_arg = vararg{1};
-0558   <span class="keyword">else</span>
-0559     input_arg = vararg;    
-0560   <span class="keyword">end</span>
-0561 
-0562 <span class="keyword">switch</span> length(input_arg),
-0563   <span class="keyword">case</span> 0,
-0564   <span class="keyword">case</span> 1,
-0565     <span class="keyword">if</span> isstruct(input_arg),
-0566       fn = fieldnames(input_arg);
-0567       <span class="keyword">for</span> i=1:length(fn), p=setfield( p, fn{i},getfield(input_arg,fn{i})); <span class="keyword">end</span>
-0568     <span class="keyword">end</span>
-0569   <span class="keyword">otherwise</span>,
-0570     <span class="keyword">for</span> i=1:length(input_arg)/2,
-0571       p = setfield( p, input_arg{2*(i-1)+1},input_arg{2*i}); 
-0572     <span class="keyword">end</span>
-0573 <span class="keyword">end</span>
-0574 <span class="keyword">end</span>
-0575 
-0576 <span class="comment">% -------------------------</span>
-0577 <span class="comment">% add missing parameters</span>
-0578 
-0579 p_default = struct(<span class="keyword">...</span>
-0580     <span class="string">'N'</span>,               network.N, <span class="keyword">...</span>
-0581     <span class="string">'show_regulation'</span>, 0, <span class="keyword">...</span>
-0582     <span class="string">'showsign'</span>,        1, <span class="keyword">...</span>
-0583     <span class="string">'omit_zeros'</span>,      0, <span class="keyword">...</span>
-0584     <span class="string">'show_metvalues'</span>, 1, <span class="keyword">...</span>
-0585     <span class="string">'show_actvalues'</span>, 1, <span class="keyword">...</span>
-0586     <span class="string">'show_arrowvalues'</span>, 1, <span class="keyword">...</span>
-0587     <span class="string">'show_edgevalues'</span>, 0, <span class="keyword">...</span>
-0588     <span class="string">'show_regulationvalues'</span>, 0, <span class="keyword">...</span>
-0589     <span class="string">'metvalues_std'</span>,   zeros(size(p.metvalues)),  <span class="keyword">...</span><span class="comment"> </span>
-0590     <span class="string">'metvaluesmax'</span>,    [], <span class="keyword">...</span>
-0591     <span class="string">'metvaluesmin'</span>,    [], <span class="keyword">...</span>
-0592     <span class="string">'metstyle'</span>, <span class="string">'fixed'</span>, <span class="keyword">...</span>
-0593     <span class="string">'actvalues_std'</span>,   zeros(size(p.actvalues)),  <span class="keyword">...</span>
-0594     <span class="string">'actvaluesmax'</span>,    [], <span class="keyword">...</span>
-0595     <span class="string">'actvaluesmin'</span>,    [], <span class="keyword">...</span>
-0596     <span class="string">'actstyle'</span>, <span class="string">'fixed'</span>, <span class="keyword">...</span>
-0597     <span class="string">'omitreactions'</span>,   {<span class="string">'omitthisreaction'</span>}, <span class="keyword">...</span>
-0598     <span class="string">'omitmetabolites'</span>, {<span class="string">'omitthismetabolite'</span>}, <span class="keyword">...</span>
-0599     <span class="string">'arrowstyle'</span>,      <span class="string">'none'</span>, <span class="keyword">...</span>
-0600     <span class="string">'arrowvalues'</span>,     [], <span class="keyword">...</span>
-0601     <span class="string">'arrowprintvalues'</span>,   0, <span class="keyword">...</span>
-0602     <span class="string">'arrowvaluesmax'</span>,  [], <span class="keyword">...</span>
-0603     <span class="string">'arrowvaluesmin'</span>,  [], <span class="keyword">...</span>
-0604     <span class="string">'arrow_stoichiometries'</span>, 1, <span class="keyword">...</span>
-0605     <span class="string">'arrowvalues_std'</span>,     zeros(size(p.arrowvalues)), <span class="keyword">...</span>
-0606     <span class="string">'arrow_shift'</span>,     0.7,  <span class="keyword">...</span>
-0607     <span class="string">'arrowcolor'</span>,      [0.7 0.7 0.7],  <span class="keyword">...</span>
-0608     <span class="string">'single_arrow'</span>, 0, <span class="keyword">...</span>
-0609     <span class="string">'edgevalues'</span>,      [],  <span class="keyword">...</span>
-0610     <span class="string">'edgevalues_std'</span>,  [], <span class="keyword">...</span>
-0611     <span class="string">'edgevaluesmax'</span>,   [], <span class="keyword">...</span>
-0612     <span class="string">'edgevaluesmin'</span>,   [], <span class="keyword">...</span>
-0613     <span class="string">'edgeprintvalues'</span>,      [],  <span class="keyword">...</span>
-0614     <span class="string">'edgestyle'</span>,      <span class="string">'normal'</span>,  <span class="keyword">...</span>
-0615     <span class="string">'regulationvalues'</span>,    [],  <span class="keyword">...</span>
-0616     <span class="string">'regulationprintvalues'</span>,    [],  <span class="keyword">...</span>
-0617     <span class="string">'regulationvalues_std'</span>,[], <span class="keyword">...</span>
-0618     <span class="string">'regulationvaluesmax'</span>, [], <span class="keyword">...</span>
-0619     <span class="string">'regulationvaluesmin'</span>, [], <span class="keyword">...</span>
-0620     <span class="string">'regulationstyle'</span>,      <span class="string">'normal'</span>,  <span class="keyword">...</span>
-0621     <span class="string">'hold_on'</span>,         0, <span class="keyword">...</span>
-0622     <span class="string">'FontSize'</span>,        8, <span class="keyword">...</span>
-0623     <span class="string">'fontangle'</span>,       0, <span class="keyword">...</span>
-0624     <span class="string">'YDir'</span>,            <span class="string">'normal'</span>, <span class="keyword">...</span>
-0625     <span class="string">'figure_axis'</span>,     [], <span class="keyword">...</span>
-0626     <span class="string">'black_and_white'</span>, 0, <span class="keyword">...</span>
-0627     <span class="string">'colormap'</span>,        <a href="../../mnt/utils/rb_colors.html" class="code" title="function c = rb_colors(ncol)">rb_colors</a>(250), <span class="keyword">...</span>
-0628     <span class="string">'linecolor'</span>,       [0 0 1], <span class="keyword">...</span>
-0629     <span class="string">'rlinecolor'</span>,      [1 .3 0.], <span class="keyword">...</span>
-0630     <span class="string">'text_offset'</span>,     [0.01,-0.01], <span class="keyword">...</span>
-0631     <span class="string">'straightlines'</span>,   1,       <span class="keyword">...</span>
-0632     <span class="string">'arrowsize'</span>,       0.03,        <span class="keyword">...</span>
-0633     <span class="string">'figure_position'</span>, [],  <span class="keyword">...</span>
-0634     <span class="string">'subplot_position'</span>,[], <span class="keyword">...</span>
-0635     <span class="string">'no_points'</span>,       0, <span class="keyword">...</span>
-0636     <span class="string">'colorbar'</span>,        0,<span class="keyword">...</span>
-0637     <span class="string">'colorbar_numbers'</span>, [],<span class="keyword">...</span>
-0638     <span class="string">'flag_edges'</span>, 1 );
-0639    
-0640 p = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(p_default,p);
-0641 
-0642 <span class="keyword">if</span> ~isempty(p.edgevalues),       p.show_edgevalues = 1; <span class="keyword">end</span> 
-0643 <span class="keyword">if</span> ~isempty(p.regulationvalues), p.show_regulationvalues = 1; <span class="keyword">end</span> 
-0644 <span class="keyword">if</span> p.show_regulationvalues,      p.show_regulation = 1; <span class="keyword">end</span> 
-0645 
-0646 <span class="keyword">if</span> p.arrowprintvalues, p.actprintvalues = 0; <span class="keyword">end</span>
+0541 [nm,nr] = size(network.N);
+0542 
+0543 <span class="comment">% -------------------------</span>
+0544 <span class="comment">% use parameters from network</span>
+0545 
+0546 <span class="keyword">if</span> isfield(network,<span class="string">'graphics_par'</span>), 
+0547   p = network.graphics_par;
+0548 <span class="keyword">else</span>
+0549   network = <a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network);
+0550   p = network.graphics_par;
+0551 <span class="keyword">end</span>
+0552 
+0553 
+0554 <span class="comment">% -------------------------</span>
+0555 <span class="comment">% use parameters in argument list</span>
+0556 
+0557 <span class="keyword">if</span> length(vararg),
+0558   <span class="keyword">if</span> length(vararg) == 1, 
+0559     input_arg = vararg{1};
+0560   <span class="keyword">else</span>
+0561     input_arg = vararg;    
+0562   <span class="keyword">end</span>
+0563 
+0564 <span class="keyword">switch</span> length(input_arg),
+0565   <span class="keyword">case</span> 0,
+0566   <span class="keyword">case</span> 1,
+0567     <span class="keyword">if</span> isstruct(input_arg),
+0568       fn = fieldnames(input_arg);
+0569       <span class="keyword">for</span> i=1:length(fn), p=setfield( p, fn{i},getfield(input_arg,fn{i})); <span class="keyword">end</span>
+0570     <span class="keyword">end</span>
+0571   <span class="keyword">otherwise</span>,
+0572     <span class="keyword">for</span> i=1:length(input_arg)/2,
+0573       p = setfield( p, input_arg{2*(i-1)+1},input_arg{2*i}); 
+0574     <span class="keyword">end</span>
+0575 <span class="keyword">end</span>
+0576 <span class="keyword">end</span>
+0577 
+0578 <span class="comment">% -------------------------</span>
+0579 <span class="comment">% add missing parameters</span>
+0580 
+0581 p_default = struct(<span class="keyword">...</span>
+0582     <span class="string">'N'</span>,               network.N, <span class="keyword">...</span>
+0583     <span class="string">'show_regulation'</span>, 0, <span class="keyword">...</span>
+0584     <span class="string">'showsign'</span>,        1, <span class="keyword">...</span>
+0585     <span class="string">'omit_zeros'</span>,      0, <span class="keyword">...</span>
+0586     <span class="string">'show_metvalues'</span>, 1, <span class="keyword">...</span>
+0587     <span class="string">'show_actvalues'</span>, 1, <span class="keyword">...</span>
+0588     <span class="string">'show_arrowvalues'</span>, 1, <span class="keyword">...</span>
+0589     <span class="string">'show_edgevalues'</span>, 0, <span class="keyword">...</span>
+0590     <span class="string">'show_regulationvalues'</span>, 0, <span class="keyword">...</span>
+0591     <span class="string">'metvalues_std'</span>,   zeros(size(p.metvalues)),  <span class="keyword">...</span><span class="comment"> </span>
+0592     <span class="string">'metvaluesmax'</span>,    [], <span class="keyword">...</span>
+0593     <span class="string">'metvaluesmin'</span>,    [], <span class="keyword">...</span>
+0594     <span class="string">'metstyle'</span>, <span class="string">'fixed'</span>, <span class="keyword">...</span>
+0595     <span class="string">'actvalues_std'</span>,   zeros(size(p.actvalues)),  <span class="keyword">...</span>
+0596     <span class="string">'actvaluesmax'</span>,    [], <span class="keyword">...</span>
+0597     <span class="string">'actvaluesmin'</span>,    [], <span class="keyword">...</span>
+0598     <span class="string">'actstyle'</span>, <span class="string">'fixed'</span>, <span class="keyword">...</span>
+0599     <span class="string">'omitreactions'</span>,   {<span class="string">'omitthisreaction'</span>}, <span class="keyword">...</span>
+0600     <span class="string">'omitmetabolites'</span>, {<span class="string">'omitthismetabolite'</span>}, <span class="keyword">...</span>
+0601     <span class="string">'arrowstyle'</span>,      <span class="string">'none'</span>, <span class="keyword">...</span>
+0602     <span class="string">'arrowvalues'</span>,     [], <span class="keyword">...</span>
+0603     <span class="string">'arrowprintvalues'</span>,   0, <span class="keyword">...</span>
+0604     <span class="string">'arrowvaluesmax'</span>,  [], <span class="keyword">...</span>
+0605     <span class="string">'arrowvaluesmin'</span>,  [], <span class="keyword">...</span>
+0606     <span class="string">'arrow_stoichiometries'</span>, 1, <span class="keyword">...</span>
+0607     <span class="string">'arrowvalues_std'</span>,     zeros(size(p.arrowvalues)), <span class="keyword">...</span>
+0608     <span class="string">'arrow_shift'</span>,     0.7,  <span class="keyword">...</span>
+0609     <span class="string">'arrowcolor'</span>,      [0.7 0.7 0.7],  <span class="keyword">...</span>
+0610     <span class="string">'single_arrow'</span>, 0, <span class="keyword">...</span>
+0611     <span class="string">'edgevalues'</span>,      [],  <span class="keyword">...</span>
+0612     <span class="string">'edgevalues_std'</span>,  [], <span class="keyword">...</span>
+0613     <span class="string">'edgevaluesmax'</span>,   [], <span class="keyword">...</span>
+0614     <span class="string">'edgevaluesmin'</span>,   [], <span class="keyword">...</span>
+0615     <span class="string">'edgeprintvalues'</span>,      [],  <span class="keyword">...</span>
+0616     <span class="string">'edgestyle'</span>,      <span class="string">'normal'</span>,  <span class="keyword">...</span>
+0617     <span class="string">'regulationvalues'</span>,    [],  <span class="keyword">...</span>
+0618     <span class="string">'regulationprintvalues'</span>,    [],  <span class="keyword">...</span>
+0619     <span class="string">'regulationvalues_std'</span>,[], <span class="keyword">...</span>
+0620     <span class="string">'regulationvaluesmax'</span>, [], <span class="keyword">...</span>
+0621     <span class="string">'regulationvaluesmin'</span>, [], <span class="keyword">...</span>
+0622     <span class="string">'regulationstyle'</span>,      <span class="string">'normal'</span>,  <span class="keyword">...</span>
+0623     <span class="string">'hold_on'</span>,         0, <span class="keyword">...</span>
+0624     <span class="string">'FontSize'</span>,        8, <span class="keyword">...</span>
+0625     <span class="string">'fontangle'</span>,       0, <span class="keyword">...</span>
+0626     <span class="string">'YDir'</span>,            <span class="string">'normal'</span>, <span class="keyword">...</span>
+0627     <span class="string">'figure_axis'</span>,     [], <span class="keyword">...</span>
+0628     <span class="string">'black_and_white'</span>, 0, <span class="keyword">...</span>
+0629     <span class="string">'colormap'</span>,        <a href="../../mnt/utils/rb_colors.html" class="code" title="function c = rb_colors(ncol)">rb_colors</a>(250), <span class="keyword">...</span>
+0630     <span class="string">'linecolor'</span>,       [0 0 1], <span class="keyword">...</span>
+0631     <span class="string">'rlinecolor'</span>,      [1 .3 0.], <span class="keyword">...</span>
+0632     <span class="string">'text_offset'</span>,     [0.01,-0.01], <span class="keyword">...</span>
+0633     <span class="string">'straightlines'</span>,   1,       <span class="keyword">...</span>
+0634     <span class="string">'arrowsize'</span>,       0.03,        <span class="keyword">...</span>
+0635     <span class="string">'figure_position'</span>, [],  <span class="keyword">...</span>
+0636     <span class="string">'subplot_position'</span>,[], <span class="keyword">...</span>
+0637     <span class="string">'no_points'</span>,       0, <span class="keyword">...</span>
+0638     <span class="string">'colorbar'</span>,        0,<span class="keyword">...</span>
+0639     <span class="string">'colorbar_numbers'</span>, [],<span class="keyword">...</span>
+0640     <span class="string">'flag_edges'</span>, 1 );
+0641    
+0642 p = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(p_default,p);
+0643 
+0644 <span class="keyword">if</span> ~isempty(p.edgevalues),       p.show_edgevalues = 1; <span class="keyword">end</span> 
+0645 <span class="keyword">if</span> ~isempty(p.regulationvalues), p.show_regulationvalues = 1; <span class="keyword">end</span> 
+0646 <span class="keyword">if</span> p.show_regulationvalues,      p.show_regulation = 1; <span class="keyword">end</span> 
 0647 
-0648 <span class="comment">% if length(p.metvalues_std)</span>
-0649 <span class="comment">%   if sum(p.metvalues_std~=0), p.metstyle = 'box_std';</span>
-0650 <span class="comment">%   end</span>
-0651 <span class="comment">% end</span>
-0652 <span class="comment">%</span>
-0653 <span class="comment">% if length(p.actvalues_std)</span>
-0654 <span class="comment">%   if sum(p.actvalues_std~=0), p.actstyle = 'box_std';</span>
-0655 <span class="comment">%   end</span>
-0656 <span class="comment">% end</span>
-0657 
-0658 
-0659 <span class="comment">% ----------</span>
-0660 <span class="comment">% correct parameters</span>
-0661 
-0662 <span class="keyword">switch</span> p.arrowstyle,
-0663   <span class="keyword">case</span> <span class="string">'directions'</span>,
-0664     p.arrowvalues = ones(length(network.actions),1);
-0665     <span class="keyword">if</span> isfield(p,<span class="string">'reaction_mapping'</span>),
-0666         p.arrowvalues = ones(max(p.reaction_mapping),1);
-0667     <span class="keyword">end</span>  
-0668 <span class="keyword">end</span>
-0669 
-0670 <span class="keyword">if</span> isempty(p.metvalues),          p.show_metvalues = 0; <span class="keyword">end</span>
-0671 <span class="keyword">if</span> strcmp(p.metstyle,<span class="string">'none'</span>),     p.show_metvalues = 0; <span class="keyword">end</span>
-0672 <span class="keyword">if</span> isempty(p.actvalues),          p.show_actvalues = 0; <span class="keyword">end</span>
-0673 <span class="keyword">if</span> strcmp(p.actstyle,<span class="string">'none'</span>),     p.show_actvalues = 0; <span class="keyword">end</span>
-0674 <span class="keyword">if</span> isempty(p.arrowvalues),        p.show_arrowvalues = 0; <span class="keyword">end</span>
-0675 <span class="keyword">if</span> isempty(p.edgevalues),         p.show_edgevalues = 0; <span class="keyword">end</span>
-0676 <span class="keyword">if</span> isempty(p.regulationvalues),   p.show_regulationvalues = 0; <span class="keyword">end</span>
-0677 <span class="keyword">if</span> strcmp(p.arrowstyle,<span class="string">'none'</span>),  p.show_arrowvalues = 0; <span class="keyword">end</span>
-0678 
-0679 <span class="keyword">if</span> p.show_regulationvalues,
-0680   <span class="keyword">if</span> isempty(p.regulationvalues_std),
-0681     p.regulationvalues_std = zeros(size(p.regulationvalues));
-0682   <span class="keyword">end</span>
-0683 <span class="keyword">end</span>
-0684 
-0685 <span class="keyword">if</span> p.show_edgevalues,
-0686   <span class="keyword">if</span> isempty(p.edgevalues_std),
-0687     p.edgevalues_std = zeros(size(p.edgevalues));
-0688   <span class="keyword">end</span>
-0689 <span class="keyword">end</span>
-0690 
-0691 <span class="comment">% ----------</span>
-0692 <span class="comment">% split metabolites?</span>
-0693 
-0694 <span class="keyword">if</span> isfield(p,<span class="string">'metabolite_mapping'</span>),
-0695   <span class="keyword">if</span> p.show_metvalues,
-0696     p.metvalues       = p.metvalues(p.metabolite_mapping);
-0697     p.metvalues_std   = p.metvalues_std(p.metabolite_mapping); 
-0698   <span class="keyword">end</span>
-0699   <span class="keyword">if</span> p.show_edgevalues,
-0700     p.edgevalues     = p.edgevalues(p.metabolite_mapping,:); 
-0701     p.edgevalues_std = p.edgevalues_std(p.metabolite_mapping,:); 
-0702   <span class="keyword">end</span>
-0703   <span class="keyword">if</span> p.show_regulationvalues,
-0704     p.regulationvalues     = p.regulationvalues(:,p.metabolite_mapping); 
-0705     p.regulationvalues_std = p.regulationvalues_std(:,p.metabolite_mapping); 
-0706   <span class="keyword">end</span>
-0707 <span class="keyword">end</span>
-0708 
-0709 <span class="keyword">if</span> isfield(p,<span class="string">'reaction_mapping'</span>),
-0710   <span class="keyword">if</span> p.show_actvalues,
-0711     p.actvalues       = p.actvalues(p.reaction_mapping);
-0712     p.actvalues_std   = p.actvalues_std(p.reaction_mapping);
-0713   <span class="keyword">end</span>
-0714   <span class="keyword">if</span> p.show_arrowvalues,
-0715     p.arrowvalues       = p.arrowvalues(p.reaction_mapping);
-0716   <span class="keyword">end</span>
-0717   <span class="keyword">if</span> p.show_edgevalues,
-0718     p.edgevalues     = p.edgevalues(:,p.reaction_mapping); 
-0719     p.edgevalues_std = p.edgevalues_std(:,p.reaction_mapping); 
-0720   <span class="keyword">end</span>
-0721   <span class="keyword">if</span> p.show_regulationvalues,
-0722     p.regulationvalues     = p.regulationvalues(p.reaction_mapping,:); 
-0723     p.regulationvalues_std = p.regulationvalues_std(p.reaction_mapping,:); 
-0724   <span class="keyword">end</span>
-0725 <span class="keyword">end</span>
-0726 
-0727 <span class="comment">% ---------------------------------------------------------------------</span>
-0728 <span class="comment">% showsign = 1  -&gt; normalise all values to values between -1 and 1</span>
-0729 <span class="comment">% showsign = 0  -&gt; normalise all values to values between  0 and 1</span>
-0730 
-0731 <span class="keyword">if</span> p.show_metvalues,
-0732   [p.norm_metvalues, p.norm_metvalues_std,p.metvaluesmax,p.metvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.metvalues,p.metvalues_std,p.metvaluesmax,p.metvaluesmin,p);
-0733 <span class="keyword">end</span>
-0734 
-0735 <span class="keyword">if</span> p.show_actvalues,
-0736   [p.norm_actvalues, p.norm_actvalues_std,p.actvaluesmax,p.actvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.actvalues,p.actvalues_std,p.actvaluesmax,p.actvaluesmin,p);
-0737 <span class="keyword">end</span>
-0738 
-0739 <span class="keyword">if</span> p.show_arrowvalues,  
-0740   p.norm_arrowvalues = p.arrowvalues;
-0741   <span class="keyword">if</span> ~isempty(p.arrowvaluesmax),
-0742     <span class="keyword">if</span> isempty(p.arrowvaluesmin),
-0743       p.arrowvaluesmin = -p.arrowvaluesmax;
-0744     <span class="keyword">end</span>
-0745     p.norm_arrowvalues(p.norm_arrowvalues&gt;p.arrowvaluesmax) = p.arrowvaluesmax;
-0746     p.norm_arrowvalues(p.norm_arrowvalues&lt;p.arrowvaluesmin) = p.arrowvaluesmin;
-0747     p.norm_arrowvalues = p.norm_arrowvalues / max(p.arrowvaluesmax, abs(p.arrowvaluesmin));
-0748   <span class="keyword">end</span>
-0749 <span class="keyword">end</span>
-0750 
-0751 <span class="keyword">if</span> p.show_edgevalues,
-0752   [p.norm_edgevalues, p.norm_edgevalues_std,p.edgevaluesmax,p.edgevaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.edgevalues,p.edgevalues_std,p.edgevaluesmax,p.edgevaluesmin,p); 
-0753 <span class="keyword">end</span>
-0754 
-0755 <span class="keyword">if</span> p.show_regulationvalues,
-0756   [p.norm_regulationvalues, p.norm_regulationvalues_std,p.regulationvaluesmax,p.regulationvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.regulationvalues,p.regulationvalues_std,p.regulationvaluesmax,p.regulationvaluesmin,p);
-0757 <span class="keyword">end</span>
-0758 
-0759 <span class="comment">% --- some more stuff</span>
+0648 <span class="keyword">if</span> p.arrowprintvalues, p.actprintvalues = 0; <span class="keyword">end</span>
+0649 
+0650 <span class="comment">% if length(p.metvalues_std)</span>
+0651 <span class="comment">%   if sum(p.metvalues_std~=0), p.metstyle = 'box_std';</span>
+0652 <span class="comment">%   end</span>
+0653 <span class="comment">% end</span>
+0654 <span class="comment">%</span>
+0655 <span class="comment">% if length(p.actvalues_std)</span>
+0656 <span class="comment">%   if sum(p.actvalues_std~=0), p.actstyle = 'box_std';</span>
+0657 <span class="comment">%   end</span>
+0658 <span class="comment">% end</span>
+0659 
+0660 
+0661 <span class="comment">% ----------</span>
+0662 <span class="comment">% correct parameters</span>
+0663 
+0664 <span class="keyword">switch</span> p.arrowstyle,
+0665   <span class="keyword">case</span> <span class="string">'directions'</span>,
+0666     p.arrowvalues = ones(length(network.actions),1);
+0667     <span class="keyword">if</span> isfield(p,<span class="string">'reaction_mapping'</span>),
+0668         p.arrowvalues = ones(max(p.reaction_mapping),1);
+0669     <span class="keyword">end</span>  
+0670 <span class="keyword">end</span>
+0671 
+0672 <span class="keyword">if</span> isempty(p.metvalues),          p.show_metvalues = 0; <span class="keyword">end</span>
+0673 <span class="keyword">if</span> strcmp(p.metstyle,<span class="string">'none'</span>),     p.show_metvalues = 0; <span class="keyword">end</span>
+0674 <span class="keyword">if</span> isempty(p.actvalues),          p.show_actvalues = 0; <span class="keyword">end</span>
+0675 <span class="keyword">if</span> strcmp(p.actstyle,<span class="string">'none'</span>),     p.show_actvalues = 0; <span class="keyword">end</span>
+0676 <span class="keyword">if</span> isempty(p.arrowvalues),        p.show_arrowvalues = 0; <span class="keyword">end</span>
+0677 <span class="keyword">if</span> isempty(p.edgevalues),         p.show_edgevalues = 0; <span class="keyword">end</span>
+0678 <span class="keyword">if</span> isempty(p.regulationvalues),   p.show_regulationvalues = 0; <span class="keyword">end</span>
+0679 <span class="keyword">if</span> strcmp(p.arrowstyle,<span class="string">'none'</span>),  p.show_arrowvalues = 0; <span class="keyword">end</span>
+0680 
+0681 <span class="keyword">if</span> p.show_regulationvalues,
+0682   <span class="keyword">if</span> isempty(p.regulationvalues_std),
+0683     p.regulationvalues_std = zeros(size(p.regulationvalues));
+0684   <span class="keyword">end</span>
+0685 <span class="keyword">end</span>
+0686 
+0687 <span class="keyword">if</span> p.show_edgevalues,
+0688   <span class="keyword">if</span> isempty(p.edgevalues_std),
+0689     p.edgevalues_std = zeros(size(p.edgevalues));
+0690   <span class="keyword">end</span>
+0691 <span class="keyword">end</span>
+0692 
+0693 <span class="comment">% ----------</span>
+0694 <span class="comment">% split metabolites?</span>
+0695 
+0696 <span class="keyword">if</span> isfield(p,<span class="string">'metabolite_mapping'</span>),
+0697   <span class="keyword">if</span> p.show_metvalues,
+0698     p.metvalues       = p.metvalues(p.metabolite_mapping);
+0699     p.metvalues_std   = p.metvalues_std(p.metabolite_mapping); 
+0700   <span class="keyword">end</span>
+0701   <span class="keyword">if</span> p.show_edgevalues,
+0702     p.edgevalues     = p.edgevalues(p.metabolite_mapping,:); 
+0703     p.edgevalues_std = p.edgevalues_std(p.metabolite_mapping,:); 
+0704   <span class="keyword">end</span>
+0705   <span class="keyword">if</span> p.show_regulationvalues,
+0706     p.regulationvalues     = p.regulationvalues(:,p.metabolite_mapping); 
+0707     p.regulationvalues_std = p.regulationvalues_std(:,p.metabolite_mapping); 
+0708   <span class="keyword">end</span>
+0709 <span class="keyword">end</span>
+0710 
+0711 <span class="keyword">if</span> isfield(p,<span class="string">'reaction_mapping'</span>),
+0712   <span class="keyword">if</span> p.show_actvalues,
+0713     p.actvalues       = p.actvalues(p.reaction_mapping);
+0714     p.actvalues_std   = p.actvalues_std(p.reaction_mapping);
+0715   <span class="keyword">end</span>
+0716   <span class="keyword">if</span> p.show_arrowvalues,
+0717     p.arrowvalues       = p.arrowvalues(p.reaction_mapping);
+0718   <span class="keyword">end</span>
+0719   <span class="keyword">if</span> p.show_edgevalues,
+0720     p.edgevalues     = p.edgevalues(:,p.reaction_mapping); 
+0721     p.edgevalues_std = p.edgevalues_std(:,p.reaction_mapping); 
+0722   <span class="keyword">end</span>
+0723   <span class="keyword">if</span> p.show_regulationvalues,
+0724     p.regulationvalues     = p.regulationvalues(p.reaction_mapping,:); 
+0725     p.regulationvalues_std = p.regulationvalues_std(p.reaction_mapping,:); 
+0726   <span class="keyword">end</span>
+0727 <span class="keyword">end</span>
+0728 
+0729 <span class="comment">% ---------------------------------------------------------------------</span>
+0730 <span class="comment">% showsign = 1  -&gt; normalise all values to values between -1 and 1</span>
+0731 <span class="comment">% showsign = 0  -&gt; normalise all values to values between  0 and 1</span>
+0732 
+0733 <span class="keyword">if</span> p.show_metvalues,
+0734   [p.norm_metvalues, p.norm_metvalues_std,p.metvaluesmax,p.metvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.metvalues,p.metvalues_std,p.metvaluesmax,p.metvaluesmin,p);
+0735 <span class="keyword">end</span>
+0736 
+0737 <span class="keyword">if</span> p.show_actvalues,
+0738   [p.norm_actvalues, p.norm_actvalues_std,p.actvaluesmax,p.actvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.actvalues,p.actvalues_std,p.actvaluesmax,p.actvaluesmin,p);
+0739 <span class="keyword">end</span>
+0740 
+0741 <span class="keyword">if</span> p.show_arrowvalues,  
+0742   p.norm_arrowvalues = p.arrowvalues;
+0743   <span class="keyword">if</span> ~isempty(p.arrowvaluesmax),
+0744     <span class="keyword">if</span> isempty(p.arrowvaluesmin),
+0745       p.arrowvaluesmin = -p.arrowvaluesmax;
+0746     <span class="keyword">end</span>
+0747     p.norm_arrowvalues(p.norm_arrowvalues&gt;p.arrowvaluesmax) = p.arrowvaluesmax;
+0748     p.norm_arrowvalues(p.norm_arrowvalues&lt;p.arrowvaluesmin) = p.arrowvaluesmin;
+0749     p.norm_arrowvalues = p.norm_arrowvalues / max(p.arrowvaluesmax, abs(p.arrowvaluesmin));
+0750   <span class="keyword">end</span>
+0751 <span class="keyword">end</span>
+0752 
+0753 <span class="keyword">if</span> p.show_edgevalues,
+0754   [p.norm_edgevalues, p.norm_edgevalues_std,p.edgevaluesmax,p.edgevaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.edgevalues,p.edgevalues_std,p.edgevaluesmax,p.edgevaluesmin,p); 
+0755 <span class="keyword">end</span>
+0756 
+0757 <span class="keyword">if</span> p.show_regulationvalues,
+0758   [p.norm_regulationvalues, p.norm_regulationvalues_std,p.regulationvaluesmax,p.regulationvaluesmin] = <a href="#_sub10" class="code" title="subfunction [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);">normalise</a>(p.regulationvalues,p.regulationvalues_std,p.regulationvaluesmax,p.regulationvaluesmin,p);
+0759 <span class="keyword">end</span>
 0760 
-0761 <span class="keyword">if</span> p.black_and_white,        p.colormap = 0.5-0.5*sign(gray(250)-0.5); <span class="keyword">end</span>
+0761 <span class="comment">% --- some more stuff</span>
 0762 
-0763 
-0764 <span class="comment">% omit metabolites that are not connected anymore once reactions have been omitted</span>
-0765 ll = setdiff(1:nr,<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitreactions,network.actions));
-0766 p.omitmetabolites = union(p.omitmetabolites, network.metabolites(find(sum(abs(network.N(:,ll)),2)==0)));
-0767 
-0768 
-0769 p.actindshow = setdiff(1:length(network.actions),<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitreactions,network.actions));
-0770 p.metindshow = setdiff(1:length(network.metabolites),<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitmetabolites,network.metabolites));
-0771 
-0772 <span class="comment">% ----------</span>
+0763 <span class="keyword">if</span> p.black_and_white,        p.colormap = 0.5-0.5*sign(gray(250)-0.5); <span class="keyword">end</span>
+0764 
+0765 
+0766 <span class="comment">% omit metabolites that are not connected anymore once reactions have been omitted</span>
+0767 ll = setdiff(1:nr,<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitreactions,network.actions));
+0768 p.omitmetabolites = union(p.omitmetabolites, network.metabolites(find(sum(abs(network.N(:,ll)),2)==0)));
+0769 
+0770 
+0771 p.actindshow = setdiff(1:length(network.actions),<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitreactions,network.actions));
+0772 p.metindshow = setdiff(1:length(network.metabolites),<a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(p.omitmetabolites,network.metabolites));
 0773 
-0774 <span class="keyword">if</span> isfield(p,<span class="string">'chop_names'</span>),
-0775   <span class="keyword">for</span> it = 1:length(p.metnames),
-0776     <span class="keyword">if</span> length(p.metnames{it}) &gt; p.chop_names,
-0777       p.metnames{it} = [p.metnames{it}(1:p.chop_names) <span class="string">'...'</span>];
-0778     <span class="keyword">end</span>
-0779   <span class="keyword">end</span>
-0780   <span class="keyword">for</span> it = 1:length(p.actnames),
-0781     <span class="keyword">if</span> length(p.actnames{it}) &gt; p.chop_names,
-0782       p.actnames{it} = [p.actnames{it}(1:p.chop_names) <span class="string">'...'</span> ];
-0783     <span class="keyword">end</span>
-0784   <span class="keyword">end</span>
-0785 <span class="keyword">end</span>
-0786 
-0787 <span class="keyword">if</span> isfield(p,<span class="string">'split_names'</span>),
-0788   <span class="keyword">if</span> p.split_names,
-0789   <span class="keyword">for</span> it = 1:length(p.metnames),
-0790     p.metnames{it} =  <a href="#_sub9" class="code" title="subfunction name2 = split_name(name,l)">split_name</a>(p.metnames{it},p.split_names);
-0791   <span class="keyword">end</span>
-0792   <span class="keyword">for</span> it = 1:length(p.actnames),
-0793      p.actnames{it} =  <a href="#_sub9" class="code" title="subfunction name2 = split_name(name,l)">split_name</a>(p.actnames{it},p.split_names);
-0794   <span class="keyword">end</span>
-0795   <span class="keyword">end</span>
-0796 <span class="keyword">end</span>
-0797 
-0798 <span class="keyword">if</span> size(p.x,2) == 0, error(<span class="string">'No point positions found'</span>); <span class="keyword">end</span>
+0774 <span class="comment">% ----------</span>
+0775 
+0776 <span class="keyword">if</span> isfield(p,<span class="string">'chop_names'</span>),
+0777   <span class="keyword">for</span> it = 1:length(p.metnames),
+0778     <span class="keyword">if</span> length(p.metnames{it}) &gt; p.chop_names,
+0779       p.metnames{it} = [p.metnames{it}(1:p.chop_names) <span class="string">'...'</span>];
+0780     <span class="keyword">end</span>
+0781   <span class="keyword">end</span>
+0782   <span class="keyword">for</span> it = 1:length(p.actnames),
+0783     <span class="keyword">if</span> length(p.actnames{it}) &gt; p.chop_names,
+0784       p.actnames{it} = [p.actnames{it}(1:p.chop_names) <span class="string">'...'</span> ];
+0785     <span class="keyword">end</span>
+0786   <span class="keyword">end</span>
+0787 <span class="keyword">end</span>
+0788 
+0789 <span class="keyword">if</span> isfield(p,<span class="string">'split_names'</span>),
+0790   <span class="keyword">if</span> p.split_names,
+0791   <span class="keyword">for</span> it = 1:length(p.metnames),
+0792     p.metnames{it} =  <a href="#_sub9" class="code" title="subfunction name2 = split_name(name,l)">split_name</a>(p.metnames{it},p.split_names);
+0793   <span class="keyword">end</span>
+0794   <span class="keyword">for</span> it = 1:length(p.actnames),
+0795      p.actnames{it} =  <a href="#_sub9" class="code" title="subfunction name2 = split_name(name,l)">split_name</a>(p.actnames{it},p.split_names);
+0796   <span class="keyword">end</span>
+0797   <span class="keyword">end</span>
+0798 <span class="keyword">end</span>
 0799 
-0800 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0800 <span class="keyword">if</span> size(p.x,2) == 0, error(<span class="string">'No point positions found'</span>); <span class="keyword">end</span>
 0801 
-0802 <a name="_sub9" href="#_subfunctions" class="code">function name2 = split_name(name,l)</a>
+0802 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
 0803 
-0804 name2 = name;
-0805 <span class="keyword">if</span> length(name) &gt; l,
-0806   ll = ceil(length(name)/2);
-0807   name  = [name repmat(<span class="string">' '</span>,1,ll - mod(length(name),ll))];
-0808   name1 = [reshape(name,ll,length(name)/ll)', repmat(<span class="string">'\n'</span>,length(name)/ll,1)];
-0809   name1 = reshape(name1',prod(size(name1)),1)';
-0810   name2 = sprintf(name1(1:end-2));
-0811 <span class="keyword">end</span>
-0812 
-0813 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0804 <a name="_sub9" href="#_subfunctions" class="code">function name2 = split_name(name,l)</a>
+0805 
+0806 name2 = name;
+0807 <span class="keyword">if</span> length(name) &gt; l,
+0808   ll = ceil(length(name)/2);
+0809   name  = [name repmat(<span class="string">' '</span>,1,ll - mod(length(name),ll))];
+0810   name1 = [reshape(name,ll,length(name)/ll)', repmat(<span class="string">'\n'</span>,length(name)/ll,1)];
+0811   name1 = reshape(name1',prod(size(name1)),1)';
+0812   name2 = sprintf(name1(1:end-2));
+0813 <span class="keyword">end</span>
 0814 
-0815 <a name="_sub10" href="#_subfunctions" class="code">function [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);</a>
+0815 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
 0816 
-0817 normvalues     = [];
-0818 normvalues_std = [];
-0819 
-0820 <span class="keyword">if</span> p.omit_zeros, nonzero = (values~=0); <span class="keyword">end</span>
+0817 <a name="_sub10" href="#_subfunctions" class="code">function [normvalues, normvalues_std,valuesmax,valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);</a>
+0818 
+0819 normvalues     = [];
+0820 normvalues_std = [];
 0821 
-0822 <span class="keyword">if</span> p.showsign,
-0823   <span class="keyword">if</span> isempty(valuesmax),   valuesmax  = max(10^-10,max(abs(values(:)))); <span class="keyword">end</span>
-0824   <span class="keyword">if</span> isempty(valuesmin),   valuesmin  = - valuesmax   ; <span class="keyword">end</span>
-0825 <span class="keyword">else</span>,
-0826   <span class="keyword">if</span> isempty(valuesmax),   valuesmax  = max(values(:)); <span class="keyword">end</span>
-0827   <span class="keyword">if</span> isempty(valuesmin),   valuesmin  = min(values(:)); <span class="keyword">end</span>  
-0828 <span class="keyword">end</span>
-0829 <span class="keyword">if</span> valuesmin == valuesmax,  valuesmax = 10^-10 +  valuesmin; <span class="keyword">end</span>
-0830 <span class="keyword">if</span> p.showsign,
-0831   normvalues     = values / valuesmax;
-0832 <span class="keyword">else</span>
-0833   normvalues     = 2*[(values -  valuesmin)   / ( valuesmax- valuesmin)]-1;
-0834 <span class="keyword">end</span>
-0835 
-0836 normvalues_std = real(values_std /  ( valuesmax- valuesmin));
-0837 normvalues(find(normvalues&gt;1)) = 1;  
-0838 normvalues(find(normvalues&lt;-1))=-1;
-0839 
-0840 <span class="keyword">if</span> p.omit_zeros, 
-0841   normvalues     = normvalues .* nonzero;
-0842   <span class="keyword">if</span> ~isempty(normvalues_std), normvalues_std = normvalues_std .* nonzero;  <span class="keyword">end</span>
-0843 <span class="keyword">end</span>
-0844 
-0845 <span class="comment">% ----------------------------------------</span>
+0822 <span class="keyword">if</span> p.omit_zeros, nonzero = (values~=0); <span class="keyword">end</span>
+0823 
+0824 <span class="keyword">if</span> p.showsign,
+0825   <span class="keyword">if</span> isempty(valuesmax),   valuesmax  = max(10^-10,max(abs(values(:)))); <span class="keyword">end</span>
+0826   <span class="keyword">if</span> isempty(valuesmin),   valuesmin  = - valuesmax   ; <span class="keyword">end</span>
+0827 <span class="keyword">else</span>,
+0828   <span class="keyword">if</span> isempty(valuesmax),   valuesmax  = max(values(:)); <span class="keyword">end</span>
+0829   <span class="keyword">if</span> isempty(valuesmin),   valuesmin  = min(values(:)); <span class="keyword">end</span>  
+0830 <span class="keyword">end</span>
+0831 <span class="keyword">if</span> valuesmin == valuesmax,  valuesmax = 10^-10 +  valuesmin; <span class="keyword">end</span>
+0832 <span class="keyword">if</span> p.showsign,
+0833   normvalues     = values / valuesmax;
+0834 <span class="keyword">else</span>
+0835   normvalues     = 2*[(values -  valuesmin)   / ( valuesmax- valuesmin)]-1;
+0836 <span class="keyword">end</span>
+0837 
+0838 normvalues_std = real(values_std /  ( valuesmax- valuesmin));
+0839 normvalues(find(normvalues&gt;1)) = 1;  
+0840 normvalues(find(normvalues&lt;-1))=-1;
+0841 
+0842 <span class="keyword">if</span> p.omit_zeros, 
+0843   normvalues     = normvalues .* nonzero;
+0844   <span class="keyword">if</span> ~isempty(normvalues_std), normvalues_std = normvalues_std .* nonzero;  <span class="keyword">end</span>
+0845 <span class="keyword">end</span>
 0846 
-0847 <a name="_sub11" href="#_subfunctions" class="code">function this_colorbar(num,colmap)</a>
+0847 <span class="comment">% ----------------------------------------</span>
 0848 
-0849 colorbar(<span class="string">'off'</span>); colormap(colmap); h = colorbar; nc = size(colmap,1);
-0850 this_xtick = 1+ceil([nc-1]*(0:1:length(num)-1)/(length(num)-1));
-0851 <span class="comment">%set(h,'Location','SouthOutside','XLim',[1 nc],'XTick',this_xtick,'XTickLabel',[0],'Position', [0.25 0.05 0.50.015]);</span>
-0852 set(h,<span class="string">'YLim'</span>,[1 nc],<span class="string">'YTick'</span>,this_xtick,<span class="string">'YTickLabel'</span>,num);</pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0849 <a name="_sub11" href="#_subfunctions" class="code">function this_colorbar(num,colmap)</a>
+0850 
+0851 colorbar(<span class="string">'off'</span>); colormap(colmap); h = colorbar; nc = size(colmap,1);
+0852 this_xtick = 1+ceil([nc-1]*(0:1:length(num)-1)/(length(num)-1));
+0853 <span class="comment">%set(h,'Location','SouthOutside','XLim',[1 nc],'XTick',this_xtick,'XTickLabel',[0],'Position', [0.25 0.05 0.50.015]);</span>
+0854 set(h,<span class="string">'YLim'</span>,[1 nc],<span class="string">'YTick'</span>,this_xtick,<span class="string">'YTickLabel'</span>,num);</pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

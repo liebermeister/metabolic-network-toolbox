@@ -27,9 +27,7 @@
 <div class="box"><strong>function M = data_integration_save_kinetic_data(kinetic_data, network, filename, options_style) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)
-
- export kinetic data to SBtab format; requires the SBtab toolbox</pre></div>
+<div class="fragment"><pre class="comment"> M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -47,27 +45,25 @@ This function is called by:
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function M = data_integration_save_kinetic_data(kinetic_data, network, filename, options_style)</a>
 0002 
 0003 <span class="comment">% M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% export kinetic data to SBtab format; requires the SBtab toolbox</span>
+0004 
+0005 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options_style'</span>,<span class="string">'0'</span>,<span class="string">'filename'</span>,<span class="string">'[]'</span>));
 0006 
-0007 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options_style'</span>,<span class="string">'0'</span>,<span class="string">'filename'</span>,<span class="string">'[]'</span>));
+0007 T = <a href="data_integration_display_kinetic_data.html" class="code" title="function T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)">data_integration_display_kinetic_data</a>(kinetic_data,network,0);
 0008 
-0009 T = <a href="data_integration_display_kinetic_data.html" class="code" title="function T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)">data_integration_display_kinetic_data</a>(kinetic_data,network,0);
+0009 M = T{1}(1,:);
 0010 
-0011 M = T{1}(1,:);
-0012 
-0013 <span class="keyword">for</span> it = 1:length(T),
-0014   <span class="keyword">if</span> length(T{it}),
-0015     M = [M; T{it}(2:<span class="keyword">end</span>,:)];
-0016   <span class="keyword">end</span>
-0017 <span class="keyword">end</span>
-0018 
-0019 <span class="keyword">if</span> length(filename),
-0020   display(sprintf(<span class="string">'Saving kinetic data to file %s '</span>,filename));
-0021    <a href="../../mnt/utils/table.html" class="code" title="function res = table(names,rownumbers,filename)">table</a>(M,options_style,filename);
-0022 <span class="keyword">else</span>,
-0023    <a href="../../mnt/utils/table.html" class="code" title="function res = table(names,rownumbers,filename)">table</a>(M,options_style)
-0024 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0011 <span class="keyword">for</span> it = 1:length(T),
+0012   <span class="keyword">if</span> length(T{it}),
+0013     M = [M; T{it}(2:<span class="keyword">end</span>,:)];
+0014   <span class="keyword">end</span>
+0015 <span class="keyword">end</span>
+0016 
+0017 <span class="keyword">if</span> length(filename),
+0018   display(sprintf(<span class="string">'Saving kinetic data to file %s '</span>,filename));
+0019    <a href="../../mnt/utils/table.html" class="code" title="function res = table(names,rownumbers,filename)">table</a>(M,options_style,filename);
+0020 <span class="keyword">else</span>,
+0021    <a href="../../mnt/utils/table.html" class="code" title="function res = table(names,rownumbers,filename)">table</a>(M,options_style)
+0022 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

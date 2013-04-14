@@ -4,7 +4,7 @@
 <head>
   <title>Description of es_check_flux_constraints</title>
   <meta name="keywords" content="es_check_flux_constraints">
-  <meta name="description" content="correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">
+  <meta name="description" content="isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,13 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</strong></div>
+<div class="box"><strong>isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C) </strong></div>
+<div class="box"><strong>function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)
+<div class="fragment"><pre class="comment"> isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)
 
  Check whether flux distribution v satisfies constraints</pre></div>
 
@@ -44,9 +44,9 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</a>
 0002 
-0003 <span class="comment">% correct = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</span>
+0003 <span class="comment">% isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</span>
 0004 <span class="comment">%</span>
 0005 <span class="comment">% Check whether flux distribution v satisfies constraints</span>
 0006 
@@ -54,48 +54,52 @@ This function is called by:
 0008 
 0009 [nm,nr]       = size(N);
 0010 N_int         = N(setdiff(1:nm,ind_ext),:);
-0011 ind_extsign   = find(isfinite(constraints.ext_signs));
+0011 ind_extsign   = find(isfinite(constraints.ext_sign));
 0012 ind_fixed     = find(~isnan(constraints.v_fix));
 0013 ind_non_fixed = find(isnan(constraints.v_fix));
 0014 
-0015 <span class="keyword">if</span> isnan(C),
-0016   <span class="keyword">if</span> isfield(constraints,<span class="string">'ind_ignore'</span>),
-0017     use_in_cycles = setdiff(1:size(N,2),constraints.ind_ignore);
-0018     NN = N(:,use_in_cycles);
-0019     CC = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(NN);
-0020     C  = zeros(size(N,2),size(CC,2));
-0021     C(use_in_cycles,:) = CC;
-0022   <span class="keyword">else</span>
-0023     C = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N);
-0024   <span class="keyword">end</span>
-0025 <span class="keyword">end</span>
-0026 
-0027 <span class="keyword">for</span> it = 1:size(v,2),
-0028   violate_bounds = <span class="keyword">...</span>
-0029       sum(v(ind_non_fixed,it) &lt; constraints.v_min(ind_non_fixed))<span class="keyword">...</span>
-0030       + sum(v(ind_non_fixed,it) &gt; constraints.v_max(ind_non_fixed))<span class="keyword">...</span>
-0031       + sum( abs(v(ind_fixed,it) - constraints.v_fix(ind_fixed))&gt;epsilon_stationary );
-0032   
-0033   violate_ext_sign   = sum(abs(sign(N(ind_extsign,:) * v(:,it)) -  constraints.ext_signs(ind_extsign)));
-0034   
-0035   violate_thermo     = 1 - <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(v(:,it),N,C,constraints.ind_ignore,<span class="string">'loose'</span>);
-0036 
-0037   violate_stationary = sum(abs(N_int * v(:,it))&gt; epsilon_stationary);
-0038 
-0039   correct(it) = (violate_bounds + violate_ext_sign + violate_thermo + violate_stationary) ==0;
+0015 <span class="keyword">if</span> ~isfield(constraints,<span class="string">'ind_ignore'</span>),
+0016   constraints.ind_ignore = [];
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> isnan(C),
+0020   <span class="keyword">if</span> length(constraints.ind_ignore),
+0021     use_in_cycles = setdiff(1:size(N,2),constraints.ind_ignore);
+0022     NN = N(:,use_in_cycles);
+0023     CC = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(NN);
+0024     C  = zeros(size(N,2),size(CC,2));
+0025     C(use_in_cycles,:) = CC;
+0026   <span class="keyword">else</span>
+0027     C = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N);
+0028   <span class="keyword">end</span>
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">for</span> it = 1:size(v,2),
+0032   violate_bounds = <span class="keyword">...</span>
+0033       sum(v(ind_non_fixed,it) &lt; constraints.v_min(ind_non_fixed))<span class="keyword">...</span>
+0034       + sum(v(ind_non_fixed,it) &gt; constraints.v_max(ind_non_fixed))<span class="keyword">...</span>
+0035       + sum( abs(v(ind_fixed,it) - constraints.v_fix(ind_fixed))&gt;epsilon_stationary );
+0036   
+0037   violate_ext_sign   = sum(abs(sign(N(ind_extsign,:) * v(:,it)) -  constraints.ext_sign(ind_extsign)));
+0038   
+0039   violate_thermo     = 1 - <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(v(:,it),N,C,constraints.ind_ignore,<span class="string">'loose'</span>);
 0040 
-0041   <span class="keyword">if</span> verbose,
-0042     <span class="keyword">if</span> ~correct(it),
-0043     display(sprintf(<span class="string">'Flux distribution %d/%d'</span>,it,size(v,2)));
-0044     violate_bounds
-0045     violate_ext_sign
-0046     violate_thermo
-0047     violate_stationary
-0048     epsilon_stationary
-0049     <span class="keyword">end</span>
-0050   <span class="keyword">end</span>
-0051   
-0052 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0041   violate_stationary = sum(abs(N_int * v(:,it))&gt; epsilon_stationary);
+0042 
+0043   isFeasible(it) = (violate_bounds + violate_ext_sign + violate_thermo + violate_stationary) ==0;
+0044 
+0045   <span class="keyword">if</span> verbose,
+0046     <span class="keyword">if</span> ~isFeasible(it),
+0047     display(sprintf(<span class="string">'Flux distribution %d/%d'</span>,it,size(v,2)));
+0048     violate_bounds
+0049     violate_ext_sign
+0050     violate_thermo
+0051     violate_stationary
+0052     epsilon_stationary
+0053     <span class="keyword">end</span>
+0054   <span class="keyword">end</span>
+0055   
+0056 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

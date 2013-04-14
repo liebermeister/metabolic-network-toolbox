@@ -89,25 +89,32 @@ This function is called by:
 0036   CS_2_omega  = - L * pinv(M0 -i * 2*delta_par.omega*eye(n_indep)) * N0;
 0037   CJ_2_omega  =  Ec * CS_2_omega + eye(n_react);
 0038 
-0039   Gamma_omega_omega =  <span class="keyword">...</span>
-0040       <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecc,RS_omega,3,1),RS_omega,2,1) <span class="keyword">...</span>
-0041       + <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega,2,1) <span class="keyword">...</span>
-0042       + permute(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega,2,1),[1,3,2])<span class="keyword">...</span>
-0043       + Epp;
-0044   
-0045   Gamma_omega_minus_omega =  <span class="keyword">...</span>
-0046       <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecc,RS_omega.'',3,1),RS_omega,2,1) <span class="keyword">...</span>
-0047       + <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega.'',2,1)  <span class="keyword">...</span>
-0048       + permute(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega,2,1),[1,3,2])<span class="keyword">...</span>
-0049       + Epp;
-0050   
-0051   RS_2_2omega  = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS_2_omega,Gamma_omega_omega);
-0052   RJ_2_2omega  = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ_2_omega,Gamma_omega_omega);
-0053   
-0054   RS_2_2omega0 = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS,Gamma_omega_minus_omega);
-0055   RJ_2_2omega0 = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ,Gamma_omega_minus_omega);
-0056 
-0057 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0039   
+0040   <span class="comment">%% In case Ecc and Ecp are sparse tensors: convert back to full tensors</span>
+0041   Ecc = double(full(Ecc));
+0042   Ecp = double(full(Ecp));
+0043   Epp = double(full(Epp));
+0044   RS_omega = double(RS_omega);
+0045 
+0046   Gamma_omega_omega =  <span class="keyword">...</span>
+0047       <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecc,RS_omega,3,1),RS_omega,2,1) <span class="keyword">...</span>
+0048       + <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega,2,1) <span class="keyword">...</span>
+0049       + permute(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega,2,1),[1,3,2])<span class="keyword">...</span>
+0050       + Epp;
+0051   
+0052   Gamma_omega_minus_omega =  <span class="keyword">...</span>
+0053       <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecc,RS_omega.'',3,1),RS_omega,2,1) <span class="keyword">...</span>
+0054       + <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega.'',2,1)  <span class="keyword">...</span>
+0055       + permute(<a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS_omega,2,1),[1,3,2])<span class="keyword">...</span>
+0056       + Epp;
+0057   
+0058   RS_2_2omega  = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS_2_omega,Gamma_omega_omega);
+0059   RJ_2_2omega  = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ_2_omega,Gamma_omega_omega);
+0060   
+0061   RS_2_2omega0 = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS,Gamma_omega_minus_omega);
+0062   RJ_2_2omega0 = 1/sqrt(2*pi) * <a href="../../mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ,Gamma_omega_minus_omega);
+0063 
+0064 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

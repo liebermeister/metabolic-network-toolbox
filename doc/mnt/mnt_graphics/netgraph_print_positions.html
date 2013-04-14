@@ -66,18 +66,18 @@ This function is called by:
 0022 
 0023 <span class="keyword">switch</span> policy, 
 0024   <span class="keyword">case</span> <span class="string">'add nonexistent'</span>,  
-0025     t = sbtab_load_table(filename);
-0026     elements = t.column.column.Element;
-0027     x  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(t.column.column.PositionX);
-0028     y  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(t.column.column.PositionY);
+0025     t = sbtab_table_load(filename);
+0026     elements = sbtab_table_get_column(t,<span class="string">'Element'</span>));
+0027     x  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionX'</span>));
+0028     y  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionY'</span>));
 0029     ll = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(names,elements); ind_keep = find(ll==0);
 0030     names     = [elements; names(ind_keep)];
 0031     positions = [[x';y'], positions(:,ind_keep) ];
 0032   <span class="keyword">case</span> <span class="string">'replace elements'</span>,  
-0033     t = sbtab_load_table(filename);
-0034     elements = t.column.column.Element;
-0035     x  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(t.column.column.PositionX);
-0036     y  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(t.column.column.PositionY);
+0033     t = sbtab_table_load(filename);
+0034     elements = sbtab_table_get_column(t,<span class="string">'Element'</span>));
+0035     x  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionX'</span>));
+0036     y  = <a href="../../mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionY'</span>));
 0037     ll = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(elements,names); ind_keep = find(ll==0);
 0038     names     = [elements(ind_keep); names];
 0039     positions = [ [x(ind_keep)';y(ind_keep)'], positions];
@@ -93,6 +93,6 @@ This function is called by:
 0049 <span class="keyword">end</span>
 0050 fclose(fid);
 0051 <span class="comment">%output = table([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,filename);</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

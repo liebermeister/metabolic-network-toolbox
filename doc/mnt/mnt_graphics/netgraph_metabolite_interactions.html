@@ -50,37 +50,66 @@ This function is called by:
 0004 
 0005 <a name="_sub0" href="#_subfunctions" class="code">function netgraph_metabolite_interactions(network, influence_values, interaction_values, col, gp)</a>
 0006 
-0007 
-0008 <span class="comment">% to make this script nicer, update it according to interaction_network_plot</span>
-0009 
-0010 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'col'</span>,<span class="string">'my_colors(250)'</span>,<span class="string">'gp'</span>,<span class="string">'struct'</span>));
-0011 
-0012 plot_parameters = struct(<span class="string">'actprintnames'</span>,0,<span class="string">'metprintnames'</span>,1,<span class="string">'arrowsize'</span>,0.03,<span class="keyword">...</span>
-0013     <span class="string">'linecolor'</span>,[0 0 0],<span class="string">'arrowcolor'</span>,[.7 .7 .7],<span class="string">'colorbar'</span>,0,<span class="keyword">...</span>
-0014     <span class="string">'FontSize'</span>,8,<span class="string">'text_offset'</span>,[.01,-.01],<span class="string">'colormap'</span>,col,<span class="string">'hold_on'</span>,1);
-0015 
+0007 <span class="comment">% to make this script nicer, update it according to interaction_network_plot</span>
+0008 
+0009 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'col'</span>,<span class="string">'my_colors(250)'</span>,<span class="string">'gp'</span>,<span class="string">'struct'</span>));
+0010 
+0011 gp = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(struct(<span class="string">'relative_threshold'</span>,0,<span class="string">'normalise_values'</span>,1,<span class="string">'show_diagonal_values'</span>,0,<span class="string">'linewidth'</span>,2),gp);
+0012 
+0013 plot_parameters = struct(<span class="string">'actprintnames'</span>,0,<span class="string">'metprintnames'</span>,1,<span class="string">'arrowsize'</span>,0.03,<span class="keyword">...</span>
+0014     <span class="string">'linecolor'</span>,[0 0 0],<span class="string">'arrowcolor'</span>,[.7 .7 .7],<span class="string">'colorbar'</span>,0,<span class="keyword">...</span>
+0015     <span class="string">'FontSize'</span>,8,<span class="string">'text_offset'</span>,[.01,-.01],<span class="string">'colormap'</span>,col,<span class="string">'hold_on'</span>,1);
 0016 plot_parameters = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(plot_parameters,gp);
 0017 
 0018 [nm,nr] = size(network.N);
 0019 
-0020 metmap = network.graphics_par.metabolite_mapping;
-0021 
-0022 <span class="keyword">if</span> size(interaction_values,1) ~= max(metmap), error(<span class="string">'Wrong matrix size'</span>); <span class="keyword">end</span>
-0023 
-0024 <span class="keyword">for</span> i1 = 1:nm,
-0025   <span class="keyword">for</span> i2 = 1:i1,
-0026     colors(:,i1,i2) = [nan;nan;nan];
-0027     <span class="keyword">if</span> isfinite(interaction_values(metmap(i1),metmap(i2))),
-0028       <span class="keyword">if</span> sign(interaction_values(metmap(i1),metmap(i2))),
-0029         colors(:,i1,i2) = col(1+floor((size(col,1)-1)*(interaction_values(metmap(i1),metmap(i2))+1)/2),:);
-0030       <span class="keyword">end</span>
-0031     <span class="keyword">end</span>
-0032   <span class="keyword">end</span>;
-0033 <span class="keyword">end</span>
-0034 
-0035 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,influence_values,[],1,plot_parameters); hold on;
-0036 <a href="draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, linewidth)">draw_metabolite_arcs</a>(network,colors,2);   
-0037 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,influence_values,[],1,plot_parameters); hold off;</pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0020 <span class="keyword">if</span> isfield(network.graphics_par, <span class="string">'metabolite_mapping'</span>),
+0021   metmap = network.graphics_par.metabolite_mapping;
+0022 <span class="keyword">else</span>,
+0023   metmap = 1:nr;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">if</span> size(interaction_values,1) ~= max(metmap), error(<span class="string">'Wrong matrix size'</span>); <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">if</span> gp.show_diagonal_values,
+0029   influence_values = diag(interaction_values);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">% normalise by maximal absolute value</span>
+0033 <span class="keyword">if</span> gp.normalise_values,
+0034   <span class="keyword">if</span> length(isfinite(interaction_values)),
+0035     influence_values = influence_values/max(abs(influence_values(metmap)));
+0036   <span class="keyword">end</span>
+0037   interaction_values = interaction_values - diag(diag(interaction_values));
+0038   interaction_values = interaction_values/nanmax(nanmax(abs(interaction_values(metmap,metmap))));
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> gp.relative_threshold,
+0042   interaction_values(abs(interaction_values)&lt;gp.relative_threshold*max(abs(interaction_values(:)))) = 0;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% the loop plots only upper triangle values!!</span>
+0046 interaction_values = interaction_values';
+0047 
+0048 <span class="comment">% replace nan by zeros for graphics</span>
+0049 interaction_values(isnan(interaction_values)) = 0;
+0050 colors = nan * ones(3,nm,nm);
+0051 <span class="keyword">for</span> i1 = 1:nm,
+0052   <span class="keyword">for</span> i2 = i1+1:nm,
+0053     my_value = interaction_values(metmap(i1),metmap(i2));
+0054     <span class="keyword">if</span> isfinite(my_value),
+0055       <span class="keyword">if</span> sign(my_value),
+0056         colors(:,i1,i2) = col(1+floor((size(col,1)-1)*(my_value+1)/2),:);
+0057       <span class="keyword">end</span>
+0058     <span class="keyword">end</span>
+0059   <span class="keyword">end</span>;
+0060 <span class="keyword">end</span>
+0061 
+0062 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,influence_values,[],1,plot_parameters); hold on;
+0063 
+0064 <a href="draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, linewidth)">draw_metabolite_arcs</a>(network,colors,gp.linewidth);   
+0065 
+0066 <span class="comment">%netgraph_concentrations(network,influence_values,[],1,plot_parameters); hold off;</span></pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

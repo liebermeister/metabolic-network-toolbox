@@ -52,7 +52,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li></ul>
+<li><a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li><li><a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="../../../mnt/mnt_fluxes/eba/es_mu_simple_guess.html" class="code" title="function [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)">es_mu_simple_guess</a>	[A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)</li><li><a href="fba_interactions.html" class="code" title="function [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)">fba_interactions</a>	[f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)</li><li><a href="fba_screen_inhibitions.html" class="code" title="function [v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)">fba_screen_inhibitions</a>	[v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)</li></ul>
@@ -87,7 +87,7 @@ This function is called by:
 0024 
 0025 <span class="comment">%fprintf('FBA: ');</span>
 0026 [nm,nr] = size(network.N);
-0027 
+0027 ind_int = find(network.external==0);
 0028 fba_constraints = <a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>(fba_constraints);
 0029 
 0030 ind_fix = find(isfinite(fba_constraints.v_fix));
@@ -96,55 +96,62 @@ This function is called by:
 0033 
 0034 c  = fba_constraints.zv;
 0035 
-0036 A  = [network.N(find(network.external==0),:); <span class="keyword">...</span>
-0037      dd(ind_fix,:)];
-0038 
-0039 b  = [zeros(sum(network.external==0),1);<span class="keyword">...</span>
-0040       fba_constraints.v_fix(ind_fix)];
-0041 
-0042 my_eye = eye(nr);
-0043 
-0044 <span class="keyword">if</span> sum(isfinite(fba_constraints.ext_sign)),
+0036 <span class="comment">% used reduced stoichiometric matrix (to avoid numerical problems in linprog)</span>
+0037 
+0038 [K, L, NR] = <a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(network.N,network.external);
+0039 
+0040 A  = [NR; <span class="keyword">...</span>
+0041      dd(ind_fix,:)];
+0042 
+0043 b  = [zeros(size(A,1),1);<span class="keyword">...</span>
+0044       fba_constraints.v_fix(ind_fix)];
 0045 
-0046   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
+0046 my_eye = eye(nr);
 0047 
-0048   G  = [  my_eye(ind_notfix,:); <span class="keyword">...</span>
-0049         - my_eye(ind_notfix,:); <span class="keyword">...</span>
-0050         - diag(fba_constraints.ext_sign(ind_ext_sign))*network.N(ind_ext_sign,:); <span class="keyword">...</span>
-0051        ];
-0052   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
-0053           - fba_constraints.v_min(ind_notfix,:); <span class="keyword">...</span>
-0054             zeros(length(ind_ext_sign),1);];
-0055 <span class="keyword">else</span>,
-0056 
-0057   G  = [    my_eye(ind_notfix,:);<span class="keyword">...</span>
-0058           - my_eye(ind_notfix,:)];
-0059   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
-0060           - fba_constraints.v_min(ind_notfix,:)];  
-0061 
-0062 <span class="keyword">end</span>
-0063 
-0064 <span class="comment">%[v,s,z,y,status] = lp236a(-c,G,h,A,b);</span>
-0065 [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>));
-0066 
-0067 <span class="comment">% Check if at least zero flux is a solution</span>
-0068 <span class="comment">%[G * zeros(size(fba_constraints.v_min)),h]</span>
-0069 <span class="comment">%[A * zeros(size(fba_constraints.v_min)),b]</span>
-0070 <span class="comment">%fba_constraints.v_min</span>
-0071 <span class="comment">%fba_constraints.v_max</span>
-0072 
-0073 <span class="keyword">if</span> exitflag~=1,
-0074   value = nan; v = nan;
-0075   <span class="keyword">if</span> exitflag == -4,
-0076     error(<span class="string">'Nan value encountered.'</span>);
-0077   <span class="keyword">end</span>
-0078   exitflag
-0079   error(<span class="string">'No FBA solution found.'</span>); 
-0080 <span class="keyword">else</span>, 
-0081   value = c'*v;
-0082 <span class="keyword">end</span>
-0083 
-0084 <span class="comment">% check: [v &gt;= fba_constraints.v_min, v &lt;= fba_constraints.v_max]</span></pre></div>
-<hr><address>Generated on Wed 10-Apr-2013 10:42:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0048 <span class="keyword">if</span> sum(isfinite(fba_constraints.ext_sign)),
+0049 
+0050   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
+0051 
+0052   G  = [  my_eye(ind_notfix,:); <span class="keyword">...</span>
+0053         - my_eye(ind_notfix,:); <span class="keyword">...</span>
+0054         - diag(fba_constraints.ext_sign(ind_ext_sign))*network.N(ind_ext_sign,:); <span class="keyword">...</span>
+0055        ];
+0056   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
+0057           - fba_constraints.v_min(ind_notfix,:); <span class="keyword">...</span>
+0058             zeros(length(ind_ext_sign),1);];
+0059 <span class="keyword">else</span>,
+0060 
+0061   G  = [    my_eye(ind_notfix,:);<span class="keyword">...</span>
+0062           - my_eye(ind_notfix,:)];
+0063   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
+0064           - fba_constraints.v_min(ind_notfix,:)];  
+0065 
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">%[v,s,z,y,status] = lp236a(-c,G,h,A,b);</span>
+0069 
+0070 [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>));
+0071 
+0072 <span class="keyword">if</span> exitflag~=1,
+0073   <span class="comment">%% Check if at least zero flux is a solution</span>
+0074   <span class="comment">%% v_eq = zeros(size(fba_constraints.v_min));</span>
+0075   <span class="comment">%% %flux_check_stationarity(network,v_eq)</span>
+0076   <span class="comment">%% eq_flux_satisfies_inequalities = prod(double([G * v_eq &lt;= h]))</span>
+0077   <span class="comment">%% eq_flux_satisfies_equalities   = prod(double([A * v_eq == b]))</span>
+0078   <span class="comment">%% eq_flux_satisfies_lower_bounds = prod(double(v_eq &gt;= fba_constraints.v_min))</span>
+0079   <span class="comment">%% eq_flux_satisfies_upper_bounds = prod(double(v_eq &lt;= fba_constraints.v_max))</span>
+0080 
+0081   <span class="keyword">if</span> exitflag == -4,
+0082     error(<span class="string">'Nan value encountered.'</span>);
+0083   <span class="keyword">end</span>
+0084   value = nan; v = nan;
+0085   exitflag
+0086   error(<span class="string">'No FBA solution found.'</span>); 
+0087 <span class="keyword">else</span>, 
+0088   value = c'*v;
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">% check: [v &gt;= fba_constraints.v_min, v &lt;= fba_constraints.v_max]</span></pre></div>
+<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
