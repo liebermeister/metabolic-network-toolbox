@@ -30,8 +30,10 @@
 %
 %
 % MATLAB toolboxes required
-%   SBMLtoolbox - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
-%   efmtool     - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
+%   SBMLtoolbox    - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
+%   SBtab toolbox  - SBtab format (https://github.com/wolframliebermeister/sbtab-matlab)
+%   Tensor toolbox - (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
+%   efmtool        - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
 %
 % Copyright (C) 2006-2013 
 % Wolfram Liebermeister <wolfram.liebermeister@gmail.com>

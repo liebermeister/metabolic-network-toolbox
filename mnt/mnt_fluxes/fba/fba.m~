@@ -67,7 +67,7 @@ end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
 
-[v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off'));
+[v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[]);%,optimset('Display','off'));
 
 if exitflag~=1,
   %% Check if at least zero flux is a solution

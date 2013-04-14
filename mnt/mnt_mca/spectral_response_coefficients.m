@@ -36,6 +36,13 @@ if nargout>2,
   CS_2_omega  = - L * pinv(M0 -i * 2*delta_par.omega*eye(n_indep)) * N0;
   CJ_2_omega  =  Ec * CS_2_omega + eye(n_react);
 
+  
+  %% In case Ecc and Ecp are sparse tensors: convert back to full tensors 
+  Ecc = double(full(Ecc));
+  Ecp = double(full(Ecp));
+  Epp = double(full(Epp));
+  RS_omega = double(RS_omega);
+
   Gamma_omega_omega =  ...
       tensor_product(tensor_product(Ecc,RS_omega,3,1),RS_omega,2,1) ...
       + tensor_product(Ecp,RS_omega,2,1) ...

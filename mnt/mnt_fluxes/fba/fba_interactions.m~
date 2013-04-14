@@ -2,9 +2,8 @@ function [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interac
 
 % [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)
 
-
-[nm,nr]        = size(network.N);
-[v_ref, f_ref] = fba(network,fba_constraints);
+[nm,nr]       = size(network.N);
+[v_ref,f_ref] = fba(network,fba_constraints);
 
 for it1 = 1:nr,
 

@@ -22,18 +22,18 @@ positions = [metpositions, actpositions];
 
 switch policy, 
   case 'add nonexistent',  
-    t = sbtab_load_table(filename);
-    elements = t.column.column.Element;
-    x  = cell_string2num(t.column.column.PositionX);
-    y  = cell_string2num(t.column.column.PositionY);
+    t = sbtab_table_load(filename);
+    elements = sbtab_table_get_column(t,'Element'));
+    x  = cell_string2num(sbtab_table_get_column(t,'PositionX'));
+    y  = cell_string2num(sbtab_table_get_column(t,'PositionY'));
     ll = label_names(names,elements); ind_keep = find(ll==0);
     names     = [elements; names(ind_keep)];
     positions = [[x';y'], positions(:,ind_keep) ];
   case 'replace elements',  
-    t = sbtab_load_table(filename);
-    elements = t.column.column.Element;
-    x  = cell_string2num(t.column.column.PositionX);
-    y  = cell_string2num(t.column.column.PositionY);
+    t = sbtab_table_load(filename);
+    elements = sbtab_table_get_column(t,'Element'));
+    x  = cell_string2num(sbtab_table_get_column(t,'PositionX'));
+    y  = cell_string2num(sbtab_table_get_column(t,'PositionY'));
     ll = label_names(elements,names); ind_keep = find(ll==0);
     names     = [elements(ind_keep); names];
     positions = [ [x(ind_keep)';y(ind_keep)'], positions];

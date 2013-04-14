@@ -464,7 +464,9 @@ if std,
   fill(x + 0.5 * l_max * cos(0:0.1:2*pi), y + 0.5*l_max * sin(0:0.1:2*pi),stdcol,'EdgeColor',secol)
 end
 l_min = squaresize * (max(0,l));
+if l_min, 
 fill(x + 0.5 * l_min * cos(0:0.1:2*pi), y + 0.5*l_min * sin(0:0.1:2*pi),col,'EdgeColor',ecol)
+end
 
 
 function plot_diamond(x,y,l,std,squaresize,col,flag_edges)

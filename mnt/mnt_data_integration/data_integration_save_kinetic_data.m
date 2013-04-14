@@ -1,8 +1,6 @@
 function M = data_integration_save_kinetic_data(kinetic_data, network, filename, options_style)
 
 % M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)
-%
-% export kinetic data to SBtab format; requires the SBtab toolbox
 
 eval(default('options_style','0','filename','[]'));
 

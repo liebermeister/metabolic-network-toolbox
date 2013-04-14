@@ -17,11 +17,11 @@ function [network,N,metabolites] = network_build_from_sum_formulas(filename_reac
 eval(default('filename_compounds','[]','columns','[]'));
 
 if length(filename_reactions), 
-  reaction_table = sbtab_load_table(filename_reactions); 
-  columns        = reaction_table.column.column;
+  reaction_table = sbtab_table_load(filename_reactions); 
+  columns        = sbtab_table_get_all_columns(reaction_table);
   if length(filename_compounds), 
-    compound_table   = sbtab_load_table(filename_compounds); 
-    compound_columns = compound_table.column.column;
+    compound_table   = sbtab_table_load(filename_compounds); 
+    compound_columns = sbtab_table_get_all_columns(compound_table);
   end
 end
 

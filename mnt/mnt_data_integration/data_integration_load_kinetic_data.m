@@ -13,6 +13,10 @@ function kinetic_data = data_integration_load_kinetic_data(data_quantities, quan
 % take logarithms where necessary
 % values are NOT averaged yet (FIX!!!)
 
+if ~exist('sbtab_version','file'),
+  error('For this function, the SBtab toolbox must be installed');
+end
+
 eval(default('quantity_info','[]','use_sbml_ids','1','use_kegg_ids','1','flag_invent_std','1','verbose','1'));
 
 if isempty(quantity_info), quantity_info = data_integration_load_quantity_info; end
@@ -66,8 +70,8 @@ end
 % ------------------------------------------
 
 if length(file_kinetic_data),
-  kinetic_data_sbtab = sbtab_load_table(file_kinetic_data);
-  kinetic_data_table = kinetic_data_sbtab.column.column;
+  kinetic_data_sbtab = sbtab_table_load(file_kinetic_data);
+  kinetic_data_table = sbtab_table_get_all_columns(kinetic_data_sbtab);
 else
   kinetic_data_table = struct('QuantityType',[],'SBMLSpeciesID',[]);
 end

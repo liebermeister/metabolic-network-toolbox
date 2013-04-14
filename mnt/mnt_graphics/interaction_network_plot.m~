@@ -30,7 +30,7 @@ else,
   actmap = 1:nr;
 end
 
-%if size(reaction_pair_values,1) ~= max(actmap), error('Wrong matrix size'); end
+%if length(actmap) ~= size(reaction_pair_values,1), error('Wrong matrix size'); end
 
 if gp.show_diagonal_values,
   reaction_values = diag(reaction_pair_values);
@@ -58,8 +58,8 @@ colors = nan * ones(3,nr,nr);
 for i1 = 1:nr, 
   for i2 = i1+1:nr,
     this_value = reaction_pair_values(actmap(i1),actmap(i2));
-    if isfinite(this_value),  
-      if sign(this_value),  
+    if isfinite(reaction_pair_values(actmap(i1),actmap(i2))),  
+      if sign(reaction_pair_values(actmap(i1),actmap(i2))),  
         colors(:,i1,i2) = col(1+floor((size(col,1)-1)*(this_value+1)/2),:);
       end
     end

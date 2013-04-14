@@ -2,6 +2,10 @@ function quantity_info = data_integration_load_quantity_info(omit_quantities,qua
 
 % quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)
 
+if ~exist('sbtab_version','file'),
+  error('For this function, the SBtab toolbox must be installed');
+end
+
 eval(default('omit_quantities','[]','quantity_info_filename','[]'));
 
 if isempty(quantity_info_filename),
@@ -9,8 +13,8 @@ data_integration_dir = [fileparts(which(mfilename))];
 quantity_info_filename = [ data_integration_dir '/quantity_info.tsv'];
 end
 
-quantity_info_sbtab = sbtab_load_table(quantity_info_filename);
-quantity_info       = quantity_info_sbtab.column.column;
+quantity_info_sbtab = sbtab_table_load(quantity_info_filename);
+quantity_info       = sbtab_table_get_all_columns(quantity_info_sbtab);
 
 keep = 1:length(quantity_info.QuantityType);
 if length(omit_quantities),

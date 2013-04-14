@@ -8,8 +8,8 @@ x     = nan*ones(2,length(network.metabolites)+length(network.actions));
 fixed = zeros(1,length(network.metabolites)+length(network.actions));
 
 if exist('sbtab_version','file'), 
-  sbtab_table = sbtab_load_table(table_positions);
-  columns = sbtab_table.column.column;
+  sbtab_table = sbtab_table_load(table_positions);
+  columns = sbtab_table_get_all_columns(sbtab_table);
   A{1} = columns.Element;
   A{2} = cell_string2num(columns.PositionX);
   A{3} = cell_string2num(columns.PositionY);
