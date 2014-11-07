@@ -1,7 +1,7 @@
-%[t,x,v,t_pre,x_pre,p_p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external)
+%[t,x,v,t_pre,x_pre,p_p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external,volumes,verbose_flag)
 %
 % Time integration for metabolic systems with one oscillatory parameter
-%  kinetics function given by m-file and structure array of parameters
+% Kinetics function is given by m-file and structure array of parameters
 %
 %ARGUMENTS
 % x0           initial concentrations (vector)
@@ -11,6 +11,7 @@
 % velocity_function function handle to kinetics function
 % delta_par    structure array describing the parameter perturbation
 %              (optional)
+% volumes      compartment volumes assigned to internal metabolites (length = # int. metabolite) 
 %
 %FIELDS OF delta_par: 
 % type (optional)  'complex', 'cos'
@@ -20,15 +21,23 @@
 %
 %For extracting a single oscillation period, see 'choose_period'
 
-function [t,x,v,t_pre,x_pre,p,p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external)
+function [t,x,v,t_pre,x_pre,p,p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external,volumes,verbose_flag)
 
-eval(default('external','[]','delta_par','[]'));
+eval(default('external','[]','delta_par','[]','volumes','[]'));
 
 odeoptions = odeset('NonNegative',1:length(x0),'RelTol', 1e-6);
 
-if length(T2)==1, T2 = 0:T2/100:T2; end
+if length(T2) == 1, display('Using 100 time integration steps'); T2 = 0:T2/100:T2; end
 
 N(find(external),:) = 0;
+
+if length(volumes),
+  if verbose_flag, display('Dynamic simulation: Using given compartment volumes = 1'); end
+  N(find(external==0),:) = diag(volumes) * N(find(external==0),:);
+else,
+  if verbose_flag,   display('Dynamic simulation: Assuming compartment volumes = 1'); end
+end
+
 
 % --------------------------------------------------------------------
 
@@ -72,11 +81,13 @@ if T1 > 0,
     end
     
   else
-    
+
     [t_pre,x_pre]  = ode15s(@derivatives,T2,x0,odeoptions,N,pp,velocity_function);
+
     for j=1:size(t_pre),
       v_pre(j,:)= feval(velocity_function,x_pre(j,:).',pp).';
     end
+  
   end
   x_init = x_pre(end,:);  
 else

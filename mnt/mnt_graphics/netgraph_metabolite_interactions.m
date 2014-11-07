@@ -6,7 +6,7 @@ function netgraph_metabolite_interactions(network, influence_values, interaction
 
 % to make this script nicer, update it according to interaction_network_plot
 
-eval(default('col','my_colors(250)','gp','struct'));
+eval(default('col','my_colors(250)','gp','struct','influence_values','[]'));
 
 gp = join_struct(struct('relative_threshold',0,'normalise_values',1,'show_diagonal_values',0,'linewidth',2),gp);
 
@@ -20,7 +20,7 @@ plot_parameters = join_struct(plot_parameters,gp);
 if isfield(network.graphics_par, 'metabolite_mapping'),
   metmap = network.graphics_par.metabolite_mapping;
 else,
-  metmap = 1:nr;
+  metmap = 1:nm;
 end
 
 if size(interaction_values,1) ~= max(metmap), error('Wrong matrix size'); end
@@ -31,7 +31,7 @@ end
 
 % normalise by maximal absolute value
 if gp.normalise_values,
-  if length(isfinite(interaction_values)),
+  if length(isfinite(influence_values)),
     influence_values = influence_values/max(abs(influence_values(metmap)));
   end
   interaction_values = interaction_values - diag(diag(interaction_values));
@@ -47,20 +47,33 @@ interaction_values = interaction_values';
 
 % replace nan by zeros for graphics
 interaction_values(isnan(interaction_values)) = 0;
-colors = nan * ones(3,nm,nm);
+
+colors  = [];
+i1_list = [];
+i2_list = [];
+value_list = [];
+z = 1; 
+
 for i1 = 1:nm,
   for i2 = i1+1:nm,
     my_value = interaction_values(metmap(i1),metmap(i2));
     if isfinite(my_value),
       if sign(my_value),
-        colors(:,i1,i2) = col(1+floor((size(col,1)-1)*(my_value+1)/2),:);
+        i1_list(z) = i1;
+        i2_list(z) = i2;
+        value_list(z) = my_value;
+        colors = [colors; col(1+floor((size(col,1)-1)*(my_value+1)/2),:)];
+        z = z+1;
       end
     end
   end;
 end
 
+[dum,order] = sort(abs(value_list));
+i1_list = i1_list(order);
+i2_list = i2_list(order);
+colors = colors(order,:);
+
 netgraph_concentrations(network,influence_values,[],1,plot_parameters); hold on;
 
-draw_metabolite_arcs(network,colors,gp.linewidth);   
-
-%netgraph_concentrations(network,influence_values,[],1,plot_parameters); hold off;
+draw_metabolite_arcs(network,colors,i1_list,i2_list,gp.linewidth);   

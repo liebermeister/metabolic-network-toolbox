@@ -1,12 +1,16 @@
-function [log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);
+function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);
 
-% [log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);
+% [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);
 
-ind_N               = find(N'~=0);
+eval(default('h','ones(size(KV))'));
+
 log_KV              = log(KV);
 log_Keq             = log(Keq);
+
+ind_N               = find(N'~=0);
 all_log_KM          = sparse(size(N,2),size(N,1));
-all_log_KM(ind_N)   = log(KM(ind_N)+10^-15);
-log_prod_KM         = - sum( N' .* all_log_KM , 2);
-log_Kplus           = log_KV + 0.5 * ( log_Keq + log_prod_KM );
-log_Kminus          = log_KV - 0.5 * ( log_Keq + log_prod_KM );
+all_log_KM(ind_N)   = log(KM(ind_N) + 10^-15);
+
+log_prod_KM         = sum( N' .* all_log_KM , 2);
+log_kcatplus        = log_KV + 0.5 * h .* ( log_Keq - log_prod_KM );
+log_kcatminus       = log_KV - 0.5 * h .* ( log_Keq - log_prod_KM );

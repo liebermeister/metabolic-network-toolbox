@@ -2,8 +2,7 @@ function [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduc
 
 % [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)
 %
-% Determine feasible reaction affinities A and chemical potentials mu 
-% given fluxes v and es_constraints
+% Determine feasible reaction affinities A and chemical potentials mu from fluxes v and es_constraints
 
 eval(default('flag_reduce_network','0','es_constraints','[]','zv','ones(size(v))'));
 

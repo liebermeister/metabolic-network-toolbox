@@ -9,7 +9,7 @@ if ~exist('external_ind','var'),    external_ind= [];      end
 switch kinetics.type,
   case 'convenience',
   otherwise,
-    S_ext = [];  
+    S_ext = []; 
     n_ext = length(external_ind);
     if n_ext ~= 0, 
       S_ext  = vector(end-n_ext+1:end);
@@ -29,6 +29,6 @@ switch kinetics.type,
   case 'fd',              kinetics = ms_vector2par(vector,kinetics,network);
   case 'mass-action',     
     [kinetics,S_ext] = vector2mass_action(vector,ones(length(vector)-n_ext,1),ones(length(vector)-n_ext,1),n_ext);
-  case 'standard',        kinetics            = vector2standard_kinetics(vector,kinetics);
-  case 'numeric', kinetics.parameter_values = vector;
+  case 'standard',        kinetics = vector2standard_kinetics(vector,kinetics);
+  case 'kinetic_strings', kinetics.parameter_values = vector;
 end

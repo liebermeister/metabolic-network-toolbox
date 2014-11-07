@@ -1,7 +1,17 @@
-function [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)
+function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)
 
-% [f_ref,df1,df2,f_single,f_double,v_ref,v_single,v_double] = fba_interactions(network,fba_constraints,inhibition_factor)
+% [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)
+%
+% f_ref      unperturbed objective value
+% f_single   single-perturbation objectives (vector)
+% f_double   double-perturbation objectives (matrix)
+% v_ref      unperturbed flux mode
+% v_single   single-perturbation flux modes (matrix)
+% v_double   double-perturbation flux modes (tensor)
+% df1        single-perturbation objective deficits (vector)
+% df2        double-perturbation synergistic objective deficits (matrix)
 
+epsilon = 10^-8;
 
 [nm,nr]        = size(network.N);
 [v_ref, f_ref] = fba(network,fba_constraints);
@@ -44,5 +54,8 @@ end
 
 f_double = f_double + f_double' - diag(diag(f_double));
 
-df1 = f_single-f_ref; 
-df2 = f_double-f_ref-repmat(df1,1,nr)-repmat(df1',nr,1);
+f_single(abs(f_single)<epsilon) = 0;
+f_double(abs(f_double)<epsilon) = 0;
+
+df1 = f_single - f_ref; 
+df2 = f_double - f_ref - repmat(df1,1,nr) - repmat(df1',nr,1);

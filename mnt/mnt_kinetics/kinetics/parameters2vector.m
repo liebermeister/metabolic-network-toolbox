@@ -4,7 +4,7 @@ function [vector,names,relevant,relevant_reactions,types] = parameters2vector(ki
 
 % no_names is important for speed-up
 
-eval(default('split','0','no_names','0'));
+eval(default('S_ext','[]','S_ext_names','{}','split','0','no_names','0'));
 relevant_reactions = [];
 types              = [];
 
@@ -25,12 +25,12 @@ switch kinetics.type,
   case 'fd',             [vector,names] = modular_par2vector(kinetics, network, no_names);
   case 'mass-action',    [vector,names] = mass_action2vector(kinetics);
   case 'standard',       [vector,names,relevant_reactions] = standard_kinetics2vector(kinetics);
-  case 'numeric', vector = kinetics.parameter_values; 
-                          names  = kinetics.parameters;
+  case 'kinetic_strings', vector = kinetics.parameter_values; 
+                         names  = kinetics.parameters;
   otherwise error('Error: unknown kinetics type');
 end
 
-if exist('S_ext','var'),
+if length(S_ext),
   if ~strcmp(kinetics.type,'convenience'),
     vector = [vector; S_ext];
     names  = [names;  S_ext_names];
@@ -45,10 +45,10 @@ if exist('S_ext','var'),
   end
 end
 
-relevant           = (1:length(vector))';
+relevant = (1:length(vector))';
 
-if nargout>=4,
-  if split,
+if split,
+  if nargout>=4,
     nr = length(network.actions);
     for it =1:length(relevant_reactions),
       relevant_reactions{it} = [relevant_reactions{it},relevant_reactions{it}+nr];

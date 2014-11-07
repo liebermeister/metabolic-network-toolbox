@@ -9,7 +9,9 @@ values = [];
 switch network.kinetics.type,
   case 'numeric',
     for it = 1:length(names),
-       values(it,:) = getfield(network.kinetics.parameters,names{it});
+      if isfield(network.kinetics.parameters, names{it}),
+        values(it,:) = getfield(network.kinetics.parameters, names{it});
+      end
     end
   otherwise, warning('Network_get_parameters not implemented for this type of kinetics'); 
 end

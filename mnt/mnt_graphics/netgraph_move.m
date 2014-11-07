@@ -52,12 +52,7 @@ switch flag_draw_details,
   case {'text','all'}, opt = struct('metstyle','none','actstyle','none'); 
 end
 
-if ~isempty(options), 
-  f = fieldnames(options);
-  for it=1:length(f),
-    opt = setfield(opt,f{it},getfield(options,f{it}));
-  end
-end
+opt = join_struct(opt,options);
 
 if ~isfield(network,'graphics_par'),  network=netgraph_make_graph(network); end
 
@@ -97,7 +92,7 @@ if splitted,
     p.fixed_split = zeros(size(network.graphics_par.x_split,2),1); 
   end
   fixed = p.fixed_split;
-  N  = p.N_split;
+  N   = p.N_split;
   x   = p.x_split;
   m   = p.m_split;
   n_met = length(p.split_back_mapping);
@@ -151,8 +146,10 @@ Nj = Nj+n_met;
 % m is the adjacency matrix
 
 while cont==1,
-  button = 0;
-  
+
+  button = 0;  
+  [x_old,y_old,button] = ginput(1);
+
   while isempty(button),
     [x_old,y_old,button] = ginput(1);
   end

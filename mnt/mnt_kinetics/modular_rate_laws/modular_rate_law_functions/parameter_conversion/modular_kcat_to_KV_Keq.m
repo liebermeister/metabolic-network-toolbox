@@ -12,7 +12,7 @@ if length(kcatminus),
   Keq = kcatplus./kcatminus./KMprod;
 end
 
-KV  = kcatplus./sqrt(Keq);
+KV  = sqrt([kcatplus .* kcatminus]);
 
 kinetics.KV  = KV;
 kinetics.Keq = Keq;

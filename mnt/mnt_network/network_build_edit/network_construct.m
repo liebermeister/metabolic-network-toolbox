@@ -1,4 +1,4 @@
-%network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)
+%network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)
 %
 %Construct network data structures from stoichiometric matrix
 %  network structure has mandatory fields 
@@ -16,10 +16,11 @@
 % ind_external indices (vector) of external (=fixed) metabolites.    
 %                      default: all internal
 % no_graphics          flag: 1: do not construct field 'graphics_par'
+% flag_kinetics        flag: 0: construct field 'kinetics' with cs kinetics as default
 
 function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)
 
-eval(default('metabolites','[]','actions','[]','reversible','ones(size(N,2),1)','ind_external','[]','no_graphics','[]'));
+eval(default('metabolites','[]','actions','[]','reversible','ones(size(N,2),1)','ind_external','[]','no_graphics','[]','flag_kinetics','0'));
 
 if isempty('no_graphics'), no_graphics=0; end
 
@@ -52,7 +53,9 @@ n.regulation_matrix = regulation_matrix;
 n.regulation_matrix = sparse(zeros(size(n.N))');
 end
 
-n.kinetics    = set_kinetics(n,'cs');
-%n.h           = ones(length(actions),1);
+if flag_kinetics, 
+  n.kinetics    = set_kinetics(n,'cs');
+  %%n.h           = ones(length(actions),1);
+end
 
 if ~no_graphics, n = netgraph_make_graph(n); end

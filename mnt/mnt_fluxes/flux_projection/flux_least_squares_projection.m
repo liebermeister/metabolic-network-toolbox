@@ -6,11 +6,10 @@ function v = flux_least_squares_projection(network,v_pre)
 % v_pre flux vector with missing elements (nan) to be completed
 
 [nm,nr] = size(network.N);
-ind = find(isfinite(v_pre));
+ind     = find(isfinite(v_pre));
  
-N = network.N(find(network.external==0),:);
+N   = network.N(find(network.external==0),:);
 dum = eye(nr); dum = dum(ind,:);
-M = full([N; dum]);
-v = inv(M'*M + 0.000001 * eye(nr)) * M' * [zeros(size(N,1),1); v_pre(ind)];
-
-v = project_fluxes(network.N, find(network.external), v);
+M   = full([N; dum]);
+v   = inv(M'*M + 0.000001 * eye(nr)) * M' * [zeros(size(N,1),1); v_pre(ind)];
+v   = project_fluxes(network.N, find(network.external), v);

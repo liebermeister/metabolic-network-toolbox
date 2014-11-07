@@ -9,7 +9,7 @@ function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_con
 % 
 % ind_ignore: reactions to be ignored in the cycle constraints
 
-eval(default('C','nan','ind_ignore','[]','eba_condition','''strict''','cycle_method','''efmtool'''));
+eval(default('C','nan','ind_ignore','[]','eba_condition','''loose''','cycle_method','''efmtool'''));
 
 if isnan(C),
   display('Computing elementary cycles. This may take a while');

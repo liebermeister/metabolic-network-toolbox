@@ -25,6 +25,6 @@ for it = 1:length(fnames),
   if ~isstruct(ff),
     update = empty;
     update(1:size(ff,1),1:size(ff,2)) = ff;
-    network= setfield(network,fnames{it},update); 
+    network = setfield(network,fnames{it},update); 
   end
 end

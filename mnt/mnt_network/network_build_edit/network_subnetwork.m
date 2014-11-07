@@ -1,8 +1,8 @@
-% subnetwork = network_subnetwork(network,ind_m,ind_r, omit_isolated_metabolites)
+% [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)
 %
 % ind_m, ind_r row vectors with indices of metabolites and reactions to choose
 
-function [subnetwork,ind_m] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)
+function [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)
 
 eval(default('ind_r','[]','omit_isolated_metabolites','0'));
 
@@ -31,7 +31,7 @@ n_met = length(network.metabolites);
 n_act = length(network.actions);
 
 if n_met == n_act, 
-  warning('I am confused by the equal numbers of metabolites and reactions'); 
+  warning('Equal numbers of metabolites and reactions - some fields may not be properly handled'); 
 end
 
 
@@ -94,4 +94,9 @@ if isfield(network,'graphics_par'),
   if isfield(network.graphics_par,'show_regulation'), 
     subnetwork.graphics_par.show_regulation = network.graphics_par.show_regulation;
   end
+end
+
+if isfield(network,'compartments'),
+  subnetwork.compartments = network.compartments;
+  subnetwork.compartment_sizes = network.compartment_sizes;
 end

@@ -35,12 +35,14 @@ c  = fba_constraints.zv;
 
 % used reduced stoichiometric matrix (to avoid numerical problems in linprog)
 
-[K, L, NR] = analyse_N(network.N,network.external);
+N = network.N(network.external==0,:);
+[echelon,independent_metabolites] = rref(N');
+NR                                = N(independent_metabolites,:);
 
 A  = [NR; ...
      dd(ind_fix,:)];
 
-b  = [zeros(size(A,1),1);...
+b  = [zeros(size(NR,1),1);...
       fba_constraints.v_fix(ind_fix)];
 
 my_eye = eye(nr);
@@ -66,7 +68,6 @@ else,
 end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
-
 [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off'));
 
 if exitflag~=1,

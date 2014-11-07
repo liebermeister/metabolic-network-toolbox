@@ -19,18 +19,20 @@
 % Ecc:       tensor d^2v_i/(ds_k ds_l) of second elasticties w.r.t. metabolites
 % Ecp:       tensor d^2v_i/(ds_k dp_m) of second elasticties w.r.t. metabolites and parameters  
 % Epp:       tensor d^2v_i/(dp_m dP_n) of second elasticties w.r.t. parameters 
-% p  : parameter vector
+% p:         parameter vector
 % 
 % The parameters comprise all kinetic parameters, followed by all external concentrations
-% Note that therefore, the appear in both the epsilon and pi matrices!
+% Note that therefore, they appear in both the epsilon and pi matrices!
 %
 % See also: 'numerical_elasticities'
+
 
 function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);
 
 eval(default('options','struct'));
+
 options_default = struct('split',0,'include_external',1,'delta_basic',0.001,'only_enzyme_levels',0);
-options = join_struct(options_default,options);
+options         = join_struct(options_default,options);
 
 no_names     = (nargout<3);
 compute_pi   = (nargout>1);
@@ -40,6 +42,7 @@ kinetics     = network.kinetics;
 ind_ext      = find(network.external);
 n_ext        = length(ind_ext);
 nv           = nr;
+
 if options.split, nv = 2*nr; end
 
 delta = options.delta_basic;
@@ -93,12 +96,13 @@ end
 
 
 % ------------------------------------------------------------------
-% first order parameter el.
+% first order parameter elasticities
 
 if compute_pi,    
   
   [p,parameters] = parameters2vector(kinetics,S_ext,S_ext_names,network);  
-  np             = length(p);
+  
+  np = length(p);
 
   %% restrict parameters to the first nr in the list (i.e., the enzyme levels)
   if options.only_enzyme_levels, 
@@ -242,6 +246,7 @@ Ec = sparse(Ec);
 if compute_pi,  Ep = sparse(Ep); end
 
 if options.include_external == 0,
+  parameters = parameters(1:end-n_ext);
   Ep  = Ep(:,1:end-n_ext);
   if second_order,
     Ecp = Ecp(:,:,1:end-n_ext);

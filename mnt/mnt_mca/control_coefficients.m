@@ -1,4 +1,4 @@
-%[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)
+%[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)
 %
 %Metabolic control coefficients (unnormalised, first order)
 %
@@ -21,10 +21,17 @@
 
 % CJ2, CS2  arrays of unscaled second order control coefficients
 
-function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)
-
+function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)
 
 eval(default('used','[]','NR_int','[]','L_int','[]','dilution_rate','[]'));
+
+if sum(external==0)==0,
+  [nm,nr]  = size(N);
+  CJ = eye(nr);
+  CS = zeros(nm,nr);
+  L_int = []; NR_int = zeros(0,nr); M = []; M_adj = []; indp_among_internal = [];
+  return
+end
 
 if length(dilution_rate),
  %% build explicit model with dilution reactions (because dilution
@@ -71,7 +78,7 @@ M = full(NR_int * Ec_int * L_int);
 eigmax = max(real(eig(M)));
 if [eigmax > 0] * [eigmax < 10^-10], 
   display(sprintf(' * Maximal real part of eigenvalues %f < numerical error, correcting M',eigmax));
-  M = M - 5 * eigmax * eye(size(M)); 
+  M_adj = M - 5 * eigmax * eye(size(M)); 
 end
 
 %% if this still doesn't help:
@@ -79,12 +86,14 @@ eigmax = max(real(eig(M)));
 if eigmax > 0,
   display(sprintf(' * The steady state is unstable; maximal eigenvalue %f',eigmax)); 
   %% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');
-  display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax)); 
-  M = M - [ eigmax + 10^-10] * eye(size(M)); 
+  display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax));
+  M_adj = M - [ eigmax + 10^-10] * eye(size(M)); 
+else
+  M_adj = M;
 end
 
-if rank(M) == size(M,1), 
-  CS_int  = - L_int * [ full(M) \ NR_int ];  
+if rank(M_adj) == size(M_adj,1), 
+  CS_int  = - L_int * [ full(M_adj) \ NR_int ];  
 else
   display('  * Jacobian is rank-deficient; using pseudoinverse instead of inverse (in control_coefficients.m)');
   %% sprintf('size of NR_int * Ec_int:')
@@ -96,9 +105,9 @@ else
   %% sprintf('Rank of NR_int: %d',   rank(NR_int))
   %% sprintf('Rank of Ec_int: %d',   rank(Ec_int))
   %% sprintf('Rank of L_int : %d',   rank(full(L_int)))
-  %% sprintf('Rank of Jacobian: %d', rank(M))
-  %% sprintf('Dim  of Jacobian: %d', size(M,1))
-  CS_int = - L_int * [ pinv(M) * NR_int ];
+  %% sprintf('Rank of (adjusted) Jacobian: %d', rank(M_adj))
+  %% sprintf('Dim  of (adjusted) Jacobian: %d', size(M_adj,1))
+  CS_int = - L_int * [ pinv(M_adj) * NR_int ];
 end
 
 CS = zeros(n_metab_int + length(ind_ext), n_react); 

@@ -1,12 +1,12 @@
 %[RS, RJ, RS2, RJ2] = response_coefficients(CS, Ec, Ep, Ecc, Ecp, Epp)
 %
-% Response coefficients (first and second order)
+% Static response coefficients (first and second order)
 
 function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)
 
 nr    = size(Ec,1);
 
-CJ    = eye(nr) + Ec * CS ;
+CJ    = eye(nr) + Ec * CS;
 
 % first order
 

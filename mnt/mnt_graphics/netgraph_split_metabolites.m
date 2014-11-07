@@ -8,7 +8,12 @@
 
 function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);
 
-if isfield (network,'graphics_par'), 
+if ~length(met_list),
+  network_split = network;
+  return  
+end
+
+if isfield(network,'graphics_par'), 
   metabolites = network.graphics_par.metabolites;
   N = network.graphics_par.N;
 else,
@@ -60,7 +65,6 @@ end
 
 network_split = network_subnetwork(network,back_mapping);
 
-
 % -- append reaction numbers to multiple metabolite names
 % (not in graphics metnames list)
 
@@ -75,7 +79,7 @@ for it = 1:max(back_mapping),
   end
 end
 
-network_split.graphics_par.fixed = ones(size(network_split.metabolites));
+network_split.graphics_par.fixed = ones(length(network_split.metabolites)+length(network_split.actions),1);
 
 for it = 1:length(met_index),
   new_indices = split_mapping{met_index(it)};

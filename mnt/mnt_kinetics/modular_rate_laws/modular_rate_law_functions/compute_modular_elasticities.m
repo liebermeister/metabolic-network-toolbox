@@ -98,8 +98,10 @@ ind_act = find(v~=0)';
 E_sc_c_thermo     = sparse(nr,nm);
 E_sc_c_thermo(ind_act,:) = diag(1./(sparse(zeta(ind_act)-1))) * ...
     [diag(sparse(zeta(ind_act))) * Mplus(ind_act,:) - Mminus(ind_act,:)]; 
+
 E_un_c_thermo     = sparse(nr,nm);
 E_un_c_thermo(ind_act,:) = [diag(v_plus(ind_act)) * Mplus(ind_act,:) - diag(v_minus(ind_act)) * Mminus(ind_act,:)] * diag(1./c);
+
 
 E_sc_c_regulation = alpha_A .* Wplus - beta_I .* Wminus; 
 
@@ -185,5 +187,5 @@ end
 % fix strange bug with sptensor data structure
 E.un_E_cu = E.un_E_cu(:,:,:);
 
-
 end
+

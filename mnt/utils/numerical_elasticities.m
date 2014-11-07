@@ -1,3 +1,5 @@
+function [epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);
+
 %[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);
 %
 % calculate the first- and second-order elasticities
@@ -5,8 +7,6 @@
 % x                : variables       (vector)
 % p                : parameters      (structure array)
 % velocity_function: function handle to kinetics function
-
-function [epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);
 
 v = feval(velocity_function,x,p);
 

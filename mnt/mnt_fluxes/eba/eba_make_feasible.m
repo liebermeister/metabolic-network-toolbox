@@ -1,4 +1,4 @@
-function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext)
+function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)
 
 % v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)
 %
@@ -14,9 +14,11 @@ function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,i
 %    cycle_method: 'beard', 'efmtool'
 % ind_ext: optional; if given -> projection to stationary flux distribution
 
-eval(default('eba_condition','''strict''','C','nan','ind_ignore','[]','cycle_method','''beard'''));
+eval(default('eba_condition','''strict''','C','nan','ind_ignore','[]','cycle_method','''beard''','v_sign','[]'));
 
 v_orig = v;
+
+if isempty(v_sign), v_sign = nan * v; end
 
 if isnan(C),
   display(sprintf('\n  Computing elementary cycles. This may take a while'));
@@ -32,16 +34,14 @@ end
 
 feasible = 0;
 
-[feasible,CC,ind_violated] = eba_feasible(sign(v),N,C,ind_ignore,eba_condition);
+[feasible, CC, ind_violated] = eba_feasible(sign(v),N,C,ind_ignore,eba_condition);
 
 % adjust flux distribution by substracting a multiple of each 
 % cycle involved in a violation
 % repeat this until a feasible solution is reached
 
 while ~feasible,
-  fprintf('.')
-  %figure(1); netgraph_concentrations(network_CoHid,[],v);
-  %figure(2); netgraph_concentrations(network_CoHid,[],C(:,ind_violated(1)));
+  % fprintf('.')
   for it = 1:length(ind_violated),
     a   = C(:,ind_violated(it)).*v;
     if sum(a~=0),
@@ -54,13 +54,12 @@ while ~feasible,
       v   = v - C(:,ind_violated(it))*dum;
     end
   end
-  v(abs(v)<10^-10) = 0;
+  v(abs(v)<10^-8) = 0;
   if exist('ind_ext','var'),
-    v = project_fluxes(N, ind_ext, v);
+    v = project_fluxes(N, ind_ext, v, [], v_sign);
   end
   %% check for feasibility
   [feasible,CC,ind_violated] = eba_feasible(sign(v),N,C,ind_ignore,eba_condition);
-  ind_violated
 end
 
 if feasible, display('  Feasible flux distribution found'); end

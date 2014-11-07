@@ -45,22 +45,32 @@ else,
       scale_G = convert_G_scale;
       v       = convenience_velocities(s,network,kinetics,indices,split,scale_G);
       
-    case 'numeric',
-      
+    case 'kinetic_strings',
+ 
       for it = 1:length(network.metabolites),
         eval([ network.metabolites{it} ' = ' num2str(s(it)) ';']);
       end
+
+      if isfield(network, 'compartments'),
+        for it = 1:length(network.compartments),
+          eval([ network.compartments{it} ' = ' num2str(network.compartment_sizes(it)) ';']);
+        end
+      end
+
+      for it = 1:length(kinetics.parameters),
+        eval([ kinetics.parameters{it} ' = ' num2str(kinetics.parameter_values(it)) ';']);
+      end
+
       for it2=1:length(indices),
         it = indices(it2);
         r  = kinetics.reactions{it};
         for itt = 1:length(r.parameters),
-          eval([r.parameters{itt}.name ' = ' num2str(kinetics.parameter_values(r.parameters{itt}.index)) ';']);
+          eval([r.parameters{itt} ' = ' num2str(r.parameter_values(itt)) ';']);
         end
         eval(['v(it2,:) = ' r.string ';']);
       end
-
-    case 'numeric',
     
+    case 'numeric',
       if isfield(kinetics,'use_only_met'),
         dummy = ones(kinetics.n_met_tot,1);
         dummy(kinetics.use_only_met) = s;
@@ -72,7 +82,7 @@ else,
       else
         v = feval(kinetics.velocity_function,s,kinetics.parameters);
       end
-        if isfield(kinetics,'use_only_act'), v = v(kinetics.use_only_act); end
+      if isfield(kinetics,'use_only_act'), v = v(kinetics.use_only_act); end
       v = v(indices);
       
     case 'mass-action',

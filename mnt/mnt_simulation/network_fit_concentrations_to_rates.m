@@ -1,4 +1,4 @@
-function [c,u_ratio] = network_fit_concentrations_to_rates(network,v,c_init);
+function [c,u_ratio] = network_fit_concentrations_to_rates(network, v, c_init);
 
 % [c,u_ratio] = network_fit_concentrations_to_rates(network,v,c_init);
 

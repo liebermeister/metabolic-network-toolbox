@@ -7,7 +7,7 @@
 %- a filename. In this case, the firectory name has to be given 
 %  in the argument 'dirname'
 %
-%Kinetic laws are represented in kinetics of the 'numeric'
+%Kinetic laws are represented in kinetics of the 'kinetic_strings'
 %type (see 'network_velocities')
 %
 %This function requiers the SBMLToolbox to be installed
@@ -21,10 +21,10 @@ end
 
 eval(default('verbose','0'));
 
-create_annotations = 0;   % CONSTRUCT UNIQUE ANNOTATIONS ?
-graphics_flag      = 0;   % SHOW GRAPHICS?
-import_names       = 1;   % import_names from model
-import_compartments= 0;   % import_names from model
+create_annotations  = 0;   % CONSTRUCT UNIQUE ANNOTATIONS ?
+graphics_flag       = 0;   % SHOW GRAPHICS?
+import_names        = 1;   % import names from model
+import_compartments = 1;   % import compartments from model
 
 if isstr(s),
   if exist('dirname','var'); cd(dirname); end 
@@ -174,43 +174,36 @@ for it1 = 1:length(modifier),
 end
 
 if ~isempty(reaction_formula{1}),
-  network.kinetics.type = 'numeric';
+  network.kinetics.type = 'kinetic_strings';
   network.kinetics.reactions = {};
   all_parameters = {};
   for it = 1:length(actions),
     network.kinetics.reactions{it}.string = strrep(reaction_math{it},'pow','power');
     for itt = 1:length(reaction_parameter{it}),
       this_parameter = reaction_parameter{it}(itt);
-      network.kinetics.reactions{it}.parameters{itt}.name = this_parameter.id;
-      network.kinetics.reactions{it}.parameters{itt}.value = this_parameter.value;
+      network.kinetics.reactions{it}.parameters{itt}       = this_parameter.id;
+      network.kinetics.reactions{it}.parameter_values(itt) = this_parameter.value;
     end
     if length(reaction_parameter{it}),
       network.kinetics.reactions{it}.parameters = network.kinetics.reactions{it}.parameters';
-      else,
+    else,
       network.kinetics.reactions{it}.parameters = {};
+      network.kinetics.reactions{it}.parameter_values = [];
     end
-    end
+  end
   network.kinetics.reactions = network.kinetics.reactions';
 end
 
-
 if ~isempty(reaction_formula{1}),
-  z=1;
+  network.kinetics.parameters       = {};
   network.kinetics.parameter_values = [];
-  network.kinetics.parameters = [];
-
-  for it=1:length(network.actions),
-    par = network.kinetics.reactions{it}.parameters;
-    for it2 = 1: length(par),
-      network.kinetics.parameters{z}   = ['v' num2str(it) '_' par{it2}.name];
-      network.kinetics.parameter_values(z)   = par{it2}.value;
-      network.kinetics.reactions{it}.parameters{it2}.index = z;
-      network.kinetics.reactions{it}.parameters{it2} = rmfield(network.kinetics.reactions{it}.parameters{it2},'value');
-      z=z+1;
-    end
+  for itp = 1:length(s.parameter),
+    network.kinetics.parameters{itp,1} = s.parameter(itp).id;
+    network.kinetics.parameter_values(itp,1) = s.parameter(itp).value;
   end
-  network.kinetics.parameter_values = network.kinetics.parameter_values';
-  network.kinetics.parameters = network.kinetics.parameters';
+  if length(s.rule),
+    warning('SBML model contains rules - these cannot be imported'); 
+  end
 elseif verbose, 
   fprintf('Warning: no kinetics found in SBML file.\n');
 end 
@@ -218,6 +211,14 @@ end
 if exist('s_init','var'), network.s_init       = s_init; 
 else,
 if exist('a_init','var'), network.s_init       = a_init; end
+end
+
+if import_compartments, 
+  clear compartments 
+  for it=1:length(s.compartment),
+    network.compartments{it}      = s.compartment(it).id;
+    network.compartment_sizes(it) = s.compartment(it).size;
+  end
 end
 
 if graphics_flag,

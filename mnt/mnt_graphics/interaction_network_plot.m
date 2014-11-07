@@ -18,7 +18,7 @@ eval(default('col','[]','gp','struct'));
 
 if isempty(col), col = rb_colors; end
 
-gp_def = struct('actprintnames',0,'metprintnames',1,'arrowsize',0.03, 'linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',0, 'FontSize',8,'text_offset',[.01,-.01],'colormap',col,'hold_on',1,'linewidth',2, 'show_diagonal_values',0,'normalise_values',1,'flag_edges',1,'relative_threshold',0);
+gp_def = struct('actprintnames',0,'metprintnames',1,'arrowstyle','none','arrowsize',0.03, 'linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',0, 'FontSize',8,'text_offset',[.01,-.01],'colormap',col,'hold_on',1,'linewidth',2, 'show_diagonal_values',0,'normalise_values',1,'flag_edges',1,'relative_threshold',0);
 
 gp = join_struct(gp_def,gp);
 
@@ -34,6 +34,7 @@ end
 
 if gp.show_diagonal_values,
   reaction_values = diag(reaction_pair_values);
+  gp.actstyle = 'fixed';
 end
 
 % normalise by maximal absolute value
@@ -54,17 +55,32 @@ reaction_pair_values = reaction_pair_values';
 
 % replace nan by zeros for graphics
 reaction_pair_values(isnan(reaction_pair_values)) = 0;
-colors = nan * ones(3,nr,nr);
+
+colors  = [];
+i1_list = [];
+i2_list = [];
+value_list = [];
+z = 1; 
+
 for i1 = 1:nr, 
   for i2 = i1+1:nr,
     this_value = reaction_pair_values(actmap(i1),actmap(i2));
     if isfinite(this_value),  
-      if sign(this_value),  
-        colors(:,i1,i2) = col(1+floor((size(col,1)-1)*(this_value+1)/2),:);
+      if sign(this_value),
+        i1_list(z) = i1;
+        i2_list(z) = i2;
+        value_list(z) = this_value;
+        colors = [colors; col(1+floor((size(col,1)-1)*(this_value+1)/2),:)];
+        z = z+1;
       end
     end
   end;
 end
+
+[dum,order] = sort(abs(value_list));
+i1_list = i1_list(order);
+i2_list = i2_list(order);
+colors = colors(order,:);
 
 if isfield(gp,'metvalues'),
   c = gp.metvalues; 
@@ -74,4 +90,4 @@ end
 
 netgraph_concentrations(network,c,reaction_values,1,gp); hold on;
 
-draw_reaction_arcs(network,colors,gp.linewidth);  hold on;
+draw_reaction_arcs(network,colors,i1_list,i2_list,gp.linewidth);  hold on;

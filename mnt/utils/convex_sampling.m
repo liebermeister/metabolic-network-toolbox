@@ -10,7 +10,17 @@ function [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = conve
 %    xl <= x <= xu
 %
 % method = 'rejection'   (default, no 'options' argument needed)
-%          'hit-and-run' ( options in data structure 'options', see convex_sampling_hit_and_run)
+%          'extreme-points' extreme vectors (smallest / largest values along coordinate axes)
+%          'hit-and-run' (requires data structure 'options'
+%                         with options for convex_sampling_hit_and_run)
+%
+% options.x_start
+% options.x_mean
+% options.x_cov 
+% options.n_warm
+% options.n_pick
+% options.flag_artificial_centering
+
 
 eval(default('n_sample','1','A_eq','[]','b_eq','[]','xl','[]','xu','[]','verbose','0','method','''rejection''','options','struct'));
 
@@ -80,6 +90,8 @@ end
 switch method,
   case 'rejection',
     [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,n_sample,xl,xu,verbose,options);
+  case 'extreme-points',
+    [x, x_lower, x_upper] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,n_sample,xl,xu);
   case 'hit-and-run',
     [x, x_lower, x_upper, x_lower_list, x_upper_list] = convex_sampling_hit_and_run(A_ineq, b_ineq, xl, xu, options.x_mean, options.x_cov, n_sample, options.n_warm, options.n_pick, options.flag_artificial_centering, options.x_start);
 end

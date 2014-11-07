@@ -24,5 +24,9 @@ network.regulation_matrix(nr+1,:) = 0;
 network.reversible                = [network.reversible; reversible];
 
 if isfield(network, 'reaction_names'),
-  network.reaction_names =   [network.reaction_names; {name}];
+  network.reaction_names = [network.reaction_names; {name}];
+end
+
+if isfield(network, 'formulae'),
+  network.formulae = network_print_formulae(network);
 end

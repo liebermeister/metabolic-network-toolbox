@@ -52,7 +52,7 @@ end
 error = max(abs(Sdot./S(internal)));
 
 if error > 10^-3, 
-  disp(['Warning: maximal error (relative change of metabolite) in output state is ' num2str(error)]); 
+  warning(['Maximal error (relative change of metabolite) in output state is ' num2str(error)]); 
 end
 
 

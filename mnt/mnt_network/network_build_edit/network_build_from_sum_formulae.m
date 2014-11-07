@@ -2,7 +2,9 @@ function [network,N,metabolites] = network_build_from_sum_formulas(filename_reac
 
 % network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)
 %
-% build matlab network network structure from reactions contained in file
+% build matlab network network structure from reactions contained in SBtab file
+%
+% Instead of SBtab filenames, SBtab data structures can be directly provided as function arguments
 %
 % attention: the syntax of the sum formulas is very strict
 % example: 'A + 2 B <=> C'
@@ -13,16 +15,26 @@ function [network,N,metabolites] = network_build_from_sum_formulas(filename_reac
 % 'filename_reactions' 'filename_compounds' need to be empty 
 % and the formulas have to be given in 'columns.SumFormula'; 
 % other network entries can also be given
+% -- OR: use the wrapper function network_build_from_sum_formulae_list --
 
 eval(default('filename_compounds','[]','columns','[]'));
 
-if length(filename_reactions), 
-  reaction_table = sbtab_table_load(filename_reactions); 
-  columns        = sbtab_table_get_all_columns(reaction_table);
-  if length(filename_compounds), 
-    compound_table   = sbtab_table_load(filename_compounds); 
-    compound_columns = sbtab_table_get_all_columns(compound_table);
+if length(filename_reactions),
+  if isstr(filename_reactions),
+    reaction_table = sbtab_table_load(filename_reactions); 
+  else
+    reaction_table = filename_reactions;
   end
+  columns        = sbtab_table_get_all_columns(reaction_table);
+end
+
+if length(filename_reactions) * length(filename_compounds),
+  if isstr(filename_compounds),
+    compound_table = sbtab_table_load(filename_compounds); 
+  else
+    compound_table = filename_compounds;
+  end
+  compound_columns = sbtab_table_get_all_columns(compound_table);
 end
 
 metab_collect = {};
@@ -102,14 +114,20 @@ network = network_construct(N,reversible,external_ind,metabolites,actions,0,regu
 network.formulae = columns.SumFormula;
 
 if exist('compound_columns','var'),
-  if isfield(compound_columns,'SBML__species__ID'),
+  if isfield(compound_columns,'SBML_species_ID'),
+    network.sbml_id_species  = compound_columns.SBML_species_ID(ll);
+  end
+  if isfield(compound_columns,'SBML__species__ID'), % OLD SBTAB COMPATIBILITY
     network.sbml_id_species  = compound_columns.SBML__species__ID(ll);
   end
   if isfield(compound_columns,'Name'),
     network.metabolite_names  = compound_columns.Name(ll);
   end
-  if isfield(compound_columns,'MiriamID__urn_miriam_kegg_compound'),
+  if isfield(compound_columns,'MiriamID__urn_miriam_kegg_compound'), % OLD SBTAB COMPATIBILITY
     network.metabolite_KEGGID = compound_columns.MiriamID__urn_miriam_kegg_compound(ll);
+  end
+  if isfield(compound_columns,'Identifiers_kegg_compound'),
+    network.metabolite_KEGGID = compound_columns.Identifiers_kegg_compound(ll);
   end
   if isfield(compound_columns,'IsCofactor'),
     network.is_cofactor = cell_string2num(compound_columns.IsCofactor(ll));
@@ -125,11 +143,17 @@ end
 if isfield(columns,'SBML__reaction__ID'),
   network.sbml_id_reaction  = columns.SBML__reaction__ID;
 end
-if isfield(columns,'MiriamID__urn_miriam_kegg_reaction'),
+if isfield(columns,'MiriamID__urn_miriam_kegg_reaction'), % OLD SBTAB
   network.reaction_KEGGID = columns.MiriamID__urn_miriam_kegg_reaction;
 end
-if isfield(columns,'MiriamID__urn_miriam_ec_code'),
+if isfield(columns,'Identifiers_kegg_reaction'),
+  network.reaction_KEGGID = columns.Identifiers_kegg_reaction;
+end
+if isfield(columns,'MiriamID__urn_miriam_ec_code'), % OLD
   network.EC = columns.MiriamID__urn_miriam_ec_code;
+end
+if isfield(columns,'Identifiers_ec_code'),
+  network.EC = columns.Identifiers_ec_code;
 end
 
 network.formulae = columns.SumFormula;

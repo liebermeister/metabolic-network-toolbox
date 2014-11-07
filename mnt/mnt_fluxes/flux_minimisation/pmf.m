@@ -10,13 +10,17 @@ function v = pmf(network,fba_constraints,benefit,v_start)
 %       v_min <= v <= v_max
 %
 % fba_constraints: see fba_default_options
+%
 %  fba_constraints.zv:       linear weights in the objective function  
 %  fba_constraints.v_min:    vector of lower bounds
 %  fba_constraints.v_max:    vector of upper bounds
 %  fba_constraints.v_sign:   vector of signs, overrides v_min and v_max
 %  fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else
 %  fba_constraints.ext_sign: sign vector for external metabolite production
+%
 % benefit: predefined value of the objective
+% v_start: (optional) initial flux vector to be optimised
+
 [nm,nr] = size(network.N);
 
 fba_constraints = fba_update_constraints(fba_constraints);
@@ -34,7 +38,6 @@ else,
   v0(ind_fix) = fba_constraints.v_fix(ind_fix);
 end
 v0red = pinv(full(K)) * v0;
-
 
 % min = sum(abs(K*vred))
 % where K * vred > v_min

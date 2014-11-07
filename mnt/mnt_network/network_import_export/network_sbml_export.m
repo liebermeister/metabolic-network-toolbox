@@ -1,4 +1,4 @@
-% SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
+% SBMLmodel = network_sbml_export(network, verbose, name, filename, notes, sbml_level, sbml_version)
 % 
 % Export network (data type from mnt) to libSBML's SBMLModel data type
 % 
@@ -86,7 +86,7 @@ for it = 1:length(network.metabolites),
   if sbml_level >2,
     species{it} = Species_setUnits(species{it},'mmol/l');
   end
-  species{it} = Species_setBoundaryCondition(species{it},network.external(it));
+  species{it} = Species_setBoundaryCondition(species{it},double(network.external(it)));
   if isfield(network,'s_init'),  
     species{it} = Species_setInitialConcentration(species{it},network.s_init(it));
   else,
@@ -152,7 +152,7 @@ if isfield(network,'kinetics'),
         parameter       = Parameter_setValue(parameter,kk.u(it));
         parameter       = Parameter_setConstant(parameter,1);
         if sbml_level >2,
-          parameter       = Parameter_setUnits(parameter,'mmol/l');
+          parameter     = Parameter_setUnits(parameter,'mmol/l');
         end
         kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
         
@@ -162,7 +162,7 @@ if isfield(network,'kinetics'),
         parameter       = Parameter_setValue(parameter,kk.KV(it));
         parameter       = Parameter_setConstant(parameter,1);
         if sbml_level >2,
-          parameter       = Parameter_setUnits(parameter,'1/s');         
+          parameter     = Parameter_setUnits(parameter,'1/s');         
         end        
         kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
 
@@ -211,7 +211,7 @@ if isfield(network,'kinetics'),
       
       end
     
-    case 'numeric',
+    case 'kinetic_strings',
     
       for it = 1:length(network.actions),
 	kinetic_law{it} = KineticLaw_create(sbml_level,sbml_version);
@@ -220,8 +220,8 @@ if isfield(network,'kinetics'),
 	kinetic_law{it} = KineticLaw_setFormulaFromMath(kinetic_law{it});
 	for p_ind = 1:length(r.parameters),
 	  thispar            = Parameter_create(sbml_level,sbml_version);
-	  thispar.id         = r.parameters{p_ind}.name;
-	  thispar.value      = network.kinetics.parameter_values(r.parameters{p_ind}.index);
+	  thispar.id         = r.parameters{p_ind};
+	  thispar.value      = r.parameter_values(p_ind);
 	  thispar.isSetValue = 1;
 	  kinetic_law{it}    = KineticLaw_addParameter(kinetic_law{it}, thispar);
 	end
@@ -300,7 +300,7 @@ end
 
 % -------------------------------------------------------------------
 
-%     case 'numeric',
+%     case 'kinetic_strings',
 %       
 %       s = [s sprintf('        <kineticLaw formula="%s">\n',network.kinetics.reactions{it}.string)]; 
 %       s = [s sprintf('          <listOfParameters>\n')];

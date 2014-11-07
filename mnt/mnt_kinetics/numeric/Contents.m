@@ -1,1 +1,1 @@
-% Functions for rate laws of type 'numeric' (with rate law formulae given by strings) 
+% Functions for rate laws of type 'numeric' (with rate law formulae given in an m-file (subfield 'velocity_function' in kinetics) 

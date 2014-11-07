@@ -1,6 +1,6 @@
-function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)
+function [kinetics, sbtab_table] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)
 
-% [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)
+% [kinetics, sbtab_table] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)
 
 eval(default('options','struct'));
 
@@ -13,28 +13,48 @@ switch options.kinetic_law,
   otherwise, error('Conversion is only possible for modular rate law');
 end
 
-data_quantities = {'equilibrium constant','catalytic rate constant geometric mean', 'Michaelis constant', 'activation constant', 'inhibitory constant', 'concentration', 'concentration of enzyme'};
-
-quantity_info = data_integration_load_quantity_info;
-kinetic_data  = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, options.use_sbml_ids,1,1,options.verbose);
-
-if options.use_sbml_ids,
-  if isfield(network,'sbml_id_species')
-    metabolites = network.sbml_id_species; 
-    reactions   = network.sbml_id_reaction;
-  else
-    metabolites = network.metabolites; 
-    reactions   = network.actions; 
-    [metabolites,reactions] = network_adjust_names_for_sbml_export(metabolites,reactions);
-  end
-end
+sbtab_table = sbtab_table_load(file_kinetic_data);
+QuantityType = sbtab_table_get_column(sbtab_table,'QuantityType');
+Value        = cell_string2num(sbtab_table_get_column(sbtab_table,'Value'));
+Compound     = sbtab_table_get_column(sbtab_table,'Compound');
+Reaction     = sbtab_table_get_column(sbtab_table,'Reaction');
+compound_ind = label_names(Compound,network.metabolites);
+reaction_ind = label_names(Reaction,network.actions);
 
 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = network_numbers(network);
 
-kinetics.u          = kinetic_data.u(:,1).mean;
-kinetics.c          = kinetic_data.c(:,1).mean;
-kinetics.KA(ind_KA) = kinetic_data.KA.mean(ind_KA);
-kinetics.KI(ind_KI) = kinetic_data.KI.mean(ind_KI);
-kinetics.KM(ind_KM) = kinetic_data.KM.mean(ind_KM);
-kinetics.KV         = kinetic_data.KV.mean;
-kinetics.Keq        = kinetic_data.Keq.mean; 
+ind_Keq = find(strcmp(QuantityType,'equilibrium constant'));
+ind_Keq = ind_Keq(label_names(Reaction(ind_Keq),network.actions));
+kinetics.Keq = Value(ind_Keq);
+
+ind_KV = find(strcmp(QuantityType,'catalytic rate constant geometric mean'));
+ind_KV = ind_KV(label_names(Reaction(ind_KV),network.actions));
+kinetics.KV = Value(ind_KV);
+
+ind_c = find(strcmp(QuantityType,'concentration'));
+ind_c = ind_c(label_names(Compound(ind_c),network.metabolites));
+kinetics.c = Value(ind_c);
+
+ind_u = find(strcmp(QuantityType,'concentration of enzyme'));
+ind_u = ind_u(label_names(Reaction(ind_u),network.actions));
+kinetics.u = Value(ind_u);
+
+ind_KM  = find(strcmp(QuantityType,'Michaelis constant'));
+ind_KMc = label_names(Compound(ind_KM),network.metabolites);
+ind_KMr = label_names(Reaction(ind_KM),network.actions);
+kinetics.KM = zeros(nr,nm);
+kinetics.KM(sub2ind([nr,nm],ind_KMr,ind_KMc)) = Value(ind_KM);
+
+ind_KI  = find(strcmp(QuantityType,'inhibitory constant'));
+ind_KIc = label_names(Compound(ind_KI),network.metabolites);
+ind_KIr = label_names(Reaction(ind_KI),network.actions);
+kinetics.KI = zeros(nr,nm);
+kinetics.KI(sub2ind([nr,nm],ind_KIr,ind_KIc)) = Value(ind_KI);
+
+ind_KA  = find(strcmp(QuantityType,'activation constant'));
+ind_KAc = label_names(Compound(ind_KA),network.metabolites);
+ind_KAr = label_names(Reaction(ind_KA),network.actions);
+kinetics.KA = zeros(nr,nm);
+kinetics.KA(sub2ind([nr,nm],ind_KAr,ind_KAc)) = Value(ind_KA);
+
+[kinetics.Kcatf, kinetics.Kcatr] = modular_KV_Keq_to_kcat(network.N,kinetics,kinetics.KV,kinetics.Keq,kinetics.KM,kinetics.h);

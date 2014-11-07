@@ -1,4 +1,4 @@
-function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)
+function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network,kinetics)
 
 % [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)
 
@@ -7,9 +7,13 @@ local_assignment  = {};
 
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);
 
-metnames = network.metabolites;      
-kk       = network.kinetics;
- 
+metnames = network.metabolites;
+if exist('kinetics','var'),
+  kk       = kinetics;
+else
+  kk       = network.kinetics;
+end
+
 for it = 1:nr,
 
   r_name = ['R' num2str(it) ];
@@ -23,7 +27,7 @@ for it = 1:nr,
   m_sub           = abs(network.N(sub,it));
   m_pro           = abs(network.N(pro,it));
 
-  switch network.kinetics.type,
+  switch kk.type,
     case 'ms',
       formula{it,1} = ms_get_formula(r_name,metnames,sub,pro,act,inh,m_sub,m_pro); 
       kk.KVratio{it} = ms_KM_KVratio_to_Keq(network.N,kk.KM,kk.Keq);

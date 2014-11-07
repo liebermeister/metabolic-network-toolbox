@@ -20,7 +20,7 @@ function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_li
 
 eval(default('dmu_fix','[]','rho','[]','epsilon','[]','dmu_limit','1'));
 
-if isempty(rho), rho = 10^-3; end 
+if isempty(rho),         rho = 10^-3; end 
 if isempty(epsilon), epsilon = 10^-5; end 
 
 % --------------------------------------------------------------
@@ -83,7 +83,7 @@ else,
    end
    
    if isempty(dmu) + [exitflag==-2],
-     eba_feasible = 0;  display(sprintf('Flux distribution is thermodynamically unfeasible at rho = %f.',rho));
+     eba_feasible = 0;  display(sprintf('Flux distribution is thermodynamically infeasible at rho = %f.',rho));
      dmu = [];
    end
   

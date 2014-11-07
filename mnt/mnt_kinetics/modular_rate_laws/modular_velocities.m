@@ -45,3 +45,7 @@ v_minus = u .* regulation_term .* Kminus .* theta_minus ./ D;
 v_plus  = real(full(v_plus));
 v_minus = real(full(v_minus));
 v       = v_plus - v_minus;
+
+%D
+%[Kplus .* theta_plus, Kminus .* theta_minus]
+%[v_plus, v_minus]

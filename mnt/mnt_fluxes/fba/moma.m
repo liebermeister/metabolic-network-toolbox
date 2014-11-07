@@ -1,28 +1,19 @@
-function [v,value] = fba(network,fba_constraints)
+function [v,value] = moma(network,fba_constraints,v_ref)
 
-% [v,benefit] = fba(network,fba_constraints)
+% [v,benefit] = moma(network,fba_constraints)
 %
-% flux balance analysis; solves
-% max = z' * v  where N_internal * v = 0  and vmin <= v <= vmax
+% MOMA solves
+% min = ||v-c_ref|| where N_internal * v = 0  and vmin <= v <= vmax
 %
 % fba_constraints: see fba_default_options
-%
-% fba_constraints.zv:       linear weights in the objective function  
+% fba_constraints.zv:       vector of flux gain weights
 % fba_constraints.v_min:    vector of lower bounds
 % fba_constraints.v_max:    vector of upper bounds
 % fba_constraints.v_sign:   vector of signs, overrides v_min and v_max
 % fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else
 % fba_constraints.ext_sign: sign vector for external metabolite production
 %                             undefined signs: nan
-%
-% simple usage:
-% fba_constraints = fba_default_options(network);
-% fba_constraints.zv = zeros(size(fba_constraints.zv));
-% fba_constraints.zv(#biomass_reaction) = 1;
-% [v,value] = fba(network,fba_constraints)
 
-
-%fprintf('FBA: ');
 [nm,nr] = size(network.N);
 ind_int = find(network.external==0);
 fba_constraints = fba_update_constraints(fba_constraints);
@@ -37,7 +28,7 @@ c  = fba_constraints.zv;
 
 [K, L, NR] = analyse_N(network.N,network.external);
 
-A  = [NR; ...
+A  = [full(NR); ...
      dd(ind_fix,:)];
 
 b  = [zeros(size(A,1),1);...
@@ -64,28 +55,9 @@ else,
           - fba_constraints.v_min(ind_notfix,:)];  
 
 end
+M  = eye(length(v_ref));
+m  = -v_ref;
 
-%[v,s,z,y,status] = lp236a(-c,G,h,A,b);
+[v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
 
-[v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[]);%,optimset('Display','off'));
-
-if exitflag~=1,
-  %% Check if at least zero flux is a solution
-  %% v_eq = zeros(size(fba_constraints.v_min));  
-  %% %flux_check_stationarity(network,v_eq)
-  %% eq_flux_satisfies_inequalities = prod(double([G * v_eq <= h]))
-  %% eq_flux_satisfies_equalities   = prod(double([A * v_eq == b]))
-  %% eq_flux_satisfies_lower_bounds = prod(double(v_eq >= fba_constraints.v_min))
-  %% eq_flux_satisfies_upper_bounds = prod(double(v_eq <= fba_constraints.v_max))
-
-  if exitflag == -4,
-    error('Nan value encountered.');
-  end
-  value = nan; v = nan;
-  exitflag
-  error('No FBA solution found.'); 
-else, 
-  value = c'*v;
-end
-
-% check: [v >= fba_constraints.v_min, v <= fba_constraints.v_max] 
+value = fba_constraints.zv' * v;

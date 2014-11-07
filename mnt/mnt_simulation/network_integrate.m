@@ -12,6 +12,10 @@
 %v          reaction velocities
 %x_assign   values of variables giuven by assignment rules
 %
+% Information about compartment volumes can be given in fields
+% 'metabolite_compartments', 'compartments', and 'compartment_sizes'
+% If 'metabolite_compartments' does not exist, all metabolites are considered in a volume of 1
+%
 % for visualising the results at one time point, type
 % i=1;  % (number of time point)
 % netgraph_draw(network,'metvalues',s_t(:,i),'actvalues',...
@@ -19,14 +23,16 @@
 
 function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)
 
-if ~exist('s_init','var'), s_init = rand(size(network.metabolites)); end
-if ~exist('T','var'),      T = 1; end
+if ~exist('s_init','var'),        s_init = rand(size(network.metabolites)); end
+if ~exist('T','var'),             T      = 1; end
 if ~exist('graphics_flag','var'), graphics_flag = 0; end
 if ~exist('verbose_flag','var'),  verbose_flag = 0; end
-if ~exist('Tmax','var'),          Tmax = []; end
+if ~exist('Tmax','var'),          Tmax    = []; end
 if ~exist('dilution_rate','var'), dilution_rate = []; end
-if ~exist('ode_opt','var'), ode_opt = []; end
-if ~isfield(network.kinetics,'assignment_function'), network.kinetics.assignment_function = []; end
+if ~exist('ode_opt','var'),       ode_opt = []; end
+if ~isfield(network.kinetics,'assignment_function'), 
+  network.kinetics.assignment_function = []; 
+end
 
 if length(Tmax),
   my_timer = timer('TimerFcn',@timer_error, 'Period', Tmax);
@@ -47,20 +53,26 @@ internal  = setdiff(1:n_S,external)';
 s_int     = s_init(internal);
 s_ext     = s_init(external);
 
+volumes = ones(length(internal),1);
+if isfield(network,'metabolite_compartments'),
+  ll = label_names(network.metabolite_compartments(internal), network.compartments);
+  volumes = network.compartment_sizes(ll);
+  if verbose_flag, 
+    display('Dynamic simulation: Using given compartment volumes = 1'); end
+else,
+  if verbose_flag, 
+    display('Dynamic simulation: Assuming compartment volumes = 1'); end
+end
+
 N     = network.N;
-N_int = N(internal,:);
+N_int = diag(1./volumes) * N(internal,:);
 
 if length(T)==1, T = [0,T]; end
 
 switch network.kinetics.type,
   
   case 'numeric',
-    N_internal = N;
-    [t, s_t] = network_integrate_kin(s_init,network.kinetics.parameters,0,T,N_internal,network.kinetics.velocity_function,[],network.external);
-    %if length(T)>2,
-      %s_t = interp1(t,s_t,T);
-      %t = T;
-    %end
+    [t, s_t] = network_integrate_kin(s_init,network.kinetics.parameters,0,T,N,network.kinetics.velocity_function,[],network.external,[],verbose_flag);
     s_int_t = s_t(:,internal);
 
   case 'mass-action',
@@ -100,8 +112,9 @@ switch network.kinetics.type,
                             internal,external,s_ext,N_int,verbose_flag,dilution_rate);
      else,
        [t,s_int_t] = ode15s(@integrate_network_der,T,s_int,odeoptions,network,...
-                            internal,external,s_ext,N_int,verbose_flag,dilution_rate);
+                            internal,external,s_ext,N_int,verbose_flag);
      end
+
 end
  
 s_int_t         = s_int_t';
@@ -124,7 +137,7 @@ met_int = network.metabolites(internal);
 %% --------------------------------------------------------------------
 %% compute fluxes
 
-if nargout >4,
+if nargout > 4,
   
   switch network.kinetics.type,
     
@@ -132,7 +145,7 @@ if nargout >4,
       for it=1:length(t),
         v(:,it) = feval(network.kinetics.velocity_function,s_t(:,it),network.kinetics.parameters,t(it));
       end
-    
+      
     otherwise,
       for it=1:length(t),
         v(:,it) = network_velocities(s_t(:,it),network);
@@ -141,7 +154,7 @@ if nargout >4,
 
   if ~isempty(network.kinetics.assignment_function),
     for it=1:length(t),
-      x_assign(:,it) = feval(network.kinetics.assignment_function,network.kinetics.parameters,s_t(:,it));
+      x_assign(:,it) = feval(network.kinetics.assignment_function,s_t(:,it),network.kinetics.parameters);
     end
   end
 
@@ -154,11 +167,11 @@ end
 
 % --------------------------------------------------------------------
 
-function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,verbose_flag,dilution_rate)
+function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,verbose_flag)
 
-if verbose_flag,
-  t
-end
+%if verbose_flag,
+%  t
+%end
 
 % vector f contains time derivative of the internal metabolites
 

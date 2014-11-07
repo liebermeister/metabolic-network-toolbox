@@ -26,8 +26,14 @@ if isempty('name'),      name    = 'Model'; end
 if ~exist('filename','var'),filename = []; end 
 
 if write_equilibrium_constants,
-  if ~isfield(network.kinetics,'Keq'),
-    error('No equilibrium constants found');
+  kEQ_found = 0;
+  if isfield(network,'kinetics'),
+    if isfield(network.kinetics,'Keq'),
+      kEQ_found = 1;
+    end
+  end  
+  if ~kEQ_found,
+    warning('No equilibrium constants found; inventing equilibrium constants');
   end
 end
 
@@ -207,7 +213,7 @@ end
 
 
 % switch network.kinetics.type,
-%   case 'numeric',
+%   case 'kinetic_strings',
 %     
 %     s = [s sprintf('        <kineticLaw formula="%s">\n',network.kinetics.reactions{it}.string)]; 
 %     s = [s sprintf('          <listOfParameters>\n')];

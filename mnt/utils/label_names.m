@@ -3,6 +3,8 @@
 
 function [label,indices] = label_names(names,allnames,method)
 
+if isstr(names), names = {names}; end
+
 case_sensitive=0;
 if not(case_sensitive), names=upper(names); allnames=upper(allnames); end
 
@@ -12,7 +14,7 @@ switch method
  case 'multiple'
  label = cell(length(names),1);
  for k=1:length(names)
-  hits = find(strcmp(char(allnames),names(k)));
+  hits = find(strcmp(allnames,names(k)));
   if length(hits)>0 
     label{k} = hits;
   end
@@ -21,12 +23,12 @@ switch method
 case 'single'
  label = zeros(length(names),1);
  for k=1:length(names)
-  hits = find(strcmp(char(allnames),names(k)));
+  hits = find(strcmp(allnames,names(k)));
   if length(hits)>0 
     label(k) = hits(1);
   end
  end
- 
+
 case 'fields'
     allnames=strrep(allnames,'-','_');
     allnames=strrep(allnames,'/','_');
@@ -48,3 +50,5 @@ case 'fields'
   end
 
 end
+
+

@@ -28,7 +28,7 @@ else,
   end
 end
 
-[R.s,R.j] = network_steady_state(network,s,1000,[],[],[], options.dilution_rate);
+[R.s,R.j] = network_steady_state(network,s,10000,[],[],[], options.dilution_rate);
 
 R.s = real(R.s);
 if find(R.s<0), 

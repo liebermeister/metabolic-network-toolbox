@@ -10,11 +10,11 @@
 %
 %         kinetics.parameters          structure containing the parameters
 %
-% (ii) 'standard': kinetics contains field 'reactions', a cell structure of
+% (ii)  'standard': kinetics contains field 'reactions', a cell structure of
 %        structure arrays, each describing one reaction: the kind of kinetics is 
 %        given in the field
 %
-% (iii)  'numeric': kinetics contains field 'reactions', a cell structure of
+% (iii)  'kinetic_strings': kinetics contains field 'reactions', a cell structure of
 %        structure arrays, each describing one reaction. parameter
 %        names and values are given in a column cell array of strings
 %        and a column vector, respectively.

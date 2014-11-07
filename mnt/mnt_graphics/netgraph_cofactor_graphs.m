@@ -1,13 +1,15 @@
-function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)
+function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree,no_cofactors)
 
 % [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)
 
-eval(default('cofactors','[]','table_positions','[]','max_met_degree','5'));
+eval(default('cofactors','[]','table_positions','[]','max_met_degree','5','no_cofactors','[]'));
 
 if length(max_met_degree),
   met_degree = sum(abs(sign(network.N)),2);
-  cofactors  = [cofactors; network.metabolites(met_degree>max_met_degree)];
+  cofactors  = unique([column(cofactors); network.metabolites(met_degree>max_met_degree)]);
 end
+
+cofactors  = setdiff(cofactors,no_cofactors);
 
 network_CoHid   = netgraph_simple_graph(network,cofactors);
 if nargout >1,
