@@ -35,7 +35,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>	NETWORK_ANALYSE - Analyse a metabolic network structure</li></ul>
+<li><a href="network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>	NETWORK_ANALYSE - Analyse a metabolic network structure</li><li><a href="../../.././mnt/utils/im.html" class="code" title="function im(X,m,rownames,colnames)">im</a>	im(X,m,rownames,colnames)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -57,7 +57,7 @@ This function is called by:
 0012 d                    = abs(corrcoef(K'))&gt;0.999;
 0013 enzyme_subset_matrix = [d+d^2 ~=0];
 0014 enzyme_subset_matrix = triu(enzyme_subset_matrix);
-0015 im(enzyme_subset_matrix)
+0015 <a href="../../.././mnt/utils/im.html" class="code" title="function im(X,m,rownames,colnames)">im</a>(enzyme_subset_matrix)
 0016 
 0017 enzyme_subsets = {};
 0018 ee = enzyme_subset_matrix;
@@ -71,6 +71,6 @@ This function is called by:
 0026 
 0027 [dum,order] = sort(-cellfun(<span class="string">'length'</span>,enzyme_subsets));
 0028 enzyme_subsets = enzyme_subsets(order);</pre></div>
-<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

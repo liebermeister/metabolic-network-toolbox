@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of display_stochastic_control</title>
+  <meta name="keywords" content="display_stochastic_control">
+  <meta name="description" content="display_stochastic_control(network,solution,control_type,direction_type,ind,filename)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; <a href="#">uncertain_parameters</a> &gt; display_stochastic_control.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters/uncertain_parameters&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>display_stochastic_control
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>display_stochastic_control(network,solution,control_type,direction_type,ind,filename)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function display_stochastic_control(network,solution,control_type,direction_type,ind,filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> display_stochastic_control(network,solution,control_type,direction_type,ind,filename)
+
+ control_type            choices for direction_type
+
+ 'control coefficients'  {'by reaction', 'on reaction', 'on metabolite'}
+ 'response coefficients' {'by rate constant', 'by Sext', 'on reaction', 'on metabolite'}
+ 'sensitivities'         {'by rate constant', 'by Sext', 'on reaction', 'on metabolite'}
+ 'sensitivities_simple'  {'by rate constant', 'by Sext', 'on reaction', 'on metabolite'}
+
+ ind  index for reaction, metabolite, or parameter</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function display_stochastic_control(network,solution,control_type,direction_type,ind,filename)</a>
+0002 
+0003 <span class="comment">% display_stochastic_control(network,solution,control_type,direction_type,ind,filename)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% control_type            choices for direction_type</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% 'control coefficients'  {'by reaction', 'on reaction', 'on metabolite'}</span>
+0008 <span class="comment">% 'response coefficients' {'by rate constant', 'by Sext', 'on reaction', 'on metabolite'}</span>
+0009 <span class="comment">% 'sensitivities'         {'by rate constant', 'by Sext', 'on reaction', 'on metabolite'}</span>
+0010 <span class="comment">% 'sensitivities_simple'  {'by rate constant', 'by Sext', 'on reaction', 'on metabolite'}</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% ind  index for reaction, metabolite, or parameter</span>
+0013 
+0014 set(gca,<span class="string">'FontSize'</span>,16);
+0015  
+0016  
+0017 <span class="keyword">switch</span>  control_type,
+0018   
+0019   <span class="keyword">case</span> <span class="string">'control coefficients'</span>,
+0020     <span class="keyword">switch</span> direction_type,
+0021       <span class="keyword">case</span> <span class="string">'by reaction'</span>,
+0022     <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.MonteCarlo.control_coefficients.C_S_mean(:,ind),<span class="keyword">...</span>
+0023                      <span class="string">'metvalues_std'</span>,solution.MonteCarlo.control_coefficients.C_S_std(:,ind),<span class="keyword">...</span>
+0024                      <span class="string">'actvalues'</span>,solution.MonteCarlo.control_coefficients.C_J_mean(:,ind),<span class="keyword">...</span>
+0025                      <span class="string">'actvalues_std'</span>,solution.MonteCarlo.control_coefficients.C_J_std(:,ind),<span class="keyword">...</span>
+0026                      <span class="string">'arrowvalues'</span>,solution.MonteCarlo.control_coefficients.C_J_mean(:,ind),<span class="keyword">...</span>
+0027                      <span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>, <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="keyword">...</span>
+0028                      <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0029     title([ solution.name <span class="string">', control exerted by reaction '</span> network.graphics_par.actnames{ind}]);
+0030       <span class="keyword">case</span> <span class="string">'on reaction'</span>,
+0031     <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>,solution.MonteCarlo.control_coefficients.C_J_mean(ind,:)',<span class="string">'actvalues_std'</span>,solution.MonteCarlo.control_coefficients.C_J_std(ind,:)',<span class="keyword">...</span>
+0032                      <span class="string">'arrowvalues'</span>,solution.MonteCarlo.control_coefficients.C_J_mean(ind,:)',<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0033                      <span class="string">'actprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05)); <span class="comment">%</span>
+0034     title([ solution.name <span class="string">', control on reaction '</span> network.graphics_par.actnames{ind}]);
+0035       <span class="keyword">case</span> <span class="string">'on metabolite'</span>,
+0036     <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>,solution.MonteCarlo.control_coefficients.C_S_mean(ind,:)',<span class="string">'actvalues_std'</span>,solution.MonteCarlo.control_coefficients.C_S_std(ind,:)',<span class="keyword">...</span>
+0037                      <span class="string">'arrowvalues'</span>,solution.MonteCarlo.control_coefficients.C_S_mean(ind,:)',<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0038                      <span class="string">'actprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05)); <span class="comment">%</span>
+0039     title([ solution.name <span class="string">', control on metabolite '</span> network.metabolites{ind}]);
+0040     <span class="keyword">end</span>
+0041 
+0042     
+0043     <span class="keyword">case</span> <span class="string">'response coefficients'</span>,
+0044 
+0045       <span class="keyword">switch</span> direction_type,
+0046     <span class="keyword">case</span> <span class="string">'by rate constant'</span>,
+0047       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.MonteCarlo.control_coefficients.R_S_mean(:,ind),<span class="string">'actvalues'</span>,solution.MonteCarlo.control_coefficients.R_J_mean(:,ind),<span class="keyword">...</span>
+0048                        <span class="string">'metvalues_std'</span>,solution.MonteCarlo.control_coefficients.R_S_std(:,ind),<span class="string">'actvalues_std'</span>,solution.MonteCarlo.control_coefficients.R_J_std(:,ind),<span class="keyword">...</span>
+0049                        <span class="string">'arrowvalues'</span>,solution.MonteCarlo.control_coefficients.R_J_mean(:,ind),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0050                        <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span>
+0051                        <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0052       title([ solution.name <span class="string">', sensitivities to '</span> solution.parameter_names{ind}]);
+0053     <span class="keyword">case</span> <span class="string">'by Sext'</span>,
+0054       dummy=find(network.external);
+0055       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.MonteCarlo.control_coefficients.R_S_Sext_mean(:,ind),<span class="string">'actvalues'</span>,<span class="keyword">...</span>
+0056                        solution.MonteCarlo.control_coefficients.R_J_Sext_mean(:,ind),<span class="keyword">...</span>
+0057                        <span class="string">'metvalues_std'</span>,solution.MonteCarlo.control_coefficients.R_S_Sext_std(:,ind),<span class="string">'actvalues_std'</span>,<span class="keyword">...</span>
+0058                        solution.MonteCarlo.control_coefficients.R_J_Sext_std(:,ind),<span class="keyword">...</span>
+0059                        <span class="string">'arrowvalues'</span>,solution.MonteCarlo.control_coefficients.R_J_Sext_mean(:,ind),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0060                        <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span><span class="comment">% </span>
+0061                        <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0062       title([ solution.name <span class="string">', sensitivities to '</span> network.metabolites{dummy(ind)}]);
+0063       
+0064     <span class="keyword">case</span> <span class="string">'on reaction'</span>,
+0065       dummy=zeros(length(network.actions),1);       dummy2=dummy;
+0066       dummy(solution.relevant)= solution.MonteCarlo.control_coefficients.R_J_mean(ind,:)';
+0067       dummy2(solution.relevant)= solution.MonteCarlo.control_coefficients.R_J_std(ind,:)';
+0068       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>,dummy,<span class="string">'arrowvalues'</span>,dummy,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0069                        <span class="string">'actvalues_std'</span>,dummy2,<span class="keyword">...</span>
+0070                        <span class="string">'actprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05)); <span class="comment">%,</span>
+0071       title([ solution.name <span class="string">', sensitivities of '</span> network.graphics_par.actnames{ind}]);
+0072       
+0073           <span class="keyword">case</span> <span class="string">'on metabolite'</span>,
+0074       dummy=zeros(length(network.metabolites),1);       dummy2=dummy;
+0075       dummy(solution.relevant)= solution.MonteCarlo.control_coefficients.R_S_mean(ind,:)';
+0076       dummy2(solution.relevant)= solution.MonteCarlo.control_coefficients.R_S_std(ind,:)';
+0077       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>,dummy,<span class="string">'arrowvalues'</span>,dummy,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0078                        <span class="string">'actvalues_std'</span>,dummy2,<span class="keyword">...</span>
+0079                        <span class="string">'actprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05)); <span class="comment">%,</span>
+0080       title([ solution.name <span class="string">', sensitivities of '</span> network.metabolites{ind}]);
+0081 
+0082       <span class="keyword">end</span>
+0083 
+0084     <span class="keyword">case</span> <span class="string">'sensitivities'</span>,
+0085 
+0086       <span class="keyword">switch</span> direction_type,
+0087     <span class="keyword">case</span> <span class="string">'by rate constant'</span>,
+0088       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.sensitivities.logS(:,ind),<span class="string">'actvalues'</span>,solution.sensitivities.logJ(:,ind),<span class="keyword">...</span>
+0089                        <span class="string">'arrowvalues'</span>,solution.sensitivities.logJ(:,ind),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0090                        <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span><span class="comment">% 'metprintnames',0,'actprintnames',0,...</span>
+0091                        <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0092       title([ solution.name <span class="string">', sensitivities to '</span> solution.parameter_names{ind}]);
+0093     <span class="keyword">case</span> <span class="string">'by Sext'</span>,
+0094       dummy=find(network.external);
+0095       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.sensitivities.logS_Sext(:,ind),<span class="string">'actvalues'</span>,solution.sensitivities.logJ_Sext(:,ind),<span class="keyword">...</span>
+0096                        <span class="string">'arrowvalues'</span>,solution.sensitivities.logJ_Sext(:,ind),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0097                        <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span><span class="comment">% 'metprintnames',0,'actprintnames',0,...</span>
+0098                        <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0099       title([ solution.name <span class="string">', sensitivities to '</span> network.metabolites{dummy(ind)}]);
+0100     <span class="keyword">case</span> <span class="string">'on reaction'</span>,
+0101       dummy=zeros(length(network.actions),1);
+0102       dummy(solution.relevant)= solution.sensitivities.logJ(ind,:)';
+0103       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>,dummy,<span class="string">'arrowvalues'</span>,dummy,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0104                        <span class="string">'actprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05)); <span class="comment">%,'actprintnames',0,</span>
+0105       title([ solution.name <span class="string">', sensitivities of '</span> network.graphics_par.actnames{ind}]);
+0106     <span class="keyword">case</span> <span class="string">'on metabolite'</span>,
+0107       dummy=zeros(length(network.actions),1);
+0108       dummy(solution.relevant)= solution.sensitivities.logS(ind,:)';
+0109       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>,dummy,<span class="string">'arrowvalues'</span>,dummy,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0110                        <span class="string">'actprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05)); <span class="comment">%,'actprintnames',0,</span>
+0111       title([ solution.name <span class="string">', sensitivities of '</span> network.metabolites{ind}]);
+0112       <span class="keyword">end</span>
+0113   <span class="keyword">case</span> <span class="string">'sensitivities_simple'</span>,
+0114 
+0115       <span class="keyword">switch</span> direction_type,
+0116     <span class="keyword">case</span> <span class="string">'by rate constant'</span>,
+0117       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.control_coefficients.R_S_norm*solution.logk_cov(:,ind),<span class="keyword">...</span>
+0118                        <span class="string">'actvalues'</span>,solution.control_coefficients.R_J_norm*solution.logk_cov(:,ind),<span class="keyword">...</span>
+0119                        <span class="string">'arrowvalues'</span>,solution.control_coefficients.R_J_norm*solution.logk_cov(:,ind),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0120                        <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span><span class="comment">% 'metprintnames',0,'actprintnames',0,...</span>
+0121                        <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0122       title([ solution.name <span class="string">', simple sensitivities to '</span> solution.parameter_names{ind}]);
+0123     <span class="keyword">case</span> <span class="string">'by Sext'</span>,
+0124       dummy=find(network.external);
+0125       <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,solution.control_coefficients.R_S_Sext*solution.logSext_cov(:,ind),<span class="keyword">...</span>
+0126                        <span class="string">'actvalues'</span>,solution.control_coefficients.R_J_Sext*solution.logSext_cov(:,ind),<span class="keyword">...</span>
+0127                        <span class="string">'arrowvalues'</span>,solution.control_coefficients.R_J_Sext*solution.logSext_cov(:,ind),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
+0128                        <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span><span class="comment">% 'metprintnames',0,'actprintnames',0,...</span>
+0129                        <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
+0130       title([ solution.name <span class="string">', simple sensitivities to '</span> network.metabolites{dummy(ind)}]);
+0131       <span class="keyword">end</span>
+0132       
+0133 <span class="keyword">end</span>
+0134 <a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
+0135   
+0136 <span class="keyword">if</span> exist(<span class="string">'filename'</span>,<span class="string">'var'</span>),
+0137   cd ~/projekte/unsichere_parameter/data
+0138   print squareControlByReact.eps -depsc
+0139 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

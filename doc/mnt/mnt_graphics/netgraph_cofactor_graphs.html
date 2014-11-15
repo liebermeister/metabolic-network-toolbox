@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -60,9 +60,9 @@ This function is called by:
 0017 <span class="keyword">end</span>
 0018 
 0019 <span class="keyword">if</span> length(table_positions),
-0020   network_CoHid   = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoHid,table_positions,[0,0],1);
+0020   network_CoHid   = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoHid,table_positions,[0,0],1);
 0021   <span class="keyword">if</span> nargout &gt;1,
-0022     network_CoSplit = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoSplit,table_positions,[0,0],1);
+0022     network_CoSplit = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoSplit,table_positions,[0,0],1);
 0023   <span class="keyword">end</span>
 0024 <span class="keyword">end</span>
 0025 
@@ -70,6 +70,6 @@ This function is called by:
 0027 <span class="comment">%pars = struct('initial_relax',200,'manual',0,'actprintnames',0,'arrowstyle','directions','arrowsize',0.03);</span>
 0028 <span class="comment">%network_CoSplit = netgraph_move(network_CoSplit,'text',pars);</span>
 0029 <span class="comment">%network_CoHid   = netgraph_move(network_CoSplit,'text',pars);</span></pre></div>
-<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

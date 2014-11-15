@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_model_matrices</title>
+  <meta name="keywords" content="parameter_balancing_model_matrices">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_parameter_balancing</a> &gt; <a href="#">parameter_balancing</a> &gt; parameter_balancing_model_matrices.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_model_matrices
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function model_matrices = parameter_balancing_model_matrices(network) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>	Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function model_matrices = parameter_balancing_model_matrices(network)</a>
+0002 
+0003 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
+0004 
+0005 model_matrices.Nt         = sparse(network.N');
+0006 model_matrices.I_species  = speye(nm);
+0007 model_matrices.I_reaction = speye(nr);
+0008 model_matrices.I_KM       = speye(nKM);
+0009 model_matrices.I_KA       = speye(nKA);
+0010 model_matrices.I_KI       = speye(nKI);
+0011 model_matrices.Nkm        = sparse(zeros(nr,nKM));
+0012 [r_ind,m_ind] = ind2sub(size(model_matrices.Nt),KM_indices);
+0013 <span class="keyword">for</span> it = 1:length(KM_indices),
+0014   model_matrices.Nkm(r_ind(it),it) = model_matrices.Nt(KM_indices(it));
+0015 <span class="keyword">end</span>
+0016 model_matrices.absNkm     = abs(model_matrices.Nkm );
+0017 model_matrices.Nft        = sparse(abs(network.N') .* double([network.N'&lt;0]));
+0018 model_matrices.Nrt        = sparse(    network.N'  .* double([network.N'&gt;0]));
+0019 model_matrices.RT         = 2.4942; <span class="comment">% kJ/mol</span>
+0020 
+0021 <span class="keyword">if</span> isfield(network.kinetics,<span class="string">'h'</span>),
+0022   model_matrices.h          = sparse(diag(network.kinetics.h));
+0023 <span class="keyword">else</span>
+0024   model_matrices.h          = speye(nr);
+0025 <span class="keyword">end</span>
+0026   
+0027 [itr,itm] = ind2sub(size(network.N'),KM_indices);
+0028 <span class="keyword">for</span> it = 1:length(KM_indices), 
+0029   model_matrices.Z(itr(it),it) = network.N(itm(it),itr(it));
+0030 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

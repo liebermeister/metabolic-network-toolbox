@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of kinetics_distribution_par</title>
+  <meta name="keywords" content="kinetics_distribution_par">
+  <meta name="description" content="K = kinetics_distribution_par(reaction, d, q);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; <a href="#">uncertain_parameters</a> &gt; kinetics_distribution_par.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters/uncertain_parameters&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>kinetics_distribution_par
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>K = kinetics_distribution_par(reaction, d, q);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function K = kinetics_distribution_par(reaction, d, q_mean, q_cov,r_mean,r_cov); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> K = kinetics_distribution_par(reaction, d, q);
+
+ Compute mean and covariance of logarithmic parameters 
+ for a single reaction of arbitrary type 
+ (see 'set_standard_kinetics_type')</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="parameter_distribution.html" class="code" title="function [d, distribution] = parameter_distribution(distribution, network)">parameter_distribution</a>	d = parameter_distribution(distribution,network)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function K = kinetics_distribution_par(reaction, d, q_mean, q_cov,r_mean,r_cov);</a>
+0002 
+0003 <span class="comment">% K = kinetics_distribution_par(reaction, d, q);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute mean and covariance of logarithmic parameters</span>
+0006 <span class="comment">% for a single reaction of arbitrary type</span>
+0007 <span class="comment">% (see 'set_standard_kinetics_type')</span>
+0008 
+0009 K.type       = reaction.type;
+0010 K.parameters = reaction.parameters;
+0011 K.sizes = reaction.sizes;
+0012 n_par        = sum(reaction.sizes);
+0013 
+0014 <span class="comment">% dummy solution</span>
+0015 K.log_mean = zeros(n_par,1);
+0016 K.log_cov  = sparse(0.01*eye(n_par));
+0017 
+0018 <span class="string">'kinetics_distribution_par: preliminary dummy solution!!!'</span>
+0019 
+0020 <span class="keyword">return</span>;
+0021 
+0022 <span class="keyword">switch</span> K.type,
+0023     
+0024   <span class="keyword">case</span> <span class="string">'mass-action'</span>,
+0025     K.k   = exp(d.mu_k+d.sigma_k*randn);
+0026     K.km  = exp(d.mu_k+d.sigma_k*randn);
+0027     qq     = K.k/K.km;
+0028     alpha = sqrt(q/qq);
+0029     K.k   = K.k * alpha;
+0030     K.km  = K.km / alpha;
+0031     
+0032   <span class="keyword">case</span> <span class="string">'michaelis_menten_rev'</span>, 
+0033     K.Vm_S = exp(d.mu_Vm+d.sigma_Vm*randn); 
+0034     K.Km_S = exp(d.mu_Km+d.sigma_Km*randn); 
+0035     K.Vm_P = exp(d.mu_Vm+d.sigma_Vm*randn); 
+0036     K.Km_P = exp(d.mu_Km+d.sigma_Km*randn); 
+0037     qq = K.Vm_S * K.Km_P / ( K.Vm_P * K.Km_S );
+0038     alpha = sqrt(q/qq); 
+0039     K.Vm_S = K.Vm_S * alpha; 
+0040     K.Vm_P = K.Vm_P / alpha;
+0041      
+0042   <span class="keyword">case</span> <span class="string">'influx'</span>, 
+0043     K.v_in = exp(d.mu_k+d.sigma_k*randn); 
+0044      
+0045   <span class="keyword">case</span> <span class="string">'efflux'</span>, 
+0046     K.k_out = exp(d.mu_k+d.sigma_k*randn); 
+0047     
+0048   <span class="keyword">case</span> {<span class="string">'rev_uni_uni'</span>,<span class="string">'irrev_uni'</span>},    n_steps = 2;
+0049   <span class="keyword">case</span> {<span class="string">'rev_uni_bi'</span>, <span class="string">'irrev_bi'</span>},     n_steps = 3;
+0050   <span class="keyword">case</span> {<span class="string">'rev_bi_uni'</span>},                 n_steps = 3;
+0051   <span class="keyword">case</span> {<span class="string">'rev_bi_bi'</span>},                  n_steps = 4;
+0052   <span class="keyword">case</span> {<span class="string">'rev_multiple'</span>},               n_steps = 2;
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">switch</span> K.type,
+0056   
+0057   <span class="keyword">case</span> {<span class="string">'rev_uni_uni'</span>,<span class="string">'rev_uni_bi'</span>,<span class="string">'rev_bi_uni'</span>,<span class="string">'rev_bi_bi'</span>,<span class="string">'rev_multiple'</span>},
+0058     K.k    = exp(d.mu_k+d.sigma_k*randn(n_steps,1)); 
+0059     K.km   = exp(d.mu_k+d.sigma_k*randn(n_steps,1)); 
+0060     K.Etot = exp(d.mu_k+d.sigma_k*randn);
+0061     qq      = prod(K.k)/prod(K.km);
+0062     alpha  = (q/qq)^(1/2*1/n_steps);
+0063     K.k    = K.k * alpha;
+0064     K.km   = K.km / alpha;
+0065     K.Pk   = K.Etot*prod(K.k);
+0066     K.Pkm  = K.Etot*prod(K.km);
+0067   <span class="keyword">case</span> {<span class="string">'irrev_uni'</span>,<span class="string">'irrev_bi'</span>},
+0068     K.k    = exp(d.mu_k+d.sigma_k*randn(n_steps,1)); 
+0069     K.Etot = exp(d.mu_k+d.sigma_k*randn);
+0070     K.Pk   = K.Etot*prod(K.k);
+0071 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

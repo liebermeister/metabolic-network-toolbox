@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of display_histograms</title>
+  <meta name="keywords" content="display_histograms">
+  <meta name="description" content="display_histograms(s,comment,fn,met_indices,act_indices,par_indices,parnames)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; display_histograms.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>display_histograms
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>display_histograms(s,comment,fn,met_indices,act_indices,par_indices,parnames)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function display_histograms(s,fn,met_indices,act_indices,par_indices,parnames) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> display_histograms(s,comment,fn,met_indices,act_indices,par_indices,parnames)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../.././mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/stochasticJ_show_distribution.html" class="code" title="function stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)">stochasticJ_show_distribution</a>	stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function display_histograms(s,fn,met_indices,act_indices,par_indices,parnames)</a>
+0002 
+0003 <span class="comment">% display_histograms(s,comment,fn,met_indices,act_indices,par_indices,parnames)</span>
+0004 
+0005 <span class="keyword">if</span> ~exist(<span class="string">'parnames'</span>,<span class="string">'var'</span>), parnames = s.parameter_names(par_indices); <span class="keyword">end</span>
+0006 
+0007 figure(fn(1)); 
+0008 [ni,nk]= subplot_size(length(par_indices));
+0009 <span class="keyword">for</span> it=1:length(par_indices),
+0010 subplot(ni,nk,it); set(gca,<span class="string">'FontSize'</span>,14);
+0011 stochastic_show_distribution(s.MonteCarlo.k_fwd_list(par_indices(it),:),s.logk_mean(par_indices(it)),sqrt(s.logk_cov(par_indices(it),par_indices(it))),1,fn(1))
+0012 ylabel(<span class="string">'Counts'</span>);
+0013 xlabel([<span class="string">'Parameter '</span> parnames{par_indices(it)}]);
+0014 <span class="keyword">end</span>
+0015 
+0016 figure(fn(2));
+0017 [ni,nk]= subplot_size(length(met_indices));
+0018 <span class="keyword">for</span> it=1:length(met_indices),
+0019 ind = met_indices(it);
+0020 subplot(ni,nk,it);set(gca,<span class="string">'FontSize'</span>,14);
+0021 stochastic_show_distribution(s.MonteCarlo.S.list(ind,:),s.logS.mean_analytical_2(ind),s.logS.std_analytical_2(ind),1);
+0022 ylabel(<span class="string">'Counts'</span>);
+0023 xlabel([<span class="string">'Concentration S_'</span> num2str(ind)]);
+0024 <span class="keyword">end</span>
+0025 
+0026 figure(fn(3));
+0027 <span class="keyword">for</span> it=1:length(act_indices),
+0028 ind = act_indices(it);
+0029 subplot(ni,nk,it);set(gca,<span class="string">'FontSize'</span>,14);
+0030 <a href="../.././mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/stochasticJ_show_distribution.html" class="code" title="function stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)">stochasticJ_show_distribution</a>(s.MonteCarlo.J.list(ind,:),s.Jtotvalues{it},s.pJtot{it})
+0031 ylabel(<span class="string">'Counts'</span>);
+0032 xlabel([<span class="string">'Flux J_'</span>  num2str(ind)]);
+0033 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

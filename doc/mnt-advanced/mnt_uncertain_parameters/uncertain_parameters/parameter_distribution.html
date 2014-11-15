@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_distribution</title>
+  <meta name="keywords" content="parameter_distribution">
+  <meta name="description" content="d = parameter_distribution(distribution,network)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; <a href="#">uncertain_parameters</a> &gt; parameter_distribution.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters/uncertain_parameters&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>d = parameter_distribution(distribution,network)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [d, distribution] = parameter_distribution(distribution, network) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> d = parameter_distribution(distribution,network)
+
+ Compute means and covariances of parameter distributions
+
+ arguments: fields of 'distribution'. 'kinetics_type' must be 'from_network'
+
+ values 'Sext' or distribution parameters  'Sext_mu', 'Sext_sigma'
+ values 'logk'     or  distribution parameters  logk_mu,  logk_sigma
+ values 'H'       or  distribution parameters  g_mu,     g_sigma
+ values 'r'       or distribution parameters   logu_sigma,  sigma_r
+ values 'log_expression' (optional)
+
+ For multiple Michaelis-Menten:
+ values 'KmS', 'KmP' or distribution parameters  'KmS_mu', 'KmP_mu', 'KmS_sigma', 'KmP_sigma'
+
+ additional energies for irreversible reactions: 'deltag_irrev' vector of additional energy terms
+
+ ordering of the parameters is according to 'mass_action2par' or 'standard2par'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="kinetics_distribution_par.html" class="code" title="function K = kinetics_distribution_par(reaction, d, q_mean, q_cov,r_mean,r_cov);">kinetics_distribution_par</a>	K = kinetics_distribution_par(reaction, d, q);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [d, distribution] = parameter_distribution(distribution, network)</a>
+0002 
+0003 <span class="comment">% d = parameter_distribution(distribution,network)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Compute means and covariances of parameter distributions</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% arguments: fields of 'distribution'. 'kinetics_type' must be 'from_network'</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% values 'Sext' or distribution parameters  'Sext_mu', 'Sext_sigma'</span>
+0010 <span class="comment">% values 'logk'     or  distribution parameters  logk_mu,  logk_sigma</span>
+0011 <span class="comment">% values 'H'       or  distribution parameters  g_mu,     g_sigma</span>
+0012 <span class="comment">% values 'r'       or distribution parameters   logu_sigma,  sigma_r</span>
+0013 <span class="comment">% values 'log_expression' (optional)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% For multiple Michaelis-Menten:</span>
+0016 <span class="comment">% values 'KmS', 'KmP' or distribution parameters  'KmS_mu', 'KmP_mu', 'KmS_sigma', 'KmP_sigma'</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% additional energies for irreversible reactions: 'deltag_irrev' vector of additional energy terms</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% ordering of the parameters is according to 'mass_action2par' or 'standard2par'</span>
+0021 
+0022 N               = network.N;
+0023 kinetics        = network.kinetics;
+0024 <span class="keyword">if</span> isfield(network.kinetics,<span class="string">'used_fwd'</span>),
+0025   used_fwd        = network.kinetics.used_fwd;
+0026   used_bwd        = network.kinetics.used_bwd;
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="keyword">if</span> ~isfield(distribution,<span class="string">'kinetics_type'</span>), distribution.type = <span class="string">'mass-action'</span>; <span class="keyword">end</span>
+0030 
+0031 <span class="comment">% n_rea: number of chemical reactions</span>
+0032 <span class="comment">% n_rea_split number of chemical reactions (where reaction directions are counted separately)</span>
+0033 
+0034 [n_met,n_rea] = size(N);
+0035 
+0036 d = struct;
+0037 
+0038 <span class="keyword">if</span> sum(network.external),
+0039   <span class="keyword">if</span> isfield(distribution,<span class="string">'Sext'</span>),
+0040     d.logSext_mean = log(distribution.Sext);
+0041     d.logSext_cov = sparse(length(d.logSext_mean),length(d.logSext_mean));
+0042   <span class="keyword">elseif</span> isfield(distribution,<span class="string">'logSext_mu'</span>),
+0043     d.logSext_mean = distribution.logSext_mu;
+0044     d.logSext_cov = sparse(length(d.logSext_mean),length(d.logSext_mean));
+0045     d.logSext_cov = d.logSext_cov + diag(sparse(distribution.logSext_sigma.^2.* <span class="keyword">...</span>
+0046                         ones(length(d.logSext_mean ),1)));
+0047   <span class="keyword">end</span>
+0048 <span class="keyword">else</span>, 
+0049   d.logSext_mean = []; 
+0050   d.logSext_cov = sparse([]);
+0051   distribution.Sext = [];
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="keyword">if</span> sum(sum((diag(diag(d.logSext_cov))==d.logSext_cov)-1)), 
+0055   d.logSext_cov_sqrt = real(sqrtm(full(d.logSext_cov)));
+0056 <span class="keyword">else</span>
+0057   d.logSext_cov_sqrt =  diag(sqrt(diag(d.logSext_cov)));
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">if</span> isfield(distribution,<span class="string">'g'</span>),
+0061   d.g_mean = distribution.g;
+0062   d.g_cov  = sparse(length(d.g_mean),length(d.g_mean));
+0063 <span class="keyword">elseif</span> isfield(distribution,<span class="string">'g_mu'</span>),
+0064   d.g_mean = distribution.g_mu.*ones(n_met,1);
+0065   d.g_cov  = sparse(length(d.g_mean),length(d.g_mean));
+0066   d.g_cov  = d.g_cov + diag(sparse(distribution.g_sigma.^2.*ones(n_met,1)));
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> isfield(d,<span class="string">'g_mean'</span>),
+0070   beta     = distribution.beta;
+0071   d.logq_mean = - beta * N' * d.g_mean;
+0072   d.logq_cov  = beta^2 * sparse(N)'*d.g_cov * sparse(N);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">if</span> isfield(distribution,<span class="string">'deltag_irrev'</span>),
+0076   d.logq_mean = d.logq_mean + beta * distribution.deltag_irrev;
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> isfield(distribution,<span class="string">'logu'</span>),
+0080   d.logu_mean = distribution.logu;
+0081   d.logu_cov = sparse(length(d.logu_mean),length(d.logu_mean));
+0082 <span class="keyword">elseif</span> isfield(distribution,<span class="string">'logu_sigma'</span>),
+0083   d.logu_mean = distribution.logu_mu.*ones(n_rea,1);
+0084   d.logu_cov  = sparse(length(d.logu_mean),(length(d.logu_mean)));
+0085   d.logu_cov  = d.logu_cov + diag(sparse(distribution.logu_sigma.^2.*ones(n_rea,1)));
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="keyword">if</span> isfield(distribution,<span class="string">'log_expression'</span>),
+0089   d.logu_mean = d.logu_mean + distribution.log_expression;
+0090 <span class="keyword">end</span>
+0091 
+0092 
+0093 <span class="comment">% --------------------------------------------------------</span>
+0094 <span class="comment">% compute means and covariance of all parameters</span>
+0095 
+0096 <span class="keyword">switch</span> distribution.kinetics_type,
+0097   
+0098   <span class="keyword">case</span> <span class="string">'mass-action'</span>,    
+0099     
+0100      <span class="keyword">if</span> isfield(distribution,<span class="string">'logk'</span>),
+0101        d.logk_mean = distribution.logk;
+0102        d.logk_cov  = sparse(length(d.logk_mean),length(d.logk_mean));
+0103      <span class="keyword">elseif</span> isfield(distribution,<span class="string">'logk_mu'</span>),
+0104       d.logk_mean = distribution.logk_mu.*ones(2*n_rea,1);
+0105       d.logk_cov = sparse(length(d.logk_mean),length(d.logk_mean));
+0106       d.logk_cov = d.logk_cov + diag(sparse(distribution.logk_sigma.^2.*ones(2*n_rea,1)));
+0107      <span class="keyword">else</span> 
+0108        d.logk_mean = 1/2 * [d.logu_mean + beta * sparse(N') * d.g_mean; d.logu_mean - beta * sparse(N') * d.g_mean];
+0109        d.logk_cov  = 1/4 * [d.logu_cov+d.logq_cov, d.logu_cov-d.logq_cov; <span class="keyword">...</span>
+0110                    d.logu_cov-d.logq_cov, d.logu_cov+d.logq_cov];
+0111     <span class="keyword">end</span>
+0112     
+0113     <span class="keyword">if</span> exist(<span class="string">'used_fwd'</span>,<span class="string">'var'</span>),
+0114       d.logk_mean(find([used_fwd;used_bwd] ==0))  = 0;
+0115       d.logk_cov(:,find([used_fwd;used_bwd] ==0)) = 0;
+0116       d.logk_cov(find([used_fwd;used_bwd] ==0),:) = 0;
+0117     <span class="keyword">end</span>
+0118     
+0119     <span class="keyword">if</span> isfield(d,<span class="string">'logu_cov'</span>), d.pi_logk_logu = 0.5 * [eye(length(d.logu_mean)); eye(length(d.logu_mean))];     
+0120     <span class="keyword">end</span>
+0121     <span class="keyword">if</span> isfield(d,<span class="string">'g_cov'</span>), d.pi_logk_g = beta * 0.5 * [eye(length(d.logu_mean)); - eye(length(d.logu_mean))] * N';
+0122     <span class="keyword">end</span>
+0123     
+0124   <span class="keyword">case</span> <span class="string">'from_network'</span>,
+0125     
+0126     A = sparse([]); B = sparse([]); C = sparse([]); D = sparse([]);
+0127     parameter_names = {};
+0128     <span class="keyword">for</span> it = 1:length(network.kinetics.reactions)
+0129       r = network.kinetics.reactions{it};
+0130       <span class="keyword">switch</span> network.kinetics.type,
+0131     <span class="keyword">case</span> <span class="string">'standard'</span>,
+0132           parameter_names = [ parameter_names; <span class="keyword">...</span>
+0133                    cellstr([ repmat([<span class="string">'R'</span> num2str(it) <span class="string">':'</span>], sum(r.sizes),1), char(r.parameters)] )];
+0134       <span class="keyword">switch</span> r.type,
+0135         <span class="keyword">case</span> <span class="string">'mass-action'</span>,
+0136           <span class="comment">%          dummy.parameters = {'k','km'}';</span>
+0137           this_A = [];
+0138           this_B = [];
+0139           this_C = [];
+0140           this_D = [];
+0141         <span class="keyword">case</span> <span class="string">'michaelis_menten_rev'</span>, 
+0142           <span class="comment">%          dummy.parameters = {'Km_S','Km_P','Vm_S','Vm_P'}';</span>
+0143           this_A = [];
+0144           this_B = [];
+0145           this_C = [];
+0146           this_D = [];
+0147         <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_rev'</span>, 
+0148           <span class="comment">%      parameters = {'Km_S','Km_P','Vm_S','Vm_P'}';</span>
+0149           this_A = [0;0;1;1];
+0150           this_B = [0;0;1/2;1/2];
+0151           this_C = [distribution.logKm_sigma ,0, 0;<span class="keyword">...</span>
+0152             0,distribution.logKm_sigma ,0; <span class="keyword">...</span>
+0153             0.5*distribution.logKm_sigma, -0.5*distribution.logKm_sigma, distribution.logVm_sigma;<span class="keyword">...</span>
+0154             -0.5*distribution.logKm_sigma, 0.5*distribution.logKm_sigma, distribution.logVm_sigma];
+0155           this_D = [distribution.logKm_mu; distribution.logKm_mu; distribution.logVm_mu; distribution.logVm_mu];
+0156         <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_irrev'</span>, 
+0157           <span class="comment">%          dummy.parameters = {'Km_S','Vm_S'}';</span>
+0158           this_A = [0;1];
+0159           this_B = [0;0];
+0160           this_C = [distribution.logKm_sigma ,0; 0, distribution.logVm_sigma];
+0161           this_D = [distribution.logKm_mu; distribution.logVm_mu ];
+0162         <span class="keyword">case</span> <span class="string">'influx'</span>, 
+0163           <span class="comment">%          dummy.parameters = {'v_in'}';</span>
+0164           this_A = [];
+0165           this_B = [];
+0166           this_C = [];
+0167           this_D = [];
+0168         <span class="keyword">case</span> <span class="string">'efflux'</span>, 
+0169 <span class="comment">%          dummy.parameters = {'k_out'}';</span>
+0170           this_A = [];
+0171           this_B = [];
+0172           this_C = [];
+0173           this_D = [];
+0174         <span class="keyword">case</span> {<span class="string">'rev_uni_uni'</span>},
+0175 <span class="comment">%          dummy.parameters = {'k','km','Pk','Pkm'}';          dummy.sizes = [2 2 1 1]';</span>
+0176           this_A = [];
+0177           this_B = [];
+0178           this_C = [];
+0179           this_D = [];
+0180         <span class="keyword">case</span> {<span class="string">'rev_uni_bi'</span>},
+0181 <span class="comment">%          dummy.parameters = {'k','km','Pk','Pkm'}';          dummy.sizes = [3 3 1 1]';</span>
+0182           this_A = [];
+0183           this_B = [];
+0184           this_C = [];
+0185           this_D = [];
+0186         <span class="keyword">case</span> {<span class="string">'rev_bi_uni'</span>},
+0187 <span class="comment">%          dummy.parameters = {'k','km','Pk','Pkm'}';          dummy.sizes = [3 3 1 1]';</span>
+0188           this_A = [];
+0189           this_B = [];
+0190           this_C = [];
+0191           this_D = [];
+0192         <span class="keyword">case</span> {<span class="string">'rev_bi_bi'</span>},
+0193 <span class="comment">%          dummy.parameters = {'k','km','Pk','Pkm'}';          dummy.sizes = [4 4 1 1]';</span>
+0194           this_A = [];
+0195           this_B = [];
+0196           this_C = [];
+0197           this_D = [];
+0198         <span class="keyword">case</span> {<span class="string">'rev_multiple'</span>},
+0199 <span class="comment">%          dummy.parameters = {'k','km','Pk','Pkm'}';          dummy.sizes = [2 2 1 1]';</span>
+0200           this_A = [];
+0201           this_B = [];
+0202           this_C = [];
+0203           this_D = [];
+0204         <span class="keyword">case</span> {<span class="string">'irrev_uni'</span>},
+0205 <span class="comment">%          dummy.parameters = {'k','Pk'}';          dummy.sizes = [2 1]';</span>
+0206           this_A = [];
+0207           this_B = [];
+0208           this_C = [];
+0209           this_D = [];
+0210         <span class="keyword">case</span> {<span class="string">'irrev_bi'</span>},
+0211 <span class="comment">%          dummy.parameters = {'k','Pk'}';          dummy.sizes = [3 1]';</span>
+0212           this_A = [];
+0213           this_B = [];
+0214           this_C = [];
+0215           this_D = [];
+0216       <span class="keyword">end</span>
+0217       A(size(A,1)+1:size(A,1)+size(this_A,1),size(A,2)+1) = this_A;
+0218       B(size(B,1)+1:size(B,1)+size(this_B,1),size(B,2)+1) = this_B;
+0219       C(size(C,1)+1:size(C,1)+size(this_C,1),size(C,2)+1:size(C,2)+size(this_C,2)) = this_C;
+0220       D= [D; this_D];
+0221       <span class="keyword">end</span>
+0222     <span class="keyword">end</span>
+0223     d.parameter_names = parameter_names;
+0224     d.logk_mean = A * d.logu_mean     + B * d.logq_mean     + D;
+0225     d.logk_cov  = A * d.logu_cov * A' + B * d.logq_cov * B' + C*C';
+0226 <span class="keyword">end</span>
+0227 
+0228 <span class="keyword">if</span> sum(sum((diag(diag(d.logk_cov))==d.logk_cov)-1)),  d.logk_cov_sqrt = real(sqrtm(full(d.logk_cov)));
+0229 <span class="keyword">else</span>,                                                 d.logk_cov_sqrt = diag(sqrt(diag(d.logk_cov)));
+0230 <span class="keyword">end</span>
+0231 
+0232 distribution.parameter_names  =  d.parameter_names;
+0233 distribution.logk_mean        =  d.logk_mean;
+0234 distribution.logk_cov         =  d.logk_cov;
+0235 distribution.logk_cov_sqrt    =  d.logk_cov_sqrt;
+0236 
+0237 distribution.logSext_mean     =  d.logSext_mean;
+0238 distribution.logSext_cov      =  d.logSext_cov;
+0239 distribution.logSext_cov_sqrt =  d.logSext_cov_sqrt;
+0240 
+0241 
+0242 <span class="keyword">return</span>
+0243 
+0244 
+0245 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0246 <span class="comment">% ALTER KRAM</span>
+0247 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0248 
+0249 <span class="keyword">switch</span> bla,
+0250 
+0251   <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten'</span>,
+0252 
+0253     <span class="keyword">if</span> isfield(distribution,<span class="string">'KmS'</span>),
+0254       d.logKmS_mean = log(distribution.KmS);
+0255       d.logKmS_cov  = sparse(length(d.logKmS_mean),length(d.logKmS_mean));
+0256     <span class="keyword">elseif</span> isfield(distribution,<span class="string">'logKmS_mu'</span>),
+0257       d.logKmS_mean = distribution.logKmS_mu.*ones(n_rea_split,1);
+0258       d.logKmS_cov  = sparse(length(d.logKmS_mean),length(d.logKmS_mean));
+0259       d.logKmS_cov  = d.logKmS_cov + diag(sparse(distribution.logKmS_sigma.^2.*ones(n_rea_split,1)));
+0260     <span class="keyword">end</span>
+0261     
+0262     <span class="keyword">if</span> isfield(distribution,<span class="string">'KmP'</span>),
+0263       d.logKmP_mean = log(distribution.KmP);
+0264       d.logKmP_cov  = sparse(length(d.logKmP_mean),length(d.logKmP_mean));
+0265     <span class="keyword">elseif</span> isfield(distribution,<span class="string">'logKmP_mu'</span>),
+0266       d.logKmP_mean = distribution.logKmP_mu.*ones(n_rea_split,1);
+0267       d.logKmP_cov  = sparse(length(d.logKmP_mean),length(d.logKmP_mean));
+0268       d.logKmP_cov  = d.logKmP_cov + diag(sparse(distribution.logKmP_sigma.^2.*ones(n_rea_split,1)));
+0269     <span class="keyword">end</span>
+0270     
+0271     d.logVmS_mean = 0.5 * (d.logu_mean + d.logq_mean + d.logKmS_mean - d.logKmP_mean);
+0272     d.logVmP_mean = 0.5 * (d.logu_mean - d.logq_mean - d.logKmS_mean + d.logKmP_mean);
+0273     
+0274     logVm_cov = 1/4* (d.logu_cov + d.logq_cov + d.logKmS_cov + d.logKmP_cov);
+0275     d.logVmS_cov = logVm_cov;
+0276     d.logVmP_cov = logVm_cov;
+0277     d.logVmS_logVmP_cov =  1/4*(d.logu_cov - d.logq_cov - d.logKmS_cov - d.logKmP_cov);
+0278     
+0279     logk_mean_sorted = [d.logKmS_mean; d.logKmP_mean; d.logVmS_mean; d.logVmP_mean;];
+0280 
+0281     logk_cov_sorted = <span class="keyword">...</span>
+0282     [ d.logKmS_cov       ,       zeros(n_rea_split)  ,  0.5*  d.logKmS_cov , -0.5*d.logKmS_cov; <span class="keyword">...</span>
+0283        zeros(n_rea_split),              d.logKmP_cov , -0.5*d.logKmP_cov   ,  0.5*d.logKmP_cov; <span class="keyword">...</span>
+0284         0.5*d.logKmS_cov , - 0.5*d.logKmP_cov   ,       logVm_cov      ,        d.logVmS_logVmP_cov;    <span class="keyword">...</span>
+0285       - 0.5*d.logKmS_cov ,   0.5*d.logKmP_cov      ,     d.logVmS_logVmP_cov'   ,    logVm_cov  ];
+0286 
+0287     d.logk_cov_sorted = logk_cov_sorted;
+0288     
+0289     order = [];
+0290     parnames = {};
+0291     <span class="keyword">for</span> it = 1:n_rea_split,  
+0292       itstr = num2str(it);
+0293       <span class="keyword">if</span> network.reversible(it),
+0294     order = [order; it; it+n_rea_split;   it+2*n_rea_split;   it+3*n_rea_split]; 
+0295     parnames=[parnames;{[<span class="string">'KmS'</span> itstr],[<span class="string">'KmP'</span> itstr],[<span class="string">'VmS'</span> itstr],[<span class="string">'VmP'</span> itstr]}'];
+0296       <span class="keyword">else</span>,
+0297     order = [order; it; it+2*n_rea_split; ]; 
+0298     parnames=[parnames;{[<span class="string">'KmS'</span> itstr],[<span class="string">'VmS'</span> itstr]}'];
+0299       <span class="keyword">end</span>
+0300     <span class="keyword">end</span>
+0301     
+0302     d.logk_mean = logk_mean_sorted(order);
+0303     d.logk_cov  = logk_cov_sorted(order,order);
+0304     d.parnames  = parnames;
+0305   
+0306     
+0307   <span class="keyword">otherwise</span>,
+0308     
+0309     d.logk_mean = [];
+0310     d.logk_cov  = [];
+0311     
+0312     <span class="keyword">for</span> it = 1:n_rea,
+0313       it
+0314       K = <a href="kinetics_distribution_par.html" class="code" title="function K = kinetics_distribution_par(reaction, d, q_mean, q_cov,r_mean,r_cov);">kinetics_distribution_par</a>(kinetics.reactions{it}, d,<span class="keyword">...</span>
+0315                     d.logq_mean(it),d.logq_cov(it,it),d.logu_mean(it),d.logu_cov(it,it));
+0316       d.logk_mean = [d.logk_mean; K.log_mean];
+0317       nn = size(d.logk_cov,1);
+0318       d.logk_cov(nn+1:nn+sum(K.sizes),nn+1:nn+sum(K.sizes))  = K.log_cov;
+0319     <span class="keyword">end</span>
+0320     
+0321     <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

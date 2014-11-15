@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_analytical_distribution</title>
+  <meta name="keywords" content="network_analytical_distribution">
+  <meta name="description" content="[logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; network_analytical_distribution.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>network_analytical_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ]= network_analytical_distribution(Y,R_Y_norm,R_Y_2_norm,cov_logk,R_Y_Sext_norm,R_Y_Sext_2_norm,cov_logSext) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...
+    = network_analytical_distribution(Y,R_Y_norm,R_Y_2_norm,cov_logk,R_Y_Sext_norm,R_Y_Sext_2_norm,cov_logSext)
+
+ Determine the distribution of output variables based on 1st and 2nd order scaled response coefficients
+  (work with logarithms)
+
+ Arguments R_Y_Sext_norm, R_Y_Sext_2_norm, cov_logSext 
+  for additional variation of external concentrations are optional
+
+ Workaround for negative Y values: use absolute value and multiply the mean values with its sign</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] </a><span class="keyword">...</span>
+0002     = network_analytical_distribution(Y,R_Y_norm,R_Y_2_norm,cov_logk,R_Y_Sext_norm,R_Y_Sext_2_norm,cov_logSext)
+0003 
+0004 <span class="comment">% [logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...</span>
+0005 <span class="comment">%    = network_analytical_distribution(Y,R_Y_norm,R_Y_2_norm,cov_logk,R_Y_Sext_norm,R_Y_Sext_2_norm,cov_logSext)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Determine the distribution of output variables based on 1st and 2nd order scaled response coefficients</span>
+0008 <span class="comment">%  (work with logarithms)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Arguments R_Y_Sext_norm, R_Y_Sext_2_norm, cov_logSext</span>
+0011 <span class="comment">%  for additional variation of external concentrations are optional</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Workaround for negative Y values: use absolute value and multiply the mean values with its sign</span>
+0014 
+0015 n_Y = length(Y);
+0016 n_k = size(cov_logk,1);
+0017 
+0018 
+0019 <span class="comment">% -----------------------------------------------------------</span>
+0020 <span class="comment">% 1st order terms</span>
+0021 
+0022 logY_mean_1 = log(abs(Y));
+0023 logY_mean_1(find(~isfinite(logY_mean_1))) = nan;
+0024 
+0025 logY_cov_1 = R_Y_norm * cov_logk * R_Y_norm';
+0026 
+0027 <span class="keyword">if</span> exist(<span class="string">'R_Y_Sext_norm'</span>,<span class="string">'var'</span>),
+0028   logY_cov_1 = logY_cov_1 + R_Y_Sext_norm * cov_logSext * R_Y_Sext_norm';
+0029 <span class="keyword">end</span>
+0030 
+0031 [Y_mean_1, Y_std_1, logY_var_1, logY_std_1] = logNormal_to_Normal(logY_mean_1,logY_cov_1);
+0032 Y_mean_1 = Y_mean_1 .* sign(Y);
+0033 
+0034 
+0035 <span class="comment">% -----------------------------------------------------------</span>
+0036 <span class="comment">% 2nd order terms</span>
+0037 
+0038 logY_mean_dev = zeros(n_Y,1);
+0039 <span class="keyword">for</span> it=1:n_Y, logY_mean_dev(it)=sum(diag(squeeze(R_Y_2_norm(it,:,:))*cov_logk));  <span class="keyword">end</span>
+0040 
+0041 d1 = reshape(full(cov_logk),n_k^2,1)*reshape(full(cov_logk),1,n_k^2);
+0042 d2 = reshape(d1, n_k, n_k, n_k, n_k); 
+0043 d3 = reshape(permute(d2,[1,3,2,4]),n_k^2,n_k^2) + reshape(permute(d2,[1,3,4,2]),n_k^2,n_k^2);
+0044 
+0045 logY_cov_dev = 1/4* reshape(R_Y_2_norm,n_Y,n_k^2) * d3 * reshape(R_Y_2_norm,n_Y,n_k^2)';
+0046 
+0047 
+0048 <span class="keyword">if</span> exist(<span class="string">'R_Y_Sext_norm'</span>,<span class="string">'var'</span>),
+0049   n_Sext = size(cov_logSext,1);
+0050   d1 = reshape(full(cov_logSext),n_Sext^2,1)*reshape(full(cov_logSext),1,n_Sext^2);
+0051   d2 = reshape(d1, n_Sext, n_Sext, n_Sext, n_Sext); 
+0052   d3 = reshape(permute(d2,[1,3,2,4]),n_Sext^2,n_Sext^2) + reshape(permute(d2,[1,3,4,2]),n_Sext^2,n_Sext^2);
+0053 
+0054   logY_cov_dev = logY_cov_dev + 1/4* reshape(R_Y_Sext_2_norm,n_Y,n_Sext^2) * d3 * reshape(R_Y_Sext_2_norm,n_Y,n_Sext^2)';
+0055 <span class="keyword">end</span>
+0056 
+0057 logY_mean_2 = logY_mean_1 + logY_mean_dev;
+0058 logY_cov_2  = logY_cov_1  + logY_cov_dev;
+0059 
+0060 [Y_mean_2, Y_std_2, logY_var_2, logY_std_2] = logNormal_to_Normal(logY_mean_2,logY_cov_2);
+0061 Y_mean_2 = Y_mean_2 .* sign(Y);</pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

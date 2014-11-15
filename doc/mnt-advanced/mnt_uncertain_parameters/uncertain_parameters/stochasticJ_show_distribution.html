@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stochasticJ_show_distribution</title>
+  <meta name="keywords" content="stochasticJ_show_distribution">
+  <meta name="description" content="stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; <a href="#">uncertain_parameters</a> &gt; stochasticJ_show_distribution.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters/uncertain_parameters&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>stochasticJ_show_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function stochastic_show_distribution(list,Jtotvalues,pJtot,fignum) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt-advanced/mnt_uncertain_parameters/display_histograms.html" class="code" title="function display_histograms(s,fn,met_indices,act_indices,par_indices,parnames)">display_histograms</a>	display_histograms(s,comment,fn,met_indices,act_indices,par_indices,parnames)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)</a>
+0002 
+0003 <span class="comment">% stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)</span>
+0004 
+0005 <span class="keyword">if</span> exist(<span class="string">'fignum'</span>,<span class="string">'var'</span>), figure(fignum);  <span class="keyword">end</span>
+0006 <span class="keyword">if</span> ~exist(<span class="string">'positive'</span>,<span class="string">'var'</span>), positive=1;  <span class="keyword">end</span>
+0007 
+0008 list=list(find(abs(list)&lt;10*abs(median(list))));
+0009 
+0010 nit = length(list);
+0011 [n,bin]=hist(list,20); 
+0012 hist(list,20); hold on; colormap(1-gray)
+0013 <span class="comment">%maxvalue=max(1.1*max(bin),exp(mu+3*sigma))</span>
+0014 maxvalue=1.1*max(bin);
+0015 
+0016 plot(Jtotvalues,pJtot*nit *(bin(2)-bin(1)),<span class="string">'LineWidth'</span>,2);
+0017 
+0018 <span class="comment">%/(Jtotvalues(2)-Jtotvalues(1))</span>
+0019 <span class="comment">%vals = (0:0.01:1)*maxvalue;</span>
+0020 <span class="comment">%dval = vals(2)-vals(1);</span>
+0021 <span class="comment">%plot(vals*positive,nit*(bin(2)-bin(1))*lognpdf(vals,mu,sigma),'LineWidth',2);</span>
+0022 hold off;
+0023 
+0024 axis([min(list) max(list) 0 max(n)]);</pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

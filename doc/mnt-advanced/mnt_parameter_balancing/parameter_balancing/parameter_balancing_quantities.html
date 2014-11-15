@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_quantities</title>
+  <meta name="keywords" content="parameter_balancing_quantities">
+  <meta name="description" content="[model_quantities, basic_quantities, data_quantities] = parameter_balancing_relevant_quantities(quantity_info,network,options)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_parameter_balancing</a> &gt; <a href="#">parameter_balancing</a> &gt; parameter_balancing_quantities.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_quantities
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[model_quantities, basic_quantities, data_quantities] = parameter_balancing_relevant_quantities(quantity_info,network,options)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(quantity_info,network,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [model_quantities, basic_quantities, data_quantities] = parameter_balancing_relevant_quantities(quantity_info,network,options)
+ find out which quantities are relevant for a model (model_quantities, list of strings),
+ relevant basic quantities in a model (basic_quantities), and possible quantities
+ in the kinetic data that might be relevant to estimate the basic quantities</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing_sbtab.html" class="code" title="function parameter_balancing_sbtab(model_name, metabolic_data_sbtab, options)">parameter_balancing_sbtab</a>	parameter_balancing_sbtab(model_name, metabolic_data_sbtab, options)</li><li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities)">parameter_balancing_task</a>	Prepare vectors and matrices for parameter balancing</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(quantity_info,network,options)</a>
+0002 
+0003 <span class="comment">% [model_quantities, basic_quantities, data_quantities] = parameter_balancing_relevant_quantities(quantity_info,network,options)</span>
+0004 <span class="comment">% find out which quantities are relevant for a model (model_quantities, list of strings),</span>
+0005 <span class="comment">% relevant basic quantities in a model (basic_quantities), and possible quantities</span>
+0006 <span class="comment">% in the kinetic data that might be relevant to estimate the basic quantities</span>
+0007 
+0008 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>));
+0009 options_default = struct(<span class="string">'include_metabolic'</span>,0,<span class="string">'enzymes_explicit'</span>,1,<span class="string">'parametrisation'</span>,<span class="string">'catalytic rate constant'</span>);
+0010 options = <a href="../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(options_default,options);
+0011 
+0012 <span class="comment">% ------------------------------------------------</span>
+0013 <span class="comment">% restrict quantity table to quantities relevant for this model</span>
+0014 
+0015 <span class="comment">% which quantities are needed in the model ?</span>
+0016 
+0017 quantities = quantity_info.QuantityType; 
+0018 
+0019 keep = ones(size(quantities));
+0020 
+0021 <span class="keyword">if</span> options.include_metabolic ==0,
+0022   keep = keep .* double(~strcmp(quantity_info.Constant,<span class="string">'Dynamic'</span>));
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="keyword">if</span> options.enzymes_explicit,
+0026   keep(find(strcmp(quantity_info.QuantityType,<span class="string">'forward maximal velocity'</span>)))   = 0;
+0027   keep(find(strcmp(quantity_info.QuantityType,<span class="string">'reverse maximal velocity'</span>)))   = 0;
+0028 <span class="keyword">end</span>
+0029 
+0030 keep_model = keep;
+0031 keep_data  = keep;
+0032 keep_basic = keep;
+0033 
+0034 keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'forward enzyme mass action term'</span>)))   = 0;
+0035 keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'reverse enzyme mass action term'</span>))) = 0;
+0036 
+0037 <span class="keyword">switch</span> options.parametrisation,
+0038   <span class="keyword">case</span> <span class="string">'equilibrium constant'</span>,
+0039     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'standard chemical potential'</span>)))   = 0;
+0040     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'substrate catalytic rate constant'</span>))) = 0;
+0041     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'product catalytic rate constant'</span>))) = 0;
+0042   <span class="keyword">case</span> <span class="string">'standard chemical potential'</span>,
+0043     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'equilibrium constant'</span>)))   = 0;
+0044     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'substrate catalytic rate constant'</span>))) = 0;
+0045     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'product catalytic rate constant'</span>))) = 0;
+0046   <span class="keyword">case</span> <span class="string">'catalytic rate constant'</span>,
+0047     <span class="comment">%% keep eq. const in order to impose pseudo values</span>
+0048     <span class="comment">%%keep_model(find(strcmp(quantity_info.QuantityType,'equilibrium constant')))   = 0;</span>
+0049     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'standard chemical potential'</span>)))   = 0;
+0050     keep_model(find(strcmp(quantity_info.QuantityType,<span class="string">'catalytic rate constant geometric mean'</span>)))    = 0;
+0051 <span class="keyword">end</span>
+0052 
+0053 keep_data(find(strcmp(quantity_info.QuantityType,<span class="string">'catalytic rate constant geometric mean'</span>)))   = 0;
+0054 
+0055 keep_basic = keep_basic .* double(strcmp(quantity_info.Dependence,<span class="string">'Basic'</span>));
+0056 
+0057 <span class="comment">% basic parameters could be further reduced to those on which any of the</span>
+0058 <span class="comment">% model or data parameters depend ...</span>
+0059 
+0060 data_quantities  = quantities(find(keep_data)); 
+0061 model_quantities = quantities(find(keep_model)); 
+0062 basic_quantities = quantities(find(keep_basic));</pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

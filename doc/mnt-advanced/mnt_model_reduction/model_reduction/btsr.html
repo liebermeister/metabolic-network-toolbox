@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of btsr</title>
+  <meta name="keywords" content="btsr">
+  <meta name="description" content="[T1, Tr, Ar, Br, Cr, err, relative_error] = btsr(A,B,C,ra)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_model_reduction</a> &gt; <a href="#">model_reduction</a> &gt; btsr.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_model_reduction/model_reduction&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>btsr
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[T1, Tr, Ar, Br, Cr, err, relative_error] = btsr(A,B,C,ra)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function  [Tl, Tr, Ar, Br, Cr, err, relative_error ] = btsr(A,B,C,ra) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [T1, Tr, Ar, Br, Cr, err, relative_error] = btsr(A,B,C,ra)
+
+ Model reduction by balanced truncation
+
+ Given A, B, C, ra (requested dimensionality), compute balanced reduced order model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="chollyap.html" class="code" title="function [Z,iter] = chollyap(A,C);">chollyap</a>	CHOLLYAP</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="model_reduction_simulations.html" class="code" title="function [tF,s_tF,tR,s_tR,x_tR,tE,s_tE,weights,Tr,environment_metabolites] = model_reduction_simulations(network,r,metabolites_subsystem,S,J,s_initial,t_max,ndim,verbose)">model_reduction_simulations</a>	[tF,s_tF,tR,s_tR,x_tR,tE,s_tE,weights,Tr,environment_metabolites] = model_reduction_simulations(network,r,metabolites_subsystem,S,J,s_initial,t_max,ndim,verbose)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% [T1, Tr, Ar, Br, Cr, err, relative_error] = btsr(A,B,C,ra)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Model reduction by balanced truncation</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Given A, B, C, ra (requested dimensionality), compute balanced reduced order model</span>
+0006 
+0007 <a name="_sub0" href="#_subfunctions" class="code">function  [Tl, Tr, Ar, Br, Cr, err, relative_error ] = btsr(A,B,C,ra)</a>
+0008 
+0009 n = size(A,1);
+0010 m = size(B,2);
+0011 p = size(C,1);
+0012 
+0013 <span class="keyword">if</span> max(real(eig(A)))&gt;0, disp(<span class="string">'Error in btsr.m: matrix A is unstable'</span>); <span class="keyword">end</span> 
+0014 
+0015 <span class="comment">%% For convenience use Matlab Control Toolbox Lyapunov solver</span>
+0016 
+0017 S = <a href="chollyap.html" class="code" title="function [Z,iter] = chollyap(A,C);">chollyap</a>(full(A)',full(B)');
+0018 R = <a href="chollyap.html" class="code" title="function [Z,iter] = chollyap(A,C);">chollyap</a>(full(A),full(C));
+0019 
+0020 <span class="comment">%% Test solution</span>
+0021 
+0022 Wc = S'*S;
+0023 resS = norm(A*Wc+Wc*A'+B*B',1)/(2*norm(A,1)*norm(Wc,1));
+0024 <span class="comment">%disp(sprintf('Relative Residuum in Wc = %12.4g', resS))</span>
+0025 
+0026 Wo = R'*R;
+0027 resR = norm(A'*Wo+Wo*A+C'*C,1)/(2*norm(A,1)*norm(Wo,1));
+0028 <span class="comment">%disp(sprintf('Relative Residuum in Wc = %12.4g', resR))</span>
+0029 
+0030 [U,Sigma,V]=svd(S*R',0);
+0031 
+0032 <span class="comment">%%Brute-force order selection ;-)</span>
+0033 <span class="comment">%ra = input('order of ROM = ');</span>
+0034 <span class="keyword">if</span> rank(Sigma)&lt;ra, 
+0035   disp(<span class="string">'Warning (btsr.m): Rank of Sigma is smaller than requested number of dimensions'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 ra = min(ra,rank(Sigma) );
+0039 <span class="comment">%%Brute-force transformation.</span>
+0040 S1 = sqrt(Sigma(1:ra,1:ra));
+0041 U1 = U(:,1:ra);
+0042 V1 = V(:,1:ra);
+0043 Tl = S1\V1'*R;
+0044 Tr = S'*U1/S1;
+0045 Ar = Tl*A*Tr;
+0046 Br = Tl*B;
+0047 Cr = C*Tr;
+0048 
+0049 err=0;
+0050 <span class="keyword">for</span> i=ra+1:size(Sigma,1)
+0051     err=err+Sigma(i,i);
+0052 <span class="keyword">end</span>
+0053 err=2*err;
+0054 
+0055 <span class="comment">%sys=ss(A,B,C,0);</span>
+0056 <span class="comment">%sysr=ss(Ar,Br,Cr,0);</span>
+0057 
+0058 relative_error = 1-cumsum(diag(Sigma))/sum(diag(Sigma));</pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

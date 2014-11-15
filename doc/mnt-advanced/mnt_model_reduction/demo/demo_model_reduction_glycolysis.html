@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of demo_model_reduction_glycolysis</title>
+  <meta name="keywords" content="demo_model_reduction_glycolysis">
+  <meta name="description" content="-------------------------------------------------------------------------">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_model_reduction</a> &gt; <a href="#">demo</a> &gt; demo_model_reduction_glycolysis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_model_reduction/demo&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>demo_model_reduction_glycolysis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>-------------------------------------------------------------------------</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> -------------------------------------------------------------------------
+ Model reduction - Example E. coli glycolysis network</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt-advanced/mnt_model_reduction/model_reduction.html" class="code" title="function [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = model_reduction(network,metabolites_subsystem,ndim,verbose,s_initial,S,J,flag_graphics,t_max,gp,network_CoHid,Ec_un)">model_reduction</a>	model_reduction - Replace parts of biochemical network models by simple linear systems</li><li><a href="../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% -------------------------------------------------------------------------</span>
+0002 <span class="comment">% Model reduction - Example E. coli glycolysis network</span>
+0003 
+0004 <span class="comment">% ----------------------------------------------------------------------</span>
+0005 <span class="comment">% Load model</span>
+0006 
+0007 demo_dir = [fileparts(which(mfilename))];
+0008 load([demo_dir <span class="string">'/data/ecoli_glycolysis_es_glucose_model'</span>]);
+0009 
+0010 
+0011 <span class="comment">% ----------------------------------------------------------------------</span>
+0012 <span class="comment">% Set subsystem and other parameters</span>
+0013 
+0014 subsystem_metabolites = {<span class="keyword">...</span>
+0015     <span class="string">'D_Fructose_1_6_bisphosphate'</span>, <span class="keyword">...</span>
+0016     <span class="string">'D_Fructose_6_phosphate'</span>, <span class="keyword">...</span>
+0017     <span class="string">'D_Glucose'</span>, <span class="keyword">...</span>
+0018     <span class="string">'D_Glucose_6_phosphate'</span>,<span class="keyword">...</span>
+0019     <span class="string">'ATP'</span>,<span class="keyword">...</span>
+0020     <span class="string">'ADP'</span>};
+0021 t_max = 100;  <span class="comment">% duration of simulations</span>
+0022 ndim  = 5;
+0023 
+0024 <span class="comment">% ----------------------------------------------------------------------</span>
+0025 <span class="comment">% Reduce model and show results</span>
+0026 
+0027 network.kinetics = <a href="../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>(network,<span class="string">'cs'</span>);
+0028 
+0029 [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = <a href="../../.././mnt-advanced/mnt_model_reduction/model_reduction.html" class="code" title="function [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = model_reduction(network,metabolites_subsystem,ndim,verbose,s_initial,S,J,flag_graphics,t_max,gp,network_CoHid,Ec_un)">model_reduction</a>(network,subsystem_metabolites,ndim,1,[],[],[],0,t_max);</pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

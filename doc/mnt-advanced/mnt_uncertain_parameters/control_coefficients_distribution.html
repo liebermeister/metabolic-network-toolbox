@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of control_coefficients_distribution</title>
+  <meta name="keywords" content="control_coefficients_distribution">
+  <meta name="description" content="[C_J_mean,C_J_std,C_S_mean, C_S_std, R_J_mean,R_J_std,R_S_mean,R_S_std] = control_coefficients_distribution(network,solution)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; control_coefficients_distribution.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>control_coefficients_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[C_J_mean,C_J_std,C_S_mean, C_S_std, R_J_mean,R_J_std,R_S_mean,R_S_std] = control_coefficients_distribution(network,solution)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [C_J_mean,C_J_std,C_S_mean, C_S_std, R_J_mean,R_J_std,R_S_mean,R_S_std] = control_coefficients_distribution(network,solution) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [C_J_mean,C_J_std,C_S_mean, C_S_std, R_J_mean,R_J_std,R_S_mean,R_S_std] = control_coefficients_distribution(network,solution)
+
+ compute the distribution of control coefficients etc in uncertain models</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li><li><a href="../.././mnt/mnt_mca/control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="../.././mnt/mnt_mca/response_coefficients.html" class="code" title="function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)">response_coefficients</a>	[RS, RJ, RS2, RJ2] = response_coefficients(CS, Ec, Ep, Ecc, Ecp, Epp)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [C_J_mean,C_J_std,C_S_mean, C_S_std, R_J_mean,R_J_std,R_S_mean,R_S_std] = control_coefficients_distribution(network,solution)</a>
+0002 
+0003 <span class="comment">% [C_J_mean,C_J_std,C_S_mean, C_S_std, R_J_mean,R_J_std,R_S_mean,R_S_std] = control_coefficients_distribution(network,solution)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% compute the distribution of control coefficients etc in uncertain models</span>
+0006 
+0007 [null_l, K, N0, pinv_N0, independent_metabolites, N1, L] = <a href="../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(network.N(find(network.external==0),:));
+0008 
+0009  [parvalues,parnames,relevant] = mass_action2par(network.kinetics,network.kinetics.used_fwd,network.kinetics.used_bwd);
+0010  
+0011  C_J_mean = zeros(size(solution.CC.C_J));
+0012  C_J_sqr = C_J_mean;
+0013  C_S_mean = zeros(size(solution.CC.C_S));
+0014  C_S_sqr = C_S_mean;
+0015  R_J_mean = zeros(length(network.actions),length(parnames));
+0016  R_J_sqr = zeros(length(network.actions),length(parnames));
+0017  R_S_mean = zeros(length(network.metabolites),length(parnames));
+0018  R_S_sqr = zeros(length(network.metabolites),length(parnames));
+0019  
+0020  clear C_J_list C_S_list R_J_list R_S_list
+0021  <span class="keyword">for</span> it=1:nit
+0022   [epsilon_1,pi_1] = calculate_epsilon(network,solution.S.list(:,it));
+0023   [C_J_list{it}, C_S_list{it}] = <a href="../.././mnt/mnt_mca/control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>(network.N, epsilon_1, network.external, N0, L);
+0024   [R_S_list{it},R_J_list{it}] = <a href="../.././mnt/mnt_mca/response_coefficients.html" class="code" title="function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)">response_coefficients</a>(C_S_list{it},epsilon_1,pi_1);
+0025   C_J_mean =  C_J_mean + C_J_list{it};
+0026   C_S_mean =  C_S_mean + C_S_list{it};
+0027   C_J_sqr =   C_J_sqr + C_J_list{it}.^2;
+0028   C_S_sqr =   C_S_sqr + C_S_list{it}.^2;
+0029   R_J_mean =  R_J_mean + R_J_list{it};
+0030   R_S_mean =  R_S_mean + R_S_list{it};
+0031   R_J_sqr =   R_J_sqr + R_J_list{it}.^2;
+0032   R_S_sqr =   R_S_sqr + R_S_list{it}.^2;
+0033  <span class="keyword">end</span>
+0034 
+0035  C_J_mean=C_J_mean/nit;
+0036  C_S_mean=C_S_mean/nit;
+0037  
+0038  C_J_std=sqrt(1/(nit+1)*(C_J_sqr - C_J_mean.^2));
+0039  C_S_std=sqrt(1/(nit+1)*(C_S_sqr - C_S_mean.^2));
+0040 
+0041  R_J_mean=R_J_mean/nit;
+0042  R_S_mean=R_S_mean/nit;
+0043  
+0044  R_J_std=sqrt(1/(nit+1)*(R_J_sqr - R_J_mean.^2));
+0045  R_S_std=sqrt(1/(nit+1)*(R_S_sqr - R_S_mean.^2));</pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

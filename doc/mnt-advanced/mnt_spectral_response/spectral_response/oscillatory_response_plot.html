@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of oscillatory_response_plot</title>
+  <meta name="keywords" content="oscillatory_response_plot">
+  <meta name="description" content="this is an updated version of osc_resp_plot_timecourse">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_spectral_response</a> &gt; <a href="#">spectral_response</a> &gt; oscillatory_response_plot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_spectral_response/spectral_response&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>oscillatory_response_plot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>this is an updated version of osc_resp_plot_timecourse</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [RS_omega,RV_omega,xappr,xappr_2,vappr,v_appr2] = oscillatory_response_plot(network,x_ss,v_ss,t,x,v,p,t_pre,x_pre,p_pre,rr,delta_par,ind_int,par) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> this is an updated version of osc_resp_plot_timecourse
+ arguments: E structure of elasticity matrices, Ec, Ep, Ecc, Epc, Epp
+ par: plotting directives .color .orderx .orderv .t_appr</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [RS_omega,RV_omega,xappr,xappr_2,vappr,v_appr2] = oscillatory_response_plot(network,x_ss,v_ss,t,x,v,p,t_pre,x_pre,p_pre,rr,delta_par,ind_int,par)</a>
+0002 
+0003 <span class="comment">% this is an updated version of osc_resp_plot_timecourse</span>
+0004 <span class="comment">% arguments: E structure of elasticity matrices, Ec, Ep, Ecc, Epc, Epp</span>
+0005 <span class="comment">% par: plotting directives .color .orderx .orderv .t_appr</span>
+0006 
+0007 pp = network.kinetics.parameters;
+0008 
+0009 [n_met,n_rea]  = size(network.N);
+0010 
+0011 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'ind_int'</span>,<span class="string">'1:n_met'</span>));
+0012 
+0013 <span class="keyword">if</span> ~isfield(par,<span class="string">'orderx'</span>), par.orderx= 1:n_met; <span class="keyword">end</span>
+0014 <span class="keyword">if</span> ~isfield(par,<span class="string">'orderv'</span>), par.orderv= 1:n_rea; <span class="keyword">end</span>
+0015 
+0016 RS_omega   = rr.RS_omega  ;
+0017 RV_omega   = rr.RV_omega  ;
+0018 x_appr     = rr.x_appr    ;
+0019 x_appr2    = rr.x_appr2   ;
+0020 v_appr     = rr.v_appr    ;
+0021 v_appr2    = rr.v_appr2   ;
+0022 x_appr_offset = rr.x_appr_offset;
+0023 v_appr_offset = rr.v_appr_offset;
+0024 
+0025 x        = real(x);
+0026 v        = real(v);
+0027 
+0028 <span class="comment">% --------------------------------------------------------------------------------------------</span>
+0029 <span class="comment">% plot concentrations</span>
+0030 
+0031 figure(13); 
+0032 
+0033 [ni,nk] = subplot_n(n_met+1);
+0034 
+0035 subplot(nk,ni,1); <span class="comment">% set(gca,'plot(rr.t,p,'k'); hold on; %%FontSize',6);</span>
+0036 plot(t,p,<span class="string">'k'</span>); hold on; 
+0037 <span class="keyword">if</span> isfield(rr,<span class="string">'p_appr'</span>), plot(rr.t,rr.p_appr,<span class="string">'b'</span>);  <span class="keyword">end</span>
+0038 hold off; 
+0039 title([<span class="string">'\Delta'</span> delta_par.name]); axis tight; <span class="comment">% set(gca,'FontSize',6);</span>
+0040 <span class="comment">%  set(gca,'YScale','log');</span>
+0041 
+0042 <span class="keyword">for</span> k=1:length(par.orderx),
+0043   subplot(nk,ni,k+1);
+0044   l = par.orderx(k);  
+0045   line1 = plot(t,x(:,l),<span class="string">'k'</span>); hold on;                         <span class="comment">% numerical result</span>
+0046   line2 = plot(rr.t,x_ss(l)*ones(size(rr.t)),<span class="string">'b--'</span>); <span class="comment">% stationary value</span>
+0047   line3 = plot(rr.t,x_appr(:,l),<span class="string">'b'</span>);                    <span class="comment">% first order</span>
+0048   <span class="keyword">if</span> length(x_appr2),
+0049     line4 = plot(rr.t,x_appr2(:,l),<span class="string">'r--'</span>); <span class="comment">% second order</span>
+0050   <span class="keyword">end</span>
+0051   <span class="keyword">if</span> strcmp(delta_par.type,<span class="string">'cos'</span>),                             <span class="comment">% shifted offset</span>
+0052     iii = find(l==ind_int); 
+0053     <span class="keyword">if</span> iii,      plot(rr.t,((x_ss(l)+0.25*real(x_appr_offset(iii)))) * ones(size(rr.t)),<span class="string">'r'</span>);     <span class="keyword">end</span>
+0054   <span class="keyword">end</span>
+0055   a = axis;  a(3)=0; ymax = max(abs(a([3,4]))); a(4)=1.1*ymax; axis(a);
+0056 <span class="comment">%  axis tight;</span>
+0057   title(network.metabolites{l}); 
+0058 <span class="comment">%  set(gca,'YScale','log');</span>
+0059   hold off;
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% if ~par.color,</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">%   for k=1:length(par.orderx),</span>
+0065 <span class="comment">%     subplot(nk,ni,k+1);</span>
+0066 <span class="comment">%     l=par.orderx(k);</span>
+0067 <span class="comment">%     line1 = plot(t,x(:,l)); hold on;</span>
+0068 <span class="comment">%     line2 = plot(rr.t,x_ss(l)*ones(size(rr.t)),'g');</span>
+0069 <span class="comment">%     line3 = plot(rr.t,x_appr(:,l),'r:');</span>
+0070 <span class="comment">%     line4 = plot(rr.t,x_appr2(:,l),'m--');</span>
+0071 <span class="comment">%     if strcmp(delta_par.type,'cos'),</span>
+0072 <span class="comment">%       plot(rr.t,((x_ss(l)+real(x_appr_offset(l))))*ones(size(rr.t)),'c-.');</span>
+0073 <span class="comment">%     end</span>
+0074 <span class="comment">%     axis tight</span>
+0075 <span class="comment">% %  set(gca,'FontSize',6);</span>
+0076 <span class="comment">%     title(network.metabolites{l});</span>
+0077 <span class="comment">%     if k&lt;20, set(gca,'XTick',[]); end</span>
+0078 <span class="comment">%     hold off</span>
+0079 <span class="comment">%   end</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% end</span>
+0082 
+0083 <span class="comment">% ---------------------------------------------------------</span>
+0084 <span class="comment">% plot velocities</span>
+0085 
+0086 <span class="keyword">if</span> length(v_appr),
+0087 
+0088   figure(14); 
+0089 
+0090 [ni,nk]=subplot_n(n_rea);
+0091 
+0092   <span class="keyword">for</span> k=1:n_rea,
+0093   subplot(nk,ni,k);
+0094   l = par.orderv(k);
+0095   plot(t,v(:,l),<span class="string">'k'</span>); hold on;         <span class="comment">% numerical values</span>
+0096   plot(rr.t,v_ss(l)*ones(size(rr.t)),<span class="string">'b--'</span>); <span class="comment">% stationary value</span>
+0097   plot(rr.t,v_appr(:,l),<span class="string">'b'</span>);   <span class="comment">% first order</span>
+0098   plot(rr.t,v_appr2(:,l),<span class="string">'r--'</span>); 
+0099   <span class="keyword">if</span> strcmp(delta_par.type,<span class="string">'cos'</span>),  
+0100     plot(rr.t,((v_ss(l)+0.25*real(v_appr_offset(l))))*ones(size(rr.t)),<span class="string">'r--'</span>); 
+0101   <span class="keyword">end</span>
+0102   axis tight; <span class="comment">%    set(gca,'FontSize',6);</span>
+0103 <span class="comment">%  a = axis; ymax = max(abs(a([3,4]))); a(3)=-1.1*ymax; a(4)=1.1*ymax; axis(a);</span>
+0104   title(network.actions{l}); 
+0105   <span class="keyword">if</span> k&lt;20, set(gca,<span class="string">'XTick'</span>,[]); <span class="keyword">end</span>
+0106   hold off
+0107 <span class="keyword">end</span>
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="comment">%figure(1); im(abs(RS_omega(:,:))',[],fieldnames(p),network.metabolites)</span>
+0111 <span class="comment">%figure(2); im(abs(squeeze(RS_2_2omega(1,:,:))),[],fieldnames(p),fieldnames(p))</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

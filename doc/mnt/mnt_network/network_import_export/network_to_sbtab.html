@@ -175,16 +175,17 @@ This function is called by:
 0118   quantity_table = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>(network,[],struct(<span class="string">'use_sbml_ids'</span>,options.use_sbml_ids,<span class="string">'write_concentrations'</span>,options.write_concentrations));
 0119   sbtab_document = sbtab_document_add_table(sbtab_document,<span class="string">'Quantity'</span>,quantity_table);
 0120 <span class="keyword">end</span>
-0121 <span class="keyword">if</span> ~isempty(options.filename),
-0122   <span class="keyword">switch</span> options.save_in_one_file,
-0123     <span class="keyword">case</span> 0, sbtab_document_save(sbtab_document,options.filename,0,options.verbose);
-0124     <span class="keyword">case</span> 1, 
-0125       <span class="keyword">if</span> ~strcmp(options.filename(end-3:end),<span class="string">'.csv'</span>),
-0126         options.filename = [options.filename, <span class="string">'.csv'</span>];
-0127         <span class="keyword">end</span>
-0128       sbtab_document_save_to_one(sbtab_document,options.filename );
-0129   <span class="keyword">end</span>
-0130 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+0121 
+0122 <span class="keyword">if</span> ~isempty(options.filename),
+0123   <span class="keyword">switch</span> options.save_in_one_file,
+0124     <span class="keyword">case</span> 0, sbtab_document_save(sbtab_document,options.filename,0,options.verbose);
+0125     <span class="keyword">case</span> 1, 
+0126       <span class="keyword">if</span> ~strcmp(options.filename(end-3:end),<span class="string">'.csv'</span>),
+0127         options.filename = [options.filename, <span class="string">'.csv'</span>];
+0128         <span class="keyword">end</span>
+0129       sbtab_document_save_to_one(sbtab_document,options.filename );
+0130   <span class="keyword">end</span>
+0131 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

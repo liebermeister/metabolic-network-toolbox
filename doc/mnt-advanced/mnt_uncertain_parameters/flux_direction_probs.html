@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flux_direction_probs</title>
+  <meta name="keywords" content="flux_direction_probs">
+  <meta name="description" content="[prob, mean_prob, var_prob] = flux_direction_probs(network, solution, fn);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; flux_direction_probs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>flux_direction_probs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[prob, mean_prob, var_prob] = flux_direction_probs(network, solution, fn);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [prob,mean_prob,var_prob] = flux_direction_probs(network, solution, fn); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [prob, mean_prob, var_prob] = flux_direction_probs(network, solution, fn);
+
+ compute and draw probabilities of flux directions
+ 'solution':  Monte-Carlo results from 'stochastic_parameters'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../.././mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/prob_of_order_relation.html" class="code" title="function prob = prob_of_order_relation(mean_logy,cov_logy,a)">prob_of_order_relation</a>	prob = order_relation(mean_logy,cov_logy,a)</li><li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [prob,mean_prob,var_prob] = flux_direction_probs(network, solution, fn);</a>
+0002 
+0003 <span class="comment">% [prob, mean_prob, var_prob] = flux_direction_probs(network, solution, fn);</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% compute and draw probabilities of flux directions</span>
+0006 <span class="comment">% 'solution':  Monte-Carlo results from 'stochastic_parameters'</span>
+0007 
+0008 <span class="keyword">if</span> ~exist(<span class="string">'fn'</span>,<span class="string">'var'</span>), fn=[]; <span class="keyword">end</span> 
+0009 
+0010 
+0011 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0012 <span class="comment">% determine probabilities of forward fluxes</span>
+0013 
+0014 <span class="comment">% probability of forward fluxes (Monte Carlo solution)</span>
+0015 
+0016 list_J = solution.MonteCarlo.J.list;
+0017 
+0018 n_plus=sum(sign(list_J)&gt;0,2);
+0019 n_tot=size(list_J,2);
+0020 MC_mean_prob=(n_plus+1)/(n_tot+2);
+0021 MC_var_prob=(n_plus+1).*(n_tot-n_plus+1)/((n_tot+2)^2*(n_tot+3));
+0022 
+0023 <span class="keyword">if</span> fn,
+0024 figure(fn(1));set(gca,<span class="string">'FontSize'</span>,16);
+0025 <a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,<span class="string">'arrowstyle'</span>,<span class="string">'fluxes'</span>,<span class="string">'arrowvalues'</span>, 2*(MC_mean_prob-0.5),<span class="string">'arrowsize'</span>,0.05,<span class="string">'actprintvalues'</span>,1,<span class="string">'actvalues'</span>,MC_mean_prob,<span class="string">'actvalues_std'</span>,sqrt(MC_var_prob));
+0026 <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>; title(<span class="string">'Monte Carlo solution'</span>);
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% probability of forward fluxes (analytical solution)</span>
+0030 
+0031 n_rea = size(network.N,2);
+0032 prob=zeros(n_rea,1);
+0033 <span class="keyword">for</span> it=1:n_rea,
+0034   mean_J   = solution.logJsplit.mean_analytical_2([2*it-1, 2*it]);
+0035   cov_J    = solution.logJsplit.cov_analytical_2([2*it-1, 2*it],[2*it-1, 2*it]);
+0036   prob(it) = 0.01*round(100*<a href="../.././mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/prob_of_order_relation.html" class="code" title="function prob = prob_of_order_relation(mean_logy,cov_logy,a)">prob_of_order_relation</a>(mean_J,cov_J));
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> ~isempty(fn),
+0040   figure(fn(2)); set(gca,<span class="string">'FontSize'</span>,16);
+0041   <a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,<span class="string">'arrowstyle'</span>,<span class="string">'fluxes'</span>,<span class="string">'arrowvalues'</span>, 2*(prob-0.5),<span class="string">'arrowsize'</span>,0.05,<span class="string">'actprintvalues'</span>,1,<span class="string">'actvalues'</span>,prob,<span class="string">'actstyle'</span>,<span class="string">'none'</span>,<span class="string">'FontSize'</span>,14);
+0042   <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;<span class="comment">% title('Flux directions: analytic solution');</span>
+0043   axis off
+0044 
+0045   figure(fn(3));set(gca,<span class="string">'FontSize'</span>,14);
+0046   errorbar(prob,MC_mean_prob,sqrt(MC_var_prob),sqrt(MC_var_prob),<span class="string">'r.'</span>);
+0047   text(prob+0.03,MC_mean_prob,network.actions,<span class="string">'FontSize'</span>,14);
+0048   xlabel(<span class="string">'Forward flux probabilities: approximative solution'</span>);
+0049   ylabel(<span class="string">'Forward flux probabilities: Monte Carlo'</span>);
+0050 <span class="comment">%  title('Probability of forward fluxes');</span>
+0051   line([0 1],[0 1]);
+0052   axis([0 1 0 1]);
+0053 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

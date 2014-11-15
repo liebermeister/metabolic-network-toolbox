@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of im</title>
+  <meta name="keywords" content="im">
+  <meta name="description" content="im(X,m,rownames,colnames)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">utils</a> &gt; im.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>im
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>im(X,m,rownames,colnames)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function im(X,m,rownames,colnames) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> im(X,m,rownames,colnames)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="ryb_colors.html" class="code" title="function col = ryb_colors(n)">ryb_colors</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../.././mnt/mnt_network/network_query/network_enzyme_subsets.html" class="code" title="function [enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);">network_enzyme_subsets</a>	[enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% im(X,m,rownames,colnames)</span>
+0002 
+0003 <a name="_sub0" href="#_subfunctions" class="code">function im(X,m,rownames,colnames)</a>
+0004 
+0005 <span class="keyword">if</span> sum(sum(~isreal(X))), X=abs(X); 
+0006 fprintf(<span class="string">'im.m: Complex values encountered. Displaying absolute values\n'</span>);
+0007 <span class="keyword">end</span>
+0008 
+0009 cla
+0010 
+0011 <span class="keyword">if</span> sum(sum(isfinite(X)))~=0,
+0012 
+0013 colormap(<a href="ryb_colors.html" class="code" title="function col = ryb_colors(n)">ryb_colors</a>(250));
+0014    <span class="keyword">if</span> ~exist(<span class="string">'m'</span>,<span class="string">'var'</span>), m=[]; <span class="keyword">end</span>
+0015    <span class="keyword">if</span> ~exist(<span class="string">'rownames'</span>,<span class="string">'var'</span>), rownames=[]; <span class="keyword">end</span>
+0016    <span class="keyword">if</span> ~exist(<span class="string">'colnames'</span>,<span class="string">'var'</span>), colnames=[]; <span class="keyword">end</span>
+0017    <span class="keyword">if</span> isempty(m), m=1.1*max(max(abs(double(X(find(isfinite(X))))))); 
+0018      <span class="keyword">if</span> m==0, m=1; <span class="keyword">end</span>
+0019    <span class="keyword">end</span>
+0020    <span class="keyword">if</span> size(m)==[1 1],
+0021      imagesc(X,[-m,m]);
+0022    <span class="keyword">else</span>,  
+0023      imagesc(X,m); 
+0024    <span class="keyword">end</span>
+0025    
+0026 <span class="keyword">if</span> isempty(rownames), set(gca,<span class="string">'YTick'</span>,[]); 
+0027 <span class="keyword">else</span>, set(gca,<span class="string">'YTick'</span>,1:size(X,1)); set(gca,<span class="string">'YTickLabel'</span>,rownames);
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="keyword">if</span> isempty(colnames), set(gca,<span class="string">'XTick'</span>,[]); 
+0031 <span class="keyword">else</span>, set(gca,<span class="string">'XTick'</span>,1:size(X,2)); set(gca,<span class="string">'XTickLabel'</span>,colnames);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">%colorbar</span>
+0035 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

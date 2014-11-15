@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of empirical_distributions_draw</title>
+  <meta name="keywords" content="empirical_distributions_draw">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_uncertain_parameters</a> &gt; <a href="#">uncertain_parameters</a> &gt; empirical_distributions_draw.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_uncertain_parameters/uncertain_parameters&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>empirical_distributions_draw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 values = load(filename);
+0002 values = values(find(sum(values==0,2)==0),:);
+0003 values = values(find(values(:,1)&lt;=values(:,2)),:);
+0004 
+0005 figure(1); set(gca,<span class="string">'FontSize'</span>,18); 
+0006 plot(values(:,1),values(:,2),<span class="string">'.'</span>);  
+0007 <span class="keyword">if</span> logar, set(gca,<span class="string">'XScale'</span>,<span class="string">'Log'</span>,<span class="string">'YScale'</span>,<span class="string">'Log'</span>); <span class="keyword">end</span>
+0008 title(name)
+0009 xlabel([<span class="string">'Lower limit, '</span> unit]); ylabel([<span class="string">'Upper limit, '</span> unit]);
+0010 
+0011 figure(2); set(gca,<span class="string">'FontSize'</span>,18); 
+0012 <span class="keyword">if</span> logar,   plot(sqrt(values(:,1).*values(:,2)),log10(values(:,2)./values(:,1)) ,<span class="string">'.'</span>);  
+0013   set(gca,<span class="string">'XScale'</span>,<span class="string">'Log'</span>,<span class="string">'YScale'</span>,<span class="string">'Log'</span>); 
+0014   ylabel([<span class="string">'log_{10} ratio of '</span> unit]);
+0015 <span class="keyword">else</span>,
+0016   plot(0.5*(values(:,1) + values(:,2)),values(:,2) - values(:,1) ,<span class="string">'.'</span>);  
+0017   ylabel([<span class="string">'Difference of '</span> unit]);
+0018 <span class="keyword">end</span>
+0019 title(name)
+0020 xlabel([<span class="string">'Mean, '</span> unit]); 
+0021      
+0022 figure(3); set(gca,<span class="string">'FontSize'</span>,18); 
+0023    vvalues=values(:,1);
+0024 <span class="keyword">if</span> logar, 
+0025   n=histc(log10(vvalues),edges1);
+0026   bar(edges1,n,<span class="string">'histc'</span>);
+0027 <span class="keyword">else</span>, 
+0028     n=histc(vvalues,edges1);
+0029   bar(edges1,n,<span class="string">'histc'</span>);
+0030  <span class="keyword">end</span>
+0031 title([<span class="string">'Minimum '</span> name])
+0032    xlabel(unit); ylabel(<span class="string">'Counts'</span>);
+0033   <span class="comment">% print brendaKm.eps -f2 -deps</span>
+0034 
+0035 figure(4); set(gca,<span class="string">'FontSize'</span>,18); 
+0036 <span class="keyword">if</span> logar, 
+0037    vvalues=sqrt(values(:,1).*values(:,2));
+0038    n=histc(log10(vvalues),edges1);
+0039   bar(edges1,n,<span class="string">'histc'</span>);
+0040 <span class="keyword">else</span>,
+0041    vvalues=0.5*(values(:,1)+values(:,2));
+0042     n=histc(vvalues,edges1);
+0043   bar(edges1,n,<span class="string">'histc'</span>);
+0044 <span class="keyword">end</span>
+0045  title([<span class="string">'Mean '</span> name])
+0046    xlabel(unit); ylabel(<span class="string">'Counts'</span>);
+0047   <span class="comment">% print brendaKm.eps -f2 -deps</span>
+0048   
+0049 figure(5); set(gca,<span class="string">'FontSize'</span>,18); 
+0050 <span class="keyword">if</span> logar, 
+0051    vvalues=sqrt(values(:,2)./values(:,1));
+0052    vvalues = log10(vvalues(find(vvalues~=1)));
+0053    n=histc(log10(vvalues),edges2);
+0054   bar(edges2,n,<span class="string">'histc'</span>);
+0055    title([<span class="string">'log_{10} Ratio of '</span> name])
+0056   xlabel([<span class="string">'Ratio of '</span> unit]);
+0057 <span class="keyword">else</span>,
+0058    vvalues=values(:,2)-values(:,1);
+0059    vvalues = vvalues(find(vvalues~=0));
+0060     n=histc(vvalues,edges2);
+0061   bar(edges2,n,<span class="string">'histc'</span>);
+0062   title([<span class="string">'Difference of '</span> name])
+0063    xlabel([<span class="string">'Range of '</span> unit]);
+0064 <span class="keyword">end</span>
+0065 ylabel(<span class="string">'Counts'</span>);
+0066 
+0067 <span class="keyword">if</span> print_flag,
+0068   cd ~/projekte/unsichere_parameter/ps-files
+0069   print([save_name <span class="string">'MinvsMax.eps'</span>],<span class="string">'-f1'</span>,<span class="string">'-deps'</span>);
+0070   print([save_name <span class="string">'MeanVSDiff.eps'</span>],<span class="string">'-f2'</span>,<span class="string">'-deps'</span>);
+0071   print([save_name <span class="string">'Minimum.eps'</span>],<span class="string">'-f3'</span>,<span class="string">'-deps'</span>);
+0072   print([save_name <span class="string">'Mean.eps'</span>],<span class="string">'-f4'</span>,<span class="string">'-deps'</span>);
+0073   print([save_name <span class="string">'Diff.eps'</span>],<span class="string">'-f5'</span>,<span class="string">'-deps'</span>);
+0074 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>
