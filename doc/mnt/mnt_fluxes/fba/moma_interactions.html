@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of moma_interactions</title>
+  <meta name="keywords" content="moma_interactions">
+  <meta name="description" content="[f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_fluxes</a> &gt; <a href="#">fba</a> &gt; moma_interactions.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt/mnt_fluxes/fba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>moma_interactions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = moma_interactions(network,fba_constraints,inhibition_factor,v_ref) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)
+
+ f_ref      unperturbed objective value
+ f_single   single-perturbation objectives (vector)
+ f_double   double-perturbation objectives (matrix)
+ v_ref      unperturbed flux mode
+ v_single   single-perturbation flux modes (matrix)
+ v_double   double-perturbation flux modes (tensor)
+
+ Identical to fba_interactions.m (except for use of moma instead of fba)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="moma.html" class="code" title="function [v,value] = moma(network,fba_constraints,v_ref)">moma</a>	[v,benefit] = moma(network,fba_constraints)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = moma_interactions(network,fba_constraints,inhibition_factor,v_ref)</a>
+0002 
+0003 <span class="comment">% [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% f_ref      unperturbed objective value</span>
+0006 <span class="comment">% f_single   single-perturbation objectives (vector)</span>
+0007 <span class="comment">% f_double   double-perturbation objectives (matrix)</span>
+0008 <span class="comment">% v_ref      unperturbed flux mode</span>
+0009 <span class="comment">% v_single   single-perturbation flux modes (matrix)</span>
+0010 <span class="comment">% v_double   double-perturbation flux modes (tensor)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Identical to fba_interactions.m (except for use of moma instead of fba)</span>
+0013 
+0014 epsilon = 10^-8;
+0015 
+0016 [nm,nr]        = size(network.N);
+0017 <span class="comment">%[v_ref, f_ref] = fba(network,fba_constraints);</span>
+0018 f_ref = fba_constraints.zv' * v_ref;
+0019 
+0020 <span class="keyword">for</span> it1 = 1:nr,
+0021 
+0022   <span class="comment">%% first order</span>
+0023   fba_constraints_1 = fba_constraints;
+0024   <span class="keyword">if</span> v_ref(it1)&gt;0,
+0025     fba_constraints_1.v_max(it1) = inhibition_factor * v_ref(it1);
+0026   <span class="keyword">end</span>
+0027   <span class="keyword">if</span> v_ref(it1)&lt;0,
+0028     fba_constraints_1.v_min(it1) = inhibition_factor * v_ref(it1);
+0029   <span class="keyword">end</span>
+0030 
+0031   <span class="comment">%% second order</span>
+0032   [v_single(:,it1),f_single(it1,1)] = <a href="moma.html" class="code" title="function [v,value] = moma(network,fba_constraints,v_ref)">moma</a>(network,fba_constraints_1,v_ref);
+0033   <span class="keyword">for</span> it2 = 1:it1-1,
+0034     fba_constraints_2 = fba_constraints_1;
+0035     <span class="keyword">if</span> v_ref(it2)&gt;0,
+0036       fba_constraints_2.v_max(it2) = inhibition_factor * v_ref(it2);
+0037     <span class="keyword">end</span>
+0038     <span class="keyword">if</span> v_ref(it2)&lt;0,
+0039       fba_constraints_2.v_min(it2) = inhibition_factor * v_ref(it2);
+0040     <span class="keyword">end</span>
+0041     [v_double(:,it1,it2),f_double(it1,it2)] = <a href="moma.html" class="code" title="function [v,value] = moma(network,fba_constraints,v_ref)">moma</a>(network,fba_constraints_2,v_ref);
+0042   <span class="keyword">end</span>
+0043 
+0044   <span class="comment">% diagonal elements (square perturbation!)</span>
+0045   it2 = it1;
+0046   fba_constraints_2 = fba_constraints_1;
+0047   <span class="keyword">if</span> v_ref(it2)&gt;0,
+0048     fba_constraints_2.v_max(it2) = inhibition_factor^2 * v_ref(it2);
+0049   <span class="keyword">end</span>
+0050   <span class="keyword">if</span> v_ref(it2)&lt;0,
+0051     fba_constraints_2.v_min(it2) = inhibition_factor^2 * v_ref(it2);
+0052   <span class="keyword">end</span>
+0053   [v_double(:,it1,it2),f_double(it1,it2)] = <a href="moma.html" class="code" title="function [v,value] = moma(network,fba_constraints,v_ref)">moma</a>(network,fba_constraints_2,v_ref);
+0054 <span class="keyword">end</span>
+0055 
+0056 f_double = f_double + f_double' - diag(diag(f_double));
+0057 
+0058 f_single(abs(f_single)&lt;epsilon) = 0;
+0059 f_double(abs(f_double)&lt;epsilon) = 0;
+0060 
+0061 df1 = f_single - f_ref; 
+0062 df2 = f_double - f_ref - repmat(df1,1,nr) - repmat(df1',nr,1);</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

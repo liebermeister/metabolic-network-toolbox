@@ -70,8 +70,8 @@ for it = 1:length(columns.SumFormula),
   ls = label_names(smetab{it},metabolites);
   lp = label_names(pmetab{it},metabolites);
   if sum([ls;lp]==0),   
-    table(smetab{it}')
-    table(pmetab{it}')
+   mytable(smetab{it}')
+   mytable(pmetab{it}')
     error(sprintf('Unknown substance')); 
   end
   N(ls,it) = - sstoich{it};

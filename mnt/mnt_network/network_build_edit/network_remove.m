@@ -27,7 +27,7 @@ network1 = network_choose(network,keep,keep_actions,1);
 %% %keep         = find( sum(network.N(:,keep_actions)~=0,2) );
 %% 
 %% % fprintf('removing the metabolites\n');
-%% % table(network.metabolites( setdiff(1:length(network.metabolites),keep)),0)
+%% %mytable(network.metabolites( setdiff(1:length(network.metabolites),keep)),0)
 %% 
 %% network1.metabolites = network.metabolites(keep);
 %% network1.N           = network.N(keep,keep_actions);

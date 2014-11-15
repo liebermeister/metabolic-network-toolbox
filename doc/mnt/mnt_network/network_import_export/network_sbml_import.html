@@ -6,16 +6,16 @@
   <meta name="keywords" content="network_sbml_import">
   <meta name="description" content="[network,s] = network_sbml_import(s,dirname,verbose)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_network</a> &gt; <a href="index.html">network_import_export</a> &gt; network_sbml_import.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_network</a> &gt; <a href="#">network_import_export</a> &gt; network_sbml_import.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_network/network_import_export&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_network/network_import_export&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>network_sbml_import
 </h1>
@@ -36,7 +36,7 @@ s can be:
 - a filename. In this case, the firectory name has to be given 
   in the argument 'dirname'
 
-Kinetic laws are represented in kinetics of the 'numeric'
+Kinetic laws are represented in kinetics of the 'kinetic_strings'
 type (see 'network_velocities')
 
 This function requiers the SBMLToolbox to be installed
@@ -46,12 +46,11 @@ This function requiers the SBMLToolbox to be installed
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -64,7 +63,7 @@ This function is called by:
 0007 <span class="comment">%- a filename. In this case, the firectory name has to be given</span>
 0008 <span class="comment">%  in the argument 'dirname'</span>
 0009 <span class="comment">%</span>
-0010 <span class="comment">%Kinetic laws are represented in kinetics of the 'numeric'</span>
+0010 <span class="comment">%Kinetic laws are represented in kinetics of the 'kinetic_strings'</span>
 0011 <span class="comment">%type (see 'network_velocities')</span>
 0012 <span class="comment">%</span>
 0013 <span class="comment">%This function requiers the SBMLToolbox to be installed</span>
@@ -76,12 +75,12 @@ This function is called by:
 0019   error(<span class="string">'Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.'</span>);
 0020 <span class="keyword">end</span>
 0021 
-0022 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'verbose'</span>,<span class="string">'0'</span>));
+0022 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'verbose'</span>,<span class="string">'0'</span>));
 0023 
-0024 create_annotations = 0;   <span class="comment">% CONSTRUCT UNIQUE ANNOTATIONS ?</span>
-0025 graphics_flag      = 0;   <span class="comment">% SHOW GRAPHICS?</span>
-0026 import_names       = 1;   <span class="comment">% import_names from model</span>
-0027 import_compartments= 0;   <span class="comment">% import_names from model</span>
+0024 create_annotations  = 0;   <span class="comment">% CONSTRUCT UNIQUE ANNOTATIONS ?</span>
+0025 graphics_flag       = 0;   <span class="comment">% SHOW GRAPHICS?</span>
+0026 import_names        = 1;   <span class="comment">% import names from model</span>
+0027 import_compartments = 1;   <span class="comment">% import compartments from model</span>
 0028 
 0029 <span class="keyword">if</span> isstr(s),
 0030   <span class="keyword">if</span> exist(<span class="string">'dirname'</span>,<span class="string">'var'</span>); cd(dirname); <span class="keyword">end</span> 
@@ -183,9 +182,9 @@ This function is called by:
 0126 N=zeros(length(metabolites),length(reaction_id));
 0127 
 0128 <span class="keyword">for</span> it=1:length(s.reaction),
-0129   substrate_indices =  <a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(substrate{it},metabolites,<span class="string">'single'</span>);
+0129   substrate_indices =  <a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(substrate{it},metabolites,<span class="string">'single'</span>);
 0130   <span class="keyword">if</span> length(substrate_indices), N(substrate_indices,it) = N(substrate_indices,it)-sstoichiometries{it}'; <span class="keyword">end</span> 
-0131   product_indices =  <a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(product{it},metabolites,<span class="string">'single'</span>);
+0131   product_indices =  <a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(product{it},metabolites,<span class="string">'single'</span>);
 0132   <span class="keyword">if</span> length(product_indices),
 0133     N(product_indices,it) = N(product_indices,it) + pstoichiometries{it}' ; <span class="keyword">end</span>
 0134 <span class="keyword">end</span>
@@ -223,7 +222,7 @@ This function is called by:
 0166   
 0167 <span class="keyword">for</span> it1 = 1:length(modifier),
 0168   <span class="keyword">for</span> it2=1:length(modifier{it1}),
-0169     mm = <a href="../../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(modifier{it1}(it2),metabolites);
+0169     mm = <a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(modifier{it1}(it2),metabolites);
 0170     <span class="keyword">if</span> mm,
 0171       network.regulation_matrix(it1,mm)=1;
 0172     <span class="keyword">end</span>
@@ -231,92 +230,93 @@ This function is called by:
 0174 <span class="keyword">end</span>
 0175 
 0176 <span class="keyword">if</span> ~isempty(reaction_formula{1}),
-0177   network.kinetics.type = <span class="string">'numeric'</span>;
+0177   network.kinetics.type = <span class="string">'kinetic_strings'</span>;
 0178   network.kinetics.reactions = {};
 0179   all_parameters = {};
 0180   <span class="keyword">for</span> it = 1:length(actions),
 0181     network.kinetics.reactions{it}.string = strrep(reaction_math{it},<span class="string">'pow'</span>,<span class="string">'power'</span>);
 0182     <span class="keyword">for</span> itt = 1:length(reaction_parameter{it}),
 0183       this_parameter = reaction_parameter{it}(itt);
-0184       network.kinetics.reactions{it}.parameters{itt}.name = this_parameter.id;
-0185       network.kinetics.reactions{it}.parameters{itt}.value = this_parameter.value;
+0184       network.kinetics.reactions{it}.parameters{itt}       = this_parameter.id;
+0185       network.kinetics.reactions{it}.parameter_values(itt) = this_parameter.value;
 0186     <span class="keyword">end</span>
 0187     <span class="keyword">if</span> length(reaction_parameter{it}),
 0188       network.kinetics.reactions{it}.parameters = network.kinetics.reactions{it}.parameters';
-0189       <span class="keyword">else</span>,
+0189     <span class="keyword">else</span>,
 0190       network.kinetics.reactions{it}.parameters = {};
-0191     <span class="keyword">end</span>
+0191       network.kinetics.reactions{it}.parameter_values = [];
 0192     <span class="keyword">end</span>
-0193   network.kinetics.reactions = network.kinetics.reactions';
-0194 <span class="keyword">end</span>
-0195 
+0193   <span class="keyword">end</span>
+0194   network.kinetics.reactions = network.kinetics.reactions';
+0195 <span class="keyword">end</span>
 0196 
 0197 <span class="keyword">if</span> ~isempty(reaction_formula{1}),
-0198   z=1;
+0198   network.kinetics.parameters       = {};
 0199   network.kinetics.parameter_values = [];
-0200   network.kinetics.parameters = [];
-0201 
-0202   <span class="keyword">for</span> it=1:length(network.actions),
-0203     par = network.kinetics.reactions{it}.parameters;
-0204     <span class="keyword">for</span> it2 = 1: length(par),
-0205       network.kinetics.parameters{z}   = [<span class="string">'v'</span> num2str(it) <span class="string">'_'</span> par{it2}.name];
-0206       network.kinetics.parameter_values(z)   = par{it2}.value;
-0207       network.kinetics.reactions{it}.parameters{it2}.index = z;
-0208       network.kinetics.reactions{it}.parameters{it2} = rmfield(network.kinetics.reactions{it}.parameters{it2},<span class="string">'value'</span>);
-0209       z=z+1;
-0210     <span class="keyword">end</span>
-0211   <span class="keyword">end</span>
-0212   network.kinetics.parameter_values = network.kinetics.parameter_values';
-0213   network.kinetics.parameters = network.kinetics.parameters';
-0214 <span class="keyword">elseif</span> verbose, 
-0215   fprintf(<span class="string">'Warning: no kinetics found in SBML file.\n'</span>);
-0216 <span class="keyword">end</span> 
-0217 
-0218 <span class="keyword">if</span> exist(<span class="string">'s_init'</span>,<span class="string">'var'</span>), network.s_init       = s_init; 
-0219 <span class="keyword">else</span>,
-0220 <span class="keyword">if</span> exist(<span class="string">'a_init'</span>,<span class="string">'var'</span>), network.s_init       = a_init; <span class="keyword">end</span>
-0221 <span class="keyword">end</span>
-0222 
-0223 <span class="keyword">if</span> graphics_flag,
-0224   <span class="keyword">if</span> length(network.actions),
-0225     <a href="../../../mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network);
-0226   <span class="keyword">end</span>
-0227 <span class="keyword">end</span>
-0228 
+0200   <span class="keyword">for</span> itp = 1:length(s.parameter),
+0201     network.kinetics.parameters{itp,1} = s.parameter(itp).id;
+0202     network.kinetics.parameter_values(itp,1) = s.parameter(itp).value;
+0203   <span class="keyword">end</span>
+0204   <span class="keyword">if</span> length(s.rule),
+0205     warning(<span class="string">'SBML model contains rules - these cannot be imported'</span>); 
+0206   <span class="keyword">end</span>
+0207 <span class="keyword">elseif</span> verbose, 
+0208   fprintf(<span class="string">'Warning: no kinetics found in SBML file.\n'</span>);
+0209 <span class="keyword">end</span> 
+0210 
+0211 <span class="keyword">if</span> exist(<span class="string">'s_init'</span>,<span class="string">'var'</span>), network.s_init       = s_init; 
+0212 <span class="keyword">else</span>,
+0213 <span class="keyword">if</span> exist(<span class="string">'a_init'</span>,<span class="string">'var'</span>), network.s_init       = a_init; <span class="keyword">end</span>
+0214 <span class="keyword">end</span>
+0215 
+0216 <span class="keyword">if</span> import_compartments, 
+0217   clear compartments 
+0218   <span class="keyword">for</span> it=1:length(s.compartment),
+0219     network.compartments{it}      = s.compartment(it).id;
+0220     network.compartment_sizes(it) = s.compartment(it).size;
+0221   <span class="keyword">end</span>
+0222 <span class="keyword">end</span>
+0223 
+0224 <span class="keyword">if</span> graphics_flag,
+0225   <span class="keyword">if</span> length(network.actions),
+0226     <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network);
+0227   <span class="keyword">end</span>
+0228 <span class="keyword">end</span>
 0229 
-0230 <span class="comment">% --------------------------------------------------------------</span>
-0231 
-0232 <span class="comment">%if create_annotations,</span>
-0233 
-0234 <span class="comment">%for it=1:length(network.metabolites),</span>
-0235 <span class="comment">%  network.metabolite_annotation{it}.object      = network.metabolites{it};</span>
-0236 <span class="comment">%  network.metabolite_annotation{it}.is_reaction = 0;</span>
-0237 <span class="comment">%  network.metabolite_annotation{it}.quantity    = 'concentration';</span>
-0238 <span class="comment">%  network.metabolite_annotation{it}.unit        = 'mM';</span>
-0239 <span class="comment">%end</span>
-0240 
-0241 <span class="comment">%for it=1:length(network.actions),</span>
-0242 <span class="comment">%  network.action_annotation{it}.object        = network.actions{it};</span>
-0243 <span class="comment">%  network.action_annotation{it}.is_reaction   =  1;</span>
-0244 <span class="comment">%  network.action_annotation{it}.quantity      = 'flux';</span>
-0245 <span class="comment">%  network.action_annotation{it}.unit          = 'mM/min';</span>
-0246 <span class="comment">%end</span>
-0247 
-0248 <span class="comment">%if ~isempty(reaction_formula),</span>
-0249 <span class="comment">%  z=1;</span>
-0250 <span class="comment">%  for it=1:length(network.actions),</span>
-0251 <span class="comment">%    par = network.kinetics.reactions{it}.parameters;</span>
-0252 <span class="comment">%    for it2 = 1: length(par),</span>
-0253 <span class="comment">%    network.parameter_annotation{z}.quantity      = 'reaction parameter';</span>
-0254 <span class="comment">%    network.parameter_annotation{it}.is_reaction  = 0;</span>
-0255 <span class="comment">%    network.parameter_annotation{it}.unit         = 'unknown';</span>
-0256 <span class="comment">%    network.parameter_annotation{z}.object        = par{it2}.name;</span>
-0257 <span class="comment">%    network.parameter_annotation{z}.value         = par{it2}.value;</span>
-0258 <span class="comment">%    network.parameter_annotation{z}.appears_in_reaction = it;</span>
-0259 <span class="comment">%    z=z+1;</span>
-0260 <span class="comment">%    end</span>
-0261 <span class="comment">%  end</span>
-0262 <span class="comment">%end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0230 
+0231 <span class="comment">% --------------------------------------------------------------</span>
+0232 
+0233 <span class="comment">%if create_annotations,</span>
+0234 
+0235 <span class="comment">%for it=1:length(network.metabolites),</span>
+0236 <span class="comment">%  network.metabolite_annotation{it}.object      = network.metabolites{it};</span>
+0237 <span class="comment">%  network.metabolite_annotation{it}.is_reaction = 0;</span>
+0238 <span class="comment">%  network.metabolite_annotation{it}.quantity    = 'concentration';</span>
+0239 <span class="comment">%  network.metabolite_annotation{it}.unit        = 'mM';</span>
+0240 <span class="comment">%end</span>
+0241 
+0242 <span class="comment">%for it=1:length(network.actions),</span>
+0243 <span class="comment">%  network.action_annotation{it}.object        = network.actions{it};</span>
+0244 <span class="comment">%  network.action_annotation{it}.is_reaction   =  1;</span>
+0245 <span class="comment">%  network.action_annotation{it}.quantity      = 'flux';</span>
+0246 <span class="comment">%  network.action_annotation{it}.unit          = 'mM/min';</span>
+0247 <span class="comment">%end</span>
+0248 
+0249 <span class="comment">%if ~isempty(reaction_formula),</span>
+0250 <span class="comment">%  z=1;</span>
+0251 <span class="comment">%  for it=1:length(network.actions),</span>
+0252 <span class="comment">%    par = network.kinetics.reactions{it}.parameters;</span>
+0253 <span class="comment">%    for it2 = 1: length(par),</span>
+0254 <span class="comment">%    network.parameter_annotation{z}.quantity      = 'reaction parameter';</span>
+0255 <span class="comment">%    network.parameter_annotation{it}.is_reaction  = 0;</span>
+0256 <span class="comment">%    network.parameter_annotation{it}.unit         = 'unknown';</span>
+0257 <span class="comment">%    network.parameter_annotation{z}.object        = par{it2}.name;</span>
+0258 <span class="comment">%    network.parameter_annotation{z}.value         = par{it2}.value;</span>
+0259 <span class="comment">%    network.parameter_annotation{z}.appears_in_reaction = it;</span>
+0260 <span class="comment">%    z=z+1;</span>
+0261 <span class="comment">%    end</span>
+0262 <span class="comment">%  end</span>
+0263 <span class="comment">%end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

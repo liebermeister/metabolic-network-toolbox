@@ -6,16 +6,16 @@
   <meta name="keywords" content="sample_feasible_dmu">
   <meta name="description" content="[mu, success_flag] = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">flux_sampling</a> &gt; sample_feasible_dmu.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_fluxes</a> &gt; <a href="#">flux_sampling</a> &gt; sample_feasible_dmu.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/flux_sampling&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_fluxes/flux_sampling&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>sample_feasible_dmu
 </h1>
@@ -44,12 +44,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li></ul>
+<li><a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -75,7 +74,7 @@ This function is called by:
 0020 <span class="keyword">if</span> ~isfield(es_options,<span class="string">'seed'</span>), es_options.seed = 0; <span class="keyword">end</span>
 0021 <span class="keyword">if</span> ~isnan(es_options.seed), randn(<span class="string">'state'</span>,es_options.seed); <span class="keyword">end</span>
 0022 
-0023 epsilon     = <a href="../../../mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>/es_constraints.rho;
+0023 epsilon     = <a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>/es_constraints.rho;
 0024 v_signs     = sign(v);
 0025 
 0026 <span class="comment">% update lower and upper bounds for dmu</span>
@@ -115,6 +114,6 @@ This function is called by:
 0060 <span class="comment">%   [A_ineq * dmu, b_ineq]</span>
 0061 <span class="comment">%   [A_eq * dmu, b_eq]</span>
 0062 <span class="comment">% end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

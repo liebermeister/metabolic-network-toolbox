@@ -6,16 +6,16 @@
   <meta name="keywords" content="chop">
   <meta name="description" content="res = chop(matrix)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">utils</a> &gt; chop.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">utils</a> &gt; chop.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>chop
 </h1>
@@ -36,9 +36,8 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/mnt_mca/control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="../../mnt/mnt_mca/flux_control_coefficients_split.html" class="code" title="function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = control_coefficients(N,epsilon,external,used,NR_int,L_int,J)">flux_control_coefficients_split</a>	[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)</li></ul>
+<li><a href="../.././mnt/mnt_mca/control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="../.././mnt/mnt_mca/flux_control_coefficients_split.html" class="code" title="function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = control_coefficients(N,epsilon,external,used,NR_int,L_int,J)">flux_control_coefficients_split</a>	[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -47,6 +46,6 @@ This function is called by:
 0003 
 0004 res = matrix;
 0005      res( find( abs(res) &lt; 0.000000000000001 * max(max(abs(res))) ) ) = 0;</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

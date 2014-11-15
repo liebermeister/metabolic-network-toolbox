@@ -6,16 +6,16 @@
   <meta name="keywords" content="elasticities_scaled">
   <meta name="description" content="[Ec, Ep, parameters, Ecc, Ecp, Epp] = elasticities_scaled(network,s);">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; elasticities_scaled.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_mca</a> &gt; elasticities_scaled.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>elasticities_scaled
 </h1>
@@ -53,12 +53,11 @@ OUTPUT:
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
+<li><a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -100,7 +99,7 @@ This function is called by:
 0036 <span class="comment">% first order metabolite el.</span>
 0037 
 0038 log_s   = log(s);
-0039 log_v   = log(abs(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network,kinetics)));
+0039 log_v   = log(abs(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network,kinetics)));
 0040     
 0041 S_ext       = s(ind_ext);
 0042 S_ext_names = network.metabolites(ind_ext);
@@ -112,8 +111,8 @@ This function is called by:
 0048   log_s_pert2 = log_s; log_s_pert2(it) = log_s_pert1(it)*(1-delta);
 0049   <span class="keyword">if</span> abs(log_s_pert1(it)) &lt; delta, log_s_pert1(it) = delta;  <span class="keyword">end</span>
 0050   <span class="keyword">if</span> abs(log_s_pert2(it)) &lt; delta, log_s_pert2(it) = -delta; <span class="keyword">end</span>
-0051   v_pert1 = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert1),network,kinetics));
-0052   v_pert2 = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert2),network,kinetics));
+0051   v_pert1 = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert1),network,kinetics));
+0052   v_pert2 = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert2),network,kinetics));
 0053   Ec(:,it) = (v_pert1-v_pert2) / (log_s_pert1(it)-log_s_pert2(it));
 0054 <span class="keyword">end</span>
 0055 
@@ -122,7 +121,7 @@ This function is called by:
 0058 
 0059 <span class="keyword">if</span> compute_pi,    
 0060 
-0061   [p,parameters] = <a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(kinetics,S_ext,S_ext_names,network);
+0061   [p,parameters] = <a href="../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(kinetics,S_ext,S_ext_names,network);
 0062   log_p = log(p);
 0063   np    = length(p);
 0064   
@@ -132,12 +131,12 @@ This function is called by:
 0068     log_p_pert2  = log_p; log_p_pert2(i) = log_p_pert2(i)*(1-delta);
 0069     <span class="keyword">if</span> log_p_pert1(i)==0, log_p_pert1(i) =  delta; <span class="keyword">end</span>
 0070     <span class="keyword">if</span> log_p_pert2(i)==0, log_p_pert2(i) = -delta; <span class="keyword">end</span>
-0071     [nkinetics1,Sext_pert1] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert1),ind_ext);
-0072     [nkinetics2,Sext_pert2] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert2),ind_ext);
+0071     [nkinetics1,Sext_pert1] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert1),ind_ext);
+0072     [nkinetics2,Sext_pert2] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert2),ind_ext);
 0073     log_s_pert1    = log_s; log_s_pert1(ind_ext) = log(Sext_pert1);
 0074     log_s_pert2    = log_s; log_s_pert2(ind_ext) = log(Sext_pert2);
-0075     v_pert1        = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert1),network,nkinetics1));
-0076     v_pert2        = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert2),network,nkinetics2));
+0075     v_pert1        = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert1),network,nkinetics1));
+0076     v_pert2        = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert2),network,nkinetics2));
 0077     Ep(:,i)        = (v_pert1-v_pert2) / (log_p_pert1(i)-log_p_pert2(i));
 0078   <span class="keyword">end</span>
 0079       
@@ -162,7 +161,7 @@ This function is called by:
 0098     log_s_pert    = log_s; 
 0099     log_s_pert(i) = log_s_pert(i) * (1+delta); 
 0100     <span class="keyword">if</span> abs(log_s_pert(i)) &lt; delta, log_s_pert(i) = delta; <span class="keyword">end</span> 
-0101     v_pert       = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,kinetics));
+0101     v_pert       = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,kinetics));
 0102     Ecc(:,i,i)   = 2 * ( v_pert - log_v - Ec * (log_s_pert-log_s) ) / (log_s_pert(i)-log_s(i))^2;
 0103     Eccdiag(:,i) = Ecc(:,i,i);
 0104   <span class="keyword">end</span>
@@ -176,7 +175,7 @@ This function is called by:
 0112       log_s_pert(k) = log_s_pert(k) * (1+delta); 
 0113       <span class="keyword">if</span> abs(log_s_pert(i))&lt;delta,  log_s_pert(i) =   delta; <span class="keyword">end</span> 
 0114       <span class="keyword">if</span> abs(log_s_pert(k))&lt;delta,  log_s_pert(k) = - delta; <span class="keyword">end</span>
-0115       v_pert  = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,kinetics));
+0115       v_pert  = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,kinetics));
 0116       delta_s = log_s_pert([i,k]) - log_s([i,k]);
 0117       Ecc(:,i,k) = <span class="keyword">...</span>
 0118           ( v_pert - log_v - Ec * (log_s_pert - log_s) - 1/2 * Eccdiag(:,[i,k]) * delta_s.^2 ) <span class="keyword">...</span>
@@ -191,10 +190,10 @@ This function is called by:
 0127     log_p_pert    = log_p; 
 0128     log_p_pert(i) = log_p(i) * (1+delta); 
 0129     <span class="keyword">if</span> log_p_pert(i)==0, log_p_pert(i) = delta; <span class="keyword">end</span> 
-0130     [nkinetics,Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert),ind_ext);
+0130     [nkinetics,Sext_pert] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert),ind_ext);
 0131     log_s_pert            = log_s; 
 0132     log_s_pert(ind_ext)   = log(Sext_pert);
-0133     v_pert      = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,nkinetics));
+0133     v_pert      = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,nkinetics));
 0134     Epp(:,i,i)  = 2 * ( v_pert - log_v - Ep * (log_p_pert- log_p) ) <span class="keyword">...</span>
 0135         / ( log_p_pert(i) - log_p(i) )^2;
 0136     Eppdiag(:,i) =  Epp(:,i,i);
@@ -209,10 +208,10 @@ This function is called by:
 0145       log_p_pert(k) = log_p(k) * (1+delta);
 0146       <span class="keyword">if</span> log_p_pert(i)==0, log_p_pert(i) = delta; <span class="keyword">end</span> 
 0147       <span class="keyword">if</span> log_p_pert(k)==0, log_p_pert(k) = -delta; <span class="keyword">end</span> 
-0148       [nkinetics,Sext_pert]   = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert),ind_ext);
+0148       [nkinetics,Sext_pert]   = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert),ind_ext);
 0149       log_s_pert    = log_s; 
 0150       log_s_pert(ind_ext) = log(Sext_pert);
-0151       v_pert      = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,nkinetics));
+0151       v_pert      = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,nkinetics));
 0152       delta_p  = log_p_pert([i,k])-log_p([i,k]);
 0153       Epp(:,i,k) = <span class="keyword">...</span>
 0154           ( v_pert - log_v - Ep * (log_p_pert-log_p) -  1/2 * Eppdiag(:,[i,k]) * delta_p.^2) <span class="keyword">...</span>
@@ -231,10 +230,10 @@ This function is called by:
 0167       log_p_pert    = log_p;  
 0168       log_p_pert(k) = log_p_pert(k) * (1+delta);  
 0169       <span class="keyword">if</span> log_p_pert(k)==0, log_p_pert(k)=delta; <span class="keyword">end</span>
-0170       [nkinetics,Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert),ind_ext);
+0170       [nkinetics,Sext_pert] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,exp(log_p_pert),ind_ext);
 0171       log_s_pert(ind_ext)   = log(Sext_pert);
 0172       <span class="keyword">if</span> log_s_pert(i)==log_s(i),  log_s_pert(i) = log_s(i) + delta; <span class="keyword">end</span> 
-0173       v_pert       = log(<a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,nkinetics));
+0173       v_pert       = log(<a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(exp(log_s_pert),network,nkinetics));
 0174       Ecp(:,i,k) = ( <span class="keyword">...</span>
 0175           v_pert - log_v - Ec * (log_s_pert-log_s) - Ep * (log_p_pert-log_p) <span class="keyword">...</span>
 0176           -  1/2 * Eccdiag(:,i) * (log_s_pert(i)-log_s(i)).^2  <span class="keyword">...</span>
@@ -257,6 +256,6 @@ This function is called by:
 0193 Ec = sparse(Ec);
 0194 
 0195 <span class="keyword">if</span> compute_pi,  Ep = sparse(Ep); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

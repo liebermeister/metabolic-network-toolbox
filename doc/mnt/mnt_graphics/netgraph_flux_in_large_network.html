@@ -6,16 +6,16 @@
   <meta name="keywords" content="netgraph_flux_in_large_network">
   <meta name="description" content="[nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_flux_in_large_network.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_graphics</a> &gt; netgraph_flux_in_large_network.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>netgraph_flux_in_large_network
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_flux_movie.html" class="code" title="function M = netgraph_flux_movie(network,S,J,text_flag,goptions);">netgraph_flux_movie</a>	M = netgraph_flux_movie(network,S,J,text_flag,goptions);</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)">netgraph_read_positions</a>	network = netgraph_read_positions(network,offsets,table_positions,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="../../mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites)</li><li><a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../../mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>	b = print_matrix(matrix,rownames,colnames)</li></ul>
+<li><a href="netgraph_flux_movie.html" class="code" title="function M = netgraph_flux_movie(network,S,J,text_flag,goptions);">netgraph_flux_movie</a>	M = netgraph_flux_movie(network,S,J,text_flag,goptions);</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="../.././mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites,all_reversible )</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../.././mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>	b = print_matrix(matrix,rownames,colnames)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -46,10 +45,10 @@ This function is called by:
 0002 
 0003 <span class="comment">% [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</span>
 0004 
-0005 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'perc_show'</span>,<span class="string">'0.002'</span>,<span class="string">'table_positions'</span>,<span class="string">''''''</span>,<span class="string">'cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'not_cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'goptions_default'</span>,<span class="string">'struct'</span>));
+0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'perc_show'</span>,<span class="string">'0.002'</span>,<span class="string">'table_positions'</span>,<span class="string">''''''</span>,<span class="string">'cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'not_cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'goptions_default'</span>,<span class="string">'struct'</span>));
 0006 
-0007 goptions = <a href="../../mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(struct,goptions_default);
-0008 network.formulae = <a href="../../mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites)">network_print_formulae</a>(network);
+0007 goptions = <a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(struct,goptions_default);
+0008 network.formulae = <a href="../.././mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>(network);
 0009 
 0010 <span class="comment">% ------------------------------------------------------------------------------</span>
 0011 <span class="comment">% 1. distribution of flux values</span>
@@ -64,7 +63,7 @@ This function is called by:
 0020 display(sprintf(<span class="string">'Reactions with %d highest fluxes'</span>,n_show))
 0021 [dum,order] = sort(-abs(v));
 0022 
-0023 <a href="../../mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>(v(order(1:n_show)), network.reaction_names(order(1:n_show)))
+0023 <a href="../.././mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>(v(order(1:n_show)), network.reaction_names(order(1:n_show)))
 0024 
 0025 <span class="comment">% ------------------------------------------------------------------------------</span>
 0026 <span class="comment">% 3. network graphics with n_show largest flux reactions</span>
@@ -74,7 +73,7 @@ This function is called by:
 0030 <span class="keyword">end</span>
 0031 
 0032 metrank = sum(abs(network.N),2);
-0033 cofactors = [<a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(cofactors); network.metabolites(find(metrank&gt;5))];
+0033 cofactors = [<a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(cofactors); network.metabolites(find(metrank&gt;5))];
 0034 
 0035 ind_not_involved_in_relevant_flux = find(abs(network.N) * double(abs(v) &gt;= perc_show * max(abs(v))) ==0);
 0036 cofactors = [cofactors; network.metabolites(ind_not_involved_in_relevant_flux)];
@@ -87,7 +86,7 @@ This function is called by:
 0043 <span class="keyword">end</span>
 0044 <span class="comment">%nn = netgraph_make_graph(nn);</span>
 0045 <span class="keyword">if</span> length(table_positions),
-0046   nn = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)">netgraph_read_positions</a>(nn,table_positions,[0,0],1,0);
+0046   nn = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>(nn,table_positions,[0,0],1,0);
 0047 <span class="keyword">end</span>
 0048 
 0049 [nm,nr] = size(network.N);
@@ -97,6 +96,6 @@ This function is called by:
 0053 <span class="comment">%M=[];</span>
 0054 M = <a href="netgraph_flux_movie.html" class="code" title="function M = netgraph_flux_movie(network,S,J,text_flag,goptions);">netgraph_flux_movie</a>(nn,zeros(nm,1),v,1,goptions);
 0055 movie(M,10)</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -6,16 +6,16 @@
   <meta name="keywords" content="netgraph_cofactor_graphs">
   <meta name="description" content="[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_cofactor_graphs.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_graphics</a> &gt; netgraph_cofactor_graphs.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>netgraph_cofactor_graphs
 </h1>
@@ -24,7 +24,7 @@
 <div class="box"><strong>[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree) </strong></div>
+<div class="box"><strong>function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree,no_cofactors) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</pre></div>
@@ -33,42 +33,43 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)">netgraph_read_positions</a>	network = netgraph_read_positions(network,offsets,table_positions,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree,no_cofactors)</a>
 0002 
 0003 <span class="comment">% [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</span>
 0004 
-0005 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'table_positions'</span>,<span class="string">'[]'</span>,<span class="string">'max_met_degree'</span>,<span class="string">'5'</span>));
+0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'table_positions'</span>,<span class="string">'[]'</span>,<span class="string">'max_met_degree'</span>,<span class="string">'5'</span>,<span class="string">'no_cofactors'</span>,<span class="string">'[]'</span>));
 0006 
 0007 <span class="keyword">if</span> length(max_met_degree),
 0008   met_degree = sum(abs(sign(network.N)),2);
-0009   cofactors  = [cofactors; network.metabolites(met_degree&gt;max_met_degree)];
+0009   cofactors  = unique([<a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(cofactors); network.metabolites(met_degree&gt;max_met_degree)]);
 0010 <span class="keyword">end</span>
 0011 
-0012 network_CoHid   = <a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>(network,cofactors);
-0013 <span class="keyword">if</span> nargout &gt;1,
-0014   network_CoSplit = <a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>(network,cofactors);
-0015 <span class="keyword">end</span>
-0016 
-0017 <span class="keyword">if</span> length(table_positions),
-0018   network_CoHid   = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)">netgraph_read_positions</a>(network_CoHid,table_positions,[0,0],1);
-0019   <span class="keyword">if</span> nargout &gt;1,
-0020     network_CoSplit = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)">netgraph_read_positions</a>(network_CoSplit,table_positions,[0,0],1);
-0021   <span class="keyword">end</span>
-0022 <span class="keyword">end</span>
-0023 
-0024 <span class="comment">%display('Please wait ...');</span>
-0025 <span class="comment">%pars = struct('initial_relax',200,'manual',0,'actprintnames',0,'arrowstyle','directions','arrowsize',0.03);</span>
-0026 <span class="comment">%network_CoSplit = netgraph_move(network_CoSplit,'text',pars);</span>
-0027 <span class="comment">%network_CoHid   = netgraph_move(network_CoSplit,'text',pars);</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0012 cofactors  = setdiff(cofactors,no_cofactors);
+0013 
+0014 network_CoHid   = <a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>(network,cofactors);
+0015 <span class="keyword">if</span> nargout &gt;1,
+0016   network_CoSplit = <a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>(network,cofactors);
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> length(table_positions),
+0020   network_CoHid   = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoHid,table_positions,[0,0],1);
+0021   <span class="keyword">if</span> nargout &gt;1,
+0022     network_CoSplit = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoSplit,table_positions,[0,0],1);
+0023   <span class="keyword">end</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">%display('Please wait ...');</span>
+0027 <span class="comment">%pars = struct('initial_relax',200,'manual',0,'actprintnames',0,'arrowstyle','directions','arrowsize',0.03);</span>
+0028 <span class="comment">%network_CoSplit = netgraph_move(network_CoSplit,'text',pars);</span>
+0029 <span class="comment">%network_CoHid   = netgraph_move(network_CoSplit,'text',pars);</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

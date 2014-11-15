@@ -49,4 +49,4 @@ for it = 1:length(names),
   fprintf(fid,'%s\t%f\t%f\n',names{it},positions(1,it),positions(2,it));
 end
 fclose(fid);
-%output = table([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,filename);
+%output = mytable([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,filename);

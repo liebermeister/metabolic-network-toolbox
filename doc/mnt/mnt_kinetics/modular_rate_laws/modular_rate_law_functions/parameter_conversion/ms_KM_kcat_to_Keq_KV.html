@@ -6,16 +6,16 @@
   <meta name="keywords" content="ms_KM_kcat_to_Keq_KV">
   <meta name="description" content="[Keq,KV] = ms_KM_kcat_to_Keq_KV(N,kinetics,KM,kcatplus,kcatminus);">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../../index.html">Home</a> &gt;  <a href="../../../../index.html">mnt</a> &gt; <a href="../../../index.html">mnt_kinetics</a> &gt; <a href="../../index.html">modular_rate_laws</a> &gt; <a href="../index.html">modular_rate_law_functions</a> &gt; <a href="index.html">parameter_conversion</a> &gt; ms_KM_kcat_to_Keq_KV.m</div>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">modular_rate_law_functions</a> &gt; <a href="#">parameter_conversion</a> &gt; ms_KM_kcat_to_Keq_KV.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
 
 <h1>ms_KM_kcat_to_Keq_KV
 </h1>
@@ -36,9 +36,8 @@ This function calls:
 <li><a href="modular_kcat_to_KV_Keq.html" class="code" title="function [kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminus,Keq)">modular_kcat_to_KV_Keq</a>	[kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminus,Keq)</li><li><a href="ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>	keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-<li><a href="../../../../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_sample_models.html" class="code" title="function [v, kinetics_list] = parameter_balancing_sample_models(task,kinetics_sample,options)">parameter_balancing_sample_models</a>	</li></ul>
+</ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
@@ -46,8 +45,8 @@ This function is called by:
 0002 
 0003 <span class="comment">% [Keq,KV] = ms_KM_kcat_to_Keq_KV(N,kinetics,KM,kcatplus,kcatminus);</span>
 0004 
-0005 Keq = <a href="ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>(N,KM,kcatplus ./ kcatminus);
+0005 Keq           = <a href="ms_KM_KVratio_to_Keq.html" class="code" title="function keq = ms_KM_KVratio_to_Keq(N,KM,KVratio);">ms_KM_KVratio_to_Keq</a>(N,KM,kcatplus ./ kcatminus);
 0006 [kinetics,KV] = <a href="modular_kcat_to_KV_Keq.html" class="code" title="function [kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminus,Keq)">modular_kcat_to_KV_Keq</a>(N,kinetics,kcatplus,kcatminus,Keq);</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

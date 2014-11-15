@@ -6,16 +6,16 @@
   <meta name="keywords" content="modular_velocities_fast">
   <meta name="description" content="[v, v_plus, v_minus] = modular_velocities_fast(kinetic_law,u,c,pars)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../../index.html">Home</a> &gt;  <a href="../../../../index.html">mnt</a> &gt; <a href="../../../index.html">mnt_kinetics</a> &gt; <a href="../../index.html">modular_rate_laws</a> &gt; <a href="../index.html">modular_rate_law_functions</a> &gt; <a href="index.html">modular_fast</a> &gt; modular_velocities_fast.m</div>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">modular_rate_law_functions</a> &gt; <a href="#">modular_fast</a> &gt; modular_velocities_fast.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_fast&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_fast&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
 
 <h1>modular_velocities_fast
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-<li><a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>	log_alpha_X,log_beta_X: sparse matrices</li></ul>
+<li><a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>	log_alpha_X,log_beta_X: sparse matrices</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
@@ -54,8 +53,8 @@ This function is called by:
 0010 theta_plus  = exp( sum( pars.Mplus  .* log_c_by_k, 2) );
 0011 theta_minus = exp( sum( pars.Mminus .* log_c_by_k, 2) );
 0012 
-0013 [log_alpha_A, log_beta_A] = <a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>(pars.KA,pars.KA_rel,c,pars.ind_KA,pars.ind_KA_metabolite_index,pars);
-0014 [log_alpha_I            ] = <a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>(pars.KI,pars.KI_rel,c,pars.ind_KI,pars.ind_KI_metabolite_index,pars);
+0013 [log_alpha_A, log_beta_A] = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>(pars.KA,pars.KA_rel,c,pars.ind_KA,pars.ind_KA_metabolite_index,pars);
+0014 [log_alpha_I            ] = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>(pars.KI,pars.KI_rel,c,pars.ind_KI,pars.ind_KI_metabolite_index,pars);
 0015 regulation_term           = exp( sum( pars.Wplus .* log_beta_A + pars.Wminus .* log_alpha_I, 2) );
 0016 
 0017 <span class="keyword">switch</span> kinetic_law,  
@@ -83,6 +82,6 @@ This function is called by:
 0039 <span class="comment">%ma_ratio = exp(pars.N'*log(c));</span>
 0040 <span class="comment">%[ma_ratio(1) pars.Keq(1) sign(v(1))]</span>
 0041</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

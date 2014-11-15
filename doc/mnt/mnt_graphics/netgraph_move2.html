@@ -6,16 +6,16 @@
   <meta name="keywords" content="netgraph_move2">
   <meta name="description" content="network = netgraph_move2(network,flag_draw_details)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_move2.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_graphics</a> &gt; netgraph_move2.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>netgraph_move2
 </h1>
@@ -45,12 +45,11 @@ move nodes of metabolic network graph with the mouse
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>	netgraph_draw_simple(network)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
+<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>	netgraph_draw_simple(network)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -116,9 +115,9 @@ This function is called by:
 0060 
 0061 p.arrowstyle=<span class="string">'none'</span>;
 0062 <span class="keyword">switch</span> flag_draw_details,
-0063  <span class="keyword">case</span> <span class="string">'none'</span>, <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network); <a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
-0064  <span class="keyword">case</span> <span class="string">'regulation'</span>, <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network,1); <a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
-0065  <span class="keyword">case</span> <span class="string">'text'</span>, <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p); <a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
+0063  <span class="keyword">case</span> <span class="string">'none'</span>, <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network); <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
+0064  <span class="keyword">case</span> <span class="string">'regulation'</span>, <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network,1); <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
+0065  <span class="keyword">case</span> <span class="string">'text'</span>, <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p); <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
 0066 <span class="keyword">end</span>
 0067 title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
 0068 
@@ -171,9 +170,9 @@ This function is called by:
 0115      <span class="keyword">end</span>
 0116 
 0117      <span class="keyword">switch</span> flag_draw_details,
-0118      <span class="keyword">case</span> <span class="string">'none'</span>,      network.graphics_par=p; <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network);   <a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
-0119      <span class="keyword">case</span> <span class="string">'regulation'</span>,  network.graphics_par=p;    <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network,1);   <a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
-0120      <span class="keyword">case</span> <span class="string">'text'</span>,     <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p);  <a href="../../mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;  <span class="keyword">end</span>
+0118      <span class="keyword">case</span> <span class="string">'none'</span>,      network.graphics_par=p; <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network);   <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
+0119      <span class="keyword">case</span> <span class="string">'regulation'</span>,  network.graphics_par=p;    <a href="netgraph_draw_simple.html" class="code" title="function netgraph_draw_simple(network,regulation)">netgraph_draw_simple</a>(network,1);   <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
+0120      <span class="keyword">case</span> <span class="string">'text'</span>,     <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p);  <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;  <span class="keyword">end</span>
 0121      title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
 0122 
 0123       hold on; <span class="comment">%           plot(edgecenters(1,:),edgecenters(2,:),'g.');</span>
@@ -195,6 +194,6 @@ This function is called by:
 0139  
 0140 network.graphics_par = p;
 0141 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -1,4 +1,4 @@
-function network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids,reaction_KEGG_IDs)
+function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)
 
 % network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)
 %
@@ -13,8 +13,13 @@ end
 x     = nan*ones(2,length(network.metabolites)+length(network.actions));
 fixed = zeros(1,length(network.metabolites)+length(network.actions));
 
-if exist('sbtab_version','file'), 
-  sbtab_table = sbtab_table_load(table_positions);
+if exist('sbtab_version','file'),
+  if isstr(table_positions),
+    sbtab_table = sbtab_table_load(table_positions);
+  else
+    % assume that table_positions is already an SBtab object
+    sbtab_table = table_positions;
+  end
   columns = sbtab_table_get_all_columns(sbtab_table);
   A{1} = columns.Element;
   A{2} = cell_string2num(columns.PositionX);
@@ -32,11 +37,17 @@ switch flag_KEGG_ids,
     model_metabolite_names = network.metabolites;
     model_reaction_names   = network.actions;
   case 1,
-    model_metabolite_names = network.metabolite_KEGGID;
+    if isfield('network','metabolite_KEGGID'), 
+      model_metabolite_names = network.metabolite_KEGGID;
+    elseif  isfield('network','Identifiers_kegg_compound'), 
+      model_metabolite_names = network.Identifiers_kegg_compound;
+    else
+      model_metabolite_names = network.Compound_Identifiers_kegg_compound;
+    end
     if length(reaction_KEGG_IDs),
       model_reaction_names = reaction_KEGG_IDs;
     else
-      model_reaction_names   = network.reaction_KEGGID;
+      model_reaction_names = network.reaction_KEGGID;
     end
 end
 

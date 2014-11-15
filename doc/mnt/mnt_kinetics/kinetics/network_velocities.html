@@ -6,16 +6,16 @@
   <meta name="keywords" content="network_velocities">
   <meta name="description" content="v = network_velocities(s,network,kinetics,split,indices,t)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">kinetics</a> &gt; network_velocities.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">kinetics</a> &gt; network_velocities.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/kinetics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/kinetics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>network_velocities
 </h1>
@@ -47,12 +47,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_kinetics/convenience/convenience_velocities.html" class="code" title="function v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)">convenience_velocities</a>	v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)</li><li><a href="../../../mnt/mnt_kinetics/convenience/convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>	scale_G = convert_G_scale()</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>	[v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../.././mnt/mnt_kinetics/convenience/convenience_velocities.html" class="code" title="function v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)">convenience_velocities</a>	v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)</li><li><a href="../../.././mnt/mnt_kinetics/convenience/convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>	scale_G = convert_G_scale()</li><li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>	[v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_graphics/netgraph_movie.html" class="code" title="function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);">netgraph_movie</a>	[M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);</li><li><a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/elasticities_to_parameters.html" class="code" title="function kinetics = elasticities_to_parameters(network,E_sc,v,c,u,h)">elasticities_to_parameters</a>	kinetics = elasticities_to_parameters(network,E_sc,v,c,u,A,h)</li><li><a href="../../../mnt/mnt_mca/basic_control_analysis.html" class="code" title="function R = basic_control_analysis(network,s,options)">basic_control_analysis</a>	R = basic_control_analysis(network,s,options)</li><li><a href="../../../mnt/mnt_mca/elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li><li><a href="../../../mnt/mnt_mca/elasticities_scaled.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp] = elasticities_scaled(network,s);">elasticities_scaled</a>	[Ec, Ep, parameters, Ecc, Ecp, Epp] = elasticities_scaled(network,s);</li><li><a href="../../../mnt/mnt_mca/internal_elasticities.html" class="code" title="function [epsilon,epsilonP,parameters] = internal_elasticities(network,s,enzyme_factor,relevant_parameters);">internal_elasticities</a>	epsilon = internal_elasticities(network,s,enzyme_factor,relevant_parameters);</li><li><a href="../../../mnt/mnt_mca/time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li><li><a href="../../../mnt/mnt_parameter_balancing/parameter_balancing_utils/parameter_balancing_sample_models.html" class="code" title="function [v, kinetics_list] = parameter_balancing_sample_models(task,kinetics_sample,options)">parameter_balancing_sample_models</a>	</li><li><a href="../../../mnt/mnt_simulation/network_fit_concentrations_to_rates.html" class="code" title="function [c,u_ratio] = network_fit_concentrations_to_rates(network,v,c_init);">network_fit_concentrations_to_rates</a>	[c,u_ratio] = network_fit_concentrations_to_rates(network,v,c_init);</li><li><a href="../../../mnt/mnt_simulation/network_integrate.html" class="code" title="function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)">network_integrate</a>	[t, s, s_int, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag,Tmax,dilution_rate,ode_opt)</li><li><a href="../../../mnt/mnt_simulation/network_integrate_par_pert.html" class="code" title="function [t, s_t, v, p, s_int_t, met_int]= network_integrate_par_pert(network, s, T, graphics_flag,par_osc,dt)">network_integrate_par_pert</a>	[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)</li><li><a href="../../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../../mnt/utils/network_derivative.html" class="code" title="function f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)">network_derivative</a>	f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)</li></ul>
+<li><a href="../../.././mnt/mnt_graphics/netgraph_movie.html" class="code" title="function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);">netgraph_movie</a>	[M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);</li><li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/elasticities_to_parameters.html" class="code" title="function kinetics = elasticities_to_parameters(network,E_sc,v,c,u,h)">elasticities_to_parameters</a>	kinetics = elasticities_to_parameters(network,E_sc,v,c,u,A,h)</li><li><a href="../../.././mnt/mnt_mca/basic_control_analysis.html" class="code" title="function R = basic_control_analysis(network,s,options)">basic_control_analysis</a>	R = basic_control_analysis(network,s,options)</li><li><a href="../../.././mnt/mnt_mca/elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li><li><a href="../../.././mnt/mnt_mca/elasticities_scaled.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp] = elasticities_scaled(network,s);">elasticities_scaled</a>	[Ec, Ep, parameters, Ecc, Ecp, Epp] = elasticities_scaled(network,s);</li><li><a href="../../.././mnt/mnt_mca/internal_elasticities.html" class="code" title="function [epsilon,epsilonP,parameters] = internal_elasticities(network,s,enzyme_factor,relevant_parameters);">internal_elasticities</a>	epsilon = internal_elasticities(network,s,enzyme_factor,relevant_parameters);</li><li><a href="../../.././mnt/mnt_mca/time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li><li><a href="../../.././mnt/mnt_simulation/network_fit_concentrations_to_rates.html" class="code" title="function [c,u_ratio] = network_fit_concentrations_to_rates(network, v, c_init);">network_fit_concentrations_to_rates</a>	[c,u_ratio] = network_fit_concentrations_to_rates(network,v,c_init);</li><li><a href="../../.././mnt/mnt_simulation/network_integrate.html" class="code" title="function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)">network_integrate</a>	[t, s, s_int, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag,Tmax,dilution_rate,ode_opt)</li><li><a href="../../.././mnt/mnt_simulation/network_integrate_par_pert.html" class="code" title="function [t, s_t, v, p, s_int_t, met_int]= network_integrate_par_pert(network, s, T, graphics_flag,par_osc,dt)">network_integrate_par_pert</a>	[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)</li><li><a href="../../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../.././mnt/utils/network_derivative.html" class="code" title="function f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)">network_derivative</a>	f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -74,7 +73,7 @@ This function is called by:
 0016 
 0017 <a name="_sub0" href="#_subfunctions" class="code">function v = network_velocities(s, network, kinetics, split, indices,t)</a>
 0018 
-0019 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'kinetics'</span>,<span class="string">'[]'</span>,<span class="string">'split'</span>,<span class="string">'0'</span>,<span class="string">'indices'</span>,<span class="string">'1:length(network.actions)'</span>));
+0019 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'kinetics'</span>,<span class="string">'[]'</span>,<span class="string">'split'</span>,<span class="string">'0'</span>,<span class="string">'indices'</span>,<span class="string">'1:length(network.actions)'</span>));
 0020 
 0021 <span class="keyword">if</span> size(s,1)==1, s = s'; <span class="keyword">end</span>
 0022 
@@ -95,278 +94,288 @@ This function is called by:
 0037     <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>,<span class="string">'ds'</span>,<span class="string">'rp'</span>,<span class="string">'fd'</span>},
 0038       ind_ext = find(network.external);
 0039       p = kinetics;
-0040       v = <a href="../../../mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>(kinetics.type,network.N, network.regulation_matrix,<span class="keyword">...</span>
+0040       v = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>(kinetics.type,network.N, network.regulation_matrix,<span class="keyword">...</span>
 0041                              ind_ext,p.u,s,p.KA,p.KI,p.KM,p.KV,p.Keq,p.h);
 0042     
 0043     <span class="keyword">case</span> <span class="string">'convenience'</span>,
 0044       
-0045       scale_G = <a href="../../../mnt/mnt_kinetics/convenience/convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>;
-0046       v       = <a href="../../../mnt/mnt_kinetics/convenience/convenience_velocities.html" class="code" title="function v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)">convenience_velocities</a>(s,network,kinetics,indices,split,scale_G);
+0045       scale_G = <a href="../../.././mnt/mnt_kinetics/convenience/convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>;
+0046       v       = <a href="../../.././mnt/mnt_kinetics/convenience/convenience_velocities.html" class="code" title="function v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)">convenience_velocities</a>(s,network,kinetics,indices,split,scale_G);
 0047       
-0048     <span class="keyword">case</span> <span class="string">'numeric'</span>,
-0049       
+0048     <span class="keyword">case</span> <span class="string">'kinetic_strings'</span>,
+0049  
 0050       <span class="keyword">for</span> it = 1:length(network.metabolites),
 0051         eval([ network.metabolites{it} <span class="string">' = '</span> num2str(s(it)) <span class="string">';'</span>]);
 0052       <span class="keyword">end</span>
-0053       <span class="keyword">for</span> it2=1:length(indices),
-0054         it = indices(it2);
-0055         r  = kinetics.reactions{it};
-0056         <span class="keyword">for</span> itt = 1:length(r.parameters),
-0057           eval([r.parameters{itt}.name <span class="string">' = '</span> num2str(kinetics.parameter_values(r.parameters{itt}.index)) <span class="string">';'</span>]);
-0058         <span class="keyword">end</span>
-0059         eval([<span class="string">'v(it2,:) = '</span> r.string <span class="string">';'</span>]);
-0060       <span class="keyword">end</span>
-0061 
-0062     <span class="keyword">case</span> <span class="string">'numeric'</span>,
-0063     
-0064       <span class="keyword">if</span> isfield(kinetics,<span class="string">'use_only_met'</span>),
-0065         dummy = ones(kinetics.n_met_tot,1);
-0066         dummy(kinetics.use_only_met) = s;
-0067         s = dummy;
-0068       <span class="keyword">end</span>
-0069 
-0070       <span class="keyword">if</span> exist(<span class="string">'t'</span>,<span class="string">'var'</span>),
-0071         v = feval(kinetics.velocity_function,s,kinetics.parameters,t);
-0072       <span class="keyword">else</span>
-0073         v = feval(kinetics.velocity_function,s,kinetics.parameters);
-0074       <span class="keyword">end</span>
-0075         <span class="keyword">if</span> isfield(kinetics,<span class="string">'use_only_act'</span>), v = v(kinetics.use_only_act); <span class="keyword">end</span>
-0076       v = v(indices);
-0077       
-0078     <span class="keyword">case</span> <span class="string">'mass-action'</span>,
-0079       N          = network.N;
-0080       
-0081       <span class="keyword">if</span> isfield(kinetics,<span class="string">'exponents'</span>),
-0082         Nf = kinetics.exponents.*(N&lt;0);
-0083         Nb = kinetics.exponents.*(N&gt;0);
-0084       <span class="keyword">else</span>,
-0085         Nf  = abs(N.*(N&lt;0));
-0086         Nb  =     N.*(N&gt;0);      
-0087       <span class="keyword">end</span>
-0088       v  = (  ( kinetics.k_fwd'  .* prod( repmat(s,1,nr) .^ Nf) ) <span class="keyword">...</span>
-0089             - ( ( network.reversible' .* kinetics.k_bwd') .* prod( repmat(s,1,nr) .^ Nb) ) )';
+0053 
+0054       <span class="keyword">if</span> isfield(network, <span class="string">'compartments'</span>),
+0055         <span class="keyword">for</span> it = 1:length(network.compartments),
+0056           eval([ network.compartments{it} <span class="string">' = '</span> num2str(network.compartment_sizes(it)) <span class="string">';'</span>]);
+0057         <span class="keyword">end</span>
+0058       <span class="keyword">end</span>
+0059 
+0060       <span class="keyword">for</span> it = 1:length(kinetics.parameters),
+0061         eval([ kinetics.parameters{it} <span class="string">' = '</span> num2str(kinetics.parameter_values(it)) <span class="string">';'</span>]);
+0062       <span class="keyword">end</span>
+0063 
+0064       <span class="keyword">for</span> it2=1:length(indices),
+0065         it = indices(it2);
+0066         r  = kinetics.reactions{it};
+0067         <span class="keyword">for</span> itt = 1:length(r.parameters),
+0068           eval([r.parameters{itt} <span class="string">' = '</span> num2str(r.parameter_values(itt)) <span class="string">';'</span>]);
+0069         <span class="keyword">end</span>
+0070         eval([<span class="string">'v(it2,:) = '</span> r.string <span class="string">';'</span>]);
+0071       <span class="keyword">end</span>
+0072     
+0073     <span class="keyword">case</span> <span class="string">'numeric'</span>,
+0074       <span class="keyword">if</span> isfield(kinetics,<span class="string">'use_only_met'</span>),
+0075         dummy = ones(kinetics.n_met_tot,1);
+0076         dummy(kinetics.use_only_met) = s;
+0077         s = dummy;
+0078       <span class="keyword">end</span>
+0079 
+0080       <span class="keyword">if</span> exist(<span class="string">'t'</span>,<span class="string">'var'</span>),
+0081         v = feval(kinetics.velocity_function,s,kinetics.parameters,t);
+0082       <span class="keyword">else</span>
+0083         v = feval(kinetics.velocity_function,s,kinetics.parameters);
+0084       <span class="keyword">end</span>
+0085       <span class="keyword">if</span> isfield(kinetics,<span class="string">'use_only_act'</span>), v = v(kinetics.use_only_act); <span class="keyword">end</span>
+0086       v = v(indices);
+0087       
+0088     <span class="keyword">case</span> <span class="string">'mass-action'</span>,
+0089       N          = network.N;
 0090       
-0091     <span class="keyword">case</span> <span class="string">'standard'</span>,
-0092       
-0093       <span class="keyword">if</span> ~split,
-0094         
-0095         v = nan*ones(length(indices),1);
-0096         
-0097         <span class="keyword">for</span> it=1:length(indices),
-0098           i = indices(it);
-0099           R   = kinetics.reactions{i};
-0100           S   = s(find(network.N(:,i)&lt;0));
-0101           P   = s(find(network.N(:,i)&gt;0));
-0102           
-0103           <span class="keyword">switch</span> R.type,
-0104             
-0105             <span class="keyword">case</span> <span class="string">'mass-action'</span>      
-0106               
-0107         <span class="comment">%% WARNING</span>
-0108         Nf  = 1;
-0109         Nb  = 1;
-0110         
-0111         v(it) = prod(s.^Nf)* R.k - prod(s.^Nb) * R.km * network.reversible(i);        
-0112             <span class="keyword">case</span> <span class="string">'michaelis_menten_rev'</span>,
-0113               v(it)= ( R.Vm_S/R.Km_S * S -R.Vm_P/R.Km_P * P)/(1+S/R.Km_S+P/R.Km_P);        
-0114             <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_rev'</span>,
-0115               v(it)= ( R.Vm_S/R.Km_S * prod(S) -R.Vm_P/R.Km_P * prod(P))/(1+prod(S)/R.Km_S+prod(P)/R.Km_P);
-0116             <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_irrev'</span>,
-0117               v(it)= ( R.Vm_S/R.Km_S * prod(S) )/(1+prod(S)/R.Km_S);        
-0118       <span class="keyword">case</span> <span class="string">'influx'</span>,
-0119         v(it) = R.v_in;        
-0120             <span class="keyword">case</span> <span class="string">'efflux'</span>,
-0121               v(it)= prod(S) * R.k_out;        
-0122             <span class="keyword">case</span> <span class="string">'rev_uni_uni'</span>,        
-0123               v(it) = ( R.Pk * S - R.Pkm * P ) / ( S * R.k(1) + R.km(1) +  R.k(2) + P * R.km(2));        
-0124             <span class="keyword">case</span> <span class="string">'rev_bi_uni'</span>,
-0125               v(it) = ( R.Pk * S(1) * S(2) - R.Pkm * P ) /<span class="keyword">...</span>
-0126                       ( ( R.km(2) + S(2)*R.k(2))*(S(1)*R.k(1)+ P*R.km(3)) + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) <span class="keyword">...</span>
-0127                         + R.km(1)*(R.km(2) + R.k(3) + P*R.km(3)) );        
-0128             <span class="keyword">case</span> <span class="string">'rev_uni_bi'</span>,
-0129               v(it) = ( R.Pk * S - R.Pkm * P(1) * P(2) )/<span class="keyword">...</span>
-0130                       ( ( R.k(2) + P(1)*R.km(2))*(P(2)*R.km(3) + S*R.k(1)) + R.km(1)*(P(2)*R.km(3) + P(1)*R.km(2)) <span class="keyword">...</span>
-0131              + R.k(3)*(R.k(2) + R.km(1) + S*R.k(1)) );        
-0132             <span class="keyword">case</span> <span class="string">'rev_bi_bi'</span>,
-0133               v(it) = ( R.Pk * S(1) * S(2)- R.Pkm * P(1) * P(2))/<span class="keyword">...</span>
-0134                       ( (R.km(2)+R.k(3))*(R.k(4)*R.km(1) + R.k(1)*R.k(4)*S(1) + R.km(4)*R.km(1)*P(2)) <span class="keyword">...</span>
-0135                         + S(2)*R.k(2) *(R.k(3) *(R.k(4)+R.km(4)*P(2)) + S(1)*R.k(1)*(R.k(3)+R.k(4)))<span class="keyword">...</span>
-0136                         + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))<span class="keyword">...</span>
-0137                         + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );        
-0138             <span class="keyword">case</span> <span class="string">'rev_multiple'</span>,
-0139               Nf  = abs(N(find(network.N(:,i)&lt;0),i).*(N(find(network.N(:,i)&lt;0),i)&lt;0));
-0140               Nr  = abs(N(find(network.N(:,i)&gt;0),i).*(N(find(network.N(:,i)&gt;0),i)&gt;0));
-0141               v(it) = ( R.Pk * prod(S.^Nf) - R.Pkm * prod(P.^Nr) ) / ( prod(S.^Nf) * R.k(1) + R.km(1) +  R.k(2) + prod(P.^Nr) * R.km(2));        
-0142             <span class="keyword">case</span> <span class="string">'irrev_uni'</span>,
-0143               v(it) =  R.Pk * S / (S * R.k(1) + R.k(2) );        
-0144             <span class="keyword">case</span> <span class="string">'irrev_bi'</span>,
-0145               v(it) = ( R.Pk * S(1) * S(2) ) /<span class="keyword">...</span>
-0146                       (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) );    
-0147       <span class="keyword">case</span> <span class="string">'irrev_multiple'</span>,
-0148         Nf  = abs(N(find(network.N(:,i)&lt;0),i).*(N(find(network.N(:,i)&lt;0),i)&lt;0));
-0149         v(it) = ( R.Pk * prod(S.^Nf)  ) / ( prod(S.^Nf) * R.k(1) +  R.k(2) );        
-0150         
-0151             <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>},        
-0152               v(it) = (R.Vf * S(1)/R.kA) / (1 + S(1)/R.kA);      
-0153             <span class="keyword">case</span> {<span class="string">'standard_irrev_bi'</span>},
-0154               v(it) = (R.Vf * S(1)/R.kA * S(2)/R.kB) / (1 + S(1)/R.kA + S(2)/R.kB + S(1)/R.kA * S(2)/R.kB);
-0155             <span class="keyword">case</span> {<span class="string">'standard_rev_uni_uni'</span>},
-0156               An = S(1)/R.kA;
-0157               Pn = P(1)/R.kP;
-0158               v(it) = (R.Vf * An - R.Vr * Pn) / (1 + An + Pn );
-0159       <span class="keyword">case</span> {<span class="string">'standard_rev_uni_bi'</span>},
-0160             An = S(1)/R.kA;
-0161             Pn = P(1)/R.kP;
-0162             Qn = P(2)/R.kQ;
-0163         v(it) = (R.Vf * An - R.Vr * Pn * Qn) /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
-0164             <span class="keyword">case</span> {<span class="string">'standard_rev_bi_uni'</span>},
-0165               An = S(1)/R.kA;
-0166             Bn = S(2)/R.kB;
-0167             Pn = P(1)/R.kP;
-0168         v(it) = (R.Vf * An * Bn - R.Vr * Pn) / (1 + An + Bn + Pn + An*Bn + An*Pn);
-0169             <span class="keyword">case</span> {<span class="string">'standard_rev_bi_bi'</span>},
-0170               An = S(1)/R.kA;
-0171               Bn = S(2)/R.kB;
-0172               Pn = P(1)/R.kP;
-0173               Qn = P(2)/R.kQ;
-0174               v(it) = (R.Vf * An * Bn - R.Vr * Pn * Qn) / <span class="keyword">...</span>
-0175                       (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
-0176             <span class="keyword">case</span> {<span class="string">'standard_rev_multiple'</span>},
-0177             Sn = S./R.kf;
-0178             Pn = P./R.kr;
-0179         v(it) =  (R.Vf * prod(Sn)  - R.Vr * prod(Pn) ) / <span class="keyword">...</span>
-0180                      (  prod(1+Sn) + prod(1+Pn) -1);
-0181             
-0182             <span class="keyword">case</span> {<span class="string">'ready_made'</span>},
-0183               nS  = abs(network.N(find(network.N(:,i)&lt;0),i));
-0184               nP  = abs(network.N(find(network.N(:,i)&gt;0),i));
-0185               Sn = S./R.KMf;
-0186               Pn = P./R.KMr;
-0187             
-0188               <span class="keyword">if</span> sum(nS)+sum(nP)==length(nS)+length(nP), <span class="comment">% if all stoich. coefficients ==1</span>
-0189                 
-0190                 v(it) =  (R.Vf * prod(Sn.^nS)  - R.Vr * prod(Pn.^nP) ) / <span class="keyword">...</span>
-0191                          (  prod(1+Sn) + prod(1+Pn) -1);
-0192                 
-0193               <span class="keyword">else</span>
-0194                 l1 = Sn+1; <span class="keyword">for</span> zz = 2:max(nS), l1(nS&gt;=zz) = l1(nS&gt;=zz) + Sn(nS&gt;=zz).^zz; <span class="keyword">end</span>
-0195                 l2 = Pn+1; <span class="keyword">for</span> zz = 2:max(nP), l2(nP&gt;=zz) = l2(nP&gt;=zz) + Pn(nP&gt;=zz).^zz; <span class="keyword">end</span>
-0196                 
-0197                 v(it) =  (R.Vf * prod(Sn.^nS)  - R.Vr * prod(Pn.^nP) ) / <span class="keyword">...</span>
-0198                          (  prod(l1) + prod(l2) -1);
-0199               <span class="keyword">end</span>
-0200               
-0201               activators_ind = find(network.regulation_matrix(i,:)&gt;0);
-0202         <span class="keyword">if</span> length( activators_ind),
-0203           act = s(activators_ind,1);
-0204           v(it) = v(it) * prod( act ./ R.KA ./ (1+act./R.KA));
-0205         <span class="keyword">end</span>
-0206         
-0207         inhibitors_ind = find(network.regulation_matrix(i,:)&lt;0);
-0208         <span class="keyword">if</span> length( inhibitors_ind),
-0209           rep = s(inhibitors_ind,1);
-0210           v(it) = v(it) * prod( 1./(1 + rep./R.KI) );
-0211         <span class="keyword">end</span>
-0212         
-0213     <span class="keyword">end</span>
-0214     
-0215         <span class="keyword">switch</span> kinetics.reactions{i}.type,
-0216           <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>,<span class="string">'standard_irrev_bi'</span>,<span class="string">'standard_rev_uni_uni'</span>,<span class="keyword">...</span>
-0217                 <span class="string">'standard_rev_uni_bi'</span>,<span class="string">'standard_rev_bi_uni'</span>,<span class="string">'standard_rev_bi_bi'</span>},
-0218             <span class="keyword">if</span> isfield(R,<span class="string">'Krep'</span>),
-0219               inhibitors_ind = find(network.regulation_matrix(it,:));
-0220               rep = s(inhibitors_ind,1);
-0221               v(it) = v(it) * prod(1./(1+rep./R.Krep));
-0222             <span class="keyword">end</span>
-0223             <span class="keyword">if</span> isfield(R,<span class="string">'Kact'</span>),       
-0224               activators_ind = find(network.regulation_matrix(it,:));
-0225               act = s(activators_ind,1);
-0226               v(it) = v(it) * prod(act./(act+R.Kact));
-0227             <span class="keyword">end</span>
-0228         <span class="keyword">end</span>
-0229         <span class="keyword">end</span>    
-0230         
-0231 <span class="comment">% SPLITTED kinetics</span>
-0232         
-0233       <span class="keyword">else</span>,
-0234         v = nan*ones(2*length(indices),1);
-0235         
-0236         <span class="keyword">for</span> it=1:length(indices),
-0237     i = indices(it);    
-0238     R   = kinetics.reactions{i};
-0239     S   = s(find(network.N(:,i)&lt;0));
-0240     P   = s(find(network.N(:,i)&gt;0));
-0241     
-0242     <span class="keyword">switch</span> R.type,
-0243       
-0244       <span class="keyword">case</span> <span class="string">'mass-action'</span>      
-0245         v(2*it-1:2*it) = [prod(s.^Nf)* R.k;  prod(s.^Nb) * R.km * network.reversible(i)];        
-0246       <span class="keyword">case</span> <span class="string">'michaelis_menten_rev'</span>,
-0247         v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * S ; R.Vm_P/R.Km_P * P]/(1+S/R.Km_S+P/R.Km_P);        
-0248       <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_rev'</span>,
-0249         v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S);  R.Vm_P/R.Km_P * prod(P)]/(1+S/R.Km_S+P/R.Km_P);
-0250       <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_irrev'</span>,
-0251         v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S) /(1+S/R.Km_S); 0];        
-0252       <span class="keyword">case</span> <span class="string">'influx'</span>,
-0253         v(2*it-1:2*it) = [R.v_in;0];        
-0254       <span class="keyword">case</span> <span class="string">'efflux'</span>,
-0255         v(2*it-1:2*it)= [prod(S) * R.k_out; 0];
-0256       <span class="keyword">case</span> <span class="string">'rev_uni_uni'</span>,        
-0257         v(2*it-1:2*it) = [ R.Pk * S; R.Pkm * P ] / ( S * R.k(1) + R.km(1) +  R.k(2) + P * R.km(2));        
-0258       <span class="keyword">case</span> <span class="string">'rev_bi_uni'</span>,
-0259         v(2*it-1:2*it) = [ R.Pk * S(1) * S(2) ;  R.Pkm * P ] /<span class="keyword">...</span>
-0260                 ( ( R.km(2) + S(2)*R.k(2))*(S(1)*R.k(1)+ P*R.km(3)) + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) <span class="keyword">...</span>
-0261                   + R.km(1)*(R.km(2) + R.k(3) + P*R.km(3)) );        
-0262       <span class="keyword">case</span> <span class="string">'rev_uni_bi'</span>,
-0263         v(2*it-1:2*it) = [ R.Pk * S ; R.Pkm * P(1) * P(2) ]/<span class="keyword">...</span>
-0264         ( ( R.k(2) + P(1)*R.km(2))*(P(2)*R.km(3) + S*R.k(1)) + R.km(1)*(P(2)*R.km(3) + P(1)*R.km(2)) <span class="keyword">...</span>
-0265                   + R.k(3)*(R.k(2) + R.km(1) + S*R.k(1)) );        
-0266       <span class="keyword">case</span> <span class="string">'rev_bi_bi'</span>,
-0267         v(2*it-1:2*it) = [ R.Pk * S(1) * S(2);  R.Pkm * P(1) * P(2)]/<span class="keyword">...</span>
-0268         ( (R.km(2)+R.k(3))*(R.k(4)*R.km(1) + R.k(1)*R.k(4)*S(1) + R.km(4)*R.km(1)*P(2)) <span class="keyword">...</span>
-0269                   + S(2)*R.k(2) *(R.k(3) *(R.k(4)+R.km(4)*P(2)) + S(1)*R.k(1)*(R.k(3)+R.k(4)))<span class="keyword">...</span>
-0270                   + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))<span class="keyword">...</span>
-0271                   + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );        
-0272       <span class="keyword">case</span> <span class="string">'rev_multiple'</span>,
-0273         v(2*it-1:2*it) = [ R.Pk * prod(S); R.Pkm * prod(P)] / ( prod(S) * R.k(1) + R.km(1) +  R.k(2) + prod(P) * R.km(2));        
-0274       <span class="keyword">case</span> <span class="string">'irrev_uni'</span>,
-0275         v(2*it-1:2*it) =  [R.Pk * S / (S * R.k(1) + R.k(2) );0];        
-0276       <span class="keyword">case</span> <span class="string">'irrev_bi'</span>,
-0277         v(2*it-1:2*it) = [ ( R.Pk * S(1) * S(2) ) /<span class="keyword">...</span>
-0278                    (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) ); 0];
-0279         
-0280       <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>},        
-0281         v(2*it-1:2*it) = [ R.Vf * S(1)/R.kA; 0] / (1 + S(1)/R.kA);      
-0282       <span class="keyword">case</span> {<span class="string">'standard_irrev_bi'</span>},
-0283         v(2*it-1:2*it) = [R.Vf * S(1)/R.kA * S(2)/R.kB; 0] / (1 + S(1)/R.kA + S(2)/R.kB + S(1)/R.kA * S(2)/R.kB);
-0284       <span class="keyword">case</span> {<span class="string">'standard_rev_uni_uni'</span>},
-0285             An = S(1)/R.kA;
-0286             Pn = P(1)/R.kP;
-0287         v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn] / (1 + An + Pn );
-0288       <span class="keyword">case</span> {<span class="string">'standard_rev_uni_bi'</span>},
-0289             An = S(1)/R.kA;
-0290             Pn = P(1)/R.kP;
-0291             Qn = P(2)/R.kQ;
-0292         v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn * Qn] /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
-0293       <span class="keyword">case</span> {<span class="string">'standard_rev_bi_uni'</span>},
-0294             An = S(1)/R.kA;
-0295             Bn = S(2)/R.kB;
+0091       <span class="keyword">if</span> isfield(kinetics,<span class="string">'exponents'</span>),
+0092         Nf = kinetics.exponents.*(N&lt;0);
+0093         Nb = kinetics.exponents.*(N&gt;0);
+0094       <span class="keyword">else</span>,
+0095         Nf  = abs(N.*(N&lt;0));
+0096         Nb  =     N.*(N&gt;0);      
+0097       <span class="keyword">end</span>
+0098       v  = (  ( kinetics.k_fwd'  .* prod( repmat(s,1,nr) .^ Nf) ) <span class="keyword">...</span>
+0099             - ( ( network.reversible' .* kinetics.k_bwd') .* prod( repmat(s,1,nr) .^ Nb) ) )';
+0100       
+0101     <span class="keyword">case</span> <span class="string">'standard'</span>,
+0102       
+0103       <span class="keyword">if</span> ~split,
+0104         
+0105         v = nan*ones(length(indices),1);
+0106         
+0107         <span class="keyword">for</span> it=1:length(indices),
+0108           i = indices(it);
+0109           R   = kinetics.reactions{i};
+0110           S   = s(find(network.N(:,i)&lt;0));
+0111           P   = s(find(network.N(:,i)&gt;0));
+0112           
+0113           <span class="keyword">switch</span> R.type,
+0114             
+0115             <span class="keyword">case</span> <span class="string">'mass-action'</span>      
+0116               
+0117         <span class="comment">%% WARNING</span>
+0118         Nf  = 1;
+0119         Nb  = 1;
+0120         
+0121         v(it) = prod(s.^Nf)* R.k - prod(s.^Nb) * R.km * network.reversible(i);        
+0122             <span class="keyword">case</span> <span class="string">'michaelis_menten_rev'</span>,
+0123               v(it)= ( R.Vm_S/R.Km_S * S -R.Vm_P/R.Km_P * P)/(1+S/R.Km_S+P/R.Km_P);        
+0124             <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_rev'</span>,
+0125               v(it)= ( R.Vm_S/R.Km_S * prod(S) -R.Vm_P/R.Km_P * prod(P))/(1+prod(S)/R.Km_S+prod(P)/R.Km_P);
+0126             <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_irrev'</span>,
+0127               v(it)= ( R.Vm_S/R.Km_S * prod(S) )/(1+prod(S)/R.Km_S);        
+0128       <span class="keyword">case</span> <span class="string">'influx'</span>,
+0129         v(it) = R.v_in;        
+0130             <span class="keyword">case</span> <span class="string">'efflux'</span>,
+0131               v(it)= prod(S) * R.k_out;        
+0132             <span class="keyword">case</span> <span class="string">'rev_uni_uni'</span>,        
+0133               v(it) = ( R.Pk * S - R.Pkm * P ) / ( S * R.k(1) + R.km(1) +  R.k(2) + P * R.km(2));        
+0134             <span class="keyword">case</span> <span class="string">'rev_bi_uni'</span>,
+0135               v(it) = ( R.Pk * S(1) * S(2) - R.Pkm * P ) /<span class="keyword">...</span>
+0136                       ( ( R.km(2) + S(2)*R.k(2))*(S(1)*R.k(1)+ P*R.km(3)) + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) <span class="keyword">...</span>
+0137                         + R.km(1)*(R.km(2) + R.k(3) + P*R.km(3)) );        
+0138             <span class="keyword">case</span> <span class="string">'rev_uni_bi'</span>,
+0139               v(it) = ( R.Pk * S - R.Pkm * P(1) * P(2) )/<span class="keyword">...</span>
+0140                       ( ( R.k(2) + P(1)*R.km(2))*(P(2)*R.km(3) + S*R.k(1)) + R.km(1)*(P(2)*R.km(3) + P(1)*R.km(2)) <span class="keyword">...</span>
+0141              + R.k(3)*(R.k(2) + R.km(1) + S*R.k(1)) );        
+0142             <span class="keyword">case</span> <span class="string">'rev_bi_bi'</span>,
+0143               v(it) = ( R.Pk * S(1) * S(2)- R.Pkm * P(1) * P(2))/<span class="keyword">...</span>
+0144                       ( (R.km(2)+R.k(3))*(R.k(4)*R.km(1) + R.k(1)*R.k(4)*S(1) + R.km(4)*R.km(1)*P(2)) <span class="keyword">...</span>
+0145                         + S(2)*R.k(2) *(R.k(3) *(R.k(4)+R.km(4)*P(2)) + S(1)*R.k(1)*(R.k(3)+R.k(4)))<span class="keyword">...</span>
+0146                         + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))<span class="keyword">...</span>
+0147                         + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );        
+0148             <span class="keyword">case</span> <span class="string">'rev_multiple'</span>,
+0149               Nf  = abs(N(find(network.N(:,i)&lt;0),i).*(N(find(network.N(:,i)&lt;0),i)&lt;0));
+0150               Nr  = abs(N(find(network.N(:,i)&gt;0),i).*(N(find(network.N(:,i)&gt;0),i)&gt;0));
+0151               v(it) = ( R.Pk * prod(S.^Nf) - R.Pkm * prod(P.^Nr) ) / ( prod(S.^Nf) * R.k(1) + R.km(1) +  R.k(2) + prod(P.^Nr) * R.km(2));        
+0152             <span class="keyword">case</span> <span class="string">'irrev_uni'</span>,
+0153               v(it) =  R.Pk * S / (S * R.k(1) + R.k(2) );        
+0154             <span class="keyword">case</span> <span class="string">'irrev_bi'</span>,
+0155               v(it) = ( R.Pk * S(1) * S(2) ) /<span class="keyword">...</span>
+0156                       (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) );    
+0157       <span class="keyword">case</span> <span class="string">'irrev_multiple'</span>,
+0158         Nf  = abs(N(find(network.N(:,i)&lt;0),i).*(N(find(network.N(:,i)&lt;0),i)&lt;0));
+0159         v(it) = ( R.Pk * prod(S.^Nf)  ) / ( prod(S.^Nf) * R.k(1) +  R.k(2) );        
+0160         
+0161             <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>},        
+0162               v(it) = (R.Vf * S(1)/R.kA) / (1 + S(1)/R.kA);      
+0163             <span class="keyword">case</span> {<span class="string">'standard_irrev_bi'</span>},
+0164               v(it) = (R.Vf * S(1)/R.kA * S(2)/R.kB) / (1 + S(1)/R.kA + S(2)/R.kB + S(1)/R.kA * S(2)/R.kB);
+0165             <span class="keyword">case</span> {<span class="string">'standard_rev_uni_uni'</span>},
+0166               An = S(1)/R.kA;
+0167               Pn = P(1)/R.kP;
+0168               v(it) = (R.Vf * An - R.Vr * Pn) / (1 + An + Pn );
+0169       <span class="keyword">case</span> {<span class="string">'standard_rev_uni_bi'</span>},
+0170             An = S(1)/R.kA;
+0171             Pn = P(1)/R.kP;
+0172             Qn = P(2)/R.kQ;
+0173         v(it) = (R.Vf * An - R.Vr * Pn * Qn) /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
+0174             <span class="keyword">case</span> {<span class="string">'standard_rev_bi_uni'</span>},
+0175               An = S(1)/R.kA;
+0176             Bn = S(2)/R.kB;
+0177             Pn = P(1)/R.kP;
+0178         v(it) = (R.Vf * An * Bn - R.Vr * Pn) / (1 + An + Bn + Pn + An*Bn + An*Pn);
+0179             <span class="keyword">case</span> {<span class="string">'standard_rev_bi_bi'</span>},
+0180               An = S(1)/R.kA;
+0181               Bn = S(2)/R.kB;
+0182               Pn = P(1)/R.kP;
+0183               Qn = P(2)/R.kQ;
+0184               v(it) = (R.Vf * An * Bn - R.Vr * Pn * Qn) / <span class="keyword">...</span>
+0185                       (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
+0186             <span class="keyword">case</span> {<span class="string">'standard_rev_multiple'</span>},
+0187             Sn = S./R.kf;
+0188             Pn = P./R.kr;
+0189         v(it) =  (R.Vf * prod(Sn)  - R.Vr * prod(Pn) ) / <span class="keyword">...</span>
+0190                      (  prod(1+Sn) + prod(1+Pn) -1);
+0191             
+0192             <span class="keyword">case</span> {<span class="string">'ready_made'</span>},
+0193               nS  = abs(network.N(find(network.N(:,i)&lt;0),i));
+0194               nP  = abs(network.N(find(network.N(:,i)&gt;0),i));
+0195               Sn = S./R.KMf;
+0196               Pn = P./R.KMr;
+0197             
+0198               <span class="keyword">if</span> sum(nS)+sum(nP)==length(nS)+length(nP), <span class="comment">% if all stoich. coefficients ==1</span>
+0199                 
+0200                 v(it) =  (R.Vf * prod(Sn.^nS)  - R.Vr * prod(Pn.^nP) ) / <span class="keyword">...</span>
+0201                          (  prod(1+Sn) + prod(1+Pn) -1);
+0202                 
+0203               <span class="keyword">else</span>
+0204                 l1 = Sn+1; <span class="keyword">for</span> zz = 2:max(nS), l1(nS&gt;=zz) = l1(nS&gt;=zz) + Sn(nS&gt;=zz).^zz; <span class="keyword">end</span>
+0205                 l2 = Pn+1; <span class="keyword">for</span> zz = 2:max(nP), l2(nP&gt;=zz) = l2(nP&gt;=zz) + Pn(nP&gt;=zz).^zz; <span class="keyword">end</span>
+0206                 
+0207                 v(it) =  (R.Vf * prod(Sn.^nS)  - R.Vr * prod(Pn.^nP) ) / <span class="keyword">...</span>
+0208                          (  prod(l1) + prod(l2) -1);
+0209               <span class="keyword">end</span>
+0210               
+0211               activators_ind = find(network.regulation_matrix(i,:)&gt;0);
+0212         <span class="keyword">if</span> length( activators_ind),
+0213           act = s(activators_ind,1);
+0214           v(it) = v(it) * prod( act ./ R.KA ./ (1+act./R.KA));
+0215         <span class="keyword">end</span>
+0216         
+0217         inhibitors_ind = find(network.regulation_matrix(i,:)&lt;0);
+0218         <span class="keyword">if</span> length( inhibitors_ind),
+0219           rep = s(inhibitors_ind,1);
+0220           v(it) = v(it) * prod( 1./(1 + rep./R.KI) );
+0221         <span class="keyword">end</span>
+0222         
+0223     <span class="keyword">end</span>
+0224     
+0225         <span class="keyword">switch</span> kinetics.reactions{i}.type,
+0226           <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>,<span class="string">'standard_irrev_bi'</span>,<span class="string">'standard_rev_uni_uni'</span>,<span class="keyword">...</span>
+0227                 <span class="string">'standard_rev_uni_bi'</span>,<span class="string">'standard_rev_bi_uni'</span>,<span class="string">'standard_rev_bi_bi'</span>},
+0228             <span class="keyword">if</span> isfield(R,<span class="string">'Krep'</span>),
+0229               inhibitors_ind = find(network.regulation_matrix(it,:));
+0230               rep = s(inhibitors_ind,1);
+0231               v(it) = v(it) * prod(1./(1+rep./R.Krep));
+0232             <span class="keyword">end</span>
+0233             <span class="keyword">if</span> isfield(R,<span class="string">'Kact'</span>),       
+0234               activators_ind = find(network.regulation_matrix(it,:));
+0235               act = s(activators_ind,1);
+0236               v(it) = v(it) * prod(act./(act+R.Kact));
+0237             <span class="keyword">end</span>
+0238         <span class="keyword">end</span>
+0239         <span class="keyword">end</span>    
+0240         
+0241 <span class="comment">% SPLITTED kinetics</span>
+0242         
+0243       <span class="keyword">else</span>,
+0244         v = nan*ones(2*length(indices),1);
+0245         
+0246         <span class="keyword">for</span> it=1:length(indices),
+0247     i = indices(it);    
+0248     R   = kinetics.reactions{i};
+0249     S   = s(find(network.N(:,i)&lt;0));
+0250     P   = s(find(network.N(:,i)&gt;0));
+0251     
+0252     <span class="keyword">switch</span> R.type,
+0253       
+0254       <span class="keyword">case</span> <span class="string">'mass-action'</span>      
+0255         v(2*it-1:2*it) = [prod(s.^Nf)* R.k;  prod(s.^Nb) * R.km * network.reversible(i)];        
+0256       <span class="keyword">case</span> <span class="string">'michaelis_menten_rev'</span>,
+0257         v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * S ; R.Vm_P/R.Km_P * P]/(1+S/R.Km_S+P/R.Km_P);        
+0258       <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_rev'</span>,
+0259         v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S);  R.Vm_P/R.Km_P * prod(P)]/(1+S/R.Km_S+P/R.Km_P);
+0260       <span class="keyword">case</span> <span class="string">'multiple_michaelis_menten_irrev'</span>,
+0261         v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S) /(1+S/R.Km_S); 0];        
+0262       <span class="keyword">case</span> <span class="string">'influx'</span>,
+0263         v(2*it-1:2*it) = [R.v_in;0];        
+0264       <span class="keyword">case</span> <span class="string">'efflux'</span>,
+0265         v(2*it-1:2*it)= [prod(S) * R.k_out; 0];
+0266       <span class="keyword">case</span> <span class="string">'rev_uni_uni'</span>,        
+0267         v(2*it-1:2*it) = [ R.Pk * S; R.Pkm * P ] / ( S * R.k(1) + R.km(1) +  R.k(2) + P * R.km(2));        
+0268       <span class="keyword">case</span> <span class="string">'rev_bi_uni'</span>,
+0269         v(2*it-1:2*it) = [ R.Pk * S(1) * S(2) ;  R.Pkm * P ] /<span class="keyword">...</span>
+0270                 ( ( R.km(2) + S(2)*R.k(2))*(S(1)*R.k(1)+ P*R.km(3)) + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) <span class="keyword">...</span>
+0271                   + R.km(1)*(R.km(2) + R.k(3) + P*R.km(3)) );        
+0272       <span class="keyword">case</span> <span class="string">'rev_uni_bi'</span>,
+0273         v(2*it-1:2*it) = [ R.Pk * S ; R.Pkm * P(1) * P(2) ]/<span class="keyword">...</span>
+0274         ( ( R.k(2) + P(1)*R.km(2))*(P(2)*R.km(3) + S*R.k(1)) + R.km(1)*(P(2)*R.km(3) + P(1)*R.km(2)) <span class="keyword">...</span>
+0275                   + R.k(3)*(R.k(2) + R.km(1) + S*R.k(1)) );        
+0276       <span class="keyword">case</span> <span class="string">'rev_bi_bi'</span>,
+0277         v(2*it-1:2*it) = [ R.Pk * S(1) * S(2);  R.Pkm * P(1) * P(2)]/<span class="keyword">...</span>
+0278         ( (R.km(2)+R.k(3))*(R.k(4)*R.km(1) + R.k(1)*R.k(4)*S(1) + R.km(4)*R.km(1)*P(2)) <span class="keyword">...</span>
+0279                   + S(2)*R.k(2) *(R.k(3) *(R.k(4)+R.km(4)*P(2)) + S(1)*R.k(1)*(R.k(3)+R.k(4)))<span class="keyword">...</span>
+0280                   + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))<span class="keyword">...</span>
+0281                   + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );        
+0282       <span class="keyword">case</span> <span class="string">'rev_multiple'</span>,
+0283         v(2*it-1:2*it) = [ R.Pk * prod(S); R.Pkm * prod(P)] / ( prod(S) * R.k(1) + R.km(1) +  R.k(2) + prod(P) * R.km(2));        
+0284       <span class="keyword">case</span> <span class="string">'irrev_uni'</span>,
+0285         v(2*it-1:2*it) =  [R.Pk * S / (S * R.k(1) + R.k(2) );0];        
+0286       <span class="keyword">case</span> <span class="string">'irrev_bi'</span>,
+0287         v(2*it-1:2*it) = [ ( R.Pk * S(1) * S(2) ) /<span class="keyword">...</span>
+0288                    (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) ); 0];
+0289         
+0290       <span class="keyword">case</span> {<span class="string">'standard_irrev_uni'</span>},        
+0291         v(2*it-1:2*it) = [ R.Vf * S(1)/R.kA; 0] / (1 + S(1)/R.kA);      
+0292       <span class="keyword">case</span> {<span class="string">'standard_irrev_bi'</span>},
+0293         v(2*it-1:2*it) = [R.Vf * S(1)/R.kA * S(2)/R.kB; 0] / (1 + S(1)/R.kA + S(2)/R.kB + S(1)/R.kA * S(2)/R.kB);
+0294       <span class="keyword">case</span> {<span class="string">'standard_rev_uni_uni'</span>},
+0295             An = S(1)/R.kA;
 0296             Pn = P(1)/R.kP;
-0297         v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn] / (1 + An + Bn + Pn + An*Bn + An*Pn);
-0298       <span class="keyword">case</span> {<span class="string">'standard_rev_bi_bi'</span>},
+0297         v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn] / (1 + An + Pn );
+0298       <span class="keyword">case</span> {<span class="string">'standard_rev_uni_bi'</span>},
 0299             An = S(1)/R.kA;
-0300             Bn = S(2)/R.kB;
-0301             Pn = P(1)/R.kP;
-0302             Qn = P(2)/R.kQ;
-0303         v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn * Qn] / <span class="keyword">...</span>
-0304         (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
-0305     <span class="keyword">end</span>
-0306     
-0307         <span class="keyword">end</span>
-0308       <span class="keyword">end</span>
-0309   <span class="keyword">end</span>
-0310   
-0311 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0300             Pn = P(1)/R.kP;
+0301             Qn = P(2)/R.kQ;
+0302         v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn * Qn] /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
+0303       <span class="keyword">case</span> {<span class="string">'standard_rev_bi_uni'</span>},
+0304             An = S(1)/R.kA;
+0305             Bn = S(2)/R.kB;
+0306             Pn = P(1)/R.kP;
+0307         v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn] / (1 + An + Bn + Pn + An*Bn + An*Pn);
+0308       <span class="keyword">case</span> {<span class="string">'standard_rev_bi_bi'</span>},
+0309             An = S(1)/R.kA;
+0310             Bn = S(2)/R.kB;
+0311             Pn = P(1)/R.kP;
+0312             Qn = P(2)/R.kQ;
+0313         v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn * Qn] / <span class="keyword">...</span>
+0314         (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
+0315     <span class="keyword">end</span>
+0316     
+0317         <span class="keyword">end</span>
+0318       <span class="keyword">end</span>
+0319   <span class="keyword">end</span>
+0320   
+0321 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

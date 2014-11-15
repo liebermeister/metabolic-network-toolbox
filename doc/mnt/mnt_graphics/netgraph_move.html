@@ -6,16 +6,16 @@
   <meta name="keywords" content="netgraph_move">
   <meta name="description" content="network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_move.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_graphics</a> &gt; netgraph_move.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>netgraph_move
 </h1>
@@ -49,16 +49,15 @@ move nodes of metabolic network graph with the mouse
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>	netgraph_save_positions(network,filename,offsets)</li><li><a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>	netgraph_save_positions(network,filename,offsets)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</li></ul>
+<li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids,gp,reaction_KEGG_IDs)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="#_sub1" class="code">function display_graphics(picture,network,p,opt,x,fixed)</a></li><li><a href="#_sub2" class="code">function  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)</a></li></ul>
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <span class="comment">%network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</span>
 0002 <span class="comment">%</span>
@@ -103,7 +102,7 @@ This function is called by:
 0041   <span class="keyword">end</span>
 0042   fclose(file);
 0043   names= names';
-0044   ll = <a href="../../mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(names,network.metabolites);
+0044   ll = <a href="../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(names,network.metabolites);
 0045   network.graphics_par.x(:,ll) = x;
 0046   network.graphics_par.fixed(ll) = fixed;
 0047 <span class="keyword">end</span>
@@ -114,236 +113,233 @@ This function is called by:
 0052   <span class="keyword">case</span> {<span class="string">'text'</span>,<span class="string">'all'</span>}, opt = struct(<span class="string">'metstyle'</span>,<span class="string">'none'</span>,<span class="string">'actstyle'</span>,<span class="string">'none'</span>); 
 0053 <span class="keyword">end</span>
 0054 
-0055 <span class="keyword">if</span> ~isempty(options), 
-0056   f = fieldnames(options);
-0057   <span class="keyword">for</span> it=1:length(f),
-0058     opt = setfield(opt,f{it},getfield(options,f{it}));
-0059   <span class="keyword">end</span>
-0060 <span class="keyword">end</span>
+0055 opt = <a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(opt,options);
+0056 
+0057 <span class="keyword">if</span> ~isfield(network,<span class="string">'graphics_par'</span>),  network=<a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network); <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% ------------------------------------------------------------</span>
+0060 <span class="comment">% layout parameters</span>
 0061 
-0062 <span class="keyword">if</span> ~isfield(network,<span class="string">'graphics_par'</span>),  network=<a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(network); <span class="keyword">end</span>
-0063 
-0064 <span class="comment">% ------------------------------------------------------------</span>
-0065 <span class="comment">% layout parameters</span>
-0066 
-0067 <span class="keyword">if</span> ~isfield(opt,<span class="string">'frame'</span>),
-0068   p = network.graphics_par;
-0069   <span class="keyword">if</span> sum(sum(p.x ~= 0 )) == 0, opt.frame = [0 1 0 1]; <span class="keyword">end</span> 
-0070   opt.frame = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),<span class="keyword">...</span>
-0071       -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)),<span class="keyword">...</span>
-0072       1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),<span class="keyword">...</span>
-0073       -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:))];
-0074 <span class="comment">% frame of the model</span>
-0075 <span class="keyword">end</span>
-0076 
-0077 a = opt.frame;
-0078 
-0079 nm        = length(network.graphics_par.metnames);
-0080 size_unit = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);  <span class="comment">% typical</span>
-0081                                                          <span class="comment">% distance</span>
-0082                                                          <span class="comment">% between equally spaced dots</span>
-0083 force_unit = 0.1;
-0084 
-0085 gridsize = 0.01  * size_unit;   <span class="comment">% distance between discrete x values</span>
-0086 k1       = 0.005 * force_unit;  <span class="comment">% overall repulsion strength</span>
-0087 k2       = 0.1   * size_unit;   <span class="comment">% overall repulsion scale</span>
-0088 k3       = 0.5   * force_unit;  <span class="comment">% neighbour attraction strength</span>
-0089 k4       = 0.5   * size_unit;   <span class="comment">% neighbour attraction scale</span>
-0090 
-0091 p   = network.graphics_par;
-0092 
-0093 splitted = 0; <span class="keyword">if</span> isfield(p,<span class="string">'display_split'</span>), splitted = p.display_split;   <span class="keyword">end</span>; 
-0094 
-0095 <span class="keyword">if</span> splitted,
-0096   <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'fixed_split'</span>), 
-0097     p.fixed_split = zeros(size(network.graphics_par.x_split,2),1); 
-0098   <span class="keyword">end</span>
-0099   fixed = p.fixed_split;
-0100   N  = p.N_split;
-0101   x   = p.x_split;
-0102   m   = p.m_split;
-0103   n_met = length(p.split_back_mapping);
-0104 <span class="keyword">else</span>,
-0105   <span class="keyword">if</span> ~isfield(p,<span class="string">'fixed'</span>), p.fixed = zeros(length(network.metabolites)+length(network.actions),1); <span class="keyword">end</span>
-0106   fixed = p.fixed;
-0107   N  = p.N;
-0108   x   = p.x;
-0109   m   = p.m;
-0110   n_met = length(p.metnames);
-0111 <span class="keyword">end</span>
-0112 
-0113 
-0114 <span class="keyword">switch</span> flag_draw_details,
-0115   <span class="keyword">case</span> {<span class="string">'regulation'</span>,<span class="string">'all'</span>},
-0116     <span class="keyword">if</span> ~isfield(p,<span class="string">'regulation_matrix'</span>); flag_draw_details = <span class="string">'none'</span>; <span class="keyword">end</span>
-0117     p.show_regulation = 1; network.graphics_par.show_regulation = 1; 
-0118 <span class="keyword">end</span>
-0119 
-0120 p.arrowstyle=<span class="string">'none'</span>;
+0062 <span class="keyword">if</span> ~isfield(opt,<span class="string">'frame'</span>),
+0063   p = network.graphics_par;
+0064   <span class="keyword">if</span> sum(sum(p.x ~= 0 )) == 0, opt.frame = [0 1 0 1]; <span class="keyword">end</span> 
+0065   opt.frame = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),<span class="keyword">...</span>
+0066       -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)),<span class="keyword">...</span>
+0067       1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),<span class="keyword">...</span>
+0068       -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:))];
+0069 <span class="comment">% frame of the model</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 a = opt.frame;
+0073 
+0074 nm        = length(network.graphics_par.metnames);
+0075 size_unit = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);  <span class="comment">% typical</span>
+0076                                                          <span class="comment">% distance</span>
+0077                                                          <span class="comment">% between equally spaced dots</span>
+0078 force_unit = 0.1;
+0079 
+0080 gridsize = 0.01  * size_unit;   <span class="comment">% distance between discrete x values</span>
+0081 k1       = 0.005 * force_unit;  <span class="comment">% overall repulsion strength</span>
+0082 k2       = 0.1   * size_unit;   <span class="comment">% overall repulsion scale</span>
+0083 k3       = 0.5   * force_unit;  <span class="comment">% neighbour attraction strength</span>
+0084 k4       = 0.5   * size_unit;   <span class="comment">% neighbour attraction scale</span>
+0085 
+0086 p   = network.graphics_par;
+0087 
+0088 splitted = 0; <span class="keyword">if</span> isfield(p,<span class="string">'display_split'</span>), splitted = p.display_split;   <span class="keyword">end</span>; 
+0089 
+0090 <span class="keyword">if</span> splitted,
+0091   <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'fixed_split'</span>), 
+0092     p.fixed_split = zeros(size(network.graphics_par.x_split,2),1); 
+0093   <span class="keyword">end</span>
+0094   fixed = p.fixed_split;
+0095   N   = p.N_split;
+0096   x   = p.x_split;
+0097   m   = p.m_split;
+0098   n_met = length(p.split_back_mapping);
+0099 <span class="keyword">else</span>,
+0100   <span class="keyword">if</span> ~isfield(p,<span class="string">'fixed'</span>), p.fixed = zeros(length(network.metabolites)+length(network.actions),1); <span class="keyword">end</span>
+0101   fixed = p.fixed;
+0102   N  = p.N;
+0103   x   = p.x;
+0104   m   = p.m;
+0105   n_met = length(p.metnames);
+0106 <span class="keyword">end</span>
+0107 
+0108 
+0109 <span class="keyword">switch</span> flag_draw_details,
+0110   <span class="keyword">case</span> {<span class="string">'regulation'</span>,<span class="string">'all'</span>},
+0111     <span class="keyword">if</span> ~isfield(p,<span class="string">'regulation_matrix'</span>); flag_draw_details = <span class="string">'none'</span>; <span class="keyword">end</span>
+0112     p.show_regulation = 1; network.graphics_par.show_regulation = 1; 
+0113 <span class="keyword">end</span>
+0114 
+0115 p.arrowstyle=<span class="string">'none'</span>;
+0116 
+0117 ind_hub_metabolites = find(sum(double(network.N~=0),2)&gt;5);
+0118 
+0119 <span class="comment">% -----------------------------------------------------------------</span>
+0120 <span class="comment">% first relaxation and display</span>
 0121 
-0122 ind_hub_metabolites = find(sum(double(network.N~=0),2)&gt;5);
-0123 
-0124 <span class="comment">% -----------------------------------------------------------------</span>
-0125 <span class="comment">% first relaxation and display</span>
-0126 
-0127 names=[p.metnames; p.actnames];
-0128 loose = find(1-fixed);
-0129 
-0130 <span class="keyword">if</span> isfield(opt,<span class="string">'initial_relax'</span>),
-0131   <span class="keyword">for</span> it = 1:opt.initial_relax, x = <a href="#_sub2" class="code" title="subfunction  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)">netgraph_relaxation_step</a>(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); <span class="keyword">end</span>
-0132 <span class="keyword">end</span>
+0122 names=[p.metnames; p.actnames];
+0123 loose = find(1-fixed);
+0124 
+0125 <span class="keyword">if</span> isfield(opt,<span class="string">'initial_relax'</span>),
+0126   <span class="keyword">for</span> it = 1:opt.initial_relax, x = <a href="#_sub2" class="code" title="subfunction  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)">netgraph_relaxation_step</a>(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); <span class="keyword">end</span>
+0127 <span class="keyword">end</span>
+0128 
+0129 <a href="#_sub1" class="code" title="subfunction display_graphics(picture,network,p,opt,x,fixed)">display_graphics</a>(picture,network,p,opt,x,fixed);
+0130 
+0131 <span class="comment">% -----------------------------------------------------------------</span>
+0132 <span class="comment">% manual relaxation</span>
 0133 
-0134 <a href="#_sub1" class="code" title="subfunction display_graphics(picture,network,p,opt,x,fixed)">display_graphics</a>(picture,network,p,opt,x,fixed);
+0134 <span class="keyword">if</span> opt.manual ~=0, cont = 1; <span class="keyword">else</span>, cont = 0; <span class="keyword">end</span>
 0135 
-0136 <span class="comment">% -----------------------------------------------------------------</span>
-0137 <span class="comment">% manual relaxation</span>
+0136 [Ni,Nj]=ind2sub(size(N),find((N~=0)));
+0137 Nj = Nj+n_met;
 0138 
-0139 <span class="keyword">if</span> opt.manual ~=0, cont = 1; <span class="keyword">else</span>, cont = 0; <span class="keyword">end</span>
-0140 
-0141 [Ni,Nj]=ind2sub(size(N),find((N~=0)));
-0142 Nj = Nj+n_met;
-0143 
-0144 <span class="comment">%edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
-0145 <span class="comment">%hold on;      %     plot(edgecenters(1,:),edgecenters(2,:),'g.');</span>
-0146 <span class="comment">%fixed_ind = find(fixed);</span>
-0147 <span class="comment">%plot(x(1,fixed_ind),x(2,fixed_ind),'k.');</span>
-0148 <span class="comment">%hold off;</span>
-0149 <span class="comment">%loose = find(1-fixed);</span>
-0150 
-0151 <span class="comment">% m is the adjacency matrix</span>
+0139 <span class="comment">%edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
+0140 <span class="comment">%hold on;      %     plot(edgecenters(1,:),edgecenters(2,:),'g.');</span>
+0141 <span class="comment">%fixed_ind = find(fixed);</span>
+0142 <span class="comment">%plot(x(1,fixed_ind),x(2,fixed_ind),'k.');</span>
+0143 <span class="comment">%hold off;</span>
+0144 <span class="comment">%loose = find(1-fixed);</span>
+0145 
+0146 <span class="comment">% m is the adjacency matrix</span>
+0147 
+0148 <span class="keyword">while</span> cont==1,
+0149 
+0150   button = 0;  
+0151   [x_old,y_old,button] = ginput(1);
 0152 
-0153 <span class="keyword">while</span> cont==1,
-0154   button = 0;
-0155   
-0156   <span class="keyword">while</span> isempty(button),
-0157     [x_old,y_old,button] = ginput(1);
-0158   <span class="keyword">end</span>
-0159 
-0160   <span class="keyword">switch</span> button
-0161     
-0162     <span class="keyword">case</span> 1,
-0163       dist    = sum( (repmat([x_old;y_old],1,size(x,2))-x).^2);
-0164       [dum,i] = min(dist);
-0165       index   = i(1);
-0166       title(<span class="string">'Left &gt; place node. Center &gt; place and fix node'</span>);
-0167       [x_new,y_new,button] = ginput(1);
-0168             x(:,index) = [x_new;y_new];
-0169 <span class="comment">%      factors = exp(-db(index,:)/p.lambda);</span>
-0170 <span class="comment">%      x(:,loose) = x(:,loose) + [x_new-x_old; y_new-y_old] * factors(:,loose);</span>
-0171       <span class="keyword">if</span>  button-1 ~= fixed(index),
-0172     fixed(index) = button-1;
-0173     loose = find(1-fixed);
-0174       <span class="keyword">end</span>
-0175       
-0176     <span class="keyword">case</span> 2,  <span class="keyword">for</span> it = 1:20, x = <a href="#_sub2" class="code" title="subfunction  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)">netgraph_relaxation_step</a>(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); <span class="keyword">end</span>
-0177 
-0178     <span class="keyword">case</span> 3,   cont = 0; 
-0179   
-0180   <span class="keyword">end</span>
-0181 
-0182 <span class="comment">%  edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
-0183   
-0184   <span class="keyword">if</span> splitted,     p.x_split = x;
-0185   <span class="keyword">else</span>,            p.x = x;
-0186   <span class="keyword">end</span>
-0187   
-0188   network.graphics_par=p;
-0189 
-0190   <a href="#_sub1" class="code" title="subfunction display_graphics(picture,network,p,opt,x,fixed)">display_graphics</a>(picture,network,p,opt,x,fixed);  
-0191   
-0192 <span class="keyword">end</span>
+0153   <span class="keyword">while</span> isempty(button),
+0154     [x_old,y_old,button] = ginput(1);
+0155   <span class="keyword">end</span>
+0156 
+0157   <span class="keyword">switch</span> button
+0158     
+0159     <span class="keyword">case</span> 1,
+0160       dist    = sum( (repmat([x_old;y_old],1,size(x,2))-x).^2);
+0161       [dum,i] = min(dist);
+0162       index   = i(1);
+0163       title(<span class="string">'Left &gt; place node. Center &gt; place and fix node'</span>);
+0164       [x_new,y_new,button] = ginput(1);
+0165             x(:,index) = [x_new;y_new];
+0166 <span class="comment">%      factors = exp(-db(index,:)/p.lambda);</span>
+0167 <span class="comment">%      x(:,loose) = x(:,loose) + [x_new-x_old; y_new-y_old] * factors(:,loose);</span>
+0168       <span class="keyword">if</span>  button-1 ~= fixed(index),
+0169     fixed(index) = button-1;
+0170     loose = find(1-fixed);
+0171       <span class="keyword">end</span>
+0172       
+0173     <span class="keyword">case</span> 2,  <span class="keyword">for</span> it = 1:20, x = <a href="#_sub2" class="code" title="subfunction  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)">netgraph_relaxation_step</a>(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); <span class="keyword">end</span>
+0174 
+0175     <span class="keyword">case</span> 3,   cont = 0; 
+0176   
+0177   <span class="keyword">end</span>
+0178 
+0179 <span class="comment">%  edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
+0180   
+0181   <span class="keyword">if</span> splitted,     p.x_split = x;
+0182   <span class="keyword">else</span>,            p.x = x;
+0183   <span class="keyword">end</span>
+0184   
+0185   network.graphics_par=p;
+0186 
+0187   <a href="#_sub1" class="code" title="subfunction display_graphics(picture,network,p,opt,x,fixed)">display_graphics</a>(picture,network,p,opt,x,fixed);  
+0188   
+0189 <span class="keyword">end</span>
+0190 
+0191 <span class="keyword">if</span> exist(<span class="string">'filename_out'</span>,<span class="string">'var'</span>), <a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>(network,filename_out); <span class="keyword">end</span>
+0192 <span class="keyword">if</span> opt.manual, title(<span class="string">'New positions confirmed'</span>); <span class="keyword">end</span>
 0193 
-0194 <span class="keyword">if</span> exist(<span class="string">'filename_out'</span>,<span class="string">'var'</span>), <a href="netgraph_save_positions.html" class="code" title="function netgraph_save_positions(network,filename,offsets)">netgraph_save_positions</a>(network,filename_out); <span class="keyword">end</span>
-0195 <span class="keyword">if</span> opt.manual, title(<span class="string">'New positions confirmed'</span>); <span class="keyword">end</span>
+0194 p.x      = x; 
+0195 p.fixed = fixed; 
 0196 
-0197 p.x      = x; 
-0198 p.fixed = fixed; 
-0199 
-0200 <span class="keyword">if</span> splitted,
-0201   p.x_split     = x; 
-0202   p.fixed_split = fixed; 
-0203 <span class="keyword">end</span>
-0204 
-0205 network.graphics_par = p;
-0206 
-0207 <span class="comment">% --------------------------------------------------------------------------------</span>
-0208 
-0209 <a name="_sub1" href="#_subfunctions" class="code">function display_graphics(picture,network,p,opt,x,fixed)</a>
-0210 
-0211 <span class="keyword">if</span> opt.manual,
+0197 <span class="keyword">if</span> splitted,
+0198   p.x_split     = x; 
+0199   p.fixed_split = fixed; 
+0200 <span class="keyword">end</span>
+0201 
+0202 network.graphics_par = p;
+0203 
+0204 <span class="comment">% --------------------------------------------------------------------------------</span>
+0205 
+0206 <a name="_sub1" href="#_subfunctions" class="code">function display_graphics(picture,network,p,opt,x,fixed)</a>
+0207 
+0208 <span class="keyword">if</span> opt.manual,
+0209 
+0210 network.graphics_par = p;
+0211 network.graphics_par.x = x;
 0212 
-0213 network.graphics_par = p;
-0214 network.graphics_par.x = x;
-0215 
-0216 <span class="keyword">if</span> exist(<span class="string">'picture'</span>,<span class="string">'var'</span>), 
-0217   image(picture); 
-0218   hold on;
-0219 <span class="keyword">end</span>;
-0220 
-0221 <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,opt); hold on;
-0222 title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
-0223 drawnow; 
-0224 
-0225 fixed_ind = find(fixed);
-0226 plot(x(1,fixed_ind),x(2,fixed_ind),<span class="string">'k.'</span>); 
-0227 hold off;
-0228 <span class="keyword">if</span> isfield(opt,<span class="string">'Axis'</span>), 
-0229   axis(opt.Axis); 
-0230 <span class="keyword">else</span>,
-0231   axis(opt.frame);
-0232 <span class="keyword">end</span>
-0233 axis tight
-0234 <span class="keyword">end</span>
-0235 
-0236 <span class="comment">% --------------------------------------------------------------------------------</span>
-0237 
-0238 <a name="_sub2" href="#_subfunctions" class="code">function  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)</a>
-0239 
-0240 x(:,loose) = x(:,loose) + 0.001*randn(2,length(loose));
+0213 <span class="keyword">if</span> exist(<span class="string">'picture'</span>,<span class="string">'var'</span>), 
+0214   image(picture); 
+0215   hold on;
+0216 <span class="keyword">end</span>;
+0217 
+0218 <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,opt); hold on;
+0219 title(<span class="string">'Left &gt; move node. Center &gt; relax network. Right &gt; finish'</span>);
+0220 drawnow; 
+0221 
+0222 fixed_ind = find(fixed);
+0223 plot(x(1,fixed_ind),x(2,fixed_ind),<span class="string">'k.'</span>); 
+0224 hold off;
+0225 <span class="keyword">if</span> isfield(opt,<span class="string">'Axis'</span>), 
+0226   axis(opt.Axis); 
+0227 <span class="keyword">else</span>,
+0228   axis(opt.frame);
+0229 <span class="keyword">end</span>
+0230 axis tight
+0231 <span class="keyword">end</span>
+0232 
+0233 <span class="comment">% --------------------------------------------------------------------------------</span>
+0234 
+0235 <a name="_sub2" href="#_subfunctions" class="code">function  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites)</a>
+0236 
+0237 x(:,loose) = x(:,loose) + 0.001*randn(2,length(loose));
+0238 
+0239 <span class="comment">% spring forces:</span>
+0240 f2 = (( m(loose,:)*x')- repmat(sum(m(loose,:),2),1,2).*x(:,loose)')';
 0241 
-0242 <span class="comment">% spring forces:</span>
-0243 f2 = (( m(loose,:)*x')- repmat(sum(m(loose,:),2),1,2).*x(:,loose)')';
-0244 
-0245 <span class="comment">% nonlinear springs</span>
+0242 <span class="comment">% nonlinear springs</span>
+0243 
+0244 f2_norm = sqrt(sum(f2.^2))/k4;
+0245 f2      = f2 .*repmat( 0.5*f2_norm+1./(0.2+f2_norm),2,1);
 0246 
-0247 f2_norm = sqrt(sum(f2.^2))/k4;
-0248 f2      = f2 .*repmat( 0.5*f2_norm+1./(0.2+f2_norm),2,1);
-0249 
-0250 <span class="comment">% repelling forces</span>
-0251 thresh = 10*k2;
-0252 d1 = abs( repmat(x(1,:),length(loose),1)-repmat(x(1,loose)',1,size(x,2))) &lt; thresh;
-0253 d2 = abs( repmat(x(2,:),length(loose),1)-repmat(x(2,loose)',1,size(x,2))) &lt; thresh;
-0254 <span class="comment">%d_non_neighb =</span>
-0255 d3 = d1.*d2.*(1-m(loose,:));
-0256 d3(:,1:size(d3,1)) = d3(:,1:size(d3,1)) - speye( size(d3,1));
-0257 has_neighbours = find(sum(d3,2));
-0258 
-0259 f0 = zeros(2,size(d3,1));      
-0260 <span class="comment">%      for it=1:1,</span>
-0261 <span class="comment">%    edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
-0262 
-0263 <span class="keyword">for</span> ittt=1:length(has_neighbours);
-0264   itt = has_neighbours(ittt);
-0265   neighbours = find(d3(itt,:));
-0266   distances = repmat(x(:,loose(itt)),1,length(neighbours)) - x(:,neighbours);
-0267   f1 = sum(distances.^2)+10^-10;
-0268   f1 = exp(-f1/(2*k2^2))./sqrt(f1);
-0269   f0(:,itt) = sum(distances.*repmat(f1,2,1),2);      
-0270 <span class="keyword">end</span>
-0271 <span class="comment">%      end</span>
-0272 
-0273 <span class="comment">%f2(:,ind_hub_metabolites) = 0;</span>
-0274 
-0275 <span class="keyword">if</span> length(loose),
-0276   force_loose = 0*k3 * f2 + k1 * f0;
-0277   x(:,loose) = x(:,loose) + force_loose;
-0278   x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
-0279 <span class="comment">%  x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);</span>
-0280 <span class="comment">%  x(:,loose) = gridsize * round(x(:,loose)/gridsize);</span>
-0281 <span class="keyword">end</span>
-0282 
-0283  x(1,:) = x(1,:)-min(x(1,:)); x(1,:) = x(1,:)/max(x(1,:));
-0284  x(2,:) = x(2,:)-min(x(2,:)); x(2,:) = x(2,:)/max(x(2,:));</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0247 <span class="comment">% repelling forces</span>
+0248 thresh = 10*k2;
+0249 d1 = abs( repmat(x(1,:),length(loose),1)-repmat(x(1,loose)',1,size(x,2))) &lt; thresh;
+0250 d2 = abs( repmat(x(2,:),length(loose),1)-repmat(x(2,loose)',1,size(x,2))) &lt; thresh;
+0251 <span class="comment">%d_non_neighb =</span>
+0252 d3 = d1.*d2.*(1-m(loose,:));
+0253 d3(:,1:size(d3,1)) = d3(:,1:size(d3,1)) - speye( size(d3,1));
+0254 has_neighbours = find(sum(d3,2));
+0255 
+0256 f0 = zeros(2,size(d3,1));      
+0257 <span class="comment">%      for it=1:1,</span>
+0258 <span class="comment">%    edgecenters = 0.5*(x(:,Ni)+x(:,Nj));</span>
+0259 
+0260 <span class="keyword">for</span> ittt=1:length(has_neighbours);
+0261   itt = has_neighbours(ittt);
+0262   neighbours = find(d3(itt,:));
+0263   distances = repmat(x(:,loose(itt)),1,length(neighbours)) - x(:,neighbours);
+0264   f1 = sum(distances.^2)+10^-10;
+0265   f1 = exp(-f1/(2*k2^2))./sqrt(f1);
+0266   f0(:,itt) = sum(distances.*repmat(f1,2,1),2);      
+0267 <span class="keyword">end</span>
+0268 <span class="comment">%      end</span>
+0269 
+0270 <span class="comment">%f2(:,ind_hub_metabolites) = 0;</span>
+0271 
+0272 <span class="keyword">if</span> length(loose),
+0273   force_loose = 0*k3 * f2 + k1 * f0;
+0274   x(:,loose) = x(:,loose) + force_loose;
+0275   x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
+0276 <span class="comment">%  x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);</span>
+0277 <span class="comment">%  x(:,loose) = gridsize * round(x(:,loose)/gridsize);</span>
+0278 <span class="keyword">end</span>
+0279 
+0280  x(1,:) = x(1,:)-min(x(1,:)); x(1,:) = x(1,:)/max(x(1,:));
+0281  x(2,:) = x(2,:)-min(x(2,:)); x(2,:) = x(2,:)/max(x(2,:));</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

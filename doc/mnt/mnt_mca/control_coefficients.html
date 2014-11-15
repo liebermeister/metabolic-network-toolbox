@@ -4,30 +4,30 @@
 <head>
   <title>Description of control_coefficients</title>
   <meta name="keywords" content="control_coefficients">
-  <meta name="description" content="[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)">
+  <meta name="description" content="[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; control_coefficients.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_mca</a> &gt; control_coefficients.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>control_coefficients
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</strong></div>
+<div class="box"><strong>[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal) </strong></div>
+<div class="box"><strong>function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment">[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)
+<div class="fragment"><pre class="comment">[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)
 
 Metabolic control coefficients (unnormalised, first order)
 
@@ -52,16 +52,15 @@ Outputs
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li><li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/compute_modular_response_second.html" class="code" title="function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)">compute_modular_response_second</a>	[Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)</li><li><a href="basic_control_analysis.html" class="code" title="function R = basic_control_analysis(network,s,options)">basic_control_analysis</a>	R = basic_control_analysis(network,s,options)</li><li><a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li></ul>
+<li><a href="../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/compute_modular_response_second.html" class="code" title="function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)">compute_modular_response_second</a>	[Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)</li><li><a href="basic_control_analysis.html" class="code" title="function R = basic_control_analysis(network,s,options)">basic_control_analysis</a>	R = basic_control_analysis(network,s,options)</li><li><a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>	[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</li></ul>
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</span>
+<div class="fragment"><pre>0001 <span class="comment">%[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)</span>
 0002 <span class="comment">%</span>
 0003 <span class="comment">%Metabolic control coefficients (unnormalised, first order)</span>
 0004 <span class="comment">%</span>
@@ -84,109 +83,118 @@ This function is called by:
 0021 
 0022 <span class="comment">% CJ2, CS2  arrays of unscaled second order control coefficients</span>
 0023 
-0024 <a name="_sub0" href="#_subfunctions" class="code">function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)</a>
+0024 <a name="_sub0" href="#_subfunctions" class="code">function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)</a>
 0025 
-0026 
-0027 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'used'</span>,<span class="string">'[]'</span>,<span class="string">'NR_int'</span>,<span class="string">'[]'</span>,<span class="string">'L_int'</span>,<span class="string">'[]'</span>,<span class="string">'dilution_rate'</span>,<span class="string">'[]'</span>));
-0028 
-0029 <span class="keyword">if</span> length(dilution_rate),
-0030  <span class="comment">%% build explicit model with dilution reactions (because dilution</span>
-0031  <span class="comment">%% changes the conservation relations!</span>
-0032  [nm,nr]  = size(N);
-0033  ind_int  = find(exteral~=0);
-0034  my_N     = N;
-0035  my_N(ind_int, nr+1:length(ind_int)) = -eye(length(ind_int));
-0036  my_Ec = Ec;
-0037  my_Ec(nr+1:length(ind_int),ind_int) = dilution_rate * eye(length(ind_int)); 
-0038  [CJ, CS, L_int, NR_int, M, indp_among_internal] = <a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>(my_N, my_Ec, external);
-0039  <span class="keyword">return</span>
-0040 <span class="keyword">end</span>
-0041 
-0042 ind_ext = find(external);
-0043 ind_int = setdiff(1:size(N,1)',ind_ext);
-0044 N_int   = N(ind_int,:);
-0045 Ec_int  = Ec(:,ind_int);
-0046 
-0047 [n_metab_int,n_react]  = size(N_int);
+0026 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'used'</span>,<span class="string">'[]'</span>,<span class="string">'NR_int'</span>,<span class="string">'[]'</span>,<span class="string">'L_int'</span>,<span class="string">'[]'</span>,<span class="string">'dilution_rate'</span>,<span class="string">'[]'</span>));
+0027 
+0028 <span class="keyword">if</span> sum(external==0)==0,
+0029   [nm,nr]  = size(N);
+0030   CJ = eye(nr);
+0031   CS = zeros(nm,nr);
+0032   L_int = []; NR_int = zeros(0,nr); M = []; M_adj = []; indp_among_internal = [];
+0033   <span class="keyword">return</span>
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="keyword">if</span> length(dilution_rate),
+0037  <span class="comment">%% build explicit model with dilution reactions (because dilution</span>
+0038  <span class="comment">%% changes the conservation relations!</span>
+0039  [nm,nr]  = size(N);
+0040  ind_int  = find(exteral~=0);
+0041  my_N     = N;
+0042  my_N(ind_int, nr+1:length(ind_int)) = -eye(length(ind_int));
+0043  my_Ec = Ec;
+0044  my_Ec(nr+1:length(ind_int),ind_int) = dilution_rate * eye(length(ind_int)); 
+0045  [CJ, CS, L_int, NR_int, M, indp_among_internal] = <a href="control_coefficients.html" class="code" title="function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)">control_coefficients</a>(my_N, my_Ec, external);
+0046  <span class="keyword">return</span>
+0047 <span class="keyword">end</span>
 0048 
-0049 <span class="keyword">if</span> isempty(used), used = ones(n_react,1); <span class="keyword">end</span>
-0050 
-0051 <span class="keyword">if</span> isempty(NR_int), 
-0052   [L_int, NR_int, indp_among_internal] = <a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>(N_int); 
-0053 <span class="keyword">end</span>;
-0054 
-0055 Ec_int(find(1-used)) = 0;
-0056 NR_int(:,find(1-used)) = 0;
-0057 N_int(:,find(1-used)) = 0;
-0058 
-0059 <span class="comment">% if there are reactions without internal metabolites, omit them in the calculation</span>
-0060 ind_int_react = find(sum(abs(N_int)));
-0061 N_int         = N_int(:,ind_int_react);
-0062 
-0063 <span class="keyword">if</span> length(NR_int),
-0064   NR_int        = NR_int(:,ind_int_react);
-0065 <span class="keyword">end</span>
-0066 Ec_int        = Ec_int(ind_int_react,:);
-0067 
-0068 M = full(NR_int * Ec_int * L_int);
+0049 ind_ext = find(external);
+0050 ind_int = setdiff(1:size(N,1)',ind_ext);
+0051 N_int   = N(ind_int,:);
+0052 Ec_int  = Ec(:,ind_int);
+0053 
+0054 [n_metab_int,n_react]  = size(N_int);
+0055 
+0056 <span class="keyword">if</span> isempty(used), used = ones(n_react,1); <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> isempty(NR_int), 
+0059   [L_int, NR_int, indp_among_internal] = <a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>(N_int); 
+0060 <span class="keyword">end</span>;
+0061 
+0062 Ec_int(find(1-used)) = 0;
+0063 NR_int(:,find(1-used)) = 0;
+0064 N_int(:,find(1-used)) = 0;
+0065 
+0066 <span class="comment">% if there are reactions without internal metabolites, omit them in the calculation</span>
+0067 ind_int_react = find(sum(abs(N_int)));
+0068 N_int         = N_int(:,ind_int_react);
 0069 
-0070 <span class="comment">%% if maximal real part of eigenvalues &lt; numerical error, correct M -&gt;</span>
-0071 eigmax = max(real(eig(M)));
-0072 <span class="keyword">if</span> [eigmax &gt; 0] * [eigmax &lt; 10^-10], 
-0073   display(sprintf(<span class="string">' * Maximal real part of eigenvalues %f &lt; numerical error, correcting M'</span>,eigmax));
-0074   M = M - 5 * eigmax * eye(size(M)); 
-0075 <span class="keyword">end</span>
+0070 <span class="keyword">if</span> length(NR_int),
+0071   NR_int        = NR_int(:,ind_int_react);
+0072 <span class="keyword">end</span>
+0073 Ec_int        = Ec_int(ind_int_react,:);
+0074 
+0075 M = full(NR_int * Ec_int * L_int);
 0076 
-0077 <span class="comment">%% if this still doesn't help:</span>
+0077 <span class="comment">%% if maximal real part of eigenvalues &lt; numerical error, correct M -&gt;</span>
 0078 eigmax = max(real(eig(M)));
-0079 <span class="keyword">if</span> eigmax &gt; 0,
-0080   display(sprintf(<span class="string">' * The steady state is unstable; maximal eigenvalue %f'</span>,eigmax)); 
-0081   <span class="comment">%% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');</span>
-0082   display(sprintf(<span class="string">'   Fixing the steady state by decreasing all eigenvalues by %f'</span>,eigmax)); 
-0083   M = M - [ eigmax + 10^-10] * eye(size(M)); 
-0084 <span class="keyword">end</span>
-0085 
-0086 <span class="keyword">if</span> rank(M) == size(M,1), 
-0087   CS_int  = - L_int * [ full(M) \ NR_int ];  
-0088 <span class="keyword">else</span>
-0089   display(<span class="string">'  * Jacobian is rank-deficient; using pseudoinverse instead of inverse (in control_coefficients.m)'</span>);
-0090   <span class="comment">%% sprintf('size of NR_int * Ec_int:')</span>
-0091   <span class="comment">%% size(NR_int * Ec_int)</span>
-0092   <span class="comment">%% sprintf('rank of NR_int * Ec_int:')</span>
-0093   <span class="comment">%% rank(NR_int * Ec_int)</span>
-0094   <span class="comment">%% sprintf('rank of Ec_int * L_int:')</span>
-0095   <span class="comment">%% rank(Ec_int * L_int)</span>
-0096   <span class="comment">%% sprintf('Rank of NR_int: %d',   rank(NR_int))</span>
-0097   <span class="comment">%% sprintf('Rank of Ec_int: %d',   rank(Ec_int))</span>
-0098   <span class="comment">%% sprintf('Rank of L_int : %d',   rank(full(L_int)))</span>
-0099   <span class="comment">%% sprintf('Rank of Jacobian: %d', rank(M))</span>
-0100   <span class="comment">%% sprintf('Dim  of Jacobian: %d', size(M,1))</span>
-0101   CS_int = - L_int * [ pinv(M) * NR_int ];
-0102 <span class="keyword">end</span>
-0103 
-0104 CS = zeros(n_metab_int + length(ind_ext), n_react); 
-0105 CS(ind_int,ind_int_react) = CS_int; 
-0106 CS  = <a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(CS);
-0107 
-0108 CJ = eye(n_react);
-0109 CJ(ind_int_react, ind_int_react) = CJ( ind_int_react, ind_int_react) + Ec_int * CS_int;
-0110 CJ = <a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(CJ);
-0111 
-0112 CS(:,find(1-used)) = 0;
-0113 CJ(:,find(1-used)) = 0;
-0114 CJ(find(1-used),:) = 0;
-0115 
-0116 <span class="comment">%if nargout&gt;5,</span>
-0117 <span class="comment">% THAT MAY BE INCORRECT .. make sure that Kronecker deltas are IN THE RIGHT PLACE!!</span>
-0118 <span class="comment">% see Hoefer + Heinrich paper</span>
-0119 <span class="comment">%  rho_2 = diag(1./J) * Ec</span>
-0120 <span class="comment">%  Gamma = tensor_product(tensor_product(Ec_2,CS),CS,2,1) ...</span>
-0121 <span class="comment">%       + tensor_product(rho_2,CS,2,1) ...</span>
-0122 <span class="comment">%       + permute(tensor_product(rho_2,CS,2,1),[1,3,2]);</span>
-0123 <span class="comment">%</span>
-0124 <span class="comment">%  CS2 = tensor_product(CS,Gamma);</span>
-0125 <span class="comment">%  CJ2 = tensor_product(CJ,Gamma);</span>
-0126 <span class="comment">%end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0079 <span class="keyword">if</span> [eigmax &gt; 0] * [eigmax &lt; 10^-10], 
+0080   display(sprintf(<span class="string">' * Maximal real part of eigenvalues %f &lt; numerical error, correcting M'</span>,eigmax));
+0081   M_adj = M - 5 * eigmax * eye(size(M)); 
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="comment">%% if this still doesn't help:</span>
+0085 eigmax = max(real(eig(M)));
+0086 <span class="keyword">if</span> eigmax &gt; 0,
+0087   display(sprintf(<span class="string">' * The steady state is unstable; maximal eigenvalue %f'</span>,eigmax)); 
+0088   <span class="comment">%% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');</span>
+0089   display(sprintf(<span class="string">'   Fixing the steady state by decreasing all eigenvalues by %f'</span>,eigmax));
+0090   M_adj = M - [ eigmax + 10^-10] * eye(size(M)); 
+0091 <span class="keyword">else</span>
+0092   M_adj = M;
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="keyword">if</span> rank(M_adj) == size(M_adj,1), 
+0096   CS_int  = - L_int * [ full(M_adj) \ NR_int ];  
+0097 <span class="keyword">else</span>
+0098   display(<span class="string">'  * Jacobian is rank-deficient; using pseudoinverse instead of inverse (in control_coefficients.m)'</span>);
+0099   <span class="comment">%% sprintf('size of NR_int * Ec_int:')</span>
+0100   <span class="comment">%% size(NR_int * Ec_int)</span>
+0101   <span class="comment">%% sprintf('rank of NR_int * Ec_int:')</span>
+0102   <span class="comment">%% rank(NR_int * Ec_int)</span>
+0103   <span class="comment">%% sprintf('rank of Ec_int * L_int:')</span>
+0104   <span class="comment">%% rank(Ec_int * L_int)</span>
+0105   <span class="comment">%% sprintf('Rank of NR_int: %d',   rank(NR_int))</span>
+0106   <span class="comment">%% sprintf('Rank of Ec_int: %d',   rank(Ec_int))</span>
+0107   <span class="comment">%% sprintf('Rank of L_int : %d',   rank(full(L_int)))</span>
+0108   <span class="comment">%% sprintf('Rank of (adjusted) Jacobian: %d', rank(M_adj))</span>
+0109   <span class="comment">%% sprintf('Dim  of (adjusted) Jacobian: %d', size(M_adj,1))</span>
+0110   CS_int = - L_int * [ pinv(M_adj) * NR_int ];
+0111 <span class="keyword">end</span>
+0112 
+0113 CS = zeros(n_metab_int + length(ind_ext), n_react); 
+0114 CS(ind_int,ind_int_react) = CS_int; 
+0115 CS  = <a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(CS);
+0116 
+0117 CJ = eye(n_react);
+0118 CJ(ind_int_react, ind_int_react) = CJ( ind_int_react, ind_int_react) + Ec_int * CS_int;
+0119 CJ = <a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(CJ);
+0120 
+0121 CS(:,find(1-used)) = 0;
+0122 CJ(:,find(1-used)) = 0;
+0123 CJ(find(1-used),:) = 0;
+0124 
+0125 <span class="comment">%if nargout&gt;5,</span>
+0126 <span class="comment">% THAT MAY BE INCORRECT .. make sure that Kronecker deltas are IN THE RIGHT PLACE!!</span>
+0127 <span class="comment">% see Hoefer + Heinrich paper</span>
+0128 <span class="comment">%  rho_2 = diag(1./J) * Ec</span>
+0129 <span class="comment">%  Gamma = tensor_product(tensor_product(Ec_2,CS),CS,2,1) ...</span>
+0130 <span class="comment">%       + tensor_product(rho_2,CS,2,1) ...</span>
+0131 <span class="comment">%       + permute(tensor_product(rho_2,CS,2,1),[1,3,2]);</span>
+0132 <span class="comment">%</span>
+0133 <span class="comment">%  CS2 = tensor_product(CS,Gamma);</span>
+0134 <span class="comment">%  CJ2 = tensor_product(CJ,Gamma);</span>
+0135 <span class="comment">%end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

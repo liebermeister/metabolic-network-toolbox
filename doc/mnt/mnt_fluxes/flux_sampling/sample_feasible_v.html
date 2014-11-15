@@ -6,16 +6,16 @@
   <meta name="keywords" content="sample_feasible_v">
   <meta name="description" content="v = sample_feasible_v(N, ind_ext, constraints, options)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">flux_sampling</a> &gt; sample_feasible_v.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_fluxes</a> &gt; <a href="#">flux_sampling</a> &gt; sample_feasible_v.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/flux_sampling&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_fluxes/flux_sampling&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>sample_feasible_v
 </h1>
@@ -47,12 +47,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_fluxes/eba/eba_util/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>	C = cycles(N);</li><li><a href="../../../mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>	isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/eba/eba_util/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>	orthogonal = EBA_orth(sign_J,C)</li><li><a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>	C = cycles(N);</li><li><a href="../../.././mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>	isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -89,7 +88,7 @@ This function is called by:
 0031   
 0032   display(<span class="string">' Using fixed flux distribution'</span>);
 0033   v       = constraints.v_fix;
-0034   correct = <a href="../../../mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>(v,N,ind_ext,constraints,0,options.epsilon_stationary,options.cycles);
+0034   correct = <a href="../../.././mnt/mnt_fluxes/flux_feasibility/es_check_flux_constraints.html" class="code" title="function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)">es_check_flux_constraints</a>(v,N,ind_ext,constraints,0,options.epsilon_stationary,options.cycles);
 0035   <span class="keyword">if</span> ~correct, 
 0036     warning(<span class="string">'Unfeasible flux'</span>)
 0037     <span class="comment">%correct = es_check_flux_constraints(v,N,ind_ext,constraints,1,options.epsilon_stationary,options.cycles);</span>
@@ -130,11 +129,11 @@ This function is called by:
 0072     <span class="keyword">if</span> isfield(constraints,<span class="string">'ind_ignore'</span>),
 0073       use_in_cycles = setdiff(1:size(N,2),constraints.ind_ignore);
 0074       NN = N(:,use_in_cycles);
-0075       CC = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(NN);
+0075       CC = <a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(NN);
 0076       C  = zeros(size(N,2),size(CC,2));
 0077       C(use_in_cycles,:) = CC;
 0078     <span class="keyword">else</span>
-0079       C = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N);
+0079       C = <a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N);
 0080     <span class="keyword">end</span>
 0081   <span class="keyword">else</span>,
 0082     C = options.cycles;
@@ -187,11 +186,11 @@ This function is called by:
 0129             (sum( constraints.ext_signs(ind_extsign) ~= sign(N(ind_extsign,:) * v))==0);
 0130       <span class="keyword">end</span>
 0131 
-0132       feasible = <a href="../../../mnt/mnt_fluxes/eba/eba_util/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>(sign(v),C);
+0132       feasible = <a href="../../.././mnt/mnt_fluxes/eba/eba_util/EBA_orth.html" class="code" title="function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)">EBA_orth</a>(sign(v),C);
 0133       
 0134     <span class="keyword">end</span>
 0135     
 0136 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

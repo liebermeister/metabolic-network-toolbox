@@ -4,7 +4,9 @@ function b = print_matrix(matrix,rownames,colnames)
 
 if ~exist('number_flag','var'), number_flag = 0; end
 if ~exist('rownames','var'), rownames = repmat({''},size(matrix,1),1); end
-if ~exist('colnames','var'), colnames=repmat({''},size(matrix,2),1); end
+if ~exist('colnames','var'), colnames=[]; end
+
+if isempty(colnames), colnames = repmat({''},size(matrix,2),1); end
   
 if size(rownames,1) ==1,  rownames=rownames'; end
 if size(colnames,1) ==1,  colnames=colnames'; end
@@ -20,7 +22,7 @@ for i=1:numel(b)
     b{i}=num2str(b{i},4);
   end
 end
-b = table(b,0);
+b = mytable(b,0);
 %b=strcat(b,{' '});
 %b=char(b);
 %b = reshape(b,prod(size(b))/(length(rownames)+1),length(rownames)+1 );

@@ -6,16 +6,16 @@
   <meta name="keywords" content="flux_control_coefficients_split">
   <meta name="description" content="[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; flux_control_coefficients_split.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_mca</a> &gt; flux_control_coefficients_split.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>flux_control_coefficients_split
 </h1>
@@ -52,12 +52,11 @@ OUTPUTS
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li></ul>
+<li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -107,8 +106,8 @@ This function is called by:
 0044 CCS = zeros(n_metab_int+length(external),n_react); 
 0045 CCS(internal,:) = C_S; C_S = CCS; 
 0046 
-0047 C_J = <a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_J);
-0048 C_S = <a href="../../mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_S);
+0047 C_J = <a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_J);
+0048 C_S = <a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_S);
 0049 
 0050 C_J(:,find(1-used))=0;
 0051 C_J(find(1-used),:)=0;
@@ -125,6 +124,6 @@ This function is called by:
 0062 <span class="comment">%    C_S2 =   tensor_product(C_S,Gamma);</span>
 0063 <span class="comment">%    C_J2 =   tensor_product(C_J,Gamma);</span>
 0064 <span class="comment">%end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

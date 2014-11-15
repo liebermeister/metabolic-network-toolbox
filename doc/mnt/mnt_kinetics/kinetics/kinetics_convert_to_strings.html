@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of kinetics_convert_to_strings</title>
+  <meta name="keywords" content="kinetics_convert_to_strings">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">kinetics</a> &gt; kinetics_convert_to_strings.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/kinetics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>kinetics_convert_to_strings
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function kinetics_strings = kinetics_convert_to_strings(network,kinetics) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_kinetic_formulae.html" class="code" title="function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network,kinetics)">modular_kinetic_formulae</a>	[formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function kinetics_strings = kinetics_convert_to_strings(network,kinetics)</a>
+0002 
+0003 <span class="keyword">switch</span> kinetics.type,
+0004   <span class="keyword">case</span> <span class="string">'kinetic_strings'</span>,
+0005     kinetics_strings = kinetics;
+0006   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>},
+0007     [formula, global_assignment, local_assignment] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_kinetic_formulae.html" class="code" title="function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network,kinetics)">modular_kinetic_formulae</a>(network,kinetics);
+0008     kinetics_strings.type = <span class="string">'kinetic_strings'</span>;
+0009     <span class="keyword">for</span> it = 1:length(formula),
+0010       kinetics_strings.reactions{it,1}.string = formula{it};
+0011       local_parameters = fieldnames(local_assignment{it});
+0012       kinetics_strings.reactions{it}.parameters = local_parameters';
+0013       kinetics_strings.reactions{it}.parameter_values = [];
+0014       <span class="keyword">for</span> itt=1:length(local_parameters)
+0015         kinetics_strings.reactions{it}.parameter_values(itt,1) = local_assignment{it}.(local_parameters{itt});
+0016       <span class="keyword">end</span>
+0017     <span class="keyword">end</span>
+0018     global_parameters = fieldnames(global_assignment);
+0019     kinetics_strings.parameters = global_parameters;
+0020     kinetics_strings.parameter_values = [];
+0021     <span class="keyword">for</span> it=1:length(global_parameters)
+0022       kinetics_strings.parameter_values(it,1) = global_assignment.(global_parameters{it});
+0023     <span class="keyword">end</span>
+0024   <span class="keyword">otherwise</span>,
+0025     error(<span class="string">'Kinetics type %s cannot be converted into string format'</span>, kinetics.type);
+0026 <span class="keyword">end</span>
+0027</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

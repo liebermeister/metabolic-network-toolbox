@@ -6,16 +6,16 @@
   <meta name="keywords" content="eba_my_cycles">
   <meta name="description" content="wrapper around 'cycles', allowing to ignore some reactions">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_fluxes</a> &gt; <a href="../index.html">eba</a> &gt; <a href="index.html">eba_util</a> &gt; eba_my_cycles.m</div>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_fluxes</a> &gt; <a href="#">eba</a> &gt; <a href="#">eba_util</a> &gt; eba_my_cycles.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/eba/eba_util&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_fluxes/eba/eba_util&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
 
 <h1>eba_my_cycles
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>	C = cycles(N);</li></ul>
+<li><a href="../../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>	C = cycles(N);</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../../mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../../../mnt/mnt_fluxes/eba/feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../../../mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li></ul>
+<li><a href="../../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../../.././mnt/mnt_fluxes/eba/feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
@@ -50,13 +49,13 @@ This function is called by:
 0006   <span class="keyword">if</span> ind_ignore,
 0007     use_in_cycles = setdiff(1:size(N,2),ind_ignore);
 0008     NN = N(:,use_in_cycles);
-0009     CC = <a href="../../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(NN);
+0009     CC = <a href="../../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(NN);
 0010     C  = zeros(size(N,2),size(CC,2));
 0011     C(use_in_cycles,:) = CC;
 0012   <span class="keyword">else</span>,
-0013     C = <a href="../../../../mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N); 
+0013     C = <a href="../../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N); 
 0014   <span class="keyword">end</span>
 0015 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

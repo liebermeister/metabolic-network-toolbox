@@ -17,4 +17,4 @@ for it=1:length(network.actions),
     end  
   end
 end
-table(dum)
+mytable(dum)

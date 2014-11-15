@@ -6,16 +6,16 @@
   <meta name="keywords" content="ms_vector2par">
   <meta name="description" content="kinetics = ms_vector2par(vector,kinetics,network)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">ms_rate_law</a> &gt; ms_vector2par.m</div>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">ms_rate_law</a> &gt; ms_vector2par.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/ms_rate_law&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/ms_rate_law&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
 
 <h1>ms_vector2par
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
+<li><a href="../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
+<li><a href="../../../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
@@ -46,7 +45,7 @@ This function is called by:
 0002 
 0003 <span class="comment">% kinetics = ms_vector2par(vector,kinetics,network)</span>
 0004 
-0005 [nr,nm,nx,KM_indices,KA_indices,KI_indices,n_KM,n_KA,n_KI] = <a href="../../../../mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
+0005 [nr,nm,nx,KM_indices,KA_indices,KI_indices,n_KM,n_KA,n_KI] = <a href="../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
 0006 
 0007 l  = [nr nm n_KA n_KI n_KM nr nr];
 0008 l1 = cumsum([0 l]); 
@@ -59,6 +58,6 @@ This function is called by:
 0015 kinetics.KM(KM_indices) = vector(l2(5):l1(6));
 0016 kinetics.KV                       = vector(l2(6):l1(7));                      
 0017 kinetics.Keq                      = vector(l2(7):l1(8));</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

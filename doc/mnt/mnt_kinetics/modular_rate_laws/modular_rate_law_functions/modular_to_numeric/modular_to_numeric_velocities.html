@@ -6,16 +6,16 @@
   <meta name="keywords" content="modular_to_numeric_velocities">
   <meta name="description" content="v = modular_to_numeric_velocities(s,p)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../../index.html">Home</a> &gt;  <a href="../../../../index.html">mnt</a> &gt; <a href="../../../index.html">mnt_kinetics</a> &gt; <a href="../../index.html">modular_rate_laws</a> &gt; <a href="../index.html">modular_rate_law_functions</a> &gt; <a href="index.html">modular_to_numeric</a> &gt; modular_to_numeric_velocities.m</div>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">modular_rate_law_functions</a> &gt; <a href="#">modular_to_numeric</a> &gt; modular_to_numeric_velocities.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_to_numeric&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_to_numeric&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
 
 <h1>modular_to_numeric_velocities
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-<li><a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>	[v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</li></ul>
+<li><a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>	[v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
 <li><a href="modular_to_numeric_initialise.html" class="code" title="function [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);">modular_to_numeric_initialise</a>	[numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
@@ -56,7 +55,7 @@ This function is called by:
 0012   kinetics.u(it)  = getfield(p,[<span class="string">'u_'</span>,num2str(it)]);
 0013 <span class="keyword">end</span>
 0014 
-0015 v = <a href="../../../../../mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>(p.kinetics.type, p.N, p.W, p.ind_ext,kinetics.u,s,kinetics.KA,kinetics.KI,kinetics.KM,kinetics.KV,kinetics.Keq,p.h);
+0015 v = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>(p.kinetics.type, p.N, p.W, p.ind_ext,kinetics.u,s,kinetics.KA,kinetics.KI,kinetics.KM,kinetics.KV,kinetics.Keq,p.h);
 0016  
 0017 <span class="comment">% append dilution reactions for all internal metabolites</span>
 0018 
@@ -64,6 +63,6 @@ This function is called by:
 0020   ind_internal = find(p.external==0); 
 0021   v = [v; p.mu * s(ind_internal)];
 0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

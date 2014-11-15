@@ -48,5 +48,5 @@ end
 
 if ~isempty(outfile),
   display(sprintf('Writing positions to file %s',outfile));
-  table([names,cellstr(num2str(xpos(1,:)')),cellstr(num2str(xpos(2,:)'))],0,outfile);
+ mytable([names,cellstr(num2str(xpos(1,:)')),cellstr(num2str(xpos(2,:)'))],0,outfile);
 end

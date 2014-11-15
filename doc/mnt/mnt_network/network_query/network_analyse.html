@@ -6,16 +6,16 @@
   <meta name="keywords" content="network_analyse">
   <meta name="description" content="NETWORK_ANALYSE - Analyse a metabolic network structure">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_network</a> &gt; <a href="index.html">network_query</a> &gt; network_analyse.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_network</a> &gt; <a href="#">network_query</a> &gt; network_analyse.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_network/network_query&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_network/network_query&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>network_analyse
 </h1>
@@ -44,12 +44,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li></ul>
+<li><a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_fluxes/eba/es_mu_simple_guess.html" class="code" title="function [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)">es_mu_simple_guess</a>	[A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)</li><li><a href="../../../mnt/mnt_fluxes/eba/flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="network_enzyme_subsets.html" class="code" title="function [enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);">network_enzyme_subsets</a>	[enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);</li><li><a href="network_print_conservation_relations.html" class="code" title="function network_print_conservation_relations(network,G)">network_print_conservation_relations</a>	network_print_conservation_relations(network,G)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/eba/es_mu_simple_guess.html" class="code" title="function [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)">es_mu_simple_guess</a>	[A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)</li><li><a href="../../.././mnt/mnt_fluxes/eba/flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="network_enzyme_subsets.html" class="code" title="function [enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);">network_enzyme_subsets</a>	[enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);</li><li><a href="network_print_conservation_relations.html" class="code" title="function network_print_conservation_relations(network,G)">network_print_conservation_relations</a>	network_print_conservation_relations(network,G)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -71,11 +70,11 @@ This function is called by:
 0016 N = full(network.N);
 0017 
 0018 <span class="keyword">switch</span> nargout,
-0019   <span class="keyword">case</span> 1,     K                                    = <a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0020   <span class="keyword">case</span> {2,3}, [K, L, N_R]                          = <a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0021   <span class="keyword">case</span> 4,     [K, L, N_R, G]                       = <a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0022   <span class="keyword">otherwise</span>,  [K, L, N_R, G, pinv_N_R, indep, N_1] = <a href="../../../mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
+0019   <span class="keyword">case</span> 1,     K                                    = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
+0020   <span class="keyword">case</span> {2,3}, [K, L, N_R]                          = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
+0021   <span class="keyword">case</span> 4,     [K, L, N_R, G]                       = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
+0022   <span class="keyword">otherwise</span>,  [K, L, N_R, G, pinv_N_R, indep, N_1] = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
 0023 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -80,5 +80,5 @@ for itt = 1:length(save_quantities),
 end
 
 if length(file_basename),
-  table(s,0,[file_basename '_QuantityData.tsv']);
+ mytable(s,0,[file_basename '_QuantityData.tsv']);
 end

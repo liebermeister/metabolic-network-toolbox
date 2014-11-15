@@ -6,16 +6,16 @@
   <meta name="keywords" content="numeric_par2vector">
   <meta name="description" content="function v = par2vector(p)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">numeric</a> &gt; numeric_par2vector.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">numeric</a> &gt; numeric_par2vector.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/numeric&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/numeric&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>numeric_par2vector
 </h1>
@@ -29,18 +29,17 @@
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> function v = par2vector(p)
 
- Extract parameter vector from parameter structure</pre></div>
+ Extract parameter vector (only numeric parameters) from parameter structure</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-</ul>
+<li><a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li></ul>
+<li><a href="../../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -48,18 +47,17 @@ This function is called by:
 0002 
 0003 <span class="comment">% function v = par2vector(p)</span>
 0004 <span class="comment">%</span>
-0005 <span class="comment">% Extract parameter vector from parameter structure</span>
+0005 <span class="comment">% Extract parameter vector (only numeric parameters) from parameter structure</span>
 0006 
-0007 f = fields(p);
-0008 <span class="keyword">for</span> i=1:length(f)
-0009   <span class="keyword">if</span> isnumeric(getfield(p,f{i})),
-0010     v(i)= getfield(p,f{i});
+0007 f = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(fields(p));
+0008 <span class="keyword">for</span> it=1:length(f)
+0009   <span class="keyword">if</span> isnumeric(getfield(p,f{it})),
+0010     v(it,1) = getfield(p,f{it});
 0011   <span class="keyword">else</span>
 0012     <span class="keyword">break</span>;
 0013   <span class="keyword">end</span>
 0014 <span class="keyword">end</span>
-0015 v=v';
-0016 names=f;</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0015 names = f;</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

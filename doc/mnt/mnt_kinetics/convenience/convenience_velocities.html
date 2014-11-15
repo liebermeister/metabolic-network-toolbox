@@ -6,16 +6,16 @@
   <meta name="keywords" content="convenience_velocities">
   <meta name="description" content="v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">convenience</a> &gt; convenience_velocities.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">convenience</a> &gt; convenience_velocities.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/convenience&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/convenience&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>convenience_velocities
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li></ul>
+<li><a href="../../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -46,7 +45,7 @@ This function is called by:
 0002 
 0003 <span class="comment">% v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)</span>
 0004 
-0005 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'kinetics'</span>,<span class="string">'network.kinetics'</span>,<span class="keyword">...</span>
+0005 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'kinetics'</span>,<span class="string">'network.kinetics'</span>,<span class="keyword">...</span>
 0006              <span class="string">'indices'</span>,<span class="string">'1:length(network.actions)'</span>,<span class="keyword">...</span>
 0007              <span class="string">'split'</span>,<span class="string">'0'</span>,<span class="keyword">...</span>
 0008              <span class="string">'scale_G'</span>,<span class="string">'convert_G_scale'</span>,<span class="keyword">...</span>
@@ -68,9 +67,9 @@ This function is called by:
 0024 Nplus               = Nminus;
 0025 Nminus(find(N_sparse&lt;0)) = abs(N_sparse(find(N_sparse&lt;0)));
 0026  Nplus(find(N_sparse&gt;0)) = abs(N_sparse(find(N_sparse&gt;0)));
-0027 ind_substrate       = <a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(find(N_sparse_trans&lt;0));
-0028 ind_product         = <a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(find(N_sparse_trans&gt;0));
-0029 ind_both            = <a href="../../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(find(N_sparse_trans~=0));
+0027 ind_substrate       = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(find(N_sparse_trans&lt;0));
+0028 ind_product         = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(find(N_sparse_trans&gt;0));
+0029 ind_both            = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(find(N_sparse_trans~=0));
 0030 ind_KM              = [ind_substrate; ind_product];
 0031 ind_KA              = find(network.regulation_matrix(indices,:) &gt; 0);
 0032 ind_KI              = find(network.regulation_matrix(indices,:) &lt; 0);
@@ -163,6 +162,6 @@ This function is called by:
 0119 <span class="comment">% vminus = 1 ./ sqrt_q .* numerator_product_term;</span>
 0120 <span class="comment">% A = full(RT * log(vplus./vminus));</span>
 0121 <span class="comment">% find(abs(A) &lt; 10^-1)'</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

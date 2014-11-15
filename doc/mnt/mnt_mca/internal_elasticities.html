@@ -6,16 +6,16 @@
   <meta name="keywords" content="internal_elasticities">
   <meta name="description" content="epsilon = internal_elasticities(network,s,enzyme_factor,relevant_parameters);">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; internal_elasticities.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_mca</a> &gt; internal_elasticities.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>internal_elasticities
 </h1>
@@ -43,12 +43,11 @@ FUNCTION ARGUMENTS:
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
+<li><a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -74,7 +73,7 @@ This function is called by:
 0020 internal = find(network.external ==0);
 0021 n_A = length(network.actions);
 0022     
-0023 v   = <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network,network.kinetics);
+0023 v   = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network,network.kinetics);
 0024 
 0025 <span class="comment">% --------------------------------------------------------------------------</span>
 0026 <span class="comment">% compute substrate elasticities</span>
@@ -85,7 +84,7 @@ This function is called by:
 0031   s_pert = s; s_pert(internal(i)) = s(internal(i))*(1+delta);
 0032   <span class="keyword">if</span> s_pert(internal(i))==0, s_pert(internal(i))=10^-6; <span class="keyword">end</span>
 0033   relevant_reactions = find( network.N(internal(i),:)~=0 + network.regulation_matrix(:,internal(i))'~=0);
-0034   v_pert = <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,network.kinetics,0,relevant_reactions);
+0034   v_pert = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,network.kinetics,0,relevant_reactions);
 0035   epsilon(relevant_reactions,i) = (v_pert-v(relevant_reactions))/(s_pert(internal(i))-s(internal(i)));
 0036 <span class="keyword">end</span>
 0037 
@@ -98,7 +97,7 @@ This function is called by:
 0044 
 0045   S_ext = s(find(network.external));
 0046   S_ext_names = network.metabolites(find(network.external));
-0047   [par,parameters,relevant,rel_reactions] = <a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(network.kinetics,S_ext,S_ext_names,network);
+0047   [par,parameters,relevant,rel_reactions] = <a href="../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(network.kinetics,S_ext,S_ext_names,network);
 0048   <span class="keyword">if</span> ~exist(<span class="string">'relevant_parameters'</span>,<span class="string">'var'</span>),
 0049     n_par = length(par);   
 0050     relevant_parameters = 1:n_par;
@@ -127,7 +126,7 @@ This function is called by:
 0073       par_pert = par(i)*(1+delta);     
 0074       <span class="keyword">if</span> par_pert==0, par_pert = 10^-6; <span class="keyword">end</span>
 0075       [nkinetics,rnum] = vectorchange2standard_kinetics(network.kinetics,i,offsets,reaction_pars,par_pert);
-0076       v_pert    = <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,nkinetics,0,rel_reactions{i});
+0076       v_pert    = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,nkinetics,0,rel_reactions{i});
 0077       epsilonP(rel_reactions{i},i) = (v_pert-v(rel_reactions{i}))/(par_pert-par(i));
 0078     <span class="keyword">end</span>
 0079 
@@ -137,7 +136,7 @@ This function is called by:
 0083       par_pert = S_ext(i)*(1+delta);     
 0084       <span class="keyword">if</span> par_pert==0, par_pert = 10^-6; <span class="keyword">end</span>
 0085       s_pert(ind_external(i))  = par_pert;
-0086       v_pert                   = <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,nkinetics,0,rel_reactions{i+of});
+0086       v_pert                   = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,nkinetics,0,rel_reactions{i+of});
 0087       epsilonP(rel_reactions{i+of},i+of) = (v_pert-v(rel_reactions{i+of}))/(par_pert-par(i+of));
 0088       s_pert(ind_external(i))  = S_ext(i);
 0089     <span class="keyword">end</span>
@@ -148,9 +147,9 @@ This function is called by:
 0094 <span class="comment">%    fprintf('%d ',i)</span>
 0095       par_pert(i) = par(i)*(1+delta);     
 0096       <span class="keyword">if</span> par_pert(i)==0, par_pert(i) = 10^-6; <span class="keyword">end</span>
-0097       [nkinetics,Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(network.kinetics,par_pert,external_ind);
+0097       [nkinetics,Sext_pert] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(network.kinetics,par_pert,external_ind);
 0098       s_pert(ind_external) = Sext_pert;
-0099       v_pert               = <a href="../../mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,nkinetics,0,rel_reactions{i});
+0099       v_pert               = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s_pert,network,nkinetics,0,rel_reactions{i});
 0100       epsilonP(rel_reactions{i},i) = (v_pert-v(rel_reactions{i}))/(par_pert(i)-par(i));
 0101       par_pert(i) = par(i);     
 0102   <span class="keyword">end</span>
@@ -160,6 +159,6 @@ This function is called by:
 0106 <span class="comment">%  fprintf('\n')</span>
 0107   epsilonP = diag(sparse(enzyme_factor))*epsilonP;
 0108 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

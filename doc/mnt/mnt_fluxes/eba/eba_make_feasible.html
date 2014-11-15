@@ -6,16 +6,16 @@
   <meta name="keywords" content="eba_make_feasible">
   <meta name="description" content="v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">eba</a> &gt; eba_make_feasible.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_fluxes</a> &gt; <a href="#">eba</a> &gt; eba_make_feasible.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_fluxes/eba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_fluxes/eba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>eba_make_feasible
 </h1>
@@ -24,7 +24,7 @@
 <div class="box"><strong>v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext) </strong></div>
+<div class="box"><strong>function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)
@@ -45,16 +45,15 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_my_cycles.html" class="code" title="function C = eba_my_cycles(N,C,ind_ignore)">eba_my_cycles</a>	wrapper around 'cycles', allowing to ignore some reactions</li><li><a href="../../../mnt/mnt_fluxes/elementary_modes/network_efmtool.html" class="code" title="function [C, mnet] = network_efmtool(network, method, ind_ignore, zv)">network_efmtool</a>	[C,mnet] = network_efmtool(network, method, ind_ignore, zv)</li><li><a href="../../../mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="../../../mnt/mnt_fluxes/flux_projection/project_fluxes.html" class="code" title="function v_projected = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li><li><a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</li><li><a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_my_cycles.html" class="code" title="function C = eba_my_cycles(N,C,ind_ignore)">eba_my_cycles</a>	wrapper around 'cycles', allowing to ignore some reactions</li><li><a href="../../.././mnt/mnt_fluxes/elementary_modes/network_efmtool.html" class="code" title="function [C, mnet] = network_efmtool(network, method, ind_ignore, zv)">network_efmtool</a>	[C,mnet] = network_efmtool(network, method, ind_ignore, zv)</li><li><a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="../../.././mnt/mnt_fluxes/flux_projection/project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li><li><a href="../../.././mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../../mnt/mnt_fluxes/flux_projection/project_fluxes.html" class="code" title="function v_projected = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li></ul>
+<li><a href="feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../.././mnt/mnt_fluxes/flux_projection/project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li></ul>
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)</a>
 0002 
 0003 <span class="comment">% v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</span>
 0004 <span class="comment">%</span>
@@ -70,34 +69,34 @@ This function is called by:
 0014 <span class="comment">%    cycle_method: 'beard', 'efmtool'</span>
 0015 <span class="comment">% ind_ext: optional; if given -&gt; projection to stationary flux distribution</span>
 0016 
-0017 eval(<a href="../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'eba_condition'</span>,<span class="string">'''strict'''</span>,<span class="string">'C'</span>,<span class="string">'nan'</span>,<span class="string">'ind_ignore'</span>,<span class="string">'[]'</span>,<span class="string">'cycle_method'</span>,<span class="string">'''beard'''</span>));
+0017 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'eba_condition'</span>,<span class="string">'''strict'''</span>,<span class="string">'C'</span>,<span class="string">'nan'</span>,<span class="string">'ind_ignore'</span>,<span class="string">'[]'</span>,<span class="string">'cycle_method'</span>,<span class="string">'''beard'''</span>,<span class="string">'v_sign'</span>,<span class="string">'[]'</span>));
 0018 
 0019 v_orig = v;
 0020 
-0021 <span class="keyword">if</span> isnan(C),
-0022   display(sprintf(<span class="string">'\n  Computing elementary cycles. This may take a while'</span>));
-0023   <span class="keyword">switch</span> cycle_method,
-0024     <span class="keyword">case</span> <span class="string">'beard'</span>,
-0025       C = <a href="../../../mnt/mnt_fluxes/eba/eba_util/eba_my_cycles.html" class="code" title="function C = eba_my_cycles(N,C,ind_ignore)">eba_my_cycles</a>(N,C,ind_ignore);
-0026     <span class="keyword">case</span> <span class="string">'efmtool'</span>,
-0027       [nm,nr] = size(N);
-0028       network = <a href="../../../mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>(full(N),ones(nr,1),[]);
-0029       C = <a href="../../../mnt/mnt_fluxes/elementary_modes/network_efmtool.html" class="code" title="function [C, mnet] = network_efmtool(network, method, ind_ignore, zv)">network_efmtool</a>(network,<span class="string">'total'</span>,ind_ignore);
-0030   <span class="keyword">end</span>
-0031 <span class="keyword">end</span>
-0032 
-0033 feasible = 0;
+0021 <span class="keyword">if</span> isempty(v_sign), v_sign = nan * v; <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">if</span> isnan(C),
+0024   display(sprintf(<span class="string">'\n  Computing elementary cycles. This may take a while'</span>));
+0025   <span class="keyword">switch</span> cycle_method,
+0026     <span class="keyword">case</span> <span class="string">'beard'</span>,
+0027       C = <a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_my_cycles.html" class="code" title="function C = eba_my_cycles(N,C,ind_ignore)">eba_my_cycles</a>(N,C,ind_ignore);
+0028     <span class="keyword">case</span> <span class="string">'efmtool'</span>,
+0029       [nm,nr] = size(N);
+0030       network = <a href="../../.././mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>(full(N),ones(nr,1),[]);
+0031       C = <a href="../../.././mnt/mnt_fluxes/elementary_modes/network_efmtool.html" class="code" title="function [C, mnet] = network_efmtool(network, method, ind_ignore, zv)">network_efmtool</a>(network,<span class="string">'total'</span>,ind_ignore);
+0032   <span class="keyword">end</span>
+0033 <span class="keyword">end</span>
 0034 
-0035 [feasible,CC,ind_violated] = <a href="../../../mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(sign(v),N,C,ind_ignore,eba_condition);
+0035 feasible = 0;
 0036 
-0037 <span class="comment">% adjust flux distribution by substracting a multiple of each</span>
-0038 <span class="comment">% cycle involved in a violation</span>
-0039 <span class="comment">% repeat this until a feasible solution is reached</span>
-0040 
-0041 <span class="keyword">while</span> ~feasible,
-0042   fprintf(<span class="string">'.'</span>)
-0043   <span class="comment">%figure(1); netgraph_concentrations(network_CoHid,[],v);</span>
-0044   <span class="comment">%figure(2); netgraph_concentrations(network_CoHid,[],C(:,ind_violated(1)));</span>
+0037 [feasible, CC, ind_violated] = <a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(sign(v),N,C,ind_ignore,eba_condition);
+0038 
+0039 <span class="comment">% adjust flux distribution by substracting a multiple of each</span>
+0040 <span class="comment">% cycle involved in a violation</span>
+0041 <span class="comment">% repeat this until a feasible solution is reached</span>
+0042 
+0043 <span class="keyword">while</span> ~feasible,
+0044   <span class="comment">% fprintf('.')</span>
 0045   <span class="keyword">for</span> it = 1:length(ind_violated),
 0046     a   = C(:,ind_violated(it)).*v;
 0047     <span class="keyword">if</span> sum(a~=0),
@@ -110,16 +109,15 @@ This function is called by:
 0054       v   = v - C(:,ind_violated(it))*dum;
 0055     <span class="keyword">end</span>
 0056   <span class="keyword">end</span>
-0057   v(abs(v)&lt;10^-10) = 0;
+0057   v(abs(v)&lt;10^-8) = 0;
 0058   <span class="keyword">if</span> exist(<span class="string">'ind_ext'</span>,<span class="string">'var'</span>),
-0059     v = <a href="../../../mnt/mnt_fluxes/flux_projection/project_fluxes.html" class="code" title="function v_projected = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars);">project_fluxes</a>(N, ind_ext, v);
+0059     v = <a href="../../.././mnt/mnt_fluxes/flux_projection/project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>(N, ind_ext, v, [], v_sign);
 0060   <span class="keyword">end</span>
 0061   <span class="comment">%% check for feasibility</span>
-0062   [feasible,CC,ind_violated] = <a href="../../../mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(sign(v),N,C,ind_ignore,eba_condition);
-0063   ind_violated
-0064 <span class="keyword">end</span>
-0065 
-0066 <span class="keyword">if</span> feasible, display(<span class="string">'  Feasible flux distribution found'</span>); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0062   [feasible,CC,ind_violated] = <a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(sign(v),N,C,ind_ignore,eba_condition);
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">if</span> feasible, display(<span class="string">'  Feasible flux distribution found'</span>); <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

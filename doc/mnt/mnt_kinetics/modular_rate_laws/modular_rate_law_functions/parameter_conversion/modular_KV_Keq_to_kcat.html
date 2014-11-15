@@ -4,56 +4,57 @@
 <head>
   <title>Description of modular_KV_Keq_to_kcat</title>
   <meta name="keywords" content="modular_KV_Keq_to_kcat">
-  <meta name="description" content="[kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq)">
+  <meta name="description" content="[kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../../index.html">Home</a> &gt;  <a href="../../../../index.html">mnt</a> &gt; <a href="../../../index.html">mnt_kinetics</a> &gt; <a href="../../index.html">modular_rate_laws</a> &gt; <a href="../index.html">modular_rate_law_functions</a> &gt; <a href="index.html">parameter_conversion</a> &gt; modular_KV_Keq_to_kcat.m</div>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">modular_rate_law_functions</a> &gt; <a href="#">parameter_conversion</a> &gt; modular_KV_Keq_to_kcat.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
 
 <h1>modular_KV_Keq_to_kcat
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="box"><strong>[kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq)</strong></div>
+<div class="box"><strong>[kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="box"><strong>function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq) </strong></div>
+<div class="box"><strong>function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq)</pre></div>
+<div class="fragment"><pre class="comment"> [kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-<li><a href="../../../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="ms_compute_Kcat.html" class="code" title="function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);">ms_compute_Kcat</a>	[kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq);</li><li><a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-</ul>
+<li><a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/sbtab_to_modular_rate_law.html" class="code" title="function [kinetics, sbtab_table] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)">sbtab_to_modular_rate_law</a>	[kinetics, sbtab_table] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)</li></ul>
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h)</a>
 0002 
-0003 <span class="comment">% [kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq)</span>
+0003 <span class="comment">% [kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)</span>
 0004 
-0005 eval(<a href="../../../../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'KV'</span>,<span class="string">'kinetics.KV'</span>,<span class="string">'Keq'</span>,<span class="string">'kinetics.Keq'</span>));
+0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'KV'</span>,<span class="string">'kinetics.KV'</span>,<span class="string">'Keq'</span>,<span class="string">'kinetics.Keq'</span>,<span class="string">'KM'</span>,<span class="string">'kinetics.KM'</span>,<span class="string">'h'</span>,<span class="string">'ones(size(KV))'</span>));
 0006 
-0007 all_KM              = ones(size(N'));
-0008 all_KM(find(N'~=0)) = kinetics.KM(find(N'~=0));
-0009 KMprod              = prod(all_KM.^(N'),2);
-0010 
-0011 kcatplus  = KV .* sqrt(Keq.*KMprod);
-0012 kcatminus = KV ./ sqrt(Keq.*KMprod);</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0007 [kcatplus,kcatminus] = <a href="ms_compute_Kcat.html" class="code" title="function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);">ms_compute_Kcat</a>(N,KM,KV,Keq);
+0008 
+0009 <span class="comment">% DEPRECATED</span>
+0010 <span class="comment">% all_KM              = ones(size(N'));</span>
+0011 <span class="comment">% all_KM(find(N'~=0)) = kinetics.KM(find(N'~=0));</span>
+0012 <span class="comment">% prod_KM             = prod(all_KM.^(N'),2);</span>
+0013 <span class="comment">% kcatplus            = KV .* [sqrt(Keq ./ prod_KM) .^ h];</span>
+0014 <span class="comment">% kcatminus           = KV ./ [sqrt(Keq ./ prod_KM) .^ h];</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

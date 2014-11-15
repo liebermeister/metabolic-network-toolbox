@@ -4,56 +4,59 @@
 <head>
   <title>Description of ms_compute_log_Kcat</title>
   <meta name="keywords" content="ms_compute_log_Kcat">
-  <meta name="description" content="[log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);">
+  <meta name="description" content="[log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../../index.html">Home</a> &gt;  <a href="../../../../index.html">mnt</a> &gt; <a href="../../../index.html">mnt_kinetics</a> &gt; <a href="../../index.html">modular_rate_laws</a> &gt; <a href="../index.html">modular_rate_law_functions</a> &gt; <a href="index.html">parameter_conversion</a> &gt; ms_compute_log_Kcat.m</div>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">modular_rate_law_functions</a> &gt; <a href="#">parameter_conversion</a> &gt; ms_compute_log_Kcat.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
 
 <h1>ms_compute_log_Kcat
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="box"><strong>[log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);</strong></div>
+<div class="box"><strong>[log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="box"><strong>function [log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars); </strong></div>
+<div class="box"><strong>function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h); </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);</pre></div>
+<div class="fragment"><pre class="comment"> [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-</ul>
+<li><a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../../matlabicon.gif)">
-<li><a href="ms_compute_Kcat.html" class="code" title="function [Kplus,Kminus] = ms_compute_Kcat(N,KM,KV,Keq);">ms_compute_Kcat</a>	[Kplus,Kminus] = ms_compute_Kcat(N,KM,KV,Keq);</li></ul>
+<li><a href="ms_compute_Kcat.html" class="code" title="function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);">ms_compute_Kcat</a>	[kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq);</li></ul>
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);</a>
 0002 
-0003 <span class="comment">% [log_Kplus,log_Kminus] = ms_compute_log_Kcat(N,KM,KV,Keq,pars);</span>
+0003 <span class="comment">% [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);</span>
 0004 
-0005 ind_N               = find(N'~=0);
-0006 log_KV              = log(KV);
-0007 log_Keq             = log(Keq);
-0008 all_log_KM          = sparse(size(N,2),size(N,1));
-0009 all_log_KM(ind_N)   = log(KM(ind_N)+10^-15);
-0010 log_prod_KM         = - sum( N' .* all_log_KM , 2);
-0011 log_Kplus           = log_KV + 0.5 * ( log_Keq + log_prod_KM );
-0012 log_Kminus          = log_KV - 0.5 * ( log_Keq + log_prod_KM );</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'h'</span>,<span class="string">'ones(size(KV))'</span>));
+0006 
+0007 log_KV              = log(KV);
+0008 log_Keq             = log(Keq);
+0009 
+0010 ind_N               = find(N'~=0);
+0011 all_log_KM          = sparse(size(N,2),size(N,1));
+0012 all_log_KM(ind_N)   = log(KM(ind_N) + 10^-15);
+0013 
+0014 log_prod_KM         = sum( N' .* all_log_KM , 2);
+0015 log_kcatplus        = log_KV + 0.5 * h .* ( log_Keq - log_prod_KM );
+0016 log_kcatminus       = log_KV - 0.5 * h .* ( log_Keq - log_prod_KM );</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

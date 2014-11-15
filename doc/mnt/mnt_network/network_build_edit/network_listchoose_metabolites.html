@@ -6,16 +6,16 @@
   <meta name="keywords" content="network_listchoose_metabolites">
   <meta name="description" content="[n_sub,metindices] = network_listchoose_metabolites(network,metnames,indices)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_network</a> &gt; <a href="index.html">network_build_edit</a> &gt; network_listchoose_metabolites.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_network</a> &gt; <a href="#">network_build_edit</a> &gt; network_listchoose_metabolites.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_network/network_build_edit&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_network/network_build_edit&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>network_listchoose_metabolites
 </h1>
@@ -33,12 +33,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="network_choose.html" class="code" title="function [subnetwork,indm,indr] = network_choose(network,indm,indr)">network_choose</a>	[subnetwork,indm,indr] = network_choose(network,indm,indr)</li><li><a href="../../../mnt/utils/listbox.html" class="code" title="function [indices,h] = listbox(list,indices);">listbox</a>	[indices,h] = listbox(list,indices);</li></ul>
+<li><a href="../../.././mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>	[subnetwork,indm,indr] = network_choose(network,indm,indr,strict)</li><li><a href="../../.././mnt/utils/listbox.html" class="code" title="function [indices,h] = listbox(list,indices);">listbox</a>	[indices,h] = listbox(list,indices);</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -49,12 +48,12 @@ This function is called by:
 0005 <span class="keyword">if</span> ~exist(<span class="string">'metnames'</span>,<span class="string">'var'</span>); metnames = network.metabolites; <span class="keyword">end</span> 
 0006 <span class="keyword">if</span> ~exist(<span class="string">'indices'</span>,<span class="string">'var'</span>); indices = []; <span class="keyword">end</span> 
 0007 
-0008 [met,h] = <a href="../../../mnt/utils/listbox.html" class="code" title="function [indices,h] = listbox(list,indices);">listbox</a>(metnames,indices);
+0008 [met,h] = <a href="../../.././mnt/utils/listbox.html" class="code" title="function [indices,h] = listbox(list,indices);">listbox</a>(metnames,indices);
 0009  actindices = find(sum(network.N(met,:)~=0,1));
 0010 metindices = find(sum(network.N(:,actindices)~=0,2));
 0011 
-0012 n_sub = <a href="network_choose.html" class="code" title="function [subnetwork,indm,indr] = network_choose(network,indm,indr)">network_choose</a>(network,metindices,actindices);
-0013 n_sub = <a href="../../../mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(n_sub);</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0012 n_sub = <a href="network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>(network,metindices,actindices);
+0013 n_sub = <a href="../../.././mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(n_sub);</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

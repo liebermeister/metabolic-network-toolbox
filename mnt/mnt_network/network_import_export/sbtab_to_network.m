@@ -31,6 +31,9 @@ options_default.load_quantity_table = 1;
 options_default.quantity_table_file = '';
 options_default.use_sbml_ids        = 0;
 options_default.extension           ='.csv';
+% expect SBtab table to contain position information
+options_default.read_positions      = 0;  
+options_default.position_file       = [];
 
 options = join_struct(options_default,options);
 
@@ -50,6 +53,21 @@ else,
   network = network_build_from_sum_formulae(filename_reactions);
 end
 
+
+% -------------------------------------------
+% Positions (optional)
+
+if options_default.read_positions,
+  if isempty(options.position_file),
+    options.position_file = [filename '_Position' options.extension];
+  end
+  network = netgraph_read_positions(network, options.position_file);
+end
+
+
+% -------------------------------------------
+% Parameters (optional)
+
 if options.load_quantity_table,
 
   if length(options.quantity_table_file),
@@ -59,8 +77,12 @@ if options.load_quantity_table,
       quantity_table_file = [filename '_QuantityData' options_default.extension];
     else
       %% workaround: save data and load them again
-      sbtab_table_save(filename.tables.RateConstant, struct('filename','/tmp/quantity_data.csv'));
-      quantity_table_file = '/tmp/quantity_data.csv';
+      if isfield(options,'my_matlab_tmp'),
+	quantity_table_file = [options.my_matlab_tmp '/quantity_data.csv'];
+      else
+	quantity_table_file = '/tmp/quantity_data.csv';
+      end
+      sbtab_table_save(filename.tables.RateConstant, struct('filename',quantity_table_file));
     end
   end
 

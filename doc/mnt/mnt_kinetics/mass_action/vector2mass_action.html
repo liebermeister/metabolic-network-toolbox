@@ -6,16 +6,16 @@
   <meta name="keywords" content="vector2mass_action">
   <meta name="description" content="[kinetics,S_ext] = vector2mass_action(vector,used_fwd,used_bwd,n_ext)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">mass_action</a> &gt; vector2mass_action.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">mass_action</a> &gt; vector2mass_action.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/mass_action&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/mass_action&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>vector2mass_action
 </h1>
@@ -39,9 +39,8 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
+<li><a href="../../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -64,6 +63,6 @@ This function is called by:
 0017 kinetics.k_fwd(find(used_fwd)) =  vector(1:sum(used_fwd));
 0018 kinetics.k_bwd(find(used_bwd)) =  vector(sum(used_fwd)+1:end-n_ext);
 0019 S_ext = vector(end-n_ext+1:end);</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -118,6 +118,7 @@ if options.modular_rate_law_table,
   quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations));
   sbtab_document = sbtab_document_add_table(sbtab_document,'Quantity',quantity_table);
 end
+
 if ~isempty(options.filename),
   switch options.save_in_one_file,
     case 0, sbtab_document_save(sbtab_document,options.filename,0,options.verbose);

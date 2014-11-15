@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of moma</title>
+  <meta name="keywords" content="moma">
+  <meta name="description" content="[v,benefit] = moma(network,fba_constraints)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_fluxes</a> &gt; <a href="#">fba</a> &gt; moma.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ./mnt/mnt_fluxes/fba&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>moma
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[v,benefit] = moma(network,fba_constraints)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [v,value] = moma(network,fba_constraints,v_ref) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [v,benefit] = moma(network,fba_constraints)
+
+ MOMA solves
+ min = ||v-c_ref|| where N_internal * v = 0  and vmin &lt;= v &lt;= vmax
+
+ fba_constraints: see fba_default_options
+ fba_constraints.zv:       vector of flux gain weights
+ fba_constraints.v_min:    vector of lower bounds
+ fba_constraints.v_max:    vector of upper bounds
+ fba_constraints.v_sign:   vector of signs, overrides v_min and v_max
+ fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else
+ fba_constraints.ext_sign: sign vector for external metabolite production
+                             undefined signs: nan</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li><li><a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="moma_interactions.html" class="code" title="function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = moma_interactions(network,fba_constraints,inhibition_factor,v_ref)">moma_interactions</a>	[f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)</li></ul>
+<!-- crossreference -->
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,value] = moma(network,fba_constraints,v_ref)</a>
+0002 
+0003 <span class="comment">% [v,benefit] = moma(network,fba_constraints)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% MOMA solves</span>
+0006 <span class="comment">% min = ||v-c_ref|| where N_internal * v = 0  and vmin &lt;= v &lt;= vmax</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% fba_constraints: see fba_default_options</span>
+0009 <span class="comment">% fba_constraints.zv:       vector of flux gain weights</span>
+0010 <span class="comment">% fba_constraints.v_min:    vector of lower bounds</span>
+0011 <span class="comment">% fba_constraints.v_max:    vector of upper bounds</span>
+0012 <span class="comment">% fba_constraints.v_sign:   vector of signs, overrides v_min and v_max</span>
+0013 <span class="comment">% fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else</span>
+0014 <span class="comment">% fba_constraints.ext_sign: sign vector for external metabolite production</span>
+0015 <span class="comment">%                             undefined signs: nan</span>
+0016 
+0017 [nm,nr] = size(network.N);
+0018 ind_int = find(network.external==0);
+0019 fba_constraints = <a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>(fba_constraints);
+0020 
+0021 ind_fix = find(isfinite(fba_constraints.v_fix));
+0022 ind_notfix = find(~isfinite(fba_constraints.v_fix));
+0023 dd      = eye(nr);
+0024 
+0025 c  = fba_constraints.zv;
+0026 
+0027 <span class="comment">% used reduced stoichiometric matrix (to avoid numerical problems in linprog)</span>
+0028 
+0029 [K, L, NR] = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(network.N,network.external);
+0030 
+0031 A  = [full(NR); <span class="keyword">...</span>
+0032      dd(ind_fix,:)];
+0033 
+0034 b  = [zeros(size(A,1),1);<span class="keyword">...</span>
+0035       fba_constraints.v_fix(ind_fix)];
+0036 
+0037 my_eye = eye(nr);
+0038 
+0039 <span class="keyword">if</span> sum(isfinite(fba_constraints.ext_sign)),
+0040 
+0041   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
+0042 
+0043   G  = [  my_eye(ind_notfix,:); <span class="keyword">...</span>
+0044         - my_eye(ind_notfix,:); <span class="keyword">...</span>
+0045         - diag(fba_constraints.ext_sign(ind_ext_sign))*network.N(ind_ext_sign,:); <span class="keyword">...</span>
+0046        ];
+0047   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
+0048           - fba_constraints.v_min(ind_notfix,:); <span class="keyword">...</span>
+0049             zeros(length(ind_ext_sign),1);];
+0050 <span class="keyword">else</span>,
+0051 
+0052   G  = [    my_eye(ind_notfix,:);<span class="keyword">...</span>
+0053           - my_eye(ind_notfix,:)];
+0054   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
+0055           - fba_constraints.v_min(ind_notfix,:)];  
+0056 
+0057 <span class="keyword">end</span>
+0058 M  = eye(length(v_ref));
+0059 m  = -v_ref;
+0060 
+0061 [v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'Algorithm'</span>,<span class="string">'interior-point-convex'</span>));
+0062 
+0063 value = fba_constraints.zv' * v;</pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

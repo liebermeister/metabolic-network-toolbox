@@ -6,16 +6,16 @@
   <meta name="keywords" content="load_any_table">
   <meta name="description" content="list = load_any_table(filename)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">utils</a> &gt; load_any_table.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">utils</a> &gt; load_any_table.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>load_any_table
 </h1>
@@ -43,7 +43,6 @@ This function is called by:
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = load_any_table(filename,delimiter)</a>
 0002 
@@ -54,35 +53,29 @@ This function is called by:
 0007 
 0008 <span class="keyword">if</span> ~exist(<span class="string">'delimiter'</span>,<span class="string">'var'</span>), delimiter = sprintf(<span class="string">'\t'</span>); <span class="keyword">end</span>
 0009 
-0010 fid           = fopen(filename);
+0010 <span class="keyword">try</span>
 0011 
-0012 <span class="keyword">try</span>
-0013   column_titles = fgets(fid);
-0014 <span class="keyword">catch</span> 
-0015   warning(sprintf(<span class="string">'File %s ot found'</span>),filename);
-0016   result = [];
-0017   <span class="keyword">return</span>
-0018 <span class="keyword">end</span>
-0019 
-0020 fclose(fid);
-0021 
-0022 tab_pos = [0,unique([strfind(column_titles,delimiter)])];
-0023 
-0024 textscanstring = repmat(<span class="string">'%s'</span>,1,length(tab_pos));
-0025 
-0026 fid = fopen(filename);
-0027 A   = textscan(fid,textscanstring,<span class="string">'delimiter'</span>,delimiter);
-0028 fclose(fid);
-0029 
-0030 result = {};
-0031 <span class="keyword">for</span> i = 1:length(A),
-0032   <span class="keyword">for</span> k = 1:length(A{i}),
-0033   result{k,i} = A{i}{k};
-0034   <span class="keyword">end</span>
-0035 <span class="keyword">end</span>
-0036 
-0037 result = result(:,find(sum(cellfun(<span class="string">'length'</span>,result))&gt;0));
-0038</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0012   A = {};
+0013   fid         = fopen(filename);
+0014   line_number = 1; 
+0015   <span class="keyword">while</span> 1,
+0016     tline  = fgetl(fid);
+0017     <span class="keyword">if</span> ~ischar(tline), <span class="keyword">break</span>, <span class="keyword">end</span>
+0018     delpos = findstr(tline,delimiter);
+0019     delpos = [0, delpos, length(tline)+1];
+0020     <span class="keyword">for</span> it = 1:length(delpos)-1,
+0021       result{line_number,it} = tline(delpos(it)+1:delpos(it+1)-1);
+0022     <span class="keyword">end</span>
+0023     line_number = line_number + 1;
+0024   <span class="keyword">end</span>
+0025   fclose(fid);
+0026 
+0027   result = result(:,find(sum(cellfun(<span class="string">'length'</span>,result),1)&gt;0));
+0028 
+0029 <span class="keyword">catch</span> 
+0030   warning(sprintf(<span class="string">'File %s not found'</span>,filename));
+0031   result = [];
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

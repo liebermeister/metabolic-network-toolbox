@@ -6,16 +6,16 @@
   <meta name="keywords" content="compute_modular_elasticities_second">
   <meta name="description" content="E_target = compute_modular_elasticities_second(z,kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">mnt</a> &gt; <a href="../../index.html">mnt_kinetics</a> &gt; <a href="../index.html">modular_rate_laws</a> &gt; <a href="index.html">modular_rate_law_functions</a> &gt; compute_modular_elasticities_second.m</div>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_kinetics</a> &gt; <a href="#">modular_rate_laws</a> &gt; <a href="#">modular_rate_law_functions</a> &gt; compute_modular_elasticities_second.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
 
 <h1>compute_modular_elasticities_second
 </h1>
@@ -40,12 +40,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="compute_modular_elasticities.html" class="code" title="function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, flag_second_order)">compute_modular_elasticities</a>	E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback,flag_second_order)</li><li><a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>	[beta_A, gamma_A] = alpha_to_betagamma(alpha_A)</li><li><a href="../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>	[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)</li><li><a href="../../../../mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li></ul>
+<li><a href="compute_modular_elasticities.html" class="code" title="function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, flag_second_order)">compute_modular_elasticities</a>	E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback,flag_second_order)</li><li><a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>	[beta_A, gamma_A] = alpha_to_betagamma(alpha_A)</li><li><a href="../../../.././mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>	[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)</li><li><a href="../../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
 <li><a href="compute_modular_response_second.html" class="code" title="function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)">compute_modular_response_second</a>	[Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_control_second(zc_scaled, zv_scaled, kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, CS_un, CJ_un)</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
@@ -63,7 +62,7 @@ This function is called by:
 0012 E = <a href="compute_modular_elasticities.html" class="code" title="function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, flag_second_order)">compute_modular_elasticities</a>(kinetic_law,N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback,0);
 0013   
 0014 [nm,nr] = size(N);
-0015 zeta    = exp(h.*A/<a href="../../../../mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>);
+0015 zeta    = exp(h.*A/<a href="../../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>);
 0016 
 0017 <span class="comment">% v_plus  = zeta ./ (zeta-1) .* v;</span>
 0018 <span class="comment">% v_minus =    1 ./ (zeta-1) .* v;</span>
@@ -78,11 +77,11 @@ This function is called by:
 0027 <span class="comment">% -----------------------------------------------</span>
 0028 <span class="comment">% structure matrices and saturation values</span>
 0029 
-0030 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = <a href="../../../../mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(N,W,ind_ext,h);
+0030 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = <a href="../../../.././mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(N,W,ind_ext,h);
 0031 
-0032 [beta_A,gamma_A] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_A);
-0033 [beta_I,gamma_I] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_I);
-0034 [beta_M,gamma_M] = <a href="../../../../mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_M);
+0032 [beta_A,gamma_A] = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_A);
+0033 [beta_I,gamma_I] = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_I);
+0034 [beta_M,gamma_M] = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_betagamma.html" class="code" title="function [beta_A, gamma_A] = alpha_to_betagamma(alpha_A)">alpha_to_betagamma</a>(alpha_M);
 0035 
 0036 <span class="comment">% -----------------------------------------------</span>
 0037 <span class="comment">% rate-law-specific quantities</span>
@@ -159,6 +158,6 @@ This function is called by:
 0108 
 0109 E_target.sc_E_cu       = zeros(nm,nr);
 0110 E_target.sc_E_uu       = zeros(nr,nr);</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

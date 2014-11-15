@@ -6,16 +6,16 @@
   <meta name="keywords" content="netgraph_find_x">
   <meta name="description" content="x = netgraph_find_x(network,fixed_positions)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_find_x.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_graphics</a> &gt; netgraph_find_x.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>netgraph_find_x
 </h1>
@@ -35,12 +35,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/utils/netgraph_find_x_old.html" class="code" title="function x = netgraph_find_x_old(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);">netgraph_find_x_old</a>	x = netgraph_find_x(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);</li></ul>
+<li><a href="../.././mnt/utils/netgraph_find_x_old.html" class="code" title="function x = netgraph_find_x_old(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);">netgraph_find_x_old</a>	x = netgraph_find_x(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="netgraph_calculate_positions.html" class="code" title="function [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);">netgraph_calculate_positions</a>	[x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);</li></ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -68,7 +67,7 @@ This function is called by:
 0022 <span class="comment">% first guess</span>
 0023 
 0024 
-0025 x = <a href="../../mnt/utils/netgraph_find_x_old.html" class="code" title="function x = netgraph_find_x_old(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);">netgraph_find_x_old</a>(network.graphics_par,gridsize,k1,k2,k3,network.graphics_par.db,indices_fixed,x_fixed);
+0025 x = <a href="../.././mnt/utils/netgraph_find_x_old.html" class="code" title="function x = netgraph_find_x_old(graphics_object,gridsize,k1,k2,k3,db,indices_fixed,x_fixed);">netgraph_find_x_old</a>(network.graphics_par,gridsize,k1,k2,k3,network.graphics_par.db,indices_fixed,x_fixed);
 0026 network.graphics_par.x = x;
 0027 
 0028 <span class="keyword">if</span> ~isfield(network.graphics_par,<span class="string">'fixed'</span>), 
@@ -159,6 +158,6 @@ This function is called by:
 0113 <span class="keyword">end</span>
 0114  
 0115 network.graphics_par = p;</pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

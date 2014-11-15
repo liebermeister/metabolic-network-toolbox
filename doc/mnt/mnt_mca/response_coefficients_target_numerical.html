@@ -6,16 +6,16 @@
   <meta name="keywords" content="response_coefficients_target_numerical">
   <meta name="description" content="[RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">mnt_mca</a> &gt; response_coefficients_target_numerical.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">mnt_mca</a> &gt; response_coefficients_target_numerical.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>response_coefficients_target_numerical
 </h1>
@@ -45,12 +45,11 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li><li><a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>	[vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>	[kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)</li><li><a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
-
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -70,8 +69,8 @@ This function is called by:
 0014 
 0015 <a name="_sub0" href="#_subfunctions" class="code">function [RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv)</a>
 0016 
-0017 zc = <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(zc);
-0018 zv = <a href="../../mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(zv);
+0017 zc = <a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(zc);
+0018 zv = <a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(zv);
 0019 
 0020 kinetics     = network.kinetics;
 0021 [nm,nr]      = size(network.N);
@@ -81,14 +80,14 @@ This function is called by:
 0025 T            = 10000;
 0026 
 0027 <span class="comment">%v = network_velocities(c,network);</span>
-0028 [s,v,dum1,dum2,L_int,NR_int,indep_met_int] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network,c,T);
+0028 [s,v,dum1,dum2,L_int,NR_int,indep_met_int] = <a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network,c,T);
 0029 c           = s;
 0030 
 0031 S_ext       = c(ind_ext);
 0032 S_ext_names = network.metabolites(ind_ext);
-0033 par         = <a href="../../mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(kinetics,S_ext,S_ext_names,network);
+0033 par         = <a href="../.././mnt/mnt_kinetics/kinetics/parameters2vector.html" class="code" title="function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)">parameters2vector</a>(kinetics,S_ext,S_ext_names,network);
 0034 
-0035 eval(<a href="../../mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'ind_rel_par'</span>,<span class="string">'1:length(par)'</span>));
+0035 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'ind_rel_par'</span>,<span class="string">'1:length(par)'</span>));
 0036 
 0037 np          = length(ind_rel_par);
 0038 
@@ -119,16 +118,16 @@ This function is called by:
 0063   <span class="keyword">if</span> par_pert1(it) == 0, par_pert(it) =  10^-8; <span class="keyword">end</span>
 0064   <span class="keyword">if</span> par_pert2(it) == 0, par_pert(it) = -10^-8; <span class="keyword">end</span>
 0065 
-0066   [nkinetics1, Sext_pert1] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert1,ind_ext,network);
-0067   [nkinetics2, Sext_pert2] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert2,ind_ext,network);
+0066   [nkinetics1, Sext_pert1] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert1,ind_ext,network);
+0067   [nkinetics2, Sext_pert2] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert2,ind_ext,network);
 0068   s_pert1  = c;
 0069   s_pert2  = c;
 0070   s_pert1(ind_ext) = Sext_pert1;
 0071   s_pert2(ind_ext) = Sext_pert2;
 0072   network1.kinetics = nkinetics1;
 0073   network2.kinetics = nkinetics2;
-0074   [s_pert1, v_pert1] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert1,T,L_int,NR_int,indep_met_int);
-0075   [s_pert2, v_pert2] = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network2,s_pert2,T,L_int,NR_int,indep_met_int);
+0074   [s_pert1, v_pert1] = <a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert1,T,L_int,NR_int,indep_met_int);
+0075   [s_pert2, v_pert2] = <a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network2,s_pert2,T,L_int,NR_int,indep_met_int);
 0076 
 0077   delta_par_pert1 = par_pert1(it) - par(it);
 0078   delta_par_pert2 = par_pert2(it )- par(it);
@@ -190,11 +189,11 @@ This function is called by:
 0134     <span class="keyword">if</span> par_pert1(k) == 0, par_pert1(k)  = 10^-5; <span class="keyword">end</span>
 0135     delta_par1    = par_pert1 - par;
 0136 
-0137     [nkinetics, Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert1,ind_ext,network);
+0137     [nkinetics, Sext_pert] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert1,ind_ext,network);
 0138     s_pert1            = c + RS * delta_par1(ind_rel_par) + 0. * RS2diag(:,it) * delta_par1(it)^2 + 0. * RS2diag(:,k) * delta_par1(k)^2; 
 0139     s_pert1(ind_ext)   = Sext_pert;
 0140     network1.kinetics = nkinetics;
-0141     [s_pert1,v_pert1]   = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert1,T,L_int,NR_int,indep_met_int);    
+0141     [s_pert1,v_pert1]   = <a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert1,T,L_int,NR_int,indep_met_int);    
 0142 
 0143     my_RJ2_1 = [v_pert1 - v - RJ * delta_par1(ind_rel_par) <span class="keyword">...</span>
 0144                 - 1/2 * RJ2diag(:,[it,k]) *  delta_par1([it,k]).^2] <span class="keyword">...</span>
@@ -213,11 +212,11 @@ This function is called by:
 0157     <span class="keyword">if</span> par_pert2(it)==0, par_pert2(it) = -10^-5; <span class="keyword">end</span> 
 0158     <span class="keyword">if</span> par_pert2(k) ==0, par_pert2(k)  = -10^-5; <span class="keyword">end</span>
 0159     delta_par2      = par_pert2 - par;
-0160     [nkinetics, Sext_pert] = <a href="../../mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert2,ind_ext,network);
+0160     [nkinetics, Sext_pert] = <a href="../.././mnt/mnt_kinetics/kinetics/vector2parameters.html" class="code" title="function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)">vector2parameters</a>(kinetics,par_pert2,ind_ext,network);
 0161     s_pert2            = c + RS * delta_par2(ind_rel_par) + 0. * RS2diag(:,it) * delta_par2(it)^2 + 0. * RS2diag(:,k) * delta_par2(k)^2; 
 0162     s_pert2(ind_ext)   = Sext_pert;
 0163     network1.kinetics  = nkinetics;
-0164     [s_pert2,v_pert2]  = <a href="../../mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert2,T,L_int,NR_int,indep_met_int);
+0164     [s_pert2,v_pert2]  = <a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network1,s_pert2,T,L_int,NR_int,indep_met_int);
 0165 
 0166     my_RS2_2 = [s_pert1 - c - RS * delta_par1(ind_rel_par) <span class="keyword">...</span>
 0167                 - 1/2 * RS2diag(:,[it,k]) *  delta_par2([it,k]).^2] <span class="keyword">...</span>
@@ -237,6 +236,6 @@ This function is called by:
 0181  
 0182   <span class="keyword">end</span>
 0183 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -6,16 +6,16 @@
   <meta name="keywords" content="numerical_elasticities">
   <meta name="description" content="[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt</a> &gt; <a href="index.html">utils</a> &gt; numerical_elasticities.m</div>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="#">utils</a> &gt; numerical_elasticities.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for ./mnt/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
 
 <h1>numerical_elasticities
 </h1>
@@ -46,17 +46,16 @@ This function is called by:
 <!-- crossreference -->
 
 
-
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% calculate the first- and second-order elasticities</span>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</a>
+0002 
+0003 <span class="comment">%[epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</span>
 0004 <span class="comment">%</span>
-0005 <span class="comment">% x                : variables       (vector)</span>
-0006 <span class="comment">% p                : parameters      (structure array)</span>
-0007 <span class="comment">% velocity_function: function handle to kinetics function</span>
-0008 
-0009 <a name="_sub0" href="#_subfunctions" class="code">function [epsilon_1,epsilon_2,pi_1,pi_2,rho_2] = numerical_elasticities(x,p,velocity_function);</a>
+0005 <span class="comment">% calculate the first- and second-order elasticities</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% x                : variables       (vector)</span>
+0008 <span class="comment">% p                : parameters      (structure array)</span>
+0009 <span class="comment">% velocity_function: function handle to kinetics function</span>
 0010 
 0011 v = feval(velocity_function,x,p);
 0012 
@@ -164,6 +163,6 @@ This function is called by:
 0114 rho_2(find(abs(rho_2)&lt;(10^-10)))            = 0;
 0115 
 0116 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 14-Apr-2013 22:34:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 09-Nov-2014 13:14:25 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>
