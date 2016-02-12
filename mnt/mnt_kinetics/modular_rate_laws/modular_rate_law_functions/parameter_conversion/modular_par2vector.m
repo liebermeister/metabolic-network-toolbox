@@ -1,10 +1,12 @@
 function [v,names] = modular_par2vector(p,network,no_names)
 
 % [v,names] = modular_par2vector(p,network,no_names)
+%
+% Order: [p.u; p.c; column(p.KA(KA_indices)); column(p.KI(KI_indices)); column(p.KM(KM_indices)); p.KV; p.Keq];
 
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);
 
-v              = [p.u; p.c; column(p.KA(KA_indices)); column(p.KI(KI_indices)); column(p.KM(KM_indices)); p.KV; p.Keq];
+v = [p.u; p.c; column(p.KA(KA_indices)); column(p.KI(KI_indices)); column(p.KM(KM_indices)); p.KV; p.Keq];
 
 if no_names,
   names =[];

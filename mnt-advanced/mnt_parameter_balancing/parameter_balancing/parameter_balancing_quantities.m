@@ -1,11 +1,23 @@
 function [model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(quantity_info,network,options)
 
 % [model_quantities, basic_quantities, data_quantities] = parameter_balancing_relevant_quantities(quantity_info,network,options)
-% find out which quantities are relevant for a model (model_quantities, list of strings),
-% relevant basic quantities in a model (basic_quantities), and possible quantities
-% in the kinetic data that might be relevant to estimate the basic quantities
+% 
+% Lists of 
+%  - quantities relevant for a model (model_quantities, list of strings),
+%  - relevant basic quantities in a model (basic_quantities)
+%  - possible quantities in kinetic data that might be relevant to estimate the basic quantities
+%
+% Options
+%  options.include_metabolic (default 0) 
+%  options.enzymes_explicit  (default 1)
+%  options.parametrisation   (default 'catalytic rate constant');
 
-eval(default('options','struct'));
+eval(default('quantity_info','[]','options','struct'));
+
+if isempty(quantity_info),
+  quantity_info =   data_integration_load_quantity_info;
+end
+
 options_default = struct('include_metabolic',0,'enzymes_explicit',1,'parametrisation','catalytic rate constant');
 options = join_struct(options_default,options);
 

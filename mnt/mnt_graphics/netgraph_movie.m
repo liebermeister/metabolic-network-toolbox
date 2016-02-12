@@ -1,4 +1,4 @@
-% [M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);
+% [M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);
 %
 % s_t must be #variables x #timepoints !!!
 %
@@ -36,7 +36,6 @@ s_t            = interp1(t,s_t',T,'cubic')';
 s_t(nandata,:) = nan;
 if size(s_t,2)==1, s_t = s_t'; end
 
-
 if length(options.metabolite_colors), 
   options.metabolite_colors = interp1(t,options.metabolite_colors,T,'cubic');
   options.metabolite_colors(options.metabolite_colors<0) = 0;
@@ -49,15 +48,33 @@ if length(options.reaction_colors),
   options.reaction_colors(options.reaction_colors>1) = 1;
 end
 
-[nm,nr] = size(network.N);
+%[nm,nr] = size(network.N);
 
-if isfield(network.graphics_par,'reaction_mapping'), 
-  nr = max(network.graphics_par.reaction_mapping); 
-  nm = size(s_t,1) - nr;
-end
-
-if isfield(network.graphics_par,'metabolite_mapping'), 
-  nm = max(network.graphics_par.metabolite_mapping); 
+switch data_type,    
+  case 'concentrations',
+    s_t_c = s_t;
+    s_t_v = [];
+    nm    = size(s_t,1);
+    nr    = 0;
+%  case 'compute reactions',
+%    if isfield(network.graphics_par,'metabolite_mapping'),
+%       if max(network.graphics_par.metabolite_mapping) > nm, 
+%          error('Option compute reactions is not supported in this case');
+%       end
+%    end
+%    s_t_c = s_t;
+%    s_t_v = [];
+%    nm    = size(s_t,1);
+%    nr    = 0;
+  case 'reactions',
+    s_t_c = [];
+    s_t_v = s_t;
+    nm    = 0;
+    nr    = size(s_t,1);
+%  case 'both',
+%    s_t_c = s_t(1:nm,:);
+%    s_t_v = s_t(nm+1:end,:);
+%  otherwise, error('Unknown function option'); 
 end
 
 metvalues = zeros(nm,length(T));
@@ -66,17 +83,18 @@ actvalues = zeros(nr,length(T));
 for j = 1:length(T),
   switch data_type,    
     case 'concentrations',
-      metvalues(:,j) = s_t(:,j);
+      metvalues(:,j) = s_t_c(:,j);
       options.actstyle = 'none';
     case 'reactions',
-      actvalues(:,j) =  s_t(:,j);
+      actvalues(:,j) =  s_t_v(:,j);
       options.metstyle = 'none';
-    case 'both',
-      metvalues(:,j) = s_t(1:nm,j);
-      actvalues(:,j) = s_t(nm+1:end,j);
-    case 'compute reactions',
-      metvalues(:,j) = s_t(:,j);
-      actvalues(:,j) = network_velocities(metvalues(:,j),network,network.kinetics);    
+    %% case 'both',
+    %%   metvalues(:,j) = s_t_c(:,j);
+    %%   actvalues(:,j) = s_t_v(:,j);
+    %% case 'compute reactions',     
+    %%   metvalues(:,j) = s_t_c(:,j);
+    %%   actvalues(:,j) = network_velocities(metvalues(:,j),network,network.kinetics);    
+   otherwise, error('Unknown function option'); 
   end
 end
 
@@ -85,6 +103,8 @@ jj = j;
 if length(metvalues), options_default.metvaluesmax = max(max(metvalues(:)),0.001); end
 if length(actvalues), options_default.actvaluesmax = max(max(actvalues(:)),0.001); end
 
+clf; 
+subplot('position',[0 0 1 1]);
 netgraph_concentrations(network,metvalues(:,1),actvalues(:,1),0,options_default);
 
 options_default.figure_axis    = axis;
@@ -117,14 +137,19 @@ for j=1:jj,
     if size( options.actcolors,2) == 1, options.actcolors = options.actcolors'; end
   end
   
+  clf; 
+  subplot('position',[0 0 1 1]);
   netgraph_concentrations(network,metvalues(:,j),actvalues(:,j),text_flag,options);
-
   if timebar, 
     hold on;  
     ss = network.graphics_par.squaresize;
-    plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0.4 0.7 1]); 
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0.2 0.5 1]);
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/3,[0.4 0.7 1]);
+    plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]); 
+    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0 0 0]);
+    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/6,[1 1 1]);
+    % Blue circle
+    % plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0.4 0.7 1]); 
+    % circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0.2 0.5 1]);
+    % circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/3,[0.4 0.7 1]);
   end
 
   axis(a);

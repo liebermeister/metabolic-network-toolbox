@@ -72,10 +72,17 @@ else,
   
   %%  dmu = lp236a(-c, -G, -h, A, b);
 
+  if exist('cplexlp','file'),
+   opt         = cplexoptimset('linprog');
+   opt.MaxIter = 10^10;
+   opt.Display = 'off';
+   [dmu, dum, exitflag] = cplexlp(-c, -G, -h, A, b, lb, ub, [], opt);
+  else
    opt         = optimset('linprog');
    opt.MaxIter = 10^10;
    opt.Display = 'off';
    [dmu, dum, exitflag] = linprog(-c, -G, -h, A, b, lb, ub, [], opt);
+  end
 
    if exitflag ~=1,
      exitflag

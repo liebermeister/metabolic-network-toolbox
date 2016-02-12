@@ -1,6 +1,6 @@
-% output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)
+% [names, positions] = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)
 
-function output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)
+function [names, positions] = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)
 
 eval(default('filename','[]','offsets','[0,0]','policy','''replace elements''','flag_KEGG_ids','0'));
 
@@ -20,6 +20,8 @@ actpositions = network.graphics_par.x(:,nm+1:end) + repmat(offsets',1,nr);
 
 names     = [metnames; actnames];
 positions = [metpositions, actpositions];
+
+if length(filename),
 
 switch policy, 
   case 'add nonexistent',  
@@ -43,10 +45,14 @@ end
 
 fid = fopen(filename,'w');
 
+fprintf(fid,'!!SBtab TableType="Position"\n');
 fprintf(fid,'!Element\t!PositionX\t!PositionY\n');
 
 for it = 1:length(names),
   fprintf(fid,'%s\t%f\t%f\n',names{it},positions(1,it),positions(2,it));
 end
 fclose(fid);
-%output = mytable([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,filename);
+
+end
+
+%output = mytable([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,filename)

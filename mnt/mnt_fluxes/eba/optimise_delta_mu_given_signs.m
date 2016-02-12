@@ -95,7 +95,11 @@ x_upper = xmax * ones(n_mu_ind,1);
 
 opt = optimset; opt.MaxIter = 10000; opt.LargeScale = 'off';
 
-[delta_mu_ind,fval,exitflag] = quadprog(H,f,A,b,[],[], -x_upper, x_upper, delta_mu_ind_mean, opt);
+if exist('cplexqp','file'),
+  [delta_mu_ind,fval,exitflag] = cplexqp(H,f,A,b,[],[], -x_upper, x_upper, delta_mu_ind_mean, opt);
+else,
+  [delta_mu_ind,fval,exitflag] = quadprog(H,f,A,b,[],[], -x_upper, x_upper, delta_mu_ind_mean, opt);
+end
 
 delta_mu_ind_score = gaussian_score(delta_mu_ind,delta_mu_ind_mean, inv(delta_mu_ind_cov_inv));
 

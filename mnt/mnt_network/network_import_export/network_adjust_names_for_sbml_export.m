@@ -1,8 +1,8 @@
-function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)
+function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions,flag_no_leading_underscores)
 
 % [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)
 
-eval(default('actions','[]'));
+eval(default('actions','[]','flag_no_leading_underscores','0'));
 
 for it=1:length(metabolites),
   metabolites{it} = strrep(metabolites{it},'''','_');
@@ -21,10 +21,19 @@ for it=1:length(metabolites),
   metabolites{it} = strrep(metabolites{it},'[','_');  
   metabolites{it} = strrep(metabolites{it},']','_');  
   
+  if length(metabolites{it}),
+    
   if length(strfind('0123456789',metabolites{it}(1)))
     metabolites{it} = ['_' metabolites{it}];
   end
 
+  if flag_no_leading_underscores,
+    if strcmp(metabolites{it}(1),'_'),
+      metabolites{it} = metabolites{it}(2:end);
+    end
+  end
+
+  end
 end
 
 for it=1:length(actions),
@@ -46,5 +55,5 @@ for it=1:length(actions),
   if length(strfind('0123456789',actions{it}(1)))
     actions{it} = ['_' actions{it}];
   end
-
+  
 end

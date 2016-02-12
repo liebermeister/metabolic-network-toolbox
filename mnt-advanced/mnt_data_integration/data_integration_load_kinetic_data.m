@@ -2,14 +2,16 @@ function kinetic_data = data_integration_load_kinetic_data(data_quantities, quan
 
 % kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)
 %
-% construct data structure with kinetic quantities relevant for a model
+% Construct data structure containing kinetic quantities that may appear in a model
 %
-% for displaying such data structures: use 'parameter_balancing_kinetic_data_show(kinetic_data);'
+% Data are read from file 'file_kinetic_data' 
+% (if no filename is provided, an empty data structure is generated)
 %
-% data are read from file 'file_kinetic_data' and 
+% The data structure 'kinetic_data' contains a field for every quantity type listed in 'data_quantities'
 %
-% the data structure 'kinetic_data' contains a field for every quantity type listed in 'data_quantities'
+% For displaying the data structure, use 'parameter_balancing_kinetic_data_show(kinetic_data);'
 %
+
 % fill in values from "kinetic_data_table"
 % take logarithms where necessary
 % values are NOT averaged but OVERWRITTEN!
@@ -18,7 +20,9 @@ if ~exist('sbtab_version','file'),
   error('For this function, the SBtab toolbox must be installed');
 end
 
-eval(default('quantity_info','[]',...
+eval(default('data_quantities', '[]', ...
+	     'quantity_info','[]',...
+	     'file_kinetic_data', '[]', ...
              'use_sbml_ids','1',...
              'use_kegg_ids','[]',...
              'flag_invent_std','1',...
@@ -29,11 +33,23 @@ eval(default('quantity_info','[]',...
              'compound_column_name', '[]' ...
              ));
 
+if isempty(data_quantities), 
+data_quantities = {'standard Gibbs energy of reaction', ...
+	      'standard chemical potential',...
+	      'Michaelis constant',...
+	      'activation constant', ...
+	      'inhibitory constant',...
+              'equilibrium constant', ...
+	      'substrate catalytic rate constant', ...
+              'product catalytic rate constant'};
+end
+
 if isempty(quantity_info), 
   quantity_info = data_integration_load_quantity_info; 
 end
 
 if isempty(file_kinetic_data),
+  display('No data file provided. Creating empty data structure');
   verbose           = 0;
   file_kinetic_data = [];
 end

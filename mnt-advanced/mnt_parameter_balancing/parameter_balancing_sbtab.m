@@ -2,11 +2,12 @@ function parameter_balancing_sbtab(model_name, metabolic_data_sbtab, options)
 
 % parameter_balancing_sbtab(model_name, metabolic_data_sbtab, options)
 %
-% a wrapper for parameter balancing that reads all input data 
-% (model, priors, kinetic and metabolic data) from files in SBtab format
+% Wrapper for parameter balancing:
+% reads all input data (model, priors, kinetic and metabolic data) from SBtab files
+% runs parameter balancing (without and with concentration data)
 
-% example:
-% model_name        = '/home/wolfram/projekte/carbon_fixation/matlab_carbon_fixation/models/model_MOGtranshydrogenase1/MOGtranshydrogenase1';
+% Example:
+% model_name = '/home/wolfram/projekte/carbon_fixation/matlab_carbon_fixation/models/model_MOGtranshydrogenase1/MOGtranshydrogenase1';
 % file_kinetic_data = '/home/wolfram/projekte/carbon_fixation/matlab_carbon_fixation/models/model_MOGtranshydrogenase1/MOGtranshydrogenase1_Quantity.tsv';
 
 options.kinetics          = 'cs';  % ms, ...
@@ -27,7 +28,6 @@ kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info
 quantity_info.PriorMedian{quantity_info.symbol_index.u} = '1';
 quantity_info.PriorStd{quantity_info.symbol_index.u}    = '3';
 quantity_info.PriorStd{quantity_info.symbol_index.KV}   = '3';
-
 
 % -----------------------------------------------------------------------
 % run simple parameter balancing without metabolic data

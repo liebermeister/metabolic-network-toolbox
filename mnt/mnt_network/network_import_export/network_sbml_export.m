@@ -116,6 +116,7 @@ if isfield(network,'kinetics'),
 
       if verbose, fprintf('%d ',it); end
 
+        % THIS IS A COPY FROM network_get_kinetics_strings
         r_name = ['R' num2str(it) ];
         
         sub = find(network.N(:,it) < 0);
@@ -227,6 +228,27 @@ if isfield(network,'kinetics'),
 	end
       end
       
+    case 'numeric',
+     
+      if isfield(network.kinetics,'velocity_strings'),
+        my_strings = feval(network.kinetics.velocity_strings);
+        for itt = 1:length(my_strings),
+          kinetic_law{itt} = KineticLaw_create(sbml_level,sbml_version);
+          kinetic_law{itt} = KineticLaw_setFormula(kinetic_law{itt}, my_strings{itt});
+          kinetic_law{itt} = KineticLaw_setMathFromFormula(kinetic_law{itt});
+        end
+      
+        parnames = fieldnames(network.kinetics.parameters);
+        for itt = 1:length(parnames),
+          parameter = Parameter_create(sbml_level,sbml_version);
+          parameter = Parameter_setName(parameter, parnames{itt});
+          parameter = Parameter_setId(  parameter, parnames{itt});
+          parameter = Parameter_setValue(parameter,network.kinetics.parameters.(parnames{itt}));
+          parameter = Parameter_setConstant(parameter,1);
+          SBMLmodel = Model_addParameter(SBMLmodel,parameter);
+        end       
+      end
+      
     otherwise, disp('Kinetics export has not been implemented for this kinetics so far.');
   
   end
@@ -245,7 +267,6 @@ if verbose, fprintf('\n  Converting the reactions: '); end
 for it = 1:length(network.actions),
 
  if verbose,  fprintf('%d ',it); end
-
   reaction = Reaction_create(sbml_level,sbml_version);
   reaction = Reaction_setId(reaction,network.actions{it});
   reaction = Reaction_setName(reaction,network.actions{it});

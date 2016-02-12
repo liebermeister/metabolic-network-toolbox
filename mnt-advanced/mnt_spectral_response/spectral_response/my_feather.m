@@ -15,6 +15,8 @@ if isempty(color),
   color = [1 0 0];
 end
 
+light_color = [0.6,0.6,0.6] + 0.4 * color;
+
 if length(d), z=z/max(abs(z))*d; end
 
 if ~exist('l','var'), l = 0.1; end
@@ -27,7 +29,7 @@ hold on
 
 if options.show_circle,
   for i=1:length(x);
-    plot_circle(centres(1,i),centres(2,i),abs(z(i)),[0.8,0.8,0.8] + 0.2 * color);
+    plot_circle(centres(1,i),centres(2,i),abs(z(i)),light_color);
   end
 end
 

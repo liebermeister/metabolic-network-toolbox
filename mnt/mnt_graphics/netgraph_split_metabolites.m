@@ -38,8 +38,8 @@ met_list = intersect(met_list,metabolites);
 met_index = [];
 
 for it = 1:length(met_list)
-  metabolite = met_list{it};
-  met_index(it) = find(strcmp(metabolites,metabolite));
+  metabolite       = met_list{it};
+  met_index(it)    = find(strcmp(metabolites,metabolite));
   multiplicity(it) = sum(full(N(met_index(it),:))~=0);
   subN{it} = zeros(multiplicity(it),size(N,2));
   dummi = find(N(met_index(it),:)~=0);

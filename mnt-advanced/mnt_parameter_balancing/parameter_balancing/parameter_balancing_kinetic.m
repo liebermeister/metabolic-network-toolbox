@@ -1,4 +1,4 @@
-function [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given, options);
+function [r, r_orig, kinetic_data, r_samples] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given, options);
 
 % [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);
 %
@@ -12,20 +12,19 @@ function [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_
 % or some of these
 %
 % options and their default values:
-%  kcat_prior_median = [];
-%  kcat_prior_log10_std = []
-%  kcat_lower = [];
-%  kcat_upper = []; 
-%  GFE_fixed = 0
-%  quantity_info_file = [];
+%  options.kcat_prior_median = [];
+%  options.kcat_prior_log10_std = []
+%  options.kcat_lower = [];
+%  options.kcat_upper = []; 
+%  options.GFE_fixed = 0
+%  options.quantity_info_file = [];
 %
-%
-% The standard reaction directions in the model have to follow the convention in KEGG!!!!
+% The standard reaction directions in the model have to follow the convention in KEGG!!
 
 
 eval(default('filename','[]', 'Keq_given','[]','options','struct'));
 
-options_default = struct('kcat_prior_median',[],'kcat_prior_log10_std',[],'kcat_lower',[],'kcat_upper',[],'GFE_fixed',0,'quantity_info_file','[]');
+options_default = struct('kcat_prior_median',[],'kcat_prior_log10_std',[],'kcat_lower',[],'kcat_upper',[],'GFE_fixed',0,'quantity_info_file','[]','n_samples',0);
 options = join_struct(options_default,options);
 
 if isempty(kinetic_data),
@@ -112,7 +111,7 @@ end
 
 network.kinetics = set_kinetics(network, 'cs');
 task             = parameter_balancing_task(network, my_kinetic_data, quantity_info, model_quantities, basic_quantities);
-res              = parameter_balancing(task, quantity_info, struct('insert_pseudo_values',0));
+res              = parameter_balancing(task, quantity_info, struct('insert_pseudo_values',0,'n_samples',options.n_samples));
 
 r.mu0   = res.kinetics_posterior_mode.mu0  ;
 r.KV    = res.kinetics_posterior_mode.KV   ;
@@ -136,6 +135,11 @@ end
 r_orig.Kcatf = kinetic_data.Kcatf.median;
 r_orig.Kcatr = kinetic_data.Kcatr.median;
 
+if options.n_samples,
+  r_samples = res.kinetics_posterior_samples;
+else
+  r_samples = [];
+end
 
 % =========================================================================
 

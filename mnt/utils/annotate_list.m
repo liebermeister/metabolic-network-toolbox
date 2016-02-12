@@ -1,14 +1,22 @@
-function list2 = annotate_list(list1,filename)
+function list2 = annotate_list(list1,filename,filetype)
 
 %if key occurs several times in file,
 %choose last occurrence
 
-fid = fopen(filename);
-A   = textscan(fid,'%s%s\n','delimiter','\t');
-fclose(fid);
+eval(default('filetype','''txt'''));
 
-name1     = A{1};
-name2     = A{2};
+switch filetype,
+case 'txt',
+  fid = fopen(filename);
+  A   = textscan(fid,'%s%s\n','delimiter','\t');
+  fclose(fid);
+  name1     = A{1};
+  name2     = A{2};
+case 'sbtab',
+  T = sbtab_table_load(filename);
+  name1 = getfield(T.column.column,T.column.column_names{1});
+  name2 = getfield(T.column.column,T.column.column_names{2});
+end
 
 indices = label_names(list1,name1,'multiple');
 for it =1:length(indices), 

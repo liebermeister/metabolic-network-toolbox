@@ -73,9 +73,14 @@ for it=1:length(s.reaction),
     reaction_math{it,:}       = [];
     reaction_parameter{it,:}  = [];
   else,
-    reaction_formula{it,:}    = s.reaction(it).kineticLaw.formula;
     reaction_math{it,:}       = s.reaction(it).kineticLaw.math;
-    reaction_parameter{it,:}  = s.reaction(it).kineticLaw.parameter;
+    %reaction_formula{it,:}   = s.reaction(it).kineticLaw.formula;
+    reaction_formula{it,:}    = s.reaction(it).kineticLaw.math;
+    if isfield(s.reaction(it).kineticLaw,'parameter'),
+      reaction_parameter{it,:} = s.reaction(it).kineticLaw.parameter;
+    else,
+      reaction_parameter{it,:}  = s.reaction(it).kineticLaw.localParameter;
+    end
   end
   listOfReactants{it,:} = s.reaction(it).reactant;
   listOfProducts{it,:}  = s.reaction(it).product;
@@ -178,7 +183,7 @@ if ~isempty(reaction_formula{1}),
   network.kinetics.reactions = {};
   all_parameters = {};
   for it = 1:length(actions),
-    network.kinetics.reactions{it}.string = strrep(reaction_math{it},'pow','power');
+    network.kinetics.reactions{it}.string = reaction_formula{it};
     for itt = 1:length(reaction_parameter{it}),
       this_parameter = reaction_parameter{it}(itt);
       network.kinetics.reactions{it}.parameters{itt}       = this_parameter.id;
@@ -195,15 +200,30 @@ if ~isempty(reaction_formula{1}),
 end
 
 if ~isempty(reaction_formula{1}),
+
   network.kinetics.parameters       = {};
   network.kinetics.parameter_values = [];
   for itp = 1:length(s.parameter),
     network.kinetics.parameters{itp,1} = s.parameter(itp).id;
     network.kinetics.parameter_values(itp,1) = s.parameter(itp).value;
   end
+
   if length(s.rule),
-    warning('SBML model contains rules - these cannot be imported'); 
+    network.kinetics.rules = {};
+    for itt = 1:length(s.rule),
+      network.kinetics.rules{itt,1} = struct('variable', s.rule(itt).variable, 'formula', s.rule(itt).formula);
+    end
   end
+
+  if isfield(s,'initialAssignment')
+    if length(s.initialAssignment),
+      network.kinetics.initialAssignment = {};
+      for itt = 1:length(s.initialAssignment),
+	network.kinetics.initialAssignment{itt,1} = struct('symbol', s.initialAssignment(itt).symbol, 'formula', s.initialAssignment(itt).math);
+      end
+    end
+  end
+
 elseif verbose, 
   fprintf('Warning: no kinetics found in SBML file.\n');
 end 

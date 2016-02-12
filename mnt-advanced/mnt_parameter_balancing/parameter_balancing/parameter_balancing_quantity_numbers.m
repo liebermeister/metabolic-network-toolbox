@@ -20,5 +20,6 @@ for it = 1:length(quantities),
        case 'KI', num(it,1) = nKI;
        otherwise error(sprintf('Unknown symbol %s',my_symbol));
      end
+    otherwise, num(it,1) = 1;
   end
 end

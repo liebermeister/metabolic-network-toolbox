@@ -18,10 +18,11 @@
 % metprintnames
 % metprintvalues
 % metcolors       (optional, overrides all other color specifications)
-% omitmetabolites
+% omitmetabolites (list of metabolite names) metabolites to be omitted in graphics
 % squaresize ( also holds for reaction symbols)
 % no_points ( also holds for reaction symbols)
 % flag_edges (holds also for reaction and regulation symbols)
+% circle_shift [0,0] additional shift of circle symbols
 %
 %REACTION SYMBOLS
 % actvalues
@@ -33,26 +34,26 @@
 % actvaluesmin
 % actprintnames
 % actprintvalues
-% omitreactions     reactions to be omitted in graphics
+% omitreactions   (list of reaction names) reactions to be omitted in graphics
 %
 %STYLE OF ARROWS
-% arrowstyle     {'fluxes','directions','none'}
-% arrowvalues
-% arrowvaluesmax
-% arrowvaluesmin
-% arrow_stoichiometries [0,1] scale arrows with stoichiometric coefficients?
+% arrowstyle       {'fluxes','directions','none'}
+% arrowvalues      a value of 1 will be shown in standard size (given by arrowsize)
+% arrowvaluesmax   threshold value; any larger values will be replaced by this value
+% arrowvaluesmin   threshold value; any smaller (or more negative) values will be replaced by this value
+% arrow_stoichiometries [0,1] scale arrows with stoichiometric coefficients? (default 0)
 % arrowsize
-% arrow_shift     [0..1]
+% arrow_shift      [0..1]
 % arrowprintvalues (overrides actprintvalues);
 % straightlines
 % arrowcolor
-% single_arrow [0,1] Draw only one arrow per reaction, on top of the reaction symbol
+% single_arrow     [0,1] Draw only one arrow per reaction, on top of the reaction symbol
 %
 %STYLE OF EDGE SYMBOLS
 %
 % edgevalues     (sparse matrix, size of stoichiometric matrix N)
 % edgevalues_std (sparse matrix, size of stoichiometric matrix N)
-% edgestyle {'normal',fixed'}
+% edgestyle      {'normal',fixed'}; 'fixed' plot all symbols in the same size
 % edgevaluesmax
 % edgevaluesmin
 %
@@ -60,7 +61,7 @@
 % show_regulation (flag)
 % show_regulationvalues (flag)
 % regulationvalues (sparse matrix of size of regulation_matrix)
-% regulationstyle {'normal',fixed'}
+% regulationstyle {'normal',fixed'} 'fixed' plot all symbols in the same size
 % rlinecolor
 %
 %TEXT ITEMS
@@ -78,7 +79,9 @@
 % colormap        (default rb_colors)
 % black_and_white (default 0)
 % showsign
+% shade_long_lines  (value) shade lines above a certain length
 %
+% canvas (flag, default []): show light grey background
 % figure_axis
 % figure_position
 % subplot_position
@@ -87,11 +90,11 @@
 
 function  network = netgraph_draw(network,varargin)
 
-if sum(size(network.N)) > 1000, warning('Network too large for drawing'); return; end
+if sum(size(network.N)) > 10000, 
+   warning('Network too large for drawing'); return; 
+end
 
 p     = netgraph_draw_set_parameters(network,varargin);
-
-
 
 n_met = length(network.metabolites);
 n_act = length(network.actions);
@@ -105,6 +108,10 @@ if ~isempty(p.subplot_position),
 end
 
 hold on;
+
+if p.canvas,
+   fill([0 1 1 0], [0 0 1 1],[.98 .98 .98],'EdgeColor','None');
+end
 
 x_arrowlistN = zeros(n_met,n_act,2);
 
@@ -125,14 +132,20 @@ end
 % ------------------------------------------------------------------------------
 % only lines
 
-if p.straightlines,   % straight lines
-  [i2,j2] = find(triu(m));
-  for itt = 1:length(i2),
-    if sum(j2(itt)-n_met==p.actindshow) * sum(i2(itt)==p.metindshow)
-      line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',p.linecolor,'Linewidth',p.linewidth); 
-    end
-  end
-end
+ if p.straightlines,   % straight lines
+   [i2,j2] = find(triu(m));
+   for itt = 1:length(i2),
+     if sum(j2(itt)-n_met==p.actindshow) * sum(i2(itt)==p.metindshow),
+       my_color = p.linecolor;
+       if p.shade_long_lines, 
+         if [x(1,i2(itt))-x(1,j2(itt))]^2 + [x(2,i2(itt))-x(2,j2(itt))]^2 > p.shade_long_lines^2,
+	   my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
+	 end
+       end
+       line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',my_color,'Linewidth',p.linewidth); 
+     end
+   end
+ end
 
 
 % ---------------------------------------------------
@@ -144,46 +157,8 @@ if ~p.no_points,
 end
 
 
-% ---------------------------------------------------
-% metabolites
-
-if p.show_metvalues,
-  
-  switch p.metcolstyle
-    case 'fixed',  c = repmat(p.metcol,n_met,1);
-    case 'values', c = get_color(p.norm_metvalues,-1,1,p.colormap);
-  end
-
-  if length(p.metcolors),
-    c = p.metcolors(p.metabolite_mapping,:);
-  end
-  
-  p.norm_metvalues = abs(p.norm_metvalues);
-  
-  switch p.metstyle
-    case 'box',    p.norm_metvalues_std = 0*p.norm_metvalues_std;
-    case 'none',   p.show_actvalues = 0;
-    case 'fixed',  p.norm_metvalues(isfinite(p.norm_metvalues)) = 1;
-  end
-  
-  for it = p.metindshow, 
-    plot_circle(x(1,it), x(2,it), p.norm_metvalues(it), p.norm_metvalues_std(it), p.squaresize, c(it,:), p.flag_edges); 
-  end; 
-
-end
-
-
 % ------------------------------------------------------------------------------
 % lines and triangles
-
-if strcmp(p.arrowstyle,'none'),
-  p.single_arrow = 0;
-end
-
-if p.single_arrow,
-  p.show_arrowvalues = 0; 
-  p.arrow_shift = 1; 
-end
 
 if p.straightlines,   % straight lines
   
@@ -195,7 +170,7 @@ if p.straightlines,   % straight lines
     x_met = x(:,ind_met(k));
     x_act = x(:,ind_act(k)+n_met);
     
-    if p.show_arrowvalues,
+    if p.show_arrowvalues  * (1-p.single_arrow),
       scale = p.arrowsize * sqrt(abs(p.norm_arrowvalues( ind_act(k) )));
       if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
       forward = -sign(stoich_coeff) * sign(p.arrowvalues( ind_act(k) ));      
@@ -205,7 +180,7 @@ if p.straightlines,   % straight lines
       x_arr = x_met + arrow_shift * (x_act-x_met);
       switch p.arrowstyle, 
         case {'fluxes','directions'},
-          phi  = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
+          phi = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
           plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward,p.flag_edges);
       end        
     end
@@ -217,13 +192,13 @@ else,  % curved lines
   
   for q1=1:n_act,
     if sum(q1==p.actindshow),
-    substrates   = find(p.N(:,q1)<0);
-    products     = find(p.N(:,q1)>0);
-    reactants    = find(p.N(:,q1)~=0);
-    x_act        = x(:,n_met+q1);
-    x_substrates = x(:,substrates);
-    x_products   = x(:,products);
-    x_reactants  = x(:,reactants);
+    substrates       = find(p.N(:,q1)<0);
+    products         = find(p.N(:,q1)>0);
+    reactants        = find(p.N(:,q1)~=0);
+    x_act            = x(:,n_met+q1);
+    x_substrates     = x(:,substrates);
+    x_products       = x(:,products);
+    x_reactants      = x(:,reactants);
     x_substrate_mean = mean(x_substrates,2);
     x_product_mean   = mean(x_products,2);
 
@@ -234,12 +209,17 @@ else,  % curved lines
         forward = -sign(stoich_coeff)*sign(p.arrowvalues(q1)); 
 % forward can be 1 or -1
         straight = 0;
-        if  forward==1 & isempty(products),   straight = 1; end
+        if forward==1 & isempty(products),   straight = 1; end
         if forward==-1 & isempty(substrates), straight = 1; end
         arrow_shift = (forward==-1) * p.arrow_shift + (forward==+1) * (1-p.arrow_shift);
         if straight,
-          line([x_met(1),x_act(1)],[x_met(2),x_act(2)],'color',p.linecolor);
-          
+	  my_color = p.linecolor;
+	  if p.shade_long_lines, 
+            if [x_met(1)-x_act(1)]^2 + [x_met(2)-x_act(2)]^2 > p.shade_long_lines^2,
+	      my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
+	    end
+	  end
+          line([x_met(1),x_act(1)],[x_met(2),x_act(2)],'color',my_color);          
           x_arr = x_met + arrow_shift * (x_act-x_met);
         else,
           switch forward,
@@ -276,11 +256,13 @@ if p.show_edgevalues,
         stddev = p.norm_edgevalues_std(ind_m,ind_r);
         c      = get_color(value,-1,1,p.colormap);
         switch p.edgestyle,
-          case 'fixed',           if isfinite(value),  value = 1; end;       
+          case 'fixed', if isfinite(value),  value = 1; end;       
         end
-        plot_diamond(x_pos(1),x_pos(2),value, stddev,p.squaresize,c,p.flag_edges);
+        plot_diamond(x_pos(1),x_pos(2),abs(value), stddev,p.squaresize,c,p.flag_edges);
         if p.edgeprintvalues, 
-          if isnan(p.edgevalues(ind_m,ind_r)), my_ss = ''; else, my_ss = num2str(p.edgevalues(ind_m,ind_r),3); end
+          if isnan(p.edgevalues(ind_m,ind_r)), 
+            my_ss = ''; else, my_ss = num2str(p.edgevalues(ind_m,ind_r),3); 
+          end
           offset = 0.5*p.squaresize;
           text(x_pos(1)+ offset, x_pos(2)+offset, my_ss,'FontSize',p.FontSize,'Rotation',p.fontangle);
         end
@@ -309,7 +291,7 @@ if p.show_regulation,
         stddev =     p.norm_regulationvalues_std(indr(itt)-n_met,indm(itt));
         c      = get_color(val,-1,1,p.colormap);
         switch p.regulationstyle,  case 'fixed', if isfinite(val), val = 1;  end; end
-        plot_diamond( arcx,arcy, val,stddev,p.squaresize,c,p.flag_edges);
+        plot_diamond( arcx,arcy, abs(val),stddev,p.squaresize,c,p.flag_edges);
       end
       if p.regulationprintvalues, 
         ddd = p.regulationvalues(indr(itt)-n_met,indm(itt));
@@ -321,6 +303,38 @@ if p.show_regulation,
   end
 end
 
+
+% ---------------------------------------------------
+% metabolites
+
+if p.show_metvalues,
+  
+  switch p.metcolstyle
+    case 'fixed',  c = repmat(p.metcol,n_met,1);
+    case 'values', c = get_color(p.norm_metvalues,-1,1,p.colormap);
+  end
+
+  if length(p.metcolors),
+    c = p.metcolors(p.metabolite_mapping,:);
+  end
+  
+  p.norm_metvalues = abs(p.norm_metvalues);
+  
+  switch p.metstyle
+    case 'box',    p.norm_metvalues_std = 0*p.norm_metvalues_std;
+    case 'none',   p.show_actvalues = 0;
+    case 'fixed',  p.norm_metvalues(isfinite(p.norm_metvalues)) = 1;
+  end
+  
+  for it = p.metindshow,
+    if isnan(p.norm_metvalues(it)); % do not shift nan values
+      plot_circle(x(1,it), x(2,it), p.norm_metvalues(it), p.norm_metvalues_std(it), p.squaresize, c(it,:), p.flag_edges); 
+  else
+    plot_circle(x(1,it)+p.circle_shift(1), x(2,it)+p.circle_shift(2), p.norm_metvalues(it), p.norm_metvalues_std(it), p.squaresize, c(it,:), p.flag_edges); 
+    end
+  end; 
+
+end
 
 % ---------------------------------------------------
 % reactions
@@ -340,23 +354,26 @@ if p.show_actvalues,
     case 'box',    p.norm_actvalues_std = 0*p.norm_actvalues_std;
     case 'fixed',  p.norm_actvalues(isfinite(p.norm_actvalues)) = 1;
   end
-  
-  switch p.actstyle,
-    case {'box','box_std','fixed'},  
-      for r=1:length(p.actindshow),    
-        it = p.actindshow(r);
-        plot_square(x(1,it+n_met),x(2,it+n_met),abs(p.norm_actvalues(it)),p.norm_actvalues_std(it),p.squaresize,c(it,:),p.flag_edges); 
-      end
+
+  for r=1:length(p.actindshow),    
+    it = p.actindshow(r);
+    if isnan(p.norm_actvalues(it)); % do not shift nan values
+      plot_square(x(1,it+n_met),x(2,it+n_met),abs(p.norm_actvalues(it)),p.norm_actvalues_std(it),p.squaresize,c(it,:),p.flag_edges); 
+    else
+      plot_square(x(1,it+n_met)+p.circle_shift(1),x(2,it+n_met)+p.circle_shift(2),abs(p.norm_actvalues(it)),p.norm_actvalues_std(it),p.squaresize,c(it,:),p.flag_edges); 
+    end
   end
 end
 
-if p.single_arrow * p.show_arrowvalues,
+if p.single_arrow,% * p.show_arrowvalues,
   [ind_met,ind_act] = find(m(p.metindshow,end-n_act+p.actindshow));
   ind_met = p.metindshow(ind_met);
   ind_act = p.actindshow(ind_act);
+  my_N = p.N;
+  my_N(find(my_N>0)) = 0;
   for k = 1:length(ind_met),
-    stoich_coeff = p.N(ind_met(k),ind_act(k));
-    if [stoich_coeff * p.norm_arrowvalues( ind_act(k) )]< 0,
+    stoich_coeff = my_N(ind_met(k),ind_act(k));
+    if [stoich_coeff * p.norm_arrowvalues( ind_act(k) )] < 0,
       x_met = x(:,ind_met(k));
       x_act = x(:,ind_act(k)+n_met);
       scale   = p.arrowsize * sqrt(abs(p.norm_arrowvalues( ind_act(k) )));
@@ -372,6 +389,7 @@ if p.single_arrow * p.show_arrowvalues,
           plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward,p.flag_edges);
       end        
       x_arrowlistN(ind_met(k),ind_act(k),:) = x_met + .5 * (x_act-x_met);
+      my_N(:,ind_act(k)) = 0;
     end
   end
 
@@ -465,7 +483,7 @@ function plot_square(x,y,l,std,squaresize,col,flag_edges)
 stdcol = .7+.3*col;
 if isnan(l),     l = 0.2; col = [.7 .7 .7]; stdcol = [0 0 0]; end
 if isnan(std), std = .1; end
-if  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; else, ecol = col; secol =  stdcol; end
+if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
 if std,
   l_max = squaresize*(l+std); 
   fill(x + 0.5 * l_max*[-1 1 1 -1], y + 0.5*l_max*[-1 -1 1 1],stdcol,'EdgeColor',secol)
@@ -484,7 +502,7 @@ if isnan(l), l = 0.2 ; col = [.7 .7 .7]; stdcol = [0 0 0]; end
 
 if isnan(std), std = .1; end
 
-if  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; else, ecol = col; secol =  stdcol; end
+if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
 
 if std,
   l_max = squaresize*(l+std); 
@@ -505,7 +523,7 @@ function plot_diamond(x,y,l,std,squaresize,col,flag_edges)
 stdcol = .7+.3*col;
 if isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; end
 if isnan(std), std = .1; end
-if  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; else, ecol = col; secol =  stdcol; end
+if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
 if std,
   l_max = squaresize*(l+std); 
   fill(x + 0.5 * l_max * 4/pi* [-1 0 1 0 -1], y + 0.5*l_max*4/pi*[0 -1 0 1 0],stdcol,'EdgeColor',secol)
@@ -521,7 +539,7 @@ function plot_octagon(x,y,l,std,squaresize,col,flag_edges)
 stdcol = .7+.3*col;
 if isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; end
 if isnan(std), std = .1; end
-if  flag_edges, ecol = [.3 .3 .6]; secol = [.3 .3 .6]; else, ecol = col; secol =  stdcol; end
+if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
 if std,
   l_max = squaresize*(l+std); 
   fill(x + 0.5 * l_max * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_max*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],stdcol,'EdgeColor',secol)
@@ -539,8 +557,11 @@ if isnan(l), l = l*0.5; forward = 1; col = [.7 .7 .7];
 else,
   points = repmat([x; y],1,3) + forward * [cos(phi) -sin(phi); sin(phi) cos(phi)] * l * [-0.5 .5 -0.5; -0.3 0 0.3];
 end
+if flag_edges,
 fill(points(1,:),points(2,:),col);
-
+else
+fill(points(1,:),points(2,:),col,'EdgeColor','none');
+end
 
 % -------------------------
 % compute positions on an arc: x3 all points for drawing;
@@ -603,7 +624,7 @@ else,
   if isempty(valuesmax),   valuesmax  = max(values(:)); end
   if isempty(valuesmin),   valuesmin  = min(values(:)); end  
 end
-if valuesmin == valuesmax,  valuesmax = 10^-10 +  valuesmin; end
+if valuesmin == valuesmax,  valuesmax = 10^-10 + valuesmin; end
 if p.showsign,
   normvalues     = values / valuesmax;
 else
@@ -687,6 +708,7 @@ p_default = struct(...
     'metvaluesmin',    [], ...
     'metstyle', 'fixed', ...
     'metcolors', [], ...
+    'circle_shift',    [0,0], ...
     'actvalues_std',   zeros(size(p.actvalues)),  ...
     'actvaluesmax',    [], ...
     'actvaluesmin',    [], ...
@@ -699,7 +721,7 @@ p_default = struct(...
     'arrowprintvalues',   0, ...
     'arrowvaluesmax',  [], ...
     'arrowvaluesmin',  [], ...
-    'arrow_stoichiometries', 1, ...
+    'arrow_stoichiometries', 0, ...
     'arrowvalues_std',     zeros(size(p.arrowvalues)), ...
     'arrow_shift',     0.7,  ...
     'arrowcolor',      [0.7 0.7 0.7],  ...
@@ -734,9 +756,20 @@ p_default = struct(...
     'no_points',       0, ...
     'colorbar',        0,...
     'colorbar_numbers', [],...
-    'flag_edges', 1 );
+    'flag_edges', 1, ...
+    'canvas', [],...
+    'shade_long_lines', []);
    
 p = join_struct(p_default,p);
+
+if strcmp(p.arrowstyle,'none'),
+  p.single_arrow = 0;
+end
+  
+if p.single_arrow,
+  p.show_arrowvalues = 1;
+  p.arrow_shift = 1; 
+end
 
 if ~isempty(p.edgevalues),       p.show_edgevalues = 1; end 
 if ~isempty(p.regulationvalues), p.show_regulationvalues = 1; end 
@@ -835,17 +868,18 @@ if p.show_actvalues,
   [p.norm_actvalues, p.norm_actvalues_std,p.actvaluesmax,p.actvaluesmin] = normalise(p.actvalues,p.actvalues_std,p.actvaluesmax,p.actvaluesmin,p);
 end
 
-
-if p.show_arrowvalues,  
+if p.show_arrowvalues,
   p.norm_arrowvalues = p.arrowvalues;
-  if ~isempty(p.arrowvaluesmax),
+  if length(p.arrowvaluesmax),
     if isempty(p.arrowvaluesmin),
       p.arrowvaluesmin = -p.arrowvaluesmax;
     end
     p.norm_arrowvalues(p.norm_arrowvalues>p.arrowvaluesmax) = p.arrowvaluesmax;
     p.norm_arrowvalues(p.norm_arrowvalues<p.arrowvaluesmin) = p.arrowvaluesmin;
-    p.norm_arrowvalues = p.norm_arrowvalues / max(p.arrowvaluesmax, abs(p.arrowvaluesmin));
+    %p.norm_arrowvalues = p.norm_arrowvalues / max(p.arrowvaluesmax, abs(p.arrowvaluesmin));
   end
+else
+  p.norm_arrowvalues = zeros(nr,1);  
 end
 
 if p.show_edgevalues,
@@ -863,7 +897,6 @@ if p.black_and_white,        p.colormap = 0.5-0.5*sign(gray(250)-0.5); end
 % omit metabolites that are not connected anymore once reactions have been omitted
 ll = setdiff(1:nr,label_names(p.omitreactions,network.actions));
 p.omitmetabolites = union(p.omitmetabolites, network.metabolites(find(sum(abs(network.N(:,ll)),2)==0)));
-
 p.actindshow = setdiff(1:length(network.actions),label_names(p.omitreactions,network.actions));
 p.metindshow = setdiff(1:length(network.metabolites),label_names(p.omitmetabolites,network.metabolites));
 

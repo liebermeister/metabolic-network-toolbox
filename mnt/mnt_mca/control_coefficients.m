@@ -29,7 +29,11 @@ if sum(external==0)==0,
   [nm,nr]  = size(N);
   CJ = eye(nr);
   CS = zeros(nm,nr);
-  L_int = []; NR_int = zeros(0,nr); M = []; M_adj = []; indp_among_internal = [];
+  L_int = []; 
+  NR_int = zeros(0,nr); 
+  M = []; 
+  M_adj = []; 
+  indp_among_internal = [];
   return
 end
 
@@ -59,12 +63,12 @@ if isempty(NR_int),
   [L_int, NR_int, indp_among_internal] = reduce_N(N_int); 
 end;
 
-Ec_int(find(1-used)) = 0;
+Ec_int(find(1-used))   = 0;
 NR_int(:,find(1-used)) = 0;
-N_int(:,find(1-used)) = 0;
+N_int(:,find(1-used))  = 0;
 
 % if there are reactions without internal metabolites, omit them in the calculation
-ind_int_react = find(sum(abs(N_int)));
+ind_int_react = find(sum(abs(N_int),1));
 N_int         = N_int(:,ind_int_react);
 
 if length(NR_int),
@@ -112,6 +116,7 @@ end
 
 CS = zeros(n_metab_int + length(ind_ext), n_react); 
 CS(ind_int,ind_int_react) = CS_int; 
+
 CS  = chop(CS);
 
 CJ = eye(n_react);
@@ -133,3 +138,4 @@ CJ(find(1-used),:) = 0;
 %  CS2 = tensor_product(CS,Gamma);
 %  CJ2 = tensor_product(CJ,Gamma);
 %end
+

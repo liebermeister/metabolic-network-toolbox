@@ -87,12 +87,22 @@ switch method,
       if options.verbose, display(sprintf('Dimension %d/%d',it,n_mured)); end
       vec = zeros(n_mured,1); vec(it) = 1;
       opt = optimset('Display','off'); 
-      [mured_lower_opt,fval,exitflag] = linprog(vec, A, b, [],[],[],[],[],opt);
+      if exist('cplexlp','file'),
+        [mured_lower_opt,fval,exitflag] = cplexlp(vec, A, b, [],[],[],[],[],opt);
+      else
+        [mured_lower_opt,fval,exitflag] = linprog(vec, A, b, [],[],[],[],[],opt);
+      end
       if exitflag <=0, exitflag
-        error('Error during linear programming problem for finding feasible chemical potentials'); end 
-      [mured_upper_opt,fval,exitflag] = linprog(-vec, A, b, [],[],[],[],[],opt);
+        error('Error during linear programming problem for finding feasible chemical potentials'); 
+      end 
+      if exist('cplexlp','file'),
+        [mured_upper_opt,fval,exitflag] = cplexlp(-vec, A, b, [],[],[],[],[],opt);
+      else
+        [mured_upper_opt,fval,exitflag] = linprog(-vec, A, b, [],[],[],[],[],opt);
+      end
       if exitflag <=0, exitflag
-        error('Error during linear programming problem for finding feasible chemical potentials'); end 
+        error('Error during linear programming problem for finding feasible chemical potentials'); 
+      end 
       dmu_lower(:,it) = U * mured_lower_opt;
       dmu_upper(:,it) = U * mured_upper_opt;
     end

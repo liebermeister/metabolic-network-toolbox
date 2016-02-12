@@ -30,10 +30,13 @@ if sum(x_upper < x_lower), error('Wrong bounds'); end
 
 for it = 1:x_length,
   z = zeros(x_length,1);
-  z(it) = 1;
-  [solution1,value,exitflag1] = linprog(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
-  z(it) = -1;
-  [solution2,value,exitflag2] = linprog(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
+  if exist('cplexlp','file'),
+    z(it) = 1;  [solution1,value,exitflag1] = cplexlp(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
+    z(it) = -1; [solution2,value,exitflag2] = cplexlp(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
+  else
+    z(it) = 1;  [solution1,value,exitflag1] = linprog(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
+    z(it) = -1; [solution2,value,exitflag2] = linprog(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
+  end
   if [exitflag1 ==-3] + [exitflag2 ==-3],
     display('Problem is unbounded');
   end

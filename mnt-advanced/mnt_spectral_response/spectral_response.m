@@ -129,12 +129,11 @@ pi_2      = elasticities_ss.un_E_uu;
 % ----------------------------------------------------
 % show 1st order results on network
 
-circle_size = 2 * squaresize; 
+circle_size = squaresize; 
 
 pp = delta_par.ind_delta_par;
 rm = network_CoSplit.graphics_par.reaction_mapping;
 mm = network_CoSplit.graphics_par.metabolite_mapping;
-
 
 c_osc          = zeros(nm,1);
 c_osc(ind_int) = RS_omega(:,pp) * delta_par.value;

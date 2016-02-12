@@ -18,10 +18,11 @@ model_matrices.Nft        = sparse(abs(network.N') .* double([network.N'<0]));
 model_matrices.Nrt        = sparse(    network.N'  .* double([network.N'>0]));
 model_matrices.RT         = 2.4942; % kJ/mol
 
+model_matrices.h          = speye(nr);
+if isfield(network,'kinetics'),
 if isfield(network.kinetics,'h'),
   model_matrices.h          = sparse(diag(network.kinetics.h));
-else
-  model_matrices.h          = speye(nr);
+end
 end
   
 [itr,itm] = ind2sub(size(network.N'),KM_indices);

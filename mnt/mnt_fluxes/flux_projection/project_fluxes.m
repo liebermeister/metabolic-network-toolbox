@@ -33,6 +33,7 @@ if isempty(v_std),  v_std  = guess_flux_std(v_mean); end
 if isempty(v_sign), v_sign = nan * v_mean; end 
 if isempty(v_fix),  v_fix  = nan * v_mean; end 
 
+
 % make sure that reference fluxes respect zero flux and sign constraints
 
 v_mean(v_sign == 0 )           = 0;
@@ -46,6 +47,7 @@ external(ind_ext) = 1;
 if pars.verbose,
   display(sprintf('\n  Projecting fluxes using "%s" method', pars.method));
 end
+
 
 switch pars.method,
 
@@ -110,7 +112,11 @@ switch pars.method,
     ub =   pars.vmax * ones(size(v_mean));
     lb(v_sign>0) = 0;
     ub(v_sign<0) = 0;
-    [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
+if exist('cplexqp','file'),
+      [v_projected,dum,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
+    else
+      [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
+    end
     if exitflag <0,
       if exitflag ==-2, 
       error('No feasible flux distribution found');
@@ -150,10 +156,8 @@ ind_finite = find(isfinite(v_mean));
 
 if norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) > 0.5,
   display('Warning (project_fluxes.m); projection changes fluxes considerably'); 
-%%  display('Original fluxes / Projected fluxes');
-%%  [v_mean(ind_finite) v_projected(ind_finite)]
-
+  %%  display('Original fluxes / Projected fluxes');
+  %%  [v_mean(ind_finite) v_projected(ind_finite)]
   figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),'.'); 
   xlabel('Given flux'); ylabel('Projected flux'); title('Flux change in project\_fluxes.m')
 end
-

@@ -2,7 +2,7 @@ function sbtab_document = network_to_sbtab(network,options)
 
 % sbtab_document = network_to_sbtab(network,options)
 %
-% translate 'network' datastructure into 'sbtab' datastructure
+% translate 'network' data structure into 'sbtab' data structure
 % 
 % If options.filename is given -> write output files: 
 %  [filename]_Reaction.csv
@@ -11,10 +11,15 @@ function sbtab_document = network_to_sbtab(network,options)
 %
 % Options are given in the structure 'options' with fields:
 %
+% filename              : file name for saving the sbtab (extension is added automatically)
 % only_reaction_table   : (default 0) produce only 'Reactions' table
 % modular_rate_law_table: produce table with modular rate law kinetic constants 
-% filename              : file name for saving the sbtab (extension is added automatically)
+% modular_rate_law_kinetics: write kinetics strings for modular rate law kinetics
+% modular_rate_law_parameter_id: flag: include column with parameter ids?
 % save_in_one_file      : flag for saving SBtab in one file (default = 0)
+% c                     : concentration vector to be saved
+% document_name         : (for SBtab attribute Document)
+% graphics_positions    : flag: add table with x and y coordinates
 
 try
   sbtab_version;
@@ -23,39 +28,49 @@ catch err,
 end
 
 eval(default('options','struct'));
-options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',1,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'save_in_one_file',0);
-options         = join_struct(options_default,options);
+options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',1,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 1, 'modular_rate_law_parameter_id', 1, 'c', [],'document_name','Model', 'graphics_positions', 1);
+
+options = join_struct(options_default,options);
 
 if ~isfield(network,'kinetics'),
   options.modular_rate_law_table = 0;
+  options.modular_rate_law_kinetics = 0;
+else
+  switch  network.kinetics.type,
+    case {'cs','ms','ds','rp','numeric'},
+    otherwise,
+      options.modular_rate_law_table = 0;
+  end
 end
+
 
 % if necessary, make metabolite + reaction names syntactically correct:
 
 [network.metabolites,network.actions] = network_adjust_names_for_sbml_export(network.metabolites,network.actions);
 network.formulae = network_print_formulae(network,network.actions,network.metabolites);
 
-reaction_table = sbtab_table_construct(struct('TableName','Reaction','TableType','Reaction'),{'Reaction','SumFormula'},{network.actions,network.formulae});
+reaction_table = sbtab_table_construct(struct('TableName','Reaction','TableType','Reaction','Document',options.document_name),{'Reaction','SumFormula'},{network.actions,network.formulae});
 
 if isfield(network, 'reaction_names'),
   reaction_table = sbtab_table_add_column(reaction_table,'Name', network.reaction_names);
 end
 
 if isfield(network, 'reaction_KEGGID'),
-  reaction_table = sbtab_table_add_column(reaction_table,'Reaction:Identifiers:kegg.reaction', network.reaction_KEGGID);
+  reaction_table = sbtab_table_add_column(reaction_table,'Identifiers:kegg.reaction', network.reaction_KEGGID);
 end
 
 if isfield(network, 'reversible'),
-  reaction_table = sbtab_table_add_column(reaction_table,'IsReversible',network.reversible);
+  reaction_table = sbtab_table_add_column(reaction_table,'IsReversible',int_to_boolean(network.reversible));
 end
 
 if isfield(network, 'genes'),
   reaction_table = sbtab_table_add_column(reaction_table,'Gene',network.genes);
 end
 
-% metabolic regulation of enzymes
-if norm(network.regulation_matrix)>0,
 [nm,nr] = size(network.N);
+
+% metabolic regulation of enzymes
+if norm(full(network.regulation_matrix))>0,
 for it = 1:nr,
   my_line = '';
   ind_pos = find(network.regulation_matrix(it,:)>0);
@@ -87,36 +102,65 @@ if isfield(network,'MetabolicRegulation'),
   reaction_table = sbtab_table_add_column(reaction_table,'MetabolicRegulation',network.MetabolicRegulation);
 end
 
+if options.modular_rate_law_kinetics,
+  [my_kinetics_strings,my_kinetics_laws] = network_get_kinetics_strings(network);
+  if length(my_kinetics_strings), 
+    if length(my_kinetics_laws),
+      reaction_table = sbtab_table_add_column(reaction_table,'KineticLaw:Name',my_kinetics_laws);
+    end
+    reaction_table = sbtab_table_add_column(reaction_table,'KineticLaw',my_kinetics_strings);
+  end
+end
+
 sbtab_document = sbtab_document_construct(struct,{'Reaction'},{reaction_table});;
 
 if ~options.only_reaction_table,
 
-  compound_table = sbtab_table_construct(struct('TableName','Compound','TableType','Compound'),{'Compound'},{network.metabolites});
+  compound_table = sbtab_table_construct(struct('TableName','Compound','TableType','Compound','Document',options.document_name),{'Compound'},{network.metabolites});
 
   if isfield(network, 'metabolite_names'),
     compound_table = sbtab_table_add_column(compound_table,'Name', network.metabolite_names);
   end
 
   if isfield(network, 'metabolite_KEGGID'),
-    compound_table = sbtab_table_add_column(compound_table,'Compound:Identifiers:kegg.compound',network.metabolite_KEGGID);
+    compound_table = sbtab_table_add_column(compound_table,'Identifiers:kegg.compound',network.metabolite_KEGGID);
   end
   
   if isfield(network, 'sbml_id_species'),
     compound_table = sbtab_table_add_column(compound_table,'SBML:species:id',network.sbml_id_species);
   end
 
-  compound_table = sbtab_table_add_column(compound_table,'External', uint8(network.external));
+  compound_table = sbtab_table_add_column(compound_table,'IsConstant', int_to_boolean(network.external));
 
   if isfield(network, 'is_cofactor'),
     compound_table = sbtab_table_add_column(compound_table,'IsCofactor',network.is_cofactor);
   end
 
+  if length(options.c),
+    compound_table = sbtab_table_add_column(compound_table,'InitialConcentration',options.c);
+  end
+
+  
   sbtab_document = sbtab_document_add_table(sbtab_document,'Compound',compound_table);
 end
 
 if options.modular_rate_law_table,
-  quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations));
+  switch network.kinetics.type,
+    case 'numeric',
+      quantity_table = numeric_to_sbtab(network,options);
+    otherwise,
+      quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations,'write_enzyme_concentrations',options.write_enzyme_concentrations,'document_name',options.document_name,'modular_rate_law_parameter_id',options.modular_rate_law_parameter_id));
+  end
   sbtab_document = sbtab_document_add_table(sbtab_document,'Quantity',quantity_table);
+end
+
+if options.graphics_positions,
+  if isfield(network,'graphics_par')
+    %% beim einlesen: network = netgraph_read_positions(network, table_positions)
+    [names, positions] = netgraph_print_positions(network);
+    position_table = sbtab_table_construct(struct('TableName','Positions','TableType','Position','Document',options.document_name),{'Element','PositionX','PositionY'},{names,positions(1,:)',positions(2,:)'}); 
+    sbtab_document = sbtab_document_add_table(sbtab_document,'Position',position_table);
+  end
 end
 
 if ~isempty(options.filename),
@@ -125,7 +169,7 @@ if ~isempty(options.filename),
     case 1, 
       if ~strcmp(options.filename(end-3:end),'.csv'),
         options.filename = [options.filename, '.csv'];
-        end
+      end
       sbtab_document_save_to_one(sbtab_document,options.filename );
   end
 end

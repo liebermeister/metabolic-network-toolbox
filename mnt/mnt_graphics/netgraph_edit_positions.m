@@ -1,6 +1,9 @@
 function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids,gp,reaction_KEGG_IDs)
 
 % network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)
+%
+% The new positions will be saved to the positions file (filename table_positions)
+%
 % flag_KEGG_ids  which name field in 'network' to use: metabolite_KEGGID or metabolites
 
 eval(default('flag_KEGG_ids','0','gp','struct','reaction_KEGG_IDs','[]'));

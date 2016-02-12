@@ -13,7 +13,7 @@ switch options.kinetic_law,
   otherwise, error('Conversion is only possible for modular rate law');
 end
 
-sbtab_table = sbtab_table_load(file_kinetic_data);
+sbtab_table  = sbtab_table_load(file_kinetic_data);
 QuantityType = sbtab_table_get_column(sbtab_table,'QuantityType');
 Value        = cell_string2num(sbtab_table_get_column(sbtab_table,'Value'));
 Compound     = sbtab_table_get_column(sbtab_table,'Compound');

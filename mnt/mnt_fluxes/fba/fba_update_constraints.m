@@ -1,4 +1,4 @@
-function fba_constraints = fba_update_constraints(fba_constraints)
+function fba_constraints = fba_update_constraints(fba_constraints,network)
 
 % fba_constraints = fba_update_constraints(fba_constraints)
 %
@@ -23,3 +23,8 @@ if sum(fba_constraints.v_fix(fba_constraints.v_sign>0) == 0) ...
 end
 
 fba_constraints.zv(isnan(fba_constraints.zv)) = 0;
+
+ind_ext = find(network.external);
+if sum(isfinite(fba_constraints.production(ind_ext))),
+  fba_constraints.ext_sign(ind_ext) = sign(fba_constraints.production(ind_ext));
+end

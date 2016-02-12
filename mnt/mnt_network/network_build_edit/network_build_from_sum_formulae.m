@@ -1,9 +1,11 @@
-function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)
+function [network,N,metabolites] = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns)
 
 % network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)
 %
-% build matlab network network structure from reactions contained in SBtab file
-%
+% Build matlab network structure from reactions contained in SBtab file
+% (to build a network structure directly from a reaction list, use network_build_from_sum_formulae_list
+%  to convert a network structure into reaction formulae, use network_print_formulae)
+% 
 % Instead of SBtab filenames, SBtab data structures can be directly provided as function arguments
 %
 % attention: the syntax of the sum formulas is very strict
@@ -25,7 +27,7 @@ if length(filename_reactions),
   else
     reaction_table = filename_reactions;
   end
-  columns        = sbtab_table_get_all_columns(reaction_table);
+  columns = sbtab_table_get_all_columns(reaction_table);
 end
 
 if length(filename_reactions) * length(filename_compounds),
@@ -41,8 +43,11 @@ metab_collect = {};
 
 for it = 1:length(columns.SumFormula),
   sum_formula              = columns.SumFormula{it};
-  if sum(findstr(sum_formula,',')) + sum(findstr(sum_formula,'-')),
+  if sum(findstr(sum_formula,',')),
     error(sprintf('Malformed formula "%s"',sum_formula));
+  end
+  if sum(findstr(sum_formula,'-')),
+    warning(sprintf('Malformed formula "%s" (hyphens found)',sum_formula));
   end
   pos                      = findstr(sum_formula,'<=>');
   substrate_side           = [sum_formula(1:pos-2) ' + '];
@@ -69,10 +74,13 @@ N = zeros(length(metabolites),length(columns.SumFormula));
 for it = 1:length(columns.SumFormula),
   ls = label_names(smetab{it},metabolites);
   lp = label_names(pmetab{it},metabolites);
-  if sum([ls;lp]==0),   
+  if sum(ls==0) * length(smetab{it}),   
    mytable(smetab{it}')
+   error(sprintf('Unknown substrate'));
+  end
+  if sum(lp==0) * length(pmetab{it}),   
    mytable(pmetab{it}')
-    error(sprintf('Unknown substance')); 
+   error(sprintf('Unknown product'));
   end
   N(ls,it) = - sstoich{it};
   N(lp,it) = pstoich{it};
@@ -204,3 +212,6 @@ while length(spos),
   end
 end
 
+if length(smetab{1})==0, 
+  smetab=[];
+end

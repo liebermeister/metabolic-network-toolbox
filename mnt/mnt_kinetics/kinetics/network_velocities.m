@@ -16,7 +16,9 @@
 
 function v = network_velocities(s, network, kinetics, split, indices,t)
 
-eval(default('kinetics','[]','split','0','indices','1:length(network.actions)'));
+if ~exist('kinetics','var'), kinetics = []; end 
+if ~exist('split','var'),    split    = 0;  end 
+if ~exist('indices','var'),  indices  = 1:length(network.actions); end 
 
 if size(s,1)==1, s = s'; end
 
@@ -31,7 +33,6 @@ else,
 % -------------------------------------------------------------------------------
 
     case {'embedded_kinetic_models'},
-
       v = embedded_kinetic_velocities(s,network,kinetics);
 
     case {'cs','ms','ds','rp','fd'},
@@ -41,12 +42,10 @@ else,
                              ind_ext,p.u,s,p.KA,p.KI,p.KM,p.KV,p.Keq,p.h);
     
     case 'convenience',
-      
       scale_G = convert_G_scale;
       v       = convenience_velocities(s,network,kinetics,indices,split,scale_G);
       
     case 'kinetic_strings',
- 
       for it = 1:length(network.metabolites),
         eval([ network.metabolites{it} ' = ' num2str(s(it)) ';']);
       end
@@ -61,7 +60,17 @@ else,
         eval([ kinetics.parameters{it} ' = ' num2str(kinetics.parameter_values(it)) ';']);
       end
 
-      for it2=1:length(indices),
+      if isfield(kinetics,'rules'),
+        for it = 1:length(kinetics.rules),
+          try
+            eval([ kinetics.rules{it}.variable ' = ' kinetics.rules{it}.formula ';']);
+          catch
+            display(sprintf('Rule %s could not be executed', [ kinetics.rules{it}.variable ' = ' kinetics.rules{it}.formula ';']));         
+          end
+        end
+      end      
+
+     for it2=1:length(indices),
         it = indices(it2);
         r  = kinetics.reactions{it};
         for itt = 1:length(r.parameters),
@@ -98,8 +107,7 @@ else,
       v  = (  ( kinetics.k_fwd'  .* prod( repmat(s,1,nr) .^ Nf) ) ...
             - ( ( network.reversible' .* kinetics.k_bwd') .* prod( repmat(s,1,nr) .^ Nb) ) )';
       
-    case 'standard',
-      
+    case 'standard',      
       if ~split,
         
         v = nan*ones(length(indices),1);

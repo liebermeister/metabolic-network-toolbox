@@ -16,7 +16,7 @@ function [v,value] = moma(network,fba_constraints,v_ref)
 
 [nm,nr] = size(network.N);
 ind_int = find(network.external==0);
-fba_constraints = fba_update_constraints(fba_constraints);
+fba_constraints = fba_update_constraints(fba_constraints,network);
 
 ind_fix = find(isfinite(fba_constraints.v_fix));
 ind_notfix = find(~isfinite(fba_constraints.v_fix));
@@ -24,7 +24,7 @@ dd      = eye(nr);
 
 c  = fba_constraints.zv;
 
-% used reduced stoichiometric matrix (to avoid numerical problems in linprog)
+% used reduced stoichiometric matrix (to avoid numerical problems in quadprog)
 
 [K, L, NR] = analyse_N(network.N,network.external);
 
@@ -58,6 +58,9 @@ end
 M  = eye(length(v_ref));
 m  = -v_ref;
 
-[v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
-
+if exist('cplexqp','file'),
+  [v,value,exitflag] = cplexqp(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
+else
+  [v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
+end
 value = fba_constraints.zv' * v;

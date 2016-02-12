@@ -1,7 +1,9 @@
 % all_result = network_print_formulae(network,actions,metabolites,all_reversible )
 %
-% print the chemical formulae
-%
+% Convert a network structure into reaction formulae
+% (to build a network structure from a reaction list, use network_build_from_sum_formulae_list
+%  to build a network structure from a reaction list in an SBtab file, use network_build_from_sum_formulae)
+% 
 % actions, metabolites (optional): names to be used in the formulae
 % (column lists of strings)
 

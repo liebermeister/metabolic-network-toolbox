@@ -2,7 +2,7 @@ function network = netgraph_read_positions(network, table_positions, offsets, fi
 
 % network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)
 %
-% flag_KEGG_ids  which name field in 'network' to use: metabolite_KEGGID or metabolites
+% flag_KEGG_ids which name field in 'network' to use: metabolite_KEGGID or metabolites
 
 eval(default('offsets','[]','fill_nans','1','flag_KEGG_ids','0','reaction_KEGG_IDs','[]'));
 
@@ -37,9 +37,9 @@ switch flag_KEGG_ids,
     model_metabolite_names = network.metabolites;
     model_reaction_names   = network.actions;
   case 1,
-    if isfield('network','metabolite_KEGGID'), 
+    if isfield(network,'metabolite_KEGGID'), 
       model_metabolite_names = network.metabolite_KEGGID;
-    elseif  isfield('network','Identifiers_kegg_compound'), 
+    elseif  isfield(network,'Identifiers_kegg_compound'), 
       model_metabolite_names = network.Identifiers_kegg_compound;
     else
       model_metabolite_names = network.Compound_Identifiers_kegg_compound;
@@ -51,11 +51,11 @@ switch flag_KEGG_ids,
     end
 end
 
-if length(unique(model_metabolite_names)) <  length(model_metabolite_names),
+if length(unique(model_metabolite_names)) < length(model_metabolite_names),
   error('non-unique metabolite names');
 end
 
-if length(unique(model_reaction_names)) <  length(model_reaction_names),
+if length(unique(model_reaction_names)) < length(model_reaction_names),
   error('non-unique reaction names');
 end
 

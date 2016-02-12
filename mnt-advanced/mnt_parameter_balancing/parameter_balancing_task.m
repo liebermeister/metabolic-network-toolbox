@@ -1,23 +1,45 @@
-function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities)
+function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)
 
-% Prepare vectors and matrices for parameter balancing
+% [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)
 %
-% Mandatory inputs: network, kinetic_data
+% Prepare a parameter balancing task
 %
-% All q and x values are given in natural scaling!
+% Input
+%   network
 %
-% 'prior' has the same data format as kinetic_data (for export to table files)
+% Optional inputs
+%   kinetic_data      (see data_integration_load_kinetic_data)
+%   quantity_info     (see data_integration_load_quantity_info)
+%   model_quantities  list of quantities needed for the model
+%   basic_quantities  list of basic quantities to be used
+%   include_metabolic (consider metabolic quantities? only used if arguments
+%                      'model_quantities' and 'basic_quantities' are not provided)
+% 
+% For types of quantities to be used, see 'quantity_info' structure 
+% produced by data_integration_load_quantity_info
+%
+% Outputs: 
+%   task   vectors and matrices needed for parameter balancing
+%          (q and x values are given in "natural" scaling (i.e., logarithms whereever suitable)
+%   prior  has the same data format as kinetic_data (for export to table files)
 
-eval(default('quantity_info','[]'));
+eval(default('kinetic_data','[]','quantity_info','[]','model_quantities','[]', 'basic_quantities','[]','include_metabolic','0'));
+
+if isempty(kinetic_data),
+  kinetic_data = data_integration_load_kinetic_data([],[], network);
+end
 
 if isempty(quantity_info),
-  quantity_info =   data_integration_load_quantity_info;
+  quantity_info = data_integration_load_quantity_info;
 end
+
+prior = [];
 
 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = network_numbers(network);
 
-if ~exist('model_quantities','var'),
-  [model_quantities, basic_quantities] = parameter_balancing_quantities(quantity_info,network); 
+if isempty(model_quantities),
+  [model_quantities, basic_quantities] = parameter_balancing_quantities(quantity_info, ...
+     network, struct('include_metabolic',include_metabolic,'enzyme_explicit',0)); 
 end
 
 
@@ -45,6 +67,7 @@ task.q.prior.std      = [];
 num_basic = parameter_balancing_quantity_numbers(basic_quantities,quantity_info,network);
 
 for it = 1:length(basic_quantities),
+
   my_quantity = basic_quantities{it};
   ind = find(strcmp(my_quantity,quantity_info.QuantityType));
   my_scaling      = quantity_info.Scaling{ind};
@@ -78,6 +101,7 @@ for it = 1:length(basic_quantities),
       my_prior_median = log(my_prior_median);
       my_prior_std    = log(10) * my_prior_std;
   end
+
   my_indices = length(task.q.prior.mean) + [1:num_basic(it)]';
   task.q.names(my_indices,:)   = repmat(basic_quantities(it), num_basic(it),1);
   task.q.scaling(my_indices,:) = repmat({my_scaling}, num_basic(it),1);
@@ -146,10 +170,10 @@ for it = 1:length(all_quantities),
   x_all.scaling(my_indices,:) = repmat({my_scaling}, num_all(it),1);
   x_all.indices.(my_symbol)   = my_indices;
 
-  my_all_upper    = eval(quantity_info.UpperBound{ind});
-  my_all_lower    = eval(quantity_info.LowerBound{ind});
-  my_pseudo_median= cell_string2num(quantity_info.PriorMedian(ind));
-  my_pseudo_std   = cell_string2num(quantity_info.PriorStd(ind));
+  my_all_upper     = eval(quantity_info.UpperBound{ind});
+  my_all_lower     = eval(quantity_info.LowerBound{ind});
+  my_pseudo_median = cell_string2num(quantity_info.PriorMedian(ind));
+  my_pseudo_std    = cell_string2num(quantity_info.PriorStd(ind));
 
   switch my_scaling, case 'Logarithmic',
     my_all_lower = log(my_all_lower);
@@ -266,16 +290,17 @@ for it = 1:length(data_quantities),
   end
 end
 
-
 task.xall       = x_all;
 task.Q_xall_q   = Q_all;
 
 
-
 % -------------------------------------------------------------------
-% reduce vectors and matrix to existing data, for lower bounds
+% lower bounds
 
+% reduce vectors and matrix to existing data, for lower bounds
 ind_rel = isfinite(x_data_lower);
+
+% ind_rel = 1:length(x_data_lower);
 
 task.xlower.names     = x_data.names(ind_rel);
 task.xlower.scaling   = x_data.scaling(ind_rel);
@@ -298,9 +323,12 @@ task.Q_xlower_q   = Q_data(ind_rel,:);
 
 
 % -------------------------------------------------------------------
-% reduce vectors and matrix to existing data, for upper bounds
+% upper bounds
 
+% reduce vectors and matrix to existing data, for upper bounds
 ind_rel = isfinite(x_data_upper);
+
+%ind_rel = 1:length(x_data_upper);
 
 task.xupper.names   = x_data.names(ind_rel);
 task.xupper.scaling = x_data.scaling(ind_rel);

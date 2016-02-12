@@ -1,16 +1,19 @@
-function network = network_add_metabolites(network,new_metabolites,new_external);
+function [network, indices] = network_add_metabolites(network,new_metabolites,new_external);
 
 % network = network_add_metabolites(network,new_metabolites,new_external);
-
+%
+% the new metabolites are added at teh end of the metabolite list
+  
 new_metabolites = column(setdiff(new_metabolites,network.metabolites));
 
 [nr,nm] = network_numbers(network);
 nn = length(new_metabolites);
 
+indices = nm+[1:nn];
+
 if ~exist('new_external','var'),
   new_external =  ones(nn,1);
 end
-
 network.metabolites       = [network.metabolites; new_metabolites];
 network.external          = [network.external; new_external];
 network.N                 = [network.N; zeros(nn,nr)];

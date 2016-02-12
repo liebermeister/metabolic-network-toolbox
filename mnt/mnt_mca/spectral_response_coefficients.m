@@ -42,7 +42,7 @@ else,
   CJ          =  eye(n_react);
   CJ_omega    =  eye(n_react);
 end  
- 
+
 RS_omega    = CS_omega * Ep;
 RJ_omega    = CJ_omega * Ep;
 

@@ -49,13 +49,15 @@ if 0,
   figure(2); clf; plot(v, A,'.');
 end
 
+v(abs(v) < 10^-10 * max(abs(v)) ) = 0;
 
-v(abs(v)<10^-6) = 0;
+N_orig = N;
+v_orig = v; 
 
 if flag_reduce_network,
   %consider only subnetwork of reactions with finite fluxes
   %(some thermodynamic es_constraints can get lost!!!)
-  [nm_tot,nr_tot] = size(N);
+  [nm_tot, nr_tot] = size(N);
   ind_reactions   = find(v~=0);
   ind_metabolites = find(sum(abs(N(:,ind_reactions)),2));
   N = N(ind_metabolites,ind_reactions);
@@ -101,7 +103,11 @@ b = [...
 
 z = -N*zv;
 
-[my_mu, val, exitflag] = linprog(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max,[]);
+if exist('cplexlp','file'),
+  [my_mu, val, exitflag] = cplexlp(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max,[]);
+else
+  [my_mu, val, exitflag] = linprog(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max,[]);
+end
 
 if exitflag ~=1,
   exitflag
@@ -112,9 +118,13 @@ end
 my_A   = -N'*my_mu;
 
 if flag_reduce_network,
-  A  = zeros(nr_tot,1); A(ind_reactions) = my_A;
-  mu = zeros(nm_tot,1); my_mu(ind_metabolites) = my_mu;
+  mu = zeros(nm_tot,1); mu(ind_metabolites) = my_mu;
+  A  = -N_orig'*mu;
 else,
   A  = my_A;
   mu = my_mu;
+end
+
+if [norm(N_orig' * mu + A) == 0] * isempty(find(sign(v_orig .* A)<0)),
+  display('Feasible solution found');
 end

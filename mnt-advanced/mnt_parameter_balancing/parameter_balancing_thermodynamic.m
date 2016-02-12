@@ -2,14 +2,14 @@ function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(n
 
 % [c, v, mu0, Keq, A, my_kinetic_data] = parameter_balancing_theromdynamic(network, v, filename,options)
 %
-% Convenience function for using parameter balancing to obtain a steady state 
-% given a thermodynamically feasible flux distribution
+% Convenience function for parameter balancing to obtain a feasible 
+% thermodynamic state given a thermodynamically feasible flux distribution
 % 
-% The code assumes that the network structure contains KEGG IDs and uses
-% SBtab data files supplied that can contain data on standard chemical potentials,
+% The code assumes that the network structure contains metabolite KEGG IDs.
+% It uses SBtab data files that can contain data on standard chemical potentials,
 % equilibrium constants, concentrations, and reaction affinities
 %
-% Fields of options:
+% Fields of 'options':
 %   options.ind_water           (indices of metabolites representing water)
 %   options.data_refer_to_molar = 0;    (flag)
 %   options.flag_pseudo_value   = 0;    (flag; use pseudo values?)
@@ -33,20 +33,20 @@ function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(n
 
 eval(default('options','struct'));
 
-options_default.ind_water           = [];
+options_default.ind_water             = [];
 options_default.set_water_conc_to_one = 1;
-options_default.data_refer_to_molar = 0;
-options_default.flag_pseudo_values  = 0;
-options_default.sigma_mu0           = 3;%    error of mu0 values (kJ/mol); 3 for alberty data
-options_default.A_max               = 100;
-options_default.A_min               = 0.5;  
-options_default.c_fix               = nan * ones(nm,1);
-options_default.A_fix               = nan * ones(nr,1);
-options_default.A_lower             = nan * ones(nr,1);
-options_default.A_upper             = nan * ones(nr,1);
-options_default.conc_min            = 0.00001; %(mM)
-options_default.conc_max            = 100;     %(mM)
-options_default.virtual_reactions   = {};
+options_default.data_refer_to_molar   = 0;
+options_default.flag_pseudo_values    = 0;
+options_default.sigma_mu0             = 3;%    error of mu0 values (kJ/mol); 3 for alberty data
+options_default.A_max                 = 100;
+options_default.A_min                 = 0.5;  
+options_default.c_fix                 = nan * ones(nm,1);
+options_default.A_fix                 = nan * ones(nr,1);
+options_default.A_lower               = nan * ones(nr,1);
+options_default.A_upper               = nan * ones(nr,1);
+options_default.conc_min              = 0.00001; %(mM)
+options_default.conc_max              = 100;     %(mM)
+options_default.virtual_reactions     = {};
 
 options = join_struct(options_default,options);
 
@@ -67,7 +67,7 @@ if length(options.virtual_reactions),
     nn = zeros(nm,1);
     ind     = label_names(options.virtual_reactions(it).metabolites, network.metabolites);
     nn(ind) = options.virtual_reactions(it).stoichiometries;
-    network_aug.N   = [network_aug.N, nn];
+    network_aug.N       = [network_aug.N, nn];
     network_aug.actions = [network_aug.actions; {sprintf('aug_%f',it)}];
   end
 

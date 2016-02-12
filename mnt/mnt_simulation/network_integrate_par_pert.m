@@ -1,26 +1,26 @@
 %[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)
 %
-%solve differential equations for metabolic network with field 'kinetics'
+%Solve differential equations for metabolic network with field 'kinetics'
 %
 %INPUT
-%network    network data structure (see 'metabolic_networks')
-%s          initial concentrations (row vector)
-%T          integration time (or list of integration time points)
+%network  network data structure (see 'metabolic_networks')
+%s        initial concentrations (row vector)
+%T        integration time (or list of integration time points)
 %dt       time step in output of results
-%par_osc    list of structures describing oscillatory parameters,
-%           each with:  
-%             name             parameter name
-%             type             'values' (interpolation between values)
-%                              'complex' (complex exponential), 'cos' (cosine), 'sin' (sine)
-%             if type = 'values' 
-%               t                time points
-%               values           values
-%             else
-%               mean             mean value of oscillation
-%               amplitude        amplitude of oscillation
-%               omega            circular frequency
-%               phase            phase angle at time t=0
-%gf         graphics flag
+%par_osc  list of structures describing oscillatory parameters,
+%         each has fields:  
+%           name             parameter name
+%           type             'values' (interpolation between values)
+%                            'complex' (complex exponential), 'cos' (cosine), 'sin' (sine)
+%           if type = 'values' 
+%             t                time points
+%             values           values
+%           else
+%             mean             mean value of oscillation
+%             amplitude        amplitude of oscillation
+%             omega            circular frequency
+%             phase            phase angle at time t=0
+%gf       graphics flag
 %
 %OUTPUT
 %t          vector of time points
@@ -88,16 +88,8 @@ switch network.kinetics.type,
     db = prod( repmat(s(external),1,n_A) .^ Nb(external,:))';
 
     [t,s_int_t] = ode23(@integrate_network_der_MA,[0:dt:T],s_int,[],s_ext,Nfint,Nbint,network,par_osc);
-    
-%   case 'numeric',
-%     N_internal = N;
-%     N_internal(find(network.external),:) = 0;
-%     N_internal(find(network.external==0),:) = diag(1./volumes) * N_internal(find(network.external==0),:);
-%     [t,s_t] = network_integrate_kin(s,network.kinetics.parameters,0,T,...
-%                     N_internal,network.kinetics.velocity_function);
-%      s_int_t=s_t(:,internal);
-  
-  otherwise,
+
+  case 'numeric',
      if length(T)==1,
        t = [0:dt:T]'; 
      else,
@@ -127,11 +119,19 @@ if graphics_flag,
   end
 end;
 
-for it = 1:length(t),
-  [n,pp]  = compute_parameters(network,t(it),par_osc);
-  v(:,it) = network_velocities(s_t(:,it),n);
-  if length(pp), p(:,it) = pp'; else p=[]; end
+switch  network.kinetics.type,
+  case 'numeric',
+    for it = 1:length(t),
+      [kk,pp] = compute_parameters(network.kinetics,t(it),par_osc);
+      v(:,it) = network_velocities(s_t(:,it),network,kk);
+      if length(pp), p(:,it) = pp'; else p=[]; end
+    end
+  otherwise, 
+    warning('Parameter oscillations not supported for this kinetics type\n');
+    v = [];
+    p = [];
 end
+
 
 met_int = network.metabolites(internal);
 
@@ -158,32 +158,27 @@ function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int
 
 % vector f contains time derivative of the internal metabolites
 
-network = compute_parameters(network,t,po);
+kinetics = compute_parameters(network.kinetics,t,po);
 
 s(internal)  = s_int;
 s(external)  = s_ext;
-f            = N_int * network_velocities(s,network);
+f            = N_int * network_velocities(s,network,kinetics);
 
- 
 %----------------------------------------------------------------------- 
- 
-function [network,p] = compute_parameters(network,t,po)
 
-switch network.kinetics.type,
-  case 'numeric',
-    p = [];
-    for it = 1:length(po),
-      switch po{it}.type,
-	case 'complex',
-	  p(it) = po{it}.mean + po{it}.amplitude * exp(i * (po{it}.phase +  po{it}.omega * t ));
-	case 'cos',
-	  p(it) = po{it}.mean + po{it}.amplitude * cos( po{it}.phase +  po{it}.omega * t );
-	case 'sin',
-	  p(it) = po{it}.mean + po{it}.amplitude * sin( po{it}.phase +  po{it}.omega * t );
-	case 'values',
-          p(it) = interp1(po{it}.t,po{it}.values,t,'spline');
-      end       
-      network.kinetics.parameters = setfield(network.kinetics.parameters,po{it}.name,p(it));
-    end
-  otherwise, fprintf('Parameter oscillations not supported for this kinetics type\n');
+function [kinetics,p] = compute_parameters(kinetics,t,po)
+
+p = [];
+for it = 1:length(po),
+  switch po{it}.type,
+    case 'complex',
+      p(it) = po{it}.mean + po{it}.amplitude * exp(i * (po{it}.phase +  po{it}.omega * t ));
+    case 'cos',
+      p(it) = po{it}.mean + po{it}.amplitude * cos( po{it}.phase +  po{it}.omega * t );
+    case 'sin',
+      p(it) = po{it}.mean + po{it}.amplitude * sin( po{it}.phase +  po{it}.omega * t );
+    case 'values',
+      p(it) = interp1(po{it}.t,po{it}.values,t,'spline');
+  end       
+  kinetics.parameters.(po{it}.name) = p(it);  
 end

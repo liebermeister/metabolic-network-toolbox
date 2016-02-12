@@ -69,17 +69,16 @@ if ~isfield(opt,'frame'),
 % frame of the model
 end
 
-a = opt.frame;
+nm = length(network.graphics_par.metnames);
 
-nm        = length(network.graphics_par.metnames);
-size_unit = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);  % typical
-                                                         % distance
-                                                         % between equally spaced dots
+% typical distance between dots (if they were equally spaced)
+a          = opt.frame;
+size_unit  = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);  
 force_unit = 0.1;
 
 gridsize = 0.01  * size_unit;   % distance between discrete x values
-k1       = 0.005 * force_unit;  % overall repulsion strength
-k2       = 0.1   * size_unit;   % overall repulsion scale
+k1       = 0.001   * force_unit;  % overall repulsion strength
+k2       = 0.05   * size_unit;   % overall repulsion scale
 k3       = 0.5   * force_unit;  % neighbour attraction strength
 k4       = 0.5   * size_unit;   % neighbour attraction scale
 
@@ -123,7 +122,9 @@ names=[p.metnames; p.actnames];
 loose = find(1-fixed);
 
 if isfield(opt,'initial_relax'),
-  for it = 1:opt.initial_relax, x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); end
+  for it = 1:opt.initial_relax, 
+     x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); 
+  end
 end
 
 display_graphics(picture,network,p,opt,x,fixed);
@@ -170,7 +171,9 @@ while cont==1,
 	loose = find(1-fixed);
       end
       
-    case 2,  for it = 1:20, x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); end
+    case 2,  
+      for it = 1:20, x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_metabolites); 
+    end
 
     case 3,   cont = 0; 
   
@@ -237,7 +240,7 @@ function  x = netgraph_relaxation_step(x,loose,m,k1,k2,k3,k4,gridsize,ind_hub_me
 x(:,loose) = x(:,loose) + 0.001*randn(2,length(loose));
 
 % spring forces:
-f2 = (( m(loose,:)*x')- repmat(sum(m(loose,:),2),1,2).*x(:,loose)')';
+f2 = (( m(loose,:)*x') - repmat(sum(m(loose,:),2),1,2).*x(:,loose)')';
 
 % nonlinear springs
 
@@ -265,17 +268,12 @@ for ittt=1:length(has_neighbours);
   f1 = exp(-f1/(2*k2^2))./sqrt(f1);
   f0(:,itt) = sum(distances.*repmat(f1,2,1),2);	  
 end
-%      end
-
-%f2(:,ind_hub_metabolites) = 0;
 
 if length(loose),
-  force_loose = 0*k3 * f2 + k1 * f0;
+  force_loose = k1 * f0 + k3 * f2;
   x(:,loose) = x(:,loose) + force_loose;
-  x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));
-%  x(:,loose) = diag(1./(max(x(:,loose)')'))*x(:,loose);
-%  x(:,loose) = gridsize * round(x(:,loose)/gridsize);
+  %x(:,loose) = x(:,loose) - repmat(min(x(:,loose)')',1,size(x(:,loose),2));
 end
 
- x(1,:) = x(1,:)-min(x(1,:)); x(1,:) = x(1,:)/max(x(1,:));
- x(2,:) = x(2,:)-min(x(2,:)); x(2,:) = x(2,:)/max(x(2,:));
+x(1,:) = x(1,:)-min(x(1,:)); x(1,:) = x(1,:)/max(x(1,:));
+x(2,:) = x(2,:)-min(x(2,:)); x(2,:) = x(2,:)/max(x(2,:));

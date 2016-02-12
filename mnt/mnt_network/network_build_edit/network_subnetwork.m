@@ -14,7 +14,7 @@ if isempty(ind_r),
 end
 
 if isempty(ind_m), 
-  ind_m = find(sum(abs(network.N(:,ind_r)),2));
+  ind_m = column(find(sum(abs(network.N(:,ind_r)),2)))';
 end
 
 if omit_isolated_metabolites,
@@ -23,7 +23,6 @@ end
 
 ind_m = ind_m(find(ind_m~=0));
 ind_r = ind_r(find(ind_r~=0));
-
 
 % ----------------------------------------------
 

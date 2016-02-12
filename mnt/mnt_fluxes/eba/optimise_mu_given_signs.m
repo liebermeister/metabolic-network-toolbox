@@ -81,7 +81,11 @@ mu_init  = constraints.mu_data.mean;
 [this_mu,fval,e] = fminconIPasQPsolver(H,f,A,b,mu_lower,mu_upper,mu_init);
 
 %opt = optimset; opt.MaxIter = 100000000; opt.LargeScale = 'off'; % opt.TolCon = 10^-8;
-%[this_mu,fval,exitflag] = quadprog(H, f, A, b, [], [], mu_lower, mu_upper, mu_init, opt);
+%if exist('cplexqp','file'),
+%  [this_mu,fval,exitflag] = cplexqp(H, f, A, b, [], [], mu_lower, mu_upper, mu_init, opt);
+%else
+%  [this_mu,fval,exitflag] = quadprog(H, f, A, b, [], [], mu_lower, mu_upper, mu_init, opt);
+%end
 
 %sum((A*this_mu-b)>0)
 

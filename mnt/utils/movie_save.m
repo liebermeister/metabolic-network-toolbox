@@ -29,5 +29,5 @@ for it = 1:j-1,
   string = [string ' /tmp/' filename '_' num2str(it) '.bmp']; 
 end
 string = [string ' ' filename '.gif'];
-string = [string '; rm /tmp/' filename '_*.bmp'];
+string = [string '; \rm /tmp/' filename '_*.bmp'];
 eval(string);

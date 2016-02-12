@@ -14,7 +14,30 @@ function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,i
 %    cycle_method: 'beard', 'efmtool'
 % ind_ext: optional; if given -> projection to stationary flux distribution
 
-eval(default('eba_condition','''strict''','C','nan','ind_ignore','[]','cycle_method','''beard''','v_sign','[]'));
+eval(default('eba_condition','''strict''','C','nan','ind_ignore','[]','cycle_method','''beard''','ind_ext','[]','v_sign','[]'));
+
+
+if sum(v==0),
+
+  % Remove inactive fluxes from the network and iteratively call the function
+
+  ind_active = find(v~=0);
+  v_active      = v(ind_active);
+  C_active      = nan; 
+  v_sign_active = [];
+  if double(prod(size(C))>1),
+    C_active = C(:,ind_active);  
+  end
+  if length(v_sign),
+    v_sign_active = v_sign(:,ind_active);
+  end
+
+  [v_active,C_active] = eba_make_feasible(v_active,N(:,ind_active),eba_condition,C_active,ind_ignore,cycle_method,ind_ext,v_sign_active);
+
+  v = zeros(size(v)); v(ind_active) = v_active;
+  C = zeros(size(v,1),size(C_active,2)); C(ind_active,:) = C_active;
+
+else
 
 v_orig = v;
 
@@ -40,6 +63,11 @@ feasible = 0;
 % cycle involved in a violation
 % repeat this until a feasible solution is reached
 
+if feasible, 
+ display('  Flux distribution is feasible'); 
+
+else
+
 while ~feasible,
   % fprintf('.')
   for it = 1:length(ind_violated),
@@ -55,11 +83,14 @@ while ~feasible,
     end
   end
   v(abs(v)<10^-8) = 0;
-  if exist('ind_ext','var'),
+  if length(ind_ext),
     v = project_fluxes(N, ind_ext, v, [], v_sign);
   end
   %% check for feasibility
   [feasible,CC,ind_violated] = eba_feasible(sign(v),N,C,ind_ignore,eba_condition);
 end
 
-if feasible, display('  Feasible flux distribution found'); end
+if feasible, display('  Feasible modified flux distribution found'); end
+
+end
+end

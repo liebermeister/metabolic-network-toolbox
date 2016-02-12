@@ -11,7 +11,7 @@ opt_def = struct('actstyle','none','arrowvalues',[],'actprintnames',0,'flag_edge
 if isfield(options,'arrowvalues'), 
   opt_def.arrowvaluesmax = max(abs(options.arrowvalues));
   opt_def.arrowstyle = 'fluxes';
-  opt_def.actstyle = 'fluxes';
+  opt_def.actstyle   = 'fluxes';
 else
   opt_def.arrowstyle  = 'none';
 end
