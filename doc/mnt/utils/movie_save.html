@@ -43,40 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function movie_save(filename,M,my_delay)</a>
-0002 
-0003 <span class="comment">% movie_save(filename,M,resolution)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% argument 'resolution' is currently unused</span>
-0006 <span class="comment">% delay is in 1/100 seconds</span>
-0007 
-0008 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'my_delay'</span>,<span class="string">'[]'</span>,<span class="string">'resolution'</span>,<span class="string">'30'</span>));
-0009 
-0010 axis tight;
-0011 j=1;
-0012 <span class="keyword">for</span> itt = 1:length(M),
-0013   P = frame2im(M(itt));
-0014   imwrite(P,[<span class="string">'/tmp/'</span> filename <span class="string">'_'</span> num2str(j) <span class="string">'.bmp'</span>], <span class="string">'bmp'</span>);
-0015   j=j+1;
-0016 <span class="keyword">end</span>
-0017 
-0018 <span class="comment">% make movie</span>
-0019 
-0020 disp([<span class="string">'Converting frames to '</span>  filename <span class="string">'.gif'</span>]);
-0021 
-0022 string = <span class="string">'! convert '</span>;
-0023 
-0024 <span class="keyword">if</span> length(my_delay),
-0025   string = [string <span class="string">' -delay '</span> num2str(my_delay)]; 
-0026 <span class="keyword">end</span>
-0027 
-0028 <span class="keyword">for</span> it = 1:j-1,  
-0029   string = [string <span class="string">' /tmp/'</span> filename <span class="string">'_'</span> num2str(it) <span class="string">'.bmp'</span>]; 
-0030 <span class="keyword">end</span>
-0031 string = [string <span class="string">' '</span> filename <span class="string">'.gif'</span>];
-0032 string = [string <span class="string">'; rm /tmp/'</span> filename <span class="string">'_*.bmp'</span>];
-0033 eval(string);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

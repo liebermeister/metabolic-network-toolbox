@@ -8,7 +8,7 @@ function netgraph_metabolite_interactions(network, influence_values, interaction
 
 eval(default('col','my_colors(250)','gp','struct','influence_values','[]'));
 
-gp = join_struct(struct('relative_threshold',0,'normalise_values',1,'show_diagonal_values',0,'linewidth',2),gp);
+gp = join_struct(struct('relative_threshold',0,'normalise_values',1,'show_diagonal_values',0,'linewidth',1),gp);
 
 plot_parameters = struct('actprintnames',0,'metprintnames',1,'arrowsize',0.03,...
     'linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',0,...

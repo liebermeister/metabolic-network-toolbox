@@ -48,29 +48,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [feasible,ind_non_orthogonal] = EBA_orth(sign_J,C)</a>
-0002 
-0003 <span class="comment">% orthogonal = EBA_orth(sign_J,C)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% test flux sign vectors for thermodynamic feasibility</span>
-0006 <span class="comment">% function for comparing entire matrices -&gt; see EBA_orth2</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% sign_J sign vector (column)</span>
-0009 <span class="comment">% C matrix of cycle vectors (columns)</span>
-0010 <span class="comment">% feasible: flag stating that sign_J is sign-orthogonal to all cycles</span>
-0011 <span class="comment">% (i.e. all columns of C)</span>
-0012 
-0013 n_cycles       = size(C,2);
-0014 ind_common_support = find(<a href="../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(abs(sign_J))' * abs(C));
-0015 
-0016 CC              = C(:,ind_common_support);
-0017 A              = diag(sign_J)*CC;
-0018 orthogonal_list= (sum(A &gt; 0) .* sum(A &lt; 0))~=0;
-0019 feasible       = prod(double(orthogonal_list));
-0020 
-0021 ind_non_orthogonal = [];
-0022 <span class="keyword">if</span> ~feasible, ind_non_orthogonal = ind_common_support(find(orthogonal_list==0)); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

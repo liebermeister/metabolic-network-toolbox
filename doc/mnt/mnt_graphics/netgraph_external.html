@@ -44,21 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [network,p] = netgraph_external(network,draw_only,external)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% arguments draw_only,external are optional</span>
-0004 <span class="comment">% left/centre button: add/ remove external</span>
-0005 <span class="comment">% right button quit</span>
-0006 
-0007 <a name="_sub0" href="#_subfunctions" class="code">function [network,p] = netgraph_external(network,draw_only,external)</a>
-0008 
-0009 <span class="keyword">if</span> exist(<span class="string">'external'</span>,<span class="string">'var'</span>),   network.external = external; <span class="keyword">end</span>
-0010 <span class="keyword">if</span> ~exist(<span class="string">'draw_only'</span>,<span class="string">'var'</span>), draw_only = 0; <span class="keyword">end</span>
-0011 
-0012 [network.external,p] = <a href="netgraph_mark_metabolites.html" class="code" title="function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)">netgraph_mark_metabolites</a>(network,network.external,draw_only);
-0013 
-0014 title(<span class="string">'External metabolites confirmed'</span>);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

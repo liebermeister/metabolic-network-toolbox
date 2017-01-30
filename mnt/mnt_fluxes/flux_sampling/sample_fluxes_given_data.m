@@ -65,8 +65,10 @@ for it = 1:n_exp;
   rho_cov_inv      = K(ind_finite,:)' * v_cov_inv * K(ind_finite,:);
 
 %  safety measure to prevent unrealistic estimates of non-measured fluxes:
-  rho_cov_inv      = rho_cov_inv + 10^-5 * max(eig(rho_cov_inv)) * eye(size(K,2));
+  rho_cov_inv = rho_cov_inv + 10^-5 * max(eig(rho_cov_inv)) * eye(size(K,2));
 
+  rho_cov_inv =   0.5 * [rho_cov_inv *   rho_cov_inv'];
+  
 % ignore sign constraints
 %  rho_mean         = rho_cov_inv \ [ K(ind_finite,:)' * v_cov_inv * v_mean(ind_finite,it) ];
 

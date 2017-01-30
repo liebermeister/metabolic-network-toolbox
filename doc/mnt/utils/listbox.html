@@ -40,24 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [indices,h] = listbox(list,indices);</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [indices,h] = listbox(list,indices);</a>
-0004 
-0005 <span class="keyword">if</span> ~exist(<span class="string">'indices'</span>,<span class="string">'var'</span>), indices = []; <span class="keyword">end</span> 
-0006 
-0007 cell_array = cellstr( [ num2str((1:length(list))') repmat(<span class="string">' | '</span>,length(list),1) char(list)])';
-0008 
-0009 clf;
-0010 
-0011 h = uicontrol(<span class="string">'style'</span>,<span class="string">'list'</span>,<span class="string">'max'</span>,10,<span class="string">'min'</span>,1,<span class="string">'Position'</span>,[10 10 500 400],<span class="string">'string'</span>,cell_array,<span class="string">'Value'</span>,indices);
-0012 
-0013 fprintf(<span class="string">'Choose items and then press any key to confirm.\nYou can use the control key to choose several items\n'</span>);
-0014 pause;
-0015 
-0016 indices = get(h,<span class="string">'Value'</span>);
-0017 clf;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

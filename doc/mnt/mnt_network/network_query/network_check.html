@@ -42,25 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = network_check(network)</a>
-0002 
-0003 <span class="comment">%network = network_check(network)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">%Check if dimensions of network fields match the number of reactions and metabolites.</span>
-0006 
-0007 n_S = length(network.metabolites);
-0008 n_A = length(network.actions);
-0009 
-0010 <span class="keyword">if</span> max(size(network.N) ~= [n_S,n_A]),        fprintf(<span class="string">'network_check: error\n'</span>); <span class="keyword">end</span>
-0011 <span class="keyword">if</span> max(size(network.reversible) ~= [n_A,1]), fprintf(<span class="string">'network_check: error\n'</span>); <span class="keyword">end</span>
-0012 
-0013 <span class="keyword">if</span> isfield(network,<span class="string">'kinetics'</span>),
-0014  <span class="keyword">if</span> strcmp(network.kinetics.type,<span class="string">'mass-action'</span>),
-0015   <span class="keyword">if</span> max(size(network.kinetics.k_fwd) ~= [n_A,1]), fprintf(<span class="string">'network_check: error\n'</span>); <span class="keyword">end</span>
-0016   <span class="keyword">if</span> max(size(network.kinetics.k_bwd) ~= [n_A,1]), fprintf(<span class="string">'network_check: error\n'</span>); <span class="keyword">end</span>
-0017  <span class="keyword">end</span>
-0018 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

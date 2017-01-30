@@ -40,44 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);</a>
-0002 
-0003 <span class="comment">% [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);</span>
-0004 
-0005 <span class="keyword">if</span> ~exist(<span class="string">'x_init'</span>,<span class="string">'var'</span>),        x_init = []; <span class="keyword">end</span> 
-0006 <span class="keyword">if</span> ~exist(<span class="string">'set_positions'</span>,<span class="string">'var'</span>), set_positions = []; <span class="keyword">end</span> 
-0007 
-0008 nm        = length(network.metabolites);
-0009 
-0010 <span class="comment">% --- calculate graph node positions x</span>
-0011 
-0012 <span class="comment">% small network</span>
-0013 
-0014 <span class="keyword">if</span> isempty(x_init),
-0015   a = [0 1 0 1];
-0016 <span class="keyword">else</span>,
-0017   a = [min(x_init(1,:)),max(x_init(1,:)),min(x_init(2,:)),max(x_init(2,:))];
-0018 <span class="keyword">end</span>
-0019 
-0020 <span class="comment">% typical distance between equally spaced dots</span>
-0021 size_unit  = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);  
-0022 force_unit = 0.5;
-0023 
-0024 gridsize = 0.01 * size_unit;   <span class="comment">% distance between discrete x values</span>
-0025 k1       = 0.01 * force_unit;  <span class="comment">% overall repulsion strength</span>
-0026 k2       = .2 * size_unit;     <span class="comment">% overall repulsion scale</span>
-0027 k3       = 0.1 * force_unit;   <span class="comment">% neighbour attraction strength</span>
-0028 k4       = 0.5 * size_unit;    <span class="comment">% neighbour attraction scale</span>
-0029 
-0030 <span class="keyword">if</span> isempty(set_positions),
-0031   x = <a href="netgraph_find_x.html" class="code" title="function x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions)">netgraph_find_x</a>(network,gridsize,k1,k2,k3,k4);
-0032 <span class="keyword">else</span>,
-0033   x = <a href="netgraph_find_x.html" class="code" title="function x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions)">netgraph_find_x</a>(network,gridsize,k1,k2,k3,k4,[set_positions'; x_init(:,set_positions)]');
-0034 <span class="keyword">end</span>
-0035 
-0036 fixed = zeros(1,length(network.metabolites)+length(network.actions));
-0037 fixed(set_positions) = 1;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

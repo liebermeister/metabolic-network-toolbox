@@ -89,10 +89,11 @@ end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
 if exist('cplexlp','file'),
-  [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],cplexoptimset('Display','off','TolFun',10^-12,'TolRLPFun',10^-12));
-lambda_ind_int = lambda.eqlin(1:size(NR,1));
- %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
- %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
+  opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off','Diagnostics','off');
+  [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
+  lambda_ind_int = lambda.eqlin(1:size(NR,1));
+  %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
+  %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
 else
   [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off'));
 end

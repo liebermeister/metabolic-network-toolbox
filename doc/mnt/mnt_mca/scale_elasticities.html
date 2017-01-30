@@ -44,33 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function E_sc = scale_elasticities(E,v,c,p)</a>
-0002 
-0003 <span class="comment">% E_sc = scale_elasticities(E,v,c,p)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% E contains the unscaled first- and second order elasticities</span>
-0006 <span class="comment">% (fields Ec, Ep, Ecc, Ecp, Epp); v, c, and p are the vectors of</span>
-0007 <span class="comment">% reaction velocities, concentrations, and parameters, respectively.</span>
-0008 
-0009 nm = length(c);
-0010 np = length(p);
-0011 
-0012 E_sc.Ec  = diag(1./v) * E.Ec * diag(c);
-0013 E_sc.Ep  = diag(1./v) * E.Ep * diag(p);
-0014 
-0015 Ex  = [E.Ec E.Ep];
-0016 Exx(:,1:nm,1:nm) = E.Ecc;
-0017 Exx(:,1:nm,nm+(1:np)) = E.Ecp;
-0018 Exx(:,nm+(1:np),1:nm) = permute(E.Ecp,[1 3 2]);
-0019 Exx(:,nm+(1:np),nm+(1:np)) = E.Epp;
-0020 
-0021 p(p==0) = 10^-14;
-0022 c(c==0) = 10^-14;
-0023 Exx_sc = <a href="second_derivative_unscaled2scaled.html" class="code" title="function D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)">second_derivative_unscaled2scaled</a>(Exx,Ex,v,[c; p]);
-0024 E_sc.Ecc = Exx_sc(:,1:nm,1:nm);
-0025 E_sc.Ecp = Exx_sc(:,1:nm,nm+1:end);
-0026 E_sc.Epp = Exx_sc(:,1:nm+1:<span class="keyword">end</span>,nm+1:end);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

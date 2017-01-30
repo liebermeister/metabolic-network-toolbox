@@ -3,7 +3,7 @@ function [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(netw
 % [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);
 %
 % translate metabolic network datastructure with modular kinetics 
-% into metabolic network datastructure with "numeric" kinetics,
+% into metabolic network data structure with "numeric" kinetics,
 % including a dilution term for every molecular species
 
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);

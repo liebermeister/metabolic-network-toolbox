@@ -24,7 +24,7 @@
 <div class="box"><strong>[v,benefit] = fba(network,fba_constraints)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function [v,value] = fba(network,fba_constraints) </strong></div>
+<div class="box"><strong>function [v,value,lambda_ind_int] = fba(network,fba_constraints) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> [v,benefit] = fba(network,fba_constraints)
@@ -34,13 +34,15 @@
 
  fba_constraints: see fba_default_options
 
- fba_constraints.zv:       linear weights in the objective function  
- fba_constraints.v_min:    vector of lower bounds
- fba_constraints.v_max:    vector of upper bounds
- fba_constraints.v_sign:   vector of signs, overrides v_min and v_max
- fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else
- fba_constraints.ext_sign: sign vector for external metabolite production
+ fba_constraints.zv:         linear weights in the objective function  
+ fba_constraints.v_min:      vector of lower bounds
+ fba_constraints.v_max:      vector of upper bounds
+ fba_constraints.v_sign:     vector of signs, overrides v_min and v_max
+ fba_constraints.v_fix:      vector of fixed fluxes, overrides everything else
+ fba_constraints.ext_sign:   sign vector for external metabolite production
                              undefined signs: nan
+ fba_constraints.production: production rates (values for internal metabolites 
+                             will replace the zeros in the stationarity condition)
 
  simple usage:
  fba_constraints = fba_default_options(network);
@@ -52,106 +54,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li></ul>
+<li><a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints,network)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="../../.././mnt/mnt_fluxes/eba/es_mu_simple_guess.html" class="code" title="function [A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)">es_mu_simple_guess</a>	[A, mu, exitflag] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)</li><li><a href="fba_interactions.html" class="code" title="function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)">fba_interactions</a>	[f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)</li><li><a href="fba_screen_inhibitions.html" class="code" title="function [v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)">fba_screen_inhibitions</a>	[v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,value] = fba(network,fba_constraints)</a>
-0002 
-0003 <span class="comment">% [v,benefit] = fba(network,fba_constraints)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% flux balance analysis; solves</span>
-0006 <span class="comment">% max = z' * v  where N_internal * v = 0  and vmin &lt;= v &lt;= vmax</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% fba_constraints: see fba_default_options</span>
-0009 <span class="comment">%</span>
-0010 <span class="comment">% fba_constraints.zv:       linear weights in the objective function</span>
-0011 <span class="comment">% fba_constraints.v_min:    vector of lower bounds</span>
-0012 <span class="comment">% fba_constraints.v_max:    vector of upper bounds</span>
-0013 <span class="comment">% fba_constraints.v_sign:   vector of signs, overrides v_min and v_max</span>
-0014 <span class="comment">% fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else</span>
-0015 <span class="comment">% fba_constraints.ext_sign: sign vector for external metabolite production</span>
-0016 <span class="comment">%                             undefined signs: nan</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">% simple usage:</span>
-0019 <span class="comment">% fba_constraints = fba_default_options(network);</span>
-0020 <span class="comment">% fba_constraints.zv = zeros(size(fba_constraints.zv));</span>
-0021 <span class="comment">% fba_constraints.zv(#biomass_reaction) = 1;</span>
-0022 <span class="comment">% [v,value] = fba(network,fba_constraints)</span>
-0023 
-0024 
-0025 <span class="comment">%fprintf('FBA: ');</span>
-0026 [nm,nr] = size(network.N);
-0027 ind_int = find(network.external==0);
-0028 fba_constraints = <a href="fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>(fba_constraints);
-0029 
-0030 ind_fix = find(isfinite(fba_constraints.v_fix));
-0031 ind_notfix = find(~isfinite(fba_constraints.v_fix));
-0032 dd      = eye(nr);
-0033 
-0034 c  = fba_constraints.zv;
-0035 
-0036 <span class="comment">% used reduced stoichiometric matrix (to avoid numerical problems in linprog)</span>
-0037 
-0038 N = network.N(network.external==0,:);
-0039 [echelon,independent_metabolites] = rref(N');
-0040 NR                                = N(independent_metabolites,:);
-0041 
-0042 A  = [NR; <span class="keyword">...</span>
-0043      dd(ind_fix,:)];
-0044 
-0045 b  = [zeros(size(NR,1),1);<span class="keyword">...</span>
-0046       fba_constraints.v_fix(ind_fix)];
-0047 
-0048 my_eye = eye(nr);
-0049 
-0050 <span class="keyword">if</span> sum(isfinite(fba_constraints.ext_sign)),
-0051 
-0052   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
-0053 
-0054   G  = [  my_eye(ind_notfix,:); <span class="keyword">...</span>
-0055         - my_eye(ind_notfix,:); <span class="keyword">...</span>
-0056         - diag(fba_constraints.ext_sign(ind_ext_sign))*network.N(ind_ext_sign,:); <span class="keyword">...</span>
-0057        ];
-0058   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
-0059           - fba_constraints.v_min(ind_notfix,:); <span class="keyword">...</span>
-0060             zeros(length(ind_ext_sign),1);];
-0061 <span class="keyword">else</span>,
-0062 
-0063   G  = [    my_eye(ind_notfix,:);<span class="keyword">...</span>
-0064           - my_eye(ind_notfix,:)];
-0065   h  = [    fba_constraints.v_max(ind_notfix,:); <span class="keyword">...</span>
-0066           - fba_constraints.v_min(ind_notfix,:)];  
-0067 
-0068 <span class="keyword">end</span>
-0069 
-0070 <span class="comment">%[v,s,z,y,status] = lp236a(-c,G,h,A,b);</span>
-0071 [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>));
-0072 
-0073 <span class="keyword">if</span> exitflag~=1,
-0074   <span class="comment">%% Check if at least zero flux is a solution</span>
-0075   <span class="comment">%% v_eq = zeros(size(fba_constraints.v_min));</span>
-0076   <span class="comment">%% %flux_check_stationarity(network,v_eq)</span>
-0077   <span class="comment">%% eq_flux_satisfies_inequalities = prod(double([G * v_eq &lt;= h]))</span>
-0078   <span class="comment">%% eq_flux_satisfies_equalities   = prod(double([A * v_eq == b]))</span>
-0079   <span class="comment">%% eq_flux_satisfies_lower_bounds = prod(double(v_eq &gt;= fba_constraints.v_min))</span>
-0080   <span class="comment">%% eq_flux_satisfies_upper_bounds = prod(double(v_eq &lt;= fba_constraints.v_max))</span>
-0081 
-0082   <span class="keyword">if</span> exitflag == -4,
-0083     error(<span class="string">'Nan value encountered.'</span>);
-0084   <span class="keyword">end</span>
-0085   value = nan; v = nan;
-0086   exitflag
-0087   error(<span class="string">'No FBA solution found.'</span>); 
-0088 <span class="keyword">else</span>, 
-0089   value = c'*v;
-0090 <span class="keyword">end</span>
-0091 
-0092 <span class="comment">% check: [v &gt;= fba_constraints.v_min, v &lt;= fba_constraints.v_max]</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

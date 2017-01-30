@@ -23,7 +23,7 @@ if isfield(options,'used'),
   used = options.used;
 else,
   switch network.kinetics.type,
-    case {'cs','ms'},   used = real(network.kinetics.u>0);
+    case {'cs','ms'}, used = real(network.kinetics.u>0);
     otherwise,  used = [];
   end
 end

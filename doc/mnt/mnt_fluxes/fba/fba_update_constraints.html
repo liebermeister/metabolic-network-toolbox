@@ -24,7 +24,7 @@
 <div class="box"><strong>fba_constraints = fba_update_constraints(fba_constraints)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function fba_constraints = fba_update_constraints(fba_constraints) </strong></div>
+<div class="box"><strong>function fba_constraints = fba_update_constraints(fba_constraints,network) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> fba_constraints = fba_update_constraints(fba_constraints)
@@ -38,36 +38,11 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li><li><a href="moma.html" class="code" title="function [v,value] = moma(network,fba_constraints,v_ref)">moma</a>	[v,benefit] = moma(network,fba_constraints)</li><li><a href="../../.././mnt/mnt_fluxes/flux_minimisation/pmf.html" class="code" title="function v = pmf(network,fba_constraints,benefit,v_start)">pmf</a>	v = pmf(network,fba_constraints,benefit,v_start)</li><li><a href="../../.././mnt/mnt_fluxes/flux_minimisation/pmf_quadratic.html" class="code" title="function v = pmf_quadratic(network,fba_constraints,benefit)">pmf_quadratic</a>	v = pmf_quadratic(network,fba_constraints,benefit)</li></ul>
+<li><a href="fba.html" class="code" title="function [v,value,lambda_ind_int] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li><li><a href="moma.html" class="code" title="function [v,value] = moma(network,fba_constraints,v_ref)">moma</a>	[v,benefit] = moma(network,fba_constraints)</li><li><a href="../../.././mnt/mnt_fluxes/flux_minimisation/pmf.html" class="code" title="function v = pmf(network,fba_constraints,benefit,v_start)">pmf</a>	v = pmf(network,fba_constraints,benefit,v_start)</li><li><a href="../../.././mnt/mnt_fluxes/flux_minimisation/pmf_quadratic.html" class="code" title="function v = pmf_quadratic(network,fba_constraints,benefit)">pmf_quadratic</a>	v = pmf_quadratic(network,fba_constraints,benefit)</li><li><a href="../../.././mnt/mnt_fluxes/flux_minimisation/pmf_with_internal_production.html" class="code" title="function v = pmf_with_internal_production(network,fba_constraints,benefit,v_start)">pmf_with_internal_production</a>	v = pmf(network,fba_constraints,benefit,v_start)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fba_constraints = fba_update_constraints(fba_constraints)</a>
-0002 
-0003 <span class="comment">% fba_constraints = fba_update_constraints(fba_constraints)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% make fba constraints consistent</span>
-0006 
-0007 fba_constraints.v_min(find([fba_constraints.v_sign == 1] .*        [fba_constraints.v_min&lt;0])) = 0;
-0008 fba_constraints.v_min(find([fba_constraints.v_sign == 1] .* ~isfinite(fba_constraints.v_min))) = 0;
-0009 fba_constraints.v_max(find([fba_constraints.v_sign ==-1] .*        [fba_constraints.v_max&gt;0])) = 0;
-0010 fba_constraints.v_max(find([fba_constraints.v_sign ==-1] .* ~isfinite(fba_constraints.v_max))) = 0;
-0011 
-0012 fba_constraints.v_sign(find(fba_constraints.v_min&gt;0)) = 1;
-0013 fba_constraints.v_sign(find(fba_constraints.v_max&lt;0)) = -1;
-0014 
-0015 fba_constraints.v_sign(fba_constraints.v_fix==0) =  0;
-0016 fba_constraints.v_sign(fba_constraints.v_fix&gt;0)  =  1;
-0017 fba_constraints.v_sign(fba_constraints.v_fix&lt;0)  = -1;
-0018 fba_constraints.v_fix(fba_constraints.v_sign==0) =  0;
-0019 
-0020 <span class="keyword">if</span> sum(fba_constraints.v_fix(fba_constraints.v_sign&gt;0) == 0) <span class="keyword">...</span>
-0021       + sum(fba_constraints.v_fix(fba_constraints.v_sign&lt;0) == 0),
-0022   error(<span class="string">'contradicting constraints'</span>);
-0023 <span class="keyword">end</span>
-0024 
-0025 fba_constraints.zv(isnan(fba_constraints.zv)) = 0;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

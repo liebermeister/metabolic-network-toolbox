@@ -2,16 +2,35 @@
 %
 % Movie displaying data on network; two data sets are shown at teh same time 
 % (for instance, to compare experimental and simulated time series)
+%
+% options and default values:
+% flux_moves         - 0
+% metabolite_colors  - []
+% reaction_colors    - []
+% set_circle_shift   - [0.01    - 0.01]
+% colormap_1         - []
+% colormap_2         - []
 
 function [M,T] = netgraph_movie(network,t,s_t_1,s_t_2,data_type,n_frames,text_flag,options);
 
-eval(default('options','struct','data_type','''concentrations''','n_frames','[]','text_flag','0','timebar','1'));
+eval(default('options','struct','data_type','''concentrations''','n_frames','[]','text_flag','0'));
 
 if ~exist('options','var'), options = struct; end
 
-options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[]);
+options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'set_circle_shift',[0.01,0.01],'colormap_1',[],'colormap_2',[],'metvaluesmin',0,'background_colors',[],'use_background_colors',0,'timebar',1);
 
 options = join_struct(options_default, options);
+options.canvas=0;
+
+if options.use_background_colors,
+if options.background_colors,
+  if size(options.background_colors,2) ~= 3,
+    options.background_colors = options.background_colors';
+  end
+end
+else
+  options.background_colors = [];
+end
 
 if isempty(n_frames), n_frames = 10; end
 
@@ -90,9 +109,9 @@ if length(actvalues_2), options_default.actvaluesmax = max(max(actvalues_1(:)),0
 clf; 
 subplot('position',[0 0 1 1]);
 options.hold_on=0; options.circle_shift=[0,0];
-netgraph_concentrations(network,metvalues_1(:,1),actvalues_1(:,1),0,options_default); hold on;
-options.hold_on=1; options.circle_shift=[0.01,0.01];
-netgraph_concentrations(network,metvalues_2(:,1),actvalues_2(:,1),0,options_default);
+netgraph_concentrations(network,metvalues_1(:,1),actvalues_1(:,1),0,options); hold on;
+options.hold_on=1; options.circle_shift=options.set_circle_shift;
+netgraph_concentrations(network,metvalues_2(:,1),actvalues_2(:,1),0,options);
 
 options_default.figure_axis    = axis;
 options_default.actprintvalues = 0;
@@ -101,7 +120,6 @@ options_default.arrowstyle     = 'none';
 
 options = join_struct(options_default,options);
 
-if isfield(options,'timebar'), timebar = options.timebar; end
 a = axis;
 clf;
 
@@ -126,16 +144,27 @@ for j=1:jj,
   
   clf; 
   subplot('position',[0 0 1 1]);
-  options.hold_on=0; options.circle_shift=[0,0];
+  options.hold_on = 0; options.circle_shift=[0,0];
+  if length(options.colormap_1), options.colormap = options.colormap_1; end
+  if options.background_colors,
+    options.canvas = options.background_colors(j,:);
+  end
+  options.suppress_lines = 0;
   netgraph_concentrations(network,metvalues_1(:,j),actvalues_1(:,j),text_flag,options); hold on;
-  options.hold_on=1; options.circle_shift=[0.01,0.01];
+  options.hold_on=1; options.circle_shift=options.set_circle_shift;
+  if length(options.colormap_2), options.colormap = options.colormap_2; end
+  options.canvas = 0; 
+  options.suppress_lines = 1;
   netgraph_concentrations(network,metvalues_2(:,j),actvalues_2(:,j),text_flag,options);
-  if timebar, 
+
+  if options.timebar, 
     hold on;  
     ss = network.graphics_par.squaresize;
-    plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]); 
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0 0 0]);
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/6,[1 1 1]);
+    amin = a(1) + 0.05 *[a(2)-a(1)];
+    amax = a(2) - 0.05 *[a(2)-a(1)];
+    plot([amin+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]); 
+    circle( amin + ss + (j-0.9)/(jj-0.8) *(amax-amin-2*ss),ss+a(3),ss/2,[0 0 0]);
+    circle( amin + ss + (j-0.9)/(jj-0.8) *(amax-amin-2*ss),ss+a(3),ss/6,[1 1 1]);
   end
 
   axis(a);

@@ -44,25 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)</a>
-0002 
-0003 <span class="comment">% D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% let  D_un be the matrix of unscaled derivatives d f_r / d x_i</span>
-0006 <span class="comment">% and D2_un be the tensor of unscaled second derivatives d^2 f_r / dx_i dx_j</span>
-0007 <span class="comment">% compute D2_sc, the tensor of scaled second derivatives d^2 ln f_r / dln x_i dln x_j</span>
-0008 
-0009 nr = length(f);
-0010 dd = [];
-0011 
-0012 <span class="keyword">for</span> it = 1:nr,
-0013  dd(it,:,:) = - 1/f(it) * D_un(it,:)' * D_un(it,:) + diag(D_un(it,:)' ./ x);
-0014 <span class="keyword">end</span>
-0015 
-0016 D2_sc = <a href="../.././mnt/utils/tensor_scale.html" class="code" title="function U = tensor_scale(T,k,x);">tensor_scale</a>(D2_un + dd,1,1./f);
-0017 D2_sc = <a href="../.././mnt/utils/tensor_scale.html" class="code" title="function U = tensor_scale(T,k,x);">tensor_scale</a>(D2_sc,2,x);
-0018 D2_sc = <a href="../.././mnt/utils/tensor_scale.html" class="code" title="function U = tensor_scale(T,k,x);">tensor_scale</a>(D2_sc,3,x);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

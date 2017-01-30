@@ -6,7 +6,7 @@ function netgraph_concentrations(network,S,J,flag_text,options)
 
 eval(default('S','[]','J','[]','flag_text','0','options','struct'));
 
-opt_def = struct('actstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)));%,'colormap',rb_colors);
+opt_def = struct('actstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)),'canvas',[]);%,'colormap',rb_colors);
 
 if isfield(options,'arrowvalues'), 
   opt_def.arrowvaluesmax = max(abs(options.arrowvalues));
@@ -47,4 +47,8 @@ opt = join_struct(opt,options);
 
 netgraph_draw(network, opt);
 
-set(gcf,'Color',[1 1 1]);
+if isempty(opt.canvas),
+  set(gcf,'Color',[1 1 1]);
+else
+  set(gcf,'Color',opt.canvas);
+end

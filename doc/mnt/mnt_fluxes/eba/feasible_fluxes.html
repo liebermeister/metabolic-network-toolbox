@@ -45,77 +45,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</a>
-0002 
-0003 <span class="comment">% [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% Determine flux distribution close to given data that</span>
-0006 <span class="comment">% (i)   satisfies given upper and lower bounds on fluxes (overridden by sign constraints)</span>
-0007 <span class="comment">% (ii)  satisfies sign constraints for production/consumption of external metabolites</span>
-0008 <span class="comment">% (iii) is EBA-feasible (choose the condition by eba_condition = 'loose' or 'strict')</span>
-0009 
-0010 <span class="comment">% v is a column vector (but can also be a matrix containing several column vectors)</span>
-0011 <span class="comment">% (in this case all relevant inputs have to be matrices)</span>
-0012 
-0013 <span class="comment">% IDEA:</span>
-0014 <span class="comment">%  First determine a stationary flux mode satisfying the upper and lower bounds</span>
-0015 <span class="comment">%    (and possibly the bounds on production terms) close to the data</span>
-0016 <span class="comment">%  If EBA constraints are violated, repeat the entire thing; but for the null space,</span>
-0017 <span class="comment">%    do not use N, but add the cycles from the violated conditions as rows to N</span>
-0018 <span class="comment">%    (in order to make the flux distribution orthogonal on these cycles; then iterate</span>
-0019 
-0020 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'eba_condition'</span>,<span class="string">'''loose'''</span>,<span class="string">'C'</span>,<span class="string">'nan'</span>))
-0021 
-0022 n_exp = size(data.v.mean,2);
-0023 n_ext = length(ind_ext);
-0024 
-0025 <span class="comment">% -------------------------------</span>
-0026 <span class="comment">% initialise</span>
-0027 
-0028 external          = zeros(size(N,1),1); 
-0029 external(ind_ext) = 1;
-0030 
-0031 <span class="comment">%% EFM instead?</span>
-0032 <span class="keyword">if</span> isnan(C), C = <a href="../../.././mnt/mnt_fluxes/eba/eba_util/eba_my_cycles.html" class="code" title="function C = eba_my_cycles(N,C,ind_ignore)">eba_my_cycles</a>(N,C,es_constraints.ind_ignore); <span class="keyword">end</span>
-0033 
-0034 K = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,external);
-0035 
-0036 <span class="comment">%figure(1); netgraph_concentrations(network_CoHid,[],C(:,2))</span>
-0037 
-0038 es_constraints = es_constraints_update(es_constraints);
-0039 
-0040 <span class="comment">% -------------------------------</span>
-0041 <span class="comment">% determine flux distribution</span>
-0042 
-0043 <span class="comment">% similarity to data:</span>
-0044 <span class="comment">% K * w &amp;approx&amp; data.v.mean</span>
-0045 <span class="comment">% inequality constraints:</span>
-0046 <span class="comment">% [-K; K] * w &lt;= [-es_constraints.v_min; es_constraints.v_max]</span>
-0047 
-0048 <span class="keyword">for</span> it = 1:n_exp,
-0049   A = [-K; <span class="keyword">...</span>
-0050         K; <span class="keyword">...</span>
-0051         N(find(es_constraints.ext_sign(:,it)==-1),:) * K; <span class="keyword">...</span>
-0052        -N(find(es_constraints.ext_sign(:,it)== 1),:) * K; <span class="keyword">...</span>
-0053       ];
-0054   
-0055   b = [-es_constraints.v_min(:,it); <span class="keyword">...</span>
-0056         es_constraints.v_max(:,it); <span class="keyword">...</span>
-0057         zeros(sum(abs(es_constraints.ext_sign(:,it)) ==1),1) ];
-0058 
-0059   ind_data = find(isfinite(data.v.mean(:,it)));
-0060   
-0061   H =  K(ind_data,:)' * diag(data.v.std(ind_data,it).^-2) * K(ind_data,:);
-0062   f = -K(ind_data,:)' * diag(data.v.std(ind_data,it).^-2) * data.v.mean(ind_data,it);
-0063   
-0064   w = quadprog(full(H),full(f),full(A),full(b));
-0065   
-0066   v(:,it) = K * w;
-0067   v(abs(v)&lt;10^-10) = 0;
-0068 
-0069   v(:,it) = <a href="eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>(v(:,it),N,eba_condition,C);
-0070 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

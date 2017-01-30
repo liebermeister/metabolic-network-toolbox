@@ -40,19 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network =  network_set_enzyme_levels(network,u,enzyme_parameter_names)</a>
-0002 
-0003 <span class="keyword">switch</span> network.kinetics.type,
-0004   <span class="keyword">case</span> <span class="string">'numeric'</span>
-0005     <span class="keyword">if</span> ~exist(<span class="string">'enzyme_parameter_names'</span>,<span class="string">'var'</span>),
-0006       error(<span class="string">'variable enzyme_parameter_names missing'</span>)
-0007     <span class="keyword">end</span>
-0008     network = <a href="../../.././mnt/mnt_kinetics/numeric/network_set_parameters.html" class="code" title="function network = network_set_parameters(network,names,values)">network_set_parameters</a>(network,enzyme_parameter_names,u);
-0009   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>,<span class="string">'ds'</span>}
-0010     network.kinetics.u = u;
-0011 <span class="keyword">end</span>
-0012</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

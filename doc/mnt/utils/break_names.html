@@ -41,20 +41,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% bnames = break_names(names)</span>
-0002 <span class="comment">% split strings into smaller parts</span>
-0003 
-0004 <a name="_sub0" href="#_subfunctions" class="code">function bnames=break_names(names)</a>
-0005 
-0006 bnames=names;
-0007 <span class="keyword">for</span> i=1:length(bnames)
-0008   <span class="keyword">if</span> length(bnames{i})&gt;15,
-0009     dum = bnames{i};
-0010     dum = [ dum(1:ceil(length(dum)/2)) char(10) dum(ceil(length(dum)/2)+1:end)];
-0011     bnames{i}=dum;
-0012   <span class="keyword">end</span>
-0013 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

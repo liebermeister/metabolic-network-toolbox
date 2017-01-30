@@ -8,6 +8,10 @@ local_assignment  = {};
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);
 
 metnames = network.metabolites;
+metnames = strrep(metnames,'-','_');
+metnames = strrep(metnames,'[','_');
+metnames = strrep(metnames,']','_');
+
 if exist('kinetics','var'),
   kk       = kinetics;
 else

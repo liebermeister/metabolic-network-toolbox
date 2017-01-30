@@ -43,26 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[kinetics,S_ext] = vector2mass_action(vector,used_fwd,used_bwd,n_ext)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%Construct kinetics structure from a parameter string.</span>
-0004 <span class="comment">%(for kinetics of type 'mass-action')</span>
-0005 
-0006 <a name="_sub0" href="#_subfunctions" class="code">function [kinetics,S_ext] = vector2mass_action(vector,used_fwd,used_bwd,n_ext)</a>
-0007 
-0008 <span class="keyword">if</span> ~exist(<span class="string">'used_fwd'</span>,<span class="string">'var'</span>), used_fwd = ones(size(vector,1)/2,1);used_bwd = ones(size(vector,1)/2,1); <span class="keyword">end</span>
-0009 
-0010 <span class="keyword">if</span> ~exist(<span class="string">'n_ext'</span>,<span class="string">'var'</span>), n_ext = 0; <span class="keyword">end</span>
-0011 
-0012 n_rea = length(used_fwd);
-0013 
-0014 kinetics.type  = <span class="string">'mass-action'</span>;
-0015 kinetics.k_fwd = zeros(n_rea,1);
-0016 kinetics.k_bwd = zeros(n_rea,1);
-0017 kinetics.k_fwd(find(used_fwd)) =  vector(1:sum(used_fwd));
-0018 kinetics.k_bwd(find(used_bwd)) =  vector(sum(used_fwd)+1:end-n_ext);
-0019 S_ext = vector(end-n_ext+1:end);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

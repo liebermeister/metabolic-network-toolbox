@@ -40,34 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)</a>
-0002 
-0003 <span class="comment">% [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)</span>
-0004 
-0005 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'ind_first_order'</span>,<span class="string">'[]'</span>,<span class="string">'h'</span>,<span class="string">'[]'</span>));
-0006 
-0007 N = sparse(N);
-0008 W = double(sparse(W));
-0009 
-0010 [nm,nr] = size(N);
-0011 
-0012 <span class="keyword">if</span> isempty(h),
-0013   h = ones(nr,1);
-0014 <span class="keyword">end</span>
-0015 
-0016 Mplus   = diag(h) * [abs(N').*(N'&lt;0)];
-0017 Mminus  = diag(h) * [    N' .*(N'&gt;0)];
-0018 
-0019 Wplus   =     W .*(W&gt;0);
-0020 Wminus  = abs(W).*(W&lt;0);
-0021 
-0022 N_int  = N(setdiff(1:nm,ind_ext),:);
-0023 ind_M  = find(Mplus+Mminus);
-0024 ind_Wp = find(Wplus);
-0025 ind_Wm = find(Wminus);
-0026 ind_Mp  = find(Mplus);
-0027 ind_Mm  = find(Mminus);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

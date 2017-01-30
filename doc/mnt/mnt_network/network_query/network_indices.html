@@ -40,27 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ind_met,ind_act] = network_indices(network)</a>
-0002 
-0003 <span class="comment">% [ind_met,ind_act] = network_indices(network)</span>
-0004 
-0005 [nm,nr] = size(network.N);
-0006 
-0007 ind_met = struct;
-0008 <span class="keyword">for</span> it = 1:nm,
-0009   metname = strrep(network.metabolites{it},<span class="string">' '</span>,<span class="string">''</span>);
-0010   metname = strrep(metname,<span class="string">'('</span>,<span class="string">''</span>);
-0011   metname = strrep(metname,<span class="string">')'</span>,<span class="string">''</span>);
-0012   metname = strrep(metname,<span class="string">'-'</span>,<span class="string">''</span>);
-0013   metname = strrep(metname,<span class="string">'+'</span>,<span class="string">'plus'</span>);
-0014   ind_met = setfield(ind_met,metname,<a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(network.metabolites(it),network.metabolites));
-0015 <span class="keyword">end</span>
-0016 
-0017 ind_act = struct;
-0018 <span class="keyword">for</span> it = 1:nr,
-0019   ind_act = setfield(ind_act,strrep(network.actions{it},<span class="string">' '</span>,<span class="string">''</span>),<a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(network.actions(it),network.actions));
-0020 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

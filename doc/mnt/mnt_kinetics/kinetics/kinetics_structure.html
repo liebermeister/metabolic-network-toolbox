@@ -82,50 +82,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% KINETICS_STRUCTURE - Data structure for kinetic rate laws in metabolic networks</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% There are alternative ways to specify the kinetics, indicated by kinetics.type:</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% (i)   'numeric': the kinetics of all reactions are defined by a single m-file</span>
-0006 <span class="comment">%         kinetics.velocity_function   function handle the function must have the form</span>
-0007 <span class="comment">%                                      function v = fct_name(s,p,t), where s is a column vector of</span>
-0008 <span class="comment">%                                      metabolite concentrations and v is a column vector of</span>
-0009 <span class="comment">%                                      reaction velocities</span>
-0010 <span class="comment">%</span>
-0011 <span class="comment">%         kinetics.parameters          structure containing the parameters</span>
-0012 <span class="comment">%</span>
-0013 <span class="comment">% (ii)  'standard': kinetics contains field 'reactions', a cell structure of</span>
-0014 <span class="comment">%        structure arrays, each describing one reaction: the kind of kinetics is</span>
-0015 <span class="comment">%        given in the field</span>
-0016 <span class="comment">%</span>
-0017 <span class="comment">% (iii)  'kinetic_strings': kinetics contains field 'reactions', a cell structure of</span>
-0018 <span class="comment">%        structure arrays, each describing one reaction. parameter</span>
-0019 <span class="comment">%        names and values are given in a column cell array of strings</span>
-0020 <span class="comment">%        and a column vector, respectively.</span>
-0021 <span class="comment">%</span>
-0022 <span class="comment">% (iv)  'mass-action': all reactions are of mass action type</span>
-0023 <span class="comment">%        the parameters are given as vectors in fields</span>
-0024 <span class="comment">%         kinetics.k_fwd               forward rate constants</span>
-0025 <span class="comment">%         kinetics.k_bwd               backward rate constants,</span>
-0026 <span class="comment">%         kinetics.exponents          for reactions of type 2A -&gt; B, optional</span>
-0027 <span class="comment">%</span>
-0028 <span class="comment">% (v)  'convenience': all reactions are of convenience type</span>
-0029 <span class="comment">%        the parameters are given as vectors in fields</span>
-0030 <span class="comment">%         r    activity constants (geometric mean of forward and backward turnover rate), column vector</span>
-0031 <span class="comment">%         g    energy constants (g = exp((G_formation-G_mean)/RT * scaling factor) ), column vector</span>
-0032 <span class="comment">%              for the scaling factor, see convert_G_to_kG and convert_G_to_kG</span>
-0033 <span class="comment">%         KM   KM values, sparse matrix</span>
-0034 <span class="comment">%         KA   KA values, sparse matrix</span>
-0035 <span class="comment">%         KI   KI values, sparse matrix</span>
-0036 <span class="comment">%         E    enzyme concentrations, column vector</span>
-0037 <span class="comment">%         S    metabolite concentrations, column vector</span>
-0038 <span class="comment">%</span>
-0039 <span class="comment">% for initialising such structures, use 'set_kinetics'</span>
-0040 <span class="comment">% for displaying the kinetics of a network, use 'network_print_kinetics'</span>
-0041 <span class="comment">%</span>
-0042 <span class="comment">%  see also</span>
-0043 <span class="comment">%  network_velocities, set_numeric_kinetics, set_standard_kinetics_type, simulate_parameters</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

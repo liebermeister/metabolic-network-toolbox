@@ -51,30 +51,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% NETWORK_ANALYSE - Analyse a metabolic network structure</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%   [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">%   K        kernel matrix                   Def.   N * K  = 0</span>
-0006 <span class="comment">%   L        link matrix                     Def.   L * NR = N_internal</span>
-0007 <span class="comment">%   N_R      reduced stoichiometric matrix</span>
-0008 <span class="comment">%            related to the independent metabolites</span>
-0009 <span class="comment">%   G        left kernel matrix              Def.   G * N = 0</span>
-0010 <span class="comment">%   pinv_N_R pseudoinverse of NR</span>
-0011 <span class="comment">%   indep    indices of independent metabolites</span>
-0012 <span class="comment">%   N_1      stoiciometric matrix for dependent metabolites</span>
-0013 
-0014 <a name="_sub0" href="#_subfunctions" class="code">function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)</a>
-0015 
-0016 N = full(network.N);
-0017 
-0018 <span class="keyword">switch</span> nargout,
-0019   <span class="keyword">case</span> 1,     K                                    = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0020   <span class="keyword">case</span> {2,3}, [K, L, N_R]                          = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0021   <span class="keyword">case</span> 4,     [K, L, N_R, G]                       = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0022   <span class="keyword">otherwise</span>,  [K, L, N_R, G, pinv_N_R, indep, N_1] = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(N,network.external);
-0023 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -40,58 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</a>
-0002 
-0003 <span class="comment">% [v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</span>
-0004 
-0005 c(find(c&lt;10^-14)) = 10^-14;
-0006 
-0007 <span class="keyword">if</span> ~exist(<span class="string">'Mplus'</span>,<span class="string">'var'</span>),
-0008   [Mplus, Mminus, Wplus, Wminus, nm, nr] = <a href="../../.././mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(N,W,ind_ext,h);
-0009 <span class="keyword">end</span>
-0010 
-0011 ind_N  = find(Mplus + Mminus);
-0012 ind_Wp = find(Wplus);
-0013 ind_Wm = find(Wminus);
-0014  
-0015 [log_alpha_A, log_beta_A] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);">k_to_log_alpha</a>(KA,c);
-0016 [log_alpha_I            ] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);">k_to_log_alpha</a>(KI,c);
-0017 [Kplus,Kminus]            = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_compute_Kcat.html" class="code" title="function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);">ms_compute_Kcat</a>(N,KM,KV,Keq);
-0018 
-0019 log_c_by_k        = repmat(log(c)',nr,1);
-0020 log_c_by_k(ind_N) = log_c_by_k(ind_N) - log(KM(ind_N)+10^-15);
-0021 
-0022 theta_plus  = exp( sum( Mplus  .* log_c_by_k, 2) );
-0023 theta_minus = exp( sum( Mminus .* log_c_by_k, 2) );
-0024 
-0025 <span class="keyword">switch</span> kinetic_law,  
-0026   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>},
-0027     psi_plus    = exp( sum( Mplus  .* log(1+exp(log_c_by_k)) , 2) );
-0028     psi_minus   = exp( sum( Mminus .* log(1+exp(log_c_by_k)) , 2) );    
-0029 <span class="keyword">end</span>
-0030 
-0031 <span class="comment">% complete allosteric regulation</span>
-0032 regulation_term = exp( sum( Wplus .* log_beta_A + Wminus .* log_alpha_I, 2) );
-0033 
-0034 <span class="keyword">switch</span> kinetic_law,  
-0035   <span class="keyword">case</span> <span class="string">'cs'</span>, D = psi_plus + psi_minus - 1;
-0036   <span class="keyword">case</span> <span class="string">'ms'</span>, D = psi_plus .* psi_minus;
-0037   <span class="keyword">case</span> <span class="string">'ds'</span>, D = theta_plus + theta_minus + 1;
-0038   <span class="keyword">case</span> <span class="string">'rp'</span>, D = 1;
-0039   <span class="keyword">case</span> <span class="string">'fd'</span>, D = sqrt(theta_plus .* theta_minus);
-0040 <span class="keyword">end</span>
-0041 
-0042 v_plus  = u .* regulation_term .* Kplus  .* theta_plus  ./ D;
-0043 v_minus = u .* regulation_term .* Kminus .* theta_minus ./ D;
-0044 
-0045 v_plus  = real(full(v_plus));
-0046 v_minus = real(full(v_minus));
-0047 v       = v_plus - v_minus;
-0048 
-0049 <span class="comment">%D</span>
-0050 <span class="comment">%[Kplus .* theta_plus, Kminus .* theta_minus]</span>
-0051 <span class="comment">%[v_plus, v_minus]</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

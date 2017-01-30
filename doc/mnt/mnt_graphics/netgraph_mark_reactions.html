@@ -33,61 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
+<li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="netgraph_reversible.html" class="code" title="function [network,p] = netgraph_reversible(network)">netgraph_reversible</a>	[network,p] = netgraph_reversible(network)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [choice,p] = netgraph_mark_reactions(network,choice,draw_only)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [choice,p] = netgraph_mark_reactions(network,choice,draw_only)</a>
-0004 
-0005 <span class="comment">% left/centre button: add/remove reversible</span>
-0006 <span class="comment">% right button quit</span>
-0007 
-0008 x = network.graphics_par.x;
-0009  
-0010   p.metstyle=<span class="string">'none'</span>;
-0011   p.arrowstyle=<span class="string">'none'</span>;
-0012   p.actstyle=<span class="string">'box'</span>;
-0013 
-0014   p.metvalues=zeros(length(network.metabolites),1);
-0015   p.metvalues_std=zeros(length(network.metabolites),1);
-0016   p.actvalues=0.2*ones(length(network.actions),1);
-0017   p.actvalues(find(choice))=0.5;
-0018   p.actvalues_std=zeros(length(network.actions),1);
-0019   p.metvaluesmax=1;
-0020   p.actvaluesmax=1;
-0021   p.arrowstyle=<span class="string">'directions'</span>;
-0022   <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p);
-0023   
-0024 <span class="keyword">if</span> ~exist(<span class="string">'draw_only'</span>,<span class="string">'var'</span>), draw_only = 0; <span class="keyword">end</span>
-0025 <span class="keyword">if</span> draw_only,  <span class="keyword">return</span>; <span class="keyword">end</span>
-0026   title(<span class="string">'Left button &gt; mark, Right button &gt; finish'</span>)
-0027 
-0028 
-0029   n_met=length(network.metabolites);
-0030   cont = 1;
-0031   
-0032   <span class="keyword">while</span> cont==1,
-0033     [x_old,y_old,button] = ginput(1);
-0034     dist= sum( (repmat([x_old;y_old],1,size(x,2))-x).^2);
-0035     [dum,i]=min(dist);
-0036     index=i(1);
-0037     <span class="keyword">switch</span> button
-0038       <span class="keyword">case</span> 3,
-0039      cont = 0; 
-0040       <span class="keyword">otherwise</span>
-0041     <span class="keyword">if</span> index&gt;n_met, choice(index-n_met)=1-choice(index-n_met); <span class="keyword">end</span>
-0042     <span class="keyword">end</span>
-0043  p.actvalues=0.2*ones(length(network.actions),1);
-0044  p.actvalues(find(choice))=0.5;
-0045  <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,p);
-0046  title(<span class="string">'Left button &gt; mark, Right button &gt; finish'</span>)
-0047 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

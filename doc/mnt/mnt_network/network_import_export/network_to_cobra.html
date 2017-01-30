@@ -40,32 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function model = network_translate_to_cobra(network,description,vz)</a>
-0002 
-0003 <span class="comment">% model = network_translate_to_cobra(network,description,vz)</span>
-0004 
-0005 [nm,nr] = size(network.N);
-0006 
-0007 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'description'</span>,<span class="string">''''''</span>,<span class="string">'vz'</span>,<span class="string">'zeros(nr,0)'</span>));
-0008 
-0009 model.rxns        = network.actions;
-0010 model.mets        = network.metabolites;
-0011 model.S           = network.N          ;
-0012 model.rev         = network.reversible ;
-0013 model.lb          = -inf*ones(nr,1);
-0014 model.ub          =  inf*ones(nr,1);
-0015 model.c           = vz;
-0016 model.rules       = repmat({<span class="string">''</span>},nr,1);
-0017 model.genes       = {};
-0018 model.rxnGeneMat  = [];
-0019 model.grules      = repmat({<span class="string">''</span>},nr,1);
-0020 model.subSystems  = repmat({<span class="string">''</span>},nr,1);
-0021 model.rxnNames    = network.actions;
-0022 model.metNames    = network.metabolites;
-0023 model.metFormulas = network.metabolites;
-0024 model.b           = zeros(nr,1);
-0025 model.description = description;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

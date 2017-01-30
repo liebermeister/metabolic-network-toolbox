@@ -17,7 +17,6 @@ eval(default('v_plus_fallback','1', 'v_minus_fallback','1'));
 maxv = 10^20; 
 
 [nm,nr] = size(N);
-
 if ~length(zc_scaled), zc_scaled = 0 * c; end
 if ~length(zc_scaled), zv_scaled = 0 * v; end
 

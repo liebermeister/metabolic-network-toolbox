@@ -44,33 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[vector,names,relevant] = mass_action2vector(kinetics,used_fwd,used_bwd,S_ext,S_ext_names)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%translate parameter into vector for kinetics of  type 'mass-action kinetics'</span>
-0004 <span class="comment">% vector   parameter vector</span>
-0005 <span class="comment">% kinetics: kinetics field from network structure</span>
-0006 
-0007 <a name="_sub0" href="#_subfunctions" class="code">function [vector,names,relevant] = mass_action2vector(kinetics,used_fwd,used_bwd,S_ext,S_ext_names)</a>
-0008 
-0009 <span class="keyword">if</span> ~exist(<span class="string">'used_fwd'</span>,<span class="string">'var'</span>), used_fwd = ones(size(kinetics.k_fwd));used_bwd = ones(size(kinetics.k_fwd)); <span class="keyword">end</span>
-0010 <span class="keyword">if</span> ~isfield(kinetics,<span class="string">'used_fwd'</span>), kinetics.used_fwd = used_fwd; kinetics.used_bwd = used_bwd; <span class="keyword">end</span>
-0011 
-0012 <span class="keyword">if</span> strcmp(kinetics.type,<span class="string">'mass-action'</span>),
-0013   n_rea = length(used_fwd);
-0014 
-0015   vector = [kinetics.k_fwd; kinetics.k_bwd];
-0016   names= cellstr([repmat(<span class="string">'k'</span>,length(vector),1), <span class="keyword">...</span>
-0017           repmat(num2str((1:n_rea)'),2,1),<span class="keyword">...</span>
-0018           [ repmat(<span class="string">'+'</span>,n_rea,1);  repmat(<span class="string">'-'</span>, n_rea,1)] ]);
-0019   relevant = [find(kinetics.used_fwd); n_rea+find(kinetics.used_bwd)];
-0020 <span class="keyword">end</span>
-0021 
-0022 <span class="keyword">if</span> exist(<span class="string">'S_ext'</span>,<span class="string">'var'</span>), 
-0023   relevant = [relevant ; length(vector)+(1:length(S_ext))'];
-0024   vector = [vector;S_ext];
-0025   names = [names; S_ext_names];
-0026 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

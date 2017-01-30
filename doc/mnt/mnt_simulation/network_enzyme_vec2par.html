@@ -40,34 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function theta = network_enzyme_vec2par(theta_vec,nw)</a>
-0002 
-0003 <span class="comment">% theta = network_enzyme_vec2par(theta_vec,nw)</span>
-0004 
-0005 p          = nw.kinetics.parameters;
-0006 nr         = p.numbers.nr;
-0007 n_enzymes  = p.enzyme_regulation.n_enzymes;
-0008 ind_KM     = find(p.metabolic_network.N');
-0009 ind_KA     = find(p.metabolic_network.regulation_matrix&gt;0);
-0010 ind_KI     = find(p.metabolic_network.regulation_matrix&lt;0);
-0011 ind_KY     = find(p.enzyme_regulation.enzyme_compound_input);
-0012 
-0013 <span class="comment">% extract parameters from vector</span>
-0014 
-0015 n_KM = length(ind_KM);
-0016 n_KA = length(ind_KA);
-0017 n_KI = length(ind_KI);
-0018 n_KY = length(ind_KY);
-0019 
-0020 theta.flux_scaling      = theta_vec(1);
-0021 theta.betaM             = theta_vec(1+[1:n_KM]);
-0022 theta.betaA             = theta_vec(1+n_KM+[1:n_KA]);
-0023 theta.betaI             = theta_vec(1+n_KM+n_KA+[1:n_KI]);
-0024 theta.betaY             = theta_vec(1+n_KM+n_KA+n_KI+[1:n_KY]);
-0025 theta.log_met_imbalance = theta_vec(1+n_KM+n_KA+n_KI+n_KY+[1:nr]);
-0026 theta.enzyme_min        = theta_vec(1+n_KM+n_KA+n_KI+n_KY+nr+[1:n_enzymes]);
-0027</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

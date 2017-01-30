@@ -40,16 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% res = convenience_dependent_parameters(network)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function res = convenience_dependent_parameters(network)</a>
-0004 
-0005 res.keq       = exp(<a href="convert_log_g_to_log_q.html" class="code" title="function [log_q,log_q_cov] = convert_log_g_to_log_q(log_g,N,RT,log_g_cov)">convert_log_g_to_log_q</a>(log(network.kinetics.g),network.N,<a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>));
-0006 res.kcatplus  = network.kinetics.r .* sqrt(res.keq);
-0007 res.kcatminus = network.kinetics.r ./ sqrt(res.keq);
-0008 res.vmaxplus  = network.kinetics.E .* res.kcatplus;
-0009 res.vmaxminus = network.kinetics.E .* res.kcatminus;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

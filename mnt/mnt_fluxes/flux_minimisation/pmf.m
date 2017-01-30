@@ -21,6 +21,8 @@ function v = pmf(network,fba_constraints,benefit,v_start)
 % benefit: predefined value of the objective
 % v_start: (optional) initial flux vector to be optimised
 
+fba_constraints = fba_update_constraints(fba_constraints,network);
+  
 [nm,nr] = size(network.N);
 
 fba_constraints = fba_update_constraints(fba_constraints,network);
@@ -41,7 +43,9 @@ else,
   v0(ind_fix) = fba_constraints.v_fix(ind_fix);
 end
 
-v0 = v0 * benefit./[zv'*v0];
+if norm(v0),
+  v0 = v0 * benefit ./ [zv'*v0];
+end
 
 % vred: reduced version of v, such that v = K * vred
 %
@@ -62,6 +66,8 @@ w0    = abs(v0);
 
 y0    = [v0red; w0];
 
+my_cost_weights = [zeros(size(K,2),1); cost_weights];
+
 A    = [zeros(nr,nred), -eye(nr); ...
 	 K, -eye(nr); ...
 	-K, -eye(nr);
@@ -76,18 +82,18 @@ zred = [zeros(nred,1); cost_weights];
 opt  = optimset('Display','off');
 
 if exist('cplexlp','file'),
-  [y,fval,exitflag] = cplexlp(y0,A,b,A_eq,b_eq,[],[],y0,opt);
+  [y,fval,exitflag] = cplexlp(my_cost_weights,A,b,A_eq,b_eq,[],[],y0,opt);
 else
-  [y,fval,exitflag] = linprog(y0,A,b,A_eq,b_eq,[],[],y0,opt);
+  [y,fval,exitflag] = linprog(my_cost_weights,A,b,A_eq,b_eq,[],[],y0,opt);
 end
 
 if exitflag<=0,
   exitflag
-  warning('No solution found in FBA with minimal fluxes'); 
+  error('No solution found in FBA with minimal fluxes'); 
 end
 
 vred = y(1:nred);
-v    = K*vred;
+v    = K * vred;
 
 % omit very small fluxes
 v(abs(v)<10^-8*max(abs(v)))=0;

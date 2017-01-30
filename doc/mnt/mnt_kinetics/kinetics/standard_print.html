@@ -40,50 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function s = standard_print(kinetics,n,actions,network)</a>
-0002 
-0003 <span class="comment">% s = standard_print(kinetics,n,actions,network)</span>
-0004 
-0005 s = [];
-0006 nmax = length(kinetics.reactions);  n = 1:nmax;
-0007 <span class="keyword">for</span> it = 1:length(n),
-0008   <span class="keyword">if</span> ~isempty(<span class="string">'actions'</span>), act = actions{n(it)}; <span class="keyword">else</span>, act = <span class="string">''</span>; <span class="keyword">end</span>
-0009   r = kinetics.reactions{it};
-0010   dummi=<span class="string">''</span>;
-0011   <span class="keyword">for</span> it2 = 1:length(r.parameters),
-0012     <span class="keyword">if</span> length(getfield(r,r.parameters{it2})),
-0013       dummi = [dummi <span class="string">' '</span> r.parameters{it2} <span class="string">'=['</span> num2str(full(getfield(r,r.parameters{it2})')) <span class="string">']'</span>];
-0014     <span class="keyword">end</span>
-0015   <span class="keyword">end</span>
-0016   
-0017   ind_s = find(network.N(:,n(it))&lt;0);
-0018   ind_p = find(network.N(:,n(it))&gt;0);
-0019   substrates = <span class="string">'Substrates:'</span>; <span class="keyword">for</span> it3 = 1:length(ind_s), substrates = [ substrates <span class="string">' '</span> network.metabolites{ind_s(it3)}]; <span class="keyword">end</span> 
-0020   <span class="keyword">if</span> length(ind_p),
-0021     products   = <span class="string">'Products:'</span>;   <span class="keyword">for</span> it3 = 1:length(ind_s), products = [ products <span class="string">' '</span> network.metabolites{ind_p(it3)}]; <span class="keyword">end</span> 
-0022   <span class="keyword">else</span>, products = <span class="string">''</span>; <span class="keyword">end</span>
-0023   
-0024   activators = <span class="string">''</span>;
-0025   inhibitors   = <span class="string">''</span>;
-0026   
-0027   <span class="keyword">if</span> isfield(network,<span class="string">'regulation_matrix'</span>),
-0028     ind_a = find(network.regulation_matrix(n(it),:)&gt;0);
-0029     ind_r = find(network.regulation_matrix(n(it),:)&lt;0);
-0030     <span class="keyword">if</span> length(ind_a),
-0031       activators = <span class="string">'Activators:'</span>; 
-0032       <span class="keyword">for</span> it3 = 1:length(ind_a), activators = [ activators <span class="string">' '</span> network.metabolites{ind_a(it3)}]; <span class="keyword">end</span> 
-0033     <span class="keyword">end</span>
-0034     <span class="keyword">if</span> length(ind_r),
-0035       inhibitors   = <span class="string">'Inhibitors:'</span>; 
-0036       <span class="keyword">for</span> it3 = 1:length(ind_r), inhibitors = [ inhibitors <span class="string">' '</span> network.metabolites{ind_r(it3)}]; <span class="keyword">end</span> 
-0037     <span class="keyword">end</span>
-0038   <span class="keyword">end</span>
-0039   
-0040   this_line =  sprintf(<span class="string">'Reaction %d: &quot;%s&quot;, Kinetic law: &quot;%s&quot;\n   %s %s %s %s\n   Parameters:%s\n\n'</span>,<span class="keyword">...</span>
-0041                        n(it), act,r.type,substrates,products,activators,inhibitors,dummi); 
-0042   s = [s this_line ];
-0043 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <head>
   <title>Description of netgraph_cofactor_graphs</title>
   <meta name="keywords" content="netgraph_cofactor_graphs">
-  <meta name="description" content="[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)">
+  <meta name="description" content="[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,55 +21,29 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</strong></div>
+<div class="box"><strong>[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree,no_cofactors) </strong></div>
+<div class="box"><strong>function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</pre></div>
+<div class="fragment"><pre class="comment"> [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)
+ 
+ metabolites_to_be_omitted:    list of metabolites_to_be_omitted (to be omitted) 
+ metabolites_to_be_kept: list of metabolites NOT to be omitted</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, layout_file, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)">netgraph_read_positions</a>	network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree,no_cofactors)</a>
-0002 
-0003 <span class="comment">% [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, cofactors, table_positions, max_met_degree)</span>
-0004 
-0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'table_positions'</span>,<span class="string">'[]'</span>,<span class="string">'max_met_degree'</span>,<span class="string">'5'</span>,<span class="string">'no_cofactors'</span>,<span class="string">'[]'</span>));
-0006 
-0007 <span class="keyword">if</span> length(max_met_degree),
-0008   met_degree = sum(abs(sign(network.N)),2);
-0009   cofactors  = unique([<a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(cofactors); network.metabolites(met_degree&gt;max_met_degree)]);
-0010 <span class="keyword">end</span>
-0011 
-0012 cofactors  = setdiff(cofactors,no_cofactors);
-0013 
-0014 network_CoHid   = <a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>(network,cofactors);
-0015 <span class="keyword">if</span> nargout &gt;1,
-0016   network_CoSplit = <a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>(network,cofactors);
-0017 <span class="keyword">end</span>
-0018 
-0019 <span class="keyword">if</span> length(table_positions),
-0020   network_CoHid   = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoHid,table_positions,[0,0],1);
-0021   <span class="keyword">if</span> nargout &gt;1,
-0022     network_CoSplit = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>(network_CoSplit,table_positions,[0,0],1);
-0023   <span class="keyword">end</span>
-0024 <span class="keyword">end</span>
-0025 
-0026 <span class="comment">%display('Please wait ...');</span>
-0027 <span class="comment">%pars = struct('initial_relax',200,'manual',0,'actprintnames',0,'arrowstyle','directions','arrowsize',0.03);</span>
-0028 <span class="comment">%network_CoSplit = netgraph_move(network_CoSplit,'text',pars);</span>
-0029 <span class="comment">%network_CoHid   = netgraph_move(network_CoSplit,'text',pars);</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

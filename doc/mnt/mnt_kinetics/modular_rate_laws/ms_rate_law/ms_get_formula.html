@@ -38,83 +38,11 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_kinetic_formulae.html" class="code" title="function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network,kinetics)">modular_kinetic_formulae</a>	[formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</li><li><a href="../../../.././mnt/mnt_network/network_import_export/network_sbml_export.html" class="code" title="function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)">network_sbml_export</a>	SBMLmodel = network_sbml_export(network, verbose, name, filename, notes, sbml_level, sbml_version)</li></ul>
+<li><a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_kinetic_formulae.html" class="code" title="function [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network,kinetics)">modular_kinetic_formulae</a>	[formula, global_assignment, local_assignment] = modular_kinetic_formulae(network)</li><li><a href="../../../.././mnt/mnt_kinetics/network_get_kinetics_strings.html" class="code" title="function [my_kinetics_strings,my_kinetic_laws] = network_get_kinetics_strings(network)">network_get_kinetics_strings</a>	</li><li><a href="../../../.././mnt/mnt_network/network_import_export/network_sbml_export.html" class="code" title="function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)">network_sbml_export</a>	SBMLmodel = network_sbml_export(network, verbose, name, filename, notes, sbml_level, sbml_version)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)           </a>
-0002 
-0003 <span class="comment">% formula = ms_get_formula(r_name,mn,sub,pro,act,inh,m_sub,m_pro)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% mn: list of metabolite names</span>
-0006 
-0007 kCratio      = <span class="string">''</span>;
-0008 numerator_fw = <span class="string">''</span>;
-0009 numerator_bw = <span class="string">''</span>;
-0010 denominator  = <span class="string">''</span>;
-0011 activation   = <span class="string">''</span>;
-0012 inhibition   = <span class="string">''</span>;
-0013 
-0014 m_sub = full(m_sub);
-0015 m_pro = full(m_pro);
-0016 
-0017 <span class="keyword">if</span> length(sub),
-0018   <span class="keyword">for</span> it = 1:length(sub),
-0019     <span class="keyword">if</span> m_sub(it) == 1,
-0020       kCratio      = [ kCratio,  sprintf(<span class="string">' * kM_%s_%s'</span>, r_name, mn{sub(it)})];
-0021       numerator_fw = [ numerator_fw, sprintf(<span class="string">' * ( %s / kM_%s_%s )'</span>, <span class="keyword">...</span>
-0022                                              mn{sub(it)}, r_name, mn{sub(it)})];  
-0023       denominator = [ denominator, sprintf(<span class="string">' * ( 1 + %s / kM_%s_%s )'</span>, <span class="keyword">...</span>
-0024                                            mn{sub(it)}, r_name, mn{sub(it)})];  
-0025     <span class="keyword">else</span>,
-0026       kCratio      = [ kCratio,  sprintf(<span class="string">' * power( kM_%s_%s , %d )'</span>, r_name, mn{sub(it)}, m_sub(it))];
-0027       numerator_fw = [ numerator_fw,  sprintf(<span class="string">' * power( %s / kM_%s_%s , %d )'</span>, <span class="keyword">...</span>
-0028                                               mn{sub(it)}, r_name, mn{sub(it)}, m_sub(it))];  
-0029       denominator = [ denominator, sprintf(<span class="string">' * power( 1 + %s / kM_%s_%s , %d )'</span>, <span class="keyword">...</span>
-0030                                            mn{sub(it)}, r_name, mn{sub(it)},m_sub(it))];        
-0031     <span class="keyword">end</span>
-0032   <span class="keyword">end</span>
-0033   denominator = denominator(4:end);
-0034 <span class="keyword">end</span>
-0035 
-0036 <span class="keyword">if</span> length(pro),
-0037   <span class="keyword">for</span> it = 1:length(pro),
-0038     <span class="keyword">if</span> m_pro(it) == 1,
-0039       kCratio      = [ kCratio,  sprintf(<span class="string">' / kM_%s_%s'</span>, r_name, mn{pro(it)})];
-0040       numerator_bw = [ numerator_bw <span class="keyword">...</span>
-0041                        sprintf(<span class="string">' * ( %s / kM_%s_%s )'</span>, mn{pro(it)}, r_name, mn{pro(it)})];  
-0042       denominator = [ denominator <span class="keyword">...</span>
-0043                       sprintf(<span class="string">' * ( 1 + %s / kM_%s_%s )'</span>, mn{pro(it)}, r_name, mn{pro(it)})];  
-0044     <span class="keyword">else</span>,
-0045       kCratio      = [ kCratio,  sprintf(<span class="string">' / power( kM_%s_%s , %d )'</span>, r_name, mn{pro(it)}, m_pro(it))];
-0046       numerator_bw = [ numerator_bw <span class="keyword">...</span>
-0047                        sprintf(<span class="string">' * power( %s / kM_%s_%s , %d )'</span>, mn{pro(it)}, r_name, mn{pro(it)}, m_pro(it))];  
-0048       
-0049       denominator = [ denominator <span class="keyword">...</span>
-0050                       sprintf(<span class="string">' * power( 1 + %s / kM_%s_%s , %d )'</span>, mn{pro(it)}, r_name, mn{pro(it)},m_pro(it))];        
-0051     <span class="keyword">end</span>
-0052   <span class="keyword">end</span>
-0053 <span class="keyword">end</span>
-0054 
-0055 <span class="keyword">if</span> length(act),
-0056   <span class="keyword">for</span> it = 1:length(act),
-0057     activation = [ activation <span class="keyword">...</span>
-0058                    sprintf(<span class="string">'(%s / kA_%s_%s ) / ( 1 + %s / kA_%s_%s ) * '</span>, mn{act(it)}, r_name, mn{act(it)}, mn{act(it)}, r_name, mn{act(it)})]; 
-0059   <span class="keyword">end</span>
-0060 <span class="keyword">end</span>
-0061 
-0062 <span class="keyword">if</span> length(inh),
-0063   <span class="keyword">for</span> it = 1:length(inh),
-0064     inhibition = [ inhibition <span class="keyword">...</span>
-0065                    sprintf(<span class="string">'1 / ( 1 + %s / kI_%s_%s ) * '</span>, mn{inh(it)}, r_name, mn{inh(it)})]; 
-0066   <span class="keyword">end</span>
-0067 <span class="keyword">end</span>
-0068 
-0069 
-0070 formula = [ <span class="string">'u_'</span>, r_name ,<span class="string">' * '</span>, activation, inhibition, <span class="string">'( '</span>, <span class="keyword">...</span>
-0071             [<span class="string">'kC_'</span> r_name <span class="string">' * sqrt( kEQ_'</span> r_name <span class="string">' '</span> kCratio <span class="string">' )'</span>], numerator_fw, <span class="keyword">...</span>
-0072             <span class="string">' - '</span>, [<span class="string">'kC_'</span> r_name <span class="string">' / sqrt( kEQ_'</span> r_name <span class="string">' '</span> kCratio <span class="string">' )'</span>] ,numerator_bw, <span class="string">' ) / ( '</span>, denominator, <span class="string">' )'</span>];</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

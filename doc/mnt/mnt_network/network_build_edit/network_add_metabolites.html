@@ -24,10 +24,12 @@
 <div class="box"><strong>network = network_add_metabolites(network,new_metabolites,new_external);</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function network = network_add_metabolites(network,new_metabolites,new_external); </strong></div>
+<div class="box"><strong>function [network, indices] = network_add_metabolites(network,new_metabolites,new_external); </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> network = network_add_metabolites(network,new_metabolites,new_external);</pre></div>
+<div class="fragment"><pre class="comment"> network = network_add_metabolites(network,new_metabolites,new_external);
+
+ the new metabolites are added at teh end of the metabolite list</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
@@ -40,40 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = network_add_metabolites(network,new_metabolites,new_external);</a>
-0002 
-0003 <span class="comment">% network = network_add_metabolites(network,new_metabolites,new_external);</span>
-0004 
-0005 new_metabolites = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(setdiff(new_metabolites,network.metabolites));
-0006 
-0007 [nr,nm] = <a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0008 nn = length(new_metabolites);
-0009 
-0010 <span class="keyword">if</span> ~exist(<span class="string">'new_external'</span>,<span class="string">'var'</span>),
-0011   new_external =  ones(nn,1);
-0012 <span class="keyword">end</span>
-0013 
-0014 network.metabolites       = [network.metabolites; new_metabolites];
-0015 network.external          = [network.external; new_external];
-0016 network.N                 = [network.N; zeros(nn,nr)];
-0017 network.regulation_matrix = [network.regulation_matrix, zeros(nr,nn)];
-0018 
-0019 <span class="keyword">if</span> isfield(network,<span class="string">'s_init'</span>),
-0020   network.s_init            = [network.s_init; nan*zeros(nn,1)];
-0021 <span class="keyword">end</span>
-0022 
-0023 <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_names'</span>),
-0024   network.metabolite_names = [network.metabolite_names; new_metabolites];
-0025 <span class="keyword">end</span>
-0026 
-0027 <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_compartments'</span>),
-0028   network.metabolite_compartments = [network.metabolite_compartments; repmat({<span class="string">''</span>},nn,1)];
-0029 <span class="keyword">end</span>
-0030 
-0031 <span class="keyword">if</span> isfield(network,<span class="string">'metabolite_KEGGID'</span>),
-0032   network.metabolite_KEGGID = [network.metabolite_KEGGID; repmat({<span class="string">'unknown_KEGG_ID'</span>},nn,1)];
-0033 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

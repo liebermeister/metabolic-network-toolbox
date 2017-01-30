@@ -42,22 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% kinetics = set_convenience_kinetics(network,parameters)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% construct a kinetics field for a metabolic network</span>
-0004 
-0005 <a name="_sub0" href="#_subfunctions" class="code">function kinetics = set_convenience_kinetics(network,parameters)</a>
-0006 
-0007 g    = ones(length(network.metabolites),1);
-0008 r    = ones(length(network.actions),1);
-0009 KM   = sparse(double(network.N~=0))';
-0010 KA   = sparse(double(network.regulation_matrix&gt;0));
-0011 KI   = sparse(double(network.regulation_matrix&lt;0));
-0012 E    = ones(length(network.actions),1);
-0013 S    = ones(length(network.metabolites),1);
-0014 
-0015 kinetics = struct(<span class="string">'type'</span>,<span class="string">'convenience'</span>,<span class="string">'r'</span>,r,<span class="string">'g'</span>,g,<span class="string">'KM'</span>,KM,<span class="string">'KA'</span>,KA,<span class="string">'KI'</span>,KI,<span class="string">'E'</span>,E,<span class="string">'S'</span>,S);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

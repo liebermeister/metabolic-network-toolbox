@@ -4,7 +4,7 @@
 <head>
   <title>Description of eba_feasible_lp</title>
   <meta name="keywords" content="eba_feasible_lp">
-  <meta name="description" content="[eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)">
+  <meta name="description" content="[eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,129 +21,40 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>[eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)</strong></div>
+<div class="box"><strong>[eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit) </strong></div>
+<div class="box"><strong>function [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)
+<div class="fragment"><pre class="comment"> [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)
 
  Test a flux vector v for EBA feasibility 
 
  criterion: there must exist a vector dmu such that
          K' * dmu       = 0     (Wegscheider condition)
-    diag(sign(v)) * dmu &lt; -rho  (Flux driven by thermodynamic force)
-               abs(dmu) &lt;= dmu_limit 
+    diag(sign(v)) * dmu &lt; -dmu_abs_min  (Flux driven by thermodynamic force)
+               abs(dmu) &lt;= dmu_abs_max 
 
  if a vector dmu_fix is given -&gt; test this vector for feasibility
  otherwise, check by linear programming is such a vector exists
 
- rho: minimal reaction gibbs free energy to drive a non-zero flux
- epsilon: numerical tolerance for Wegscheider condition</pre></div>
+ dmu_abs_max: maximal (absolute) Gibbs free energy of reaction allowed in the solution
+ dmu_abs_min:       minimal (absolute) Gibbs free energy of reaction required to drive a non-zero flux
+ epsilon:   numerical tolerance for Wegscheider condition (only used if dmu is predefined)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)">eba_feasible_lp</a>	[eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)</li><li><a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)">eba_feasible_lp</a>	[eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)</li><li><a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>	[ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)</li><li><a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)">eba_feasible_lp</a>	[eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)</li></ul>
+<li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)">parameter_balancing_thermodynamic</a>	[c, v, mu0, Keq, A, my_kinetic_data] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)</li><li><a href="eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)">eba_feasible_lp</a>	[eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)</a>
-0002 
-0003 <span class="comment">% [eba_feasible, dmu] = eba_feasible(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% Test a flux vector v for EBA feasibility</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% criterion: there must exist a vector dmu such that</span>
-0008 <span class="comment">%         K' * dmu       = 0     (Wegscheider condition)</span>
-0009 <span class="comment">%    diag(sign(v)) * dmu &lt; -rho  (Flux driven by thermodynamic force)</span>
-0010 <span class="comment">%               abs(dmu) &lt;= dmu_limit</span>
-0011 <span class="comment">%</span>
-0012 <span class="comment">% if a vector dmu_fix is given -&gt; test this vector for feasibility</span>
-0013 <span class="comment">% otherwise, check by linear programming is such a vector exists</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">% rho: minimal reaction gibbs free energy to drive a non-zero flux</span>
-0016 <span class="comment">% epsilon: numerical tolerance for Wegscheider condition</span>
-0017 
-0018 <span class="comment">% test:</span>
-0019 <span class="comment">% Ntot = [-1 1; 1 -1]; v = [1 1]';  [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,[],0.1)</span>
-0020 
-0021 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'dmu_fix'</span>,<span class="string">'[]'</span>,<span class="string">'rho'</span>,<span class="string">'[]'</span>,<span class="string">'epsilon'</span>,<span class="string">'[]'</span>,<span class="string">'dmu_limit'</span>,<span class="string">'1'</span>));
-0022 
-0023 <span class="keyword">if</span> isempty(rho),         rho = 10^-3; <span class="keyword">end</span> 
-0024 <span class="keyword">if</span> isempty(epsilon), epsilon = 10^-5; <span class="keyword">end</span> 
-0025 
-0026 <span class="comment">% --------------------------------------------------------------</span>
-0027 <span class="comment">% handle several flux vectors (in matrix)</span>
-0028 
-0029 <span class="keyword">if</span> size(v,2)&gt;1,
-0030   <span class="keyword">for</span> it = 1:size(v,2),
-0031     <span class="keyword">if</span> length(dmu_fix),
-0032       [<a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(1,it), dmu(:,it)] = <a href="eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)">eba_feasible_lp</a>(v(:,it),Ntot,dmu_fix(:,it),rho,epsilon);
-0033     <span class="keyword">else</span>
-0034       <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(1,it) = <a href="eba_feasible_lp.html" class="code" title="function [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,dmu_fix,rho,epsilon,dmu_limit)">eba_feasible_lp</a>(v(:,it),Ntot,[],rho,epsilon);
-0035     <span class="keyword">end</span>
-0036   <span class="keyword">end</span>
-0037  <span class="keyword">return</span>
-0038 <span class="keyword">end</span>
-0039 
-0040 
-0041 <span class="comment">% --------------------------------------------------------------</span>
-0042 <span class="comment">% initialisation</span>
-0043 
-0044 nr       = size(Ntot,2);
-0045 Ktot     = <a href="../../.././mnt/mnt_mca/analyse_N.html" class="code" title="function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)">analyse_N</a>(Ntot);
-0046 <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a> = 1;
-0047 
-0048 <span class="keyword">if</span> sum(isfinite(dmu_fix)) == length(v),
-0049   <span class="comment">%% complete dmu_fix vector given as input: just check if it works</span>
-0050   
-0051   <span class="keyword">if</span> max(abs(Ktot'*dmu_fix)) &gt; epsilon,             <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a> = 0; <span class="keyword">end</span>
-0052   <span class="keyword">if</span> sum( [v~=0] .* [ sign(v).*dmu_fix &gt; -rho] ),   <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a> = 0; <span class="keyword">end</span>
-0053   dmu = dmu_fix;
-0054   
-0055 <span class="keyword">else</span>,
-0056   <span class="comment">%% try to find feasible dmu vector</span>
-0057 
-0058   c       = ones(nr,1);
-0059   h       = [rho * ones(nr,1);  ];    h(find(v==0)) = -1;
-0060   G       = [-diag(sign(v));     ];
-0061   A       = Ktot';
-0062   b       = zeros(size(Ktot,2),1);
-0063   <span class="keyword">if</span> length(dmu_fix) == length(v),
-0064     <span class="comment">% some dmu values predefined?</span>
-0065     ind_finite = find(isfinite(dmu_fix));
-0066     dd    = eye(length(dmu_fix));
-0067     A     = [A; dd(ind_finite,:)];
-0068     b     = [b; dmu_fix(ind_finite) ];
-0069   <span class="keyword">end</span>
-0070   lb = - dmu_limit * ones(nr,1); 
-0071   ub = dmu_limit * ones(nr,1);
-0072   
-0073   <span class="comment">%%  dmu = lp236a(-c, -G, -h, A, b);</span>
-0074 
-0075    opt         = optimset(<span class="string">'linprog'</span>);
-0076    opt.MaxIter = 10^10;
-0077    opt.Display = <span class="string">'off'</span>;
-0078    [dmu, dum, exitflag] = linprog(-c, -G, -h, A, b, lb, ub, [], opt);
-0079 
-0080    <span class="keyword">if</span> exitflag ~=1,
-0081      exitflag
-0082      warning(<span class="string">'No dmu vector found'</span>);
-0083    <span class="keyword">end</span>
-0084    
-0085    <span class="keyword">if</span> isempty(dmu) + [exitflag==-2],
-0086      <a href="eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a> = 0;  display(sprintf(<span class="string">'Flux distribution is thermodynamically infeasible at rho = %f.'</span>,rho));
-0087      dmu = [];
-0088    <span class="keyword">end</span>
-0089   
-0090 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

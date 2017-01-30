@@ -40,22 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [G,G_std,G_cov] = convert_kG_to_G(kG,rt,kG_std)</a>
-0002 
-0003 <span class="comment">% [G,G_std] = convert_kG_to_G(kG,rt,kG_std)</span>
-0004 
-0005 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'rt'</span>,<span class="string">'RT'</span>));
-0006 
-0007 scale_G = <a href="convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>;
-0008 
-0009 <span class="keyword">if</span> exist(<span class="string">'kG_std'</span>,<span class="string">'var'</span>),
-0010   [G,G_std]  = <a href="../../.././mnt/utils/lognormal_normal2log.html" class="code" title="function [mu_log,sigma_log] = lognormal_normal2log(mu,sigma,convention)">lognormal_normal2log</a>(kG,kG_std);
-0011    G         = G*rt/scale_G;
-0012    G_std     = G_std*rt/scale_G;
-0013 <span class="keyword">else</span>,
-0014   G = log(kG)*rt/scale_G;
-0015 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

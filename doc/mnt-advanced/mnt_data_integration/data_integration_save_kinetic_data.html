@@ -40,29 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function M = data_integration_save_kinetic_data(kinetic_data, network, filename, options_style)</a>
-0002 
-0003 <span class="comment">% M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)</span>
-0004 
-0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options_style'</span>,<span class="string">'0'</span>,<span class="string">'filename'</span>,<span class="string">'[]'</span>));
-0006 
-0007 T = <a href="data_integration_display_kinetic_data.html" class="code" title="function T = data_integration_display_kinetic_data(kinetic_data,network,flag_display)">data_integration_display_kinetic_data</a>(kinetic_data,network,0);
-0008 
-0009 M = T{1}(1,:);
-0010 
-0011 <span class="keyword">for</span> it = 1:length(T),
-0012   <span class="keyword">if</span> length(T{it}),
-0013     M = [M; T{it}(2:<span class="keyword">end</span>,:)];
-0014   <span class="keyword">end</span>
-0015 <span class="keyword">end</span>
-0016 
-0017 <span class="keyword">if</span> length(filename),
-0018   display(sprintf(<span class="string">'Saving kinetic data to file %s '</span>,filename));
-0019   <a href="../.././mnt/utils/mytable.html" class="code" title="function res = mytable(names,rownumbers,filename)">mytable</a>(M,options_style,filename);
-0020 <span class="keyword">else</span>,
-0021   <a href="../.././mnt/utils/mytable.html" class="code" title="function res = mytable(names,rownumbers,filename)">mytable</a>(M,options_style)
-0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

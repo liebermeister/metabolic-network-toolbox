@@ -42,29 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function C = cycles(N);</a>
-0002 
-0003 <span class="comment">% C = cycles(N);</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% compute cycle basis used in EBA</span>
-0006 
-0007 C = null(N,<span class="string">'r'</span>);
-0008 n = size(C,2);
-0009 
-0010 i = 1;
-0011 
-0012 <span class="keyword">while</span> i&lt;n,
-0013 <span class="comment">%  display(sprintf('check %d/%d',i,n))</span>
-0014   j = i+1;
-0015   <span class="keyword">while</span> j &lt;= n
-0016     Cnew = <a href="linear_combos.html" class="code" title="function Cnew = linear_combos(v1,v2);">linear_combos</a>(C(:,i), C(:,j));
-0017     C    = <a href="test_new_vectors.html" class="code" title="function C = test_new_vectors(C,Cnew)">test_new_vectors</a>(C,Cnew);
-0018     n    = size(C,2);
-0019     j    = j+1;
-0020   <span class="keyword">end</span>
-0021   i = i+1;
-0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

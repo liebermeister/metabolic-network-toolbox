@@ -41,24 +41,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% -----------------------------------------------------------------------</span>
-0002 <span class="comment">% Example square network</span>
-0003 
-0004 <span class="comment">% Load model</span>
-0005 demo_dir = [fileparts(which(mfilename))];
-0006 load([demo_dir <span class="string">'/data/network_square'</span>]);
-0007 
-0008 <span class="comment">% Set subsystem and further parameters</span>
-0009 subsystem_metabolites = {<span class="string">'S2'</span>,<span class="string">'S3'</span>,<span class="string">'S5'</span>}';
-0010 t_max                 = 10;  <span class="comment">% duration of simulations</span>
-0011 ndim                  = 1;
-0012 
-0013 <span class="comment">% ------------------------------------------------------------------------</span>
-0014 
-0015 network.kinetics = <a href="../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>(network,<span class="string">'cs'</span>);
-0016 
-0017 [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = <a href="../../.././mnt-advanced/mnt_model_reduction/model_reduction.html" class="code" title="function [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = model_reduction(network,metabolites_subsystem,ndim,verbose,s_initial,S,J,flag_graphics,t_max,gp,network_CoHid,Ec_un)">model_reduction</a>(network,subsystem_metabolites,ndim,0,[],[],[],1,t_max);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

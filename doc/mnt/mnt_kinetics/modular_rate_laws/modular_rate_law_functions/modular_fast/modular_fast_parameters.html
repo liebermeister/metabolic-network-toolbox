@@ -40,37 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)</a>
-0002 
-0003 <span class="comment">% pars = modular_fast_parameters(N,W,ind_ext,KA,KI,KM,KV,Keq,h)</span>
-0004 
-0005 [pars.Mplus, pars.Mminus, pars.Wplus, pars.Wminus, nm, nr] = <a href="../../../../.././mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(N,W,ind_ext,h);
-0006 
-0007 pars.nm = nm;
-0008 pars.nr = nr;
-0009 
-0010 pars.N = N;
-0011 
-0012 pars.KM = KM;
-0013 pars.KI = KI;
-0014 pars.KA = KA;
-0015 
-0016 pars.ind_KM        = find(pars.Mplus + pars.Mminus);
-0017 pars.ind_KA        = find(pars.Wplus);
-0018 pars.ind_KI        = find(pars.Wminus);
-0019 
-0020 [dummi,pars.ind_KM_metabolite_index] = ind2sub([nr,nm],pars.ind_KM);
-0021 [dummi,pars.ind_KA_metabolite_index] = ind2sub([nr,nm],pars.ind_KA);
-0022 [dummi,pars.ind_KI_metabolite_index] = ind2sub([nr,nm],pars.ind_KI);
-0023 
-0024 pars.KM_rel        = KM(pars.ind_KM);
-0025 pars.KA_rel        = KA(pars.ind_KA); 
-0026 pars.KI_rel        = KI(pars.ind_KI);
-0027 
-0028 pars.Keq = Keq;
-0029 
-0030 [pars.Kplus,pars.Kminus] = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/ms_compute_Kcat.html" class="code" title="function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);">ms_compute_Kcat</a>(N,KM,KV,Keq);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

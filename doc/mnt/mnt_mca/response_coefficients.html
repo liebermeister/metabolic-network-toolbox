@@ -42,36 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[RS, RJ, RS2, RJ2] = response_coefficients(CS, Ec, Ep, Ecc, Ecp, Epp)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% Static response coefficients (first and second order)</span>
-0004 
-0005 <a name="_sub0" href="#_subfunctions" class="code">function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)</a>
-0006 
-0007 nr    = size(Ec,1);
-0008 
-0009 CJ    = eye(nr) + Ec * CS;
-0010 
-0011 <span class="comment">% first order</span>
-0012 
-0013 RS    = CS * Ep;
-0014 RJ    = CJ * Ep;
-0015 
-0016 <span class="comment">% second order</span>
-0017 
-0018 <span class="keyword">if</span> nargout &gt; 2,
-0019 
-0020   Gamma =  <span class="keyword">...</span>
-0021     <a href="../.././mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(<a href="../.././mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecc,RS,3,1),RS,2,1) <span class="keyword">...</span>
-0022     + <a href="../.././mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS,2,1) <span class="keyword">...</span>
-0023     + permute(<a href="../.././mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(Ecp,RS,2,1),[1,3,2])<span class="keyword">...</span>
-0024     + Epp;
-0025     
-0026   RS2 = <a href="../.././mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CS,Gamma);
-0027   RJ2 = <a href="../.././mnt/utils/tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>(CJ,Gamma);
-0028 
-0029 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

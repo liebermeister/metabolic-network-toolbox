@@ -1,8 +1,14 @@
 function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)
 
-% [c,A] = thermo_pb(N, v, thermo_pb_options)
+% [c,A] = thermo_pb(N, v, thermo_pb_options, verbose)
 %
-%Thermodynamic parameter balancing
+% Thermodynamic parameter balancing (directly based on stoichiometric matrix)
+%
+% This function is independent of the general parameter balancing functions
+% (the formulae for thermodynamic parameter balancing problem are explictly solved)
+% 
+% (for an alternative function that imports all model data in a data structure, 
+%  see 'parameter_balancing_thermodynamic')
 %
 % All quantitative information (bounds and fixed values for metabolites)
 % is given in function argument 'thermo_pb_options'.
@@ -138,11 +144,13 @@ end
 
 M = diag(1./[log_c_std; dG0_std].^2);
 mean_values = [log_c_mean; dG0_mean];
+
 m = -M*mean_values;
 y_start = [log_c_mean; dG0_mean];
+
 if exist('cplexqp','file'),
   opt = cplexoptimset('Display','off');
-  [y,~,exitflag,output]  = cplexqp(M, m, A, b, A_eq, b_eq, y_min, y_max, y_start, opt);
+  [y,~,exitflag,output]  = cplexqp(M, m, A, b, A_eq, b_eq, y_min, y_max, y_start,opt);
 else
   opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');
   [y,~,exitflag]  = quadprog(M, m, full(A),b,full(A_eq),b_eq,y_min,y_max,[],opt);

@@ -33,49 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_remove.html" class="code" title="function [network1,keep,keep_actions] = network_remove(network,ind)">network_remove</a>	network=network_remove(network,ind)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_remove_action.html" class="code" title="function [network1,keep,keep_actions] = network_remove_action(network,ind,flag_remove_metabolites)">network_remove_action</a>	[network1,keep,keep_actions] = network_remove_action(network,ind,flag_remove_metabolites)</li></ul>
+<li><a href="netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_remove.html" class="code" title="function [network1,keep,keep_actions] = network_remove(network,ind)">network_remove</a>	network=network_remove(network,ind)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_remove_action.html" class="code" title="function [network1,keep,keep_actions] = network_remove_action(network,ind,flag_remove_metabolites)">network_remove_action</a>	[network1,keep,keep_actions] = network_remove_action(network,ind,flag_remove_metabolites)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [network,keep_tot,keep_actions_tot] = netgraph_remove(network)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [network,keep_tot,keep_actions_tot] = netgraph_remove(network)</a>
-0004 
-0005    n_met=length(network.metabolites);
-0006    <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network);
-0007    title(<span class="string">'Left &gt; remove metabolite or reaction. Right &gt; Confirm'</span>);
-0008 
-0009    keep_tot=1:length(network.metabolites);
-0010    keep_actions_tot=1:length(network.actions);
-0011 
-0012    cont = 1;
-0013 
-0014    <span class="keyword">while</span> cont==1,
-0015      [x_old,y_old,button] = ginput(1);
-0016      dist= sum( (repmat([x_old;y_old],1,size(network.graphics_par.x,2))-network.graphics_par.x).^2);
-0017      [dum,i]=min(dist);
-0018      index=i(1);
-0019  <span class="keyword">switch</span> button
-0020  <span class="keyword">case</span> 3,
-0021      cont = 0; 
-0022   <span class="keyword">otherwise</span>,
-0023     <span class="keyword">if</span> index&lt;=n_met, [network,keep,keep_actions]=<a href="../.././mnt/mnt_network/network_build_edit/network_remove.html" class="code" title="function [network1,keep,keep_actions] = network_remove(network,ind)">network_remove</a>(network,index); 
-0024     <span class="keyword">else</span>             [network,keep,keep_actions]=<a href="../.././mnt/mnt_network/network_build_edit/network_remove_action.html" class="code" title="function [network1,keep,keep_actions] = network_remove_action(network,ind,flag_remove_metabolites)">network_remove_action</a>(network,index-n_met);
-0025     <span class="keyword">end</span>
-0026        keep_tot=keep_tot(keep);
-0027        keep_actions_tot=keep_actions_tot(keep_actions);
-0028        n_met=length(keep);
-0029   <span class="keyword">end</span>
-0030  
-0031  <a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network);
-0032       title(<span class="string">'Left &gt; remove metabolite or reaction. Right &gt; Confirm'</span>);
-0033 <span class="keyword">end</span>
-0034 
-0035       title(<span class="string">'Removal of nodes confirmed'</span>);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

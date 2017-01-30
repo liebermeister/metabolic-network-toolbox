@@ -44,46 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function formula = convenience_get_formula(rnum,s,p,act,inh,Ns,Np)</a>
-0002 
-0003 <span class="comment">% formula = convenience_get_formula(rnum,s,p,inh,act,Ns,Np)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% s, p, ,inh,act string lists of substrate and product (and inhibitor</span>
-0006 <span class="comment">% and activator) names, each in the order of appearance in the</span>
-0007 <span class="comment">% stoichiometric matrix</span>
-0008 
-0009 <span class="comment">% DIE STOICHIOMETRISCHEN KOEFFIZIENTEN SIND NOCH NICHT EINGEBAUT</span>
-0010 
-0011 tail = [<span class="string">'R'</span> num2str(rnum) <span class="string">'_'</span> ];
-0012 
-0013 <span class="keyword">for</span> i1 = 1:length(s);     A{i1} = [s{i1} <span class="string">' / '</span> tail <span class="string">'KMf'</span> num2str(i1)];   <span class="keyword">end</span>
-0014 
-0015 prodA = A{1};
-0016 prodA1 = [<span class="string">'( 1 + '</span> A{1} <span class="string">')'</span>];
-0017 <span class="keyword">for</span> i1 = 2:length(s);
-0018   prodA =  [prodA  <span class="string">' * '</span> A{i1}];    
-0019   prodA1 = [prodA1 <span class="string">' * ( 1 + '</span> A{i1} <span class="string">' )'</span>];
-0020 <span class="keyword">end</span>
-0021 
-0022 <span class="keyword">for</span> i1 = 1:length(p);     P{i1} = [p{i1} <span class="string">' / '</span>  tail <span class="string">'KMr'</span> num2str(i1)];   <span class="keyword">end</span>
-0023 
-0024 prodP = P{1};
-0025 prodP1 = [<span class="string">'( 1 + '</span> P{1} <span class="string">')'</span>];
-0026 <span class="keyword">for</span> i1 = 2:length(p);
-0027   prodP  = [prodP  <span class="string">' * '</span> P{i1}];    
-0028   prodP1 = [prodP1 <span class="string">' * ( 1 + '</span> P{i1} <span class="string">' )'</span>];
-0029 <span class="keyword">end</span>
-0030 
-0031 formula =  [ <span class="string">' ( '</span> tail <span class="string">'Vf1 * '</span> prodA <span class="string">' - '</span> tail <span class="string">'Vr1 * '</span> prodP <span class="string">' ) / ( '</span> prodA1 <span class="string">' + '</span> prodP1 <span class="string">' - 1 )'</span>];
-0032 
-0033 <span class="keyword">for</span> it2 = 1:length(act),
-0034   formula  = [ act{it2} <span class="string">' / '</span> tail <span class="string">'KA'</span> num2str(it2) <span class="string">' / ( 1 + '</span> act{it2} <span class="string">' / '</span> tail <span class="string">' KA'</span> num2str(it2) <span class="string">' ) * ( '</span> formula <span class="string">' )'</span>] ;
-0035 <span class="keyword">end</span>
-0036 
-0037 <span class="keyword">for</span> it2 = 1:length(inh),
-0038   formula  = [ <span class="string">'1 / ( 1 + '</span> inh{it2} <span class="string">' / '</span> tail <span class="string">'KI'</span> num2str(it2) <span class="string">') * ( '</span> formula <span class="string">' )'</span>] ;
-0039 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

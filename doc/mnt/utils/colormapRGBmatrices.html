@@ -40,32 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function mymap = colormapRGBmatrices( N, rm, gm, bm)</a>
-0002 
-0003 <span class="keyword">if</span> ~exist(<span class="string">'N'</span>,<span class="string">'var'</span>),
-0004   N = 250;
-0005 <span class="keyword">end</span>
-0006 
-0007 <span class="keyword">if</span> ~exist(<span class="string">'rm'</span>,<span class="string">'var'</span>),
-0008   <span class="comment">% blue standard map</span>
-0009   rm=[0,0; 0.7,0; 1,1];
-0010   gm=[0,0; 0.3,0; 0.7,1; 1,1];
-0011   bm=[0,0;  0.02,0.3; 0.3,1; 1,1];
-0012 <span class="keyword">end</span>
-0013 
-0014 <span class="comment">% from http://cresspahl.blogspot.de/2012/03/expanded-control-of-octaves-colormap.html</span>
-0015 
-0016 x = linspace(0,1, N);
-0017 rv = interp1( rm(:,1), rm(:,2), x);
-0018 gv = interp1( gm(:,1), gm(:,2), x);
-0019 mv = interp1( bm(:,1), bm(:,2), x);
-0020 mymap = [ rv', gv', mv'];
-0021 
-0022 <span class="comment">%exclude invalid values that could appear</span>
-0023 mymap( isnan(mymap) ) = 0;
-0024 mymap( (mymap&gt;1) ) = 1;
-0025 mymap( (mymap&lt;0) ) = 0;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

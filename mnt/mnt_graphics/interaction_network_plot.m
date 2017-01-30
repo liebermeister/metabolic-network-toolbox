@@ -18,7 +18,7 @@ eval(default('col','[]','gp','struct'));
 
 if isempty(col), col = rb_colors; end
 
-gp_def = struct('actprintnames',0,'metprintnames',1,'arrowstyle','none','arrowsize',0.03, 'linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',0, 'FontSize',8,'text_offset',[.01,-.01],'colormap',col,'hold_on',1,'linewidth',2, 'show_diagonal_values',0,'normalise_values',1,'flag_edges',1,'relative_threshold',0);
+gp_def = struct('actprintnames',0,'metprintnames',1,'arrowstyle','none','arrowsize',0.03, 'linecolor',[0 0 0],'arrowcolor',[.7 .7 .7],'colorbar',0, 'FontSize',8,'text_offset',[.01,-.01],'colormap',col,'hold_on',1,'linewidth',1, 'show_diagonal_values',0,'normalise_values',1,'flag_edges',1,'relative_threshold',0);
 
 gp = join_struct(gp_def,gp);
 

@@ -100,9 +100,9 @@ else
     for it =1:n_vred,
       c                = zeros(n_vred,1); 
       c(it)            = 1;
-      vred_opt         = lp236a(c,G,h,[],[]);
+      vred_opt         = linprog(c,G,h,[],[]);
       vred_lower(it,1) = vred_opt(it);
-      vred_opt         = lp236a(-c,G,h,[],[]);
+      vred_opt         = linprog(-c,G,h,[],[]);
       vred_upper(it,1) = vred_opt(it);
     end
     

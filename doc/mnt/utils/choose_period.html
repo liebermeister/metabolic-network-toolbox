@@ -47,55 +47,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[t,x,v,T_period] = choose_period(t,x,threshold,v,Nt);</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%select one period from a metabolic time course</span>
-0004 <span class="comment">%and interpolate time points</span>
-0005 <span class="comment">%</span>
-0006 <span class="comment">%t, x, v        vectors of time points, concentrations, fluxes</span>
-0007 <span class="comment">%Nt (optional)  number of (equally sized) time points for the</span>
-0008 <span class="comment">%               resampled data</span>
-0009 
-0010 <a name="_sub0" href="#_subfunctions" class="code">function  [t,x,T_period,v] = choose_period(t,x,threshold,v,Nt);</a>
-0011 
-0012 dif =sum( (x-repmat(x(1,:),size(x,1),1)).^2,2);
-0013 rel = dif&lt;threshold;
-0014 
-0015 <span class="comment">% find the region around the first minimum</span>
-0016 
-0017 it=1;
-0018 <span class="keyword">while</span> rel(it)==1,
-0019  rel(it)=0; it =it+1;
-0020 <span class="keyword">end</span>
-0021 it=min(find(rel));
-0022 <span class="keyword">while</span> rel(it), it=it+1; <span class="keyword">end</span>
-0023 rel(it:end)=0;
-0024 [dummy,index] = max(rel.*1./(1+dif));
-0025 T_period = t(index)-t(1);
-0026 
-0027 <span class="comment">% ---</span>
-0028 
-0029 t=t(find(t&lt;T_period));
-0030 x=x(find(t&lt;T_period),:);
-0031 
-0032 [dum,index]=max(sum(x-repmat(mean(x),size(x,1),1).^2,2));
-0033 x=circshift(x,-index+1);
-0034 
-0035 <span class="keyword">if</span> nargin&gt;3,
-0036  v = v(find(t&lt;T_period),:);
-0037  v = circshift(v,-index+1);
-0038 <span class="keyword">end</span>
-0039 
-0040 <span class="keyword">if</span> exist(<span class="string">'Nt'</span>,<span class="string">'var'</span>), 
-0041  dt=t(end)/Nt;
-0042  tE=(0:dt:(t(end)-dt))';
-0043  xE=interp1(t,x,tE,<span class="string">'spline'</span>);
-0044  vE=interp1(t,v,tE,<span class="string">'spline'</span>);
-0045  x=xE;
-0046  v=vE;
-0047  t=tE;
-0048 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -36,19 +36,11 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
+<li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = get_color(values, minvalue,maxvalue,cmap);</a>
-0002 
-0003 <span class="comment">% c = get_color(values, minvalue,maxvalue,cmap);</span>
-0004 
-0005 c = .7*ones(length(values),3);
-0006 ind_ok = find(isfinite(values));
-0007 
-0008 c(ind_ok,:) = cmap(ceil(1+(values(ind_ok)-minvalue)/(maxvalue-minvalue)*(size(cmap,1)-1)),:);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

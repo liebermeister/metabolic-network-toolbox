@@ -29,29 +29,21 @@
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> network = network_build_from_sum_formulae_list(reactions)
 
- wrapper around network_build_from_sum_formulae for matlab reaction list as input</pre></div>
+ Build matlab network structure from reaction list
+  (to convert a network structure into reaction formulae, use network_print_formulae)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>	network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</li></ul>
+<li><a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>	network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = network_build_from_sum_formulae_list(reactions)</a>
-0002 
-0003 <span class="comment">% network = network_build_from_sum_formulae_list(reactions)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% wrapper around network_build_from_sum_formulae for matlab reaction list as input</span>
-0006 
-0007 dum = struct; 
-0008 dum.SumFormula = reactions;
-0009 network = <a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>([],[],dum);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

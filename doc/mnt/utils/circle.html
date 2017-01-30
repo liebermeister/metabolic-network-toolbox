@@ -4,7 +4,7 @@
 <head>
   <title>Description of circle</title>
   <meta name="keywords" content="circle">
-  <meta name="description" content="circle(x,y,r,col)">
+  <meta name="description" content="circle(x,y,r,col,filled,linewidth)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,34 +21,26 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>circle(x,y,r,col)</strong></div>
+<div class="box"><strong>circle(x,y,r,col,filled,linewidth)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function circle(x,y,r,col) </strong></div>
+<div class="box"><strong>function circle(x,y,r,col,filled,linewidth) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> circle(x,y,r,col)</pre></div>
+<div class="fragment"><pre class="comment"> circle(x,y,r,col,filled,linewidth)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-</ul>
+<li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././mnt/mnt_graphics/netgraph_movie.html" class="code" title="function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);">netgraph_movie</a>	[M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);</li><li><a href="dot_matrix.html" class="code" title="function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)">dot_matrix</a>	dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)</li></ul>
+<li><a href="../.././mnt/mnt_graphics/netgraph_double_movie.html" class="code" title="function [M,T] = netgraph_movie(network,t,s_t_1,s_t_2,data_type,n_frames,text_flag,options);">netgraph_double_movie</a>	[M,T] = netgraph_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, options);</li><li><a href="../.././mnt/mnt_graphics/netgraph_flux_movie.html" class="code" title="function M = netgraph_flux_movie(network,S,J,text_flag,goptions);">netgraph_flux_movie</a>	M = netgraph_flux_movie(network,S,J,text_flag,goptions);</li><li><a href="../.././mnt/mnt_graphics/netgraph_movie.html" class="code" title="function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);">netgraph_movie</a>	[M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);</li><li><a href="dot_matrix.html" class="code" title="function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)">dot_matrix</a>	dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function circle(x,y,r,col)</a>
-0002 
-0003 <span class="comment">% circle(x,y,r,col)</span>
-0004 
-0005 xlist = x+r*cos(0:0.01:2*pi);
-0006 ylist = y+r*sin(0:0.01:2*pi);
-0007 
-0008 fill(xlist,ylist,col,<span class="string">'EdgeColor'</span>,col);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -23,6 +23,8 @@
 
 function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)
 
+if find(isfinite(Ec)==0), error('Elasticity matrix contains non-finite values'); end
+
 eval(default('used','[]','NR_int','[]','L_int','[]','dilution_rate','[]'));
 
 if sum(external==0)==0,
@@ -78,7 +80,8 @@ Ec_int        = Ec_int(ind_int_react,:);
 
 M = full(NR_int * Ec_int * L_int);
 
-%% if maximal real part of eigenvalues < numerical error, correct M -> 
+%% if maximal real part of eigenvalues < numerical error, correct M
+
 eigmax = max(real(eig(M)));
 if [eigmax > 0] * [eigmax < 10^-10], 
   display(sprintf(' * Maximal real part of eigenvalues %f < numerical error, correcting M',eigmax));

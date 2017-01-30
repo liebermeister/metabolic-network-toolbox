@@ -43,25 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%indices = network_find_reactions(network,metabolites)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%find reactions in which a certain metabolite participates</span>
-0004 <span class="comment">%metabolites: metabolite name or list of metabolite names</span>
-0005 
-0006 <a name="_sub0" href="#_subfunctions" class="code">function re = network_find_reactions(network,metabolite)</a>
-0007 
-0008 only_one=0;
-0009 <span class="keyword">if</span> isstr(metabolite), metabolite={metabolite}; only_one=1; <span class="keyword">end</span>
-0010 ind = <a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(metabolite,network.metabolites,<span class="string">'single'</span>);
-0011 
-0012 <span class="keyword">if</span> only_one,
-0013   re=find(network.N(ind,:)~=0);
-0014 <span class="keyword">else</span>
-0015   <span class="keyword">for</span> i=1:length(ind)
-0016     re{i}=find(network.N(ind(i),:)~=0);
-0017  <span class="keyword">end</span>
-0018 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

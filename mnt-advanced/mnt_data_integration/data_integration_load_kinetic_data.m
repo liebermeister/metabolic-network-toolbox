@@ -1,16 +1,17 @@
-function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry,reaction_column_name,compound_column_name)
+function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, kinetic_data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)
 
-% kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)
+% kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, kinetic_data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)
 %
-% Construct data structure containing kinetic quantities that may appear in a model
+% Read model-related biochemical data from an SBtab file 
 %
-% Data are read from file 'file_kinetic_data' 
-% (if no filename is provided, an empty data structure is generated)
+% Data are read from file 'kinetic_data_file' 
+%  - if no filename is provided, an empty data structure is generated)
+%  - if 'kinetic_data_file' contains a list of files, they are all read
 %
-% The data structure 'kinetic_data' contains a field for every quantity type listed in 'data_quantities'
-%
-% For displaying the data structure, use 'parameter_balancing_kinetic_data_show(kinetic_data);'
-%
+% Output: 
+%   Data structure 'kinetic_data' of kinetic quantities to be used in a model
+%   It contains a field for every quantity type listed in 'data_quantities'
+%   For displaying this data structure, use 'parameter_balancing_kinetic_data_show(kinetic_data);'
 
 % fill in values from "kinetic_data_table"
 % take logarithms where necessary
@@ -22,7 +23,7 @@ end
 
 eval(default('data_quantities', '[]', ...
 	     'quantity_info','[]',...
-	     'file_kinetic_data', '[]', ...
+	     'kinetic_data_file', '[]', ...
              'use_sbml_ids','1',...
              'use_kegg_ids','[]',...
              'flag_invent_std','1',...
@@ -48,29 +49,30 @@ if isempty(quantity_info),
   quantity_info = data_integration_load_quantity_info; 
 end
 
-if isempty(file_kinetic_data),
+if isempty(kinetic_data_file),
   display('No data file provided. Creating empty data structure');
   verbose           = 0;
-  file_kinetic_data = [];
+  kinetic_data_file = [];
 end
+
 
 % ------------------------------------------
 % if several data files are given, use all of them 
 
-if iscell(file_kinetic_data),
+if iscell(kinetic_data_file),
 
   %% several files; read them one after the other;
   %% each time information from previous files is overridden
 
-  if isempty(reaction_column_name), reaction_column_name = repmat({[]},length(file_kinetic_data),1); end
-  if isempty(compound_column_name), compound_column_name = repmat({[]},length(file_kinetic_data),1); end
-  if prod(size(use_kegg_ids))==1, use_kegg_ids = use_kegg_ids * ones(length(file_kinetic_data),1); end
+  if isempty(reaction_column_name), reaction_column_name = repmat({[]},length(kinetic_data_file),1); end
+  if isempty(compound_column_name), compound_column_name = repmat({[]},length(kinetic_data_file),1); end
+  if prod(size(use_kegg_ids))==1, use_kegg_ids = use_kegg_ids * ones(length(kinetic_data_file),1); end
   
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data{1}, use_sbml_ids, use_kegg_ids(1), flag_invent_std, verbose, filter_column, filter_entry,reaction_column_name{1},compound_column_name{1});
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, kinetic_data_file{1}, use_sbml_ids, use_kegg_ids(1), flag_invent_std, verbose, filter_column, filter_entry,reaction_column_name{1},compound_column_name{1});
   fn = fieldnames(kinetic_data);
 
-  for it = 2:length(file_kinetic_data),
-    my_kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data{it}, use_sbml_ids, use_kegg_ids(2), flag_invent_std, verbose, filter_column, filter_entry,reaction_column_name{it},compound_column_name{it});
+  for it = 2:length(kinetic_data_file),
+    my_kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, kinetic_data_file{it}, use_sbml_ids, use_kegg_ids(2), flag_invent_std, verbose, filter_column, filter_entry,reaction_column_name{it},compound_column_name{it});
     for it2 = 1:length(fn)
       ii = isfinite(my_kinetic_data.(fn{it2}).median);
       kinetic_data.(fn{it2}).median(ii) = my_kinetic_data.(fn{it2}).median(ii);
@@ -86,10 +88,13 @@ if iscell(file_kinetic_data),
       if isfield(my_kinetic_data.(fn{it2}),'mean_ln'),
         ii = isfinite(my_kinetic_data.(fn{it2}).mean_ln);
         kinetic_data.(fn{it2}).mean_ln(ii) = my_kinetic_data.(fn{it2}).mean_ln(ii);
+
         ii = isfinite(my_kinetic_data.(fn{it2}).std_ln);
         kinetic_data.(fn{it2}).std_ln(ii) = my_kinetic_data.(fn{it2}).std_ln(ii);
+
         ii = isfinite(my_kinetic_data.(fn{it2}).lower_ln);
         kinetic_data.(fn{it2}).lower_ln(ii) = my_kinetic_data.(fn{it2}).lower_ln(ii);
+
         ii = isfinite(my_kinetic_data.(fn{it2}).upper);
         kinetic_data.(fn{it2}).upper_ln(ii) = my_kinetic_data.(fn{it2}).upper_ln(ii); 
       end
@@ -116,12 +121,12 @@ end
 % if filter criterion is given, put the rows that meet this criterion
 % at the end, such that they will be used!
 
-if length(file_kinetic_data),
-  kinetic_data_sbtab = sbtab_table_load(file_kinetic_data);
+if length(kinetic_data_file),
+  kinetic_data_sbtab = sbtab_table_load(kinetic_data_file);
   kinetic_data_table = sbtab_table_get_all_columns(kinetic_data_sbtab);
   if length(filter_column),
     if isfield(kinetic_data_table,filter_column),
-      display(sprintf('File %s: Preferring entries marked as %s in column %s', file_kinetic_data, filter_entry, filter_column));
+      display(sprintf('File %s:\n  Preferring entries marked as %s in column %s', kinetic_data_file, filter_entry, filter_column));
       ind_good_entries = find(strcmp(kinetic_data_table.(filter_column),filter_entry));
       ind_bad_entries  = find(strcmp(kinetic_data_table.(filter_column),filter_entry)==0);
       my_fn = fieldnames(kinetic_data_table);
@@ -131,11 +136,11 @@ if length(file_kinetic_data),
     end
   else
     if length(filter_column),
-      display(sprintf('No column %s found in file %s - no preference for entries', filter_column, file_kinetic_data));
+      display(sprintf('No column %s found in file %s - no preference for entries', filter_column, kinetic_data_file));
     end
   end
 else
-  kinetic_data_table = struct('QuantityType',[],'SBMLSpeciesID',[]);
+  kinetic_data_table = struct('QuantityType',[],'Compound_SBML_species_id',[]);
 end
 
 
@@ -159,14 +164,14 @@ end
 if use_kegg_ids,
   
   if ~isfield(network,'metabolite_KEGGID'), 
-    if isfield(network,'Compound_Identifiers_kegg_compound'), 
-      network.metabolite_KEGGID = network.Compound_Identifiers_kegg_compound;
+    if isfield(network,'Identifiers_kegg_compound'), 
+      network.metabolite_KEGGID = network.Identifiers_kegg_compound;
     end
   end
       
   if ~isfield(network,'reaction_KEGGID'), 
-    if isfield(network,'Reaction_Identifiers_kegg_reaction'), 
-      network.reaction_KEGGID = network.Reaction_Identifiers_kegg_reaction;
+    if isfield(network,'Identifiers_kegg_reaction'), 
+      network.reaction_KEGGID = network.Identifiers_kegg_reaction;
     end
   end
       
@@ -178,7 +183,7 @@ if use_kegg_ids,
   elseif ~isfield(kinetic_data_table,compound_column_name), 
     %use_kegg_ids= 0;
     if verbose, 
-      warning(sprintf('%s: Compound Kegg IDs missing in data set',file_kinetic_data));%; matching elements by SBML ids');
+      warning(sprintf('%s: Compound Kegg IDs missing in data set',kinetic_data_file));%; matching elements by SBML ids');
     end
   else,
     metabolites = network.metabolite_KEGGID;
@@ -186,7 +191,7 @@ if use_kegg_ids,
 
   if isfield(network,'reaction_KEGGID'), 
     reactions = network.reaction_KEGGID;
-  elseif  isfield(network,'Identifiers_kegg_reaction'), 
+  elseif isfield(network,'Identifiers_kegg_reaction'), 
     reactions = network.Identifiers_kegg_reaction;
   else
     %use_kegg_ids = 0;
@@ -278,8 +283,8 @@ for it = 1:length(data_quantities),
   end
     
   if flag_invent_std,
-    if verbose, 
-      display('Inventing standard deviations'); 
+    if verbose,
+      display(sprintf('Quantity %s: Inventing standard deviations',symbol)); 
     end
     if length(my_mean),
     switch scaling,
@@ -293,14 +298,18 @@ for it = 1:length(data_quantities),
     end
     end    
   end
-  
+
   if isfield(kinetic_data_table,'LowerBound'),
+    error('Deprecated column LowerBound found; please fix the data file and use Min and Max instead.');
+  end
+
+  if isfield(kinetic_data_table,'Min'),
     my_lower = cell_string2num(kinetic_data_table.LowerBound(ind));
   else,
     my_lower = nan * my_median;
   end
 
-  if isfield(kinetic_data_table,'UpperBound'),
+  if isfield(kinetic_data_table,'Max'),
     my_upper = cell_string2num(kinetic_data_table.UpperBound(ind));
   else
     my_upper = nan * my_median;
@@ -309,6 +318,7 @@ for it = 1:length(data_quantities),
   switch related_element,
     
     case 'Species',  
+
       if use_kegg_ids,
         if isfield(kinetic_data_table,compound_column_name),
           rindices = label_names(kinetic_data_table.(compound_column_name)(ind),metabolites,'multiple');
@@ -316,34 +326,48 @@ for it = 1:length(data_quantities),
           rindices = {};
         end
       else,
-        rindices = label_names(kinetic_data_table.SBMLSpeciesID(ind),metabolites,'multiple');
+        rindices = label_names(kinetic_data_table.Compound_SBML_species_id(ind),metabolites,'multiple');
       end
-        cindices = repmat({1},length(rindices),1);
+      cindices = repmat({1},length(rindices),1);
       
     case 'Reaction',
 
       if use_kegg_ids,
+        
         if isfield(kinetic_data_table,reaction_column_name),
           rindices = label_names(kinetic_data_table.(reaction_column_name)(ind),reactions,'multiple');
+        else
+          if verbose,
+            if isfield(kinetic_data, symbol),
+              warning(sprintf('File %s: Looking for %s data: Reaction IDs cannot be matched',kinetic_data_file,symbol));
+            end
+          end
+          rindices = repmat({1},length(ind));
+        end
+
+        if isfield(kinetic_data_table,compound_column_name),          
           cindices = repmat({1},length(rindices),1);      
         else
           if verbose, 
-            warning(sprintf('%s: %s: Reaction IDs cannot be matched',file_kinetic_data,symbol));
+            if isfield(kinetic_data, symbol),
+              warning(sprintf('File %s: Looking for %s data: Compound IDs cannot be matched',kinetic_data_file,symbol));
+            end
           end
-          rindices = repmat({},length(ind));
-          cindices = repmat({},length(rindices),1);
+          cindices = repmat({1},length(rindices),1);
         end
-      elseif isfield(kinetic_data_table,'SBMLReactionID'),
-        rindices = label_names(kinetic_data_table.SBMLReactionID(ind),reactions,'multiple');
+        
+      elseif isfield(kinetic_data_table,'Reaction_SBML_reaction_id'),
+        rindices = label_names(kinetic_data_table.Reaction_SBML_reaction_id(ind),reactions,'multiple');
         cindices = repmat({1},length(rindices),1);
+      
       else
         if verbose, 
-          warning(sprintf('%s: %s: Reaction IDs cannot be matched',file_kinetic_data,symbol));
+          warning(sprintf('%s: %s: Reaction IDs cannot be matched',kinetic_data_file,symbol));
         end
-        rindices = repmat({},length(ind));
-        cindices = repmat({},length(rindices),1);
+        rindices = repmat({1},length(ind));
+        cindices = repmat({1},length(rindices),1);
       end
-  
+      
     case 'Reaction/Species',   
       
       if use_kegg_ids,
@@ -353,20 +377,20 @@ for it = 1:length(data_quantities),
           cindices = label_names(kinetic_data_table.(compound_column_name)(ind),metabolites,'multiple');
         else
           if verbose, 
-            warning(sprintf('%s: %s: Joint Compound and Reaction IDs cannot be matched',file_kinetic_data,symbol));
+            warning(sprintf('%s: %s: Joint Compound and Reaction IDs cannot be matched',kinetic_data_file,symbol));
           end         
-          rindices = repmat({},length(ind));
-          cindices = repmat({},length(rindices),1);
+          rindices = repmat({1},length(ind));
+          cindices = repmat({1},length(rindices),1);
         end
-      elseif isfield(kinetic_data_table,'SBMLReactionID'),
-        rindices = label_names(kinetic_data_table.SBMLReactionID(ind),reactions,'multiple');
-        cindices = label_names(kinetic_data_table.SBMLSpeciesID(ind),metabolites,'multiple');
+      elseif isfield(kinetic_data_table,'Reaction_SBML_reaction_id'),
+        rindices = label_names(kinetic_data_table.Reaction_SBML_reaction_id(ind),reactions,'multiple');
+        cindices = label_names(kinetic_data_table.Compound_SBML_species_id(ind),metabolites,'multiple');
       else
         if verbose,
-          warning(sprintf('%s: %s: Joint Compound and Reaction IDs cannot be matched',file_kinetic_data,symbol));
+          warning(sprintf('%s: %s: Joint Compound and Reaction IDs cannot be matched',kinetic_data_file,symbol));
         end
-        rindices = repmat({},length(ind));
-        cindices = repmat({},length(rindices),1);
+        rindices = repmat({1},length(ind));
+        cindices = repmat({1},length(rindices),1);
       end
 
     case 'None',   
@@ -374,13 +398,18 @@ for it = 1:length(data_quantities),
       cindices = {};
 
   end 
-  
+
   if isempty(rindices), rindices ={}; end
   if isempty(cindices), cindices ={}; end
 
   %% -----------------------------------------------------------
-  
+
   ind_ok = find([cellfun('length',rindices)~=0].*[cellfun('length',cindices)~=0]);
+
+  % symbol
+  % rindices
+  % kinetic_data_table.Value(ind(ind_ok))
+  % kinetic_data_table.Reaction_Identifiers_kegg_reaction(ind(ind_ok))
   
   switch scaling,
     case 'Logarithmic',

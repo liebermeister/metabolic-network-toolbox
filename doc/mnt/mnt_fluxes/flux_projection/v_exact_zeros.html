@@ -40,16 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v_corrected,ind_inactive] = v_exact_zeros(v,N,external,epsilon)</a>
-0002 
-0003 <span class="comment">% [v_corrected,ind_inactive] = v_exact_zeros(v,N,external,epsilon)</span>
-0004 
-0005 v_corrected  = zeros(size(v)); 
-0006 ind_active   = find(abs(v) &gt; epsilon);
-0007 ind_inactive = find(abs(v) &lt;= epsilon);
-0008 K            = null(full(N(external==0,ind_active)));
-0009 v_corrected(ind_active) = K * pinv(K) * v(ind_active);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

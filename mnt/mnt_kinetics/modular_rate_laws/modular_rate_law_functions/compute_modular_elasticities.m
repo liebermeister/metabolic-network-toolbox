@@ -19,12 +19,12 @@ function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, a
 
 eval(default('h','ones(size(A))','flag_second_order','0','v_plus_fallback','1', 'v_minus_fallback','1'));
 
-% if flag_second_order ==1,
-%   if prod(size(N)) > 10^5, 
-%     %% flag_second_order = 0;
-%     warning('Stoichiometric matrix is large; computing the second elasticities may take a while'); 
-%   end
-% end
+if flag_second_order ==1,
+  if prod(size(N)) > 10^5, 
+    %% flag_second_order = 0;
+    warning('Stoichiometric matrix is large; computing the second elasticities may take a while'); 
+  end
+end
 
 [nm,nr] = size(N);
 zeta    = exp(h.*A/RT);

@@ -40,47 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% print_kinetics(kinetics,verbose)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function print_kinetics(kinetics,verbose)</a>
-0004 
-0005 <span class="keyword">if</span> ~exist(<span class="string">'verbose'</span>), verbose =0; <span class="keyword">end</span>
-0006 
-0007 fprintf(<span class="string">'Type: %s\n\n'</span>,kinetics.type);
-0008 
-0009 <span class="keyword">switch</span> kinetics.type,
-0010   
-0011   <span class="keyword">case</span> <span class="string">'numeric'</span>,
-0012   
-0013     <span class="keyword">for</span> it=1:length(kinetics.reactions),
-0014       fprintf(<span class="string">'Reaction %d:\t%s  \n'</span>,it,strrep(kinetics.reactions{it}.string,<span class="string">' '</span>,<span class="string">''</span>));
-0015 <span class="keyword">if</span> verbose,
-0016       fprintf(<span class="string">'(with '</span>);
-0017       <span class="keyword">for</span> it2=1:length(kinetics.reactions{it}.parameters),
-0018     fprintf(<span class="string">' %s = %f '</span>,kinetics.reactions{it}.parameters{it2}.name,kinetics.parameter_values(kinetics.reactions{it}.parameters{it2}.index));
-0019       <span class="keyword">end</span>
-0020       fprintf(<span class="string">')\n'</span>);
-0021 <span class="keyword">end</span>
-0022     <span class="keyword">end</span>
-0023     fprintf(<span class="string">'\n'</span>);
-0024     <span class="keyword">for</span> it=1:length(kinetics.parameters),
-0025       fprintf(<span class="string">'Parameter %s\t= %f\n'</span>,kinetics.parameters{it},kinetics.parameter_values(it));
-0026     <span class="keyword">end</span>
-0027 
-0028   <span class="keyword">case</span> <span class="string">'standard'</span>,
-0029       <span class="keyword">for</span> it=1:length(kinetics.reactions),
-0030       fprintf(<span class="string">'Reaction %d: %s'</span>,it,kinetics.reactions{it}.type);
-0031       <span class="keyword">for</span> itt=1:length(kinetics.reactions{it}.parameters),
-0032         fprintf(<span class="string">' %s=%f'</span>,kinetics.reactions{it}.parameters{itt},getfield(kinetics.reactions{it},kinetics.reactions{it}.parameters{itt}));
-0033       <span class="keyword">end</span>
-0034       fprintf(<span class="string">'\n'</span>);
-0035       <span class="keyword">end</span>
-0036       
-0037   <span class="keyword">otherwise</span> fprintf(<span class="string">'Warning: kinetics type not supported\n'</span>);
-0038 
-0039 <span class="keyword">end</span>
-0040</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

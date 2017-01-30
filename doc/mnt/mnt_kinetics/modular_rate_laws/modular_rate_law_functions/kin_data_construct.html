@@ -40,28 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function kin_data = kin_data_construct(network)</a>
-0002 
-0003 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0004 
-0005 empty_met = nan * ones(nm,1);
-0006 empty_rea = nan * ones(nr,1);
-0007 
-0008 kin_data.log_c.mean   = empty_met;
-0009 kin_data.log_c.std    = empty_met;
-0010 kin_data.log_u.mean   = empty_rea;
-0011 kin_data.log_u.std    = empty_rea;
-0012 kin_data.mu0.mean     = empty_met;
-0013 kin_data.mu0.std      = empty_met;
-0014 kin_data.log_Keq.mean = empty_rea;
-0015 kin_data.log_Keq.std  = empty_rea;
-0016 kin_data.log_KM.mean  = sparse(nr,nm);
-0017 kin_data.log_KA.mean  = sparse(nr,nm);
-0018 kin_data.log_KI.mean  = sparse(nr,nm);
-0019 kin_data.log_KM.std   = sparse(nr,nm);
-0020 kin_data.log_KA.std   = sparse(nr,nm);
-0021 kin_data.log_KI.std   = sparse(nr,nm);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

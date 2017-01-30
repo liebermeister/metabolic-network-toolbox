@@ -38,99 +38,11 @@ This function calls:
 <li><a href="netgraph_calculate_positions.html" class="code" title="function [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);">netgraph_calculate_positions</a>	[x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);</li><li><a href="../.././mnt/utils/graph_shortest_path.html" class="code" title="function r = graph_shortest_path(A,maxdist,check)">graph_shortest_path</a>	r = graph_shortest_path(A,maxdist,check)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_move2.html" class="code" title="function x = netgraph_move2(network,flag_draw_details)">netgraph_move2</a>	network = netgraph_move2(network,flag_draw_details)</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>	[subnetwork,indm,indr] = network_choose(network,indm,indr,strict)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_listchoose_actions.html" class="code" title="function [n_sub,actindices,metindices] = network_listchoose_actions(network,actnames,indices)">network_listchoose_actions</a>	[n_sub,actindices] = network_listchoose_actions(network,actnames,indices)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_listchoose_metabolites.html" class="code" title="function [n_sub,met,actindices,metindices] = network_listchoose_metabolites(network,metnames,indices)">network_listchoose_metabolites</a>	[n_sub,metindices] = network_listchoose_metabolites(network,metnames,indices)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_subnetwork.html" class="code" title="function [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>	[subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)</li></ul>
+<li><a href="../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_move2.html" class="code" title="function x = netgraph_move2(network,flag_draw_details)">netgraph_move2</a>	network = netgraph_move2(network,flag_draw_details)</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, layout_file, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)">netgraph_read_positions</a>	network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)</li><li><a href="netgraph_split_metabolites.html" class="code" title="function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);">netgraph_split_metabolites</a>	[network_split,met_list] = netgraph_split_metabolites(network,met_list);</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>	[subnetwork,indm,indr] = network_choose(network,indm,indr,strict)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_construct.html" class="code" title="function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)">network_construct</a>	network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_listchoose_actions.html" class="code" title="function [n_sub,actindices,metindices] = network_listchoose_actions(network,actnames,indices)">network_listchoose_actions</a>	[n_sub,actindices] = network_listchoose_actions(network,actnames,indices)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_listchoose_metabolites.html" class="code" title="function [n_sub,met,actindices,metindices] = network_listchoose_metabolites(network,metnames,indices)">network_listchoose_metabolites</a>	[n_sub,metindices] = network_listchoose_metabolites(network,metnames,indices)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_subnetwork.html" class="code" title="function [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>	[subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% create or modify structure describing the graphical appearance of a metabolic network</span>
-0004 
-0005 <a name="_sub0" href="#_subfunctions" class="code">function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);</a>
-0006 
-0007 <span class="comment">% -----------------------------------------------</span>
-0008 
-0009 <span class="keyword">if</span> ~exist(<span class="string">'table_positions'</span>,<span class="string">'var'</span>),  table_positions = []; <span class="keyword">end</span>
-0010 <span class="keyword">if</span> ~exist(<span class="string">'metvalues'</span>,<span class="string">'var'</span>),  metvalues = []; <span class="keyword">end</span>
-0011 <span class="keyword">if</span> ~exist(<span class="string">'actvalues'</span>,<span class="string">'var'</span>),  actvalues = []; <span class="keyword">end</span>
-0012 <span class="keyword">if</span> ~exist(<span class="string">'set_positions'</span>,<span class="string">'var'</span>),  set_positions = []; <span class="keyword">end</span> 
-0013 
-0014 metnames = strrep(network.metabolites,<span class="string">'_'</span>,<span class="string">' '</span>);
-0015 metnames = strrep(metnames,<span class="string">'Compartment '</span>,<span class="string">''</span>);
-0016 metnames = strrep(metnames,<span class="string">'Cell '</span>,<span class="string">''</span>);
-0017 metnames = strrep(metnames,<span class="string">'Compound '</span>,<span class="string">''</span>);
-0018 metnames = strrep(metnames,<span class="string">'Enzyme '</span>,<span class="string">''</span>);
-0019 metnames = strrep(metnames,<span class="string">'PseudoBioObj '</span>,<span class="string">''</span>);
-0020 metnames = strrep(metnames,<span class="string">'  '</span>,<span class="string">' '</span>);
-0021 
-0022 metnames = strrep(metnames,<span class="string">'(2R)-2-Hydroxy-3-(phosphonooxy)-propanal'</span>,<span class="string">'Glyceraldehyde 3-phosphate'</span>);
-0023 metnames = strrep(metnames,<span class="string">'-D-'</span>,<span class="string">'-'</span>);
-0024 metnames = strrep(metnames,<span class="string">'D-'</span>,<span class="string">''</span>);
-0025 metnames = strrep(metnames,<span class="string">'L-'</span>,<span class="string">''</span>);
-0026 metnames = strrep(metnames,<span class="string">'S-'</span>,<span class="string">''</span>);
-0027 metnames = strrep(metnames,<span class="string">'(S)-'</span>,<span class="string">''</span>);
-0028 metnames = strrep(metnames,<span class="string">'alpha'</span>,<span class="string">'\alpha'</span>);
-0029 metnames = strrep(metnames,<span class="string">'beta'</span>,<span class="string">'\beta'</span>);
-0030   
-0031 actnames = strrep(network.actions,<span class="string">'_'</span>,<span class="string">' '</span>);
-0032 actnames = strrep(actnames,<span class="string">'PseudoBioObj.'</span>,<span class="string">''</span>);
-0033 actnames = strrep(actnames,<span class="string">'Enzyme.'</span>,<span class="string">''</span>);
-0034 
-0035 graphics_object.metvalues      = metvalues;
-0036 graphics_object.actvalues      = actvalues;
-0037 graphics_object.arrowvalues    = actvalues;
-0038 
-0039 graphics_object.metstyle       = <span class="string">'fixed'</span>; <span class="comment">% , 'box', 'diamond', 'none'</span>
-0040 graphics_object.metcolstyle    = <span class="string">'values'</span>; <span class="comment">% 'fixed'</span>
-0041 graphics_object.metcol         = <span class="string">'c'</span>;  <span class="comment">% used if metcolstyle ==  'fixed'</span>
-0042 graphics_object.metprintnames  = 1;
-0043 graphics_object.metprintvalues = 0;
-0044 graphics_object.metnames       = metnames;
-0045 graphics_object.metabolites    = network.metabolites;
-0046 
-0047 graphics_object.actstyle       = <span class="string">'fixed'</span>; <span class="comment">% , 'box', 'diamond' 'none'</span>
-0048 graphics_object.actcolstyle    = <span class="string">'values'</span>; <span class="comment">% 'fixed'</span>
-0049 graphics_object.actcol         = <span class="string">'r'</span>; <span class="comment">% used if actcolstyle ==  'fixed'</span>
-0050 graphics_object.actprintnames  = 1;
-0051 graphics_object.actprintvalues = 0;
-0052 graphics_object.actnames       = actnames;
-0053 
-0054 graphics_object.arrowstyle     = <span class="string">'directions'</span>;  <span class="comment">% 'fluxes', 'none'</span>
-0055 
-0056 graphics_object.squaresize     = 0.2/sqrt(length(metnames));
-0057 graphics_object.arrowsize      = 0.08/sqrt(length(metnames));
-0058 graphics_object.lambda         = 1;
-0059 graphics_object.N              = network.N;
-0060 
-0061 graphics_object.metabolite_mapping = (1:length(metnames))';
-0062 graphics_object.reaction_mapping   = (1:length(actnames))';
-0063 
-0064 <span class="comment">% adjacency matrix between metabolites and reactions</span>
-0065 
-0066 <span class="keyword">if</span> isfield(network,<span class="string">'regulation_matrix'</span>),
-0067   graphics_object.regulation_matrix = <span class="keyword">...</span>
-0068       [sparse(zeros(length(network.metabolites)))<span class="keyword">...</span>
-0069        sparse(network.regulation_matrix)';<span class="keyword">...</span>
-0070        sparse(network.regulation_matrix)<span class="keyword">...</span>
-0071        sparse(zeros(length(network.actions)))<span class="keyword">...</span>
-0072       ];
-0073 <span class="keyword">end</span>
-0074 
-0075 m = [sparse(zeros(length(network.metabolites))) sparse(network.N~=0); sparse(network.N'~=0) sparse(zeros(length(network.actions)))];
-0076 
-0077 m = m-diag(diag(m));
-0078 db = <a href="../.././mnt/utils/graph_shortest_path.html" class="code" title="function r = graph_shortest_path(A,maxdist,check)">graph_shortest_path</a>(m,4,0);
-0079 db(find(~isfinite(db)))=5; 
-0080 
-0081 graphics_object.m  = m;
-0082 graphics_object.db = db;
-0083 
-0084 network.graphics_par = graphics_object;
-0085 
-0086 <span class="keyword">if</span> ~exist(<span class="string">'x_init'</span>,<span class="string">'var'</span>), x_init = []; <span class="keyword">end</span> 
-0087 
-0088 [network.graphics_par.x, network.graphics_par.fixed] = <a href="netgraph_calculate_positions.html" class="code" title="function [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);">netgraph_calculate_positions</a>(network, x_init, set_positions);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

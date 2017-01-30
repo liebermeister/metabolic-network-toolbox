@@ -33,52 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
+<li><a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function display_variability(network,solution, fn)</a>
-0002 
-0003 <span class="keyword">if</span> ~exist(<span class="string">'fn'</span>,<span class="string">'var'</span>), fn=1:3; <span class="keyword">end</span> 
-0004 
-0005 <span class="comment">% display_variability(network,solution,fn)</span>
-0006 
-0007 S_std_logk = diag( solution.control_coefficients.R_S * solution.logk_cov *  solution.control_coefficients.R_S');
-0008 J_std_logk = diag( solution.control_coefficients.R_J * solution.logk_cov *  solution.control_coefficients.R_J');
-0009 
-0010 figure(fn(1)); set(gca,<span class="string">'FontSize'</span>,16);
-0011 <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,S_std_logk,<span class="string">'actvalues'</span>,J_std_logk,<span class="keyword">...</span>
-0012                  <span class="string">'arrowvalues'</span>,J_std_logk,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
-0013                  <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05,<span class="string">'metprintnames'</span>,0,<span class="string">'metprintvalues'</span>,1,<span class="string">'actprintnames'</span>,0,<span class="string">'actprintvalues'</span>,1));
-0014 
-0015 <a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>; title([ solution.name <span class="string">', variabilities due to kinetic parameters'</span>]);
-0016 
-0017 <span class="keyword">if</span> isfield(solution,<span class="string">'logSext_cov'</span>),
-0018 
-0019 S_std_Sext = diag( solution.control_coefficients.R_S_Sext * solution.logSext_cov *  solution.control_coefficients.R_S_Sext');
-0020 J_std_Sext = diag( solution.control_coefficients.R_J_Sext * solution.logSext_cov *  solution.control_coefficients.R_J_Sext');
-0021 
-0022 figure(fn(2)); set(gca,<span class="string">'FontSize'</span>,16);
-0023 <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,S_std_Sext,<span class="string">'actvalues'</span>,J_std_Sext,<span class="keyword">...</span>
-0024                  <span class="string">'arrowvalues'</span>,J_std_Sext,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
-0025                  <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1, <span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span>
-0026                  <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
-0027 
-0028 <a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>; title([ solution.name <span class="string">', variabilities due to external metabolites'</span>]);
-0029 
-0030 
-0031 figure(fn(3));  set(gca,<span class="string">'FontSize'</span>,16);
-0032 <a href="../../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,S_std_Sext+S_std_logk,<span class="string">'actvalues'</span>,J_std_Sext+J_std_logk,<span class="keyword">...</span>
-0033                  <span class="string">'arrowvalues'</span>,J_std_Sext+J_std_logk,<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
-0034                  <span class="string">'metprintvalues'</span>,1,<span class="string">'actprintvalues'</span>,1,<span class="string">'metprintnames'</span>,0,<span class="string">'actprintnames'</span>,0,<span class="keyword">...</span>
-0035                  <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'arrowsize'</span>,0.05));
-0036 
-0037 <a href="../../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>; title([ solution.name <span class="string">', total variabilities'</span>]);
-0038  <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

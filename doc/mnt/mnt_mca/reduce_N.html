@@ -43,24 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% compute reduced stoichiometric matrix NR for independent metabolites</span>
-0004 <span class="comment">% and link matrix L fulfilling L*NR = N</span>
-0005 
-0006 <a name="_sub0" href="#_subfunctions" class="code">function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)</a>
-0007 
-0008 [n_metab, n_react] = size(N);
-0009 
-0010 [echelon,independent_metabolites] = rref(N');
-0011 NR                                = N(independent_metabolites,:);
-0012 L                                 = echelon(1:length(independent_metabolites),:)';
-0013 
-0014 dependent_metabolites = setdiff(1:size(N,1),independent_metabolites);
-0015 N1                    = N(dependent_metabolites,:);
-0016 
-0017 L=sparse(L);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

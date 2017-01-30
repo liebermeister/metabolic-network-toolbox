@@ -14,6 +14,8 @@ for it = 1:length(T),
   end
 end
 
+M = [[{'!!SBtab TableType="Quantity"'}, repmat({''},1,size(M,2)-1)]; M];
+
 if length(filename),
   display(sprintf('Saving kinetic data to file %s ',filename));
   mytable(M,options_style,filename);

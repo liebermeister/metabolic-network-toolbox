@@ -24,7 +24,7 @@
 <div class="box"><strong>[metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions) </strong></div>
+<div class="box"><strong>function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions,flag_no_leading_underscores) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)</pre></div>
@@ -36,61 +36,11 @@ This function calls:
 <li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>	quantity_table = modular_rate_law_to_sbtab(network,filename,options)</li><li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/sbtab_to_modular_rate_law_via_kinetic_data.html" class="code" title="function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)">sbtab_to_modular_rate_law_via_kinetic_data</a>	[kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)</li><li><a href="network_sbml_export.html" class="code" title="function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)">network_sbml_export</a>	SBMLmodel = network_sbml_export(network, verbose, name, filename, notes, sbml_level, sbml_version)</li><li><a href="network_to_sbtab.html" class="code" title="function sbtab_document = network_to_sbtab(network,options)">network_to_sbtab</a>	sbtab_document = network_to_sbtab(network,options)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/elementary_modes/network_efmtool.html" class="code" title="function [C, mnet] = network_efmtool(network, method, ind_ignore, zv, omit_reverse_copies, enforce_reactions)">network_efmtool</a>	[C,mnet] = network_efmtool(network, method, ind_ignore, zv)</li><li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>	quantity_table = modular_rate_law_to_sbtab(network,filename,options)</li><li><a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/sbtab_to_modular_rate_law_via_kinetic_data.html" class="code" title="function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)">sbtab_to_modular_rate_law_via_kinetic_data</a>	[kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)</li><li><a href="network_sbml_export.html" class="code" title="function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)">network_sbml_export</a>	SBMLmodel = network_sbml_export(network, verbose, name, filename, notes, sbml_level, sbml_version)</li><li><a href="network_to_sbtab.html" class="code" title="function sbtab_document = network_to_sbtab(network, options)">network_to_sbtab</a>	sbtab_document = network_to_sbtab(network, options)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)</a>
-0002 
-0003 <span class="comment">% [metabolites,actions] = network_adjust_names_for_sbml_export(metabolites,actions)</span>
-0004 
-0005 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'actions'</span>,<span class="string">'[]'</span>));
-0006 
-0007 <span class="keyword">for</span> it=1:length(metabolites),
-0008   metabolites{it} = strrep(metabolites{it},<span class="string">''''</span>,<span class="string">'_'</span>);
-0009   metabolites{it} = strrep(metabolites{it},<span class="string">'-'</span>,<span class="string">'_'</span>);
-0010   metabolites{it} = strrep(metabolites{it},<span class="string">':'</span>,<span class="string">'_'</span>);
-0011   metabolites{it} = strrep(metabolites{it},<span class="string">','</span>,<span class="string">'_'</span>);
-0012   metabolites{it} = strrep(metabolites{it},<span class="string">'.'</span>,<span class="string">'_'</span>);
-0013   metabolites{it} = strrep(metabolites{it},<span class="string">' '</span>,<span class="string">'_'</span>);
-0014   metabolites{it} = strrep(metabolites{it},<span class="string">'+'</span>,<span class="string">'plus'</span>);
-0015   metabolites{it} = strrep(metabolites{it},<span class="string">'('</span>,<span class="string">'_'</span>);
-0016   metabolites{it} = strrep(metabolites{it},<span class="string">')'</span>,<span class="string">'_'</span>);
-0017   metabolites{it} = strrep(metabolites{it},<span class="string">'['</span>,<span class="string">'_'</span>);
-0018   metabolites{it} = strrep(metabolites{it},<span class="string">']'</span>,<span class="string">'_'</span>);
-0019   metabolites{it} = strrep(metabolites{it},<span class="string">'&lt;'</span>,<span class="string">'_'</span>);
-0020   metabolites{it} = strrep(metabolites{it},<span class="string">'/'</span>,<span class="string">'_'</span>);  
-0021   metabolites{it} = strrep(metabolites{it},<span class="string">'['</span>,<span class="string">'_'</span>);  
-0022   metabolites{it} = strrep(metabolites{it},<span class="string">']'</span>,<span class="string">'_'</span>);  
-0023   
-0024   <span class="keyword">if</span> length(strfind(<span class="string">'0123456789'</span>,metabolites{it}(1)))
-0025     metabolites{it} = [<span class="string">'_'</span> metabolites{it}];
-0026   <span class="keyword">end</span>
-0027 
-0028 <span class="keyword">end</span>
-0029 
-0030 <span class="keyword">for</span> it=1:length(actions),
-0031   actions{it} = strrep(actions{it},<span class="string">':'</span>,<span class="string">'_'</span>);
-0032   actions{it} = strrep(actions{it},<span class="string">' '</span>,<span class="string">'_'</span>);
-0033   actions{it} = strrep(actions{it},<span class="string">'='</span>,<span class="string">'-'</span>);
-0034   actions{it} = strrep(actions{it},<span class="string">'&lt;-&gt;'</span>,<span class="string">'_rev_'</span>);
-0035   actions{it} = strrep(actions{it},<span class="string">'-&gt;'</span>,<span class="string">'_irrev_'</span>);
-0036   actions{it} = strrep(actions{it},<span class="string">'-'</span>,<span class="string">'_'</span>);
-0037   actions{it} = strrep(actions{it},<span class="string">','</span>,<span class="string">'_'</span>);
-0038   actions{it} = strrep(actions{it},<span class="string">'.'</span>,<span class="string">'_'</span>);
-0039   actions{it} = strrep(actions{it},<span class="string">'('</span>,<span class="string">'_'</span>);
-0040   actions{it} = strrep(actions{it},<span class="string">')'</span>,<span class="string">'_'</span>);
-0041   actions{it} = strrep(actions{it},<span class="string">'.'</span>,<span class="string">'_'</span>);
-0042   actions{it} = strrep(actions{it},<span class="string">'+'</span>,<span class="string">'plus'</span>);
-0043   actions{it} = strrep(actions{it},<span class="string">'['</span>,<span class="string">'_'</span>);
-0044   actions{it} = strrep(actions{it},<span class="string">']'</span>,<span class="string">'_'</span>);
-0045 
-0046   <span class="keyword">if</span> length(strfind(<span class="string">'0123456789'</span>,actions{it}(1)))
-0047     actions{it} = [<span class="string">'_'</span> actions{it}];
-0048   <span class="keyword">end</span>
-0049 
-0050 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

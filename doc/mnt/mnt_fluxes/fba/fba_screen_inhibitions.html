@@ -33,30 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li></ul>
+<li><a href="fba.html" class="code" title="function [v,value,lambda_ind_int] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)</a>
-0002 
-0003 <span class="comment">% [v_ref,V_inhibited] = fba_screen_inhibitions(network,constraints,inhibition_ratio)</span>
-0004 
-0005 v_ref = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,constraints);
-0006 
-0007 <span class="keyword">for</span> it = 1:length(network.actions),
-0008   my_constraints = constraints;
-0009   <span class="keyword">if</span> v_ref(it),
-0010     my_constraints.v_min(it) = -inhibition_ratio * abs(v_ref(it));
-0011     my_constraints.v_max(it) =  inhibition_ratio * abs(v_ref(it));
-0012     V_inhibited(:,it)  = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,my_constraints);
-0013   <span class="keyword">else</span>
-0014     V_inhibited(:,it) = v_ref;         
-0015   <span class="keyword">end</span>
-0016 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

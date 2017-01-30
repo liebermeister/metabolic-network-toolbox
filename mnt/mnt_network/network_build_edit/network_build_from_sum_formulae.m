@@ -15,7 +15,7 @@ function [network,N,metabolites] = network_build_from_sum_formulae(filename_reac
 %
 % to import the data directly from a matlab structure, the arguments 
 % 'filename_reactions' 'filename_compounds' need to be empty 
-% and the formulas have to be given in 'columns.SumFormula'; 
+% and the formulas have to be given in 'columns.ReactionFormula'; 
 % other network entries can also be given
 % -- OR: use the wrapper function network_build_from_sum_formulae_list --
 
@@ -27,6 +27,7 @@ if length(filename_reactions),
   else
     reaction_table = filename_reactions;
   end
+  reaction_table = sbtab_table_remove_comment_lines(reaction_table);
   columns = sbtab_table_get_all_columns(reaction_table);
 end
 
@@ -36,13 +37,14 @@ if length(filename_reactions) * length(filename_compounds),
   else
     compound_table = filename_compounds;
   end
+  compound_table = sbtab_table_remove_comment_lines(compound_table);
   compound_columns = sbtab_table_get_all_columns(compound_table);
 end
 
 metab_collect = {};
 
-for it = 1:length(columns.SumFormula),
-  sum_formula              = columns.SumFormula{it};
+for it = 1:length(columns.ReactionFormula),
+  sum_formula              = columns.ReactionFormula{it};
   if sum(findstr(sum_formula,',')),
     error(sprintf('Malformed formula "%s"',sum_formula));
   end
@@ -65,13 +67,13 @@ if isfield(columns,'MetabolicRegulation'),
 end
 
 if exist('compound_columns','var'),
-  metabolites = compound_columns.Compound;
+  metabolites = compound_columns.ID;
 else,  
   metabolites = unique(metab_collect);
 end
 
-N = zeros(length(metabolites),length(columns.SumFormula));
-for it = 1:length(columns.SumFormula),
+N = zeros(length(metabolites),length(columns.ReactionFormula));
+for it = 1:length(columns.ReactionFormula),
   ls = label_names(smetab{it},metabolites);
   lp = label_names(pmetab{it},metabolites);
   if sum(ls==0) * length(smetab{it}),   
@@ -86,17 +88,17 @@ for it = 1:length(columns.SumFormula),
   N(lp,it) = pstoich{it};
 end
 
-regulation_matrix = zeros(length(columns.SumFormula),length(metabolites));
+regulation_matrix = zeros(length(columns.ReactionFormula),length(metabolites));
 
 if isfield(columns,'MetabolicRegulation'),
-for it = 1:length(columns.SumFormula),
+for it = 1:length(columns.ReactionFormula),
   l = label_names(rmetab{it},metabolites);
   regulation_matrix(it,l) = rstoich{it};
 end
 end
 
 if exist('compound_columns','var'),
-  ll = label_names(metabolites,compound_columns.Compound);
+  ll = label_names(metabolites,compound_columns.ID);
   if isfield(compound_columns,'External'),
     external_ind = find(cell_string2num(compound_columns.External(ll)));
   else
@@ -106,10 +108,15 @@ else,
   external_ind = [];
 end
 
-if isfield(columns,'Reaction'),
-  actions = columns.Reaction;
+if isfield(columns,'ID'),
+  actions = columns.ID;
 else
-  actions = numbered_names('R',length(columns.SumFormula));
+  if isfield(columns,'Reaction'), % for compatibility with old
+                                  % SBtab files
+    actions = columns.Reaction;
+  else
+    actions = numbered_names('R',length(columns.ReactionFormula));
+  end 
 end
 
 if isfield(columns,'IsReversible'),
@@ -119,58 +126,69 @@ else
 end
 
 network = network_construct(N,reversible,external_ind,metabolites,actions,0,regulation_matrix);
-network.formulae = columns.SumFormula;
 
 if exist('compound_columns','var'),
+
   if isfield(compound_columns,'SBML_species_ID'),
     network.sbml_id_species  = compound_columns.SBML_species_ID(ll);
+    compound_columns = rmfield(compound_columns,'SBML_species_ID');
   end
+
   if isfield(compound_columns,'SBML__species__ID'), % OLD SBTAB COMPATIBILITY
     network.sbml_id_species  = compound_columns.SBML__species__ID(ll);
+    compound_columns = rmfield(compound_columns,'SBML__species__ID');
   end
+
   if isfield(compound_columns,'Name'),
     network.metabolite_names  = compound_columns.Name(ll);
+    compound_columns = rmfield(compound_columns,'Name');
   end
-  if isfield(compound_columns,'MiriamID__urn_miriam_kegg_compound'), % OLD SBTAB COMPATIBILITY
-    network.metabolite_KEGGID = compound_columns.MiriamID__urn_miriam_kegg_compound(ll);
-  end
+
   if isfield(compound_columns,'Identifiers_kegg_compound'),
     network.metabolite_KEGGID = compound_columns.Identifiers_kegg_compound(ll);
+    compound_columns = rmfield(compound_columns,'Identifiers_kegg_compound');
   end
+
   if isfield(compound_columns,'IsCofactor'),
     network.is_cofactor = cell_string2num(compound_columns.IsCofactor(ll));
+    compound_columns = rmfield(compound_columns,'IsCofactor');
   end
+
 end
 
 if isfield(columns,'Name'),
   network.reaction_names  = columns.Name;
+  columns = rmfield(columns,'Name');
 end
+
 if isfield(columns,'Gene'),
   network.genes  = columns.Gene;
+  columns = rmfield(columns,'Gene');
 end
+
 if isfield(columns,'SBML__reaction__ID'),
   network.sbml_id_reaction  = columns.SBML__reaction__ID;
+  columns = rmfield(columns,'SBML__reaction__ID');
 end
-if isfield(columns,'MiriamID__urn_miriam_kegg_reaction'), % OLD SBTAB
-  network.reaction_KEGGID = columns.MiriamID__urn_miriam_kegg_reaction;
-end
+
 if isfield(columns,'Identifiers_kegg_reaction'),
   network.reaction_KEGGID = columns.Identifiers_kegg_reaction;
+  columns = rmfield(columns,'Identifiers_kegg_reaction');
 end
-if isfield(columns,'MiriamID__urn_miriam_ec_code'), % OLD
-  network.EC = columns.MiriamID__urn_miriam_ec_code;
-end
+
 if isfield(columns,'Identifiers_ec_code'),
   network.EC = columns.Identifiers_ec_code;
+  columns = rmfield(columns,'Identifiers_ec_code');
 end
 
-network.formulae = columns.SumFormula;
-
-network = join_struct(network,columns);
+network.formulae = columns.ReactionFormula;
 
 if exist('compound_columns','var'),
   network = join_struct(network,compound_columns);
 end
+
+network = join_struct(network,columns);
+
 
 function [rstoic,rmetab] = analyse_regulation(regulation)
 
@@ -185,7 +203,7 @@ for it = 1:length(signs),
   if strcmp(signs(it),'-'), rstoic(it)  = -1; end
 end
 
-A = strsplit(' | ',dum); rmetab = A(2:end)';
+A = Strsplit(' | ',dum); rmetab = A(2:end)';
 
 function [sstoic,smetab] = analyse_one_side(substrate_side)
 

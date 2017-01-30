@@ -40,20 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [n_sub,metindices] = network_listchoose_metabolites(network,metnames,indices)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [n_sub,met,actindices,metindices] = network_listchoose_metabolites(network,metnames,indices)</a>
-0004 
-0005 <span class="keyword">if</span> ~exist(<span class="string">'metnames'</span>,<span class="string">'var'</span>); metnames = network.metabolites; <span class="keyword">end</span> 
-0006 <span class="keyword">if</span> ~exist(<span class="string">'indices'</span>,<span class="string">'var'</span>); indices = []; <span class="keyword">end</span> 
-0007 
-0008 [met,h] = <a href="../../.././mnt/utils/listbox.html" class="code" title="function [indices,h] = listbox(list,indices);">listbox</a>(metnames,indices);
-0009  actindices = find(sum(network.N(met,:)~=0,1));
-0010 metindices = find(sum(network.N(:,actindices)~=0,2));
-0011 
-0012 n_sub = <a href="network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>(network,metindices,actindices);
-0013 n_sub = <a href="../../.././mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(n_sub);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

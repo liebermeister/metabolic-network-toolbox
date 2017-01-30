@@ -27,7 +27,9 @@
 <div class="box"><strong>function [v,names] = modular_par2vector(p,network,no_names) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [v,names] = modular_par2vector(p,network,no_names)</pre></div>
+<div class="fragment"><pre class="comment"> [v,names] = modular_par2vector(p,network,no_names)
+
+ Order: [p.u; p.c; column(p.KA(KA_indices)); column(p.KI(KI_indices)); column(p.KM(KM_indices)); p.KV; p.Keq];</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
@@ -40,28 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v,names] = modular_par2vector(p,network,no_names)</a>
-0002 
-0003 <span class="comment">% [v,names] = modular_par2vector(p,network,no_names)</span>
-0004 
-0005 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0006 
-0007 v              = [p.u; p.c; <a href="../../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(p.KA(KA_indices)); <a href="../../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(p.KI(KI_indices)); <a href="../../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(p.KM(KM_indices)); p.KV; p.Keq];
-0008 
-0009 <span class="keyword">if</span> no_names,
-0010   names =[];
-0011 <span class="keyword">else</span>,
-0012   u_names        = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'u'</span>,nr);
-0013   c_names        = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'c'</span>,nm);
-0014   KA_names       = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'KA'</span>,[nr,nm]);
-0015   KI_names       = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'KI'</span>,[nr,nm]);
-0016   KM_names       = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'KM'</span>,[nr,nm]);
-0017   KV_names       = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'KV'</span>,nr);
-0018   Keq_names      = <a href="../../../../.././mnt/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max)">numbered_names</a>(<span class="string">'Keq'</span>,nr);
-0019   names          = [u_names;c_names;<a href="../../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(KA_names(KA_indices));<a href="../../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(KI_names(KI_indices));<span class="keyword">...</span>
-0020                     <a href="../../../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(KM_names(KM_indices));KV_names;Keq_names];
-0021 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

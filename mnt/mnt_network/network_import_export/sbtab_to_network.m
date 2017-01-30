@@ -3,19 +3,23 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %function network = sbtab_to_network(filename,options)
 %
 %Read network structure and kinetic data from SBtab files
+%  (to translate 'network' data structure into 'sbtab' data structure, use 'network_to_sbtab');
+%
 %Insert kinetic parameters that *directly* appear in the rate law specified in "options.kinetic_law"
 %
 % Assumes three input files: 
-%  [filename]_Reaction.csv
-%  [filename]_Compound.csv
-%  [filename]_QuantityData.csv
+%  [filename]_Reaction.tsv
+%  [filename]_Compound.tsv
+%  [filename]_QuantityData.tsv
 %
 % The last one can be omitted if options.load_quantity_table = 0;
 % or another file name can be explicitly given in options.quantity_table_file
 % also see network_to_sbtab.m
 %
-% OR: instead of a filename, an SBtab data structure is given directly!!
+% OR: instead of a filename, an SBtab data structure can given directly!!
 %
+% OR: if options.one_sbtab_file = 1 has been set, all data are read from one SBtab file (several tables)
+% 
 % Options and their default values:
 %
 %  options_default.verbose             = 0;     % verbose mode
@@ -24,13 +28,12 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %  options_default.load_quantity_table = 1;     % use input file for parameter data?
 %  options_default.quantity_table_file = '';    % filename for parameter data
 %  options_default.use_sbml_ids        = 0;     % use sbml_ids from input files
-%  options_default.extension           ='.csv'; % default extension of input files
+%  options_default.extension           ='.tsv'; % default extension of input files
 %  options_default.read_positions      = 0;     % expect SBtab table to contain position information
 %  options_default.position_file       = [];    % filename for position information
 %  options_default.only_reaction_table = 0;     % read only reaction table (no compounds and parameters)
 %                                               % assume full filename to be given
-
-
+%  options_default.one_sbtab_file      = 0;     % all data from one SBtab file (several tables)
 
 try
   sbtab_version;
@@ -46,11 +49,12 @@ options_default.use_compound_table  = 1;     % use input file for compounds?
 options_default.load_quantity_table = 1;     % use input file for parameter data?
 options_default.quantity_table_file = '';    % filename for parameter data
 options_default.use_sbml_ids        = 0;     % use sbml_ids from input files
-options_default.extension           ='.csv'; % default extension of input files
+options_default.extension           ='.tsv'; % default extension of input files
 options_default.read_positions      = 0;     % expect SBtab table to contain position information
 options_default.position_file       = [];    % filename for position information
 options_default.only_reaction_table = 0;     % read only reaction table (no compounds and parameters)
                                              % assume full filename to be given
+options_default.one_sbtab_file      = 0;     % all data from one SBtab file (several tables)
 
 options = join_struct(options_default,options);
 
@@ -59,6 +63,15 @@ if options.only_reaction_table,
   options.load_quantity_table = 0;
 end
 
+if options.one_sbtab_file, 
+  filename = sbtab_document_load_from_one(filename);
+  if ~isfield(filename.tables,'RateConstant'), options.load_quantity_table = 0; end
+end
+
+if length(options.position_file),
+  options.read_positions = 1; 
+end
+    
 if isstr(filename),
   if options.only_reaction_table,
     filename_reactions = filename;
@@ -119,9 +132,9 @@ if options.load_quantity_table,
     else
       %% workaround: save data and load them again
       if isfield(options,'my_matlab_tmp'),
-	quantity_table_file = [options.my_matlab_tmp '/quantity_data.csv'];
+	quantity_table_file = [options.my_matlab_tmp '/quantity_data.tsv'];
       else
-	quantity_table_file = '/tmp/quantity_data.csv';
+	quantity_table_file = '/tmp/quantity_data.tsv';
       end
       sbtab_table_save(filename.tables.RateConstant, struct('filename',quantity_table_file));
     end

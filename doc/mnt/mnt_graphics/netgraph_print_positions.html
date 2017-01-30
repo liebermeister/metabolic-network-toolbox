@@ -4,7 +4,7 @@
 <head>
   <title>Description of netgraph_print_positions</title>
   <meta name="keywords" content="netgraph_print_positions">
-  <meta name="description" content="output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)">
+  <meta name="description" content="[names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,78 +21,28 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)</strong></div>
+<div class="box"><strong>[names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids) </strong></div>
+<div class="box"><strong>function [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)</pre></div>
+<div class="fragment"><pre class="comment"> [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)
+
+ Argument 'policy': possible choices {'replace file', 'add nonexistent', 'replace elements'}</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids,gp,reaction_KEGG_IDs)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</li></ul>
+<li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,gp,reaction_KEGG_IDs,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)</li><li><a href="../.././mnt/mnt_network/network_import_export/network_to_sbtab.html" class="code" title="function sbtab_document = network_to_sbtab(network, options)">network_to_sbtab</a>	sbtab_document = network_to_sbtab(network, options)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)</a>
-0004 
-0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'filename'</span>,<span class="string">'[]'</span>,<span class="string">'offsets'</span>,<span class="string">'[0,0]'</span>,<span class="string">'policy'</span>,<span class="string">'''replace elements'''</span>,<span class="string">'flag_KEGG_ids'</span>,<span class="string">'0'</span>));
-0006 
-0007 [nr,nm] = <a href="../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0008 
-0009 <span class="keyword">switch</span> flag_KEGG_ids,
-0010   <span class="keyword">case</span> 0,
-0011     metnames = network.metabolites;
-0012     actnames   = network.actions;
-0013   <span class="keyword">case</span> 1,
-0014     metnames = network.metabolite_KEGGID;
-0015     actnames   = network.reaction_KEGGID;
-0016 <span class="keyword">end</span>
-0017 metpositions = network.graphics_par.x(:,1:nm) + repmat(offsets',1,nm);
-0018 
-0019 actpositions = network.graphics_par.x(:,nm+1:end) + repmat(offsets',1,nr);
-0020 
-0021 names     = [metnames; actnames];
-0022 positions = [metpositions, actpositions];
-0023 
-0024 <span class="keyword">switch</span> policy, 
-0025   <span class="keyword">case</span> <span class="string">'add nonexistent'</span>,  
-0026     t         = sbtab_table_load(filename);
-0027     elements  = sbtab_table_get_column(t,<span class="string">'Element'</span>);
-0028     x         = <a href="../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionX'</span>));
-0029     y         = <a href="../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionY'</span>));
-0030     ll        = <a href="../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(names,elements); ind_keep = find(ll==0);
-0031     names     = [elements; names(ind_keep)];
-0032     positions = [[x';y'], positions(:,ind_keep) ];
-0033   <span class="keyword">case</span> <span class="string">'replace elements'</span>,  
-0034     t = sbtab_table_load(filename);
-0035     elements  = sbtab_table_get_column(t,<span class="string">'Element'</span>);
-0036     x         = <a href="../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionX'</span>));
-0037     y         = <a href="../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(t,<span class="string">'PositionY'</span>));
-0038     ll        = <a href="../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(elements,names); ind_keep = find(ll==0);
-0039     names     = [elements(ind_keep); names];
-0040     positions = [ [x(ind_keep)';y(ind_keep)'], positions];
-0041   <span class="keyword">case</span> <span class="string">'replace file'</span>,  
-0042 <span class="keyword">end</span>
-0043 
-0044 fid = fopen(filename,<span class="string">'w'</span>);
-0045 
-0046 fprintf(fid,<span class="string">'!Element\t!PositionX\t!PositionY\n'</span>);
-0047 
-0048 <span class="keyword">for</span> it = 1:length(names),
-0049   fprintf(fid,<span class="string">'%s\t%f\t%f\n'</span>,names{it},positions(1,it),positions(2,it));
-0050 <span class="keyword">end</span>
-0051 fclose(fid);
-0052 <span class="comment">%output = mytable([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,filename);</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -7,7 +7,7 @@ n_indep_quantities   = length(ind_indep_quantities);
 
 matrix_terms = repmat({},n_quantities,n_indep_quantities);
 for it = 1:n_quantities,
-  terms = strsplit(',',strrep(quantity_info.MatrixInfo{it}(2:end-1),' ',''));  % omit outer brackets
+  terms = Strsplit(',',strrep(quantity_info.MatrixInfo{it}(2:end-1),' ',''));  % omit outer brackets
    % omit inner brackets
   for itt = 1:length(terms), 
     terms(itt) = strrep(terms(itt),'[',''); 

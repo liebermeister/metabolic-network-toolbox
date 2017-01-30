@@ -59,71 +59,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%Metabolic control coefficients (unnormalised, first order)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">%For convenience, the function also outputs the reduced stoichiometric matrix and the link matrix</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">%INPUTS</span>
-0008 <span class="comment">%  N          stoichiometric matrix</span>
-0009 <span class="comment">%  epsilon    matrix of reaction elasticities</span>
-0010 <span class="comment">%  ext        binary (column) vector indicating which metabolites are external</span>
-0011 <span class="comment">%</span>
-0012 <span class="comment">%OPTIONAL INPUTS</span>
-0013 <span class="comment">% L           link matrix  of internal metabolites (see 'reduce_N')</span>
-0014 <span class="comment">% NR          reduced stoichiometric matrix of internal metabolites</span>
-0015 <span class="comment">% 'used' can be set [].</span>
-0016 <span class="comment">%</span>
-0017 <span class="comment">%OUTPUTS</span>
-0018 <span class="comment">% C_J, C_S    matrices of flux and concentration control coefficients (first order)</span>
-0019 <span class="comment">% L           link matrix  of internal metabolites (see 'reduce_N')</span>
-0020 <span class="comment">% NR          reduced stoichiometric matrix of internal metabolites</span>
-0021 
-0022 <span class="comment">% C_J2, C_S2  arrays of flux and concentration control coefficients (second order)</span>
-0023 
-0024 <a name="_sub0" href="#_subfunctions" class="code">function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = control_coefficients(N,epsilon,external,used,NR_int,L_int,J)</a>
-0025 
-0026 <span class="keyword">if</span> ~exist(<span class="string">'used'</span>,<span class="string">'var'</span>), used=[]; <span class="keyword">end</span>
-0027 
-0028 external     = find(external);
-0029 internal     = setdiff(1:size(N,1)',external);
-0030 N_int        = N(internal,:);
-0031 [n_metab_int,n_react] = size(N_int);
-0032 <span class="keyword">if</span> isempty(used), used=ones(n_react,1); <span class="keyword">end</span>
-0033 epsilon_int  = epsilon(:,internal);
-0034 
-0035 <span class="keyword">if</span> ~exist(<span class="string">'NR_int'</span>,<span class="string">'var'</span>), [ L_int, NR_int ] = <a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>(N_int); <span class="keyword">end</span>;
-0036 
-0037 epsilon_int(find(1-used)) = 0;
-0038 
-0039 M   = NR_int * epsilon_int * L_int; 
-0040 
-0041 C_S = - L_int * pinv( full(M) ) * NR_int;
-0042 C_J = eye(n_react) + epsilon_int * C_S;
-0043 
-0044 CCS = zeros(n_metab_int+length(external),n_react); 
-0045 CCS(internal,:) = C_S; C_S = CCS; 
-0046 
-0047 C_J = <a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_J);
-0048 C_S = <a href="../.././mnt/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>(C_S);
-0049 
-0050 C_J(:,find(1-used))=0;
-0051 C_J(find(1-used),:)=0;
-0052 C_S(:,find(1-used))=0;
-0053 
-0054 <span class="comment">%if nargout&gt;4,</span>
-0055 <span class="comment">%</span>
-0056 <span class="comment">%  rho_2 = diag(1./J) * epsilon %%%%</span>
-0057 <span class="comment">%  Gamma =  ...</span>
-0058 <span class="comment">%    tensor_product(tensor_product(epsilon_2,C_S),C_S,2,1) ...</span>
-0059 <span class="comment">%    + tensor_product(rho_2,C_S,2,1) ...</span>
-0060 <span class="comment">%    + permute(tensor_product(rho_2,C_S,2,1),[1,3,2]);</span>
-0061 <span class="comment">%</span>
-0062 <span class="comment">%    C_S2 =   tensor_product(C_S,Gamma);</span>
-0063 <span class="comment">%    C_J2 =   tensor_product(C_J,Gamma);</span>
-0064 <span class="comment">%end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

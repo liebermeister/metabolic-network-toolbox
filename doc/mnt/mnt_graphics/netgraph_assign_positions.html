@@ -40,59 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% xpos = netgraph_assign_positions(network,picture,offsets,outfile)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [names,xpos] = netgraph_assign_positions(network,picture,offsets,outfile)</a>
-0004 
-0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'offsets'</span>,<span class="string">'[0,0]'</span>,<span class="string">'outfile'</span>,<span class="string">'[]'</span>));
-0006 
-0007 clf;
-0008 subplot(<span class="string">'position'</span>,[0 0 1 1]);
-0009 image(picture);
-0010 axis equal; axis tight;
-0011 title(<span class="string">'Left: set point, middle: clear last point, right: skip point'</span>);
-0012 
-0013 names = network.metabolites;
-0014 ntot = length(names);
-0015 
-0016 <span class="keyword">if</span> isfield(network,<span class="string">'graphics_par'</span>), 
-0017   xpos = network.graphics_par.x(:,1:ntot) + repmat(offsets',1,ntot);
-0018 <span class="keyword">else</span>,
-0019   xpos = nan * ones(2,ntot);
-0020 <span class="keyword">end</span>
-0021 
-0022 counter = 1;
-0023 
-0024 <span class="keyword">while</span> counter &lt;= ntot,
-0025 
-0026   display(sprintf(<span class="string">'%s %f %f'</span>,names{counter},xpos(1,counter),xpos(2,counter)));
-0027   r = input(sprintf(<span class="string">'[1] choose position, [2] go forward, [3] go back, [4] finish:   '</span>));
-0028   <span class="keyword">switch</span> r,
-0029   
-0030     <span class="keyword">case</span> 1, 
-0031       [x,y,button] = ginput(1);
-0032       xpos(:,counter) = [x,y] + offsets; 
-0033       display(sprintf(<span class="string">' %f %f'</span>,x,y));  counter = counter + 1;
-0034       
-0035     <span class="keyword">case</span> 2, counter = counter + 1; 
-0036       display([<span class="string">' skipped'</span>]);
-0037   
-0038     <span class="keyword">case</span> 3, 
-0039       counter = max(1,counter - 1); 
-0040       display([<span class="string">' going back to previous metabolite'</span>]);
-0041       
-0042     <span class="keyword">case</span> 4, counter = ntot + 1; 
-0043       
-0044   <span class="keyword">end</span>
-0045   
-0046 <span class="keyword">end</span>
-0047   
-0048 
-0049 <span class="keyword">if</span> ~isempty(outfile),
-0050   display(sprintf(<span class="string">'Writing positions to file %s'</span>,outfile));
-0051  <a href="../.././mnt/utils/mytable.html" class="code" title="function res = mytable(names,rownumbers,filename)">mytable</a>([names,cellstr(num2str(xpos(1,:)')),cellstr(num2str(xpos(2,:)'))],0,outfile);
-0052 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

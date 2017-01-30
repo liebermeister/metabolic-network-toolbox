@@ -41,36 +41,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function my_colorbar(vmin,vmax,n_step,location,showsign,cm)</a>
-0002 
-0003 <span class="comment">% my_colorbar(vmin,vmax,n_step,location,showsign,cm)</span>
-0004 <span class="comment">% test my_colorbar(-1,1,10)</span>
-0005 
-0006 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'n_step'</span>,<span class="string">'10'</span>,<span class="string">'showsign'</span>,<span class="string">'1'</span>,<span class="string">'location'</span>,<span class="string">'''east'''</span>,<span class="string">'cm'</span>,<span class="string">'my_colors(250)'</span>));
-0007   
-0008 colormap(cm)
-0009 <span class="keyword">if</span> showsign==0,
-0010   dummi = cm;
-0011   colormap(dummi(ceil(size(dummi,1)/2):<span class="keyword">end</span>,:));
-0012 <span class="keyword">else</span>, 
-0013   colormap(cm);
-0014 <span class="keyword">end</span>  
-0015 
-0016 h = colorbar;
-0017 get(h,<span class="string">'YLim'</span>);
-0018 ytick = ceil(1+249/(n_step*2^(1-showsign))*(0:n_step));
-0019 yticklabel = num2str((vmin + [0:full((vmax-vmin)/n_step):full(vmax-vmin)])');
-0020 
-0021 <span class="keyword">switch</span> location, 
-0022   <span class="keyword">case</span> {<span class="string">'north'</span>,<span class="string">'south'</span>,<span class="string">'northoutside'</span>,<span class="string">'southoutside'</span>},
-0023     set(h,<span class="string">'XTick'</span>,1+ytick,<span class="string">'Location'</span>,location,<span class="string">'XTickLabel'</span>,yticklabel);
-0024     set(h,<span class="string">'XTick'</span>,1+ytick,<span class="string">'Location'</span>,location,<span class="string">'XTickLabel'</span>,yticklabel);
-0025   <span class="keyword">case</span> {<span class="string">'west'</span>,<span class="string">'east'</span>,<span class="string">'westoutside'</span>,<span class="string">'eastoutside'</span>},
-0026     set(h,<span class="string">'YTick'</span>,ytick,<span class="string">'Location'</span>,location,<span class="string">'YTickLabel'</span>,yticklabel);
-0027     set(h,<span class="string">'YTick'</span>,ytick,<span class="string">'Location'</span>,location,<span class="string">'YTickLabel'</span>,yticklabel);
-0028     set(gcf,<span class="string">'PaperPosition'</span>,[.25 2.5 2 6]);
-0029 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -41,19 +41,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [m,n] = netgraph_define_module(network)</a>
-0002 
-0003 <span class="comment">% m = netgraph_define_module(network)</span>
-0004 <span class="comment">% choose the members of a network module</span>
-0005 
-0006 [m,p] = <a href="netgraph_mark_metabolites.html" class="code" title="function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)">netgraph_mark_metabolites</a>(network);
-0007 m = find(m);
-0008 
-0009 <span class="keyword">if</span> nargout&gt;1,
-0010 n = <a href="../.././mnt/mnt_network/network_build_edit/network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>(network,m);
-0011 n.kinetics = <a href="../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>(n,network.kinetics.type)
-0012 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -16,14 +16,15 @@
 % 
 % This function requires the SBMLToolbox (see http://sbml.org/software/sbmltoolbox/)
 
-
 function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
 
 if ~exist('TranslateSBML','file'),
   error('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.');
 end
 
-eval(default('verbose','0','name','''Model''','notes','''''','sbml_level','2','sbml_version','2'));
+eval(default('verbose','0','name','''Model''','notes','''''','sbml_level','2','sbml_version','2','filename','[]'));
+
+if length(filename)==0, filename = []; end 
 
 name = strrep(name,' ','_');
 name = strrep(name,'.','_');
@@ -313,7 +314,7 @@ end
 
 if verbose, fprintf('\n',it); end
 
-if exist('filename','var'),
+if length(filename),
   OutputSBML(SBMLmodel,filename);
   fprintf('Wrote SBML file "%s"\n',filename);
 end

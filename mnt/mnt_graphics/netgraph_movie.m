@@ -12,15 +12,27 @@
 %
 % usage: movie(M);
 %
+% options fields and default values (also options for netgraph_draw can be given)
+%   flux_moves            0 
+%   metabolite_colors     []
+%   reaction_colors       []
+%   metvaluesmin          0
+%   timebar               1
+%   background_colors     []
+%   use_background_colors 0
+%   rest_frames
+%   prefix
+%
 % to save a movie as an animated gif, use movie_save(filename,M)
 
 function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);
 
-eval(default('options','struct','data_type','''concentrations''','n_frames','[]','text_flag','0','timebar','1'));
+
+eval(default('options','struct','data_type','''concentrations''','n_frames','[]','text_flag','0'));
 
 if ~exist('options','var'), options = struct; end
 
-options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[]);
+options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0);
 
 options = join_struct(options_default, options);
 
@@ -48,8 +60,6 @@ if length(options.reaction_colors),
   options.reaction_colors(options.reaction_colors>1) = 1;
 end
 
-%[nm,nr] = size(network.N);
-
 switch data_type,    
   case 'concentrations',
     s_t_c = s_t;
@@ -71,14 +81,23 @@ switch data_type,
     s_t_v = s_t;
     nm    = 0;
     nr    = size(s_t,1);
-%  case 'both',
-%    s_t_c = s_t(1:nm,:);
-%    s_t_v = s_t(nm+1:end,:);
-%  otherwise, error('Unknown function option'); 
+  case 'both',
+    warning('data type "both" is not fully supported'); 
+    nm = options.nm;
+    nr = options.nr;
+    s_t_c = s_t(1:nm,:);
+    s_t_v = s_t(nm+1:end,:);
+  otherwise, error('Unknown function option'); 
 end
 
 metvalues = zeros(nm,length(T));
 actvalues = zeros(nr,length(T));
+
+nb = size(options.background_colors,1);
+
+if length(options.background_colors),
+  options.background_colors = interp1(0:1/[nb-1]:1,options.background_colors,0:1/[length(T)-1]:1);
+end
 
 for j = 1:length(T),
   switch data_type,    
@@ -88,12 +107,14 @@ for j = 1:length(T),
     case 'reactions',
       actvalues(:,j) =  s_t_v(:,j);
       options.metstyle = 'none';
-    %% case 'both',
-    %%   metvalues(:,j) = s_t_c(:,j);
-    %%   actvalues(:,j) = s_t_v(:,j);
-    %% case 'compute reactions',     
-    %%   metvalues(:,j) = s_t_c(:,j);
-    %%   actvalues(:,j) = network_velocities(metvalues(:,j),network,network.kinetics);    
+    case 'both',
+      warning('data type "both" is not fully supported'); 
+      metvalues(:,j) = s_t_c(:,j);
+      actvalues(:,j) = s_t_v(:,j);
+    case 'compute reactions',     
+      error('data type "compute reactions" is currently not supported'); 
+      metvalues(:,j) = s_t_c(:,j);
+      actvalues(:,j) = network_velocities(metvalues(:,j),network,network.kinetics);    
    otherwise, error('Unknown function option'); 
   end
 end
@@ -114,7 +135,16 @@ options_default.arrowstyle     = 'none';
 
 options = join_struct(options_default,options);
 
-if isfield(options,'timebar'), timebar = options.timebar; end
+if options.use_background_colors,
+  if options.background_colors,
+    if size(options.background_colors,2) ~= 3,
+      options.background_colors = options.background_colors';
+    end
+  end
+else
+  options.background_colors = [];
+end
+
 a = axis;
 clf;
 
@@ -139,19 +169,17 @@ for j=1:jj,
   
   clf; 
   subplot('position',[0 0 1 1]);
+  if options.background_colors,
+    options.canvas = options.background_colors(j,:);
+  end
   netgraph_concentrations(network,metvalues(:,j),actvalues(:,j),text_flag,options);
-  if timebar, 
+  if options.timebar, 
     hold on;  
     ss = network.graphics_par.squaresize;
     plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]); 
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0 0 0]);
+    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/4,[0 0 0]);
     circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/6,[1 1 1]);
-    % Blue circle
-    % plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0.4 0.7 1]); 
-    % circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0.2 0.5 1]);
-    % circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/3,[0.4 0.7 1]);
   end
-
   axis(a);
 
   M(j) = getframe(gca);

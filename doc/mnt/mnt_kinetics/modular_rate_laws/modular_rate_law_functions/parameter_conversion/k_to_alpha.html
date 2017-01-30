@@ -40,26 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [alpha_X,beta_X] = k_to_alpha(KX,c,hill);</a>
-0002 
-0003 <span class="comment">% [alpha_X,beta_X] = k_to_alpha(KX,c,hill);</span>
-0004 
-0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'hill'</span>,<span class="string">'1'</span>));
-0006 
-0007 [nr,nm] = size(KX);
-0008 ind_KX  = find(KX);
-0009 alpha_X = sparse(nr,nm); 
-0010 
-0011 <span class="keyword">if</span> nargout == 1,
-0012   log_alpha_X = <a href="k_to_log_alpha.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);">k_to_log_alpha</a>(KX,c,hill);
-0013   alpha_X(ind_KX) = exp(log_alpha_X(ind_KX));
-0014 <span class="keyword">else</span>
-0015   [log_alpha_X,log_beta_X] = <a href="k_to_log_alpha.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);">k_to_log_alpha</a>(KX,c,hill);
-0016   alpha_X(ind_KX)  = exp(log_alpha_X(ind_KX));
-0017   beta_X           = sparse(nr,nm); 
-0018   beta_X(ind_KX)   = exp(log_beta_X(ind_KX));
-0019 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -42,24 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function values = network_get_parameters(network,names)</a>
-0002 
-0003 <span class="comment">% values = network_get_parameters(network, names)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% works only for 'numeric' kinetics</span>
-0006 
-0007 values = [];
-0008 
-0009 <span class="keyword">switch</span> network.kinetics.type,
-0010   <span class="keyword">case</span> <span class="string">'numeric'</span>,
-0011     <span class="keyword">for</span> it = 1:length(names),
-0012       <span class="keyword">if</span> isfield(network.kinetics.parameters, names{it}),
-0013         values(it,:) = getfield(network.kinetics.parameters, names{it});
-0014       <span class="keyword">end</span>
-0015     <span class="keyword">end</span>
-0016   <span class="keyword">otherwise</span>, warning(<span class="string">'Network_get_parameters not implemented for this type of kinetics'</span>); 
-0017 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

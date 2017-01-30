@@ -43,39 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result = load_any_table(filename,delimiter)</a>
-0002 
-0003 <span class="comment">% list = load_any_table(filename)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% loads a tab-delimited file and puts it into a cell array</span>
-0006 <span class="comment">% filename: name of tab-delimited file containing strings and numbers</span>
-0007 
-0008 <span class="keyword">if</span> ~exist(<span class="string">'delimiter'</span>,<span class="string">'var'</span>), delimiter = sprintf(<span class="string">'\t'</span>); <span class="keyword">end</span>
-0009 
-0010 <span class="keyword">try</span>
-0011 
-0012   A = {};
-0013   fid         = fopen(filename);
-0014   line_number = 1; 
-0015   <span class="keyword">while</span> 1,
-0016     tline  = fgetl(fid);
-0017     <span class="keyword">if</span> ~ischar(tline), <span class="keyword">break</span>, <span class="keyword">end</span>
-0018     delpos = findstr(tline,delimiter);
-0019     delpos = [0, delpos, length(tline)+1];
-0020     <span class="keyword">for</span> it = 1:length(delpos)-1,
-0021       result{line_number,it} = tline(delpos(it)+1:delpos(it+1)-1);
-0022     <span class="keyword">end</span>
-0023     line_number = line_number + 1;
-0024   <span class="keyword">end</span>
-0025   fclose(fid);
-0026 
-0027   result = result(:,find(sum(cellfun(<span class="string">'length'</span>,result),1)&gt;0));
-0028 
-0029 <span class="keyword">catch</span> 
-0030   warning(sprintf(<span class="string">'File %s not found'</span>,filename));
-0031   result = [];
-0032 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -44,62 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [omega,y] = my_fft(x,T)</a>
-0002 
-0003 <span class="comment">% let x contain the values of x(t) at</span>
-0004 <span class="comment">% t = -T .. 0 .. T</span>
-0005 <span class="comment">%</span>
-0006 <span class="comment">% calculate values of y and omega such that</span>
-0007 <span class="comment">% y(omega) is (approximately) the continuous Fourier transform of x(t)</span>
-0008 
-0009 <span class="keyword">if</span> ~exist(<span class="string">'T'</span>,<span class="string">'var'</span>), T=1; <span class="keyword">end</span> 
-0010 
-0011 dt = 2*T / (length(x)-1 );
-0012 y  = fftshift(fft(ifftshift(x)));
-0013 
-0014 y     = y * dt;
-0015 f     = -1/dt : 1/T : 1/dt;
-0016 omega = f/2*(2*pi);
-0017 
-0018 <span class="keyword">return</span>
-0019 
-0020 <span class="comment">% test</span>
-0021 
-0022 T = 500; 
-0023 dt = 0.1;
-0024 t = 0:dt:T;
-0025 f     = -1/dt : 1/T : 1/dt;
-0026 omega = f/2*(2*pi);
-0027 
-0028 a = 1;
-0029 
-0030 <span class="comment">% ------------------</span>
-0031 
-0032 x = 1./(t.^2+a^2);
-0033 ty = pi/a*exp(-a*abs(omega));
-0034 
-0035 <span class="comment">%x = 1/sqrt(4*pi*a)*exp(-t.^2/(4*pi*a^2));</span>
-0036 <span class="comment">%ty = exp(-a*omega.^2);</span>
-0037 
-0038 x = cos(a*t);
-0039 
-0040 <span class="comment">%x=1./cosh(t);</span>
-0041 <span class="comment">%yt = pi./cosh(pi*omega/2);</span>
-0042 
-0043 
-0044 <span class="comment">%x = 1./sqrt(t);</span>
-0045 <span class="comment">%yt = sqrt(pi/2)*1./sqrt(omega);</span>
-0046 [y,omega] = <a href="contfft.html" class="code" title="function [X,w] = contfft(x,T);">contfft</a>(x,dt);
-0047 
-0048 <span class="comment">%[omega,y] = my_fft(x,T);</span>
-0049 subplot(2,1,1); plot(t,x);
-0050 subplot(2,1,2); plot_complex(omega,y,<span class="string">'-'</span>);
-0051 
-0052 hold on ; plot(omega,ty,<span class="string">'g'</span>); hold off
-0053 
-0054 
-0055 <span class="comment">%hold on ; plot(omega,exp(-a*omega.^2),'g'); hold off</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -40,21 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h)</a>
-0002 
-0003 <span class="comment">% [kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)</span>
-0004 
-0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'KV'</span>,<span class="string">'kinetics.KV'</span>,<span class="string">'Keq'</span>,<span class="string">'kinetics.Keq'</span>,<span class="string">'KM'</span>,<span class="string">'kinetics.KM'</span>,<span class="string">'h'</span>,<span class="string">'ones(size(KV))'</span>));
-0006 
-0007 [kcatplus,kcatminus] = <a href="ms_compute_Kcat.html" class="code" title="function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);">ms_compute_Kcat</a>(N,KM,KV,Keq);
-0008 
-0009 <span class="comment">% DEPRECATED</span>
-0010 <span class="comment">% all_KM              = ones(size(N'));</span>
-0011 <span class="comment">% all_KM(find(N'~=0)) = kinetics.KM(find(N'~=0));</span>
-0012 <span class="comment">% prod_KM             = prod(all_KM.^(N'),2);</span>
-0013 <span class="comment">% kcatplus            = KV .* [sqrt(Keq ./ prod_KM) .^ h];</span>
-0014 <span class="comment">% kcatminus           = KV ./ [sqrt(Keq ./ prod_KM) .^ h];</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

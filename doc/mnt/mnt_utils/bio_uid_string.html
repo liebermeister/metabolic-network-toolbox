@@ -42,20 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [s,s_short] = bio_uid_string(uidlist)</a>
-0002 
-0003 <span class="comment">% uids describe a biochemical quantity by a matlab structure</span>
-0004 <span class="comment">% with (at least) fields object, is_reaction, quantity, unit</span>
-0005 <span class="comment">% to be identical, they have to be identical in each of these fields</span>
-0006 
-0007 <span class="keyword">for</span> it=1:length(uidlist),
-0008  s{it}       = sprintf(<span class="string">'[%s %s %s %d]'</span>,uidlist{it}.object,uidlist{it}.quantity,uidlist{it}.unit,uidlist{it}.is_reaction);
-0009  s_short{it} = sprintf(<span class="string">'%s'</span>,uidlist{it}.object);
-0010 <span class="keyword">end</span>
-0011 
-0012 s =s';
-0013 s_short = s_short';</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

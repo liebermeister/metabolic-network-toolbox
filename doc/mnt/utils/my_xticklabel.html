@@ -4,7 +4,7 @@
 <head>
   <title>Description of my_xticklabel</title>
   <meta name="keywords" content="my_xticklabel">
-  <meta name="description" content="my_xticklabel(x,y,s,siz)">
+  <meta name="description" content="">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,42 +21,26 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>my_xticklabel(x,y,s,siz)</strong></div>
+<div class="box"><strong></strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function my_xticklabel(x,y,s,siz) </strong></div>
+<div class="box"><strong>function my_xticklabel(x,y,s,siz,col) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment">my_xticklabel(x,y,s,siz)</pre></div>
+<div class="fragment"><pre class="comment"></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function my_xticklabel(x,y,s,siz)</a>
-0002 
-0003 <span class="comment">%my_xticklabel(x,y,s,siz)</span>
-0004 
-0005 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'s'</span>,<span class="string">'get(gca,''XTickLabel'')'</span>));
-0006 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'y'</span>,<span class="string">'[]'</span>));
-0007 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'siz'</span>,<span class="string">'get(gca,''Fontsize'')'</span>));
-0008 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'x'</span>,<span class="string">'get(gca,''XTick'')'</span>));<span class="comment">%</span>
-0009 
-0010 <span class="keyword">if</span> isempty(x), x = (1:length(s))'; <span class="keyword">end</span>
-0011 <span class="keyword">if</span> isempty(y), a = axis; y=a(3); <span class="keyword">end</span>
-0012 
-0013 set(gca,<span class="string">'XTick'</span>,[]);
-0014 <span class="keyword">for</span> it=1:length(x),
-0015    text(x(it),y,s{it},<span class="string">'Rotation'</span>,90,<span class="string">'Fontsize'</span>,siz);
-0016 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

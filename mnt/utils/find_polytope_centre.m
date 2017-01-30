@@ -21,8 +21,6 @@ end
 % using this lead to problems before (no feasible solution found)!!
 % opt = optimset('MaxIter',10^10,'LargeScale','off','Display','off');
 
-opt = optimset('Display','off');
-
 x1 = [];
 x2 = [];
 
@@ -31,9 +29,11 @@ if sum(x_upper < x_lower), error('Wrong bounds'); end
 for it = 1:x_length,
   z = zeros(x_length,1);
   if exist('cplexlp','file'),
+    opt = cplexoptimset('Display','off');
     z(it) = 1;  [solution1,value,exitflag1] = cplexlp(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
     z(it) = -1; [solution2,value,exitflag2] = cplexlp(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
   else
+    opt = optimset('Display','off');
     z(it) = 1;  [solution1,value,exitflag1] = linprog(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
     z(it) = -1; [solution2,value,exitflag2] = linprog(z,M_ineq,b_ineq,M_eq,b_eq,x_lower,x_upper,[],opt);
   end

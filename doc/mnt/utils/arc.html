@@ -39,26 +39,11 @@ This function calls:
 <li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././mnt/mnt_graphics/draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, i1_list,i2_list, linewidth)">draw_metabolite_arcs</a>	draw_metabolite_arcs(network, colors, i1_list,i2_list, linewidth)</li><li><a href="../.././mnt/mnt_graphics/draw_reaction_arcs.html" class="code" title="function draw_reaction_arcs(network, colors, i1_list, i2_list, linewidth)">draw_reaction_arcs</a>	draw_reaction_arcs(network,colors,i1_list,i2_list,linewidth)</li><li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
+<li><a href="../.././mnt/mnt_graphics/draw_metabolite_arcs.html" class="code" title="function draw_metabolite_arcs(network, colors, i1_list,i2_list, linewidth)">draw_metabolite_arcs</a>	draw_metabolite_arcs(network, colors, i1_list,i2_list, linewidth)</li><li><a href="../.././mnt/mnt_graphics/draw_reaction_arcs.html" class="code" title="function draw_reaction_arcs(network, colors, i1_list, i2_list, linewidth)">draw_reaction_arcs</a>	draw_reaction_arcs(network,colors,i1_list,i2_list,linewidth)</li><li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% -------------------------</span>
-0002 <span class="comment">% compute positions on an arc: x3 all points for drawing;</span>
-0003 <span class="comment">% arcx,arcy: positions of central point (used for arrow)</span>
-0004 <span class="comment">% arrow_shift: allows for moving the central point</span>
-0005  
-0006 <a name="_sub0" href="#_subfunctions" class="code">function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);</a>
-0007  
-0008 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'arrow_shift'</span>,<span class="string">'0.5'</span>));
-0009  s = 0:0.1:pi;
-0010  x = repmat(mean([x1,x2],2),1,length(s)) <span class="keyword">...</span>
-0011       + 0.5 * [x2-x1] * cos(s) + height * 0.5 * [0 -1; 1 0] * [x2-x1] * sin(s);
-0012  nn = max(1,ceil(arrow_shift * size(x,2)));
-0013  arcx = x(1,nn); 
-0014  arcy = x(2,nn); 
-0015</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

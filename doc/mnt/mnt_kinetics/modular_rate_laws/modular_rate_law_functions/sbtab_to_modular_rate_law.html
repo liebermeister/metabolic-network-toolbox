@@ -33,74 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
-<li><a href="../../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_KV_Keq_to_kcat.html" class="code" title="function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h)">modular_KV_Keq_to_kcat</a>	[kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)</li><li><a href="../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="../../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_KV_Keq_to_kcat.html" class="code" title="function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h)">modular_KV_Keq_to_kcat</a>	[kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)</li><li><a href="../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../.././mnt/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../../matlabicon.gif)">
 <li><a href="../../../.././mnt/mnt_network/network_import_export/sbtab_to_network.html" class="code" title="function [network, kinetic_data] = sbtab_to_network(filename,options)">sbtab_to_network</a>	function network = sbtab_to_network(filename,options)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [kinetics, sbtab_table] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)</a>
-0002 
-0003 <span class="comment">% [kinetics, sbtab_table] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)</span>
-0004 
-0005 eval(<a href="../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>));
-0006 
-0007 options_default = struct(<span class="string">'use_sbml_ids'</span>,1,<span class="string">'kinetic_law'</span>,<span class="string">'cs'</span>,<span class="string">'verbose'</span>,<span class="string">'0'</span>);
-0008 options         = <a href="../../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(options_default,options);
-0009 
-0010 <span class="keyword">switch</span> options.kinetic_law,
-0011   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>,<span class="string">'rp'</span>,<span class="string">'ma'</span>,<span class="string">'fm'</span>}, <span class="comment">% UPDATE rate law names!</span>
-0012      kinetics = <a href="../../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>(network,options.kinetic_law);
-0013   <span class="keyword">otherwise</span>, error(<span class="string">'Conversion is only possible for modular rate law'</span>);
-0014 <span class="keyword">end</span>
-0015 
-0016 sbtab_table = sbtab_table_load(file_kinetic_data);
-0017 QuantityType = sbtab_table_get_column(sbtab_table,<span class="string">'QuantityType'</span>);
-0018 Value        = <a href="../../../.././mnt/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>(sbtab_table_get_column(sbtab_table,<span class="string">'Value'</span>));
-0019 Compound     = sbtab_table_get_column(sbtab_table,<span class="string">'Compound'</span>);
-0020 Reaction     = sbtab_table_get_column(sbtab_table,<span class="string">'Reaction'</span>);
-0021 compound_ind = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Compound,network.metabolites);
-0022 reaction_ind = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction,network.actions);
-0023 
-0024 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = <a href="../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0025 
-0026 ind_Keq = find(strcmp(QuantityType,<span class="string">'equilibrium constant'</span>));
-0027 ind_Keq = ind_Keq(<a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction(ind_Keq),network.actions));
-0028 kinetics.Keq = Value(ind_Keq);
-0029 
-0030 ind_KV = find(strcmp(QuantityType,<span class="string">'catalytic rate constant geometric mean'</span>));
-0031 ind_KV = ind_KV(<a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction(ind_KV),network.actions));
-0032 kinetics.KV = Value(ind_KV);
-0033 
-0034 ind_c = find(strcmp(QuantityType,<span class="string">'concentration'</span>));
-0035 ind_c = ind_c(<a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Compound(ind_c),network.metabolites));
-0036 kinetics.c = Value(ind_c);
-0037 
-0038 ind_u = find(strcmp(QuantityType,<span class="string">'concentration of enzyme'</span>));
-0039 ind_u = ind_u(<a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction(ind_u),network.actions));
-0040 kinetics.u = Value(ind_u);
-0041 
-0042 ind_KM  = find(strcmp(QuantityType,<span class="string">'Michaelis constant'</span>));
-0043 ind_KMc = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Compound(ind_KM),network.metabolites);
-0044 ind_KMr = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction(ind_KM),network.actions);
-0045 kinetics.KM = zeros(nr,nm);
-0046 kinetics.KM(sub2ind([nr,nm],ind_KMr,ind_KMc)) = Value(ind_KM);
-0047 
-0048 ind_KI  = find(strcmp(QuantityType,<span class="string">'inhibitory constant'</span>));
-0049 ind_KIc = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Compound(ind_KI),network.metabolites);
-0050 ind_KIr = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction(ind_KI),network.actions);
-0051 kinetics.KI = zeros(nr,nm);
-0052 kinetics.KI(sub2ind([nr,nm],ind_KIr,ind_KIc)) = Value(ind_KI);
-0053 
-0054 ind_KA  = find(strcmp(QuantityType,<span class="string">'activation constant'</span>));
-0055 ind_KAc = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Compound(ind_KA),network.metabolites);
-0056 ind_KAr = <a href="../../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(Reaction(ind_KA),network.actions);
-0057 kinetics.KA = zeros(nr,nm);
-0058 kinetics.KA(sub2ind([nr,nm],ind_KAr,ind_KAc)) = Value(ind_KA);
-0059 
-0060 [kinetics.Kcatf, kinetics.Kcatr] = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_KV_Keq_to_kcat.html" class="code" title="function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h)">modular_KV_Keq_to_kcat</a>(network.N,kinetics,kinetics.KV,kinetics.Keq,kinetics.KM,kinetics.h);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

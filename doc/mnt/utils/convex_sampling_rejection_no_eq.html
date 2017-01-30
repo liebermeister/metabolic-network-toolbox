@@ -52,61 +52,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,n_sample,xl,xu,verbose,options)</a>
-0002 
-0003 <span class="comment">% [x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling_rejection_no_eq(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,options);</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% Uniform sampling of column vectors x in convex polytope by Rejection Method</span>
-0006 <span class="comment">% Draw uniformly from the box defined by [x_lower x_upper]</span>
-0007 <span class="comment">% and discard all vectors that violate the inequality constraints</span>
-0008 <span class="comment">% The polytope is defined by</span>
-0009 <span class="comment">%</span>
-0010 <span class="comment">% A_ineq * x &lt; b_ineq</span>
-0011 <span class="comment">%</span>
-0012 <span class="comment">% Default values: n_sample = 1</span>
-0013 <span class="comment">% Compute lower and upper bounds for solutions (by linear programming)</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">% for sampling with equality constraints, see convex_sampling_rejection_method</span>
-0016 
-0017 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'n_sample'</span>,<span class="string">'1'</span>,<span class="string">'xl'</span>,<span class="string">'[]'</span>,<span class="string">'xu'</span>,<span class="string">'[]'</span>,<span class="string">'verbose'</span>,<span class="string">'0'</span>));
-0018 
-0019 lx = size(A_ineq,2);
-0020 
-0021 opt = optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>);
-0022 success_flag = 1;
-0023 
-0024 <span class="keyword">for</span> it = 1:lx,
-0025   <span class="keyword">if</span> verbose, 
-0026     display(sprintf(<span class="string">'Checking dimension %d/%d'</span>, it, lx))
-0027   <span class="keyword">end</span>
-0028   vec = zeros(lx,1);
-0029   vec(it) = 1;
-0030   [x_low,f_low,status1] = linprog( vec, A_ineq, b_ineq,[],[],[],[],[],opt);
-0031   [x_upp,f_upp,status2] = linprog(-vec, A_ineq, b_ineq,[],[],[],[],[],opt);  
-0032   <span class="keyword">if</span> ([status1 == -2]+[status2 == -2]), error(<span class="string">'No feasible point found'</span>); <span class="keyword">end</span>
-0033   <span class="keyword">if</span> ~double([status1 == 1]*[status2 == 1]), 
-0034     [status1, status2]
-0035     error(<span class="string">'linprog returned error'</span>);
-0036   <span class="keyword">end</span>
-0037   x_lower(it,1) = x_low(it);
-0038   x_upper(it,1) = x_upp(it);
-0039   x_lower_list(:,it) = x_low; 
-0040   x_upper_list(:,it) = x_upp; 
-0041 <span class="keyword">end</span>
-0042 
-0043 x = [];
-0044 z = 0;
-0045 <span class="keyword">while</span> z&lt;n_sample,
-0046   this_x = x_lower + rand(size(x_lower)) .* [x_upper-x_lower];
-0047   <span class="keyword">if</span> verbose, 
-0048     display(sprintf(<span class="string">'Found  %d/%d feasible samples'</span>, z, n_sample))
-0049   <span class="keyword">end</span>
-0050   <span class="keyword">if</span> A_ineq * this_x &lt; b_ineq,
-0051     z = z+1;
-0052     x(:,z) = this_x;
-0053   <span class="keyword">end</span>
-0054 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

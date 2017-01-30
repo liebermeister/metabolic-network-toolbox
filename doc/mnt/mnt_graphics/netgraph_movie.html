@@ -4,7 +4,7 @@
 <head>
   <title>Description of netgraph_movie</title>
   <meta name="keywords" content="netgraph_movie">
-  <meta name="description" content="[M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);">
+  <meta name="description" content="[M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,13 +21,13 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>[M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);</strong></div>
+<div class="box"><strong>[M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="box"><strong>function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options); </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);
+<div class="fragment"><pre class="comment"> [M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);
 
  s_t must be #variables x #timepoints !!!
 
@@ -41,163 +41,31 @@
 
  usage: movie(M);
 
+ options fields and default values (also options for netgraph_draw can be given)
+   flux_moves            0 
+   metabolite_colors     []
+   reaction_colors       []
+   metvaluesmin          0
+   timebar               1
+   background_colors     []
+   use_background_colors 0
+   rest_frames
+   prefix
+
  to save a movie as an animated gif, use movie_save(filename,M)</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../.././mnt/utils/circle.html" class="code" title="function circle(x,y,r,col)">circle</a>	circle(x,y,r,col)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
+<li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../.././mnt/utils/circle.html" class="code" title="function circle(x,y,r,col,filled,linewidth)">circle</a>	circle(x,y,r,col,filled,linewidth)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [M,T] = netgraph_movie(network, t ,s_t, data_type, n_frames, text_flag, options);</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% s_t must be #variables x #timepoints !!!</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% data_type {'concentrations','reactions','both','compute reactions'}</span>
-0006 <span class="comment">% default: concentrations</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% if 'both' is chosen, then s_t must contain the matrix of concentration</span>
-0009 <span class="comment">% time courses and below the matrix of reaction velocity time courses</span>
-0010 <span class="comment">%</span>
-0011 <span class="comment">% Symbols colors for each frame can be specified in options.metabolite_colors and options.reaction_colors</span>
-0012 <span class="comment">%</span>
-0013 <span class="comment">% usage: movie(M);</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">% to save a movie as an animated gif, use movie_save(filename,M)</span>
-0016 
-0017 <a name="_sub0" href="#_subfunctions" class="code">function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);</a>
-0018 
-0019 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'options'</span>,<span class="string">'struct'</span>,<span class="string">'data_type'</span>,<span class="string">'''concentrations'''</span>,<span class="string">'n_frames'</span>,<span class="string">'[]'</span>,<span class="string">'text_flag'</span>,<span class="string">'0'</span>,<span class="string">'timebar'</span>,<span class="string">'1'</span>));
-0020 
-0021 <span class="keyword">if</span> ~exist(<span class="string">'options'</span>,<span class="string">'var'</span>), options = struct; <span class="keyword">end</span>
-0022 
-0023 options_default = struct(<span class="string">'flux_moves'</span>,0,<span class="string">'metabolite_colors'</span>,[],<span class="string">'reaction_colors'</span>,[]);
-0024 
-0025 options = <a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(options_default, options);
-0026 
-0027 <span class="keyword">if</span> isempty(n_frames), n_frames = 10; <span class="keyword">end</span>
-0028 
-0029 t = t-min(t);
-0030 
-0031 T = max(t)*(0:1/(n_frames-1):1);
-0032 
-0033 nandata = find(sum(isfinite(s_t),2)==0);
-0034 s_t(sum(isfinite(s_t),2)==0,:)=0;
-0035 s_t            = interp1(t,s_t',T,<span class="string">'cubic'</span>)';
-0036 s_t(nandata,:) = nan;
-0037 <span class="keyword">if</span> size(s_t,2)==1, s_t = s_t'; <span class="keyword">end</span>
-0038 
-0039 
-0040 <span class="keyword">if</span> length(options.metabolite_colors), 
-0041   options.metabolite_colors = interp1(t,options.metabolite_colors,T,<span class="string">'cubic'</span>);
-0042   options.metabolite_colors(options.metabolite_colors&lt;0) = 0;
-0043   options.metabolite_colors(options.metabolite_colors&gt;1) = 1;
-0044 <span class="keyword">end</span>
-0045 
-0046 <span class="keyword">if</span> length(options.reaction_colors), 
-0047   options.reaction_colors = interp1(t,options.reaction_colors,T,<span class="string">'cubic'</span>);
-0048   options.reaction_colors(options.reaction_colors&lt;0) = 0;
-0049   options.reaction_colors(options.reaction_colors&gt;1) = 1;
-0050 <span class="keyword">end</span>
-0051 
-0052 [nm,nr] = size(network.N);
-0053 
-0054 <span class="keyword">if</span> isfield(network.graphics_par,<span class="string">'reaction_mapping'</span>), 
-0055   nr = max(network.graphics_par.reaction_mapping); 
-0056   nm = size(s_t,1) - nr;
-0057 <span class="keyword">end</span>
-0058 
-0059 <span class="keyword">if</span> isfield(network.graphics_par,<span class="string">'metabolite_mapping'</span>), 
-0060   nm = max(network.graphics_par.metabolite_mapping); 
-0061 <span class="keyword">end</span>
-0062 
-0063 metvalues = zeros(nm,length(T));
-0064 actvalues = zeros(nr,length(T));
-0065 
-0066 <span class="keyword">for</span> j = 1:length(T),
-0067   <span class="keyword">switch</span> data_type,    
-0068     <span class="keyword">case</span> <span class="string">'concentrations'</span>,
-0069       metvalues(:,j) = s_t(:,j);
-0070       options.actstyle = <span class="string">'none'</span>;
-0071     <span class="keyword">case</span> <span class="string">'reactions'</span>,
-0072       actvalues(:,j) =  s_t(:,j);
-0073       options.metstyle = <span class="string">'none'</span>;
-0074     <span class="keyword">case</span> <span class="string">'both'</span>,
-0075       metvalues(:,j) = s_t(1:nm,j);
-0076       actvalues(:,j) = s_t(nm+1:<span class="keyword">end</span>,j);
-0077     <span class="keyword">case</span> <span class="string">'compute reactions'</span>,
-0078       metvalues(:,j) = s_t(:,j);
-0079       actvalues(:,j) = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(metvalues(:,j),network,network.kinetics);    
-0080   <span class="keyword">end</span>
-0081 <span class="keyword">end</span>
-0082 
-0083 jj = j;
-0084 
-0085 <span class="keyword">if</span> length(metvalues), options_default.metvaluesmax = max(max(metvalues(:)),0.001); <span class="keyword">end</span>
-0086 <span class="keyword">if</span> length(actvalues), options_default.actvaluesmax = max(max(actvalues(:)),0.001); <span class="keyword">end</span>
-0087 
-0088 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,metvalues(:,1),actvalues(:,1),0,options_default);
-0089 
-0090 options_default.figure_axis    = axis;
-0091 options_default.actprintvalues = 0;
-0092 options_default.metprintvalues = 0; 
-0093 options_default.arrowstyle     = <span class="string">'none'</span>;
-0094 
-0095 options = <a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(options_default,options);
-0096 
-0097 <span class="keyword">if</span> isfield(options,<span class="string">'timebar'</span>), timebar = options.timebar; <span class="keyword">end</span>
-0098 a = axis;
-0099 clf;
-0100 
-0101 <span class="keyword">for</span> j=1:jj,
-0102 
-0103   set(gcf,<span class="string">'Color'</span>,[1 1 1]);
-0104 
-0105   <span class="keyword">if</span> options.flux_moves,
-0106     arrow_shift         = mod(options.flux_moves*j,jj)/jj;
-0107     options.arrow_shift = arrow_shift;
-0108   <span class="keyword">end</span>
-0109 
-0110   <span class="keyword">if</span> length(options.metabolite_colors),
-0111     options.metcolors = squeeze(options.metabolite_colors(j,:,:));
-0112     <span class="keyword">if</span> size( options.metcolors,2) == 1, options.metcolors = options.metcolors'; <span class="keyword">end</span>
-0113   <span class="keyword">end</span>
-0114 
-0115   <span class="keyword">if</span> length(options.reaction_colors),
-0116     options.actcolors = squeeze(options.reaction_colors(j,:,:));
-0117     <span class="keyword">if</span> size( options.actcolors,2) == 1, options.actcolors = options.actcolors'; <span class="keyword">end</span>
-0118   <span class="keyword">end</span>
-0119   
-0120   <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network,metvalues(:,j),actvalues(:,j),text_flag,options);
-0121 
-0122   <span class="keyword">if</span> timebar, 
-0123     hold on;  
-0124     ss = network.graphics_par.squaresize;
-0125     plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],<span class="string">'-'</span>,<span class="string">'Color'</span>,[0.4 0.7 1]); 
-0126     <a href="../.././mnt/utils/circle.html" class="code" title="function circle(x,y,r,col)">circle</a>( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0.2 0.5 1]);
-0127     <a href="../.././mnt/utils/circle.html" class="code" title="function circle(x,y,r,col)">circle</a>( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/3,[0.4 0.7 1]);
-0128   <span class="keyword">end</span>
-0129 
-0130   axis(a);
-0131 
-0132   M(j) = getframe(gca);
-0133 
-0134   <span class="keyword">if</span> isfield(options,<span class="string">'prefix'</span>),
-0135     <span class="keyword">if</span> j ==1,             print([options.prefix <span class="string">'_start.eps'</span>],<span class="string">'-f1'</span>,<span class="string">'-depsc'</span>); <span class="keyword">end</span>
-0136     <span class="keyword">if</span> j == ceil(0.8*jj), print([options.prefix <span class="string">'_end.eps'</span>],<span class="string">'-f1'</span>,<span class="string">'-depsc'</span>);   <span class="keyword">end</span>
-0137   <span class="keyword">end</span>
-0138 
-0139 <span class="keyword">end</span>
-0140 
-0141 <span class="keyword">if</span> isfield(options,<span class="string">'rest_frames'</span>),
-0142   M = [ repmat(M(1),1,options.rest_frames), M, repmat(M(end),1,options.rest_frames)];
-0143 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

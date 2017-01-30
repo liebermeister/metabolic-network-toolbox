@@ -16,7 +16,7 @@ end
 model_matrices.absNkm     = abs(model_matrices.Nkm );
 model_matrices.Nft        = sparse(abs(network.N') .* double([network.N'<0]));
 model_matrices.Nrt        = sparse(    network.N'  .* double([network.N'>0]));
-model_matrices.RT         = 2.4942; % kJ/mol
+model_matrices.RT         = RT;
 
 model_matrices.h          = speye(nr);
 if isfield(network,'kinetics'),

@@ -40,21 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function C = test_new_vectors(C,Cnew)</a>
-0002 
-0003 <span class="comment">% C = test_new_vectors(C,Cnew)</span>
-0004 
-0005 Cs    = abs(sign(C));
-0006 Csnew = abs(sign(Cnew));
-0007 
-0008 <span class="keyword">for</span> j=1:size(Csnew,2)
-0009   t = Cs'*Csnew(:,j) - sum(Cs ~= 0,1)';
-0010   <span class="keyword">if</span> sum(t ~= 0) == length(t) &amp; sum( Csnew(:,j)~=0)~=0
-0011     C=[C Cnew(:,j)];
-0012     Cs=[Cs Csnew(:,j)];
-0013   <span class="keyword">end</span>
-0014 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

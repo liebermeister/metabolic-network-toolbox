@@ -42,75 +42,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li></ul>
+<li><a href="fba.html" class="code" title="function [v,value,lambda_ind_int] = fba(network,fba_constraints)">fba</a>	[v,benefit] = fba(network,fba_constraints)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)</a>
-0002 
-0003 <span class="comment">% [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% f_ref      unperturbed objective value</span>
-0006 <span class="comment">% f_single   single-perturbation objectives (vector)</span>
-0007 <span class="comment">% f_double   double-perturbation objectives (matrix)</span>
-0008 <span class="comment">% v_ref      unperturbed flux mode</span>
-0009 <span class="comment">% v_single   single-perturbation flux modes (matrix)</span>
-0010 <span class="comment">% v_double   double-perturbation flux modes (tensor)</span>
-0011 <span class="comment">% df1        single-perturbation objective deficits (vector)</span>
-0012 <span class="comment">% df2        double-perturbation synergistic objective deficits (matrix)</span>
-0013 
-0014 epsilon = 10^-8;
-0015 
-0016 [nm,nr]        = size(network.N);
-0017 [v_ref, f_ref] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints);
-0018 
-0019 <span class="keyword">for</span> it1 = 1:nr,
-0020 
-0021   <span class="comment">%% first order</span>
-0022   fba_constraints_1 = fba_constraints;
-0023   <span class="keyword">if</span> v_ref(it1)&gt;0,
-0024     fba_constraints_1.v_max(it1) = inhibition_factor * v_ref(it1);
-0025   <span class="keyword">end</span>
-0026   <span class="keyword">if</span> v_ref(it1)&lt;0,
-0027     fba_constraints_1.v_min(it1) = inhibition_factor * v_ref(it1);
-0028   <span class="keyword">end</span>
-0029 
-0030   <span class="comment">%% second order</span>
-0031   [v_single(:,it1),f_single(it1,1)] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints_1);
-0032   <span class="keyword">for</span> it2 = 1:it1-1,
-0033     fba_constraints_2 = fba_constraints_1;
-0034     <span class="keyword">if</span> v_ref(it2)&gt;0,
-0035       fba_constraints_2.v_max(it2) = inhibition_factor * v_ref(it2);
-0036     <span class="keyword">end</span>
-0037     <span class="keyword">if</span> v_ref(it2)&lt;0,
-0038       fba_constraints_2.v_min(it2) = inhibition_factor * v_ref(it2);
-0039     <span class="keyword">end</span>
-0040     [v_double(:,it1,it2),f_double(it1,it2)] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints_2);
-0041   <span class="keyword">end</span>
-0042 
-0043   <span class="comment">% diagonal elements (square perturbation!)</span>
-0044   it2 = it1;
-0045   fba_constraints_2 = fba_constraints_1;
-0046   <span class="keyword">if</span> v_ref(it2)&gt;0,
-0047     fba_constraints_2.v_max(it2) = inhibition_factor^2 * v_ref(it2);
-0048   <span class="keyword">end</span>
-0049   <span class="keyword">if</span> v_ref(it2)&lt;0,
-0050     fba_constraints_2.v_min(it2) = inhibition_factor^2 * v_ref(it2);
-0051   <span class="keyword">end</span>
-0052   [v_double(:,it1,it2),f_double(it1,it2)] = <a href="fba.html" class="code" title="function [v,value] = fba(network,fba_constraints)">fba</a>(network,fba_constraints_2);
-0053 <span class="keyword">end</span>
-0054 
-0055 f_double = f_double + f_double' - diag(diag(f_double));
-0056 
-0057 f_single(abs(f_single)&lt;epsilon) = 0;
-0058 f_double(abs(f_double)&lt;epsilon) = 0;
-0059 
-0060 df1 = f_single - f_ref; 
-0061 df2 = f_double - f_ref - repmat(df1,1,nr) - repmat(df1',nr,1);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

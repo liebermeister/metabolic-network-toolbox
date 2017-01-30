@@ -14,7 +14,7 @@ while ~stop,
   if this_line == -1, 
     stop = 1; 
   else,
-    this_line = strsplit(sprintf('\t'),this_line,'omit');
+    this_line = Strsplit(sprintf('\t'),this_line,'omit');
     T(size(T,1)+1,1:length(this_line)) = this_line;
   end
 end

@@ -33,53 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
+<li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li><li><a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Delta_logS_mean,Delta_logJ_mean,Delta_logS_cov,Delta_logJ_cov]=  display_expression(network,solution1,solution2,d1,d2)</a>
-0002 
-0003 <span class="comment">% [Delta_logS_mean,Delta_logJ_mean,Delta_logS_cov,Delta_logJ_cov] = display_expression(network,solution1,solution2,d1,d2)</span>
-0004 
-0005 Delta_logS_mean = solution1.logS.mean_analytical_1 - solution2.logS.mean_analytical_1;
-0006 
-0007 Delta_logS_cov = (solution1.CC.R_S_norm - solution2.CC.R_S_norm)* solution1.logk_cov * (solution1.CC.R_S_norm - solution2.CC.R_S_norm)';
-0008 
-0009 <span class="keyword">if</span> isfield(solution1,<span class="string">'logS_ext_cov'</span>),
-0010   Delta_logS_cov = Delta_logS_cov + (solution1.CC.R_S_Sext_norm - solution2.CC.R_S_Sext_norm)* solution1.logS_ext_cov * (solution1.CC.R_S_Sext_norm - solution2.CC.R_S_Sext_norm)';
-0011 <span class="keyword">end</span>
-0012 
-0013 Delta_logJ_mean = solution1.logJ.mean_analytical_1 - solution2.logJ.mean_analytical_1;
-0014 Delta_logJ_cov = (solution1.CC.R_J_norm - solution2.CC.R_J_norm)* solution1.logk_cov * (solution1.CC.R_J_norm - solution2.CC.R_J_norm)';
-0015 <span class="keyword">if</span> isfield(solution1,<span class="string">'logS_ext_cov'</span>),
-0016   Delta_logJ_cov = Delta_logJ_cov + (solution1.CC.R_J_Sext_norm - solution2.CC.R_J_Sext_norm)* solution1.logS_ext_cov * (solution1.CC.R_J_Sext_norm - solution2.CC.R_J_Sext_norm)';
-0017 <span class="keyword">end</span>
-0018 
-0019 Delta_logJ_mean(find(isnan(Delta_logJ_mean)))=0;
-0020 
-0021 delta_X = zeros(size(solution1.J.mean_analytical_1));
-0022 delta_X(solution1.relevant_par)=solution1.logk_mean - solution2.logk_mean;
-0023 
-0024 figure(1);
-0025 <a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'actvalues'</span>, delta_X,<span class="keyword">...</span>
-0026                 <span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
-0027                  <span class="string">'actprintvalues'</span>,0,<span class="keyword">...</span><span class="comment">% 'metprintnames',0,'actprintnames',0,...</span>
-0028                  <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>));
-0029 
-0030 title([ solution1.name <span class="string">'/'</span> solution2.name <span class="string">', log ratios of k'</span>]);
-0031 <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;
-0032 figure(2);
-0033 <a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>(network,struct(<span class="string">'metvalues'</span>,Delta_logS_mean,<span class="string">'actvalues'</span>,Delta_logJ_mean,<span class="keyword">...</span>
-0034                  <span class="string">'arrowvalues'</span>,Delta_logJ_mean,<span class="string">'metvalues_std'</span>,sqrt(diag(Delta_logS_cov)),<span class="string">'actvalues_std'</span>,sqrt(diag(Delta_logJ_cov)),<span class="string">'arrowstyle'</span>,<span class="string">'directions'</span>,<span class="keyword">...</span>
-0035                  <span class="string">'metprintvalues'</span>,0,<span class="string">'actprintvalues'</span>,0,<span class="keyword">...</span><span class="comment">% 'metprintnames',0,'actprintnames',0,...</span>
-0036                  <span class="string">'metstyle'</span>,<span class="string">'box_std'</span>,<span class="string">'actstyle'</span>,<span class="string">'box_std'</span>));
-0037 
-0038 title([ solution1.name <span class="string">'/'</span> solution2.name <span class="string">', log ratios of S and J'</span>]);
-0039 <a href="../.././mnt/utils/noticks.html" class="code" title="function noticks();">noticks</a>;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

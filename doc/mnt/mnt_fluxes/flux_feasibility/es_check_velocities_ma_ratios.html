@@ -45,45 +45,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function correct = es_check_velocities_ma_ratios(N,v,log_c,this_delta_mu)</a>
-0002 
-0003 <span class="comment">% correct = es_check_velocities_ma_ratios(N,v,log_c,this_delta_mu)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% In a feasible model, an increase of the mass action ratio can</span>
-0006 <span class="comment">% lead to change from a positive to a negative reaction velocity,</span>
-0007 <span class="comment">% but never from a negative to a positive reaction velocity.</span>
-0008 <span class="comment">% This is tested here.</span>
-0009 
-0010 [nm,nr] = size(N);
-0011 
-0012 <span class="keyword">for</span> it = 1:nr,
-0013   log_ma(it,:) =  N(find(N(:,it)),it)' * log_c(find(N(:,it)),:);
-0014 <span class="keyword">end</span>
-0015 
-0016 ind_ma_found = find( prod(double(isfinite(log_ma)')));
-0017 [log_ma_sorted,order] = sort(log_ma(ind_ma_found,:),2);
-0018 
-0019 signs = sign(v(ind_ma_found,:));
-0020 signs(signs==0) = nan;
-0021 
-0022 correct = 1;
-0023 
-0024 <span class="keyword">for</span> it = 1:length(ind_ma_found),
-0025   this_signs_ordered = signs(it,order(it,:));
-0026   <span class="keyword">if</span> max(find( this_signs_ordered==1))&gt;min(find( this_signs_ordered==-1)),
-0027     correct = 0;
-0028     warning(sprintf(<span class="string">'Reaction %d: mass action ratios and reaction velocities are not compatible'</span>,ind_ma_found(it)));
-0029       log_ma_sorted(it,:)
-0030    <a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>* N(:,ind_ma_found(it))' * log_c(:,order(it,:)) +  N(:,ind_ma_found(it))'
-0031     <span class="keyword">if</span> exist(<span class="string">'this_delta_mu'</span>,<span class="string">'var'</span>); 
-0032       this_delta_mu(ind_ma_found(it),order(it,:))
-0033     <span class="keyword">end</span>
-0034     v(ind_ma_found(it),order(it,:))
-0035   <span class="keyword">end</span>
-0036 <span class="keyword">end</span>
-0037 
-0038 <span class="keyword">if</span> correct==1,  display(<span class="string">'Correct'</span>); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

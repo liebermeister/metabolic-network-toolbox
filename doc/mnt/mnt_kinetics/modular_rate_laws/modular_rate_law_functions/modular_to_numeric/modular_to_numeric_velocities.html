@@ -40,29 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function v = modular_to_numeric_velocities(s,p)</a>
-0002 
-0003 <span class="comment">% v = modular_to_numeric_velocities(s,p)</span>
-0004 
-0005 <span class="comment">% &quot;numeric&quot; style api for modular kinetics,</span>
-0006 <span class="comment">% for details see modular_to_numeric_initialise.m</span>
-0007 
-0008 <span class="comment">% backtranslation of kinetic constants</span>
-0009 
-0010 kinetics = p.kinetics;
-0011 <span class="keyword">for</span> it = 1:size(p.kinetics.u,1),
-0012   kinetics.u(it)  = getfield(p,[<span class="string">'u_'</span>,num2str(it)]);
-0013 <span class="keyword">end</span>
-0014 
-0015 v = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>(p.kinetics.type, p.N, p.W, p.ind_ext,kinetics.u,s,kinetics.KA,kinetics.KI,kinetics.KM,kinetics.KV,kinetics.Keq,p.h);
-0016  
-0017 <span class="comment">% append dilution reactions for all internal metabolites</span>
-0018 
-0019 <span class="keyword">if</span> isfield(p,<span class="string">'mu'</span>),
-0020   ind_internal = find(p.external==0); 
-0021   v = [v; p.mu * s(ind_internal)];
-0022 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

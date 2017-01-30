@@ -40,27 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network_list_allosteric(network)</a>
-0002 
-0003 <span class="comment">% network_list_allosteric(network)</span>
-0004 
-0005 dum={};
-0006 <span class="keyword">for</span> it=1:length(network.actions),
-0007   <span class="keyword">for</span> itt=1:length(network.metabolites),
-0008     <span class="keyword">if</span> network.regulation_matrix(it,itt)==1, 
-0009       dum = [dum; {sprintf(<span class="string">'Activation %s &lt;- %s'</span>,network.actions{it},network.metabolites{itt})}];
-0010     <span class="keyword">end</span>  
-0011   <span class="keyword">end</span>
-0012 <span class="keyword">end</span>
-0013 <span class="keyword">for</span> it=1:length(network.actions),
-0014   <span class="keyword">for</span> itt=1:length(network.metabolites),
-0015     <span class="keyword">if</span> network.regulation_matrix(it,itt)==-1, 
-0016       dum = [dum; {sprintf(<span class="string">'Inhibition %s &lt;- %s'</span>,network.actions{it},network.metabolites{itt})}];
-0017     <span class="keyword">end</span>  
-0018   <span class="keyword">end</span>
-0019 <span class="keyword">end</span>
-0020 <a href="../../.././mnt/utils/mytable.html" class="code" title="function res = mytable(names,rownumbers,filename)">mytable</a>(dum)</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

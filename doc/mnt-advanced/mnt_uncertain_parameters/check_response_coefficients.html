@@ -42,36 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function check_response_coefficients(network,S,J,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,sigma_k,par,used)</a>
-0002 
-0003 <span class="comment">% check_response_coefficients(network,S,J,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,sigma_k,par,used)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% compare expansion by response coefficients to numerical expansion (works only for mass action kinetics)</span>
-0006 
-0007 network_pert = network;
-0008 
-0009 par_factor = exp(sigma_k*randn(size(par)));
-0010 <span class="comment">%par_factor = [1.1 1.1 1 1]'</span>
-0011 par_pert = par_factor.*par;
-0012 
-0013 network_pert.kinetics = par2mass_action(par_pert,network.kinetics.used_fwd,network.kinetics.used_bwd);
-0014 
-0015 [t, s_int_t,s_t,met_int]= <a href="../.././mnt/mnt_simulation/network_integrate.html" class="code" title="function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)">network_integrate</a>(network_pert, S,100);
-0016 [S_pert, J_pert] = <a href="../.././mnt/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>(network_pert,s_t(:,end));
-0017 <span class="comment">%netgraph_concentrations(network_pert,S,J);</span>
-0018 
-0019 delta_par     = par_pert-par;
-0020 delta_log_par = log(par_pert./par); delta_log_par(find(par_pert==0))=0;
-0021 
-0022 figure(1)
-0023 subplot(2,2,1); plot([S_pert-S, <a href="../.././mnt/mnt_mca/expand_by_R.html" class="code" title="function delta_y = expand_by_R(RY_1,RY_2,delta_par);">expand_by_R</a>(R_S,R_S_2,delta_par), R_S * delta_par ]); legend(<span class="string">'true'</span>,<span class="string">'2'</span>,<span class="string">'1'</span>); title(<span class="string">'S'</span>)
-0024 subplot(2,2,2); plot([J_pert-J, <a href="../.././mnt/mnt_mca/expand_by_R.html" class="code" title="function delta_y = expand_by_R(RY_1,RY_2,delta_par);">expand_by_R</a>(R_J,R_J_2,delta_par), R_J * delta_par ]); legend(<span class="string">'true'</span>,<span class="string">'2'</span>,<span class="string">'1'</span>); title(<span class="string">'J'</span>);
-0025 subplot(2,2,3); plot([log(S_pert)-log(S), <a href="../.././mnt/mnt_mca/expand_by_R.html" class="code" title="function delta_y = expand_by_R(RY_1,RY_2,delta_par);">expand_by_R</a>(R_S_norm, R_S_2_norm, delta_log_par  ),<span class="keyword">...</span>
-0026             R_S_norm * delta_log_par  ]); legend(<span class="string">'true'</span>,<span class="string">'2'</span>,<span class="string">'1'</span>); title(<span class="string">'log S'</span>);
-0027 dum=log(J_pert./J); dum(find(imag(dum)~=0))=0;
-0028 subplot(2,2,4); plot([dum, <a href="../.././mnt/mnt_mca/expand_by_R.html" class="code" title="function delta_y = expand_by_R(RY_1,RY_2,delta_par);">expand_by_R</a>(R_J_norm, R_J_2_norm,delta_log_par ),<span class="keyword">...</span>
-0029             R_J_norm * delta_log_par  ]); legend(<span class="string">'true'</span>,<span class="string">'2'</span>,<span class="string">'1'</span>); title(<span class="string">'log J'</span>);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -40,25 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ind_met = find_metabolites_by_name(metabolites,all_metabolites,all_metabolites_KEGGID)</a>
-0002 
-0003 ind_met = <a href="label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(metabolites,all_metabolites);
-0004 
-0005 ind_not_found = find(ind_met==0);
-0006 
-0007 keggid = kegg_name2id(metabolites(ind_not_found));
-0008 
-0009 found = zeros(size(ind_not_found));
-0010 <span class="keyword">for</span> it = 1:length(ind_not_found);
-0011  ind_try = <a href="label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(keggid{it},all_metabolites_KEGGID);
-0012  ind_try = ind_try(ind_try~=0);
-0013  <span class="keyword">if</span> length(ind_try),
-0014    found(it) = ind_try(1);
-0015  <span class="keyword">end</span>
-0016 <span class="keyword">end</span>
-0017 
-0018 ind_met(ind_not_found) = found;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

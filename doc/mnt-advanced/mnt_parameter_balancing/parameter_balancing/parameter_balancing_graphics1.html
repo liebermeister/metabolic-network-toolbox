@@ -40,32 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function parameter_balancing_graphics1(task,res)</a>
-0002 
-0003 figure(1); clf
-0004 subplot(2,1,1); plot(task.q.prior.mean,<span class="string">'c'</span>); hold on; plot(res.q_posterior.mean,<span class="string">'b--'</span>); ylabel(<span class="string">'Mean'</span>); title(<span class="string">'Basic quantities'</span>)
-0005 legend(<span class="string">'Prior'</span>,<span class="string">'Posterior'</span>);
-0006 set(gca,<span class="string">'XTick'</span>,cumsum([0;task.q.numbers(1:end-1)]),<span class="string">'XTickLabel'</span>,fieldnames(task.q.indices));
-0007 subplot(2,1,2); plot(task.q.prior.std,<span class="string">'c'</span>);  hold on; plot(res.q_posterior.std,<span class="string">'b--'</span>); ylabel(<span class="string">'Std'</span>); 
-0008 legend(<span class="string">'Prior'</span>,<span class="string">'Posterior'</span>);
-0009 set(gca,<span class="string">'XTick'</span>,cumsum([0;task.q.numbers(1:end-1)]),<span class="string">'XTickLabel'</span>,fieldnames(task.q.indices),<span class="string">'YScale'</span>,<span class="string">'Log'</span>);
-0010 
-0011 figure(2); clf
-0012 subplot(2,1,1); plot(task.xdata.mean,<span class="string">'r'</span>); hold on; plot(res.xdata_posterior.mean,<span class="string">'b--'</span>); ylabel(<span class="string">'Mean'</span>); title(<span class="string">'Data quantities'</span>) 
-0013 legend(<span class="string">'Data'</span>,<span class="string">'Posterior'</span>);
-0014 set(gca,<span class="string">'XTick'</span>,cumsum([0;task.xdata.numbers(1:end-1)]),<span class="string">'XTickLabel'</span>,fieldnames(task.xdata.indices));
-0015 subplot(2,1,2); plot(task.xdata.std,<span class="string">'r'</span>);  hold on; plot(res.xdata_posterior.std,<span class="string">'b--'</span>); ylabel(<span class="string">'Std'</span>); 
-0016 legend(<span class="string">'Data'</span>,<span class="string">'Posterior'</span>);
-0017 set(gca,<span class="string">'XTick'</span>,cumsum([0;task.xdata.numbers(1:end-1)]),<span class="string">'XTickLabel'</span>,fieldnames(task.xdata.indices),<span class="string">'YScale'</span>,<span class="string">'Log'</span>);
-0018 
-0019 figure(3); clf
-0020 subplot(2,1,1); plot(res.xmodel_posterior.mean,<span class="string">'b'</span>);ylabel(<span class="string">'Mean'</span>);  title(<span class="string">'Model quantities'</span>)
-0021 legend(<span class="string">'Posterior'</span>);
-0022 set(gca,<span class="string">'XTick'</span>,cumsum([0;task.xmodel.numbers(1:end-1)]),<span class="string">'XTickLabel'</span>,fieldnames(task.xmodel.indices));
-0023 subplot(2,1,2); plot(res.xmodel_posterior.std,<span class="string">'b'</span>); ylabel(<span class="string">'Std'</span>); 
-0024 legend(<span class="string">'Posterior'</span>);
-0025 set(gca,<span class="string">'XTick'</span>,cumsum([0;task.xmodel.numbers(1:end-1)]),<span class="string">'XTickLabel'</span>,fieldnames(task.xmodel.indices),<span class="string">'YScale'</span>,<span class="string">'Log'</span>);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

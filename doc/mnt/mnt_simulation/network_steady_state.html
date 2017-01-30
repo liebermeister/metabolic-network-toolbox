@@ -42,77 +42,8 @@ This function is called by:
 <li><a href="../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="../.././mnt-advanced/mnt_model_reduction/model_reduction.html" class="code" title="function [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = model_reduction(network,metabolites_subsystem,ndim,verbose,s_initial,S,J,flag_graphics,t_max,gp,network_CoHid,Ec_un)">model_reduction</a>	model_reduction - Replace parts of biochemical network models by simple linear systems</li><li><a href="../.././mnt-advanced/mnt_model_reduction/model_reduction/selective_reduction.html" class="code" title="function r = selective_reduction(network, subsystem_metabolites, S, J, Ec_un, Ep_un)">selective_reduction</a>	r = selective_reduction(network, subsystem_metabolites, S, J, Ec_un, Ep_un);</li><li><a href="../.././mnt-advanced/mnt_uncertain_parameters/check_response_coefficients.html" class="code" title="function check_response_coefficients(network,S,J,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,sigma_k,par,used)">check_response_coefficients</a>	check_response_coefficients(network,S,J,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,sigma_k,par,used)</li><li><a href="../.././mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/stochastic_simulations.html" class="code" title="function MonteCarlo = stochastic_simulations(nit,n_boot,verbose,network,S,J,par,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,distribution, comment,relevant)">stochastic_simulations</a>	MonteCarlo = stochastic_simulations(nit,n_boot,verbose,network,S,J,par,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,distribution, comment,relevant)</li><li><a href="../.././mnt/mnt_mca/basic_control_analysis.html" class="code" title="function R = basic_control_analysis(network,s,options)">basic_control_analysis</a>	R = basic_control_analysis(network,s,options)</li><li><a href="../.././mnt/mnt_mca/response_coefficients_numerical.html" class="code" title="function [RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)">response_coefficients_numerical</a>	[RS,RJ,RS2,RJ2] = response_coefficients_numerical(network,c,ind_rel_par)</li><li><a href="../.././mnt/mnt_mca/response_coefficients_target_numerical.html" class="code" title="function [RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv)">response_coefficients_target_numerical</a>	[RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv)</li></ul>
 <!-- crossreference -->
 
-<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="#_sub1" class="code">function sdot_sq = calc_sdot_sq(s_ind,network,external,internal,s_ext,L,T,N_int,dilution_rate)</a></li></ul>
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% calculate steady state concentrations S, fluxes J, and elasticities epsilon</span>
-0004 <span class="comment">% given network and parameters initial metabolite concentrations s (column vector)</span>
-0005 
-0006 <a name="_sub0" href="#_subfunctions" class="code">function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</a>
-0007 
-0008 <span class="keyword">if</span> sum(network.external==0)==0, S = s; J= <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network); <span class="keyword">return</span>; <span class="keyword">end</span> 
-0009 
-0010 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'s'</span>,<span class="string">'ones(size(network.metabolites))'</span>,<span class="string">'integrate_time'</span>,<span class="string">'1000'</span>,<span class="string">'L_int'</span>,<span class="string">'[]'</span>,<span class="string">'dilution_rate'</span>,<span class="string">'[]'</span>));
-0011 
-0012 [n_S,n_A] = size(network.N);
-0013 
-0014 external  = find(network.external);
-0015 internal  = setdiff(1:n_S,external);
-0016 s_ext     = s(external);
-0017 s_int     = s(internal);
-0018 N_int     = network.N(internal,:);
-0019 
-0020 <span class="comment">% let the network run for some time to get a better initial estimate</span>
-0021 
-0022 <span class="keyword">if</span> integrate_time,
-0023   [t, s_t,s_int_t,met_int] = <a href="network_integrate.html" class="code" title="function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)">network_integrate</a>(network, s, integrate_time,0,0,[],dilution_rate);
-0024   s_int = s_int_t(:,end);
-0025 <span class="keyword">end</span>
-0026 
-0027 <span class="keyword">if</span> length(dilution_rate), 
-0028   S = s_t(:,end);
-0029 <span class="keyword">else</span>,
-0030   <span class="keyword">if</span> isempty(L_int), 
-0031     [L_int, NR_int, indep_met_int] = <a href="../.././mnt/mnt_mca/reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>(N_int);
-0032   <span class="keyword">end</span>
-0033   s_ind = s_int(indep_met_int);
-0034   T     = s_int - L_int * s_ind;
-0035   <span class="comment">%% dilution_rate = 0;</span>
-0036   <span class="comment">%% s_ind = abs(fminsearch(@calc_sdot_sq,s_ind,...</span>
-0037   <span class="comment">%%     optimset('TolFun',0.005,'MaxFunEvals',1000000,'MaxIter',10000),...</span>
-0038   <span class="comment">%%     network,external,internal,s_ext,L_int,T,N_int,dilution_rate)) ;</span>
-0039   S           = zeros(n_S,1);
-0040   S(internal) = L_int * abs(s_ind) + T;
-0041   S(external) = s_ext;
-0042 <span class="keyword">end</span>
-0043 
-0044 J = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(S,network);
-0045 
-0046 <span class="keyword">if</span> length(dilution_rate), 
-0047   Sdot = N_int * J - dilution_rate *   S(internal);
-0048 <span class="keyword">else</span>,
-0049   Sdot = N_int * J;
-0050 <span class="keyword">end</span>
-0051 
-0052 error = max(abs(Sdot./S(internal)));
-0053 
-0054 <span class="keyword">if</span> error &gt; 10^-3, 
-0055   warning([<span class="string">'Maximal error (relative change of metabolite) in output state is '</span> num2str(error)]); 
-0056 <span class="keyword">end</span>
-0057 
-0058 
-0059 <span class="comment">% ---------------------------------------------------------------</span>
-0060 
-0061 <a name="_sub1" href="#_subfunctions" class="code">function sdot_sq = calc_sdot_sq(s_ind,network,external,internal,s_ext,L,T,N_int,dilution_rate)</a>
-0062 
-0063 s            = zeros(size(network.metabolites));
-0064 s(external)  = s_ext;
-0065 s(internal)  = L * abs(s_ind) + T;
-0066 v            = <a href="../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(s,network);
-0067 sdot_sq      = sum( (N_int * v - dilution_rate * s_int).^2) + 100*(min(L * abs(s_ind) + T)&lt;0);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

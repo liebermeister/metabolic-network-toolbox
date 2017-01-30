@@ -4,7 +4,7 @@
 <head>
   <title>Description of netgraph_edit_positions</title>
   <meta name="keywords" content="netgraph_edit_positions">
-  <meta name="description" content="network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)">
+  <meta name="description" content="network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,46 +21,31 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</strong></div>
+<div class="box"><strong>network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids,gp,reaction_KEGG_IDs) </strong></div>
+<div class="box"><strong>function network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,gp,reaction_KEGG_IDs,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)
- flag_KEGG_ids  which name field in 'network' to use: metabolite_KEGGID or metabolites</pre></div>
+<div class="fragment"><pre class="comment"> network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)
+
+ The new positions will be saved to the positions file (filename layout_file)
+
+ flag_KEGG_ids  compare network and layout file by KEGG IDs (rather than element names)
+ flag_fixed     read and write information about fixed glyph positions</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_print_positions.html" class="code" title="function output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)">netgraph_print_positions</a>	output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
+<li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_print_positions.html" class="code" title="function [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)">netgraph_print_positions</a>	[names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, layout_file, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)">netgraph_read_positions</a>	network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids,gp,reaction_KEGG_IDs)</a>
-0002 
-0003 <span class="comment">% network = netgraph_edit_positions(network,table_positions,flag_KEGG_ids)</span>
-0004 <span class="comment">% flag_KEGG_ids  which name field in 'network' to use: metabolite_KEGGID or metabolites</span>
-0005 
-0006 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'flag_KEGG_ids'</span>,<span class="string">'0'</span>,<span class="string">'gp'</span>,<span class="string">'struct'</span>,<span class="string">'reaction_KEGG_IDs'</span>,<span class="string">'[]'</span>));
-0007 
-0008 <span class="keyword">if</span> length(reaction_KEGG_IDs),
-0009   network.reaction_KEGGID = reaction_KEGG_IDs;
-0010 <span class="keyword">end</span>
-0011 
-0012 gp_default.actprintnames = 0;
-0013 gp = <a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(gp_default,gp);
-0014 
-0015 network = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>(network,table_positions,[0,0],1,flag_KEGG_ids);
-0016 network = <a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>(network,<span class="string">'all'</span>,gp);
-0017 <a href="netgraph_print_positions.html" class="code" title="function output = netgraph_print_positions(network,filename,offsets,policy,flag_KEGG_ids)">netgraph_print_positions</a>(network,table_positions,[0,0],<span class="string">'replace elements'</span>,flag_KEGG_ids);
-0018 
-0019 display(sprintf(<span class="string">'New positions saved to file %s'</span>,table_positions));</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

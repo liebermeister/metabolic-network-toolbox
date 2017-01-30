@@ -40,37 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = network_add_empty(network,a,b);</a>
-0002 
-0003 <span class="comment">% network = network_add_empty(network,a,b);</span>
-0004 
-0005 [nr,nm] = <a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0006 
-0007 fnames = fields(network);
-0008 
-0009 <span class="keyword">for</span> it = 1:length(fnames),
-0010   ff = getfield(network,fnames{it});
-0011   <span class="keyword">if</span>  size(ff) == [nm,1],   newsize = [nm+a,1];    <span class="keyword">end</span>
-0012   <span class="keyword">if</span>  size(ff) == [nr,1],   newsize = [nr+b,1];    <span class="keyword">end</span>
-0013   <span class="keyword">if</span>  size(ff) == [nm,nr],  newsize = [nm+a,nr+b]; <span class="keyword">end</span>
-0014   <span class="keyword">if</span>  size(ff) == [nr,nm],  newsize = [nr+b,nm+a]; <span class="keyword">end</span>
-0015 
-0016   <span class="keyword">if</span> isnumeric(ff), empty = zeros(newsize); 
-0017   <span class="keyword">elseif</span> iscell(ff),   
-0018     <span class="keyword">if</span> isstr(ff{1,1}),
-0019       empty = repmat({<span class="string">''</span>},newsize(1),newsize(2)); 
-0020     <span class="keyword">else</span>,
-0021       empty = repmat({nan},newsize(1),newsize(2)); 
-0022     <span class="keyword">end</span>
-0023   <span class="keyword">else</span>, warning(sprintf(<span class="string">'I cannot keep field &quot;%s&quot;'</span>, fnames{it}));
-0024   <span class="keyword">end</span>
-0025   <span class="keyword">if</span> ~isstruct(ff),
-0026     update = empty;
-0027     update(1:size(ff,1),1:size(ff,2)) = ff;
-0028     network = setfield(network,fnames{it},update); 
-0029   <span class="keyword">end</span>
-0030 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

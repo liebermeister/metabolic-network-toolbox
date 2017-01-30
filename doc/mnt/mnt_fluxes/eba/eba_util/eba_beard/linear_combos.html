@@ -40,27 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function Cnew = linear_combos(v1,v2);</a>
-0002 
-0003 <span class="comment">% Cnew = linear_combos(v1,v2);</span>
-0004 
-0005 Cnew = [];
-0006 n    = length(v1);
-0007 
-0008 <span class="keyword">if</span> (<a href="initial_test.html" class="code" title="function TF = initial_test(vnew, v1, v2)">initial_test</a>((v1+v2),v1,v2)==true) Cnew=[Cnew (v1+v2)]; <span class="keyword">end</span>
-0009 <span class="keyword">if</span> (<a href="initial_test.html" class="code" title="function TF = initial_test(vnew, v1, v2)">initial_test</a>((v1-v2),v1,v2)==true) Cnew=[Cnew (v1-v2)]; <span class="keyword">end</span>
-0010 
-0011 <span class="keyword">for</span> i=1:n
-0012   v1i=v1(i);
-0013   v2i=v2(i);
-0014   <span class="keyword">if</span> (v1i~=0)&amp;(v2i~=0)&amp;((abs(v1i)~=1)|(abs(v2i)~=1))
-0015     tmp=(v2i.*v1 - v1i.*v2);
-0016     <span class="keyword">if</span> (<a href="initial_test.html" class="code" title="function TF = initial_test(vnew, v1, v2)">initial_test</a>(tmp, v1, v2))==true
-0017       Cnew=[Cnew tmp];
-0018     <span class="keyword">end</span>
-0019   <span class="keyword">end</span>
-0020 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

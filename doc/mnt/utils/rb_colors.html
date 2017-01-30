@@ -36,30 +36,11 @@ This function calls:
 <li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="../.././mnt/mnt_graphics/interaction_network_plot.html" class="code" title="function interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)">interaction_network_plot</a>	interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)</li><li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function  network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
+<li><a href="../.././mnt/mnt_graphics/interaction_network_plot.html" class="code" title="function interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)">interaction_network_plot</a>	interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)</li><li><a href="../.././mnt/mnt_graphics/netgraph_draw.html" class="code" title="function network = netgraph_draw(network,varargin)">netgraph_draw</a>	netgraph_draw(network,varargin)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function c = rb_colors(ncol)</a>
-0002 
-0003 <span class="comment">% c = rb_colors(ncol)</span>
-0004 
-0005 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'ncol'</span>,<span class="string">'250'</span>));
-0006 
-0007 ncol = ceil(ncol/2);
-0008 
-0009 c = [ repmat([0 0 1],ncol,1) + (0: 1/[ncol-1]:1)' * [1 1 0]; <span class="keyword">...</span>
-0010       repmat([1 0 0],ncol,1) + (1:-1/[ncol-1]:0)' * [0 1 1] ] ; 
-0011 
-0012 c = flipud(c);
-0013 
-0014 <span class="keyword">if</span> sum(c(:)&lt;0)
-0015   error(<span class="string">'Negative values encountered'</span>)
-0016   c(c&lt;0) = 0;
-0017 <span class="keyword">end</span>
-0018 
-0019 c(find(prod(double(c==1),2)),:) = 0.999;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

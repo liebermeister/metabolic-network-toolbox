@@ -42,22 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function eba_draw_cycles(N,C)</a>
-0002 
-0003 <span class="comment">% eba_draw_cycles(N,C)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% compute and draw cycles used in energy balance analysis (EBA)</span>
-0006 
-0007 C        = <a href="../../../.././mnt/mnt_fluxes/eba/eba_util/eba_beard/cycles.html" class="code" title="function C = cycles(N);">cycles</a>(N); 
-0008 n_cycles = size(C,2);
-0009 
-0010 pars = struct(<span class="string">'text_offset'</span>,[0.01;-0.01],<span class="string">'FontSize'</span>,8,<span class="string">'split_names'</span>,21,<span class="string">'arrowsize'</span>,0.02);
-0011 
-0012 <span class="keyword">for</span> it = 1:size(C,2),
-0013   <a href="../../../.././mnt/mnt_graphics/netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network_CoSplit,[],C(:,it),1,pars); axis tight;
-0014   title(sprintf(<span class="string">'Cycle %d/%d'</span>,it,n_cycles)); pause
-0015 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

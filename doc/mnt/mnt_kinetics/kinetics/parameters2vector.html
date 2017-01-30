@@ -40,64 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)</a>
-0004 
-0005 <span class="comment">% no_names is important for speed-up</span>
-0006 
-0007 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'S_ext'</span>,<span class="string">'[]'</span>,<span class="string">'S_ext_names'</span>,<span class="string">'{}'</span>,<span class="string">'split'</span>,<span class="string">'0'</span>,<span class="string">'no_names'</span>,<span class="string">'0'</span>));
-0008 relevant_reactions = [];
-0009 types              = [];
-0010 
-0011 <span class="keyword">switch</span> kinetics.type,
-0012   
-0013   <span class="keyword">case</span> <span class="string">'convenience'</span>, 
-0014     <span class="keyword">switch</span> nargout,
-0015       <span class="keyword">case</span> 1,      vector = <a href="../../.././mnt/mnt_kinetics/convenience/convenience2vector.html" class="code" title="function [vector,names,types,relevant_reactions] = convenience2vector(kinetics,network,no_names)">convenience2vector</a>(kinetics);
-0016       <span class="keyword">case</span> {2,3},  [vector,names] = <a href="../../.././mnt/mnt_kinetics/convenience/convenience2vector.html" class="code" title="function [vector,names,types,relevant_reactions] = convenience2vector(kinetics,network,no_names)">convenience2vector</a>(kinetics,network);
-0017       <span class="keyword">otherwise</span>,   [vector,names,types,relevant_reactions] = <a href="../../.././mnt/mnt_kinetics/convenience/convenience2vector.html" class="code" title="function [vector,names,types,relevant_reactions] = convenience2vector(kinetics,network,no_names)">convenience2vector</a>(kinetics,network,no_names);
-0018     <span class="keyword">end</span>
-0019 
-0020   <span class="keyword">case</span> <span class="string">'numeric'</span>,        [vector,names] = <a href="../../.././mnt/mnt_kinetics/numeric/numeric_par2vector.html" class="code" title="function [v,names]=numeric_par2vector(p)">numeric_par2vector</a>(kinetics.parameters);
-0021   <span class="keyword">case</span> <span class="string">'ms'</span>,             [vector,names] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_par2vector.html" class="code" title="function [v,names] = modular_par2vector(p,network,no_names)">modular_par2vector</a>(kinetics, network, no_names);
-0022   <span class="keyword">case</span> <span class="string">'cs'</span>,             [vector,names] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_par2vector.html" class="code" title="function [v,names] = modular_par2vector(p,network,no_names)">modular_par2vector</a>(kinetics, network, no_names);
-0023   <span class="keyword">case</span> <span class="string">'ds'</span>,             [vector,names] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_par2vector.html" class="code" title="function [v,names] = modular_par2vector(p,network,no_names)">modular_par2vector</a>(kinetics, network, no_names);
-0024   <span class="keyword">case</span> <span class="string">'rp'</span>,             [vector,names] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_par2vector.html" class="code" title="function [v,names] = modular_par2vector(p,network,no_names)">modular_par2vector</a>(kinetics, network, no_names);
-0025   <span class="keyword">case</span> <span class="string">'fd'</span>,             [vector,names] = <a href="../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/modular_par2vector.html" class="code" title="function [v,names] = modular_par2vector(p,network,no_names)">modular_par2vector</a>(kinetics, network, no_names);
-0026   <span class="keyword">case</span> <span class="string">'mass-action'</span>,    [vector,names] = <a href="../../.././mnt/mnt_kinetics/mass_action/mass_action2vector.html" class="code" title="function [vector,names,relevant] = mass_action2vector(kinetics,used_fwd,used_bwd,S_ext,S_ext_names)">mass_action2vector</a>(kinetics);
-0027   <span class="keyword">case</span> <span class="string">'standard'</span>,       [vector,names,relevant_reactions] = standard_kinetics2vector(kinetics);
-0028   <span class="keyword">case</span> <span class="string">'kinetic_strings'</span>, vector = kinetics.parameter_values; 
-0029                          names  = kinetics.parameters;
-0030   <span class="keyword">otherwise</span> error(<span class="string">'Error: unknown kinetics type'</span>);
-0031 <span class="keyword">end</span>
-0032 
-0033 <span class="keyword">if</span> length(S_ext),
-0034   <span class="keyword">if</span> ~strcmp(kinetics.type,<span class="string">'convenience'</span>),
-0035     vector = [vector; S_ext];
-0036     names  = [names;  S_ext_names];
-0037     <span class="keyword">if</span> nargout&gt;=4,
-0038       external_ind = find(network.external);
-0039       <span class="keyword">for</span> it =1:length(external_ind),
-0040         rel = [ find(network.N(external_ind(it),:)~=0)'; <span class="keyword">...</span>
-0041                 find(network.regulation_matrix(:,external_ind(it))~=0) ];
-0042         relevant_reactions = [relevant_reactions; {rel}];
-0043       <span class="keyword">end</span>
-0044     <span class="keyword">end</span>
-0045   <span class="keyword">end</span>
-0046 <span class="keyword">end</span>
-0047 
-0048 relevant = (1:length(vector))';
-0049 
-0050 <span class="keyword">if</span> split,
-0051   <span class="keyword">if</span> nargout&gt;=4,
-0052     nr = length(network.actions);
-0053     <span class="keyword">for</span> it =1:length(relevant_reactions),
-0054       relevant_reactions{it} = [relevant_reactions{it},relevant_reactions{it}+nr];
-0055     <span class="keyword">end</span>
-0056   <span class="keyword">end</span>
-0057 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

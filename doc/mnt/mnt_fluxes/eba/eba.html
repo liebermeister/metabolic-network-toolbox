@@ -70,62 +70,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [j,delta_mu] = eba(network,eba_constraints)</a>
-0002 
-0003 <span class="comment">% [j,delta_mu] = eba(network,eba_constraints)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% Energy balance analysis (extension of FBA for simultaneous prediction of v and mu/delta mu)</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% depending on eba_options.compute_mu (possible values 'mu','delta_mu'),</span>
-0008 <span class="comment">% either mu or delta_mu are included in the variable vector</span>
-0009 <span class="comment">%</span>
-0010 <span class="comment">% if mu is chosen, delta_mu is expressed by  N_all' * mu in all above formulas</span>
-0011 <span class="comment">% to get a unique solution for mu, we require that the sum of squares is minimal</span>
-0012 <span class="comment">% the formulae read</span>
-0013 <span class="comment">%                             z' * j   =   max</span>
-0014 <span class="comment">%                     N_internal * j   =   0</span>
-0015 <span class="comment">%          ext_signs_l * (N_ext*j)_l   &gt;   0</span>
-0016 <span class="comment">% j_l ~=0  =&gt;  j_l * (N_all' * mu)_l   &lt;   0</span>
-0017 <span class="comment">%                   v_min &lt;= j         &lt;=  v_max</span>
-0018 <span class="comment">%                  mu_min &lt;= mu        &lt;=  mu_max</span>
-0019 <span class="comment">%      delta_mu_min &lt;=  (N_all' * mu)  &lt;=  delta_mu_max</span>
-0020 <span class="comment">%                           mu' * mu   =   min</span>
-0021 <span class="comment">%</span>
-0022 <span class="comment">% if delta_mu is chosen, it has to fulfil the constraint K' delta_mu = 0 where Nall K = 0</span>
-0023 <span class="comment">% and no upper and lower constraints on mu are considered. the formulae read</span>
-0024 <span class="comment">%</span>
-0025 <span class="comment">%                           z' * j  =   max</span>
-0026 <span class="comment">%                   N_internal * j  =   0</span>
-0027 <span class="comment">%        ext_signs_l * (N_ext*j)_l  &gt;   0</span>
-0028 <span class="comment">%    j_l ~=0  =&gt;  j_l * delta mu_l  &lt;   0</span>
-0029 <span class="comment">%                    K' * delta_mu  =   0</span>
-0030 <span class="comment">%                v_min &lt;=         j &lt;=  v_max</span>
-0031 <span class="comment">%         delta_mu_min &lt;=  delta_mu &lt;=  delta_mu_max</span>
-0032 <span class="comment">%</span>
-0033 <span class="comment">% for fields of 'eba_constraints' and 'eba_options', see 'eba_default_options'</span>
-0034 
-0035 
-0036  [nm,nr] = size(network.N);
-0037  
-0038  c  = eba_constraints.z;
-0039  
-0040  ind_ext_signs = find(isfinite(eba_constraints.ext_signs));
-0041  
-0042  G  = [  eye(nr); <span class="keyword">...</span>
-0043        - eye(nr); <span class="keyword">...</span>
-0044        - diag(eba_constraints.ext_signs(ind_ext_signs))*network.N(ind_ext_signs,:); <span class="keyword">...</span>
-0045       ];
-0046  h  = [  eba_constraints.vmax; <span class="keyword">...</span>
-0047        - eba_constraints.vmin; <span class="keyword">...</span>
-0048        zeros(length(ind_ext_signs),1);];
-0049  A  = network.N(find(network.external==0),:);
-0050  b  = zeros(sum(network.external==0),1);
-0051  
-0052  [j,s,z,y,status] = lp236a(-c,G,h,A,b);
-0053  
-0054  <span class="keyword">if</span> isempty(j), warning(<span class="string">'No FBA solution found.'</span>); <span class="keyword">end</span>
-0055</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

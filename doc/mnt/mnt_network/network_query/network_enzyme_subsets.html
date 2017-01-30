@@ -42,35 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);</a>
-0002 
-0003 <span class="comment">% [enzyme_subsets,equilibrium_reactions,K] = network_enzyme_subsets(network);</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% determine enzyme subsets and equilibrium reactions</span>
-0006 
-0007 [nm,nr] = size(network.N);
-0008 K = <a href="network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>(network);
-0009 
-0010 equilibrium_reactions = find(sum(abs(K),2)==0);
-0011 
-0012 d                    = abs(corrcoef(K'))&gt;0.999;
-0013 enzyme_subset_matrix = [d+d^2 ~=0];
-0014 enzyme_subset_matrix = triu(enzyme_subset_matrix);
-0015 <a href="../../.././mnt/utils/im.html" class="code" title="function im(X,m,rownames,colnames)">im</a>(enzyme_subset_matrix)
-0016 
-0017 enzyme_subsets = {};
-0018 ee = enzyme_subset_matrix;
-0019 <span class="keyword">for</span> it = 1:nr,
-0020   ii = find(ee(it,:));
-0021   <span class="keyword">if</span> length(ii)&gt;1,
-0022     enzyme_subsets = [ enzyme_subsets, {ii'}];
-0023     ee(:,ii) = 0;
-0024   <span class="keyword">end</span>
-0025 <span class="keyword">end</span>
-0026 
-0027 [dum,order] = sort(-cellfun(<span class="string">'length'</span>,enzyme_subsets));
-0028 enzyme_subsets = enzyme_subsets(order);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

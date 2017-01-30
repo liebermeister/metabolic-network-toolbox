@@ -30,7 +30,7 @@
 <div class="fragment"><pre class="comment"> [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);
 
  translate metabolic network datastructure with modular kinetics 
- into metabolic network datastructure with &quot;numeric&quot; kinetics,
+ into metabolic network data structure with &quot;numeric&quot; kinetics,
  including a dilution term for every molecular species</pre></div>
 
 <!-- crossreference -->
@@ -44,50 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);</a>
-0002 
-0003 <span class="comment">% [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% translate metabolic network datastructure with modular kinetics</span>
-0006 <span class="comment">% into metabolic network datastructure with &quot;numeric&quot; kinetics,</span>
-0007 <span class="comment">% including a dilution term for every molecular species</span>
-0008 
-0009 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0010 
-0011 p = struct;
-0012 
-0013 <span class="keyword">for</span> it = 1:nr,
-0014   p = setfield(p,[<span class="string">'u_'</span>,num2str(it)],kinetics.u(it));
-0015 <span class="keyword">end</span>
-0016 
-0017 <span class="keyword">if</span> exist(<span class="string">'dilution'</span>,<span class="string">'var'</span>), 
-0018   p.mu = dilution; 
-0019   p.external = network.external; 
-0020 <span class="keyword">end</span>
-0021 
-0022 p.kinetics = kinetics;
-0023 p.N = network.N;
-0024 p.W = network.regulation_matrix;
-0025 p.ind_ext = find(network.external);
-0026 p.h = network.kinetics.h;
-0027 
-0028 numeric_kinetics.type              = <span class="string">'numeric'</span>;
-0029 numeric_kinetics.velocity_function = @<a href="modular_to_numeric_velocities.html" class="code" title="function v = modular_to_numeric_velocities(s,p)">modular_to_numeric_velocities</a>;
-0030 numeric_kinetics.parameters        = p;
-0031 
-0032 <span class="comment">% -------------------------------------------------------------------</span>
-0033 
-0034 numeric_network         = network;
-0035 ind_int = find(network.external==0);
-0036 dilution_actions = cellstr([repmat(<span class="string">'dilution_'</span>,length(ind_int),1) char(network.metabolites(ind_int))]);
-0037 
-0038 numeric_network.actions           = [network.actions; dilution_actions];
-0039 numeric_network.N(ind_int, nr+(1:length(ind_int))) = -eye(length(ind_int));
-0040 numeric_network.reversible        = [network.reversible; zeros(length(ind_int),1)];
-0041 numeric_network.regulation_matrix = [network.regulation_matrix; zeros(length(ind_int),nm)];
-0042 numeric_network.h                 = [network.kinetics.h; ones(length(ind_int),1)];
-0043 numeric_network.kinetics          = numeric_kinetics;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

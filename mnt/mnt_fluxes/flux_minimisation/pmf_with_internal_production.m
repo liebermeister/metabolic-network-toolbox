@@ -9,14 +9,16 @@ function v = pmf_with_internal_production(network,fba_constraints,benefit,v_star
 %       N_internal * v = 0  
 %       v_min <= v <= v_max
 %
-% fba_constraints: see fba_default_options
+% instead of N_internal * v = 0, N_internal * v = production (with given entries for production) can be solved
+%
+% entries in fba_constraints: see fba_default_options
 %
 %  fba_constraints.zv:           linear weights in the objective function  
 %  fba_constraints.v_min:        vector of lower bounds
 %  fba_constraints.v_max:        vector of upper bounds
 %  fba_constraints.v_sign:       vector of signs, overrides v_min and v_max
 %  fba_constraints.v_fix:        vector of fixed fluxes, overrides everything else
-%  fba_constraints.production:   sign vector for external metabolite production
+%  fba_constraints.production:   vector for internal metabolite production rates (replaces 0 in N_int * v = 0)  
 %  fba_constraints.cost_weights: (optional) vector of flux cost weights
 %
 % benefit: predefined value of the objective
@@ -85,10 +87,10 @@ zred = [zeros(nr,1); cost_weights];
 opt  = optimset('Display','off');
 
 if exist('cplexlp','file'),
-  [y,fval,exitflag] = cplexlp(y0,A,b,A_eq,b_eq,[],[],y0,opt);
+  [y,fval,exitflag] = cplexlp(zred,A,b,A_eq,b_eq,[],[],y0,opt);
   %[A*y<b]
 else
-  [y,fval,exitflag] = linprog(y0,A,b,A_eq,b_eq,[],[],y0,opt);
+  [y,fval,exitflag] = linprog(zred,A,b,A_eq,b_eq,[],[],y0,opt);
 end
 
 if exitflag<=0,

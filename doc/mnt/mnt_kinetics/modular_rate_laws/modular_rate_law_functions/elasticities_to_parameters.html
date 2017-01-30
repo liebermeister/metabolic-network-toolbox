@@ -43,77 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function kinetics = elasticities_to_parameters(network,E_sc,v,c,u,h)</a>
-0002 
-0003 <span class="comment">% kinetics = elasticities_to_parameters(network,E_sc,v,c,u,A,h)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% this works only for correct elasticities that were sampled with the same kinetic rate law</span>
-0006 <span class="comment">% elasticities owing to allosteric regulators are not considered yet (has to be fixed)</span>
-0007 
-0008 eval(<a href="../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'h'</span>,<span class="string">'[]'</span>));
-0009 
-0010 <span class="keyword">if</span> isempty(h),  h = ones(size(network.N,2),1); <span class="keyword">end</span>
-0011 
-0012 <span class="comment">% find_only_activation    = double([network.regulation_matrix &gt; 0] .* [network.N' ==0]);</span>
-0013 <span class="comment">% find_only_inhibition    = double([network.regulation_matrix &lt; 0] .* [network.N' ==0]);</span>
-0014 <span class="comment">% find_only_stoichiometry = double([network.regulation_matrix ==0] .* [network.N' ~=0]);</span>
-0015 <span class="comment">% find_activation_and_stoichiometry = double([network.regulation_matrix &gt; 0] .* [network.N' ~=0]);</span>
-0016 <span class="comment">% find_inhibition_and_stoichiometry = double([network.regulation_matrix &lt; 0] .* [network.N' ~=0]);</span>
-0017 
-0018 [Mplus, Mminus, Wplus, Wminus, nm, nr] = <a href="../../../.././mnt/mnt_network/network_query/make_structure_matrices.html" class="code" title="function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)">make_structure_matrices</a>(network.N,network.regulation_matrix,find(network.external),h);
-0019 
-0020 epsilon = 0.1;
-0021 
-0022 <span class="comment">%if min(min([Mplus - E_sc]))&lt;0,</span>
-0023 <span class="keyword">if</span> max(max(abs(E_sc)))&gt;1
-0024   warning(<span class="string">'Elasticity out of range; trying to rescale all elasticities'</span>);
-0025   E_sc = 0.99 * 1/max(max(abs(E_sc))) * E_sc;
-0026 <span class="keyword">end</span>
-0027 <span class="keyword">if</span> min(min([Mplus - E_sc]))&lt;0,
-0028   error(<span class="string">'Unsucessful'</span>);  
-0029 <span class="keyword">end</span>
-0030 
-0031 <span class="keyword">for</span> i = 1:nr,
-0032 <span class="comment">%  if min([Mplus(i,:) - E_sc(i,:)])&gt;=0,</span>
-0033     zeta0(i) =  nanmax(abs(Mminus(i,:) - E_sc(i,:)) ./ [Mplus(i,:) - E_sc(i,:)]);
-0034     zeta1(i) =  nanmax(abs(Mplus(i,:) + E_sc(i,:)) ./ [Mminus(i,:) + E_sc(i,:)]);
-0035     zeta(i,1)  = max(zeta0(i)+epsilon,zeta1(i)+epsilon);
-0036 <span class="comment">%  else</span>
-0037 <span class="comment">%    error('Elasticity out of range');</span>
-0038 <span class="comment">%  end</span>
-0039 <span class="keyword">end</span>
-0040 
-0041 A = <a href="../../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a> * log(zeta)./h;
-0042 mu  = - pinv(full(network.N')) * A;
-0043 mu0 = mu - <a href="../../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a> * log(c);
-0044 Keq = exp(-network.N' * mu0);
-0045 
-0046 E_T = diag(1./[zeta-1]) * [ diag(zeta) * Mplus - Mminus];
-0047 beta_M = [E_T - E_sc]./ [Mplus + Mminus];
-0048 <span class="keyword">if</span> find( [beta_M&lt;0] + [beta_M&gt;1]), 
-0049   E_sc
-0050   beta_M
-0051   error(<span class="string">'wrong beta_M'</span>); 
-0052 <span class="keyword">end</span> 
-0053 
-0054 alpha_M = 1-beta_M; 
-0055 
-0056 <span class="comment">%% elasticities due to allosteric regulation are ignored until now. FIX THIS!!</span>
-0057 alpha_A = zeros(size(network.N')); 
-0058 alpha_I = zeros(size(network.N')); 
-0059 
-0060 kinetics.type= <span class="string">'ms'</span>;
-0061 kinetics.u   = u;
-0062 kinetics.c   = c;
-0063 kinetics.Keq = Keq;
-0064 kinetics.KM  = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_k.html" class="code" title="function KX = alpha_to_k(alpha_X,c,hill)">alpha_to_k</a>(alpha_M,c,h);
-0065 kinetics.KA  = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_k.html" class="code" title="function KX = alpha_to_k(alpha_X,c,hill)">alpha_to_k</a>(alpha_A,c,h);
-0066 kinetics.KI  = <a href="../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/alpha_to_k.html" class="code" title="function KX = alpha_to_k(alpha_X,c,hill)">alpha_to_k</a>(alpha_I,c,h);
-0067 kinetics.KV  = ones(size(network.actions));
-0068 kinetics.h   = h;
-0069 vv           = <a href="../../../.././mnt/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>(c,network,kinetics);
-0070 kinetics.KV  = v./vv;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

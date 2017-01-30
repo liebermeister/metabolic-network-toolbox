@@ -42,47 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function display_MC_and_analytic(figure_title,names,n_boot,Y_list,Y_mean,Y_std,std_error_of_mean_Y,std_error_of_std_Y,Y_mean_unc1,Y_std_unc1,Y_mean_unc2,Y_std_unc2)</a>
-0002 
-0003 <span class="comment">% display_MC_and_analytic(figure_title,names,n_boot,Y_list,Y_mean,Y_std,std_error_of_mean_Y,std_error_of_std_Y,Y_mean_unc1,Y_std_unc1,Y_mean_unc2,Y_std_unc2)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% graphics comparing results of monte carlo and analytic calculations</span>
-0006 
-0007 set(gca,<span class="string">'FontSize'</span>,16);
-0008 
-0009 h1 = plot(Y_mean,Y_std,<span class="string">'r.'</span>); hold on
-0010 
-0011 <span class="keyword">for</span> it=1:size(Y_list,1); 
-0012   <span class="keyword">if</span> isfinite(Y_mean(it)),
-0013     [mu,sig]=resampling(Y_list(it,:),n_boot);
-0014     <span class="comment">%%  h0 = plot(mu,sig,'y.');                           % plot results from single bootstrap runs</span>
-0015     <span class="keyword">if</span> max(sig)&gt;0,
-0016       ellipse = covariance_ellipse([mu; sig]);
-0017       <span class="keyword">if</span> sum(sum((isreal(ellipse)-1))) == 0,
-0018         plot(ellipse(1,:),ellipse(2,:),<span class="string">'r'</span>);
-0019       <span class="keyword">end</span>
-0020     <span class="keyword">end</span>
-0021   <span class="keyword">end</span>
-0022 <span class="keyword">end</span>
-0023 
-0024 text(Y_mean,Y_std,names,<span class="string">'FontSize'</span>,16);
-0025 
-0026 h2=plot(Y_mean_unc1,Y_std_unc1,<span class="string">'x'</span>); hold on;
-0027 text(Y_mean_unc1,Y_std_unc1,names,<span class="string">'FontSize'</span>,16);
-0028 
-0029 h3=plot(Y_mean_unc2,Y_std_unc2,<span class="string">'o'</span>); hold on;
-0030 <span class="comment">%text(Y_mean_unc2,Y_std_unc2,names,'FontSize',16);</span>
-0031 
-0032 <span class="comment">%set(gca,'FontYize',10);</span>
-0033 title(figure_title);
-0034 hold off
-0035 
-0036 xlabel(<span class="string">'Mean'</span>); ylabel(<span class="string">'Standard deviation'</span>); 
-0037 
-0038 set(gca,<span class="string">'FontSize'</span>,12);
-0039 
-0040 legend([h1 h2 h3],{<span class="string">'Monte Carlo'</span>,<span class="string">'1^{st} order expansion'</span>,<span class="string">'2^{nd} order expansion'</span>},0);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

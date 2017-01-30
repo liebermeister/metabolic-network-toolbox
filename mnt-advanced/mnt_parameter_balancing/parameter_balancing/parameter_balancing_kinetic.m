@@ -1,4 +1,4 @@
-function [r, r_orig, kinetic_data, r_samples] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given, options);
+function [r, r_orig, kinetic_data, r_samples, quantity_info, r_std] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given, options);
 
 % [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);
 %
@@ -12,19 +12,22 @@ function [r, r_orig, kinetic_data, r_samples] = parameter_balancing_kinetic(netw
 % or some of these
 %
 % options and their default values:
-%  options.kcat_prior_median = [];
-%  options.kcat_prior_log10_std = []
-%  options.kcat_lower = [];
-%  options.kcat_upper = []; 
-%  options.GFE_fixed = 0
-%  options.quantity_info_file = [];
+%   options.kcat_prior_median = [];
+%   options.kcat_prior_log10_std = []
+%   options.kcat_lower = [];
+%   options.kcatr_lower = [];
+%   options.kcat_upper = []; 
+%   options.GFE_fixed = 0
+%   options.quantity_info_file = [];
+%   options.use_pseudo_values = 1;
+%   options.n_samples = 0;
 %
 % The standard reaction directions in the model have to follow the convention in KEGG!!
 
 
 eval(default('filename','[]', 'Keq_given','[]','options','struct'));
 
-options_default = struct('kcat_prior_median',[],'kcat_prior_log10_std',[],'kcat_lower',[],'kcat_upper',[],'GFE_fixed',0,'quantity_info_file','[]','n_samples',0);
+options_default = struct('kcat_prior_median',[],'kcat_prior_log10_std',[],'kcat_lower',[],'kcatr_lower',[],'kcat_upper',[],'GFE_fixed',0,'quantity_info_file','[]','use_pseudo_values',1,'n_samples',0);
 options = join_struct(options_default,options);
 
 if isempty(kinetic_data),
@@ -43,22 +46,29 @@ end
 quantity_info = data_integration_load_quantity_info([],options.quantity_info_file);
 
 if length(options.kcat_prior_median),
-  display(sprintf('  Setting kcat prior median value to %2.3f', options.kcat_prior_median));
+  display(sprintf('  Setting kcat prior median value to %f', options.kcat_prior_median));
   ll = label_names({'catalytic rate constant geometric mean', 'substrate catalytic rate constant','product catalytic rate constant'},  quantity_info.QuantityType);
   quantity_info.PriorMedian(ll) = repmat({num2str(options.kcat_prior_median)},3,1);
 end
 
 if length(options.kcat_prior_log10_std),
-  display(sprintf('  Setting kcat prior log10 std dev value to %2.3f', options.kcat_prior_log10_std));
+  display(sprintf('  Setting kcat prior log10 std dev value to %f', options.kcat_prior_log10_std));
   ll = label_names({'catalytic rate constant geometric mean', 'substrate catalytic rate constant','product catalytic rate constant'},  quantity_info.QuantityType);
   quantity_info.PriorStd(ll) = repmat({num2str(options.kcat_prior_log10_std)},3,1);
 end
 
 if length(options.kcat_lower),
-  display(sprintf('  Setting kcat lower bound to %2.3f', options.kcat_lower));
+  display(sprintf('  Setting kcat lower bound to %f', options.kcat_lower));
   ll = label_names({'catalytic rate constant geometric mean', 'substrate catalytic rate constant','product catalytic rate constant'},  quantity_info.QuantityType);
   quantity_info.LowerBound(ll) = repmat({num2str(options.kcat_lower)},3,1);
 end
+
+if length(options.kcatr_lower),
+  display(sprintf('  Setting kcat reverse lower bound to %f', options.kcatr_lower));
+  ll = label_names({'product catalytic rate constant'},  quantity_info.QuantityType);
+  quantity_info.LowerBound(ll) = repmat({num2str(options.kcatr_lower)},1,1);
+end
+
 
 if length(options.KM_lower),
   display(sprintf('  Setting KM lower bound to %2.3f', options.KM_lower));
@@ -85,14 +95,20 @@ data_quantities   = {'standard chemical potential difference', 'standard chemica
 
 basic_quantities  = {'standard chemical potential','catalytic rate constant geometric mean', 'Michaelis constant','activation constant', 'inhibitory constant'}';
 
-my_kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,1,network);
+my_kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,options.use_pseudo_values,network);
+
+if options.use_pseudo_values,
+  display('  Using pseudo values');
+else
+  display('  Not using pseudo values - Note that this may result, e.g., in ill-determined Kcat values!');
+end
 
 if options.GFE_fixed,
   display(sprintf('  Fixing GFE (assuming very small std devs) for parameter balancing'));
   display(sprintf('  Recomputing equilibrium constants from GFE values'));
   dmu0_is_given = prod(double(isfinite(my_kinetic_data.dmu0.median)));
   if dmu0_is_given,
-    my_kinetic_data.dmu0.std = 0.0001 * ones(size(network.metabolites));
+    my_kinetic_data.dmu0.std = 0.0001 * ones(size(network.actions));
     Keq_given = exp(-1/RT * my_kinetic_data.dmu0.median);  
   else
     my_kinetic_data.mu0.std  = 0.0001 * ones(size(network.metabolites));
@@ -101,17 +117,18 @@ if options.GFE_fixed,
 end
 
 if length(Keq_given),
+  display('Keeping Keq values very close to given data values')
   ind_finite = find(isfinite(Keq_given));
   my_kinetic_data.Keq.median(ind_finite)  = Keq_given(ind_finite);
   my_kinetic_data.Keq.mean(ind_finite)    = Keq_given(ind_finite);
   my_kinetic_data.Keq.std(ind_finite)     = 0.0001 * Keq_given(ind_finite);
   my_kinetic_data.Keq.mean_ln(ind_finite) = log(Keq_given(ind_finite));
-  my_kinetic_data.Keq.std_ln              = 0.0001 * ones(size(network.metabolites));
-end
+  my_kinetic_data.Keq.std_ln              = 0.0001 * ones(size(network.actions));
+end  
 
 network.kinetics = set_kinetics(network, 'cs');
 task             = parameter_balancing_task(network, my_kinetic_data, quantity_info, model_quantities, basic_quantities);
-res              = parameter_balancing(task, quantity_info, struct('insert_pseudo_values',0,'n_samples',options.n_samples));
+res              = parameter_balancing(task, quantity_info, struct('use_pseudo_values',0,'n_samples',options.n_samples, 'fix_Keq_in_sampling', options.fix_Keq_in_sampling));
 
 r.mu0   = res.kinetics_posterior_mode.mu0  ;
 r.KV    = res.kinetics_posterior_mode.KV   ;
@@ -121,6 +138,15 @@ r.KI    = res.kinetics_posterior_mode.KI   ;
 r.Keq   = res.kinetics_posterior_mode.Keq  ;
 r.Kcatf = res.kinetics_posterior_mode.Kcatf;
 r.Kcatr = res.kinetics_posterior_mode.Kcatr;
+
+r_std.mu0   = full(res.kinetics_posterior_std.mu0)  ;
+r_std.KV    = full(res.kinetics_posterior_std.KV)   ;
+r_std.KM    = res.kinetics_posterior_std.KM   ;
+r_std.KA    = res.kinetics_posterior_std.KA   ;
+r_std.KI    = res.kinetics_posterior_std.KI   ;
+r_std.Keq   = full(res.kinetics_posterior_std.Keq  );
+r_std.Kcatf = full(res.kinetics_posterior_std.Kcatf);
+r_std.Kcatr = full(res.kinetics_posterior_std.Kcatr);
 
 r_orig.mu0   = kinetic_data.mu0.median  ;
 r_orig.KM    = kinetic_data.KM.median   ;
@@ -159,7 +185,7 @@ if 0,
   %filename = [];
   Keq_given = [];
 
- [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);
+  [r,r_orig,kinetic_data] = parameter_balancing_kinetic(network, kinetic_data, filename, Keq_given);
 
   gp               = struct('arrowsize',0.1,'actstyle','none','actprintnames',0,'flag_edges',1);
   gp.actstyle      ='none'; 

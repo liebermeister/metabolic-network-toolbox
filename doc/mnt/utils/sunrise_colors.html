@@ -40,41 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function col = sunrise_colors(n)</a>
-0002 
-0003 <span class="comment">% function col = sunrise_colors(n)</span>
-0004 
-0005 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'n'</span>,<span class="string">'250'</span>));
-0006 
-0007 c = [<span class="keyword">...</span>
-0008    0,0,205;<span class="keyword">...</span>
-0009    0,0,245;<span class="keyword">...</span>
-0010    15,100,255;<span class="keyword">...</span>
-0011    30,144,255;<span class="keyword">...</span>
-0012    95,184,255;<span class="keyword">...</span>
-0013    125,215,255;<span class="keyword">...</span>
-0014    152,245,255;<span class="keyword">...</span>
-0015    187,255,255;<span class="keyword">...</span>
-0016    240,255,210;<span class="keyword">...</span>
-0017    255,246,143;<span class="keyword">...</span>
-0018    255,225,80;<span class="keyword">...</span>
-0019    255,193,37;<span class="keyword">...</span>
-0020    255,160,20;<span class="keyword">...</span>
-0021    255,120,15;<span class="keyword">...</span>
-0022    255,69,10;<span class="keyword">...</span>
-0023    245,20,5;<span class="keyword">...</span>
-0024    220,20,5;<span class="keyword">...</span>
-0025     ]/256;
-0026 
-0027 nn  = size(c,1);
-0028 col = interp1(1:nn,c,1:[nn-1]/(n-1):nn,<span class="string">'cubic'</span>);
-0029 
-0030 col = flipud(col);
-0031 
-0032 <span class="keyword">if</span> n==1,
-0033   col = [0 0 1];
-0034 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

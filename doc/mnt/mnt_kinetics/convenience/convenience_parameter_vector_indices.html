@@ -40,44 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function types = convenience_parameter_vector_indices(network,dynamic_flag,n_exp,dependent_flag,nw)</a>
-0002 
-0003 <span class="comment">% types = convenience_parameter_vector_indices(network,dynamic_flag,n_exp,dependent_flag,nw)</span>
-0004 
-0005 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="keyword">...</span>
-0006     <span class="string">'dynamic_flag'</span>,<span class="string">'0'</span>,<span class="keyword">...</span>
-0007     <span class="string">'n_exp'</span>,<span class="string">'nan'</span>,<span class="keyword">...</span>
-0008     <span class="string">'dependent_flag'</span>,<span class="string">'0'</span>,<span class="keyword">...</span>
-0009     <span class="string">'nw'</span>,<span class="string">'nan'</span>));
-0010 
-0011 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0012 
-0013 ss = 0;
-0014 types.g  = 1:nm;                            ss = ss + nm;
-0015 types.r  = ss + (1:nr);                     ss = ss + nr;
-0016 types.KM = ss + (1:length(KM_indices));     ss = ss + length(KM_indices);
-0017 types.KA = ss + (1:length(KA_indices));     ss = ss + length(KA_indices);
-0018 types.KI = ss + (1:length(KI_indices));     ss = ss + length(KI_indices);
-0019 types.E  = ss + (1:nr);                     ss = ss + nr;
-0020 types.S  = ss + (1:nm);                     ss = ss + nm;
-0021 
-0022 <span class="keyword">if</span> dependent_flag,
-0023   types.q   = ss + (1:nr);             ss = ss + nr;
-0024   types.KCp = ss + (1:nr);             ss = ss + nr;
-0025   types.KCm = ss + (1:nr);             ss = ss + nr;
-0026   types.VMp = ss + (1:nr);             ss = ss + nr;
-0027   types.VMm = ss + (1:nr);             ss = ss + nr;
-0028 <span class="keyword">end</span>
-0029 
-0030 <span class="keyword">if</span> dynamic_flag,
-0031   types.w      = ss + (1:nw*n_exp);    ss = ss + nw*n_exp;
-0032   types.deltaE = ss + (1:nr*n_exp);    ss = ss + nr*n_exp;
-0033   types.deltaS = ss + (1:nm*n_exp);    ss = ss + nm*n_exp;
-0034   types.E0     = ss + (1:nr);          ss = ss + nr;
-0035   types.S0     = ss + (1:nm);          ss = ss + nm;
-0036   types.X0     = ss + (1:nr);          ss = ss + nr;
-0037 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

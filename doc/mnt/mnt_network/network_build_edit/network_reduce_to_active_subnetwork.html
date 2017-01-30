@@ -41,20 +41,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [network,ind_m,ind_r] = network_reduce_to_active_subnetwork(network,v,epsilon)</a>
-0002 
-0003 <span class="comment">% if v is a matrix, choose all reactions for which the flux in any of the states</span>
-0004 <span class="comment">% is above threshold (threshold epsilon for absolute rate)</span>
-0005 
-0006 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'epsilon'</span>,<span class="string">'10^-15'</span>));
-0007 
-0008 ind_remove = find(prod(abs(v),2)&lt;=epsilon);
-0009 
-0010 [network,ind_m,ind_r] = <a href="network_remove_action.html" class="code" title="function [network1,keep,keep_actions] = network_remove_action(network,ind,flag_remove_metabolites)">network_remove_action</a>(network,ind_remove);
-0011 
-0012 <span class="comment">%network = network_set_external(network,1);</span>
-0013</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

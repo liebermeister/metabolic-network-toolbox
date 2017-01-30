@@ -40,25 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminus,Keq)</a>
-0002 
-0003 <span class="comment">% [kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminus,Keq)</span>
-0004 
-0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'kcatminus'</span>,<span class="string">'[]'</span>,<span class="string">'Keq'</span>,<span class="string">'[]'</span>));
-0006 
-0007 all_KM              = ones(size(N'));
-0008 all_KM(find(N'~=0)) = kinetics.KM(find(N'~=0));
-0009 KMprod              = prod(all_KM.^(N'),2);
-0010 
-0011 <span class="keyword">if</span> length(kcatminus),
-0012   Keq = kcatplus./kcatminus./KMprod;
-0013 <span class="keyword">end</span>
-0014 
-0015 KV  = sqrt([kcatplus .* kcatminus]);
-0016 
-0017 kinetics.KV  = KV;
-0018 kinetics.Keq = Keq;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

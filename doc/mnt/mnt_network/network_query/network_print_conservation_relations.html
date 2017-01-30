@@ -40,18 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network_print_conservation_relations(network,G)</a>
-0002 
-0003 <span class="comment">% network_print_conservation_relations(network,G)</span>
-0004 
-0005 <span class="keyword">if</span> ~exist(<span class="string">'G'</span>,<span class="string">'var'</span>),  [K, L, N_R, G] = <a href="network_analyse.html" class="code" title="function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)">network_analyse</a>(network); <span class="keyword">end</span>
-0006 
-0007 internal_metabolites = network.metabolites;<span class="comment">%(network.external ==0);</span>
-0008 <span class="keyword">for</span> it = 1:size(G,1)
-0009   display(sprintf(<span class="string">'Conserved moiety %d:'</span>,it));
-0010   display(<a href="../../.././mnt/utils/mytable.html" class="code" title="function res = mytable(names,rownumbers,filename)">mytable</a>([  cellstr(num2str(G(it,find(G(it,:)))')), internal_metabolites(find(G(it,:)))],0))
-0011 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

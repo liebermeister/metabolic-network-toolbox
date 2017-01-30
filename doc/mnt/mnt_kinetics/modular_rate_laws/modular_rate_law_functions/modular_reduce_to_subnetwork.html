@@ -40,25 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)</a>
-0002 
-0003 <span class="comment">% kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)</span>
-0004 
-0005 <span class="keyword">switch</span> kinetics.type,
-0006   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>,<span class="string">'rp'</span>,<span class="string">'ma'</span>,<span class="string">'fm'</span>},
-0007   
-0008     kinetics.u   =     kinetics.u(indr)   ;
-0009     kinetics.c   =     kinetics.c(indm)   ;
-0010     kinetics.KA  =     kinetics.KA(indr,indm)  ;
-0011     kinetics.KI  =     kinetics.KI(indr,indm)  ;
-0012     kinetics.KM  =     kinetics.KM(indr,indm)  ;
-0013     kinetics.KV  =     kinetics.KV(indr)    ;
-0014     kinetics.Keq =     kinetics.Keq(indr)   ;
-0015     kinetics.h   =     kinetics.h(indr)   ;
-0016 
-0017   <span class="keyword">otherwise</span>, error(<span class="string">'unknown kinetics type'</span>);
-0018 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

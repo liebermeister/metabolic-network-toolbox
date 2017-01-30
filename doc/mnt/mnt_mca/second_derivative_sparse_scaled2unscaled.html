@@ -46,28 +46,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function D2_un = second_derivative_sparse_scaled2unscaled(D2_sc,D_sc,f,x)</a>
-0002 
-0003 <span class="comment">% D2_un = second_derivative_sparse_scaled2unscaled(D2_sc,D_sc,f,x)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% same as second_derivative_scaled2unscaled, but for sparse tensors</span>
-0006 <span class="comment">% (data structre from tensor_toolbox)</span>
-0007 <span class="comment">%  let  D_sc be the matrix of scaled derivatives dln f_r / dln x_i</span>
-0008 <span class="comment">%  and D2_sc be the tensor of scaled second derivatives d^2 ln f_r / dln x_i dln x_j</span>
-0009 <span class="comment">%  compute D2_un, the tensor of unscaled second derivatives d^2 f_r / dx_i dx_j</span>
-0010 
-0011 nr = length(f);
-0012 nm = size(D_sc,2);
-0013 dd = sptensor([nr,nm,nm]);
-0014 
-0015 <span class="keyword">for</span> it = 1:nr,
-0016   dd(it,:,:) = sptensor(D_sc(it,:)' * D_sc(it,:) - diag(D_sc(it,:)));
-0017 <span class="keyword">end</span>
-0018 
-0019 D2_un = scale(D2_sc + dd, f, 1);
-0020 D2_un = scale(D2_un,      1./x,2);
-0021 D2_un = scale(D2_un,      1./x,3);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

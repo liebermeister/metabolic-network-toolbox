@@ -24,7 +24,7 @@
 <div class="box"><strong>[nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default) </strong></div>
+<div class="box"><strong>function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</pre></div>
@@ -33,69 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="netgraph_flux_movie.html" class="code" title="function M = netgraph_flux_movie(network,S,J,text_flag,goptions);">netgraph_flux_movie</a>	M = netgraph_flux_movie(network,S,J,text_flag,goptions);</li><li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>	network = netgraph_read_positions(network,table_positions,offsets,fill_nans,flag_KEGG_ids)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)</li><li><a href="../.././mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites,all_reversible )</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li><li><a href="../.././mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>	b = print_matrix(matrix,rownames,colnames)</li></ul>
+<li><a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, layout_file, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)">netgraph_read_positions</a>	network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)</li><li><a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)">netgraph_simple_graph</a>	[n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)</li><li><a href="../.././mnt/mnt_network/network_build_edit/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites,all_reversible )</li><li><a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../.././mnt/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../.././mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>	b = print_matrix(matrix,rownames,colnames)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</a>
-0002 
-0003 <span class="comment">% [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</span>
-0004 
-0005 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'perc_show'</span>,<span class="string">'0.002'</span>,<span class="string">'table_positions'</span>,<span class="string">''''''</span>,<span class="string">'cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'not_cofactors'</span>,<span class="string">'[]'</span>,<span class="string">'goptions_default'</span>,<span class="string">'struct'</span>));
-0006 
-0007 goptions = <a href="../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(struct,goptions_default);
-0008 network.formulae = <a href="../.././mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>(network);
-0009 
-0010 <span class="comment">% ------------------------------------------------------------------------------</span>
-0011 <span class="comment">% 1. distribution of flux values</span>
-0012 
-0013 n_show = sum(abs(v) &gt;= perc_show * max(abs(v)) ); <span class="comment">% 10;</span>
-0014 figure(1); plot(sort(abs(v))); set(gca,<span class="string">'YScale'</span>,<span class="string">'Log'</span>); xlabel(<span class="string">'rank'</span>); ylabel(<span class="string">'absolute flux'</span>)
-0015 title(sprintf(<span class="string">'%d reactions above %f x maximum'</span>,n_show,perc_show));
-0016 
-0017 
-0018 <span class="comment">% ------------------------------------------------------------------------------</span>
-0019 <span class="comment">% 2. table of reactions with the n_show highest fluxes</span>
-0020 display(sprintf(<span class="string">'Reactions with %d highest fluxes'</span>,n_show))
-0021 [dum,order] = sort(-abs(v));
-0022 
-0023 <a href="../.././mnt/utils/print_matrix.html" class="code" title="function b = print_matrix(matrix,rownames,colnames)">print_matrix</a>(v(order(1:n_show)), network.reaction_names(order(1:n_show)))
-0024 
-0025 <span class="comment">% ------------------------------------------------------------------------------</span>
-0026 <span class="comment">% 3. network graphics with n_show largest flux reactions</span>
-0027 
-0028 <span class="keyword">if</span> isempty(cofactors),
-0029   <span class="comment">%cofactors = {'h[c]','atp[c]','atp[m]','atp[n]','adp[c]','adp[m]','adp[n]','o2[c]','o2[e]','o2[x]',  'nad[c]',   'nad[m]',  'nadh[c]', 'nadh[m]','nadp[c]' ,'nadph[c]', 'nh4[c]', 'nh4[e]', 'pi[c]', 'pi[m]', 'h[e]', 'h[m]', 'hco3[c]', 'hco3[e]', 'h2o[c]', 'h2o[l]', 'h2o[m]', 'co2[c]', 'co2[e]', 'co2[m]', 'amp[c]', 'cmp[n]', 'gtp[n]', 'h2o2[c]', 'h2o2[l]', 'h2o2[x]', 'udp[c]', 'ump[c]', 'utp[c]'}';</span>
-0030 <span class="keyword">end</span>
-0031 
-0032 metrank = sum(abs(network.N),2);
-0033 cofactors = [<a href="../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(cofactors); network.metabolites(find(metrank&gt;5))];
-0034 
-0035 ind_not_involved_in_relevant_flux = find(abs(network.N) * double(abs(v) &gt;= perc_show * max(abs(v))) ==0);
-0036 cofactors = [cofactors; network.metabolites(ind_not_involved_in_relevant_flux)];
-0037 cofactors = setdiff(cofactors, not_cofactors);
-0038 
-0039 nn = <a href="netgraph_simple_graph.html" class="code" title="function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,positions)">netgraph_simple_graph</a>(network,cofactors);
-0040 
-0041 <span class="keyword">if</span> isfield(nn,<span class="string">'metabolite_names'</span>),
-0042   nn.metabolites = nn.metabolite_names;
-0043 <span class="keyword">end</span>
-0044 <span class="comment">%nn = netgraph_make_graph(nn);</span>
-0045 <span class="keyword">if</span> length(table_positions),
-0046   nn = <a href="netgraph_read_positions.html" class="code" title="function network = netgraph_read_positions(network, table_positions, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs)">netgraph_read_positions</a>(nn,table_positions,[0,0],1,0);
-0047 <span class="keyword">end</span>
-0048 
-0049 [nm,nr] = size(network.N);
-0050 figure(2);
-0051 nn.graphics_par.metnames = nn.metabolite_names;
-0052 <span class="comment">%netgraph_concentrations(nn,ones(nm,1),v,1,struct('actstyle','none','arrowstyle','fluxes','arrowsize',0.02));</span>
-0053 <span class="comment">%M=[];</span>
-0054 M = <a href="netgraph_flux_movie.html" class="code" title="function M = netgraph_flux_movie(network,S,J,text_flag,goptions);">netgraph_flux_movie</a>(nn,zeros(nm,1),v,1,goptions);
-0055 movie(M,10)</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

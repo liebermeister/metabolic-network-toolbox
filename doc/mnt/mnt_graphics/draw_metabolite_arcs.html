@@ -43,33 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function draw_metabolite_arcs(network, colors, i1_list,i2_list, linewidth)</a>
-0002 
-0003 <span class="comment">% draw_metabolite_arcs(network, colors, i1_list,i2_list, linewidth)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">%</span>
-0006 <span class="comment">% See also draw_reaction_arcs(network,colors,linewidth)</span>
-0007 
-0008 eval(<a href="../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'linewidth'</span>,<span class="string">'2'</span>));
-0009 
-0010 [nm,nr] = size(network.N);
-0011 
-0012 xcentre = mean(network.graphics_par.x(:,1:nm),2);
-0013 
-0014 hold on
-0015 <span class="keyword">for</span> it = 1:length(i1_list),
-0016   i1 = i1_list(it);
-0017   i2 = i2_list(it);
-0018   col = colors(it,:);
-0019   x1 = network.graphics_par.x(:,i1);
-0020   x2 = network.graphics_par.x(:,i2);
-0021   arcsign = det([((x1+x2)/2 -xcentre), x1-x2]) &gt;=0;
-0022   x = <a href="../.././mnt/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>(x1,x2, 2*(arcsign-0.5)*.2);
-0023   <span class="keyword">if</span> sum(isnan(col))==0,
-0024     plot(x(1,:),x(2,:),<span class="string">'color'</span>,col,<span class="string">'Linewidth'</span>,linewidth); 
-0025   <span class="keyword">end</span>
-0026 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

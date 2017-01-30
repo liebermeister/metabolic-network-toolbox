@@ -40,18 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% [names,indices,degrees] = network_find_hub_metabolites(network,degree)</span>
-0002 
-0003 <a name="_sub0" href="#_subfunctions" class="code">function [names,indices,degrees] = network_find_hub_metabolites(network,degree)</a>
-0004 
-0005 degrees = sum(network.N ~= 0,2);
-0006 [degrees,order] = sort(-degrees);
-0007 degrees = -degrees;
-0008 
-0009 indices = order(find(degrees&gt;=degree));
-0010 names   = network.metabolites(indices);
-0011 degrees = degrees(find(degrees&gt;=degree));</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

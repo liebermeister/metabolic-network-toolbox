@@ -40,23 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);</a>
-0002 
-0003 <span class="comment">% [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);</span>
-0004 
-0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'h'</span>,<span class="string">'ones(size(KV))'</span>));
-0006 
-0007 log_KV              = log(KV);
-0008 log_Keq             = log(Keq);
-0009 
-0010 ind_N               = find(N'~=0);
-0011 all_log_KM          = sparse(size(N,2),size(N,1));
-0012 all_log_KM(ind_N)   = log(KM(ind_N) + 10^-15);
-0013 
-0014 log_prod_KM         = sum( N' .* all_log_KM , 2);
-0015 log_kcatplus        = log_KV + 0.5 * h .* ( log_Keq - log_prod_KM );
-0016 log_kcatminus       = log_KV - 0.5 * h .* ( log_Keq - log_prod_KM );</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

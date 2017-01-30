@@ -33,46 +33,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="network_add_metabolites.html" class="code" title="function network = network_add_metabolites(network,new_metabolites,new_external);">network_add_metabolites</a>	network = network_add_metabolites(network,new_metabolites,new_external);</li><li><a href="../../.././mnt/mnt_network/network_query/network_find_metabolites.html" class="code" title="function ind = network_find_metabolites(network,metabolite)">network_find_metabolites</a>	indices = network_find_metabolites(network,metabolite)</li><li><a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../.././mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites,all_reversible )</li><li><a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+<li><a href="network_add_metabolites.html" class="code" title="function [network, indices] = network_add_metabolites(network,new_metabolites,new_external);">network_add_metabolites</a>	network = network_add_metabolites(network,new_metabolites,new_external);</li><li><a href="network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>	all_result = network_print_formulae(network,actions,metabolites,all_reversible )</li><li><a href="../../.././mnt/mnt_network/network_query/network_find_metabolites.html" class="code" title="function ind = network_find_metabolites(network,metabolite)">network_find_metabolites</a>	indices = network_find_metabolites(network,metabolite)</li><li><a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = network_add_reaction(network,reactants,stoich_coeffs,name,reversible,external); </a>
-0002 
-0003 <span class="comment">% network = network_add_reaction(network,reactants,stoich_coeffs,name,reversible);</span>
-0004 
-0005 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'reversible'</span>,<span class="string">'1'</span>));
-0006 
-0007 stoich_coeffs = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(stoich_coeffs);
-0008 
-0009 new_metabolites = setdiff(reactants,network.metabolites);
-0010 
-0011 new_external = external(<a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(new_metabolites,reactants));
-0012 
-0013 <span class="keyword">if</span> length(new_metabolites),
-0014   network = <a href="network_add_metabolites.html" class="code" title="function network = network_add_metabolites(network,new_metabolites,new_external);">network_add_metabolites</a>(network,new_metabolites,new_external);
-0015 <span class="keyword">end</span>
-0016 
-0017 [nr,nm] = <a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0018 
-0019 ind    = <a href="../../.././mnt/mnt_network/network_query/network_find_metabolites.html" class="code" title="function ind = network_find_metabolites(network,metabolite)">network_find_metabolites</a>(network,reactants);
-0020   
-0021 network.actions                   = [network.actions; name];
-0022 network.N(ind,nr+1)               = stoich_coeffs;
-0023 network.regulation_matrix(nr+1,:) = 0;
-0024 network.reversible                = [network.reversible; reversible];
-0025 
-0026 <span class="keyword">if</span> isfield(network, <span class="string">'reaction_names'</span>),
-0027   network.reaction_names = [network.reaction_names; {name}];
-0028 <span class="keyword">end</span>
-0029 
-0030 <span class="keyword">if</span> isfield(network, <span class="string">'formulae'</span>),
-0031   network.formulae = <a href="../../.././mnt/mnt_network/network_query/network_print_formulae.html" class="code" title="function all_result = network_print_formulae(network,actions,metabolites,all_reversible)">network_print_formulae</a>(network);
-0032 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

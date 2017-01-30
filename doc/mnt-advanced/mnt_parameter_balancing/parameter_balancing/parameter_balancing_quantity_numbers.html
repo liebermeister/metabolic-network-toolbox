@@ -36,35 +36,11 @@ This function calls:
 <li><a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing.html" class="code" title="function [res, exitflag] = parameter_balancing(task, quantity_info, options)">parameter_balancing</a>	[res, exitflag] = parameter_balancing(task, quantity_info, options)</li><li><a href="parameter_balancing_constrained_sampling.html" class="code" title="function [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)">parameter_balancing_constrained_sampling</a>	[q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)</li><li><a href="parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>	Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)</li><li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities)">parameter_balancing_task</a>	Prepare vectors and matrices for parameter balancing</li></ul>
+<li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing.html" class="code" title="function [result, exitflag] = parameter_balancing(task, quantity_info, options)">parameter_balancing</a>	[result, exitflag] = parameter_balancing(task, quantity_info, options)</li><li><a href="parameter_balancing_constrained_sampling.html" class="code" title="function [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)">parameter_balancing_constrained_sampling</a>	[q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)</li><li><a href="parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)">parameter_balancing_construct_Q_matrix</a>	Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)</li><li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)">parameter_balancing_task</a>	[task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)</a>
-0002 
-0003 <span class="comment">% count how many quantities of a certain type appear in a model</span>
-0004 
-0005 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = <a href="../../.././mnt/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>(network);
-0006 num=[];
-0007 
-0008 <span class="keyword">for</span> it = 1:length(quantities),
-0009   my_quantity = quantities{it};
-0010   ind = find(strcmp(my_quantity, quantity_info.QuantityType));
-0011   my_elements = quantity_info.RelatedElement{ind};
-0012   my_symbol   = quantity_info.Symbol{ind};
-0013   <span class="keyword">switch</span>  my_elements,
-0014     <span class="keyword">case</span> <span class="string">'Species'</span>,  num(it,1) = nm;
-0015     <span class="keyword">case</span> <span class="string">'Reaction'</span>, num(it,1) = nr;
-0016     <span class="keyword">case</span> <span class="string">'Reaction/Species'</span>,
-0017      <span class="keyword">switch</span> my_symbol,
-0018        <span class="keyword">case</span> <span class="string">'KM'</span>, num(it,1) = nKM;
-0019        <span class="keyword">case</span> <span class="string">'KA'</span>, num(it,1) = nKA;
-0020        <span class="keyword">case</span> <span class="string">'KI'</span>, num(it,1) = nKI;
-0021        <span class="keyword">otherwise</span> error(sprintf(<span class="string">'Unknown symbol %s'</span>,my_symbol));
-0022      <span class="keyword">end</span>
-0023   <span class="keyword">end</span>
-0024 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

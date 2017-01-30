@@ -42,22 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% external_metabolites = network_find_ext_metabolites(network)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">% determine indices of metabolites that should be set external for consistency</span>
-0004 
-0005 <a name="_sub0" href="#_subfunctions" class="code">function external_metabolites = network_find_ext_metabolites(network)</a>
-0006 
-0007 N = network.N;
-0008 reversible = network.reversible;
-0009 
-0010 only_one_reaction = find(sum(N~=0,2)&lt;=1);
-0011 only_irreversible = sum(N(:,find(reversible))~=0,2)==0;
-0012 only_consumption  = find( (sum(N&gt;0,2)==0) .* only_irreversible);
-0013 only_production   = find( (sum(N&lt;0,2)==0) .* only_irreversible);
-0014 
-0015 external_metabolites = unique([only_one_reaction; only_production; only_consumption]);</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

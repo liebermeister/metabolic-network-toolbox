@@ -49,73 +49,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt/mnt_fluxes/fba/fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/fba/fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints,network)">fba_update_constraints</a>	fba_constraints = fba_update_constraints(fba_constraints)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function v = pmf_quadratic(network,fba_constraints,benefit)</a>
-0002 
-0003 <span class="comment">% v = pmf_quadratic(network,fba_constraints,benefit)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% Principle of minimal quadratic sum of fluxes, solves</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% min = sum(v.^2)</span>
-0008 <span class="comment">% where benefit = z' * v</span>
-0009 <span class="comment">%       N_internal * v = 0</span>
-0010 <span class="comment">%       v_min &lt;= v &lt;= v_max</span>
-0011 <span class="comment">%</span>
-0012 <span class="comment">% fba_constraints: see fba_default_options</span>
-0013 <span class="comment">%  fba_constraints.zv:       linear weights in the objective function</span>
-0014 <span class="comment">%  fba_constraints.v_min:    vector of lower bounds</span>
-0015 <span class="comment">%  fba_constraints.v_max:    vector of upper bounds</span>
-0016 <span class="comment">%  fba_constraints.v_sign:   vector of signs, overrides v_min and v_max</span>
-0017 <span class="comment">%  fba_constraints.v_fix:    vector of fixed fluxes, overrides everything else</span>
-0018 <span class="comment">%  fba_constraints.ext_sign: sign vector for external metabolite production</span>
-0019 <span class="comment">% benefit: predefined value of the objective</span>
-0020 
-0021 [nm,nr] = size(network.N);
-0022 
-0023 fba_constraints = <a href="../../.././mnt/mnt_fluxes/fba/fba_update_constraints.html" class="code" title="function fba_constraints = fba_update_constraints(fba_constraints)">fba_update_constraints</a>(fba_constraints);
-0024 
-0025 ind_fix = find(isfinite(fba_constraints.v_fix));
-0026 v_min = fba_constraints.v_min;
-0027 v_max = fba_constraints.v_max;
-0028 K    = null(full(network.N));
-0029 zv   = fba_constraints.zv;
-0030 
-0031 v0 = 0.5 * [v_min+v_max];
-0032 v0(ind_fix) = fba_constraints.v_fix(ind_fix);
-0033 v0red = pinv(full(K)) * v0;
-0034 
-0035 <span class="comment">% min = sum(abs(K*vred))</span>
-0036 <span class="comment">% where K * vred &gt; v_min</span>
-0037 <span class="comment">%       K * vred &lt; v_max</span>
-0038 <span class="comment">%       K(fixed,:) * vred = v_fix</span>
-0039 <span class="comment">%       zv' * K * vred = benefit;</span>
-0040 
-0041 A    = [-K; K];
-0042 b    = [-v_min; v_max];
-0043 A_eq = [K(ind_fix,:); zv' * K];
-0044 b_eq = [fba_constraints.v_fix(ind_fix); benefit];
-0045 
-0046 H = K'*K;
-0047 f = zeros(size(H,1),1);
-0048 opt  = optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'MaxIter'</span>,10^10,<span class="string">'MaxFunEvals'</span>,10^10);
-0049 
-0050 [vred,fval,exitflag] = quadprog(H,f, A, b, A_eq, b_eq, [],[],v0red, opt);
-0051 
-0052 <span class="comment">%[vred,fval,exitflag] = fmincon(@(vred) g1(vred,K), A, b, A_eq, b_eq, [],[],[],opt);</span>
-0053 
-0054 <span class="keyword">if</span> exitflag&lt;=0,
-0055   exitflag
-0056   warning(<span class="string">'No solution found in FBA with minimal fluxes'</span>); 
-0057 <span class="keyword">end</span>
-0058 
-0059 v = K * vred;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

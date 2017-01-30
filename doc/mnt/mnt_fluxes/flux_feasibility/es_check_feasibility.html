@@ -46,35 +46,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function es_check_feasibility(N, v, delta_mu, mu0, c)</a>
-0002 
-0003 <span class="comment">% es_check_feasibility(N, v, delta_mu, mu0, c)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% check vectors for feasibility:</span>
-0006 <span class="comment">%   v          fluxes</span>
-0007 <span class="comment">%   delta_mu   reaction GFE</span>
-0008 <span class="comment">%   c          metabolite levels</span>
-0009 <span class="comment">%   mu0        GFE of formation</span>
-0010 
-0011 n_exp                = size(v,2);
-0012 Q                    = null(N);
-0013 
-0014 violated_wegscheider = norm( Q'*delta_mu );
-0015 
-0016 violated_sign_const  = norm( ( sign(delta_mu) + sign(v) ) .* double(v~=0) );
-0017 
-0018 violated_relation_delta_mu_m0_c = sum(sum( double(<span class="keyword">...</span>
-0019     abs(delta_mu - [ N'* repmat(mu0,1,n_exp) + <a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a> * N' * log(c) ]) &gt; 10^-4 ) ));
-0020 
-0021 <span class="keyword">if</span> violated_wegscheider +  violated_sign_const +  violated_relation_delta_mu_m0_c &lt; 10^-10,
-0022   display(<span class="string">'  Feasibility checks are successful'</span>);
-0023 <span class="keyword">else</span>,
-0024   violated_wegscheider
-0025   violated_sign_const
-0026   ( sign(delta_mu) + sign(v) ) .* double(v~=0) ;
-0027  violated_relation_delta_mu_m0_c
-0028 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

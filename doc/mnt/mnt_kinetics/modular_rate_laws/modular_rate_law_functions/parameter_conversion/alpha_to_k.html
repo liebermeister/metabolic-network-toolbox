@@ -40,24 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function KX = alpha_to_k(alpha_X,c,hill)</a>
-0002 
-0003 <span class="comment">% KX = alpha_to_k(alpha_X,c,hill)</span>
-0004 
-0005 eval(<a href="../../../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'hill'</span>,<span class="string">'1'</span>));
-0006 
-0007 [nr,nm] = size(alpha_X);
-0008 KX      = sparse(nr,nm);
-0009 KX(find(alpha_X)) = alpha_X(find(alpha_X))./(1-alpha_X(find(alpha_X)));
-0010 
-0011 <span class="keyword">if</span> length(hill)==1, 
-0012   KX      = KX.^(1/hill);
-0013 <span class="keyword">else</span>
-0014   KX      = KX.^(1./repmat(hill,1,size(alpha_X,2)));  
-0015 <span class="keyword">end</span>
-0016 
-0017 KX      = KX * diag(sparse(c));</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

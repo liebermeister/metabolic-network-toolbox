@@ -1,4 +1,4 @@
-function [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
+function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
 
 % [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
 
@@ -50,6 +50,8 @@ end
 figure(2);
 nn.graphics_par.metnames = nn.metabolite_names;
 %netgraph_concentrations(nn,ones(nm,1),v,1,struct('actstyle','none','arrowstyle','fluxes','arrowsize',0.02));
-%M=[];
-M = netgraph_flux_movie(nn,zeros(nm,1),v,1,goptions);
-movie(M,10)
+
+M=[];
+
+%M = netgraph_flux_movie(nn,zeros(nm,1),v,1,goptions);
+%movie(M,10)

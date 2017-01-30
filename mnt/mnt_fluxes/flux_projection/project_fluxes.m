@@ -4,7 +4,8 @@ function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v
 %
 % project fluxes to stationary subspace (different methods)
 %
-% pars.method:            'simple', 'one_norm',     'lasso',   'euclidean', 'thermo_correct', 
+% pars.method:            'simple', 'one_norm', 'lasso', 'euclidean', 'thermo_correct', 
+% pars.prior_for unknown_fluxes: in method 'euclidean', use prior to keep unknown fluxes small
 % pars.remove_eba_cycles: (flag) if set to 1, a matrix pars.C of eba-cycles has to be provided
 % pars.vmax               default inf
 % pars.dilution_flux      default []; if given, the balance equation for each internal metabolite 
@@ -12,10 +13,20 @@ function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v
 %                         a stationary flux will be impossible
 % option 'thermo_correct' requires par.network
 
+if sum(isfinite(v_mean))==0,
+  error('Flux vector does not contain any finite values');
+else
+  if norm(v_mean(isfinite(v_mean)))==0,
+    error('Flux vector does not contain any non-zero values');
+  end    
+end
+
 eval(default('pars','struct','v_std','[]','v_sign','[]','v_fix','[]'));
 
-pars_default = struct('C', nan, 'dilution_flux',0); 
+pars_default = struct('C', nan, 'dilution_flux',0, 'prior_for_unknown_fluxes',0); 
 pars = join_struct(pars_default,pars);
+
+ind_finite        = find(isfinite(v_mean));
 
 if size(v_mean,2)>1,
   for it = 1:size(v_mean,2),
@@ -61,7 +72,6 @@ switch pars.method,
 
   case 'one_norm',    
 
-    ind_finite        = find(isfinite(v_mean));
     [nm,nr] = size(N);
     A = N(external == 0,:);
     b = zeros(size(A,1),1);
@@ -71,7 +81,6 @@ switch pars.method,
 
   case 'lasso',    %% lasso regression
 
-    ind_finite = find(isfinite(v_mean));
     v_cov_inv  = diag(1./v_std(ind_finite).^2);
     if exist('external','var'), Nint = N(find(external ==0),:); end
     K = null(full(Nint));
@@ -80,8 +89,6 @@ switch pars.method,
     v_projected = K * rho_mean;
 
   case 'euclidean', %% two-norm regression with constraints
-
-    opt = optimset('Display','off','Algorithm','active-set');
 
     %% update v_sign and v_fix
     v_sign(v_fix==0) = 0;
@@ -94,9 +101,13 @@ switch pars.method,
     
     ind_isnan = find(isnan(v_mean.*v_std));
     v_std_inv = 1./v_std;
-    %% effective prior for unknown fluxes
-    v_mean(ind_isnan)    = 0;
-    v_std_inv(ind_isnan) = 1/nanmean(10 * v_std);
+      v_mean(ind_isnan)    = 0;
+    if pars.prior_for_unknown_fluxes, 
+      %% use broad prior for unknown fluxes, centred around 0
+      v_std_inv(ind_isnan) = 1/nanmean(100 * v_std);
+    else
+      v_std_inv(ind_isnan) = 0;
+    end    
     M   = diag(v_std_inv.^2);
     m   = - M * v_mean;
     Nint= N(find(external ==0),:); 
@@ -112,21 +123,22 @@ switch pars.method,
     ub =   pars.vmax * ones(size(v_mean));
     lb(v_sign>0) = 0;
     ub(v_sign<0) = 0;
-if exist('cplexqp','file'),
-      [v_projected,dum,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
+    if exist('cplexqp','file'),
+      opt = cplexoptimset('Display','off');
+      [v_projected,~,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     else
+      opt = optimset('Display','off','Algorithm','active-set');
       [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     end
     if exitflag <0,
       if exitflag ==-2, 
       error('No feasible flux distribution found');
-      else,      
+      else,
         exitflag
         error('Error in quadprog');
       end
     end
 
-    
   case 'thermo_correct',
 
     dd.v.mean = v_mean;
@@ -149,11 +161,7 @@ if pars.remove_eba_cycles,
   end
 end
 
-
-ind_finite = find(isfinite(v_mean));
-
 % if flux changes considerably -> notify the user
-
 if norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) > 0.5,
   display('Warning (project_fluxes.m); projection changes fluxes considerably'); 
   %%  display('Original fluxes / Projected fluxes');

@@ -1,13 +1,14 @@
-function sbtab_document = network_to_sbtab(network,options)
+function sbtab_document = network_to_sbtab(network, options)
 
-% sbtab_document = network_to_sbtab(network,options)
+% sbtab_document = network_to_sbtab(network, options)
 %
 % translate 'network' data structure into 'sbtab' data structure
+%  (to read network from sbtab, use function 'sbtab_to_network')
 % 
 % If options.filename is given -> write output files: 
-%  [filename]_Reaction.csv
-%  [filename]_Compound.csv
-%  [filename]_QuantityData.csv (only if argument modular_rate_law_table==1)
+%  [filename]_Reaction.tsv
+%  [filename]_Compound.tsv
+%  [filename]_QuantityData.tsv (only if argument modular_rate_law_table==1)
 %
 % Options are given in the structure 'options' with fields:
 %
@@ -43,13 +44,25 @@ else
   end
 end
 
+if isfield(network,'reaction_KEGGID'),
+  if sum(cellfun('length',network.reaction_KEGGID))==0, 
+    network = rmfield(network,'reaction_KEGGID');
+  end
+end
+
+if isfield(network,'metabolite_KEGGID'),
+  if sum(cellfun('length',network.metabolite_KEGGID))==0, 
+    network = rmfield(network,'metabolite_KEGGID');
+  end
+end
+
 
 % if necessary, make metabolite + reaction names syntactically correct:
 
 [network.metabolites,network.actions] = network_adjust_names_for_sbml_export(network.metabolites,network.actions);
 network.formulae = network_print_formulae(network,network.actions,network.metabolites);
 
-reaction_table = sbtab_table_construct(struct('TableName','Reaction','TableType','Reaction','Document',options.document_name),{'Reaction','SumFormula'},{network.actions,network.formulae});
+reaction_table = sbtab_table_construct(struct('TableName','Reaction','TableType','Reaction','Document',options.document_name),{'ID','ReactionFormula'},{network.actions,network.formulae});
 
 if isfield(network, 'reaction_names'),
   reaction_table = sbtab_table_add_column(reaction_table,'Name', network.reaction_names);
@@ -108,7 +121,7 @@ if options.modular_rate_law_kinetics,
     if length(my_kinetics_laws),
       reaction_table = sbtab_table_add_column(reaction_table,'KineticLaw:Name',my_kinetics_laws);
     end
-    reaction_table = sbtab_table_add_column(reaction_table,'KineticLaw',my_kinetics_strings);
+    reaction_table = sbtab_table_add_column(reaction_table,'KineticLaw:Formula',my_kinetics_strings);
   end
 end
 
@@ -116,7 +129,7 @@ sbtab_document = sbtab_document_construct(struct,{'Reaction'},{reaction_table});
 
 if ~options.only_reaction_table,
 
-  compound_table = sbtab_table_construct(struct('TableName','Compound','TableType','Compound','Document',options.document_name),{'Compound'},{network.metabolites});
+  compound_table = sbtab_table_construct(struct('TableName','Compound','TableType','Compound','Document',options.document_name),{'ID'},{network.metabolites});
 
   if isfield(network, 'metabolite_names'),
     compound_table = sbtab_table_add_column(compound_table,'Name', network.metabolite_names);
@@ -167,8 +180,8 @@ if ~isempty(options.filename),
   switch options.save_in_one_file,
     case 0, sbtab_document_save(sbtab_document,options.filename,0,options.verbose);
     case 1, 
-      if ~strcmp(options.filename(end-3:end),'.csv'),
-        options.filename = [options.filename, '.csv'];
+      if ~strcmp(options.filename(end-3:end),'.tsv'),
+        options.filename = [options.filename, '.tsv'];
       end
       sbtab_document_save_to_one(sbtab_document,options.filename );
   end

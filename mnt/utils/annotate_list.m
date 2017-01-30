@@ -1,7 +1,8 @@
 function list2 = annotate_list(list1,filename,filetype)
 
-%if key occurs several times in file,
-%choose last occurrence
+%list2 = annotate_list(list1,filename,filetype)
+%
+%if a key occurs several times in file, choose last occurrence
 
 eval(default('filetype','''txt'''));
 

@@ -47,27 +47,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [X,w] = contfft(x,T);</a>
-0002 <span class="comment">% CONTFFT [X,w] = contfft(x,T)</span>
-0003 <span class="comment">%</span>
-0004 <span class="comment">% STOLEN FROM http://users.ece.gatech.edu/~bonnie/book/mfiles/contfft.m</span>
-0005 <span class="comment">%</span>
-0006 <span class="comment">% Computes the Fourier transform of a continuous time signal</span>
-0007 <span class="comment">%  using the FFT. The input is the sampled continuous</span>
-0008 <span class="comment">%  time signal x and the sampling time T.  The output is</span>
-0009 <span class="comment">%  the Fourier transform X(w) and the frequency vector w.</span>
-0010 <span class="comment">%</span>
-0011 [n,m] = size(x);
-0012 <span class="keyword">if</span> n&lt;m,
-0013   x = x';
-0014 <span class="keyword">end</span>
-0015 Xn = fft(x);
-0016 N = length(x);
-0017 n = 0:N-1;
-0018 n(1) = eps;
-0019 X = (1-exp(-j*2*pi*n/N))./(j*2*pi*n/N/T).*Xn.';
-0020 w = 2*pi*n/N/T;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

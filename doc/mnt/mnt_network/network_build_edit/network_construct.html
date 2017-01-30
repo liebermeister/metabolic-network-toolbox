@@ -54,72 +54,11 @@ This function calls:
 <li><a href="../../.././mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="../../.././mnt-advanced/mnt_model_reduction/demo/demo_model_reduction_simple_pathway.html" class="code" title="">demo_model_reduction_simple_pathway</a>	------------------------------------------------------------------------------</li><li><a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../.././mnt/mnt_fluxes/eba/flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="../../.././mnt/mnt_fluxes/eba/optimise_entropy_flux.html" class="code" title="function [v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)">optimise_entropy_flux</a>	[v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)</li><li><a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="../../.././mnt/mnt_mca/time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li><li><a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>	network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</li></ul>
+<li><a href="../../.././demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="../../.././mnt-advanced/mnt_model_reduction/demo/demo_model_reduction_simple_pathway.html" class="code" title="">demo_model_reduction_simple_pathway</a>	------------------------------------------------------------------------------</li><li><a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../.././mnt/mnt_fluxes/eba/flux2entropy_production.html" class="code" title="function [mu,A,R] = flux2entropy_production(network,v,mu_ext)">flux2entropy_production</a>	[mu,A,R] = flux2entropy_production(network,v,mu_ext)</li><li><a href="../../.././mnt/mnt_fluxes/eba/optimise_entropy_flux.html" class="code" title="function [v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)">optimise_entropy_flux</a>	[v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)</li><li><a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="../../.././mnt/mnt_mca/time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li><li><a href="network_build_from_sum_formulae.html" class="code" title="function [network,N,metabolites] = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns)">network_build_from_sum_formulae</a>	network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%Construct network data structures from stoichiometric matrix</span>
-0004 <span class="comment">%  network structure has mandatory fields</span>
-0005 <span class="comment">%  'metabolites','actions','N','reversible','external'</span>
-0006 <span class="comment">%  see 'network_structure'</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">%ARGUMENT</span>
-0009 <span class="comment">% N           stoichiometric matrix</span>
-0010 <span class="comment">%</span>
-0011 <span class="comment">%OPTIONAL ARGUMENTS</span>
-0012 <span class="comment">% metabolites          names of metabolites  (column list of strings)</span>
-0013 <span class="comment">% actions              names of reactions    (column list of strings)</span>
-0014 <span class="comment">% reversible           column vector (elements 0,1) indicating reversible actions.</span>
-0015 <span class="comment">%                      default: all reversible</span>
-0016 <span class="comment">% ind_external indices (vector) of external (=fixed) metabolites.</span>
-0017 <span class="comment">%                      default: all internal</span>
-0018 <span class="comment">% no_graphics          flag: 1: do not construct field 'graphics_par'</span>
-0019 <span class="comment">% flag_kinetics        flag: 0: construct field 'kinetics' with cs kinetics as default</span>
-0020 
-0021 <a name="_sub0" href="#_subfunctions" class="code">function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)</a>
-0022 
-0023 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'metabolites'</span>,<span class="string">'[]'</span>,<span class="string">'actions'</span>,<span class="string">'[]'</span>,<span class="string">'reversible'</span>,<span class="string">'ones(size(N,2),1)'</span>,<span class="string">'ind_external'</span>,<span class="string">'[]'</span>,<span class="string">'no_graphics'</span>,<span class="string">'[]'</span>,<span class="string">'flag_kinetics'</span>,<span class="string">'0'</span>));
-0024 
-0025 <span class="keyword">if</span> isempty(<span class="string">'no_graphics'</span>), no_graphics=0; <span class="keyword">end</span>
-0026 
-0027 <span class="keyword">if</span> length(N),
-0028   <span class="keyword">if</span> isempty(metabolites),
-0029     metabolites = cellstr([repmat(<span class="string">'S'</span>,size(N,1),1)  num2str((1:size(N,1))')]);
-0030     <span class="keyword">for</span> i = 1:length(metabolites), metabolites{i}=metabolites{i}(find(metabolites{i}~=<span class="string">' '</span>)); <span class="keyword">end</span>
-0031   <span class="keyword">end</span>
-0032   
-0033   <span class="keyword">if</span> isempty(actions),   
-0034     actions = cellstr([repmat(<span class="string">'E'</span>,size(N,2),1)  num2str((1:size(N,2))')]);
-0035     <span class="keyword">for</span> i = 1:length(actions), actions{i}=actions{i}(find(actions{i}~=<span class="string">' '</span>)); <span class="keyword">end</span>
-0036   <span class="keyword">end</span>
-0037 <span class="keyword">else</span>
-0038   metabolites = {}; actions = {};
-0039 <span class="keyword">end</span>
-0040 
-0041 <span class="keyword">if</span> size(reversible,1)==1, reversible = reversible'; <span class="keyword">end</span>
-0042 
-0043 n.metabolites = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(metabolites);
-0044 n.actions     = <a href="../../.././mnt/utils/column.html" class="code" title="function x = column(x)">column</a>(actions);
-0045 n.N           = sparse(N);
-0046 n.reversible  = reversible;
-0047 n.external    = zeros(size(N,1),1);
-0048 n.external(ind_external) = 1;
-0049 
-0050 <span class="keyword">if</span> exist(<span class="string">'regulation_matrix'</span>,<span class="string">'var'</span>),
-0051 n.regulation_matrix = regulation_matrix;
-0052   <span class="keyword">else</span>
-0053 n.regulation_matrix = sparse(zeros(size(n.N))');
-0054 <span class="keyword">end</span>
-0055 
-0056 <span class="keyword">if</span> flag_kinetics, 
-0057   n.kinetics    = <a href="../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>(n,<span class="string">'cs'</span>);
-0058   <span class="comment">%%n.h           = ones(length(actions),1);</span>
-0059 <span class="keyword">end</span>
-0060 
-0061 <span class="keyword">if</span> ~no_graphics, n = <a href="../../.././mnt/mnt_graphics/netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>(n); <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

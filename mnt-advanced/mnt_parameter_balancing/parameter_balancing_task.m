@@ -1,5 +1,6 @@
 function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)
 
+
 % [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)
 %
 % Prepare a parameter balancing task
@@ -213,7 +214,7 @@ for it = 1:length(data_quantities),
   x_data.scaling(my_indices,:)  = repmat({my_scaling}, num_data(it),1);
   x_data.indices.(my_symbol)    = my_indices;
 
-  switch my_scaling,
+ switch my_scaling,
     
     case 'Original',
       my_x_mean  = kinetic_data.(my_symbol).mean;
@@ -227,7 +228,7 @@ for it = 1:length(data_quantities),
       my_x_lower = kinetic_data.(my_symbol).lower_ln;
       my_x_upper = kinetic_data.(my_symbol).upper_ln;
   end
-  
+
   switch my_symbol, 
     
     case 'KM', 
@@ -249,7 +250,7 @@ for it = 1:length(data_quantities),
       my_x_upper = my_x_upper(ind_KI);
   
   end
-
+  
   x_data_mean  = [x_data_mean;  column(my_x_mean(:))  ];
   x_data_std   = [x_data_std ;  column(my_x_std(:))   ];
   x_data_lower = [x_data_lower; column(my_x_lower(:)) ];
@@ -278,6 +279,8 @@ task.xdata.std     = x_data_std(ind_rel);
 task.xdata.mean    = x_data_mean(ind_rel);
 task.xdata.indices = struct;
 task.xdata.numbers = [];
+
+% §§ task.xdata.std(task.xdata.indices.Kcatf)
 
 for it = 1:length(data_quantities),
   my_quantity = data_quantities{it};
@@ -352,6 +355,10 @@ task.Q_xupper_q = Q_data(ind_rel,:);
 % --------------------------------------------------------------------
 
 if find(isnan(task.xdata.std)), 
-  warning('Some standard deviations are missing; replacing them by 1.');
+  display('  Some standard deviations are missing; replacing them by 1.');
   task.xdata.std(find(isnan(task.xdata.std))) = 1; 
 end
+
+display(sprintf('\n'))
+
+

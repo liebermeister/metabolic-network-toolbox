@@ -40,18 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [kG,kG_std] = convert_G_to_kG(G,RT,G_std)</a>
-0002 
-0003 <span class="comment">% [kG,kG_std] = convert_G_to_kG(G,RT,G_std)</span>
-0004 
-0005 scale_G = <a href="convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>;
-0006 
-0007 <span class="keyword">if</span> exist(<span class="string">'G_std'</span>,<span class="string">'var'</span>),
-0008   [kG,kG_std]  = <a href="../../.././mnt/utils/lognormal_log2normal.html" class="code" title="function [mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)">lognormal_log2normal</a>(scale_G*G/<a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>,scale_G*G_std/<a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>);
-0009 <span class="keyword">else</span>,
-0010   kG = exp(scale_G*G/<a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>);
-0011 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -218,7 +218,7 @@ pause
 % --------------------------------------------------------------------
 % We can also show the time course as a movie
  
-M = netgraph_movie(network,t,s_t);
+M = netgraph_movie(network,t,s_t,'concentrations');
  
 figure(4); 
 movie(M,1);

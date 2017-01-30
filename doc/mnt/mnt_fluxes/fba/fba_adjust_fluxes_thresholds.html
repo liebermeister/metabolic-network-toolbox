@@ -40,26 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)</a>
-0002 
-0003 <span class="comment">% fba_constraints = fba_adjust_fluxes_thresholds(network,fba_constraints)</span>
-0004 
-0005 <span class="keyword">if</span> isfield(fba_constraints,<span class="string">'vrange'</span>),
-0006   fba_constraints.v_min = fba_constraints.vrange(:,1);
-0007   fba_constraints.v_max = fba_constraints.vrange(:,2);
-0008 <span class="keyword">end</span>
-0009 
-0010 <span class="keyword">if</span> isfield(fba_constraints,<span class="string">'v_sign'</span>),
-0011   fba_constraints.v_max(fba_constraints.v_sign&lt;0)=0;
-0012   fba_constraints.v_min(fba_constraints.v_sign&gt;0)=0;
-0013 <span class="keyword">end</span>
-0014 
-0015 ind_zero_conc = <a href="../../.././mnt/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>(fba_constraints.zero_metab,network.metabolites);
-0016 
-0017 ind_zero_conc = ind_zero_conc(find(ind_zero_conc));
-0018 fba_constraints.v_max(find(sum(network.N(ind_zero_conc,:)&lt;0,1))) = 0;
-0019 fba_constraints.v_min(find(sum(network.N(ind_zero_conc,:)&gt;0,1))) = 0;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

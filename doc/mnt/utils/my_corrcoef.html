@@ -42,24 +42,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [c, pvalue_one_tailed, pvalue_two_tailed] = my_corrcoef(A,B)</a>
-0002 
-0003 <span class="comment">% [c, pvalue_one_tailed, pvalue_two_tailed] = my_corrcoef(A,B)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% A, B vectors of same size</span>
-0006 
-0007 ind_finite = find(isfinite(A+B));
-0008 A = <a href="column.html" class="code" title="function x = column(x)">column</a>(A(ind_finite))';
-0009 B = <a href="column.html" class="code" title="function x = column(x)">column</a>(B(ind_finite))';
-0010 
-0011 c = corrcoef([A' B']);
-0012 c = c(1:size(A,1), end-size(B,1)+1:end);
-0013 
-0014 n = size(A,2);
-0015 t = c * sqrt((n-2)/(1-c^2));
-0016 pvalue_one_tailed = 1 - tcdf(t,n-2);
-0017 pvalue_two_tailed = 2 * pvalue_one_tailed;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

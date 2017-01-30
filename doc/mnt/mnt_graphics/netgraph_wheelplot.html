@@ -43,27 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function netgraph_wheelplot(network,network_CoHid,data,pars,wheelpars)</a>
-0002 
-0003 <span class="comment">% netgraph_wheelplot(network,network_CoHid,data,pars,wheelpars)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% wheel plot on network graphics</span>
-0006 <span class="comment">% for options, see wheelchart</span>
-0007 
-0008 [nm,nr] = size(network.N);
-0009 
-0010 <a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>(network_CoHid,[],[],1,pars); 
-0011 
-0012 xy = network.graphics_par.x(:,nm+(1:nr));
-0013 
-0014 <span class="keyword">if</span> ~isfield(wheelpars,<span class="string">'radius'</span>), wheelpars.radius = 0.03; <span class="keyword">end</span>
-0015 
-0016 <span class="keyword">for</span> it = 1:nr,
-0017   <span class="keyword">if</span> isfinite(data(it,1)),
-0018     wheelchart(data(it,:),wheelpars,xy(1,it),xy(2,it),wheelpars.radius);
-0019   <span class="keyword">end</span>
-0020 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

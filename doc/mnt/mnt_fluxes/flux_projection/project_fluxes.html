@@ -31,7 +31,8 @@
 
  project fluxes to stationary subspace (different methods)
 
- pars.method:            'simple', 'one_norm',     'lasso',   'euclidean', 'thermo_correct', 
+ pars.method:            'simple', 'one_norm', 'lasso', 'euclidean', 'thermo_correct', 
+ pars.prior_for unknown_fluxes: in method 'euclidean', use prior to keep unknown fluxes small
  pars.remove_eba_cycles: (flag) if set to 1, a matrix pars.C of eba-cycles has to be provided
  pars.vmax               default inf
  pars.dilution_flux      default []; if given, the balance equation for each internal metabolite 
@@ -43,173 +44,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../.././mnt/mnt_fluxes/eba/feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="es_make_fluxes_stationary.html" class="code" title="function v_stationary = es_make_fluxes_stationary(network,v)">es_make_fluxes_stationary</a>	v_stationary = es_make_fluxes_stationary(network,v)</li><li><a href="project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/guess_flux_std.html" class="code" title="function flux_std = guess_flux_std(flux_data,alpha,beta);">guess_flux_std</a>	flux_std = guess_flux_std(flux_data,alpha,beta);</li><li><a href="../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>	c = join_struct(a,b)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="../../.././mnt/mnt_fluxes/eba/feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>	[v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)</li><li><a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>	[feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)</li><li><a href="es_make_fluxes_stationary.html" class="code" title="function v_stationary = es_make_fluxes_stationary(network,v)">es_make_fluxes_stationary</a>	v_stationary = es_make_fluxes_stationary(network,v)</li><li><a href="project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/guess_flux_std.html" class="code" title="function flux_std = guess_flux_std(flux_data,alpha,beta);">guess_flux_std</a>	flux_std = guess_flux_std(flux_data,alpha,beta);</li><li><a href="../../.././mnt/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="flux_least_squares_projection.html" class="code" title="function v = flux_least_squares_projection(network,v_pre)">flux_least_squares_projection</a>	v = flux_least_squares_projection(network,v_pre)</li><li><a href="project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li><li><a href="../../.././mnt/mnt_network/network_build_edit/network_subnetwork_balanced.html" class="code" title="function [network_red,v_red,dmu_red,c_red] = network_subnetwork_balanced(network,v,epsilon,vmin,dmu,c)">network_subnetwork_balanced</a>	[network_red,v_red,dmu_red,c_red] = network_subnetwork_balanced(network,v,epsilon,vmin,dmu,c)</li></ul>
+<li><a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>	v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)</li><li><a href="flux_least_squares_projection.html" class="code" title="function v = flux_least_squares_projection(network,v_pre,v_sign)">flux_least_squares_projection</a>	v = flux_least_squares_projection(network,v_pre)</li><li><a href="project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>	v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</li><li><a href="../../.././mnt/mnt_network/network_build_edit/network_subnetwork_balanced.html" class="code" title="function [network_red,v_red,dmu_red,c_red] = network_subnetwork_balanced(network,v,epsilon,vmin,dmu,c)">network_subnetwork_balanced</a>	[network_red,v_red,dmu_red,c_red] = network_subnetwork_balanced(network,v,epsilon,vmin,dmu,c)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);</a>
-0002 
-0003 <span class="comment">% v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% project fluxes to stationary subspace (different methods)</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% pars.method:            'simple', 'one_norm',     'lasso',   'euclidean', 'thermo_correct',</span>
-0008 <span class="comment">% pars.remove_eba_cycles: (flag) if set to 1, a matrix pars.C of eba-cycles has to be provided</span>
-0009 <span class="comment">% pars.vmax               default inf</span>
-0010 <span class="comment">% pars.dilution_flux      default []; if given, the balance equation for each internal metabolite</span>
-0011 <span class="comment">%                         must not yield 0, but this dilution flux; in models with moiety conservation,</span>
-0012 <span class="comment">%                         a stationary flux will be impossible</span>
-0013 <span class="comment">% option 'thermo_correct' requires par.network</span>
-0014 
-0015 eval(<a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'pars'</span>,<span class="string">'struct'</span>,<span class="string">'v_std'</span>,<span class="string">'[]'</span>,<span class="string">'v_sign'</span>,<span class="string">'[]'</span>,<span class="string">'v_fix'</span>,<span class="string">'[]'</span>));
-0016 
-0017 pars_default = struct(<span class="string">'C'</span>, nan, <span class="string">'dilution_flux'</span>,0); 
-0018 pars = <a href="../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(pars_default,pars);
-0019 
-0020 <span class="keyword">if</span> size(v_mean,2)&gt;1,
-0021   <span class="keyword">for</span> it = 1:size(v_mean,2),
-0022     <span class="keyword">if</span> length(v_std), vv1 = v_std(:,it); <span class="keyword">else</span> vv1 = []; <span class="keyword">end</span>
-0023     <span class="keyword">if</span> length(v_sign), vv2 = v_sign(:,it); <span class="keyword">else</span> vv2 = []; <span class="keyword">end</span>
-0024     v_projected(:,it) = <a href="project_fluxes.html" class="code" title="function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);">project_fluxes</a>(N, ind_ext, v_mean(:,it), vv1, vv2, pars);
-0025   <span class="keyword">end</span>
-0026   <span class="keyword">return</span>
-0027 <span class="keyword">end</span>
-0028 
-0029 default_pars = struct(<span class="string">'method'</span>,<span class="string">'euclidean'</span>,<span class="string">'ind_ignore'</span>,[],<span class="string">'remove_eba_cycles'</span>,0,<span class="string">'verbose'</span>,0,<span class="string">'vmax'</span>,inf);
-0030 pars         = <a href="../../.././mnt/utils/join_struct.html" class="code" title="function c = join_struct(a,b)">join_struct</a>(default_pars,pars);
-0031 
-0032 <span class="keyword">if</span> isempty(v_std),  v_std  = <a href="../../.././mnt/utils/guess_flux_std.html" class="code" title="function flux_std = guess_flux_std(flux_data,alpha,beta);">guess_flux_std</a>(v_mean); <span class="keyword">end</span> 
-0033 <span class="keyword">if</span> isempty(v_sign), v_sign = nan * v_mean; <span class="keyword">end</span> 
-0034 <span class="keyword">if</span> isempty(v_fix),  v_fix  = nan * v_mean; <span class="keyword">end</span> 
-0035 
-0036 <span class="comment">% make sure that reference fluxes respect zero flux and sign constraints</span>
-0037 
-0038 v_mean(v_sign == 0 )           = 0;
-0039 v_fix( v_sign == 0 )           = 0;
-0040 v_std( find(v_mean.*v_sign)&lt;0) = nan;
-0041 v_mean(find(v_mean.*v_sign)&lt;0) = nan;
-0042 
-0043 external          = zeros(size(N,1),1); 
-0044 external(ind_ext) = 1;
-0045 
-0046 <span class="keyword">if</span> pars.verbose,
-0047   display(sprintf(<span class="string">'\n  Projecting fluxes using &quot;%s&quot; method'</span>, pars.method));
-0048 <span class="keyword">end</span>
-0049 
-0050 <span class="keyword">switch</span> pars.method,
-0051 
-0052   <span class="keyword">case</span> <span class="string">'simple'</span>,
-0053 
-0054     display(<span class="string">'Simple projection - flux sign constraints are ignored'</span>);
-0055     network.N                 = N;
-0056     network.external          = zeros(size(N,1),1);
-0057     network.external(ind_ext) = 1;
-0058     v_projected               = <a href="es_make_fluxes_stationary.html" class="code" title="function v_stationary = es_make_fluxes_stationary(network,v)">es_make_fluxes_stationary</a>(network,v_mean);
-0059 
-0060   <span class="keyword">case</span> <span class="string">'one_norm'</span>,    
-0061 
-0062     ind_finite        = find(isfinite(v_mean));
-0063     [nm,nr] = size(N);
-0064     A = N(external == 0,:);
-0065     b = zeros(size(A,1),1);
-0066     lb = v_mean(ind_finite)-v_std(ind_finite);
-0067     ub = v_mean(ind_finite)+v_std(ind_finite);
-0068     v_projected = my_lp_one_norm(A,b,lb,ub,100000);
-0069 
-0070   <span class="keyword">case</span> <span class="string">'lasso'</span>,    <span class="comment">%% lasso regression</span>
-0071 
-0072     ind_finite = find(isfinite(v_mean));
-0073     v_cov_inv  = diag(1./v_std(ind_finite).^2);
-0074     <span class="keyword">if</span> exist(<span class="string">'external'</span>,<span class="string">'var'</span>), Nint = N(find(external ==0),:); <span class="keyword">end</span>
-0075     K = null(full(Nint));
-0076     display(<span class="string">'Running lasso regression, this can take a while'</span>);
-0077     rho_mean = lasso( sqrt(v_cov_inv)* K(ind_finite,:), v_mean(ind_finite),0.1);<span class="comment">%,10^-2,10^-1)</span>
-0078     v_projected = K * rho_mean;
-0079 
-0080   <span class="keyword">case</span> <span class="string">'euclidean'</span>, <span class="comment">%% two-norm regression with constraints</span>
-0081 
-0082     opt = optimset(<span class="string">'Display'</span>,<span class="string">'off'</span>,<span class="string">'Algorithm'</span>,<span class="string">'active-set'</span>);
-0083 
-0084     <span class="comment">%% update v_sign and v_fix</span>
-0085     v_sign(v_fix==0) = 0;
-0086     v_sign(v_fix&gt;0)  = 1;
-0087     v_sign(v_fix&lt;0)  = -1;
-0088     v_fix(v_sign==0) = 0;
-0089     <span class="keyword">if</span> sum(v_fix(v_sign&gt;0) == 0) + sum(v_fix(v_sign&lt;0) == 0),
-0090       error(<span class="string">'contradicting constraints'</span>);
-0091     <span class="keyword">end</span>
-0092     
-0093     ind_isnan = find(isnan(v_mean.*v_std));
-0094     v_std_inv = 1./v_std;
-0095     <span class="comment">%% effective prior for unknown fluxes</span>
-0096     v_mean(ind_isnan)    = 0;
-0097     v_std_inv(ind_isnan) = 1/nanmean(10 * v_std);
-0098     M   = diag(v_std_inv.^2);
-0099     m   = - M * v_mean;
-0100     Nint= N(find(external ==0),:); 
-0101     A   = [];
-0102     b   = [];
-0103     Aeq = eye(length(v_mean));
-0104     Aeq = Aeq(isfinite(v_fix),:);
-0105     Aeq = [full(Nint); <span class="keyword">...</span>
-0106            Aeq];
-0107     beq = [pars.dilution_flux * ones(size(Nint,1),1);<span class="keyword">...</span>
-0108            v_fix(isfinite(v_fix))];
-0109     lb = - pars.vmax * ones(size(v_mean));
-0110     ub =   pars.vmax * ones(size(v_mean));
-0111     lb(v_sign&gt;0) = 0;
-0112     ub(v_sign&lt;0) = 0;
-0113     [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
-0114     <span class="keyword">if</span> exitflag &lt;0,
-0115       <span class="keyword">if</span> exitflag ==-2, 
-0116       error(<span class="string">'No feasible flux distribution found'</span>);
-0117       <span class="keyword">else</span>,      
-0118         exitflag
-0119         error(<span class="string">'Error in quadprog'</span>);
-0120       <span class="keyword">end</span>
-0121     <span class="keyword">end</span>
-0122 
-0123     
-0124   <span class="keyword">case</span> <span class="string">'thermo_correct'</span>,
-0125 
-0126     dd.v.mean = v_mean;
-0127     dd.v.std  = v_std;
-0128     [options,es_constraints]  = es_default_options(pars.network);
-0129     es_constraints.ext_sign   = nan * ones(length(ind_ext),1);
-0130     es_constraints.v_sign     = v_sign; 
-0131     es_constraints.ind_ignore = pars.ind_ignore; 
-0132     v_projected               = <a href="../../.././mnt/mnt_fluxes/eba/feasible_fluxes.html" class="code" title="function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)">feasible_fluxes</a>(N,ind_ext,dd,es_constraints);
-0133     
-0134 <span class="keyword">end</span>
-0135 
-0136 v_projected(abs(v_projected)/max(abs(v_projected))&lt;10^-8) = 0;
-0137 
-0138 <span class="keyword">if</span> pars.remove_eba_cycles,
-0139   [feasible,pars.C,ind_non_orthogonal] = <a href="../../.././mnt/mnt_fluxes/flux_feasibility/eba_feasible.html" class="code" title="function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)">eba_feasible</a>(v_projected,N,pars.C,[],<span class="string">'loose'</span>);
-0140   <span class="keyword">if</span> ~feasible,
-0141     display(<span class="string">'Removing unfeasible cycles'</span>);
-0142     v_projected = <a href="../../.././mnt/mnt_fluxes/eba/eba_make_feasible.html" class="code" title="function [v,C] = eba_make_feasible(v,N,eba_condition,C,ind_ignore,cycle_method,ind_ext,v_sign)">eba_make_feasible</a>(v_projected,N,<span class="string">'loose'</span>,pars.C,[],<span class="string">'beard'</span>,ind_ext,v_sign);
-0143   <span class="keyword">end</span>
-0144 <span class="keyword">end</span>
-0145 
-0146 
-0147 ind_finite = find(isfinite(v_mean));
-0148 
-0149 <span class="comment">% if flux changes considerably -&gt; notify the user</span>
-0150 
-0151 <span class="keyword">if</span> norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) &gt; 0.5,
-0152   display(<span class="string">'Warning (project_fluxes.m); projection changes fluxes considerably'</span>); 
-0153 <span class="comment">%%  display('Original fluxes / Projected fluxes');</span>
-0154 <span class="comment">%%  [v_mean(ind_finite) v_projected(ind_finite)]</span>
-0155 
-0156   figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),<span class="string">'.'</span>); 
-0157   xlabel(<span class="string">'Given flux'</span>); ylabel(<span class="string">'Projected flux'</span>); title(<span class="string">'Flux change in project\_fluxes.m'</span>)
-0158 <span class="keyword">end</span>
-0159</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

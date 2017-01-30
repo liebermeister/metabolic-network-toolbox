@@ -43,27 +43,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%netgraph_draw_connections(network,M)</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%draw network including quantitative relations among reactions</span>
-0004 <span class="comment">%M is supposed to be a symmetric matrix containing the relations</span>
-0005 
-0006 <a name="_sub0" href="#_subfunctions" class="code">function netgraph_draw_connections(network,M)</a>
-0007 
-0008 
-0009 n_react = length(network.graphics_par.actnames);
-0010 x=network.graphics_par.x(:,end-n_react+1:end);
-0011 <span class="keyword">for</span> i1 = 1: n_react,
-0012 <span class="keyword">for</span> i2 = 1: i1-1,
-0013     <span class="comment">% red for negative, green for positive values</span>
-0014     c = [1 0 0]*(M(i1,i2)&lt;0) + [0 1 0]*(M(i1,i2)&gt;0);
-0015 <span class="keyword">if</span> M(i1,i2)~=0,
-0016     h=line( [x(1,i1) x(1,i2)],[x(2,i1) x(2,i2)]);
-0017 set(h,<span class="string">'Color'</span>,c);
-0018 <span class="keyword">end</span>
-0019 <span class="keyword">end</span>
-0020 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

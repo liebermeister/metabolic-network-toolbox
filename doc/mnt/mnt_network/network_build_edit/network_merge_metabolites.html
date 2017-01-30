@@ -40,18 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function network = network_merge_metabolites(network,m1_list,m2_list);</a>
-0002 
-0003 <span class="keyword">for</span> it=1:length(m1_list),
-0004   m1 = m1_list{it};
-0005   m2 = m2_list{it};
-0006   ind = <a href="../../.././mnt/mnt_network/network_query/network_find_metabolites.html" class="code" title="function ind = network_find_metabolites(network,metabolite)">network_find_metabolites</a>(network,{m1,m2});
-0007   <span class="keyword">if</span> ind(1),
-0008     network.N(ind(1),:) = network.N(ind(1),:) + network.N(ind(2),:);
-0009     network             = <a href="network_subnetwork.html" class="code" title="function [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)">network_subnetwork</a>(network,setdiff(1:length(network.metabolites),ind(2)));
-0010   <span class="keyword">end</span>
-0011 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

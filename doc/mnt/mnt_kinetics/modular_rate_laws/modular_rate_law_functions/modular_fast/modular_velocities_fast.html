@@ -40,48 +40,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [v, v_plus, v_minus] = modular_velocities_fast(kinetic_law,u,c,pars)</a>
-0002 
-0003 <span class="comment">% [v, v_plus, v_minus] = modular_velocities_fast(kinetic_law,u,c,pars)</span>
-0004 
-0005 c(find(abs(c)&lt;10^-14)) = 10^-14;
-0006 
-0007 log_c_by_k              = repmat(log(c)', pars.nr,1);
-0008 log_c_by_k(pars.ind_KM) = log_c_by_k(pars.ind_KM) - log( full(pars.KM_rel) );<span class="comment">%+ 10^-15 );</span>
-0009 
-0010 theta_plus  = exp( sum( pars.Mplus  .* log_c_by_k, 2) );
-0011 theta_minus = exp( sum( pars.Mminus .* log_c_by_k, 2) );
-0012 
-0013 [log_alpha_A, log_beta_A] = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>(pars.KA,pars.KA_rel,c,pars.ind_KA,pars.ind_KA_metabolite_index,pars);
-0014 [log_alpha_I            ] = <a href="../../../../.././mnt/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/parameter_conversion/k_to_log_alpha_fast.html" class="code" title="function [log_alpha_X,log_beta_X] = k_to_log_alpha_fast(KX,KX_rel,c,ind_KX,ind_KX_metabolite_index,pars);">k_to_log_alpha_fast</a>(pars.KI,pars.KI_rel,c,pars.ind_KI,pars.ind_KI_metabolite_index,pars);
-0015 regulation_term           = exp( sum( pars.Wplus .* log_beta_A + pars.Wminus .* log_alpha_I, 2) );
-0016 
-0017 <span class="keyword">switch</span> kinetic_law,  
-0018   <span class="keyword">case</span> {<span class="string">'cs'</span>,<span class="string">'ms'</span>},
-0019     psi_plus    = exp( sum( pars.Mplus  .* log( 1 + exp(log_c_by_k)) , 2) );
-0020     psi_minus   = exp( sum( pars.Mminus .* log( 1 + exp(log_c_by_k)) , 2) );    
-0021 <span class="keyword">end</span>
-0022 
-0023 <span class="keyword">switch</span> kinetic_law,  
-0024   <span class="keyword">case</span> <span class="string">'cs'</span>, D = psi_plus + psi_minus - 1;
-0025   <span class="keyword">case</span> <span class="string">'ms'</span>, D = psi_plus .* psi_minus;
-0026   <span class="keyword">case</span> <span class="string">'ds'</span>, D = theta_plus + theta_minus + 1;
-0027   <span class="keyword">case</span> <span class="string">'rp'</span>, D = 1;
-0028   <span class="keyword">case</span> <span class="string">'fd'</span>, D = sqrt(theta_plus .* theta_minus);
-0029 <span class="keyword">end</span>
-0030 
-0031 v_plus  = u .* regulation_term .* pars.Kplus  .* theta_plus  ./ D;
-0032 v_minus = u .* regulation_term .* pars.Kminus .* theta_minus ./ D;
-0033 
-0034 v_plus  = real(full(v_plus));
-0035 v_minus = real(full(v_minus));
-0036 v       = v_plus - v_minus;
-0037 
-0038 <span class="comment">% check</span>
-0039 <span class="comment">%ma_ratio = exp(pars.N'*log(c));</span>
-0040 <span class="comment">%[ma_ratio(1) pars.Keq(1) sign(v(1))]</span>
-0041</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

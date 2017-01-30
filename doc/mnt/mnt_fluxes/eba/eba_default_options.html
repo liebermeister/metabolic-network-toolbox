@@ -62,56 +62,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [eba_options,eba_constraints] = eba_default_options(network)</a>
-0002 
-0003 <span class="comment">% [eba_options,eba_constraints] = eba_default_options(network)</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% set default values for structures 'eba_options' and 'eba_constraints'</span>
-0006 <span class="comment">% used to define an eba task</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% eba_constraints.z:           linear weights in the objective function</span>
-0009 <span class="comment">% eba_constraints.v_fix:       vector predetermined fluxes</span>
-0010 <span class="comment">% eba_constraints.v_min:       vector of lower bounds</span>
-0011 <span class="comment">% eba_constraints.v_max:       vector of upper bounds</span>
-0012 <span class="comment">% eba_constraints.v_sign:      predetermined flux signs</span>
-0013 <span class="comment">% eba_constraints.ext_sign:    sign vector for external metabolite production</span>
-0014 <span class="comment">% eba_constraints.mu_fix:      given mu values</span>
-0015 <span class="comment">% eba_constraints.mu_min:      lower bounds for mu values</span>
-0016 <span class="comment">% eba_constraints.mu_max:      upper bounds for mu values</span>
-0017 <span class="comment">% eba_constraints.dmu_fix:     given delta mu values</span>
-0018 <span class="comment">% eba_constraints.dmu_min:     lower bounds for delta mu values</span>
-0019 <span class="comment">% eba_constraints.dmu_max:     upper bounds for delta mu values</span>
-0020 <span class="comment">%</span>
-0021 <span class="comment">% eba_options.seed             random seed</span>
-0022 <span class="comment">% eba_options.compute_mu       'mu', 'delta_mu'</span>
-0023 <span class="comment">% eba_options.verbose</span>
-0024 <span class="comment">% eba_options.optimality_criterion 'z','minimum_norm'</span>
-0025 <span class="comment">% eba_options.n_trials          repeat eba from differemt starting points, take best result</span>
-0026 
-0027 [nm,nr] = size(network.N);
-0028 
-0029 eba_constraints.zv           = nan * ones(nr,1);
-0030 eba_constraints.v_fix        = nan * ones(nr,1);
-0031 eba_constraints.v_min        = - ones(nr,1);
-0032 eba_constraints.v_max        =   ones(nr,1);
-0033 eba_constraints.v_sign       = nan * ones(nr,1);
-0034 eba_constraints.ext_sign     = nan * ones(nm,1);
-0035 eba_constraints.mu_fix       = nan * ones(nm,1);
-0036 eba_constraints.mu_min       = - ones(nm,1);
-0037 eba_constraints.mu_max       =   ones(nm,1);
-0038 eba_constraints.muconmat     = [];
-0039 eba_constraints.muconmax     = [];
-0040 eba_constraints.dmu_fix      = nan * ones(nr,1);
-0041 eba_constraints.dmu_min      = - ones(nr,1);
-0042 eba_constraints.dmu_max      =   ones(nr,1);
-0043 
-0044 eba_options.seed         = nan;
-0045 eba_options.compute_mu   = <span class="string">'delta_mu'</span>;
-0046 eba_options.verbose      = 0;
-0047 eba_options.optimality_criterion = <span class="string">'z'</span>;
-0048 eba_options.n_trials     = 1;
-0049 eba_options.relax_eba_constraint = 1;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

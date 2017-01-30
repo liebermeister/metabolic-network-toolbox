@@ -57,67 +57,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [Z,iter] = chollyap(A,C);</a>
-0002 
-0003 <span class="comment">%CHOLLYAP</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">% Solve the stable Lyapunov equation</span>
-0006 <span class="comment">%</span>
-0007 <span class="comment">% (*)  A' X + X A + C' C = 0</span>
-0008 <span class="comment">%</span>
-0009 <span class="comment">% for a full-rank factor of X via the sign function iteration.</span>
-0010 <span class="comment">%</span>
-0011 <span class="comment">% Input:  A - a square, n x n - matrix.</span>
-0012 <span class="comment">%         C - an m x n - matrix</span>
-0013 <span class="comment">%</span>
-0014 <span class="comment">% Output: Z - a full rank factor of the solution of (*), i.e., X = Z'*Z.</span>
-0015 <span class="comment">%         iter (optionally) - number of sign iterations required.</span>
-0016 <span class="comment">%</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">% Copyright by Peter Benner, October 1996.</span>
-0019 <span class="comment">%</span>
-0020 <span class="comment">% This version:  November 5, 2003.</span>
-0021 
-0022 n = size(A,1);
-0023 
-0024 iter= 0;
-0025 tol = 10*n*sqrt(eps);
-0026 maxstep = 200;
-0027 Z    = C;
-0028 E    = eye(n);
-0029 Err  = norm(A + E,1);
-0030 onemore     = 0;
-0031 convergence = Err &lt;= tol;
-0032 
-0033 <span class="keyword">while</span> (iter &lt; maxstep) &amp; ((~convergence) | (convergence &amp; (onemore &lt; 2))),
-0034   [L,U,P] = lu(A);
-0035   Y = L\P;
-0036   Y = U\Y;
-0037   d = abs(diag(U));
-0038   d = d.^(1/n);
-0039   d = prod(d);
-0040   A = (A/d + d*Y)/2;
-0041   Z = [Z; d*Z*Y]/sqrt(2*d);  
-0042   [U,R,P] = qr(Z);
-0043   r = max(1,max(find(abs(diag(R)) &gt; sqrt(eps)*abs(R(1,1)))));
-0044   <span class="comment">%mimic rank-revealing QR</span>
-0045 
-0046   <span class="keyword">while</span> norm(R(r+1:size(R,1),r+1:n)) &gt; sqrt(eps)*norm(R),
-0047       r = r+1;
-0048   <span class="keyword">end</span>
-0049   Z = R(1:r,:)*P';
-0050   Err  = norm(A + E,1);
-0051   iter = iter + 1;
-0052   <span class="comment">%% comment out for non-verbose mode %%</span>
-0053 <span class="comment">%  disp(sprintf('Step %i, conv. crit. = %d', iter, Err))</span>
-0054   convergence = Err &lt;= tol;
-0055   <span class="keyword">if</span> convergence,  onemore = onemore + 1;  <span class="keyword">end</span>
-0056 <span class="keyword">end</span>
-0057 Z = Z/sqrt(2);
-0058 <span class="keyword">if</span> (iter == maxstep &amp; norm(A + E,1) &gt; tol),
-0059   disp(sprintf(<span class="string">'CHOLLYAP: No convergence in %d iterations.'</span>, maxstep))
-0060 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

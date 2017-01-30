@@ -44,46 +44,7 @@ This function is called by:
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">%network = netgraph_clear(network);</span>
-0002 <span class="comment">%</span>
-0003 <span class="comment">%add a new 'graphics_par' field to the network</span>
-0004 <span class="comment">%</span>
-0005 <span class="comment">%see 'netgraph'</span>
-0006 
-0007 <a name="_sub0" href="#_subfunctions" class="code">function network = netgraph_clear(network);</a>
-0008 
-0009 p.metnames = network.metabolites;
-0010 p.actnames = network.actions;
-0011 
-0012 p.metstyle       = <span class="string">'box'</span>;
-0013 p.metcolstyle    = <span class="string">'values'</span>; 
-0014 p.metcol         = <span class="string">'c'</span>; 
-0015 p.metprintnames  = 1;
-0016 p.metprintvalues = 0;
-0017 p.metvalues      = zeros(length(network.metabolites),1);
-0018 p.metvalues_std  = zeros(length(network.metabolites),1);
-0019 
-0020 p.actstyle       = <span class="string">'box'</span>;
-0021 p.actcolstyle    = <span class="string">'values'</span>;
-0022 p.actcol         = <span class="string">'r'</span>;
-0023 p.actprintnames  = 1;
-0024 p.actprintvalues = 0;
-0025 p.actvalues      = zeros(length(network.actions),1); 
-0026 p.actvalues_std  = zeros(length(network.actions),1); 
-0027 
-0028 p.arrowstyle     = <span class="string">'none'</span>;
-0029 p.arrowvalues    = p.actvalues;
-0030 
-0031 p.squaresize = 1;
-0032 p.arrowsize  = 0.5;
-0033 p.lambda     = 1;
-0034 
-0035 p.x          = network.graphics_par.x;
-0036 p.m          = network.graphics_par.m;
-0037 p.db          = network.graphics_par.db;
-0038 
-0039 network.graphics_par = p;</pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

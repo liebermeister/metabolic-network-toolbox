@@ -36,57 +36,14 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="circle.html" class="code" title="function circle(x,y,r,col)">circle</a>	circle(x,y,r,col)</li><li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="dot_matrix.html" class="code" title="function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)">dot_matrix</a>	dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)</li></ul>
+<li><a href="circle.html" class="code" title="function circle(x,y,r,col,filled,linewidth)">circle</a>	circle(x,y,r,col,filled,linewidth)</li><li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="dot_matrix.html" class="code" title="function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)">dot_matrix</a>	dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="dot_matrix.html" class="code" title="function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)">dot_matrix</a>	dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)</li></ul>
 <!-- crossreference -->
 
 
-<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)</span>
-0002 <span class="comment">% example:</span>
-0003 <span class="comment">% Mmean = randn(3);</span>
-0004 <span class="comment">% dot_matrix(Mmean,Mmean,2,1,my_colors)</span>
-0005 
-0006 <a name="_sub0" href="#_subfunctions" class="code">function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol) </a>
-0007 
-0008 eval(<a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>(<span class="string">'max_diameter'</span>,<span class="string">'1'</span>,<span class="string">'max_val'</span>,<span class="string">'max(max(abs(Mmean)))'</span>,<span class="keyword">...</span>
-0009              <span class="string">'col'</span>,<span class="string">'my_colors'</span>,<span class="string">'flag_legend'</span>,<span class="string">'0'</span>,<span class="string">'textrow'</span>,<span class="string">'[]'</span>,<span class="string">'textcol'</span>,<span class="string">'[]'</span>));
-0010 
-0011 [n1,n2] = size(Mmean);
-0012 
-0013 Mstd  = abs(Mstd);
-0014 Msign = sign(Mmean);
-0015 Mabs  = abs(Mmean)/max_val;
-0016 Mtot  = Mabs + Mstd/max_val;
-0017 
-0018 Mtot(Mabs&gt;1)  =  1;
-0019 Mabs(Mabs&gt;1)  =  1;
-0020 
-0021 color_ind = 1 + floor( ((Msign.*Mabs)+1)/2*(length(col)-1));
-0022 
-0023 <span class="keyword">for</span> i1 = 1:n1,
-0024   <span class="keyword">for</span> i2 = 1:n2,
-0025     this_color = col(color_ind(i1,i2),:);
-0026     <a href="circle.html" class="code" title="function circle(x,y,r,col)">circle</a>(i2,1+n1-i1,0.5*max_diameter*sqrt(Mtot(i1,i2)),.7 + 0.3 * this_color); hold on;
-0027     <a href="circle.html" class="code" title="function circle(x,y,r,col)">circle</a>(i2,1+n1-i1,0.5*max_diameter*sqrt(Mabs(i1,i2)),this_color); hold on;
-0028   <span class="keyword">end</span>
-0029 <span class="keyword">end</span>
-0030 hold off;
-0031 
-0032 axis equal; axis tight; 
-0033 
-0034 set(gca,<span class="string">'YTick'</span>,1:length(textrow),<span class="string">'YTickLabel'</span>,flipud(textrow)); 
-0035 set(gca,<span class="string">'XTick'</span>,1:length(textcol),<span class="string">'XTickLabel'</span>,textcol);
-0036 
-0037 <span class="keyword">if</span> flag_legend,
-0038   figure(flag_legend);
-0039   nrow = floor((size(Mmean,1)-1)/2);
-0040   values = max_val * [-nrow:nrow]'/nrow;
-0041   <a href="dot_matrix.html" class="code" title="function dot_matrix(Mmean,Mstd,max_val,max_diameter,col,flag_legend,textrow,textcol)">dot_matrix</a>(values,0*values,max_val,max_diameter,col,0,num2str(values,2))
-0042 <span class="comment">%  set(gca,'XColor',[1 1 1],'YColor',[1 1 1])</span>
-0043 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sat 15-Nov-2014 18:05:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
 </body>
 </html>

@@ -7,8 +7,9 @@
 %- a filename. In this case, the firectory name has to be given 
 %  in the argument 'dirname'
 %
-%Kinetic laws are represented in kinetics of the 'kinetic_strings'
-%type (see 'network_velocities')
+%Kinetic laws are represented in kinetics of the 'kinetic_strings' type (see 'network_velocities')
+%
+%Note that semantic annotations will not be read from the file! 
 %
 %This function requiers the SBMLToolbox to be installed
 %(see http://sbml.org/software/sbmltoolbox/)
@@ -21,7 +22,7 @@ end
 
 eval(default('verbose','0'));
 
-create_annotations  = 0;   % CONSTRUCT UNIQUE ANNOTATIONS ?
+create_annotations  = 0;  % CONSTRUCT UNIQUE ANNOTATIONS ?
 graphics_flag       = 0;   % SHOW GRAPHICS?
 import_names        = 1;   % import names from model
 import_compartments = 1;   % import compartments from model
