@@ -9,18 +9,24 @@
 
 function M = netgraph_flux_movie(network,S,J,text_flag,goptions);
 
+% scale flux data
+J = 1/nanmax(abs(J(:))) * J;
+if isfield(goptions,'arrowvalues'),
+  goptions.arrowvalues = 1/nanmax(abs(goptions.arrowvalues(:))) * goptions.arrowvalues;
+end  
+
 eval(default('text_flag','0','goptions','struct'));
 
 arrow_shift = 0;
 
-goptions_default = struct('n_frames', 10,'timebar',1,'background_colors',[],'use_background_colors',0);
+goptions_default = struct('n_frames', 10,'timebar',0,'background_colors',[],'use_background_colors',0,'scale_arrovalues',0);
 
 goptions = join_struct(goptions_default,goptions);
 
 goptions.actstyle    ='none';
 goptions.arrow_shift = arrow_shift;
-goptions.show_metvalues = 0; % otherwise arrows may be below lines
-                             % (matlab error)
+goptions.show_metvalues = 0; 
+% otherwise arrows may be below lines (matlab error)
 
 if goptions.use_background_colors,
   if goptions.background_colors,

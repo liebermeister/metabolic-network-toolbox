@@ -33,6 +33,7 @@ eval(default('options','struct','data_type','''concentrations''','n_frames','[]'
 if ~exist('options','var'), options = struct; end
 
 options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0);
+options_default.timebar_labels = {};
 
 options = join_struct(options_default, options);
 
@@ -42,8 +43,8 @@ t = t-min(t);
 
 T = max(t)*(0:1/(n_frames-1):1);
 
-nandata = find(sum(isfinite(s_t),2)==0);
-s_t(sum(isfinite(s_t),2)==0,:)=0;
+nandata = find(sum(isnan(s_t),2));
+s_t(nandata,:)=0;
 s_t            = interp1(t,s_t',T,'cubic')';
 s_t(nandata,:) = nan;
 if size(s_t,2)==1, s_t = s_t'; end
@@ -174,9 +175,12 @@ for j=1:jj,
   end
   netgraph_concentrations(network,metvalues(:,j),actvalues(:,j),text_flag,options);
   if options.timebar, 
-    hold on;  
+    hold on;
     ss = network.graphics_par.squaresize;
     plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]); 
+    if length(options.timebar_labels),
+      text(0.9*a(1)+0.1*a(2), 0.05*a(3)+0.95*a(4), options.timebar_labels{1+floor(length(t)*j/[jj+1])},'FontSize',24);
+    end
     circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/4,[0 0 0]);
     circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/6,[1 1 1]);
   end
@@ -186,7 +190,7 @@ for j=1:jj,
 
   if isfield(options,'prefix'),
     if j ==1,             print([options.prefix '_start.eps'],'-f1','-depsc'); end
-    if j == ceil(0.8*jj), print([options.prefix '_end.eps'],'-f1','-depsc');   end
+    if j == ceil(0.8*jj), print([options.prefix '_end.eps'],  '-f1','-depsc');   end
   end
 
 end

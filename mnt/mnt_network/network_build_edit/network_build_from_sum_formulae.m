@@ -37,11 +37,14 @@ if length(filename_reactions) * length(filename_compounds),
   else
     compound_table = filename_compounds;
   end
-  compound_table = sbtab_table_remove_comment_lines(compound_table);
+  compound_table   = sbtab_table_remove_comment_lines(compound_table);
   compound_columns = sbtab_table_get_all_columns(compound_table);
 end
 
 metab_collect = {};
+
+compound_table = sbtab_table_remove_comment_lines(compound_table);
+reaction_table = sbtab_table_remove_comment_lines(reaction_table);
 
 for it = 1:length(columns.ReactionFormula),
   sum_formula              = columns.ReactionFormula{it};

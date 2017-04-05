@@ -9,6 +9,14 @@ eval(default('options','struct','filename','[]','document_name','''Model'''));
 options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_concentrations',1,'write_enzyme_concentrations',1);
 options         = join_struct(options_default,options);
 
+if isempty(network.kinetics.u),
+  options.write_enzyme_concentrations = 0;
+end
+
+if isempty(network.kinetics.c),
+  options.write_concentrations = 0;
+end
+
 switch network.kinetics.type
   case {'cs','ms','rp','ma','fm'}, % UPDATE rate law names!
   otherwise, error('Conversion is only possible for modular rate law');
@@ -211,6 +219,7 @@ column_compound_KEGGID = [ column_compound_KEGGID; ...
                   ];
 
 end
+
 
 if options.write_enzyme_concentrations,
 

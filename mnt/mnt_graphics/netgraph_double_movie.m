@@ -1,4 +1,4 @@
-% [M,T] = netgraph_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, options);
+% [M,T] = netgraph_double_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, options);
 %
 % Movie displaying data on network; two data sets are shown at teh same time 
 % (for instance, to compare experimental and simulated time series)
@@ -11,16 +11,17 @@
 % colormap_1         - []
 % colormap_2         - []
 
-function [M,T] = netgraph_movie(network,t,s_t_1,s_t_2,data_type,n_frames,text_flag,options);
+function [M,T] = netgraph_double_movie(network,t,s_t_1,s_t_2,data_type,n_frames,text_flag,options);
+
 
 eval(default('options','struct','data_type','''concentrations''','n_frames','[]','text_flag','0'));
 
 if ~exist('options','var'), options = struct; end
 
-options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'set_circle_shift',[0.01,0.01],'colormap_1',[],'colormap_2',[],'metvaluesmin',0,'background_colors',[],'use_background_colors',0,'timebar',1);
+options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0,'colormap_1',[],'colormap_2',[],'set_circle_shift',[0.01,0.01]);
 
 options = join_struct(options_default, options);
-options.canvas=0;
+options.canvas=[];
 
 if options.use_background_colors,
 if options.background_colors,
@@ -38,20 +39,17 @@ t = t-min(t);
 
 T = max(t)*(0:1/(n_frames-1):1);
 
-
-nandata = find(sum(isfinite(s_t_1),2)==0);
-s_t_1(sum(isfinite(s_t_1),2)==0,:)=0;
+nandata = find(sum(isnan(s_t_1),2));
+s_t_1(nandata,:)=0;
 s_t_1            = interp1(t,s_t_1',T,'cubic')';
 s_t_1(nandata,:) = nan;
 if size(s_t_1,2)==1, s_t_1 = s_t_1'; end
-
 
 nandata = find(sum(isfinite(s_t_2),2)==0);
 s_t_2(sum(isfinite(s_t_2),2)==0,:)=0;
 s_t_2            = interp1(t,s_t_2',T,'cubic')';
 s_t_2(nandata,:) = nan;
 if size(s_t_2,2)==1, s_t_2 = s_t_2'; end
-
 
 if length(options.metabolite_colors), 
   options.metabolite_colors = interp1(t,options.metabolite_colors,T,'cubic');
@@ -87,6 +85,13 @@ actvalues_1 = zeros(nr,length(T));
 metvalues_2 = zeros(nm,length(T));
 actvalues_2 = zeros(nr,length(T));
 
+nb = size(options.background_colors,1);
+
+if length(options.background_colors),
+  options.background_colors = interp1(0:1/[nb-1]:1,options.background_colors,0:1/[length(T)-1]:1);
+end
+
+
 for j = 1:length(T),
   switch data_type,    
     case 'concentrations',
@@ -103,14 +108,19 @@ end
 
 jj = j;
 
-if length(metvalues_1), options_default.metvaluesmax = max(max(metvalues_1(:)),0.001); end
-if length(actvalues_2), options_default.actvaluesmax = max(max(actvalues_1(:)),0.001); end
+% scale actvalues matrices to maximum values of 1
+actvalues_1 = 1/nanmax(abs(actvalues_1(:))) * actvalues_1;
+actvalues_2 = 1/nanmax(abs(actvalues_2(:))) * actvalues_2;
+
+if length(metvalues_1), options.metvaluesmax = max(max(metvalues_1(:)),0.001); end
+if length(actvalues_1), options.actvaluesmax = max(max(actvalues_1(:)),0.001); end
 
 clf; 
 subplot('position',[0 0 1 1]);
-options.hold_on=0; options.circle_shift=[0,0];
+options.hold_on=0; options.circle_shift = [0,0];
 netgraph_concentrations(network,metvalues_1(:,1),actvalues_1(:,1),0,options); hold on;
-options.hold_on=1; options.circle_shift=options.set_circle_shift;
+
+options.hold_on=1; options.circle_shift = options.set_circle_shift;
 netgraph_concentrations(network,metvalues_2(:,1),actvalues_2(:,1),0,options);
 
 options_default.figure_axis    = axis;
@@ -153,12 +163,12 @@ for j=1:jj,
   netgraph_concentrations(network,metvalues_1(:,j),actvalues_1(:,j),text_flag,options); hold on;
   options.hold_on=1; options.circle_shift=options.set_circle_shift;
   if length(options.colormap_2), options.colormap = options.colormap_2; end
-  options.canvas = 0; 
+  %options.canvas = []; 
   options.suppress_lines = 1;
   netgraph_concentrations(network,metvalues_2(:,j),actvalues_2(:,j),text_flag,options);
 
   if options.timebar, 
-    hold on;  
+    hold on;
     ss = network.graphics_par.squaresize;
     amin = a(1) + 0.05 *[a(2)-a(1)];
     amax = a(2) - 0.05 *[a(2)-a(1)];

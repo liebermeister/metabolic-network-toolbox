@@ -6,7 +6,9 @@ eval(default('reversible','1'));
 
 stoich_coeffs = column(stoich_coeffs);
 
-new_metabolites = setdiff(reactants,network.metabolites);
+% remove metabolites that already exist in the network from the list "reactants"
+ll = label_names(reactants,network.metabolites);
+new_metabolites = column(reactants(find(ll==0)));
 
 new_external = external(label_names(new_metabolites,reactants));
 
@@ -17,7 +19,6 @@ end
 [nr,nm] = network_numbers(network);
 
 ind    = network_find_metabolites(network,reactants);
-  
 network.actions                   = [network.actions; name];
 network.N(ind,nr+1)               = stoich_coeffs;
 network.regulation_matrix(nr+1,:) = 0;

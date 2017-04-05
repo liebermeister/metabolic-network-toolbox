@@ -16,7 +16,7 @@ function R = basic_control_analysis(network,s,options)
 
 eval(default('options','struct'));
 
-options_default = struct('split',0,'only_enzyme_levels',1,'dilution_rate',[]);
+options_default = struct('split',0,'only_enzyme_levels',0,'dilution_rate',[]);
 options         = join_struct(options_default,options);
 
 if isfield(options,'used'),
@@ -39,6 +39,10 @@ end
 [R.epsilon_1,R.pi_1]           = elasticities(network,R.s,options);
 [R.CJ, R.CS, L, NR , R.M]      = control_coefficients(network.N, R.epsilon_1,network.external,used);
 [R.RS,R.RJ]                    = response_coefficients(R.CS,R.epsilon_1,R.pi_1);
+size(R.pi_1)
+size(R.RS)
+size(R.RJ)
+
 R.RS(find(network.external),:) = 0;
 
 n_ext = sum(network.external);

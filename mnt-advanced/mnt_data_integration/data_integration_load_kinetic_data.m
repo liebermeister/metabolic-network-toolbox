@@ -36,13 +36,13 @@ eval(default('data_quantities', '[]', ...
 
 if isempty(data_quantities), 
 data_quantities = {'standard Gibbs energy of reaction', ...
-	      'standard chemical potential',...
-	      'Michaelis constant',...
-	      'activation constant', ...
-	      'inhibitory constant',...
-              'equilibrium constant', ...
-	      'substrate catalytic rate constant', ...
-              'product catalytic rate constant'};
+                   'standard chemical potential',...
+                   'Michaelis constant',...
+                   'activation constant', ...
+                   'inhibitory constant',...
+                   'equilibrium constant', ...
+                   'substrate catalytic rate constant', ...
+                   'product catalytic rate constant'};
 end
 
 if isempty(quantity_info), 
@@ -106,16 +106,25 @@ end
 % ------------------------------------------
 
 if isempty(reaction_column_name),
-  reaction_column_name = 'Reaction_Identifiers_kegg_reaction';
+  if use_sbml_ids,
+    reaction_column_name = 'Reaction_SBML_reaction_id';
+  else
+    reaction_column_name = 'Reaction_Identifiers_kegg_reaction';
+  end
 end
 
 if isempty(compound_column_name),
-  compound_column_name =  'Compound_Identifiers_kegg_compound';
+  if use_sbml_ids,
+    reaction_column_name = 'Compound_SBML_species_id';
+  else
+    compound_column_name =  'Compound_Identifiers_kegg_compound';
+  end
 end
 
 if isempty(use_kegg_ids),
   use_kegg_ids = 1;
 end
+
 
 % ------------------------------------------
 % if filter criterion is given, put the rows that meet this criterion
@@ -318,7 +327,6 @@ for it = 1:length(data_quantities),
   switch related_element,
     
     case 'Species',  
-
       if use_kegg_ids,
         if isfield(kinetic_data_table,compound_column_name),
           rindices = label_names(kinetic_data_table.(compound_column_name)(ind),metabolites,'multiple');
@@ -369,7 +377,6 @@ for it = 1:length(data_quantities),
       end
       
     case 'Reaction/Species',   
-      
       if use_kegg_ids,
         if isfield(kinetic_data_table,reaction_column_name) * ...
               isfield(kinetic_data_table,compound_column_name),
@@ -379,7 +386,7 @@ for it = 1:length(data_quantities),
           if verbose, 
             warning(sprintf('%s: %s: Joint Compound and Reaction IDs cannot be matched',kinetic_data_file,symbol));
           end         
-          rindices = repmat({1},length(ind));
+          rindices = repmat({1},length(ind),1);
           cindices = repmat({1},length(rindices),1);
         end
       elseif isfield(kinetic_data_table,'Reaction_SBML_reaction_id'),

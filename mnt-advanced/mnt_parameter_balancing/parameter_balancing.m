@@ -92,7 +92,7 @@ if flag_bounds,
      opt = optimset('Display','off','Algorithm','active-set','MaxIter',10^8);
      [q_posterior.mode,fval,exitflag] = quadprog(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior.mean), full(Qconstraints), xconstraints - epsilon,[],[],lb,ub,[],opt);
   end
-  if exitflag <0, error(sprintf('Error in optimisation - exitflag %d',exitflag)); end
+  if exitflag <0, error(sprintf('Error in optimisation during parameter balancing - exitflag %d',exitflag)); end
 
 else
   q_posterior.mode = q_posterior.mean;

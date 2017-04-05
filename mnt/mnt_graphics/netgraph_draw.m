@@ -82,6 +82,7 @@
 % black_and_white (default 0)
 % showsign
 % shade_long_lines  (value) if ~=0 : length above which  lines are shaded 
+% shade_cofactor_lines  (bitstring denoting the cofactors)
 %
 % canvas (flag, default []): show light grey background; or rgb vector with background color
 % figure_axis
@@ -144,17 +145,21 @@ if ~p.suppress_lines,
       if sum(j2(itt)-n_met==p.actindshow) * sum(i2(itt)==p.metindshow),
         my_color = p.linecolor;
         my_linewidth = p.linewidth; 
+        shade_this_line = 0;
         if p.shade_long_lines,
-          if [x(1,i2(itt))-x(1,j2(itt))]^2 + [x(2,i2(itt))-x(2,j2(itt))]^2 > p.shade_long_lines^2,
-            my_color = 0.15 * p.linecolor + 0.85 * [1 1 1];
-            my_linewidth = 1;
-          end
+          shade_this_line = [x(1,i2(itt))-x(1,j2(itt))]^2 + [x(2,i2(itt))-x(2,j2(itt))]^2 > p.shade_long_lines^2;
         end
-        line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',my_color,'Linewidth',my_linewidth);
+        if length(p.shade_cofactor_lines),
+          shade_this_line = shade_this_line + p.shade_cofactor_lines(p.metabolite_mapping(i2(itt)));
+        end
+        if shade_this_line,
+          my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
+          my_linewidth = 1;
+        end
       end
+      line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',my_color,'Linewidth',my_linewidth);
     end
   end
-
 end
 
 % ---------------------------------------------------
@@ -292,15 +297,15 @@ x_arrowlistW = zeros(n_act,n_met,2);
 if p.show_regulation,
   [indr,indm] = find(p.regulation_matrix);
   for itt=1:length(indr),
-    if sum(indr(itt)-n_met == p.actindshow) * sum(indm(itt) == p.metindshow) ,
-      %% network.actions{indr(itt)}
-      %% network.metabolites{indm(itt)}
+    %%-n_met
+    if sum(indr(itt) == p.actindshow) * sum(indm(itt) == p.metindshow),
+      %%network.actions{indr(itt)}
+      %%network.metabolites{indm(itt)}
       this_sign = sign(p.regulation_matrix(indr(itt),indm(itt)));
       if this_sign>0, linecolor = [0 0.2 1];
       else,           linecolor = [1 0 0]; 
       end
       [x3,arcx,arcy] = arc(x(:,indr(itt)+n_met),x(:,indm(itt)),0.2,0.5);
-
       if ~p.suppress_lines,
         plot(x3(1,:),x3(2,:),'color',linecolor);
       end
@@ -351,7 +356,7 @@ if p.show_metvalues,
     case 'none',   p.show_actvalues = 0;
     case 'fixed',  p.norm_metvalues(isfinite(p.norm_metvalues)) = 1;
   end
-
+  
   for it = p.metindshow,
     if isnan(p.norm_metvalues(it)); % do not shift nan values
       if ~p.suppress_lines,
@@ -486,9 +491,9 @@ set(gca,'YDir',p.YDir);
 noticks;
 
 a = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
-     -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)),...
+     -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) + 0.000000000001,...
      1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
-     -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:))];
+     -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) + 0.000000000001];
 
 if ~isempty(p.figure_axis), a = p.figure_axis;
 end 
@@ -704,7 +709,6 @@ else
   p = network.graphics_par;
 end
 
-
 % -------------------------
 % use parameters in argument list
 
@@ -800,7 +804,8 @@ p_default = struct(...
     'flag_edges', 1, ...
     'flag_triangle_edges', 0, ...
     'canvas', [],...
-    'shade_long_lines', []);
+    'shade_long_lines', [], ...
+    'shade_cofactor_lines', []);
    
 p = join_struct(p_default,p);
 
@@ -898,8 +903,8 @@ if p.colorbar,
     p.metvaluesmax  = max(p.colorbar_numbers); 
     p.actvaluesmin  = min(p.colorbar_numbers); 
     p.actvaluesmax  = max(p.colorbar_numbers); 
-    p.edgevaluesmin = min(p.colorbar_numbers); 
-    p.edgevaluesmax = max(p.colorbar_numbers); 
+    p.edgevaluesmin = min(p.colorbar_numbers(:)); 
+    p.edgevaluesmax = max(p.colorbar_numbers(:)); 
   end
 end
 
@@ -907,15 +912,18 @@ if isempty(p.metvaluesmin), p.metvaluesmin = min(p.metvalues); end
 if isempty(p.metvaluesmax), p.metvaluesmax = max(p.metvalues); end
 if isempty(p.actvaluesmin), p.actvaluesmin = min(p.actvalues); end
 if isempty(p.actvaluesmax), p.actvaluesmax = max(p.actvalues); end
-if isempty(p.edgevaluesmin), p.edgevaluesmin = min(p.edgevalues); end
-if isempty(p.edgevaluesmax), p.edgevaluesmax = max(p.edgevalues); end
+if isempty(p.edgevaluesmin), p.edgevaluesmin = nanmin(p.edgevalues(:)); end
+if isempty(p.edgevaluesmax), p.edgevaluesmax = nanmax(p.edgevalues(:)); end
   
 p.metvalues( find(p.metvalues < p.metvaluesmin) ) = p.metvaluesmin;
 p.metvalues( find(p.metvalues > p.metvaluesmax) ) = p.metvaluesmax;
 p.actvalues( find(p.actvalues < p.actvaluesmin) ) = p.actvaluesmin;
 p.actvalues( find(p.actvalues > p.actvaluesmax) ) = p.actvaluesmax;
-p.edgevalues(find(p.edgevalues < p.edgevaluesmin)) = p.edgevaluesmin;
-p.edgevalues(find(p.edgevalues > p.edgevaluesmax)) = p.edgevaluesmax;
+
+if size(p.edgevalues),
+  p.edgevalues(find(p.edgevalues < p.edgevaluesmin)) = p.edgevaluesmin;
+  p.edgevalues(find(p.edgevalues > p.edgevaluesmax)) = p.edgevaluesmax;
+end
 
 % ---------------------------------------------------------------------
 % showsign = 1  -> normalise all values to values between -1 and 1
@@ -937,7 +945,6 @@ if p.show_arrowvalues,
     end
     p.norm_arrowvalues(p.norm_arrowvalues>p.arrowvaluesmax) = p.arrowvaluesmax;
     p.norm_arrowvalues(p.norm_arrowvalues<p.arrowvaluesmin) = p.arrowvaluesmin;
-    %p.norm_arrowvalues = p.norm_arrowvalues / max(p.arrowvaluesmax, abs(p.arrowvaluesmin));
   end
 else
   p.norm_arrowvalues = zeros(nr,1);  

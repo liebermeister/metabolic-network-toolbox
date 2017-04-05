@@ -21,6 +21,10 @@ function network = netgraph_move(network,flag_draw_details,options,picture,filen
 
 set(gca,'Position',[0.02 0 0.96 0.96]);
 
+if sum(size(network.N))==0, 
+  error('Empty network');
+end
+
 if ~exist('flag_draw_details','var'), flag_draw_details = 'text';  end;
 if ~exist('picture','var'), picture = []; end 
 
@@ -81,9 +85,9 @@ if ~isfield(options,'frame'),
     options.frame = [0 1 0 1]; 
   end 
   options.frame = [ 1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
-                   -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)),...
+                   -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) +  0.0000001,...
                     1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
-                   -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:))];
+                   -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) +  0.0000001];
 end
 
 nm = length(network.graphics_par.metnames);
