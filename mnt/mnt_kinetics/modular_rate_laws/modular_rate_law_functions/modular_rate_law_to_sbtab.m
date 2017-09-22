@@ -6,19 +6,23 @@ function quantity_table = modular_rate_law_to_sbtab(network,filename,options)
 
 eval(default('options','struct','filename','[]','document_name','''Model'''));
 
-options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_concentrations',1,'write_enzyme_concentrations',1);
+options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_concentrations',1,'write_enzyme_concentrations',1,'modular_rate_law_parameter_id',0);
 options         = join_struct(options_default,options);
 
-if isempty(network.kinetics.u),
+if ~isfield(network.kinetics,'u'),
+  options.write_enzyme_concentrations = 0;
+elseif isempty(network.kinetics.u),
   options.write_enzyme_concentrations = 0;
 end
 
-if isempty(network.kinetics.c),
+if ~isfield(network.kinetics,'c'),
+  options.write_concentrations = 0;
+elseif isempty(network.kinetics.c),
   options.write_concentrations = 0;
 end
 
 switch network.kinetics.type
-  case {'cs','ms','rp','ma','fm'}, % UPDATE rate law names!
+  case {'cs','ds','ms','rp','ma','fm'}, % UPDATE rate law names!
   otherwise, error('Conversion is only possible for modular rate law');
 end
 
@@ -185,77 +189,51 @@ end
 
 
 if options.write_concentrations,
-
-column_quantity = [ column_quantity; ...
-                    repmat({'concentration'},nm,1); ...
-                   ];
-
-column_parameterID = [ column_parameterID; ...
-                    cellstr([char(repmat({'c_'},nm,1)) char(network.metabolites)]);...
-                   ];
-
-column_value =  [ column_value; ...
-                network.kinetics.c ; ...
-              ];
-
-column_unit = [ column_unit; ...
-                    repmat({'mM'},nm,1); ...
-                   ];    
-
-column_reaction = [ column_reaction; ...
-                    repmat({''},nm,1); ...
-                   ];    
-
-column_compound = [ column_compound; ...
-                    metabolites; ...
-                  ];
-
-column_reaction_KEGGID = [ column_reaction_KEGGID; ...
-                    repmat({''},nm,1); ...
-                   ];    
-
-column_compound_KEGGID = [ column_compound_KEGGID; ...
-                    metabolite_KEGGID; ...
-                  ];
-
+  column_quantity        = [ column_quantity;  repmat({'concentration'},nm,1)];
+  column_parameterID     = [ column_parameterID; cellstr([char(repmat({'c_'},nm,1)) char(network.metabolites)])];
+  column_value           = [ column_value; network.kinetics.c];
+  column_unit            = [ column_unit;  repmat({'mM'},nm,1)];    
+  column_reaction        = [ column_reaction;  repmat({''},nm,1)];    
+  column_compound        = [ column_compound; metabolites];
+  column_reaction_KEGGID = [ column_reaction_KEGGID;  repmat({''},nm,1)];    
+  column_compound_KEGGID = [ column_compound_KEGGID;  metabolite_KEGGID];
 end
 
 
 if options.write_enzyme_concentrations,
-
-column_quantity = [ column_quantity; ...
-                    repmat({'concentration of enzyme'},nr,1); ...
-                   ];
-
-column_parameterID = [ column_parameterID; ...
-                    numbered_names_simple('u_R',nr); ...
-                   ];
-
-column_value =  [ column_value; ...
-                network.kinetics.u; ...
-              ];
-
-column_unit = [ column_unit; ...
-                    repmat({'mM'},nr,1); ...
-                   ];    
-
-column_reaction = [ column_reaction; ...
-                    reactions; ...
-                   ];    
-
-column_compound = [ column_compound; ...
-                    repmat({''},nr,1); ...
-                  ];
-
-column_reaction_KEGGID = [ column_reaction_KEGGID; ...
-                    reaction_KEGGID; ...
-                   ];    
-
-column_compound_KEGGID = [ column_compound_KEGGID; ...
-                    repmat({''},nr,1); ...
-                  ];
-
+  column_quantity        = [ column_quantity; repmat({'concentration of enzyme'},nr,1)];
+  column_parameterID     = [ column_parameterID; numbered_names_simple('u_R',nr)];
+  column_value           = [ column_value; network.kinetics.u];
+  column_unit            = [ column_unit; repmat({'mM'},nr,1)];
+  column_reaction        = [ column_reaction;  reactions];    
+  column_compound        = [ column_compound; repmat({''},nr,1)];
+  column_reaction_KEGGID = [ column_reaction_KEGGID; reaction_KEGGID];    
+  column_compound_KEGGID = [ column_compound_KEGGID;  repmat({''},nr,1)];
 end
+
+
+if isfield(network,'metabolite_mass'),
+  column_quantity        = [ column_quantity;  repmat({'compound molecular size'},nm,1)];
+  column_parameterID     = [ column_parameterID; cellstr([char(repmat({'mm_'},nm,1)) char(network.metabolites)])];
+  column_value           = [ column_value; network.metabolite_mass];
+  column_unit            = [ column_unit;  repmat({'Da'},nm,1)];    
+  column_reaction        = [ column_reaction;  repmat({''},nm,1)];    
+  column_compound        = [ column_compound; metabolites];
+  column_reaction_KEGGID = [ column_reaction_KEGGID;  repmat({''},nm,1)];    
+  column_compound_KEGGID = [ column_compound_KEGGID;  metabolite_KEGGID];
+end
+
+if isfield(network,'enzyme_mass'),
+  column_quantity        = [ column_quantity; repmat({'enzyme molecular size'},nr,1)];
+  column_parameterID     = [ column_parameterID; numbered_names_simple('em_',nr)];
+  column_value           = [ column_value; network.enzyme_mass];
+  column_unit            = [ column_unit; repmat({'Da'},nr,1)];
+  column_reaction        = [ column_reaction;  reactions];    
+  column_compound        = [ column_compound; repmat({''},nr,1)];
+  column_reaction_KEGGID = [ column_reaction_KEGGID; reaction_KEGGID];    
+  column_compound_KEGGID = [ column_compound_KEGGID;  repmat({''},nr,1)];
+end
+
 
 if isfield(network, 'metabolite_KEGGID'),
   quantity_table = sbtab_table_construct(struct('TableName','RateConstant','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Value','Unit','Reaction:Identifiers:kegg.reaction','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_value,column_unit,column_reaction_KEGGID,column_compound_KEGGID});

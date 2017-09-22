@@ -24,9 +24,11 @@ eval(default('options','struct'));
 options = join_struct(opt_def,options);
 
 if strcmp(options.actstyle, 'none'),
+  if ~strcmp(options.arrowstyle,'none'),
   if isempty(options.arrowvalues),
     options.arrowvalues = J;
     options.arrowstyle = 'fluxes';
+  end
   end
 end
 

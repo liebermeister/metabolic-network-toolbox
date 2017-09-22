@@ -97,7 +97,8 @@ for j = 1:length(T),
     case 'concentrations',
       metvalues_1(:,j) = s_t_1_c(:,j);
       metvalues_2(:,j) = s_t_2_c(:,j);
-      options.actstyle = 'none';
+      options.actstyle   = 'none';
+      options.arrowstyle = 'none';
     case 'reactions',
       actvalues_1(:,j) =  s_t_1_v(:,j);
       actvalues_2(:,j) =  s_t_2_v(:,j);

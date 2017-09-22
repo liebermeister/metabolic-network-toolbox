@@ -1,4 +1,4 @@
-function [v_projected,ind_non_orthogonal] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);
+function [v_projected,ind_non_orthogonal,v_projected_std] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);
 
 % v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);
 %
@@ -32,7 +32,7 @@ if size(v_mean,2)>1,
   for it = 1:size(v_mean,2),
     if length(v_std), vv1 = v_std(:,it); else vv1 = []; end
     if length(v_sign), vv2 = v_sign(:,it); else vv2 = []; end
-    v_projected(:,it) = project_fluxes(N, ind_ext, v_mean(:,it), vv1, vv2, pars);
+    [v_projected(:,it),~,v_projected_std(:,it)] = project_fluxes(N, ind_ext, v_mean(:,it), vv1, vv2, pars);
   end
   return
 end
@@ -59,6 +59,8 @@ if pars.verbose,
   display(sprintf('\n  Projecting fluxes using "%s" method', pars.method));
 end
 
+ind_non_orthogonal = [];
+v_projected_std = nan * ones(size(N,2),1);
 
 switch pars.method,
 
@@ -101,7 +103,7 @@ switch pars.method,
     
     ind_isnan = find(isnan(v_mean.*v_std));
     v_std_inv = 1./v_std;
-      v_mean(ind_isnan)    = 0;
+    v_mean(ind_isnan)    = 0;
     if pars.prior_for_unknown_fluxes, 
       %% use broad prior for unknown fluxes, centred around 0
       v_std_inv(ind_isnan) = 1/nanmean(100 * v_std);
@@ -138,7 +140,10 @@ switch pars.method,
         error('Error in quadprog');
       end
     end
-
+    Kernel_of_Aeq = null(Aeq); % Kern(Aeq);
+    P = Kernel_of_Aeq * Kernel_of_Aeq'; % Projector on Kern(Aeq);
+    v_projected_std = 1./sqrt(diag(P'*M*P));
+    
   case 'thermo_correct',
 
     dd.v.mean = v_mean;

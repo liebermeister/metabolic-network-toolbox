@@ -273,6 +273,10 @@ Keq = result.kinetics_posterior_mode.Keq;
 c   = result.kinetics_posterior_mode.c;    
 A   = result.kinetics_posterior_mode.A;
 
+if options.c_fix_strict, 
+  c(isfinite(options.c_fix)) = options.c_fix(isfinite(options.c_fix));
+end
+
 
 % -----------------------------------------------------
 % Test whether results are consistent
@@ -302,3 +306,4 @@ end
 if inconsistent_solution,
   error('Solution found is inconsistent with flux directions');
 end
+

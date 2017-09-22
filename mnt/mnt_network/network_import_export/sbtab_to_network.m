@@ -139,6 +139,12 @@ if options.load_quantity_table,
       sbtab_table_save(filename.tables.RateConstant, struct('filename',quantity_table_file));
     end
   end
-  [network.kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,quantity_table_file,options);
+  [network.kinetics, kinetic_data,other_parameters] = sbtab_to_modular_rate_law(network,quantity_table_file,options);
+  if sum(isfinite(other_parameters.compound_mass)),
+    network.compound_mass = other_parameters.compound_mass;
+  end
+  if sum(isfinite(other_parameters.enzyme_mass)),
+    network.enzyme_mass = other_parameters.enzyme_mass;
+  end
 end
 

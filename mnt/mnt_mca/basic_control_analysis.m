@@ -39,9 +39,9 @@ end
 [R.epsilon_1,R.pi_1]           = elasticities(network,R.s,options);
 [R.CJ, R.CS, L, NR , R.M]      = control_coefficients(network.N, R.epsilon_1,network.external,used);
 [R.RS,R.RJ]                    = response_coefficients(R.CS,R.epsilon_1,R.pi_1);
-size(R.pi_1)
-size(R.RS)
-size(R.RJ)
+%size(R.pi_1)
+%size(R.RS)
+%size(R.RJ)
 
 R.RS(find(network.external),:) = 0;
 

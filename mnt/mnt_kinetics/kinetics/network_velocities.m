@@ -96,6 +96,7 @@ else,
       
     case 'mass-action',
       N          = network.N;
+      [nm,nr] = size(N);
       
       if isfield(kinetics,'exponents'),
         Nf = kinetics.exponents.*(N<0);

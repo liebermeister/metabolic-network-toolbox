@@ -1,5 +1,5 @@
 function [result, exitflag] = parameter_balancing(task, quantity_info, options)
-
+  
 % [result, exitflag] = parameter_balancing(task, quantity_info, options)
 %
 % Parameter balancing based on vectors and matrices in data structure 'task' 
@@ -61,8 +61,6 @@ if options.use_pseudo_values,
   TT                  = TT + task.Q_xall_q' * xall_pseudo.cov_inv * task.xall.pseudo.mean;
 end
 
-
-
 % ensure that the Hessian is exactly symmetric
 q_posterior_cov_inv  = 0.5 * [q_posterior_cov_inv + q_posterior_cov_inv'];
 
@@ -92,6 +90,7 @@ if flag_bounds,
      opt = optimset('Display','off','Algorithm','active-set','MaxIter',10^8);
      [q_posterior.mode,fval,exitflag] = quadprog(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior.mean), full(Qconstraints), xconstraints - epsilon,[],[],lb,ub,[],opt);
   end
+
   if exitflag <0, error(sprintf('Error in optimisation during parameter balancing - exitflag %d',exitflag)); end
 
 else
@@ -165,6 +164,7 @@ end
 
 % -----------------------------------------------------------------------
 % translate the posterior mean values back to kinetic constants
+
 
 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = network_numbers(task.network);
 
@@ -257,3 +257,4 @@ result.kinetics_posterior_std     = kpm_std;
 if options.n_samples,
   result.kinetics_posterior_samples = kpm_samples;
 end
+

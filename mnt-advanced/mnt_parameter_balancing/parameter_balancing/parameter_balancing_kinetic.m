@@ -126,6 +126,7 @@ if length(Keq_given),
   my_kinetic_data.Keq.std_ln              = 0.0001 * ones(size(network.actions));
 end  
 
+
 network.kinetics = set_kinetics(network, 'cs');
 task             = parameter_balancing_task(network, my_kinetic_data, quantity_info, model_quantities, basic_quantities);
 res              = parameter_balancing(task, quantity_info, struct('use_pseudo_values',0,'n_samples',options.n_samples, 'fix_Keq_in_sampling', options.fix_Keq_in_sampling));

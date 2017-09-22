@@ -6,10 +6,7 @@ function network = netgraph_make_graph(network,metvalues,actvalues,set_positions
 
 % -----------------------------------------------
 
-if ~exist('table_positions','var'),  table_positions = []; end
-if ~exist('metvalues','var'),  metvalues = []; end
-if ~exist('actvalues','var'),  actvalues = []; end
-if ~exist('set_positions','var'),  set_positions = []; end 
+eval(default('table_positions','[]','metvalues','[]','actvalues','[]','set_positions','[]'));
 
 metnames = strrep(network.metabolites,'_',' ');
 metnames = strrep(metnames,'Compartment ','');

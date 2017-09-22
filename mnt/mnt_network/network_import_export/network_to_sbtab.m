@@ -29,7 +29,7 @@ catch err,
 end
 
 eval(default('options','struct'));
-options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',1,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 1, 'modular_rate_law_parameter_id', 1, 'c', [],'document_name','Model', 'graphics_positions', 1);
+options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',1,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 1, 'modular_rate_law_parameter_id', 0, 'c', [],'document_name','Model', 'graphics_positions', 1);
 
 options = join_struct(options_default,options);
 

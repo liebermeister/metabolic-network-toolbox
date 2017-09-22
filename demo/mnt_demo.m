@@ -3,6 +3,7 @@ data_dir = [fileparts(which(mfilename)) '/data'];
 
 mnt_dependencies;
 
+close all;
 echo on;
 clc
 %----------------------------------------------
@@ -64,8 +65,18 @@ network
 % The fields 'kinetics' and 'graphics_par' contain information
 % about reaction kinetics and the graphical layout (set here by default).
  
+% We now define graphics positions of the biochemical network elements 
+% (metabolites and reactions) and add this information to the 'network' object
+
+met_x = [0.1,0.1,0.3,0.7,0.9,0.9];
+met_y = [0.8,0.2,0.5,0.5,0.8,0.2];
+rea_x = [0.2,0.2,0.5,0.8,0.8];
+rea_y = [0.65,0.35,0.5,0.65,0.35];
+
+network = netgraph_make_graph(network,[],[],[1:11]',[met_x,rea_x; met_y, rea_y]);
+
 % The following command draws the network
- 
+
 figure(1);
 netgraph_draw(network);
  
@@ -111,8 +122,6 @@ s = [1 1 0 0 0 0]';
  
 % .. and plot them on the network graph. 
  
-network = netgraph_make_graph(network);
- 
 figure(2);
 netgraph_draw(network,{'metvalues',S,'arrowvalues',J,'arrowstyle','fluxes'});
  
@@ -120,6 +129,18 @@ netgraph_draw(network,{'metvalues',S,'arrowvalues',J,'arrowstyle','fluxes'});
  
 % Press any key to continue
  
+pause
+clc
+% --------------------------------------------------------------------
+% The stationary fluxes can be visualised as a movie
+ 
+figure(3); clf;
+M = netgraph_flux_movie(network,[],J,1,struct('arrowsize',0.05));
+
+movie(M,1);
+
+% Press any key to continue
+
 pause
 clc
 %---------------------------------------------------------------------
@@ -132,7 +153,7 @@ epsilon     = elasticities(network,S);
 
 % Here we plot the control coefficients on the 4th metabolite on the network
  
-figure(3);
+figure(4);
 netgraph_draw(network,'actvalues',C_S(4,:)');
  
 % Press any key to continue
@@ -210,7 +231,7 @@ clc
 
 [t,s_t,s_int] = network_integrate(network,s,5);
 
-figure(4); plot(t,s_t)
+figure(5); plot(t,s_t)
 
 % Press any key to continue
 pause
@@ -218,9 +239,9 @@ pause
 % --------------------------------------------------------------------
 % We can also show the time course as a movie
  
-M = netgraph_movie(network,t,s_t,'concentrations');
+figure(6); 
+M = netgraph_movie(network,t,s_t,'concentrations',[],1,struct('timebar',0));
  
-figure(4); 
 movie(M,1);
 
 % Press any key to continue
