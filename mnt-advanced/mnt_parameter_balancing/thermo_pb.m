@@ -2,7 +2,7 @@ function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)
 
 % [c,A] = thermo_pb(N, v, thermo_pb_options, verbose)
 %
-% Thermodynamic parameter balancing (directly based on stoichiometric matrix)
+% Thermodynamic parameter balancing (uses stoichiometric matrix as an input)
 %
 % This function is independent of the general parameter balancing functions
 % (the formulae for thermodynamic parameter balancing problem are explictly solved)

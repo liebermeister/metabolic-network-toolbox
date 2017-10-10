@@ -1,8 +1,8 @@
-function [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)
+function [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,parameter_prior)
 
-% [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,quantity_info)
+% [q_sample, xmodel_sample, xdata_sample, kinetics_sample, v_sample, q_min, q_max] = parameter_balancing_constrained_sampling(task,res,options,parameter_prior)
 
-eval(default('options','struct','quantity_info',' data_integration_load_quantity_info'));
+eval(default('options','struct','parameter_prior',' biochemical_parameter_prior'));
 
 options_default.n_sample = 1000;
 options_default.n_warm   = [];
@@ -104,13 +104,13 @@ xdata_sample  = task.Q_xdata_q  * q_sample;
 
 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = network_numbers(task.network);
 
-num_model = parameter_balancing_quantity_numbers(task.model_quantities,quantity_info,task.network);
+num_model = parameter_balancing_quantity_numbers(task.model_quantities,parameter_prior,task.network);
 
 for it = 1:length(task.model_quantities),
   my_quantity     = task.model_quantities{it};
-  ind             = find(strcmp(my_quantity,quantity_info.QuantityType));
-  my_scaling      = quantity_info.Scaling{ind};
-  my_symbol       = quantity_info.Symbol{ind};
+  ind             = find(strcmp(my_quantity,parameter_prior.QuantityType));
+  my_scaling      = parameter_prior.Scaling{ind};
+  my_symbol       = parameter_prior.Symbol{ind};
   my_indices      = task.xmodel.indices.(my_symbol);
   my_x_sample     = xmodel_sample(my_indices,:);
 

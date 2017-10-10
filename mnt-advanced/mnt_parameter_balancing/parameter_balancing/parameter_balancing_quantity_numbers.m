@@ -1,4 +1,4 @@
-function num = parameter_balancing_quantity_numbers(quantities,quantity_info,network)
+function num = parameter_balancing_quantity_numbers(quantities,parameter_prior,network)
 
 % count how many quantities of a certain type appear in a model
 
@@ -7,9 +7,9 @@ num=[];
 
 for it = 1:length(quantities),
   my_quantity = quantities{it};
-  ind = find(strcmp(my_quantity, quantity_info.QuantityType));
-  my_elements = quantity_info.RelatedElement{ind};
-  my_symbol   = quantity_info.Symbol{ind};
+  ind = find(strcmp(my_quantity, parameter_prior.QuantityType));
+  my_elements = parameter_prior.Element{ind};
+  my_symbol   = parameter_prior.Symbol{ind};
   switch  my_elements,
     case 'Species',  num(it,1) = nm;
     case 'Reaction', num(it,1) = nr;

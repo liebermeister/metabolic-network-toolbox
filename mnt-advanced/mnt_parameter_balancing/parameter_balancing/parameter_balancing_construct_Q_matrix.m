@@ -1,14 +1,14 @@
-function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)
+function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, parameter_prior, network)
 
-% Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, quantity_info, network)
+% Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, parameter_prior, network)
 
-result = parameter_balancing_process_matrix(quantity_info);
+result = parameter_balancing_process_matrix(parameter_prior);
 
 i1   = label_names(quantities,result.all_quantities);
 i2   = label_names(basic_quantities,result.all_basic_quantities);
 
-num1 = parameter_balancing_quantity_numbers(quantities,quantity_info,network);
-num2 = parameter_balancing_quantity_numbers(basic_quantities,quantity_info,network);
+num1 = parameter_balancing_quantity_numbers(quantities,parameter_prior,network);
+num2 = parameter_balancing_quantity_numbers(basic_quantities,parameter_prior,network);
 
 my_matrix_terms = result.matrix_terms(i1,i2);
 

@@ -1,49 +1,66 @@
-function res = parameter_balancing_sbtab(model_file, file_kinetic_data, options)
+function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_sbtab(model_file, data_file, options)
 
-%res = parameter_balancing_sbtab(model_file, file_kinetic_data, options)
+%  [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_sbtab(model_file, data_file, options)
 %
 % Wrapper function for parameter balancing 
+% With no options set, the function uses directly the information from input files; it is best suited for comparisons with other PB tools
+%
 %  o reads input data (model, priors, kinetic and metabolic data) from SBtab files
 %  o runs parameter balancing (without and with concentration data)
 % 
-% This function calls the functions 'parameter_balancing_task' and 'parameter_balancing'
+% Function arguments:
+%  o model_file:                   SBtab or SBML model filename; files with ".xml" extension are assumed to be SBML, otherwise SBtab
+%  o data_file:            SBtab data file (kinetic and other constants)
+%  o options.parameter_prior_file: File with parameter priors (optional)
+% 
+% options: struct with options; for default values, see 'parameter_balancing_default_options'
+%
+% This function calls the functions 'parameter_balancing_task', 'parameter_balancing', and 'parameter_balancing_output'
 
-options_default.kinetics          = 'cs';  % ms, ...
-options_default.parametrisation   = 'equilibrium constant'; 
-options_default.reaction_units    = 'concentration per time'; % 'amount per time'
-options_default.enzymes_explicit  = 1;
-options_default.include_metabolic = 1;
-options_default.quantity_info_filename = '';
+options = join_struct(parameter_balancing_default_options, options);
 
-options = join_struct(options_default, options);
 
+% ----------------------------------------------------------
+% load model
+  
 if strcmp(model_file(end-3:end), '.xml'),
-  network = network_sbml_import(model_file);
+    network = network_sbml_import(model_file);
 else,
-  network = sbtab_to_network(model_file,struct('kinetic_law','cs'));
+  network = sbtab_to_network(model_file, struct('kinetic_law','cs'));
 end
 
-if length(options.quantity_info_filename), 
-  %% general quantity table (table of strings)
-  quantity_info = data_integration_load_quantity_info([],options.quantity_info_filename); 
-else,
-  quantity_info = data_integration_load_quantity_info;
-end
+% ----------------------------------------------------------
+% load parameter_prior and define relevant quantities
+  
+parameter_prior = biochemical_parameter_prior([],options.parameter_prior_file); 
 
-[model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(quantity_info, network, options);
+parameter_prior = pb_parameter_prior_adjust(parameter_prior, options); 
 
-kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, file_kinetic_data);
+[model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(parameter_prior, network, options);
 
-% change some of the prior distributions
-quantity_info.PriorMedian{quantity_info.symbol_index.u} = '1';
-quantity_info.PriorStd{quantity_info.symbol_index.u}    = '3';
-quantity_info.PriorStd{quantity_info.symbol_index.KV}   = '3';
 
-% -----------------------------------------------------------------------
+% ----------------------------------------------------------
+% load kinetic data
+
+kinetic_data      = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, 1, 0);
+
+kinetic_data_orig = kinetic_data;
+
+kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options);
+
+
+% -----------------------------------------------------------
 % run simple parameter balancing without metabolic data
 
-task = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities);
-res  = parameter_balancing(task, quantity_info);
+task                        = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities);
+res                         = parameter_balancing_calculation(task, parameter_prior);
+[r,r_mean,r_std,r_orig,r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options);
+
+network.kinetics      = r; 
+
+
+% ===========================================================
+% Test graphics
 
 % figure(1); clf
 % subplot(2,1,1); plot(task.q.prior.mean,'c'); hold on; plot(res.q_posterior.mean,'b'); ylabel('Mean'); title('Basic quantities')
@@ -101,8 +118,8 @@ res  = parameter_balancing(task, quantity_info);
 % kinetic_data.A.lower(find(my_v> thr)) =  epsilon;
 % kinetic_data.A.upper(find(my_v<-thr)) = -epsilon;
 % 
-% task = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities);
-% res  = parameter_balancing(task,quantity_info);
+% task = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities);
+% res  = parameter_balancing(task,parameter_prior);
 % 
 % v_mean = metabolic_data.v.mean(:,1);
 % v_std  = metabolic_data.v.std(:,1);

@@ -41,8 +41,8 @@ options = join_struct(options_default,options);
 % load gibbs free energies of formation ... this requires metabolite KEGG IDs in the model!
 
 data_quantities = {'standard chemical potential','equilibrium constant', 'concentration'}';
-quantity_info   = data_integration_load_quantity_info;
-kinetic_data    = data_integration_load_kinetic_data(data_quantities, quantity_info, network, filename, 0, 1);
+parameter_prior   = biochemical_parameter_prior;
+kinetic_data    = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, filename, 0, 1);
 
 % for which metabolites do we have standard chemical potentials?
 % mu0 = kinetic_data.mu0.median;
@@ -82,7 +82,7 @@ kinetic_data.c.std_ln(find(isfinite(kinetic_data.c.std_ln))) = 10^-4;
 % ------------------------------------------------------------------------
 % Determine consistent parameter set by parameter balancing
 
-quantity_info     = data_integration_load_quantity_info;
+parameter_prior     = biochemical_parameter_prior;
 model_quantities  = {'standard chemical potential','equilibrium constant', 'concentration'}';
 data_quantities   = {'standard chemical potential','equilibrium constant', 'concentration'}';
 basic_quantities  = {'standard chemical potential','concentration'}';
@@ -90,15 +90,15 @@ basic_quantities  = {'standard chemical potential','concentration'}';
 my_kinetic_data = kinetic_data;
 
 % prepare data for parameter balancing
-quantity_info.LowerBound{quantity_info.symbol_index.c}   = '0.001';
-quantity_info.UpperBound{quantity_info.symbol_index.c}   = '100';
-quantity_info.LowerBound{quantity_info.symbol_index.Keq} = '0.000001';
-quantity_info.UpperBound{quantity_info.symbol_index.Keq} = '1000000';
-quantity_info.PriorStd{quantity_info.symbol_index.Keq}   = '0.05';
+parameter_prior.LowerBound{parameter_prior.symbol_index.c}   = '0.001';
+parameter_prior.UpperBound{parameter_prior.symbol_index.c}   = '100';
+parameter_prior.LowerBound{parameter_prior.symbol_index.Keq} = '0.000001';
+parameter_prior.UpperBound{parameter_prior.symbol_index.Keq} = '1000000';
+parameter_prior.PriorStd{parameter_prior.symbol_index.Keq}   = '0.05';
 
 my_kinetic_data.mu0.std = options.sigma_mu0 * ones(nm,1);
 
-my_kinetic_data = data_integration_bounds_pseudovalues(my_kinetic_data,quantity_info,options.flag_pseudo_values,network);
+my_kinetic_data = data_integration_bounds_pseudovalues(my_kinetic_data,parameter_prior,options.flag_pseudo_values,network);
 
 my_kinetic_data.c.lower    = 0.0001 * ones(nm,1);
 my_kinetic_data.c.upper    = 100 * ones(nm,1);
@@ -106,8 +106,8 @@ my_kinetic_data.c.lower_ln = log(0.0001) * ones(nm,1);
 my_kinetic_data.c.upper_ln = log(100) * ones(nm,1);
 
 network.kinetics = set_kinetics(network, 'cs');
-task = parameter_balancing_task(network, my_kinetic_data, quantity_info, model_quantities, basic_quantities);
-res  = parameter_balancing(task, quantity_info, struct('insert_pseudo_values',0));
+task = parameter_balancing_task(network, my_kinetic_data, parameter_prior, model_quantities, basic_quantities);
+res  = parameter_balancing(task, parameter_prior, struct('insert_pseudo_values',0));
 
 mu0 = res.kinetics_posterior_mode.mu0;
 Keq = res.kinetics_posterior_mode.Keq;
