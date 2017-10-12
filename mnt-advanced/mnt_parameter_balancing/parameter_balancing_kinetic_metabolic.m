@@ -5,6 +5,8 @@ function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = 
 % Determine consistent kinetic parameter and metabolic state by parameter balancing
 %
 % This function resembles parameter_balancing_kinetic. Please see the documentation there.
+
+  epsilon = 0.00001;
   
 % ------------------------------------------------------------------------
 % Initialise
@@ -30,7 +32,7 @@ data_quantities   = {'standard chemical potential', 'standard Gibbs energy of re
 % ------------------------------------------------------------------------
 % Load and modify parameter priors
 
-parameter_prior = biochemical_parameter_prior([],options.parameter_prior_file);
+parameter_prior = parameter_balancing_prior([],options.parameter_prior_file);
 parameter_prior = pb_parameter_prior_adjust(parameter_prior, options); 
 
 
@@ -50,8 +52,8 @@ kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, networ
 
 if options.enforce_flux_directions, 
   display('Enforcing predefined flux directions');
-  kinetic_data.A.lower(v>0) = 0;
-  kinetic_data.A.upper(v<0) = 0;
+  kinetic_data.A.lower(v>0) = epsilon;
+  kinetic_data.A.upper(v<0) = -epsilon;
 end
 
 % ----------------------------------------------------------------

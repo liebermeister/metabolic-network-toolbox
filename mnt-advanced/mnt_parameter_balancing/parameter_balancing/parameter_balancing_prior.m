@@ -1,6 +1,6 @@
-function parameter_prior = biochemical_parameter_prior(omit_quantities, parameter_prior_filename)
+function parameter_prior = parameter_balancing_prior(omit_quantities, parameter_prior_filename)
 
-% parameter_prior = biochemical_parameter_prior(omit_quantities,parameter_prior_filename)
+% parameter_prior = parameter_balancing_prior(omit_quantities,parameter_prior_filename)
 
 if ~exist('sbtab_version','file'),
   error('For this function, the SBtab toolbox must be installed');
@@ -9,8 +9,8 @@ end
 eval(default('omit_quantities','[]','parameter_prior_filename','[]'));
 
 if isempty(parameter_prior_filename),
-  data_integration_dir     = [fileparts(which(mfilename))];
-  parameter_prior_filename = [ data_integration_dir '/ecm_parameter_prior_10-2017.tsv'];
+  pb_dir     = [fileparts(which(mfilename)) filesep '../'];
+  parameter_prior_filename = [ pb_dir 'config/pb_prior_10-2017.tsv'];
 end
 
 parameter_prior_sbtab = sbtab_table_load(parameter_prior_filename);

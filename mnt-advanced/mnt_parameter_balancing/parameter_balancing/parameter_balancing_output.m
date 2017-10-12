@@ -1,6 +1,6 @@
-function [r_median, r_mean, r_std, r_orig, r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options)
+function [r_mode, r_mean, r_std, r_orig, r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options)
   
-% [r_median, r_mean, r_std,r_orig,r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options)
+% [r_mode, r_mean, r_std,r_orig,r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options)
 %
 % Auxiliary function
 
@@ -9,19 +9,20 @@ eval(default('kinetic_data_orig','[]', 'options','struct'));
 % ------------------------------------------------
 % r: "kinetics" data structure, balanced values
 
-r_median.type = options.kinetics;
-r_median.h    = ones(size(res.kinetics_posterior_median.Kcatf));
+r_mode.type = options.kinetics;
+r_mode.h    = ones(size(res.kinetics_posterior_mode.Kcatf));
 
-if isfield(res.kinetics_posterior_median,'mu0'), r_median.mu0   = res.kinetics_posterior_median.mu0  ; end
-if isfield(res.kinetics_posterior_median,'KV'),  r_median.KV    = res.kinetics_posterior_median.KV   ; end
-if isfield(res.kinetics_posterior_median,'Keq'), r_median.Keq   = res.kinetics_posterior_median.Keq  ; end
-r_median.KM    =  res.kinetics_posterior_median.KM   ;
-r_median.KA    =  res.kinetics_posterior_median.KA   ;
-r_median.KI    =  res.kinetics_posterior_median.KI   ;
-r_median.Kcatf =  res.kinetics_posterior_median.Kcatf;
-r_median.Kcatr =  res.kinetics_posterior_median.Kcatr;
-if isfield(res.kinetics_posterior_median,'c'),  r_median.c   = res.kinetics_posterior_median.c;  end
-if isfield(res.kinetics_posterior_median,'u'),  r_median.u   = res.kinetics_posterior_median.u;  end
+if isfield(res.kinetics_posterior_mode,'mu0'), r_mode.mu0   = res.kinetics_posterior_mode.mu0  ; end
+if isfield(res.kinetics_posterior_mode,'KV'),  r_mode.KV    = res.kinetics_posterior_mode.KV   ; end
+if isfield(res.kinetics_posterior_mode,'Keq'), r_mode.Keq   = res.kinetics_posterior_mode.Keq  ; end
+r_mode.KM    =  res.kinetics_posterior_mode.KM   ;
+r_mode.KA    =  res.kinetics_posterior_mode.KA   ;
+r_mode.KI    =  res.kinetics_posterior_mode.KI   ;
+r_mode.Kcatf =  res.kinetics_posterior_mode.Kcatf;
+r_mode.Kcatr =  res.kinetics_posterior_mode.Kcatr;
+if isfield(res.kinetics_posterior_mode,'c'),  r_mode.c   = res.kinetics_posterior_mode.c;  end
+if isfield(res.kinetics_posterior_mode,'u'),  r_mode.u   = res.kinetics_posterior_mode.u;  end
+if isfield(res.kinetics_posterior_mode,'A'),  r_mode.A   = res.kinetics_posterior_mode.A;  end
 
 % ------------------------------------------------
 % r_mean
@@ -65,7 +66,7 @@ if length(kinetic_data_orig),
     r_orig.c     = kinetic_data_orig.c.median   ;
   end
   if isfield(kinetic_data_orig,'u'),
-  r_orig.u     = kinetic_data_orig.u.median  ;
+    r_orig.u     = kinetic_data_orig.u.median  ;
   end
   
   

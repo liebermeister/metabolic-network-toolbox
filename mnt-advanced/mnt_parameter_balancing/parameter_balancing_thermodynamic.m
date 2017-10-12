@@ -124,7 +124,7 @@ end
 % ------------------------------------------------------------------------
 % Load and adjust parameter prior
 
-parameter_prior = biochemical_parameter_prior([],options.parameter_prior_filename);
+parameter_prior = parameter_balancing_prior([],options.parameter_prior_filename);
 
 parameter_prior.LowerBound{parameter_prior.symbol_index.c}   = '0.001';
 parameter_prior.UpperBound{parameter_prior.symbol_index.c}   = '100';

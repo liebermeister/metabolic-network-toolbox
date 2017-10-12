@@ -1,6 +1,8 @@
 function options = parameter_balancing_default_options()
-  
-% Options and their default values:
+
+% PARAMETER_BALANCING_DEFAULT_OPTIONS Options for parameter balancing - empty data structure
+%
+% options = parameter_balancing_default_options()
 %
 %   options.kinetics             = 'cs';
 %   options.parametrisation      = 'catalytic rate constant'; 
@@ -9,13 +11,14 @@ function options = parameter_balancing_default_options()
 %   options.enzymes_explicit     = 1; % do not consider maximal velocities as quantities in parameter balancing
 %   options.kcat_prior_median    = [];
 %   options.kcat_prior_log10_std = []
-%   options.KM_lower             = [];
+%   options.kcat_usage           = 'use';
+%   options.KM_lower             = []; % mM
 %   options.Keq_upper            = [];
 %   options.kcat_lower           = [];
 %   options.kcatr_lower          = [];
 %   options.kcat_upper           = []; 
 %   options.GFE_fixed            = 0
-%   options.parameter_prior_file = []; % => use default file, see biochemical_parameter_prior
+%   options.parameter_prior_file = []; % => use default file, see parameter_balacning_prior.m
 %   options.use_pseudo_values    = 1;
 %   options.n_samples            = 0;
 %   options.Keq_given            = [];

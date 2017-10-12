@@ -185,20 +185,14 @@ for it = 1:length(task.model_quantities),
   my_x_mean       = xmodel_posterior.mean(my_indices);
   my_x_std        = xmodel_posterior.std(my_indices);
   my_x_samples    = xmodel_posterior.samples(my_indices,:);
-
- % Check whther standard dev from samples agrees with nominal standard dev
- %figure(1); clf; my_quantity
- %try
- %  plot(my_x_std,std(my_x_samples')','.');  axis equal
- %end
   
   if strcmp(my_scaling, 'Logarithmic'),
      my_x_mode            = exp(my_x_mode);
-     my_x_median          = exp(my_x_mean);
+     my_x_median          = exp(my_x_mode);
      my_x_samples         = exp(my_x_samples);
     [my_x_mean, my_x_std] = lognormal_log2normal(my_x_mean, my_x_std,'arithmetic');
   else
-    my_x_median          = my_x_mean;
+    my_x_median          = my_x_mode;
   end
 
  %figure(2); clf;

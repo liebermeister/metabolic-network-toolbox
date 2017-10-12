@@ -31,9 +31,8 @@ end
 
 % ----------------------------------------------------------
 % load parameter_prior and define relevant quantities
-  
-parameter_prior = biochemical_parameter_prior([],options.parameter_prior_file); 
 
+parameter_prior = parameter_balancing_prior([],options.parameter_prior_file); 
 parameter_prior = pb_parameter_prior_adjust(parameter_prior, options); 
 
 [model_quantities, basic_quantities, data_quantities] = parameter_balancing_quantities(parameter_prior, network, options);

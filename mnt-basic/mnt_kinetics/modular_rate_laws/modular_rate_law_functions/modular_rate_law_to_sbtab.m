@@ -82,7 +82,7 @@ if ~isfield(network.kinetics,'KV'),
   end
 end
 
-column_median = full( [ network.kinetics.Keq; ...
+column_mode = full( [ network.kinetics.Keq; ...
                     network.kinetics.KV; ...
                     column(network.kinetics.KM(KM_indices)); ...
                     column(network.kinetics.KA(KA_indices)); ...
@@ -187,7 +187,7 @@ column_parameterID = [ column_parameterID; ...
                     numbered_names_simple('kcrr_R',nr); ...
                    ];
 
-column_median = [ column_median; ...
+column_mode = [ column_mode; ...
                  network.kinetics.Kcatf; ...
                  network.kinetics.Kcatr; ...
                ];
@@ -238,7 +238,7 @@ end
 if options.write_concentrations,
   column_quantity        = [ column_quantity;  repmat({'concentration'},nm,1)];
   column_parameterID     = [ column_parameterID; cellstr([char(repmat({'c_'},nm,1)) char(network.metabolites)])];
-  column_median          = [ column_median; network.kinetics.c];
+  column_mode          = [ column_mode; network.kinetics.c];
   if length(kinetics_mean), 
     column_mean          = [ column_mean; kinetics_mean.c];
     column_std           = [ column_std; kinetics_std.c];
@@ -254,7 +254,7 @@ end
 if options.write_enzyme_concentrations,
   column_quantity        = [ column_quantity; repmat({'concentration of enzyme'},nr,1)];
   column_parameterID     = [ column_parameterID; numbered_names_simple('u_R',nr)];
-  column_median           = [ column_median; network.kinetics.u];
+  column_mode           = [ column_mode; network.kinetics.u];
   if length(kinetics_mean), 
     column_mean          = [ column_mean; kinetics_mean.u];
     column_std           = [ column_std; kinetics_std.u];
@@ -270,7 +270,7 @@ end
 if isfield(network,'metabolite_mass'),
   column_quantity        = [ column_quantity;  repmat({'molecular mass'},nm,1)];
   column_parameterID     = [ column_parameterID; cellstr([char(repmat({'mm_'},nm,1)) char(network.metabolites)])];
-  column_median           = [ column_median; network.metabolite_mass];
+  column_mode           = [ column_mode; network.metabolite_mass];
   if length(kinetics_mean), 
     column_mean          = [ column_mean; repmat({''},nm,1)];
     column_std           = [ column_std; repmat({''},nm,1)];
@@ -285,7 +285,7 @@ end
 if isfield(network,'enzyme_mass'),
   column_quantity        = [ column_quantity; repmat({'protein molecular mass'},nr,1)];
   column_parameterID     = [ column_parameterID; numbered_names_simple('em_',nr)];
-  column_median           = [ column_median; network.enzyme_mass];
+  column_mode           = [ column_mode; network.enzyme_mass];
   if length(kinetics_mean), 
     column_mean          = [ column_mean; repmat({''},nr,1)];
     column_std           = [ column_std; repmat({''},nr,1)];
@@ -300,29 +300,29 @@ end
 if isfield(network, 'metabolite_KEGGID'),
   if isfield(network, 'reaction_KEGGID'), 
       if length(kinetics_mean), 
-        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Mean','Std','Reaction:Identifiers:kegg.reaction','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_mean,column_std,column_reaction_KEGGID,column_compound_KEGGID});
+        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Mean','Std','Reaction:Identifiers:kegg.reaction','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_mean,column_std,column_reaction_KEGGID,column_compound_KEGGID});
       else,
-        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Reaction:Identifiers:kegg.reaction','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_reaction_KEGGID,column_compound_KEGGID});
+        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Reaction:Identifiers:kegg.reaction','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_reaction_KEGGID,column_compound_KEGGID});
       end
       else
         if length(kinetics_mean), 
-        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Mean','Std','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_mean,column_std,column_compound_KEGGID});
+        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Mean','Std','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_mean,column_std,column_compound_KEGGID});
       else,
-        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_compound_KEGGID});
+        quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Compound:Identifiers:kegg.compound'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_compound_KEGGID});
       end
   end
 else,
   if isfield(network, 'reaction_KEGGID'),  
         if length(kinetics_mean), 
-    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Mean','Std','Reaction:Identifiers:kegg.reaction'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_mean,column_std,column_reaction_KEGGID});        
+    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Mean','Std','Reaction:Identifiers:kegg.reaction'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_mean,column_std,column_reaction_KEGGID});        
         else  
-    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Reaction:Identifiers:kegg.reaction'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_reaction_KEGGID});        
+    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Reaction:Identifiers:kegg.reaction'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_reaction_KEGGID});        
           end
   else
         if length(kinetics_mean), 
-    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit','Mean','Std'}, {column_quantity,column_reaction,column_compound,column_median,column_unit,column_mean,column_std});
+    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit','Mean','Std'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit,column_mean,column_std});
         else
-    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Median','Unit'}, {column_quantity,column_reaction,column_compound,column_median,column_unit});
+    quantity_table = sbtab_table_construct(struct('TableName','Parameter','TableType','Quantity','Document',options.document_name), {'QuantityType','Reaction','Compound','Mode','Unit'}, {column_quantity,column_reaction,column_compound,column_mode,column_unit});
         end
         end
 end

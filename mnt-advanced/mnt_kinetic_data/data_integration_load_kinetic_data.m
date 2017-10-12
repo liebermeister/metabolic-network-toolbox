@@ -46,7 +46,7 @@ data_quantities = {'standard Gibbs energy of reaction', ...
 end
 
 if isempty(parameter_prior), 
-  parameter_prior = biochemical_parameter_prior; 
+  parameter_prior = parameter_balancing_prior; 
 end
 
 if isempty(data_file),
@@ -485,7 +485,7 @@ end
 % --------------------------------------------------------------------------------------
 % make sure important fields in kinetic_data are considered
 
-
+if isfield(kinetic_data,'Keq'),
 if sum(isfinite(kinetic_data.Keq.lower_ln )) == 0, 
   kinetic_data.Keq.lower_ln = log(kinetic_data.Keq.lower);
 end
@@ -493,7 +493,9 @@ end
 if sum(isfinite(kinetic_data.Keq.upper_ln )) == 0, 
   kinetic_data.Keq.upper_ln = log(kinetic_data.Keq.upper);
 end
+end
 
+if isfield(kinetic_data,'Kcatf'),
 if sum(isfinite(kinetic_data.Kcatf.lower_ln )) == 0, 
   kinetic_data.Kcatf.lower_ln = log(kinetic_data.Kcatf.lower);
 end
@@ -509,4 +511,4 @@ end
 if sum(isfinite( kinetic_data.Kcatr.upper_ln )) == 0, 
   kinetic_data.Kcatr.upper_ln = log(kinetic_data.Kcatr.upper);
 end
-
+end

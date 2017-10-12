@@ -10,7 +10,7 @@ equilibrium constant	Keq	dimensionless	Thermodynamic	Reaction	Logarithmic	Derive
 substrate catalytic rate constant	Kcatf	1/s	Kinetic	Reaction	Logarithmic	Derived	10	1.5	0.01	10000000	0.5	Local parameter  	kcrf	[[-0.5/RT * Nt], I_reaction, [-0.5 * Nkm], 0, 0, 0, 0, 0]
 product catalytic rate constant	Kcatr	1/s	Kinetic	Reaction	Logarithmic	Derived	10	3	0.000000001	10000000	0.5	Local parameter 	kcrr	[[0.5/RT * Nt], I_reaction, [0.5 * Nkm], 0, 0, 0, 0, 0]
 concentration	c	mM	Dynamic	Species	Logarithmic	Basic	0.1	1.5	0.000001	1000	0.5	Species (conc.)	c	[0, 0, 0, 0, 0, I_species, 0, 0]
-concentration of enzyme	u	mM	Dynamic	Reaction	Logarithmic	Basic	0.00001	1.5	0.000001	2	0.5	Local parameter	eco	[0, 0, 0, 0, 0, 0, I_reaction, 0]
+concentration of enzyme	u	mM	Dynamic	Reaction	Logarithmic	Basic	0.001	2	0.000001	2	0.5	Local parameter	eco	[0, 0, 0, 0, 0, 0, I_reaction, 0]
 forward maximal velocity	Vmaxf	mM/s	Dynamic	Reaction	Logarithmic	Derived	1	2	0.00000001	1000000	0.5	Local parameter	vmaf	[[-0.5/RT * Nt], I_reaction, [-0.5 * Nkm], 0, 0, 0, I_reaction, 0]
 reverse maximal velocity	Vmaxr	mM/s	Dynamic	Reaction	Logarithmic	Derived	1	2	0.00000001	1000000	0.5	Local parameter	vmar	[[0.5/RT * Nt], I_reaction, [0.5 * Nkm], 0, 0, 0, I_reaction, 0]
 chemical potential	mu	kJ/mol	Dynamic	Species	Original	Derived	-880	1500	-3000	2000 	20		cp	[I_species, 0, 0, 0, 0, [RT * I_species], 0, 0]
