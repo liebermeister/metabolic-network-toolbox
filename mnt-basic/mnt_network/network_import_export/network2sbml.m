@@ -2,7 +2,7 @@
 %
 %export network to SBML string or SBML file (only SBML level 2)
 %
-%This script does not depend on libSBML and SBML toolbox
+%This script does not use the libSBML and SBML toolbox
 %
 %ATTENTION: 
 % 1. Reaction kinetics are only written if the kinetics 

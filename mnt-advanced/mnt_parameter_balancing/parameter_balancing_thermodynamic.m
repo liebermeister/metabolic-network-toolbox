@@ -1,6 +1,6 @@
-function [c, mu0, Keq, A, kinetic_data, r,r_mean,r_std,r_orig,r_samples,network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)
+function [c, mu0, Keq, A, kinetic_data, r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples,network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)
 
-% [c, mu0, Keq, A, kinetic_data, r,r_mean,r_std,r_orig,r_samples,network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)
+% [c, mu0, Keq, A, kinetic_data, r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples,network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)
 %
 % Compute a thermodynamically feasible metabolic state for a given flux distribution
 % Determine consistent parameter set by parameter balancing
@@ -261,11 +261,11 @@ data_quantities   = {'standard chemical potential','standard Gibbs energy of rea
 % -----------------------------------------------------
 % Parameter balancing
 
-task   = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities);
+task   = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
 result = parameter_balancing_calculation(task, parameter_prior, struct('use_pseudo_values',0,'fix_Keq_in_sampling',options.fix_Keq_in_sampling));
 
 if nargout >5,
-[r,r_mean,r_std,r_orig,r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options);
+[r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options);
 
 network.kinetics      = r; 
 end

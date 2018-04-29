@@ -1,13 +1,12 @@
 function kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options)
   
-  if isfield(options, 'Keq_given'),
-    Keq_given = options.Keq_given;
-  else
-    Keq_given = [];
-  end
+if isfield(options, 'Keq_given'),
+  Keq_given = options.Keq_given;
+else
+  Keq_given = [];
+end
   
-  
-kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,options.use_pseudo_values,network);
+kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,options.insert_pseudo_values,network);
 
 if options.use_pseudo_values,
   display('  Using pseudo values');
@@ -59,7 +58,7 @@ switch options.kcat_usage
     em = nan * kk.Kcatr.median;
     kk.Kcatr.median = em; kk.Kcatr.mean = em; kk.Kcatr.std = em; kk.Kcatr.mean_ln= em; kk.Kcatr.std_ln = em;
     kinetic_data = kk;
-    
+
   case 'forward',
     %% set kcat data such that forward values match the standard value
 

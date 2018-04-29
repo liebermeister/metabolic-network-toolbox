@@ -41,24 +41,24 @@ T = max(t)*(0:1/(n_frames-1):1);
 
 nandata = find(sum(isnan(s_t_1),2));
 s_t_1(nandata,:)=0;
-s_t_1            = interp1(t,s_t_1',T,'cubic')';
+s_t_1            = interp1(t,s_t_1',T,'pchip')';
 s_t_1(nandata,:) = nan;
 if size(s_t_1,2)==1, s_t_1 = s_t_1'; end
 
 nandata = find(sum(isfinite(s_t_2),2)==0);
 s_t_2(sum(isfinite(s_t_2),2)==0,:)=0;
-s_t_2            = interp1(t,s_t_2',T,'cubic')';
+s_t_2            = interp1(t,s_t_2',T,'pchip')';
 s_t_2(nandata,:) = nan;
 if size(s_t_2,2)==1, s_t_2 = s_t_2'; end
 
 if length(options.metabolite_colors), 
-  options.metabolite_colors = interp1(t,options.metabolite_colors,T,'cubic');
+  options.metabolite_colors = interp1(t,options.metabolite_colors,T,'pchip');
   options.metabolite_colors(options.metabolite_colors<0) = 0;
   options.metabolite_colors(options.metabolite_colors>1) = 1;
 end
 
 if length(options.reaction_colors), 
-  options.reaction_colors = interp1(t,options.reaction_colors,T,'cubic');
+  options.reaction_colors = interp1(t,options.reaction_colors,T,'pchip');
   options.reaction_colors(options.reaction_colors<0) = 0;
   options.reaction_colors(options.reaction_colors>1) = 1;
 end

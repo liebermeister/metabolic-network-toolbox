@@ -6,7 +6,7 @@ model_name  = 'E coli central metabolism Noor et al (2016)';
 model_file  = [ get_pb_directory '/models/ecoli_noor_2016.tsv'];
 data_file   = [ get_pb_directory '/models/ecoli_noor_2016_data.tsv']; 
 
-[network, v, c_data, u_data, conc_min, conc_max, positions, warnings] = load_model_and_data_sbtab(model_file);
+[network, v, c_data, u_data, conc_min, conc_max, positions, warnings] = load_model_and_data_sbtab(model_file,data_file);
 
 options = parameter_balancing_default_options;
 

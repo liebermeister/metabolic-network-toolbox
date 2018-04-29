@@ -123,7 +123,7 @@ else
 end
 
 if isfield(columns,'IsReversible'),
-  reversible = cell_string2num(columns.IsReversible);
+  reversible = sbtab_table_get_column(reaction_table,'IsReversible',1);
 else
   reversible = ones(length(actions),1);
 end
@@ -147,6 +147,11 @@ if exist('compound_columns','var'),
     compound_columns = rmfield(compound_columns,'Name');
   end
 
+  if isfield(compound_columns,'NameForPlots'),
+    network.metabolite_NameForPlots  = compound_columns.NameForPlots(ll);
+    compound_columns = rmfield(compound_columns,'NameForPlots');
+  end
+
   if isfield(compound_columns,'Identifiers_kegg_compound'),
     network.metabolite_KEGGID = compound_columns.Identifiers_kegg_compound(ll);
     compound_columns = rmfield(compound_columns,'Identifiers_kegg_compound');
@@ -162,6 +167,11 @@ end
 if isfield(columns,'Name'),
   network.reaction_names  = columns.Name;
   columns = rmfield(columns,'Name');
+end
+
+if isfield(columns,'NameForPlots'),
+  network.reaction_NameForPlots  = columns.NameForPlots;
+  columns = rmfield(columns,'NameForPlots');
 end
 
 if isfield(columns,'Gene'),

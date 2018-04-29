@@ -89,7 +89,7 @@ end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
 if exist('cplexlp','file'),
-  opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off','Diagnostics','off');
+  opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
   [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
   lambda_ind_int = lambda.eqlin(1:size(NR,1));
   %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))

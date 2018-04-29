@@ -8,7 +8,7 @@ num=[];
 for it = 1:length(quantities),
   my_quantity = quantities{it};
   ind = find(strcmp(my_quantity, parameter_prior.QuantityType));
-  my_elements = parameter_prior.Element{ind};
+  my_elements = parameter_prior.BiologicalElement{ind};
   my_symbol   = parameter_prior.Symbol{ind};
   switch  my_elements,
     case 'Species',  num(it,1) = nm;

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_velocities</title>
+  <meta name="keywords" content="network_velocities">
+  <meta name="description" content="v = network_velocities(s,network,kinetics,split,indices,t)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt-basic</a> &gt; <a href="../index.html">mnt_kinetics</a> &gt; <a href="index.html">kinetics</a> &gt; network_velocities.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/mnt_kinetics/kinetics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network_velocities
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>v = network_velocities(s,network,kinetics,split,indices,t)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function v = network_velocities(s, network, kinetics, split, indices,t) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> v = network_velocities(s,network,kinetics,split,indices,t)
+
+ calculate flux velocities for a network, given a data structure
+ describing the kinetics type and containing the kinetic parameters
+
+ the field 'network.kinetics' is overridden by 'kinetics', if
+ given as an argument
+
+ There are alternative ways to specify the kinetics, indicated by kinetics.type:
+ For a description, see 'help kinetics_structure'
+
+ s: metabolite concentrations
+ indices: indices of reaction velocities to be computed (default: all reactions)
+
+ Note: this function is slow. For integration steps, use 'integrate_network_der' instead.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-basic/mnt_kinetics/convenience/convenience_velocities.html" class="code" title="function v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)">convenience_velocities</a>	v = convenience_velocities(s,network,kinetics,indices,split,scale_G,offset_ratio)</li><li><a href="../../../mnt-basic/mnt_kinetics/convenience/convert_G_scale.html" class="code" title="function scale_G = convert_G_scale()">convert_G_scale</a>	scale_G = convert_G_scale()</li><li><a href="../../../mnt-basic/mnt_kinetics/modular_rate_laws/modular_velocities.html" class="code" title="function [v, v_plus, v_minus, D, regulation_term ] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)">modular_velocities</a>	[v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-advanced/mnt_model_reduction/model_reduction/selective_reduction_derivative.html" class="code" title="function d_dt_z = selective_reduction_derivative(t,z,n_met_sub,ind_met_sub2bor,s0_bor,A,B,C,D,network_sub,N_sub_int,N_sub_bor,v0_bor);">selective_reduction_derivative</a>	function d_dt_z = selective_reduction_derivative(t, z, n_met_sub, ind_met_sub2bor, s0_bor, A, B, C, D, network_sub, N_sub_int, N_sub_bor, v0_bor);</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing/parameter_balancing_sample_models.html" class="code" title="function [v, kinetics_list] = parameter_balancing_sample_models(task,kinetics_sample,options)">parameter_balancing_sample_models</a>	</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_kinetic_metabolic.html" class="code" title="function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic_metabolic(network, kinetic_data, pb_options, v);">parameter_balancing_kinetic_metabolic</a>	[r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, file_kinetic_data, pb_options, v);</li><li><a href="../../../mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/stochastic_simulations.html" class="code" title="function MonteCarlo = stochastic_simulations(nit,n_boot,verbose,network,S,J,par,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,distribution, comment,relevant)">stochastic_simulations</a>	MonteCarlo = stochastic_simulations(nit,n_boot,verbose,network,S,J,par,R_S,R_J,R_S_2,R_J_2,R_S_norm,R_J_norm,R_S_2_norm,R_J_2_norm,distribution, comment,relevant)</li><li><a href="../../../mnt-basic/mnt_graphics/netgraph_movie.html" class="code" title="function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);">netgraph_movie</a>	[M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);</li><li><a href="../../../mnt-basic/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/elasticities_to_parameters.html" class="code" title="function kinetics = elasticities_to_parameters(network,E_sc,v,c,u,h)">elasticities_to_parameters</a>	kinetics = elasticities_to_parameters(network,E_sc,v,c,u,A,h)</li><li><a href="../../../mnt-basic/mnt_mca/basic_control_analysis.html" class="code" title="function R = basic_control_analysis(network,s,options)">basic_control_analysis</a>	R = basic_control_analysis(network,s,options)</li><li><a href="../../../mnt-basic/mnt_mca/elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li><li><a href="../../../mnt-basic/mnt_mca/elasticities_scaled.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp] = elasticities_scaled(network,s);">elasticities_scaled</a>	[Ec, Ep, parameters, Ecc, Ecp, Epp] = elasticities_scaled(network,s);</li><li><a href="../../../mnt-basic/mnt_mca/internal_elasticities.html" class="code" title="function [epsilon,epsilonP,parameters] = internal_elasticities(network,s,enzyme_factor,relevant_parameters);">internal_elasticities</a>	epsilon = internal_elasticities(network,s,enzyme_factor,relevant_parameters);</li><li><a href="../../../mnt-basic/mnt_mca/time_response_coefficients.html" class="code" title="function [t, s,RS,s_ind,RS_ind,parameters,parameter_names]= time_response_coefficients(network, s_init, t_final)">time_response_coefficients</a>	[t, s, RS, s_ind, RS_ind, parameters, par_names]= time_response_coefficients(network, s0, t_final)</li><li><a href="../../../mnt-basic/mnt_simulation/network_fit_concentrations_to_rates.html" class="code" title="function [c,u_ratio] = network_fit_concentrations_to_rates(network, v, c_init);">network_fit_concentrations_to_rates</a>	[c,u_ratio] = network_fit_concentrations_to_rates(network,v,c_init);</li><li><a href="../../../mnt-basic/mnt_simulation/network_integrate.html" class="code" title="function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)">network_integrate</a>	[t, s, s_int, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag,Tmax,dilution_rate,ode_opt)</li><li><a href="../../../mnt-basic/mnt_simulation/network_integrate_par_pert.html" class="code" title="function [t, s_t, v, p, s_int_t, met_int]= network_integrate_par_pert(network, s, T, graphics_flag,par_osc,dt)">network_integrate_par_pert</a>	[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)</li><li><a href="../../../mnt-basic/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../../mnt-basic/utils/network_derivative.html" class="code" title="function f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)">network_derivative</a>	f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

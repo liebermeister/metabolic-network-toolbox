@@ -6,6 +6,8 @@ eval(default('flag_display','1'));
 
 fn = fieldnames(kinetic_data);
 
+parameter_prior = parameter_balancing_prior;
+
 for it = 1:length(fn),
 
   xx  = kinetic_data.(fn{it});
@@ -19,9 +21,8 @@ for it = 1:length(fn),
                      xx.lower(ii), ...
                      xx.upper(ii)])];
   
-    parameter_prior   = biochemical_parameter_prior;
     ind = find(strcmp(fn{it},parameter_prior.Symbol));
-    related_element      = parameter_prior.RelatedElement{ind};
+    related_element      = parameter_prior.Element{ind};
     quantity_type        = parameter_prior.QuantityType{ind};
     quantity_type_column = [{'!QuantityType'}; repmat({quantity_type},size(T{it},1)-1,1)];
     unit                 = parameter_prior.Unit{ind};
@@ -74,8 +75,11 @@ for it = 1:length(fn),
       T{it} = [ quantity_type_column, species_column, reaction_column, unit_column, T{it}, species_kegg_column, reaction_kegg_column];
     end
     if flag_display, 
-      display(['Field ' fn{it}])
-      
-      mytable(T{it},0)
+      if size(T{it},1)>1,
+        display(['Field ' fn{it}])
+        data_table = mytable(T{it},0)
+      else
+        display(['Field ' fn{it} ': no data']);
+      end
     end
 end

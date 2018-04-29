@@ -1,7 +1,7 @@
 Metabolic Networks Toolbox for Matlab
 =====================================
 
-Wolfram Liebermeister (2014)
+Wolfram Liebermeister (2018)
 
 Dependencies:
 

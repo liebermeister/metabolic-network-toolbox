@@ -1,4 +1,4 @@
-function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, include_metabolic)
+function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic)
 
 % [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)
 %
@@ -20,7 +20,7 @@ function [task, prior] = parameter_balancing_task(network, kinetic_data, paramet
 %
 % Outputs: 
 %   task   vectors and matrices needed for parameter balancing
-%          (q and x values are given in "natural" scaling (i.e., logarithms whereever suitable)
+%          (q and x values are given in "natural" scaling (i.e., logarithms wherever suitable)
 %   prior  has the same data format as kinetic_data (for export to table files)
 
 eval(default('kinetic_data','[]','parameter_prior','[]','model_quantities','[]', 'basic_quantities','[]','include_metabolic','0'));
@@ -30,7 +30,7 @@ if isempty(kinetic_data),
 end
 
 if isempty(parameter_prior),
-  parameter_prior = biochemical_parameter_prior;
+  parameter_prior = parameter_balancing_prior([],[],1);
 end
 
 prior = [];
@@ -70,11 +70,11 @@ for it = 1:length(basic_quantities),
 
   my_quantity = basic_quantities{it};
   ind = find(strcmp(my_quantity,parameter_prior.QuantityType));
-  my_scaling      = parameter_prior.Scaling{ind};
+  my_scaling      = parameter_prior.MathematicalType{ind};
   my_symbol       = parameter_prior.Symbol{ind};
   my_prior_median = cell_string2num(parameter_prior.PriorMedian(ind));
   my_prior_std    = cell_string2num(parameter_prior.PriorStd(ind));
-  my_rel_element  = parameter_prior.Element{ind};
+  my_rel_element  = parameter_prior.BiologicalElement{ind};
   
   %% make data structure "prior"
 
@@ -87,7 +87,7 @@ for it = 1:length(basic_quantities),
     case 'Reaction/Species', ee = ones(length(network.actions), length(network.metabolites));
   end
   
-  if strcmp(my_scaling, 'Logarithmic'),
+  if strcmp(my_scaling, 'Multiplicative'),
     prior.(my_symbol).mean_ln = log(my_prior_median) * ee;
     prior.(my_symbol).std_ln  = log(10) * my_prior_std * ee;
     [prior.(my_symbol).mean, prior.(my_symbol).std] = lognormal_log2normal(prior.(my_symbol).mean_ln, prior.(my_symbol).std_ln);
@@ -96,8 +96,7 @@ for it = 1:length(basic_quantities),
     prior.(my_symbol).std  = my_prior_std * ee;
   end
   
-  
-  if strcmp(my_scaling, 'Logarithmic'),
+  if strcmp(my_scaling, 'Multiplicative'),
       my_prior_median = log(my_prior_median);
       my_prior_std    = log(10) * my_prior_std;
   end
@@ -128,7 +127,7 @@ num_model = parameter_balancing_quantity_numbers(model_quantities,parameter_prio
 for it = 1:length(model_quantities),
   my_quantity     = model_quantities{it};
   ind             = find(strcmp(my_quantity,parameter_prior.QuantityType));
-  my_scaling      = parameter_prior.Scaling{ind};
+  my_scaling      = parameter_prior.MathematicalType{ind};
   my_symbol       = parameter_prior.Symbol{ind};
   my_indices      = length(task.xmodel.names) + [1:num_model(it)]';
   task.xmodel.names(my_indices,:)   = repmat(model_quantities(it), num_model(it),1);
@@ -155,6 +154,7 @@ x_all.scaling     = {};
 x_all.pseudo      = struct;
 x_all.pseudo.mean = [];
 x_all.pseudo.std  = [];
+x_all.pseudo.use  = [];
 x_all.upper_nat   = [];
 x_all.lower_nat   = [];
 x_all.indices     = struct;
@@ -163,7 +163,7 @@ for it = 1:length(all_quantities),
 
   my_quantity                 = all_quantities{it};
   ind                         = find(strcmp(my_quantity,parameter_prior.QuantityType));
-  my_scaling                  = parameter_prior.Scaling{ind};
+  my_scaling                  = parameter_prior.MathematicalType{ind};
   my_symbol                   = parameter_prior.Symbol{ind};
   my_indices                  = length(x_all.names) + [1:num_all(it)]';
   x_all.names(my_indices,:)   = repmat(all_quantities(it), num_all(it),1);
@@ -172,23 +172,26 @@ for it = 1:length(all_quantities),
 
   my_all_upper     = eval(parameter_prior.UpperBound{ind});
   my_all_lower     = eval(parameter_prior.LowerBound{ind});
+
+  switch my_scaling, case 'Multiplicative',
+    my_all_lower     = log(my_all_lower);
+    my_all_upper     = log(my_all_upper);
+  end
+
+  x_all.upper_nat   = [x_all.upper_nat;   my_all_upper     * ones(num_all(it),1)];
+  x_all.lower_nat   = [x_all.lower_nat;   my_all_lower     * ones(num_all(it),1)];
+  
   my_pseudo_median = cell_string2num(parameter_prior.PriorMedian(ind));
   my_pseudo_std    = cell_string2num(parameter_prior.PriorStd(ind));
-
-  switch my_scaling, case 'Logarithmic',
-    my_all_lower = log(my_all_lower);
-    my_all_upper = log(my_all_upper);
+  switch my_scaling, case 'Multiplicative',
     my_pseudo_median = log(my_pseudo_median);
     my_pseudo_std    = log(10) * my_pseudo_std;
   end
-  
+  flag_use_as_pseudo_value = sum(label_names(my_quantity,pseudo_quantities))>0;
   x_all.pseudo.mean = [x_all.pseudo.mean; my_pseudo_median * ones(num_all(it),1)];
   x_all.pseudo.std  = [x_all.pseudo.std ; my_pseudo_std    * ones(num_all(it),1)];
-  x_all.upper_nat   = [x_all.upper_nat;   my_all_upper * ones(num_all(it),1)];
-  x_all.lower_nat   = [x_all.lower_nat;   my_all_lower * ones(num_all(it),1)];
-
+  x_all.pseudo.use  = [x_all.pseudo.use ; flag_use_as_pseudo_value * ones(num_all(it),1)];
 end
-
 
 % -------------------------------------------------------------
 % build description of data quantities
@@ -206,7 +209,7 @@ for it = 1:length(data_quantities),
   
   my_quantity                   = data_quantities{it};
   ind                           = find(strcmp(my_quantity,parameter_prior.QuantityType));
-  my_scaling                    = parameter_prior.Scaling{ind};
+  my_scaling                    = parameter_prior.MathematicalType{ind};
   my_symbol                     = parameter_prior.Symbol{ind};
   my_indices                    = length(x_data.names) + [1:num_data(it)]';
   x_data.names(my_indices,:)    = repmat(data_quantities(it), num_data(it),1);
@@ -215,13 +218,13 @@ for it = 1:length(data_quantities),
 
  switch my_scaling,
     
-    case 'Original',
+    case 'Additive',
       my_x_mean  = kinetic_data.(my_symbol).mean;
       my_x_std   = kinetic_data.(my_symbol).std;
       my_x_lower = kinetic_data.(my_symbol).lower;
       my_x_upper = kinetic_data.(my_symbol).upper;
     
-    case 'Logarithmic',
+    case 'Multiplicative',
       my_x_mean  = kinetic_data.(my_symbol).mean_ln;
       my_x_std   = kinetic_data.(my_symbol).std_ln;
       my_x_lower = kinetic_data.(my_symbol).lower_ln;
@@ -261,8 +264,9 @@ end
 % -------------------------------------------------------------------
 % construct the matrix for all relevant quantities
 
-Q_all  = parameter_balancing_construct_Q_matrix(all_quantities, basic_quantities, parameter_prior, network);
-Q_data = parameter_balancing_construct_Q_matrix(data_quantities, basic_quantities, parameter_prior, network);
+Q_all    = parameter_balancing_construct_Q_matrix(all_quantities,  basic_quantities, parameter_prior, network);
+Q_pseudo = Q_all(find(x_all.pseudo.use),:);
+Q_data   = parameter_balancing_construct_Q_matrix(data_quantities, basic_quantities, parameter_prior, network);
 
 
 % -------------------------------------------------------------------
@@ -295,6 +299,13 @@ end
 task.xall       = x_all;
 task.Q_xall_q   = Q_all;
 
+% -------------------------------------------------------------------
+% pseudo values
+
+task.xpseudo.names = x_all.names(find(x_all.pseudo.use));
+task.xpseudo.mean = task.xall.pseudo.mean(find(x_all.pseudo.use));
+task.xpseudo.std  = task.xall.pseudo.std(find(x_all.pseudo.use));
+task.Q_xpseudo_q  = Q_all(find(x_all.pseudo.use),:);
 
 % -------------------------------------------------------------------
 % lower bounds
@@ -358,6 +369,6 @@ if find(isnan(task.xdata.std)),
   task.xdata.std(find(isnan(task.xdata.std))) = 1; 
 end
 
-display(sprintf('\n'))
+%display(sprintf('\n'))
 
 

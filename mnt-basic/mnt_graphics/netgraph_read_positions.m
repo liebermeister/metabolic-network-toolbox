@@ -6,7 +6,7 @@ function network = netgraph_read_positions(network, layout_file, offsets, fill_n
 %   'layout_file'   may either refer to a filename or to an SBtab data object
 %   'fill_nans',    replace undetermined positions by random values
 %   'flag_KEGG_ids' match elements (between model and layout file) by KEGG ids (default: 0)
-%   'flag_fixed' read information about fixed glyph positions from file
+%   'flag_fixed'    read information about fixed glyph positions from file
 % 
 % If flag_KEGG_ids is set: 
 % use field 'network.metabolite_KEGGID' (or 'network.Identifiers_kegg_compound') for matching metabolites
@@ -18,7 +18,8 @@ if isempty(offsets), offsets = [0,0]; end
 
 x = nan * ones(2,length(network.metabolites)+length(network.actions));
 
-fixed = zeros(1,length(network.metabolites)+length(network.actions));
+fixed     = zeros(1,length(network.metabolites)+length(network.actions));
+invisible = zeros(1,length(network.metabolites)+length(network.actions));
 
 if exist('sbtab_version','file'),
   
@@ -55,6 +56,12 @@ if exist('sbtab_version','file'),
     if sbtab_table_has_column(sbtab_table,'IsFixed');
       A{4} = sbtab_table_get_column(sbtab_table,'IsFixed',1);
     end
+  end
+
+  if sbtab_table_has_column(sbtab_table,'IsInvisible');
+    A{5} = sbtab_table_get_column(sbtab_table,'IsInvisible',1);
+  else
+    A{5} = [];
   end
 
 else,
@@ -117,6 +124,9 @@ x(1,l1(ok)) = A{2}(ok)';
 x(2,l1(ok)) = A{3}(ok)';
 ll = label_names(model_metabolite_names,A{1});
 fixed(find(ll)) = A{4}(ll(find(ll)));
+if length(A{5}),
+  invisible(find(ll)) = A{5}(ll(find(ll)));
+end
 
 % ---
 
@@ -128,6 +138,9 @@ x(1,length(network.metabolites)+l1(ok)) = A{2}(ok)';
 x(2,length(network.metabolites)+l1(ok)) = A{3}(ok)';
 ll = label_names(model_reaction_names,A{1});
 fixed(length(network.metabolites)+find(ll)) = A{4}(ll(find(ll)));
+if length(A{5}),
+  invisible(length(network.metabolites)+find(ll)) = A{5}(ll(find(ll)));
+end
 
 if fill_nans,
   x(:,find(sum(isnan(x)))) = repmat([nanmean(x(1,:)'); nanmean(x(2,:)')],1,length(find(sum(isnan(x)))));
@@ -141,4 +154,6 @@ if ~isfield(network,'graphics_par'),
 end
 
 network.graphics_par.x = x;
-network.graphics_par.fixed = fixed;
+network.graphics_par.fixed     = fixed;
+network.graphics_par.metinvisible = invisible(1:length(model_metabolite_names));
+network.graphics_par.actinvisible = invisible(length(model_metabolite_names)+1:end);

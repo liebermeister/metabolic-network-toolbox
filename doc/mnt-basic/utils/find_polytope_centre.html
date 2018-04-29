@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of find_polytope_centre</title>
+  <meta name="keywords" content="find_polytope_centre">
+  <meta name="description" content="[x_centre, x1, x2] = find_polytope_centre(M_eq, b_eq, M_ineq, b_ineq, x_lower, x_upper, x_try)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">utils</a> &gt; find_polytope_centre.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>find_polytope_centre
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>[x_centre, x1, x2] = find_polytope_centre(M_eq, b_eq, M_ineq, b_ineq, x_lower, x_upper, x_try)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [x_centre, x1, x2] = find_polytope_centre(M_eq,b_eq,M_ineq,b_ineq,x_lower,x_upper, x_try) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [x_centre, x1, x2] = find_polytope_centre(M_eq, b_eq, M_ineq, b_ineq, x_lower, x_upper, x_try)
+
+ Central vector and extreme vectors (along coordinate axes) of a convex polytope
+
+ Conditions:
+  x_try &gt;= x_lower
+  x_try &lt;= x_upper
+  M_ineq * x_try &lt;= b_ineq
+  M_eq * x_try == b_eq</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="find_polytope_centre.html" class="code" title="function [x_centre, x1, x2] = find_polytope_centre(M_eq,b_eq,M_ineq,b_ineq,x_lower,x_upper, x_try)">find_polytope_centre</a>	[x_centre, x1, x2] = find_polytope_centre(M_eq, b_eq, M_ineq, b_ineq, x_lower, x_upper, x_try)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt-basic/mnt_fluxes/flux_sampling/sample_feasible_mu.html" class="code" title="function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)">sample_feasible_mu</a>	[mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)</li><li><a href="find_polytope_centre.html" class="code" title="function [x_centre, x1, x2] = find_polytope_centre(M_eq,b_eq,M_ineq,b_ineq,x_lower,x_upper, x_try)">find_polytope_centre</a>	[x_centre, x1, x2] = find_polytope_centre(M_eq, b_eq, M_ineq, b_ineq, x_lower, x_upper, x_try)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

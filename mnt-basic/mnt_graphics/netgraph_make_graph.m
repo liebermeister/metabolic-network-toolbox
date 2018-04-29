@@ -57,6 +57,8 @@ graphics_object.N              = network.N;
 
 graphics_object.metabolite_mapping = (1:length(metnames))';
 graphics_object.reaction_mapping   = (1:length(actnames))';
+graphics_object.metinvisible          = zeros(length(metnames),1);
+graphics_object.actinvisible          = zeros(length(actnames),1);
 
 % adjacency matrix between metabolites and reactions 
 

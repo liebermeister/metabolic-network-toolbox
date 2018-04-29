@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Contents</title>
+  <meta name="keywords" content="Contents">
+  <meta name="description" content="Methods for computing and checking flux distributions in metabolic networks">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_fluxes</a> &gt; Contents.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/mnt_fluxes&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>Contents
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Methods for computing and checking flux distributions in metabolic networks</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Methods for computing and checking flux distributions in metabolic networks
+
+ Subdirectories
+  fba                Flux balance analysis 
+  eba                Energy balance analysis
+  flux_minimisation  Principle of minimal fluxes
+  flux_feasibility   Feasibility tests for flux modes
+  flux_projections   Projection and correction of flux modes
+  flux_sampling      Sampling of flux modes
+ 
+
+ ---------------------------------------------------------------------------
+ Adjust given flux distribution v
+
+ v = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);
+  Make fluxes stationary and complete (several methods)
+
+ v = es_make_fluxes_stationary(network,v)
+  Make flux distribution stationary and complete (use pseudoinverse of K)
+
+ v = flux_least_squares_projection(network,v_pre)
+  Make flux distribution stationary and complete (calls project fluxes)
+
+ v = v_exact_zeros(v,N,external,epsilon)
+  Make flux distribution stationary with exact zeros
+
+ v = eba_make_feasible(v,N,eba_condition,C,ind_ignore)
+  Replace flux mode v by similar, thermodynamically feasible flux distribution
+
+
+ ---------------------------------------------------------------------------
+ Determine fluxes v
+ 
+ v = fba(network,fba_constraints)
+  Flux balance analysis
+
+ v = pmf(network,fba_constraints,benefit,v_start)
+  Principle of minimal sum of absolute fluxes
+
+ v = pmf_quadratic(network,fba_constraints,benefit)
+  Principle of minimal quadratic sum of fluxes
+
+ [v, value, Keq, c] = fasimu(network,fba_constraints,thermo_flag)
+  Flux balance analysis or thermodynamic flux analysis using FASIMU
+
+ v = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)
+  Determine flux distribution close to data with (i) flux bounds
+  (ii) given signs of external production (iii) thermo-constraint ('loose' or 'strict')
+
+ v = sample_feasible_v(N, ind_ext, constraints, options)
+  Sample flux vector v fulfilling all (also thermo) constraints
+
+ [sample_v, best_v, C] = sample_fluxes_given_data(N, ind_ext, v_mean, v_std, ...);
+  Sample fluxes (free of thermodyn. cycles) close to data 
+
+
+ ---------------------------------------------------------------------------
+ Determine chemical potentials mu / reaction affinities A for given fluxes v
+
+ [A, mu] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)
+  Determine feasible A and mu given fluxes v and es_constraints
+
+ dmu = optimize_delta_mu_given_signs(N,parameter_prior,data,v,options)
+  Optimise delta_mu (given mean and covariance) under thermo constraints
+
+ [dmu, dmu_score, mu] = optimize_mu_given_signs(N,parameter_prior,data,...)
+  Optimise delta_mu and mu (given mean and covariance) under thermo constraints
+
+ mu = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)
+  Compute (no actual sampling!) mu vectors that agree with a given flux vector v
+  Methods: 'extreme_points', 'sample', 'centre'
+   
+ mu = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)
+  Sample feasible dmu vectors given a flux vector v and es_constraints
+
+ [mu,A] = flux2entropy_production(network, v, mu_ext)
+  Determine all mu and A given v and external mu (from minimal entropy production)
+
+ [c, mu0, Keq, A] = parameter_balancing_thermodynamic(network, v, filename, options);
+  Variables from parameter balancing (filename: list of SBtab files with input data)
+  (network must contain KEGG IDs)
+
+ [Keq, mu0, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)
+  Equilibrium constants from parameter balancing (filename: list of SBtab files with input data)
+  (network must contain KEGG IDs)
+
+ ---------------------------------------------------------------------------
+ Determine fluxes v and chemical potentials mu
+
+ [v, mu] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0)
+  Determine feasible flux vector v and chemical potentials mu under constraints 
+
+ [v, mu] = find_v_and_mu(N,K,external,constraints,options)
+  Determine feasible v and mu satisfying all constraints and minimising the euclidean norm
+
+ [v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)
+  Determine v and A from &quot;Ohmian law&quot; and minimal entropy production</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

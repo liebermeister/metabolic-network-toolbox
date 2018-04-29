@@ -1,10 +1,10 @@
-function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,flag_pseudo_values,network,verbose)
+function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,insert_pseudo_values,network,verbose)
 
-% kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,flag_pseudo_values,network);
+% kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,insert_pseudo_values,network);
 
-eval(default('flag_pseudo_values','0','verbose','1','network','[]'));
+eval(default('insert_pseudo_values','0','verbose','1','network','[]'));
 
-if flag_pseudo_values,
+if insert_pseudo_values,
   if verbose, 
     display('  Replacing missing data values by pseudo values');
   end
@@ -18,11 +18,11 @@ for it = 1:length(fn),
  
  ind_lower  = find(~isfinite(kinetic_data.(fn{it}).lower));
  ind_upper  = find(~isfinite(kinetic_data.(fn{it}).upper));
- my_scaling =  parameter_prior.Scaling{parameter_prior.symbol_index.(fn{it})};
+ my_scaling =  parameter_prior.MathematicalType{parameter_prior.symbol_index.(fn{it})};
 
  switch my_scaling,
    
-   case 'Logarithmic',
+   case 'Multiplicative',
      
      my_mean_ln   = log(eval(parameter_prior.PriorMedian{parameter_prior.symbol_index.(fn{it})}));
      my_std_ln    = log(10) * eval(parameter_prior.PriorStd{parameter_prior.symbol_index.(fn{it})});
@@ -38,7 +38,7 @@ for it = 1:length(fn),
      kinetic_data.(fn{it}).lower_ln(ind_lower) = my_lower_ln;
      kinetic_data.(fn{it}).upper_ln(ind_upper) = my_upper_ln;
    
-   case 'Original',
+   case 'Additive',
 
      my_mean    = eval(parameter_prior.PriorMedian{parameter_prior.symbol_index.(fn{it})});
      my_std     = eval(parameter_prior.PriorStd{parameter_prior.symbol_index.(fn{it})});
@@ -49,7 +49,7 @@ for it = 1:length(fn),
      kinetic_data.(fn{it}).upper(ind_upper) = my_upper;
  end
   
- if flag_pseudo_values,
+ if insert_pseudo_values,
 
    if strcmp('Derived',parameter_prior.Dependence{parameter_prior.symbol_index.(fn{it})}),
      ind_mean  = find(~isfinite(kinetic_data.(fn{it}).mean));
@@ -57,9 +57,9 @@ for it = 1:length(fn),
      kinetic_data.(fn{it}).std(ind_mean)  = my_std;
  
      switch my_scaling,
-       case 'Original',
+       case 'Additive',
          kinetic_data.(fn{it}).median = kinetic_data.(fn{it}).mean;         
-       case 'Logarithmic',
+       case 'Multiplicative',
          kinetic_data.(fn{it}).median(ind_mean)  = exp(my_mean_ln);
          kinetic_data.(fn{it}).mean_ln(ind_mean) = my_mean_ln;
          kinetic_data.(fn{it}).std_ln(ind_mean)  = my_std_ln;

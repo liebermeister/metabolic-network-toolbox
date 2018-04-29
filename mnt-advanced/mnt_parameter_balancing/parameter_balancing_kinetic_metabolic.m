@@ -1,6 +1,6 @@
-function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_kinetic_metabolic(network, kinetic_data, options, v);
+function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic_metabolic(network, kinetic_data, pb_options, v);
 
-%  [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_kinetic(network, kinetic_data, file_kinetic_data, options, v);
+%  [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, file_kinetic_data, pb_options, v);
 %
 % Determine consistent kinetic parameter and metabolic state by parameter balancing
 %
@@ -11,9 +11,9 @@ function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = 
 % ------------------------------------------------------------------------
 % Initialise
   
-eval(default('kinetic_data', '[]', 'options', 'struct'));
+eval(default('kinetic_data', '[]', 'pb_options', 'struct'));
 
-options = join_struct(parameter_balancing_default_options, options);
+pb_options = join_struct(parameter_balancing_default_options, pb_options);
 
 [nm,nr] = size(network.N);
 
@@ -24,6 +24,8 @@ options = join_struct(parameter_balancing_default_options, options);
 
 basic_quantities  = {'standard chemical potential','catalytic rate constant geometric mean', 'Michaelis constant','activation constant', 'inhibitory constant','concentration','concentration of enzyme'}';
 
+pseudo_quantities  = {'equilibrium constant'}';
+
 model_quantities  = {'standard chemical potential','catalytic rate constant geometric mean', 'Michaelis constant','activation constant', 'inhibitory constant', 'equilibrium constant','substrate catalytic rate constant', 'product catalytic rate constant', 'Michaelis constant product', 'concentration','reaction affinity','concentration of enzyme'}';
 
 data_quantities   = {'standard chemical potential', 'standard Gibbs energy of reaction', 'Michaelis constant','activation constant', 'inhibitory constant', 'equilibrium constant','substrate catalytic rate constant', 'product catalytic rate constant', 'concentration','reaction affinity','concentration of enzyme'}';
@@ -32,8 +34,8 @@ data_quantities   = {'standard chemical potential', 'standard Gibbs energy of re
 % ------------------------------------------------------------------------
 % Load and modify parameter priors
 
-parameter_prior = parameter_balancing_prior([],options.parameter_prior_file);
-parameter_prior = pb_parameter_prior_adjust(parameter_prior, options); 
+parameter_prior = parameter_balancing_prior([],pb_options.parameter_prior_file);
+parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options); 
 
 
 % ----------------------------------------------------------------
@@ -44,13 +46,13 @@ if isstr(kinetic_data),
   kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, kinetic_data, 0, 1);
 elseif isempty(kinetic_data),  
   %% If necessary, create empty kinetic_data structure
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], 0, 1, options.reaction_column_name, options.compound_column_name);
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], 0, 1, pb_options.reaction_column_name, pb_options.compound_column_name);
 end  
 
 kinetic_data_orig = kinetic_data;
-kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options);
+kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
 
-if options.enforce_flux_directions, 
+if pb_options.enforce_flux_directions, 
   display('Enforcing predefined flux directions');
   kinetic_data.A.lower(v>0) = epsilon;
   kinetic_data.A.upper(v<0) = -epsilon;
@@ -60,12 +62,12 @@ end
 % Run parameter balancing
 
 network.kinetics            = set_kinetics(network, 'cs');
-task                        = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities);
-res                         = parameter_balancing_calculation(task, parameter_prior, options);
-[r,r_mean,r_std,r_orig,r_samples]  = parameter_balancing_output(res, kinetic_data_orig, options);
+task                        = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
+res                         = parameter_balancing_calculation(task, parameter_prior, pb_options);
+[r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples]  = parameter_balancing_output(res, kinetic_data_orig, pb_options);
 
 
-if options.postprocessing_enforce_fluxes,
+if pb_options.postprocessing_enforce_fluxes,
    display(sprintf('The balanced kcat values and enzyme levels have been adjusted to the predefined fluxes. Assuming rate law of type "%s"',r.type));
    display('  (Note that weighting with standard deviations has not yet been implemented)');
    display('  (Adjusted enzyme levels may be outside the allowed range)');
@@ -81,7 +83,7 @@ if options.postprocessing_enforce_fluxes,
    %% figure(100);
    %% plot(abs(v),abs(v_pred),'.','MarkerSize',20); set(gca,'XScale','log','YScale','log');
    %% xlabel('Fluxes (predefined)');    xlabel('Fluxes (predicted from balanced steady state)');
-   scaling_factors = sqrt(abs(v) ./ abs(v_pred))
+   scaling_factors = sqrt(abs(v) ./ abs(v_pred));
    ind = isfinite(scaling_factors);
    r.KV(ind)    = r.KV(ind)    .* scaling_factors(ind);
    r.Kcatf(ind) = r.Kcatf(ind) .* scaling_factors(ind);

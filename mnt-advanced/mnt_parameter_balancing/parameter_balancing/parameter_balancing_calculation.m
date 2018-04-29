@@ -20,19 +20,11 @@ function [result, exitflag] = parameter_balancing_calculation(task, parameter_pr
 
 eval(default('parameter_prior','[]','options','struct'));
 
-if isfield(options,'insert_pseudo_values'), 
-  error('deprecated option insert_pseudo_values is used; use option use_pseudo_values instead'); 
-end 
-
 if isempty(parameter_prior),
   parameter_prior = biochemical_parameter_prior;
 end
 
-options_default.use_bounds_from_quantity_table = 1;
-options_default.use_pseudo_values = 0;
-options_default.n_samples            = 0;
-
-options = join_struct(options_default,options);
+options = join_struct(parameter_balancing_default_options,options);
 
 q_prior.cov_inv = diag(sparse(1./task.q.prior.std.^2));
 
@@ -43,38 +35,52 @@ end
 
 xdata.cov_inv   = diag(sparse(1./task.xdata.std.^2));
 
-xall_pseudo.cov_inv = diag(sparse(1./task.xall.pseudo.std.^2));
+xall_pseudo.cov_inv = diag(sparse(1./task.xpseudo.std.^2));
 
-%flag_bounds = length(task.xlower.value) + length(task.xupper.value) > 0;
-flag_bounds = 1;
+flag_bounds = length(task.xlower.value_nat) + length(task.xupper.value_nat) > 0;
 
+
+% ------------------------------------------------------------
+% Posterior mean and covariance matrix (without constraints)
+
+% Terms from prior
+q_posterior_cov_inv = q_prior.cov_inv;
+TT                  = q_prior.cov_inv * task.q.prior.mean;
+
+%% Add pseudo values terms
+if options.use_pseudo_values,
+  q_posterior_cov_inv = q_posterior_cov_inv + task.Q_xpseudo_q' * xall_pseudo.cov_inv * task.Q_xpseudo_q;
+  TT                  = TT                  + task.Q_xpseudo_q' * xall_pseudo.cov_inv * task.xpseudo.mean;
+end
+
+% Add data terms
 if length(task.Q_xdata_q),
-  q_posterior_cov_inv = q_prior.cov_inv + [ task.Q_xdata_q' * xdata.cov_inv * task.Q_xdata_q ];
-  TT                  = task.Q_xdata_q' * xdata.cov_inv * task.xdata.mean + q_prior.cov_inv * task.q.prior.mean;
-else,
-  q_posterior_cov_inv = q_prior.cov_inv;
-  TT                  = q_prior.cov_inv * task.q.prior.mean;
+  q_posterior_cov_inv = q_posterior_cov_inv + task.Q_xdata_q' * xdata.cov_inv * task.Q_xdata_q;
+  TT                  = TT                  + task.Q_xdata_q' * xdata.cov_inv * task.xdata.mean;
 end
 
-if options.use_pseudo_values, 
-  q_posterior_cov_inv = q_posterior_cov_inv + task.Q_xall_q' * xall_pseudo.cov_inv * task.Q_xall_q;
-  TT                  = TT + task.Q_xall_q' * xall_pseudo.cov_inv * task.xall.pseudo.mean;
-end
-
-% ensure that the Hessian is exactly symmetric
+% Make Hessian exactly symmetric
 q_posterior_cov_inv  = 0.5 * [q_posterior_cov_inv + q_posterior_cov_inv'];
 
-q_posterior.mean    = q_posterior_cov_inv \ TT;
+q_posterior.mean     = q_posterior_cov_inv \ TT;
+
+
+% ------------------------------------------------------------
+% Posterior mode (under constraints)
+
+xconstraints = [-task.xlower.value_nat; task.xupper.value_nat;];
+Qconstraints = [-task.Q_xlower_q;   task.Q_xupper_q;];
+
+if options.use_bounds_from_quantity_table,
+  xconstraints = [xconstraints; -task.xall.lower_nat; task.xall.upper_nat;];
+  Qconstraints = [Qconstraints; -task.Q_xall_q;       task.Q_xall_q];
+end
+  
+q_posterior.mode = q_posterior.mean;
 
 if flag_bounds, 
-  xconstraints = [-task.xlower.value_nat; task.xupper.value_nat;];
-  Qconstraints = [-task.Q_xlower_q;   task.Q_xupper_q;];
+if sum([Qconstraints * q_posterior.mean > xconstraints]), 
 
-  if options.use_bounds_from_quantity_table,
-    xconstraints = [xconstraints; -task.xall.lower_nat; task.xall.upper_nat;];
-    Qconstraints = [Qconstraints; -task.Q_xall_q;       task.Q_xall_q];
-  end
-  
   epsilon = 10^-10;
 
   %% Check whether constraints are already satisfied:
@@ -93,19 +99,6 @@ if flag_bounds,
 
   if exitflag <0, error(sprintf('Error in optimisation during parameter balancing - exitflag %d',exitflag)); end
 
-else
-  q_posterior.mode = q_posterior.mean;
-end
-
-% % check inequality constraints
-% prod(double([full(Qconstraints) * q_posterior.mode < xconstraints - epsilon]))
-% 
-% % check bounds
-% if length(lb), 
-%   prod(double( [lb < q_posterior.mode; q_posterior.mode < ub]))
-% end
-
-
 if exitflag~=1, 
   if exitflag == 0, 
     exitflag
@@ -118,6 +111,11 @@ if exitflag~=1,
     warning('Problem in quadratic programming; possible reasons are too tight constraints (for concentrations, reaction affinities etc, or an infeasible flux distribution');  
   end
 end
+
+end
+end
+
+%  ----------------------------------------------------------
 
 q_posterior.cov          = inv(q_posterior_cov_inv);
 q_posterior.std          = sqrt(diag(q_posterior.cov));
@@ -178,21 +176,23 @@ for it = 1:length(task.model_quantities),
   
   my_quantity     = task.model_quantities{it};
   ind             = find(strcmp(my_quantity,parameter_prior.QuantityType));
-  my_scaling      = parameter_prior.Scaling{ind};
+  my_scaling      = parameter_prior.MathematicalType{ind};
   my_symbol       = parameter_prior.Symbol{ind};
   my_indices      = task.xmodel.indices.(my_symbol);
   my_x_mode       = xmodel_posterior.mode(my_indices);
   my_x_mean       = xmodel_posterior.mean(my_indices);
   my_x_std        = xmodel_posterior.std(my_indices);
   my_x_samples    = xmodel_posterior.samples(my_indices,:);
-  
-  if strcmp(my_scaling, 'Logarithmic'),
+
+  if strcmp(my_scaling, 'Multiplicative'),
      my_x_mode            = exp(my_x_mode);
-     my_x_median          = exp(my_x_mode);
+     my_x_median          = exp(my_x_mean);
+     my_x_geom_std        = exp(my_x_std);
      my_x_samples         = exp(my_x_samples);
     [my_x_mean, my_x_std] = lognormal_log2normal(my_x_mean, my_x_std,'arithmetic');
   else
-    my_x_median          = my_x_mode;
+    my_x_median          = nan * my_x_mode;
+    my_x_geom_std        = nan * my_x_mode;
   end
 
  %figure(2); clf;
@@ -222,10 +222,11 @@ for it = 1:length(task.model_quantities),
       my_x_samples = dum_samples;
   end
 
-  kpm_mode.(my_symbol)    = my_x_mode;
-  kpm_mean.(my_symbol)    = my_x_mean;
-  kpm_std.(my_symbol)     = my_x_std;
-  kpm_median.(my_symbol)  = my_x_median;
+  kpm_mode.(my_symbol)     = my_x_mode;
+  kpm_mean.(my_symbol)     = my_x_mean;
+  kpm_std.(my_symbol)      = my_x_std;
+  kpm_median.(my_symbol)   = my_x_median;
+  kpm_geom_std.(my_symbol) = my_x_geom_std;
 
   for itt=1:options.n_samples,
   switch my_symbol, 
@@ -247,10 +248,11 @@ end
 % -------------------------------------------------------------
 
 
-result.kinetics_posterior_mode    = kpm_mode;
-result.kinetics_posterior_median  = kpm_median;
-result.kinetics_posterior_mean    = kpm_mean;
-result.kinetics_posterior_std     = kpm_std;
+result.kinetics.posterior_mode                   = kpm_mode;
+result.kinetics.unconstrained_posterior_mean     = kpm_mean;
+result.kinetics.unconstrained_posterior_std      = kpm_std;
+result.kinetics.unconstrained_posterior_median   = kpm_median;
+result.kinetics.unconstrained_posterior_geom_std = kpm_geom_std;
 
 if options.n_samples,
   result.kinetics_posterior_samples = kpm_samples;

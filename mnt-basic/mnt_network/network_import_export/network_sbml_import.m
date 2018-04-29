@@ -122,8 +122,17 @@ end
 
 for it=1:length(listOfModifiers),
   modifier{it}={};
+  modifier_type{it}={};
   for itt = 1:length(listOfModifiers{it});
     modifier{it}= [modifier{it} {listOfModifiers{it}(itt).species}];
+    if isfield(listOfModifiers{it}(itt),'sboTerm'),
+      switch listOfModifiers{it}(itt).sboTerm,
+        case {20,639,206,638,207,640}, modifier_type{it} = [modifier_type{it} {'inhibitor'}];
+        case {459,461,462,21},         modifier_type{it} = [modifier_type{it} {'activator'}];
+        case {13,14},                  modifier_type{it} = [modifier_type{it} {'enzyme'}];
+        otherwise,                     modifier_type{it} = [modifier_type{it} {''}];
+      end
+    end
   end
 end
 
@@ -170,11 +179,18 @@ end
 
 network.regulation_matrix = zeros(size(network.N))';
   
+network.metabolite_is_an_enzyme = zeros(size(network.metabolites));
+
 for it1 = 1:length(modifier),
   for it2=1:length(modifier{it1}),
     mm = label_names(modifier{it1}(it2),metabolites);
     if mm,
-      network.regulation_matrix(it1,mm)=1;
+      switch modifier_type{it1}{it2},
+        case 'inhibitor', network.regulation_matrix(it1,mm)=-1;
+        case 'activator', network.regulation_matrix(it1,mm)= 1;
+        case 'enzyme',    network.regulation_matrix(it1,mm)= 1; network.metabolite_is_an_enzyme(mm) = 1;
+        otherwise,        network.regulation_matrix(it1,mm)= 1; warning('Modifier of unknown type encountered; I will assume it is an activator. If this is not what you want, please add sboTerm attributes in SBML to clarify the nature of modifiers');
+      end
     end
   end
 end

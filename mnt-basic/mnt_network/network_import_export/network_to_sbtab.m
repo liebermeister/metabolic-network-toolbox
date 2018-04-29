@@ -69,6 +69,12 @@ reaction_table = sbtab_table_construct(struct('TableName','Reaction','TableType'
 
 if isfield(network, 'reaction_names'),
   reaction_table = sbtab_table_add_column(reaction_table,'Name', network.reaction_names);
+else
+  reaction_table = sbtab_table_add_column(reaction_table,'Name', network.actions);
+end
+
+if isfield(network, 'reaction_NameForPlots'),
+  reaction_table = sbtab_table_add_column(reaction_table,'NameForPlots', network.reaction_NameForPlots);
 end
 
 if isfield(network, 'reaction_KEGGID'),
@@ -136,6 +142,12 @@ if ~options.only_reaction_table,
 
   if isfield(network, 'metabolite_names'),
     compound_table = sbtab_table_add_column(compound_table,'Name', network.metabolite_names);
+  else
+    compound_table = sbtab_table_add_column(compound_table,'Name', network.metabolites);
+  end
+
+  if isfield(network, 'metabolite_NameForPlots'),
+    compound_table = sbtab_table_add_column(compound_table,'NameForPlots', network.metabolite_NameForPlots);
   end
 
   if isfield(network, 'metabolite_KEGGID'),
@@ -159,6 +171,15 @@ if ~options.only_reaction_table,
   sbtab_document = sbtab_document_add_table(sbtab_document,'Compound',compound_table);
 end
 
+if options.graphics_positions,
+  if isfield(network,'graphics_par')
+    %% beim einlesen: network = netgraph_read_positions(network, table_positions)
+    [names, positions] = netgraph_print_positions(network);
+    position_table = sbtab_table_construct(struct('TableName','Layout','TableType','Layout','Document',options.document_name),{'Element','PositionX','PositionY'},{names,positions(1,:)',positions(2,:)'}); 
+    sbtab_document = sbtab_document_add_table(sbtab_document,'Layout',position_table);
+  end
+end
+
 if options.modular_rate_law_table,
   switch network.kinetics.type,
     case 'numeric',
@@ -166,16 +187,7 @@ if options.modular_rate_law_table,
     otherwise,
       quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations,'write_enzyme_concentrations',options.write_enzyme_concentrations,'document_name',options.document_name,'modular_rate_law_parameter_id',options.modular_rate_law_parameter_id));
   end
-  sbtab_document = sbtab_document_add_table(sbtab_document,'Quantity',quantity_table);
-end
-
-if options.graphics_positions,
-  if isfield(network,'graphics_par')
-    %% beim einlesen: network = netgraph_read_positions(network, table_positions)
-    [names, positions] = netgraph_print_positions(network);
-    position_table = sbtab_table_construct(struct('TableName','Layout','TableType','Position','Document',options.document_name),{'Element','PositionX','PositionY'},{names,positions(1,:)',positions(2,:)'}); 
-    sbtab_document = sbtab_document_add_table(sbtab_document,'Layout',position_table);
-  end
+  sbtab_document = sbtab_document_add_table(sbtab_document,'Parameter',quantity_table);
 end
 
 if ~isempty(options.filename),

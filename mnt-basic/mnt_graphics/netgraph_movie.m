@@ -45,18 +45,18 @@ T = max(t)*(0:1/(n_frames-1):1);
 
 nandata = find(sum(isnan(s_t),2));
 s_t(nandata,:)=0;
-s_t            = interp1(t,s_t',T,'cubic')';
+s_t            = interp1(t,s_t',T,'pchip')';
 s_t(nandata,:) = nan;
 if size(s_t,2)==1, s_t = s_t'; end
 
 if length(options.metabolite_colors), 
-  options.metabolite_colors = interp1(t,options.metabolite_colors,T,'cubic');
+  options.metabolite_colors = interp1(t,options.metabolite_colors,T,'pchip');
   options.metabolite_colors(options.metabolite_colors<0) = 0;
   options.metabolite_colors(options.metabolite_colors>1) = 1;
 end
 
 if length(options.reaction_colors), 
-  options.reaction_colors = interp1(t,options.reaction_colors,T,'cubic');
+  options.reaction_colors = interp1(t,options.reaction_colors,T,'pchip');
   options.reaction_colors(options.reaction_colors<0) = 0;
   options.reaction_colors(options.reaction_colors>1) = 1;
 end

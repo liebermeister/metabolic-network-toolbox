@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_draw</title>
+  <meta name="keywords" content="netgraph_draw">
+  <meta name="description" content="netgraph_draw(network,varargin)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_draw.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/mnt_graphics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_draw
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>netgraph_draw(network,varargin)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function network = netgraph_draw(network,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">netgraph_draw(network,varargin)
+
+Draw a metabolic network according to settings in the field 'graphics_par'
+These settings can be overridden by the contents of 'varargin'
+
+varargin is either a list of pairs 'fieldname','fieldvalue',...
+ or a structure (as 'graphics_par') struct('parname1', parvalue1, 'parname2', parvalue2, ...)
+
+PARAMETER SETTINGS:
+
+METABOLITE SYMBOLS
+ metvalues
+ metvalues_std
+ metstyle       {'fixed','box','box_std','none'}
+ metcolstyle    {'fixed','values'}
+ metvaluesmax
+ metvaluesmin
+ metprintnames
+ metprintvalues
+ metcolors       (optional, overrides all other color specifications)
+ metinvisible    (bit vector)
+ omitmetabolites (list of metabolite names) metabolites to be omitted in graphics
+ squaresize ( also holds for reaction symbols)
+ no_points ( also holds for reaction symbols)
+ flag_edges (holds also for reaction and regulation symbols)
+ circle_shift [0,0] additional shift of circle symbols
+
+REACTION SYMBOLS
+ actvalues
+ actvalues_std
+ actstyle       {'fixed','box','box_std','none'}
+ actcolstyle    {'fixed','values'}
+ actcolors      (optional, overrides all other color specifications)
+ actinvisible    (bit vector)
+ actvaluesmax
+ actvaluesmin
+ actprintnames
+ actprintvalues
+ omitreactions   (list of reaction names) reactions to be omitted in graphics
+
+STYLE OF ARROWS
+ arrowstyle       {'fluxes','directions','none'}
+ arrowvalues      a value of 1 will be shown in standard size (given by arrowsize)
+ arrowvaluesmax   threshold value; any larger values will be replaced by this value
+ arrowvaluesmin   threshold value; any smaller (or more negative) values will be replaced by this value
+ arrow_stoichiometries [0,1] scale arrows with stoichiometric coefficients? (default 0)
+ arrowsize
+ arrow_shift      [0..1]
+ arrowprintvalues (overrides actprintvalues);
+ straightlines
+ arrowcolor
+ flag_triangle_edges (default 0)
+ single_arrow     [0,1] Draw only one arrow per reaction, on top of the reaction symbol
+
+STYLE OF EDGE SYMBOLS
+
+ edgevalues     (sparse matrix, size of stoichiometric matrix N)
+ edgevalues_std (sparse matrix, size of stoichiometric matrix N)
+ edgestyle      {'normal',fixed'}; 'fixed' plot all symbols in the same size
+ edgevaluesmax
+ edgevaluesmin
+ suppress lines flag - if set, no lines are drawn
+
+REGULATION ARROWS
+ show_regulation (flag) - requires options entry &quot;regulation_matrix&quot; to be given
+ show_regulationvalues (flag)
+ regulationvalues (sparse matrix of size of regulation_matrix)
+ regulationstyle {'normal',fixed'} 'fixed' plot all symbols in the same size
+ rlinecolor
+
+TEXT ITEMS
+ chop_names     (length)
+ split_names (length)
+ FontSize 
+ Rotation  (for all text items)
+ text_offset
+
+COLORSCALE AND LINES
+ colorbar (0/1)
+ colorbar_numbers
+ linecolor 
+ linewidth
+ colormap        (default rb_colors)
+ black_and_white (default 0)
+ showsign
+ shade_long_lines  (value) if ~=0 : length above which  lines are shaded 
+ shade_cofactor_lines  (bitstring denoting the cofactors)
+
+ canvas (flag, default []): show light grey background; or rgb vector with background color
+ figure_axis: coordinate vector for figure axis
+ figure_position
+ subplot_position
+ YDir ('normal','reverse')
+ hold_on (flag)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../mnt-basic/utils/arc.html" class="code" title="function [x,arcx,arcy] = arc(x1,x2,height,arrow_shift);">arc</a>	-------------------------</li><li><a href="../../mnt-basic/utils/get_color.html" class="code" title="function c = get_color(values, minvalue,maxvalue,cmap);">get_color</a>	c = get_color(values, minvalue,maxvalue,cmap);</li><li><a href="../../mnt-basic/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../../mnt-basic/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../mnt-basic/utils/noticks.html" class="code" title="function noticks();">noticks</a>	noticks();</li><li><a href="../../mnt-basic/utils/plot_square.html" class="code" title="function plot_square(x,y,l,col)">plot_square</a>	plot_square(x,y,l,col)</li><li><a href="../../mnt-basic/utils/rb_colors.html" class="code" title="function c = rb_colors(ncol)">rb_colors</a>	c = rb_colors(ncol)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../demo/mnt_demo.html" class="code" title="">mnt_demo</a>	</li><li><a href="../../mnt-advanced/mnt_spectral_response/spectral_response/wheelplot.html" class="code" title="function wheelplot(network,RS,RJ,internal,scale_RS,scale_RJ)">wheelplot</a>	</li><li><a href="../../mnt-advanced/mnt_uncertain_parameters/display_expression.html" class="code" title="function [Delta_logS_mean,Delta_logJ_mean,Delta_logS_cov,Delta_logJ_cov]=  display_expression(network,solution1,solution2,d1,d2)">display_expression</a>	[Delta_logS_mean,Delta_logJ_mean,Delta_logS_cov,Delta_logJ_cov] = display_expression(network,solution1,solution2,d1,d2)</li><li><a href="../../mnt-advanced/mnt_uncertain_parameters/flux_direction_probs.html" class="code" title="function [prob,mean_prob,var_prob] = flux_direction_probs(network, solution, fn);">flux_direction_probs</a>	[prob, mean_prob, var_prob] = flux_direction_probs(network, solution, fn);</li><li><a href="../../mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/display_stochastic_control.html" class="code" title="function display_stochastic_control(network,solution,control_type,direction_type,ind,filename)">display_stochastic_control</a>	display_stochastic_control(network,solution,control_type,direction_type,ind,filename)</li><li><a href="../../mnt-advanced/mnt_uncertain_parameters/uncertain_parameters/display_variability.html" class="code" title="function display_variability(network,solution, fn)">display_variability</a>	</li><li><a href="netgraph_concentrations.html" class="code" title="function netgraph_concentrations(network,S,J,flag_text,options)">netgraph_concentrations</a>	netgraph_concentrations(network,S,J,flag_text,options)</li><li><a href="netgraph_fluxes.html" class="code" title="function netgraph_fluxes(network,J,gp)">netgraph_fluxes</a>	netgraph_fluxes(network,J,gp)</li><li><a href="netgraph_mark_metabolites.html" class="code" title="function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)">netgraph_mark_metabolites</a>	[choice,p] = netgraph_mark_metabolites(network,choice,draw_only)</li><li><a href="netgraph_move.html" class="code" title="function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)">netgraph_move</a>	network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)</li><li><a href="netgraph_move2.html" class="code" title="function x = netgraph_move2(network,flag_draw_details)">netgraph_move2</a>	network = netgraph_move2(network,flag_draw_details)</li><li><a href="netgraph_regulation.html" class="code" title="function   netgraph_regulation(network)">netgraph_regulation</a>	netgraph_regulation(network)</li><li><a href="netgraph_remove.html" class="code" title="function [network,keep_tot,keep_actions_tot] = netgraph_remove(network)">netgraph_remove</a>	[network,keep_tot,keep_actions_tot] = netgraph_remove(network)</li><li><a href="../../mnt-basic/mnt_network/network_import_export/network_sbml_import.html" class="code" title="function [network,s] = network_sbml_import(s,dirname,verbose)">network_sbml_import</a>	[network,s] = network_sbml_import(s,dirname,verbose)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -18,6 +18,7 @@
 % metprintnames
 % metprintvalues
 % metcolors       (optional, overrides all other color specifications)
+% metinvisible    (bit vector)
 % omitmetabolites (list of metabolite names) metabolites to be omitted in graphics
 % squaresize ( also holds for reaction symbols)
 % no_points ( also holds for reaction symbols)
@@ -30,6 +31,7 @@
 % actstyle       {'fixed','box','box_std','none'}
 % actcolstyle    {'fixed','values'}
 % actcolors      (optional, overrides all other color specifications)
+% actinvisible    (bit vector)
 % actvaluesmax
 % actvaluesmin
 % actprintnames
@@ -85,7 +87,7 @@
 % shade_cofactor_lines  (bitstring denoting the cofactors)
 %
 % canvas (flag, default []): show light grey background; or rgb vector with background color
-% figure_axis
+% figure_axis: coordinate vector for figure axis
 % figure_position
 % subplot_position
 % YDir ('normal','reverse')
@@ -138,13 +140,13 @@ end
 % only lines
 
 if ~p.suppress_lines,
-
-  if p.straightlines,   % straight lines
+  if p.straightlines,
+    %% draw straight lines
     [i2,j2] = find(triu(m));
     for itt = 1:length(i2),
       my_color = p.linecolor;
       my_linewidth = 1;
-      if sum(j2(itt)-n_met==p.actindshow) * sum(i2(itt)==p.metindshow),
+      if sum(i2(itt)==p.metindshow) * sum(j2(itt)-n_met==p.actindshow),
         my_color = p.linecolor;
         my_linewidth = p.linewidth; 
         shade_this_line = 0;
@@ -158,8 +160,8 @@ if ~p.suppress_lines,
           my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
           my_linewidth = 1;
         end
+        line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',my_color,'Linewidth',my_linewidth);
       end
-      line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',my_color,'Linewidth',my_linewidth);
     end
   end
 end
@@ -368,7 +370,7 @@ if p.show_metvalues,
       plot_circle(x(1,it)+p.circle_shift(1), x(2,it)+p.circle_shift(2), p.norm_metvalues(it), p.norm_metvalues_std(it), p.squaresize, c(it,:), p.flag_edges); 
     end
   end;
-
+  
 end
 
   
@@ -753,12 +755,14 @@ p_default = struct(...
     'metvaluesmin',    [], ...
     'metstyle', 'fixed', ...
     'metcolors', [], ...
+    'metinvisible', zeros(size(network.N,1),1), ...
     'circle_shift',    [0,0], ...
     'actvalues_std',   zeros(size(p.actvalues)),  ...
     'actvaluesmax',    [], ...
     'actvaluesmin',    [], ...
     'actstyle', 'fixed', ...
     'actcolors', [], ...
+    'actinvisible', zeros(size(network.N,2),1), ...
     'omitreactions',   {'omitthisreaction'}, ...
     'omitmetabolites', {'omitthismetabolite'}, ...
     'suppress_lines', 0, ...
@@ -965,10 +969,16 @@ end
 if p.black_and_white,        p.colormap = 0.5-0.5*sign(gray(250)-0.5); end
 
 % omit metabolites that are not connected anymore once reactions have been omitted
+
 ll = setdiff(1:nr,label_names(p.omitreactions,network.actions));
 p.omitmetabolites = union(p.omitmetabolites, network.metabolites(find(sum(abs(network.N(:,ll)),2)==0)));
 p.actindshow = setdiff(1:length(network.actions),    label_names(p.omitreactions,network.actions));
 p.metindshow = setdiff(1:length(network.metabolites),label_names(p.omitmetabolites,network.metabolites));
+
+% omit metabolites and reactions that are tagged as invisible
+
+p.actindshow = p.actindshow(find(p.actinvisible(p.actindshow)==0));
+p.metindshow = p.metindshow(find(p.metinvisible(p.metindshow)==0));
 
 % if isfield(network.graphics_par,'reaction_mapping'),
 %   ii = setdiff(1:length(network.actions),label_names(p.omitreactions,network.actions));

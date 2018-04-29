@@ -72,7 +72,7 @@ else,
   ub =   dmu_abs_max * ones(nr,1);
 
   if exist('cplexlp','file'),
-    opt         = cplexoptimset('linprog');
+    opt         = cplexoptimset();%'linprog');
     opt.MaxIter = 10^10;
     opt.Display = 'off';
     [dmu, dum, exitflag] = cplexlp(-c, -G, -h, A, b, lb, ub, [], opt);

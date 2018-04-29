@@ -8,6 +8,8 @@ function [network1,keep,keep_actions] = network_remove_action(network,ind,flag_r
 
 eval(default('flag_remove_metabolites','1'));
 
+ind = ind(find(ind~=0));
+
 % if isfield(network,'graphics_par'),
 %   x=network.graphics_par.x; 
 %   m=network.graphics_par.m; 

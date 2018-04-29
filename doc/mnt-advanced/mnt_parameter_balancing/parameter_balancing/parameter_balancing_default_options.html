@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_default_options</title>
+  <meta name="keywords" content="parameter_balancing_default_options">
+  <meta name="description" content="PARAMETER_BALANCING_DEFAULT_OPTIONS Options for parameter balancing - empty data structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt-advanced</a> &gt; <a href="../index.html">mnt_parameter_balancing</a> &gt; <a href="index.html">parameter_balancing</a> &gt; parameter_balancing_default_options.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_default_options
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PARAMETER_BALANCING_DEFAULT_OPTIONS Options for parameter balancing - empty data structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function options = parameter_balancing_default_options() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PARAMETER_BALANCING_DEFAULT_OPTIONS Options for parameter balancing - empty data structure
+
+ options = parameter_balancing_default_options()
+
+   options.parameter_prior_file = []; % =&gt; use default file, see parameter_balancing_prior.m
+   options.kinetics             = 'cs';
+   options.parametrisation      = 'catalytic rate constant'; 
+   options.reaction_units       = 'concentration per time'; % 'amount per time'
+   options.conc_min_default     = 0.001; % mM
+   options.conc_max_default     = 10;  % mM
+   options.conc_min             = [];
+   options.conc_max             = [];
+   options.kcat_prior_median    = [];
+   options.kcat_prior_log10_std = []
+   options.kcat_usage           = 'use';
+   options.KM_lower             = []; % mM
+   options.KM_upper             = []; % mM
+   options.Keq_upper            = [];
+   options.Keq_given            = [];
+   options.kcat_lower           = []; % 1/s
+   options.kcatr_lower          = []; % 1/s
+   options.kcat_upper           = []; % 1/s
+   options.GFE_fixed            = 0
+   options.use_pseudo_values    = 1;
+   options.insert_pseudo_values = 0; % replace missing data values by pseudo values
+   options.use_bounds_from_quantity_table = 1;
+   options.include_metabolic    = 1; % consider concentrations as quantities in parameter balancing
+   options.enzymes_explicit     = 1; % do not consider maximal velocities as quantities in parameter balancing
+   options.enforce_flux_directions = 0;
+   options.postprocessing_adjustment_to_fluxes = 0;
+   options.n_samples            = 0;
+
+ Currently not used (used in python code only);
+   options.use_pseudos    True
+   options.ph    7
+   options.temperature    300
+   options.overwrite_kinetics    True
+   options.cell_volume    43
+   options.enzyme_prefactor    True
+   options.default_inhibition    complete
+   options.default_activation    complete
+   options.model_name    outputname
+   options.boundary_values    ignore</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-advanced/mnt_parameter_balancing/demo/demo_pb_ecoli_noor_2016.html" class="code" title="">demo_pb_ecoli_noor_2016</a>	---------------------------------------------------------------------------------------------</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/demo/demo_pb_ecoli_wortel_2018.html" class="code" title="">demo_pb_ecoli_wortel_2018</a>	-----------------------------------------------------------------------------------------</li><li><a href="parameter_balancing_calculation.html" class="code" title="function [result, exitflag] = parameter_balancing_calculation(task, parameter_prior, options)">parameter_balancing_calculation</a>	[result, exitflag] = parameter_balancing(task, parameter_prior, options)</li><li><a href="parameter_balancing_quantities.html" class="code" title="function [model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_quantities(parameter_prior,network,options)">parameter_balancing_quantities</a>	[model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_relevant_quantities(parameter_prior,network,options)</li><li><a href="parameter_balancing_update_options.html" class="code" title="function pb_options = parameter_balancing_update_options(pb_options)">parameter_balancing_update_options</a>	</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_kinetic.html" class="code" title="function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);">parameter_balancing_kinetic</a>	[r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_kinetic_metabolic.html" class="code" title="function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic_metabolic(network, kinetic_data, pb_options, v);">parameter_balancing_kinetic_metabolic</a>	[r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, file_kinetic_data, pb_options, v);</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_sbtab.html" class="code" title="function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)">parameter_balancing_sbtab</a>	[network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tensor_scale</title>
+  <meta name="keywords" content="tensor_scale">
+  <meta name="description" content="U = tensor_scale(T,k,x);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">utils</a> &gt; tensor_scale.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/utils&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>tensor_scale
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>U = tensor_scale(T,k,x);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function U = tensor_scale(T,k,x); </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">U = tensor_scale(T,k,x);
+
+ calculate U_(ab..i..lm) = sum_i T_(ab..i..lm) * x_i
+ where i is the kth index of T</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="tensor_product.html" class="code" title="function C = tensor_product(A,B,index_A,index_B)">tensor_product</a>	C = tensor_product(A,B,index_A,index_B)</li><li><a href="tensor_scale.html" class="code" title="function U = tensor_scale(T,k,x);">tensor_scale</a>	U = tensor_scale(T,k,x);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt-basic/mnt_mca/norm_response_coefficients.html" class="code" title="function [RS_norm,RJ_norm,RS2_norm,RJ2_norm] = norm_response_coefficients(s,j,p,RS,RJ,RS2,RJ2)">norm_response_coefficients</a>	[RS_norm,RJ_norm,RS2_norm,RJ2_norm] = norm_response_coefficients(s,j,p,RS,RJ,RS2,RJ2,used_J)</li><li><a href="../../mnt-basic/mnt_mca/second_derivative_scaled2unscaled.html" class="code" title="function D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)">second_derivative_scaled2unscaled</a>	D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)</li><li><a href="../../mnt-basic/mnt_mca/second_derivative_unscaled2scaled.html" class="code" title="function D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)">second_derivative_unscaled2scaled</a>	D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)</li><li><a href="tensor_scale.html" class="code" title="function U = tensor_scale(T,k,x);">tensor_scale</a>	U = tensor_scale(T,k,x);</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

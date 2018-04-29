@@ -6,16 +6,16 @@
   <meta name="keywords" content="parameter_balancing_Keq">
   <meta name="description" content="[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
   <link type="text/css" rel="stylesheet" href="../../../m2html.css">
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt-advanced</a> &gt; <a href="#">mnt_parameter_balancing</a> &gt; <a href="#">parameter_balancing</a> &gt; parameter_balancing_Keq.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt-advanced</a> &gt; <a href="../index.html">mnt_parameter_balancing</a> &gt; <a href="index.html">parameter_balancing</a> &gt; parameter_balancing_Keq.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
-<td align="right"><a href="index.html">Index for ./mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+<td align="right"><a href="index.html">Index for mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
 
 <h1>parameter_balancing_Keq
 </h1>
@@ -52,7 +52,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../.././mnt-advanced/mnt_data_integration/data_integration_bounds_pseudovalues.html" class="code" title="function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network,verbose)">data_integration_bounds_pseudovalues</a>	kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,quantity_info,flag_pseudo_values,network);</li><li><a href="../../.././mnt-advanced/mnt_data_integration/data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, kinetic_data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)">data_integration_load_kinetic_data</a>	kinetic_data = data_integration_load_kinetic_data(data_quantities, quantity_info, network, kinetic_data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)</li><li><a href="../../.././mnt-advanced/mnt_data_integration/data_integration_load_quantity_info.html" class="code" title="function quantity_info = data_integration_load_quantity_info(omit_quantities, quantity_info_filename)">data_integration_load_quantity_info</a>	quantity_info = data_integration_load_quantity_info(omit_quantities,quantity_info_filename)</li><li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing.html" class="code" title="function [result, exitflag] = parameter_balancing(task, quantity_info, options)">parameter_balancing</a>	[result, exitflag] = parameter_balancing(task, quantity_info, options)</li><li><a href="../../.././mnt-advanced/mnt_parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)">parameter_balancing_task</a>	[task, prior] = parameter_balancing_task(network, kinetic_data, quantity_info, model_quantities, basic_quantities,include_metabolic)</li><li><a href="../../.././mnt/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../.././mnt/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li><li><a href="../../.././mnt/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../.././mnt/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li></ul>
+<li><a href="../../../mnt-advanced/mnt_kinetic_data/data_integration_bounds_pseudovalues.html" class="code" title="function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,insert_pseudo_values,network,verbose)">data_integration_bounds_pseudovalues</a>	kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,insert_pseudo_values,network);</li><li><a href="../../../mnt-advanced/mnt_kinetic_data/data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)">data_integration_load_kinetic_data</a>	kinetic_data = kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)</li><li><a href="parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic)">parameter_balancing_task</a>	[task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)</li><li><a href="../../../mnt-basic/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../../mnt-basic/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li><li><a href="../../../mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt-basic/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 </ul>
@@ -60,6 +60,7 @@ This function is called by:
 
 
 
-<hr><address>Generated on Mon 30-Jan-2017 18:09:33 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/">m2html</a></strong> &copy; 2003</address>
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

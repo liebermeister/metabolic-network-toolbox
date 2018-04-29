@@ -16,10 +16,14 @@
 % options.initial_relax  = n leads to n initial relaxation_steps
 % options.manual         = 0 leads to only automatic relaxation 
 
-
 function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)
 
 set(gca,'Position',[0.02 0 0.96 0.96]);
+if ~isfield(network.graphics_par,'metinvisible'),
+  network.graphics_par.metinvisible = zeros(size(network.metabolites));
+  network.graphics_par.actinvisible = zeros(size(network.actions));
+end
+
 
 if sum(size(network.N))==0, 
   error('Empty network');
@@ -240,7 +244,8 @@ if options.manual,
     image(picture); hold on;
   end;
   netgraph_draw(network,options); hold on; 
-  fixed_ind = find(fixed);
+  invisible = [column(network.graphics_par.metinvisible); column(network.graphics_par.actinvisible)];
+  fixed_ind = find(column(fixed) .* [invisible==0] );
   plot(x(1,fixed_ind),x(2,fixed_ind),'r.');
   hold off;
   axis(options.frame);

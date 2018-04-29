@@ -1,11 +1,11 @@
-% [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)
+% [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 %
 % Argument 'policy': possible choices {'replace file', 'add nonexistent', 'replace elements'}
 
 
-function [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed)
+function [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 
-eval(default('layout_file','[]','offsets','[]','policy','[]','flag_KEGG_ids','1','flag_element_names','1','flag_fixed','1'));
+eval(default('layout_file','[]','offsets','[]','policy','[]','flag_KEGG_ids','1','flag_element_names','1','flag_fixed','1','flag_invisible','1'));
 
 if flag_KEGG_ids,
   if ~[isfield(network,'metabolite_KEGGID') * isfield(network,'reaction_KEGGID')],
@@ -43,7 +43,11 @@ kegg_compound = [kegg_metnames; repmat({''},nr,1)];
 kegg_reaction = [repmat({''},nm,1); kegg_actnames];
 positions     = [metpositions, actpositions];
 fixed         = column(network.graphics_par.fixed);
-
+if isfield(network.graphics_par,'metinvisible'),
+  invisible   = [column(network.graphics_par.metinvisible); column(network.graphics_par.actinvisible)];
+else
+  invisible = [];
+end
 % -------------------------------------------------
 
 if length(layout_file),
@@ -77,7 +81,14 @@ if length(layout_file),
         fixed_in = sbtab_table_get_column(t,'IsFixed');
       end
     end
-    
+
+    invisible_in  = repmat(0,length(elements),1);
+    if flag_invisible,
+      if  sbtab_table_has_column(t,'IsInvisible'),
+        invisible_in = sbtab_table_get_column(t,'IsInvisible');
+      end
+    end
+
     switch policy, 
 
       case 'add nonexistent'
@@ -88,6 +99,7 @@ if length(layout_file),
         kegg_reaction = [kegg_reaction_in; kegg_actnames(ind_keep)];
         positions     = [[x';y'], positions(:,ind_keep) ];
         fixed         = [fixed_in; fixed(ind_keep)];
+        invisible     = [invisible_in; invisible(ind_keep)];
       
       case 'replace elements',  
         ll            = label_names(elements,names); 
@@ -97,6 +109,7 @@ if length(layout_file),
         kegg_reaction = [kegg_reaction(ind_keep);      kegg_reaction_in];
         positions     = [ [x(ind_keep)';y(ind_keep)'], positions];
         fixed         = [ fixed(ind_keep);              fixed_in; ];
+        invisible         = [ invisible(ind_keep);              invisible_in; ];
     
     end
   
@@ -120,7 +133,13 @@ if flag_fixed,
   sbtab_out = sbtab_table_add_column(sbtab_out,'IsFixed',fixed,1);
 end
 
-sbtab_table_save( sbtab_out, struct('filename', layout_file));
+if flag_invisible,
+  sbtab_out = sbtab_table_add_column(sbtab_out,'IsInvisible',invisible,1);
+end
+
+if length(layout_file),
+  sbtab_table_save( sbtab_out, struct('filename', layout_file));
+end
 
 % fid = fopen(layout_file,'w');
 % 

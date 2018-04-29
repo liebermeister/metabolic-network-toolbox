@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_task</title>
+  <meta name="keywords" content="parameter_balancing_task">
+  <meta name="description" content="[task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt-advanced</a> &gt; <a href="../index.html">mnt_parameter_balancing</a> &gt; <a href="index.html">parameter_balancing</a> &gt; parameter_balancing_task.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_task
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)
+
+ Prepare a parameter balancing task
+
+ Input
+   network
+
+ Optional inputs
+   kinetic_data      (see data_integration_load_kinetic_data)
+   parameter_prior     (see biochemical_parameter_prior)
+   model_quantities  list of quantities needed for the model
+   basic_quantities  list of basic quantities to be used
+   include_metabolic (consider metabolic quantities? only used if arguments
+                      'model_quantities' and 'basic_quantities' are not provided)
+ 
+ For types of quantities to be used, see 'parameter_prior' structure 
+ produced by biochemical_parameter_prior
+
+ Outputs: 
+   task   vectors and matrices needed for parameter balancing
+          (q and x values are given in &quot;natural&quot; scaling (i.e., logarithms wherever suitable)
+   prior  has the same data format as kinetic_data (for export to table files)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-advanced/mnt_kinetic_data/data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)">data_integration_load_kinetic_data</a>	kinetic_data = kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)</li><li><a href="parameter_balancing_construct_Q_matrix.html" class="code" title="function Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, parameter_prior, network)">parameter_balancing_construct_Q_matrix</a>	Q = parameter_balancing_construct_Q_matrix(quantities, basic_quantities, parameter_prior, network)</li><li><a href="parameter_balancing_prior.html" class="code" title="function [parameter_prior, parameter_prior_filename] = parameter_balancing_prior(omit_quantities, parameter_prior_filename, verbose)">parameter_balancing_prior</a>	parameter_prior = parameter_balancing_prior(omit_quantities,parameter_prior_filename)</li><li><a href="parameter_balancing_quantities.html" class="code" title="function [model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_quantities(parameter_prior,network,options)">parameter_balancing_quantities</a>	[model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_relevant_quantities(parameter_prior,network,options)</li><li><a href="parameter_balancing_quantity_numbers.html" class="code" title="function num = parameter_balancing_quantity_numbers(quantities,parameter_prior,network)">parameter_balancing_quantity_numbers</a>	count how many quantities of a certain type appear in a model</li><li><a href="../../../mnt-basic/mnt_network/network_query/network_numbers.html" class="code" title="function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)">network_numbers</a>	[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)</li><li><a href="../../../mnt-basic/utils/cell_string2num.html" class="code" title="function N = cell_string2num(C)">cell_string2num</a>	N = cell_string2num(C)</li><li><a href="../../../mnt-basic/utils/column.html" class="code" title="function x = column(x)">column</a>	transform a vector (row or column) into a column vector</li><li><a href="../../../mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt-basic/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../../mnt-basic/utils/lognormal_log2normal.html" class="code" title="function [mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)">lognormal_log2normal</a>	[mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="parameter_balancing_Keq.html" class="code" title="function [Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename, options)">parameter_balancing_Keq</a>	[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_kinetic.html" class="code" title="function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);">parameter_balancing_kinetic</a>	[r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_kinetic_metabolic.html" class="code" title="function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic_metabolic(network, kinetic_data, pb_options, v);">parameter_balancing_kinetic_metabolic</a>	[r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, file_kinetic_data, pb_options, v);</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_sbtab.html" class="code" title="function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)">parameter_balancing_sbtab</a>	[network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)</li><li><a href="../../../mnt-advanced/mnt_parameter_balancing/parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, kinetic_data, r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples,network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)">parameter_balancing_thermodynamic</a>	[c, mu0, Keq, A, kinetic_data, r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples,network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

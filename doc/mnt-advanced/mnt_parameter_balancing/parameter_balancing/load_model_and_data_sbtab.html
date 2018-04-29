@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of load_model_and_data_sbtab</title>
+  <meta name="keywords" content="load_model_and_data_sbtab">
+  <meta name="description" content="LOAD_MODEL_AND_DATA_SBTAB - Load model and data from SBtab file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt-advanced</a> &gt; <a href="../index.html">mnt_parameter_balancing</a> &gt; <a href="index.html">parameter_balancing</a> &gt; load_model_and_data_sbtab.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-advanced/mnt_parameter_balancing/parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>load_model_and_data_sbtab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>LOAD_MODEL_AND_DATA_SBTAB - Load model and data from SBtab file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [network,v,c_data,u_data, conc_min, conc_max, met_fix, conc_fix,positions, enzyme_cost_weights, warnings] = load_model_and_data_sbtab(filename_model,filename_validation_data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> LOAD_MODEL_AND_DATA_SBTAB - Load model and data from SBtab file
+
+ [network,v,c_data,u_data, conc_min, conc_max, positions, warnings] = load_model_and_data_sbtab(filename)
+
+Load SBtab file containing (model and data) information for Enzyme Cost Minimization
+
+For saving an SBtab file, see 'help save_model_and_data_sbtab'
+
+Arguments
+ filename_model         filename for SBtab intput (model and data: &quot;..._ECM_Model.tsv&quot;)
+ filename_validation_data filename for SBtab intput (separate file for validation data: &quot;..._ECM_ValidationData.tsv&quot;)
+
+
+Output
+ network                (struct describing model, see mnt toolbox)
+ v                      (nr x 1 vector of reaction rates)
+ r                      (struct describing model kinetics, see mnt toolbox)
+ c_data                 (nm x 1 vector of measured concentrations (only for information))
+ u_data                 (nr x 1 vector of measured enzyme concentrations (only for information))
+ kinetic_data           (OPTIONAL: struct with kinetic data; only to give original dmu0 values)
+ conc_min               (nm x 1 vector of minimal concentrations)
+ conc_max               (nm x 1 vector of maximal concentrations)
+ met_fix                (OPTIONAL: list of metabolites with fixed concentrations)
+ conc_fix               (OPTIONAL: fixed concentrations corresponding to met_fix)
+ enzyme_cost_weights    ( nr x 1 vector of enzyme cost weights; default [])
+ save_single_tables     (flag for saving SBtab tables in single files; default 0)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-basic/mnt_network/network_import_export/sbtab_to_network.html" class="code" title="function [network, kinetic_data] = sbtab_to_network(filename,options)">sbtab_to_network</a>	function network = sbtab_to_network(filename,options)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-advanced/mnt_parameter_balancing/demo/demo_pb_ecoli_noor_2016.html" class="code" title="">demo_pb_ecoli_noor_2016</a>	---------------------------------------------------------------------------------------------</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

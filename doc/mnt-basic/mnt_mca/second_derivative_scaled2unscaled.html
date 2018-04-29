@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of second_derivative_scaled2unscaled</title>
+  <meta name="keywords" content="second_derivative_scaled2unscaled">
+  <meta name="description" content="D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_mca</a> &gt; second_derivative_scaled2unscaled.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/mnt_mca&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>second_derivative_scaled2unscaled
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> D2_un = second_derivative_scaled2unscaled(D2_sc,D_sc,f,x)
+
+ let  D_sc be the matrix of scaled derivatives dln f_r / dln x_i
+ and D2_sc be the tensor of scaled second derivatives d^2 ln f_r / dln x_i dln x_j
+ compute D2_un, the tensor of unscaled second derivatives d^2 f_r / dx_i dx_j</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt-basic/utils/tensor_scale.html" class="code" title="function U = tensor_scale(T,k,x);">tensor_scale</a>	U = tensor_scale(T,k,x);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../mnt-basic/mnt_kinetics/modular_rate_laws/cs_rate_law/compute_cs_elasticities.html" class="code" title="function E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)">compute_cs_elasticities</a>	E = compute_cs_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</li><li><a href="../../mnt-basic/mnt_kinetics/modular_rate_laws/ds_rate_law/compute_ds_elasticities.html" class="code" title="function E = compute_ms_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)">compute_ds_elasticities</a>	E = compute_ms_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</li><li><a href="../../mnt-basic/mnt_kinetics/modular_rate_laws/ms_rate_law/compute_ms_elasticities.html" class="code" title="function E = compute_ms_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)">compute_ms_elasticities</a>	E = compute_ms_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</li><li><a href="../../mnt-basic/mnt_kinetics/modular_rate_laws/rp_rate_law/compute_rp_elasticities.html" class="code" title="function E = compute_rp_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)">compute_rp_elasticities</a>	E = compute_ms_elasticities(N, W, ext_ind, alpha_A, alpha_I, alpha_M, vplus, vminus, u, c)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

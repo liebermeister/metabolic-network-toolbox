@@ -38,8 +38,7 @@ else,
     case {'cs','ms','ds','rp','fd'},
       ind_ext = find(network.external);
       p = kinetics;
-      v = modular_velocities(kinetics.type,network.N, network.regulation_matrix,...
-                             ind_ext,p.u,s,p.KA,p.KI,p.KM,p.KV,p.Keq,p.h);
+      v = modular_velocities(kinetics.type,network.N, network.regulation_matrix,ind_ext,p.u,s,p.KA,p.KI,p.KM,p.KV,p.Keq,p.h);
     
     case 'convenience',
       scale_G = convert_G_scale;

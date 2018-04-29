@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sample_feasible_mu</title>
+  <meta name="keywords" content="sample_feasible_mu">
+  <meta name="description" content="[mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt-basic</a> &gt; <a href="../index.html">mnt_fluxes</a> &gt; <a href="index.html">flux_sampling</a> &gt; sample_feasible_mu.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt-basic/mnt_fluxes/flux_sampling&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>sample_feasible_mu
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)
+
+ Compute (this is no actual sampling!) a number of mu vectors that agree with a given flux vector v
+
+ Compute delta_mu vectors at the boundaries of the feasible region
+ set by the (previously sampled or determined) flux directions 
+ compute the corresponding mu vectors using the pseudoinverse of N'
+ method: 'extreme_points': compute all extreme dmu vectors, covert back to mu vectors
+ method: 'sample':         sample n_sample dmu vectors, covert back to mu vectors
+ method: 'centre':         central dmu vector, covert back to mu vector</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt-basic/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li><li><a href="../../../mnt-basic/utils/convex_sampling.html" class="code" title="function [x, x_lower, x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu,verbose,method,options)">convex_sampling</a>	[x, x_lower. x_upper, success_flag, x_lower_list, x_upper_list] = convex_sampling(A_ineq,b_ineq,A_eq,b_eq,n_sample,xl,xu);</li><li><a href="../../../mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt-basic/utils/find_polytope_centre.html" class="code" title="function [x_centre, x1, x2] = find_polytope_centre(M_eq,b_eq,M_ineq,b_ineq,x_lower,x_upper, x_try)">find_polytope_centre</a>	[x_centre, x1, x2] = find_polytope_centre(M_eq, b_eq, M_ineq, b_ineq, x_lower, x_upper, x_try)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sun 29-Apr-2018 14:09:51 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
