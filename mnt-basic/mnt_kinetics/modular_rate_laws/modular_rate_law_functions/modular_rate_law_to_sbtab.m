@@ -16,8 +16,8 @@ function quantity_table = modular_rate_law_to_sbtab(network,filename,options)
 %   options.kinetics_mean = [];
 %   options.kinetics_mode = [];
 %   options.kinetics_std = [];
-%   options.kinetics_geom_std = [];
 %   options.kinetics_geom_mean = [];
+%   options.kinetics_geom_std = [];
 %   options.modular_rate_law_parameter_id = 0;
 %   options.document_name = '';
 %
@@ -51,7 +51,7 @@ kinetics_mode = options.kinetics_mode;
 kinetics_mean = options.kinetics_mean;
 kinetics_std  = options.kinetics_std;
 kinetics_geom_mean  = options.kinetics_geom_mean;
-kinetics_geom_std  = options.kinetics_geom_std;
+kinetics_geom_std   = options.kinetics_geom_std;
 
 if ~isfield(network.kinetics,'Kcatf'),
   options.write_individual_kcat = 0;

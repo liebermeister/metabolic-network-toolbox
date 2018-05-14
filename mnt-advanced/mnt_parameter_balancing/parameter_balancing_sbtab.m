@@ -58,10 +58,10 @@ kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, networ
 
 task = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
 
-pm(task.q.prior.mean,task.q.names)
-pm(task.q.prior.std.^2,task.q.names)
-pm(task.xdata.mean, task.xdata.names)
-pm(task.xdata.std.^2, task.xdata.names)
+%pm(task.q.prior.mean,task.q.names)
+%pm(task.q.prior.std.^2,task.q.names)
+%pm(task.xdata.mean, task.xdata.names)
+%pm(task.xdata.std.^2, task.xdata.names)
 
 res                         = parameter_balancing_calculation(task, parameter_prior,pb_options);
 [r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples] = parameter_balancing_output(res,kinetic_data_orig,pb_options);

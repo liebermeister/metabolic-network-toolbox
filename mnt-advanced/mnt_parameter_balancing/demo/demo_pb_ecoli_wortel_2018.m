@@ -14,7 +14,6 @@ display(sprintf('Balancing the parameters for model "%s"', model_name))
 % Build model struct 'network' with balanced kinetic parameters (in field 'kinetics')
 
 pb_options                      = parameter_balancing_default_options;
-pb_options.parameter_prior_file = prior_file;
 pb_options.Keq_upper            = 10^10;
 pb_options.kcat_prior_median    = 100; % 1/s;  default=10
 pb_options.kcat_prior_log10_std = 1.5; % 1/s;  default = 0.2; vorher mal 0.0002

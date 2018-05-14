@@ -213,6 +213,7 @@ for it = 1:length(task.model_quantities),
       dum_mean   = dum; dum_mean(indices)   = my_x_mean;   my_x_mean   = dum_mean;
       dum_std    = dum; dum_std(indices)    = my_x_std;    my_x_std    = dum_std;
       dum_median = dum; dum_median(indices) = my_x_median; my_x_median = dum_median;
+      dum_geom_std = dum; dum_geom_std(indices) = my_x_geom_std; my_x_geom_std = dum_geom_std;
       dum_samples = zeros(nr,nm,options.n_samples);
       for itt=1:options.n_samples,
 	my_dum_samples = sparse(zeros(nr,nm));
