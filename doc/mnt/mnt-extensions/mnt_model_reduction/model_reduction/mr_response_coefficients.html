@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mr_response_coefficients</title>
+  <meta name="keywords" content="mr_response_coefficients">
+  <meta name="description" content="[RS, RJ, RX, RS_without, RJ_without] = mr_response_coefficients(r, s0)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">mnt-extensions</a> &gt; <a href="../index.html">mnt_model_reduction</a> &gt; <a href="index.html">model_reduction</a> &gt; mr_response_coefficients.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-extensions/mnt_model_reduction/model_reduction&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>mr_response_coefficients
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>[RS, RJ, RX, RS_without, RJ_without] = mr_response_coefficients(r, s0)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [RS, RJ, RX, RS_without, RJ_without] = mr_response_coefficients(r, s0) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [RS, RJ, RX, RS_without, RJ_without] = mr_response_coefficients(r, s0)
+
+ Metabolic response coefficients for a partially reduced metabolic model
+
+ RS, RS_without: concentration response coefficients (w/o environment)
+ RJ, RJ_without: flux response coefficients (w/o environment)
+ RX:             response coefficients for reduced variables
+
+ r : metabolic model split into subsystem and environment (see selective_reduction.m)
+ s0: steady state concentrations of the entire model</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt-basic/mnt_mca/elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

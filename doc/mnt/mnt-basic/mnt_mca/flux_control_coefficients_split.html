@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of flux_control_coefficients_split</title>
+  <meta name="keywords" content="flux_control_coefficients_split">
+  <meta name="description" content="[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_mca</a> &gt; flux_control_coefficients_split.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-basic/mnt_mca&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>flux_control_coefficients_split
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = control_coefficients(N,epsilon,external,used,NR_int,L_int,J) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)
+
+Metabolic control coefficients (unnormalised, first order)
+
+For convenience, the function also outputs the reduced stoichiometric matrix and the link matrix
+
+INPUTS
+  N          stoichiometric matrix
+  epsilon    matrix of reaction elasticities
+  ext        binary (column) vector indicating which metabolites are external
+
+OPTIONAL INPUTS
+ L           link matrix  of internal metabolites (see 'reduce_N')
+ NR          reduced stoichiometric matrix of internal metabolites
+ 'used' can be set [].
+
+OUTPUTS
+ C_J, C_S    matrices of flux and concentration control coefficients (first order)
+ L           link matrix  of internal metabolites (see 'reduce_N')
+ NR          reduced stoichiometric matrix of internal metabolites</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="reduce_N.html" class="code" title="function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)">reduce_N</a>	[L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)</li><li><a href="../../../mnt/mnt-basic/utils/chop.html" class="code" title="function res = chop(matrix)">chop</a>	res = chop(matrix)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

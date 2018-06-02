@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of parameter_balancing_options</title>
+  <meta name="keywords" content="parameter_balancing_options">
+  <meta name="description" content="PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-extensions</a> &gt; <a href="index.html">mnt_parameter_balancing</a> &gt; parameter_balancing_options.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-extensions/mnt_parameter_balancing&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>parameter_balancing_options
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function options = parameter_balancing_options() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values
+
+ options = parameter_balancing_options()
+
+ General options
+
+   options.parameter_prior_file         = [];                        default prior file (see parameter_balancing_prior.m)
+   options.kinetics                     = 'cs';                      kinetics for SBML output model (default common modular rate law)
+   options.parametrisation              = 'catalytic rate constant'; type of model parameterisation
+   options.reaction_units               = 'concentration per time';  physical unit. alternative: 'amount per time'
+   options.GFE_fixed                    = 0                          fixed GFE values          
+   options.insert_pseudo_values         = 0;                         replace missing data values by pseudo values
+   options.use_bounds_from_prior_table  = 1;                         flag: use bounds
+   options.include_metabolic            = 1;                         flag: consider concentrations in parameter balancing
+   options.enzymes_explicit             = 1;                         flag: disregard maximal velocities in parameter balancing
+   options.enforce_flux_directions      = 0;                         flag: set constraints to realise predefined flux directions
+   options.adjust_to_fluxes             = 0;                         flag: apply postprocessing to yield predefined fluxes (see parameter_balancing_output)
+   options.v                            = [];                        flux vector used by options &quot;enforce_flux_directions&quot; and &quot;adjust_to_fluxes&quot;
+   options.ignore_all_constraints       = 0;                         flag: run parameter balancing without constraints
+   options.n_samples                    = 0;                         0: no sampling; n&gt;1: generate n sampled parameter sets
+   options.preferred_data_element_ids   = 'id';                      data columns to be used for mapping (default: &quot;Reaction&quot; or &quot;Compound&quot;) % alternatives 'sbml', 'kegg'
+   options.use_sbml_ids                 = 0;                           (redundant with preferred_data_element_ids; field used internally)
+   options.use_kegg_ids                 = 0;                           (redundant preferred_data_element_ids; field used internally)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/demo/demo_pb_ecoli_noor_2016.html" class="code" title="">demo_pb_ecoli_noor_2016</a>	---------------------------------------------------------------------------------------------</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/demo/demo_pb_ecoli_wortel_2018.html" class="code" title="">demo_pb_ecoli_wortel_2018</a>	-----------------------------------------------------------------------------------------</li><li><a href="parameter_balancing.html" class="code" title="function balanced_parameters_SBtab = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name, options)">parameter_balancing</a>	PARAMETER_BALANCING Read model from SBML file; read data and general options from SBtab files; write results to output files</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_calculation.html" class="code" title="function [result, exitflag] = parameter_balancing_calculation(task, parameter_prior, options)">parameter_balancing_calculation</a>	[result, exitflag] = parameter_balancing(task, parameter_prior, options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_quantities.html" class="code" title="function [model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_quantities(parameter_prior,network,options)">parameter_balancing_quantities</a>	[model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_relevant_quantities(parameter_prior,network,options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_update_options.html" class="code" title="function pb_options = parameter_balancing_update_options(pb_options)">parameter_balancing_update_options</a>	</li><li><a href="parameter_balancing_kinetic.html" class="code" title="function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, options);">parameter_balancing_kinetic</a>	PARAMETER_BALANCING_KINETIC Determine a consistent kinetic parameter set</li><li><a href="parameter_balancing_sbtab.html" class="code" title="function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)">parameter_balancing_sbtab</a>	PARAMETER_BALANCING_SBTAB - Wrapper function for parameter balancing</li><li><a href="parameter_balancing_thermodynamic.html" class="code" title="function [c, mu0, Keq, A, kinetic_data, r, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, network] = parameter_balancing_thermodynamic(network, v, kinetic_data_file, options)">parameter_balancing_thermodynamic</a>	PARAMETER_BALANCING_THERMODYNAMIC Thermodynamic parameter balancing</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

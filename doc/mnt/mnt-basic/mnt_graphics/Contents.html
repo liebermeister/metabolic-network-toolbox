@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Contents</title>
+  <meta name="keywords" content="Contents">
+  <meta name="description" content="Graphical display and manipulation of metabolic networks">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_graphics</a> &gt; Contents.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-basic/mnt_graphics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>Contents
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Graphical display and manipulation of metabolic networks</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Graphical display and manipulation of metabolic networks
+
+ Graphics data about a network structure are stored in the field 'graphics_par'
+
+
+-------------------------------------------------------
+Functions
+
+ netgraph_make_graph       add graphics parameters to network
+ netgraph_clear            reset graphics parameters
+ netgraph_draw             display network
+ netgraph_mark_reactions   choose reactions by mouse click
+ netgraph_mark_metabolites choose metabolites by mouse click
+ netgraph_remove           remove metabolites and reactions
+
+ netgraph_regulation     display network with regulation
+ netgraph_movie          show timecourses as movie
+ netgraph_move           change network shape
+ netgraph_external       show and set external metabolites
+ netgraph_reversible     show and set reversible reactions
+
+A network structure with a m x n stoichiometric matrix contains
+a field 'graphics_par' to determine the graphics appearance.
+
+For a list of all possible fields, see 'netgraph_draw'. 
+Here is a short example list:
+ 
+          metstyle: 'box'
+       metcolstyle: 'values'
+            metcol: color ('c')
+     metprintnames: boolean
+    metprintvalues: boolean
+          metnames: {mx1 cell}
+          actstyle: 'none'
+       actcolstyle: 'values'
+            actcol: color ('r')
+     actprintnames: boolean
+    actprintvalues: boolean
+          actnames: {nx1 cell}
+        arrowstyle: 'none'
+        squaresize: float (1.)
+         arrowsize: float (0.5000)
+            lambda: float (1.)
+         metvalues: [mx1 double]
+     metvalues_std: [mx1 double]
+      metvaluesmax: float
+         actvalues: [nx1 double]
+     actvalues_std: [nx1 double]
+      actvaluesmax: float
+       arrowvalues: [nx1 double]
+                 m: [(m+n)x(m+n) double]
+                db: [(m+n)x(m+n) double]
+                 x: [2x(m+n) double]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

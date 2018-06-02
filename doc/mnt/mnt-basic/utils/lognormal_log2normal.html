@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of lognormal_log2normal</title>
+  <meta name="keywords" content="lognormal_log2normal">
+  <meta name="description" content="[mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">utils</a> &gt; lognormal_log2normal.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-basic/utils&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>lognormal_log2normal
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [mu,sigma] = lognormal_log2normal(mu_log,sigma_log,convention)
+
+ convert mean and std dev of Gaussian random variable into
+ characteristics of random variable Y = exp(X) 
+ convention 'arithmetic': mean and std dev of Y
+ convention 'geometric':  geometric mean and spread = geom.mean * (geom.std.dev - 1 ) of Y</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt-basic/mnt_kinetics/convenience/convert_G_to_kG.html" class="code" title="function [kG,kG_std] = convert_G_to_kG(G,RT,G_std)">convert_G_to_kG</a>	[kG,kG_std] = convert_G_to_kG(G,RT,G_std)</li><li><a href="../../../mnt/mnt-extensions/mnt_kinetic_data/data_integration_bounds_pseudovalues.html" class="code" title="function kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,insert_pseudo_values,network,verbose)">data_integration_bounds_pseudovalues</a>	kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,insert_pseudo_values,network);</li><li><a href="../../../mnt/mnt-extensions/mnt_kinetic_data/data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)">data_integration_load_kinetic_data</a>	kinetic_data = kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_calculation.html" class="code" title="function [result, exitflag] = parameter_balancing_calculation(task, parameter_prior, options)">parameter_balancing_calculation</a>	[result, exitflag] = parameter_balancing(task, parameter_prior, options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic)">parameter_balancing_task</a>	[task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/pb_kinetic_data_adjust.html" class="code" title="function kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options)">pb_kinetic_data_adjust</a>	If desired, insert given Keq values</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

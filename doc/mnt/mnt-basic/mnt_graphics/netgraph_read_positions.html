@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of netgraph_read_positions</title>
+  <meta name="keywords" content="netgraph_read_positions">
+  <meta name="description" content="network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_graphics</a> &gt; netgraph_read_positions.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-basic/mnt_graphics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>netgraph_read_positions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function network = netgraph_read_positions(network, layout_file, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)
+
+ Arguments:
+   'layout_file'   may either refer to a filename or to an SBtab data object
+   'fill_nans',    replace undetermined positions by random values
+   'flag_KEGG_ids' match elements (between model and layout file) by KEGG ids (default: 0)
+   'flag_fixed'    read information about fixed glyph positions from file
+ 
+ If flag_KEGG_ids is set: 
+ use field 'network.metabolite_KEGGID' (or 'network.Identifiers_kegg_compound') for matching metabolites
+ use argument list 'reaction_KEGG_IDs' or field 'network.reaction_KEGGID' for matching reactions</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="netgraph_make_graph.html" class="code" title="function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);">netgraph_make_graph</a>	network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);</li><li><a href="../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/mnt-basic/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="netgraph_cofactor_graphs.html" class="code" title="function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)">netgraph_cofactor_graphs</a>	[network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)</li><li><a href="netgraph_edit_positions.html" class="code" title="function network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,gp,reaction_KEGG_IDs,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)">netgraph_edit_positions</a>	network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)</li><li><a href="netgraph_flux_in_large_network.html" class="code" title="function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)">netgraph_flux_in_large_network</a>	[nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)</li><li><a href="../../../mnt/mnt-basic/mnt_network/network_import_export/sbtab_to_network.html" class="code" title="function [network, kinetic_data] = sbtab_to_network(filename,options)">sbtab_to_network</a>	function network = sbtab_to_network(filename,options)</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

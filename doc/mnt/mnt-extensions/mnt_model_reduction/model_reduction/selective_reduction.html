@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of selective_reduction</title>
+  <meta name="keywords" content="selective_reduction">
+  <meta name="description" content="r = selective_reduction(network, subsystem_metabolites, S, J, Ec_un, Ep_un);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../../index.html">mnt-extensions</a> &gt; <a href="../index.html">mnt_model_reduction</a> &gt; <a href="index.html">model_reduction</a> &gt; selective_reduction.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-extensions/mnt_model_reduction/model_reduction&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>selective_reduction
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>r = selective_reduction(network, subsystem_metabolites, S, J, Ec_un, Ep_un);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function r = selective_reduction(network, subsystem_metabolites, S, J, Ec_un, Ep_un) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> r = selective_reduction(network, subsystem_metabolites, S, J, Ec_un, Ep_un);
+
+ Prepare a metabolic network for model reduction: define a part of the
+ model as 'environment' and linearise it around a stationary state. 
+
+ network               network (data type: see network_structure)
+ subsystem_metabolites column list of metabolite names in the subsystem
+ S, J (optional)       column vectors of precalculated steady state concentrations and fluxes
+ Ec_un (optional)      unscaled metabolite elasticities
+ Ep_un (optional)      unscaled parameter elasticities
+
+ r                 reduced network ('network' data structure describing the subsystem)
+                   ... but with additional fields describing the reducted model ...
+ r.ind_met_sub2bor index vector for border metabolites within subsystem
+ r.N_sub_bor       N (subsystem metabolites/border reactions)
+ r.s0_bor          initial concentrations (border metabolites)
+ r.s0_ext          initial concentrations (external metabolites)
+ r.v0_bor          initial fluxes (border metabolites)
+ r.v0_ext          initial fluxes (external metabolites)
+ r.A               linear control system matrix describing environment          
+ r.B               linear control system matrix (wrt border metabolites)
+ r.Bu              linear control system matrix (wrt model parameters)    
+ r.C               linear control system matrix          
+ r.D               linear control system matrix          
+ r.Du              linear control system matrix          
+ r.more            data structure with additional information 
+
+ This function requires the metabolic network toolbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt-basic/mnt_mca/elasticities.html" class="code" title="function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);">elasticities</a>	[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);</li><li><a href="../../../../mnt/mnt-basic/mnt_network/network_build_edit/network_choose.html" class="code" title="function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)">network_choose</a>	[subnetwork,indm,indr] = network_choose(network,indm,indr,strict)</li><li><a href="../../../../mnt/mnt-basic/mnt_simulation/network_steady_state.html" class="code" title="function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)">network_steady_state</a>	[S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)</li><li><a href="../../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../../mnt/mnt-basic/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../mnt/mnt-extensions/mnt_model_reduction/model_reduction.html" class="code" title="function [r,weights,tF,s_tF,tR,s_tR,x_tR,tE,s_tE,Tr,environment_metabolites] = model_reduction(network,metabolites_subsystem,ndim,verbose,s_initial,S,J,flag_graphics,t_max,gp,network_CoHid,Ec_un)">model_reduction</a>	model_reduction - Replace parts of biochemical network models by simple linear systems</li></ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

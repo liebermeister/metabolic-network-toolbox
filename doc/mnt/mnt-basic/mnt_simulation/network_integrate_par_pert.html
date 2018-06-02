@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_integrate_par_pert</title>
+  <meta name="keywords" content="network_integrate_par_pert">
+  <meta name="description" content="[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_simulation</a> &gt; network_integrate_par_pert.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-basic/mnt_simulation&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network_integrate_par_pert
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [t, s_t, v, p, s_int_t, met_int]= network_integrate_par_pert(network, s, T, graphics_flag,par_osc,dt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">[t, s, v, p, s_int,  met_int] = network_integrate_par_pert(network, s, T, gf, par_osc, dt)
+
+Solve differential equations for metabolic network with field 'kinetics'
+
+INPUT
+network  network data structure (see 'metabolic_networks')
+s        initial concentrations (row vector)
+T        integration time (or list of integration time points)
+dt       time step in output of results
+par_osc  list of structures describing oscillatory parameters,
+         each has fields:  
+           name             parameter name
+           type             'values' (interpolation between values)
+                            'complex' (complex exponential), 'cos' (cosine), 'sin' (sine)
+           if type = 'values' 
+             t                time points
+             values           values
+           else
+             mean             mean value of oscillation
+             amplitude        amplitude of oscillation
+             omega            circular frequency
+             phase            phase angle at time t=0
+gf       graphics flag
+
+OUTPUT
+t          vector of time points
+s_int, s   (matrices) timecourses of internal/all metabolite concentrations
+met_int    list of internal metabolites
+
+ Information about compartment volumes can be given in fields
+ 'metabolite_compartments', 'compartments', and 'compartment_sizes'
+ If 'metabolite_compartments' does not exist, all metabolites are considered in a volume of 1
+
+ for visualising the results at one time point, type
+ i=1;  % (number of time point)
+ netgraph_draw(network,'metvalues',s_t(:,i),'actvalues',...
+               network_velocities(s_t(:,i),network,network.kinetics));
+
+For extracting a single oscillation period, see 'choose_period'</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../mnt/mnt-basic/mnt_kinetics/kinetics/network_velocities.html" class="code" title="function v = network_velocities(s, network, kinetics, split, indices,t)">network_velocities</a>	v = network_velocities(s,network,kinetics,split,indices,t)</li><li><a href="../../../mnt/mnt-basic/utils/label_names.html" class="code" title="function [label,indices] = label_names(names,allnames,method)">label_names</a>	function [label,indices] = label_names(names,allnames, method)</li><li><a href="../../../mnt/mnt-basic/utils/subplot_n.html" class="code" title="function [ni,nk]=subplot_n(N)">subplot_n</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

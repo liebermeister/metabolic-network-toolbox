@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of network_analytical_distribution</title>
+  <meta name="keywords" content="network_analytical_distribution">
+  <meta name="description" content="[logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-extensions</a> &gt; <a href="index.html">mnt_uncertain_parameters</a> &gt; network_analytical_distribution.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for mnt/mnt-extensions/mnt_uncertain_parameters&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>network_analytical_distribution
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>[logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ]= network_analytical_distribution(Y,R_Y_norm,R_Y_2_norm,cov_logk,R_Y_Sext_norm,R_Y_Sext_2_norm,cov_logSext) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> [logY_mean_1,  logY_std_1, logY_cov_1,  logY_mean_2,  logY_std_2, logY_cov_2, Y_mean_1, Y_std_1, Y_mean_2, Y_std_2 ] ...
+    = network_analytical_distribution(Y,R_Y_norm,R_Y_2_norm,cov_logk,R_Y_Sext_norm,R_Y_Sext_2_norm,cov_logSext)
+
+ Determine the distribution of output variables based on 1st and 2nd order scaled response coefficients
+  (work with logarithms)
+
+ Arguments R_Y_Sext_norm, R_Y_Sext_2_norm, cov_logSext 
+  for additional variation of external concentrations are optional
+
+ Workaround for negative Y values: use absolute value and multiply the mean values with its sign</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+
+<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
