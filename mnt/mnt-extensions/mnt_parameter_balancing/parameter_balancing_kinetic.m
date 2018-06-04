@@ -1,15 +1,15 @@
-function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, options);
+function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);
 
 % PARAMETER_BALANCING_KINETIC Determine a consistent kinetic parameter set
 %
-% [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, options);
+% [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);
 %
 % Wrapper function for parameter balancing, with matlab data structures (for model and data) as input arguments
 %
 % Input
 %   network         Metabolic network data structure
 %   kinetic_data    Kinetic_data used
-%   options         Parameter balancing options used (see 'parameter_balancing_options')
+%   pb_options         Parameter balancing options used (see 'parameter_balancing_options')
 %
 % Output
 %   r               Kinetic constants (posterior mode values, respecting the linear constraints)
@@ -22,23 +22,23 @@ function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_g
 % 
 % This function uses (potentially) the options
 %
-%   options.flag_given_kinetics
-%   options.reaction_column_name  (only if no kinetic data are given)
-%   options.compound_column_name  (only if no kinetic data are given)
-%   options.kcat_usage            {'use','none','forward'} (default: 'use')
-%   options.kcat_prior_median
-%   options.kcat_prior_log10_std
-%   options.kcat_lower
-%   options.kcatr_lower
-%   options.kcat_upper
-%   options.KM_lower
-%   options.Keq_upper
-%   options.parameter_prior_file
-%   options.GFE_fixed
-%   options.use_pseudo_values
-%   options.fix_Keq_in_sampling
-%   options.adjust_to_fluxes
-%   options.v
+%   pb_options.flag_given_kinetics
+%   pb_options.reaction_column_name  (only if no kinetic data are given)
+%   pb_options.compound_column_name  (only if no kinetic data are given)
+%   pb_options.kcat_usage            {'use','none','forward'} (default: 'use')
+%   pb_options.kcat_prior_median
+%   pb_options.kcat_prior_log10_std
+%   pb_options.kcat_lower
+%   pb_options.kcatr_lower
+%   pb_options.kcat_upper
+%   pb_options.KM_lower
+%   pb_options.Keq_upper
+%   pb_options.parameter_prior_file
+%   pb_options.GFE_fixed
+%   pb_options.use_pseudo_values
+%   pb_options.fix_Keq_in_sampling
+%   pb_options.adjust_to_fluxes
+%   pb_options.v
 %
 % The function assumes that the network structure contains KEGG IDs
 % The standard reaction directions in the model must follow the convention in KEGG
@@ -60,9 +60,9 @@ function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_g
 % ------------------------------------------------------------------------
 % Initialise some variables
 
-eval(default('kinetic_data', '[]', 'options', 'struct'));
+eval(default('kinetic_data', '[]', 'pb_options', 'struct'));
 
-options = parameter_balancing_update_options(join_struct(parameter_balancing_options,options));
+pb_options = parameter_balancing_update_options(join_struct(parameter_balancing_options,pb_options));
 
 [nm,nr] = size(network.N);
 
@@ -79,7 +79,7 @@ model_quantities  = {'standard chemical potential','catalytic rate constant geom
 
 data_quantities   = {'standard Gibbs energy of reaction', 'standard chemical potential','Michaelis constant','activation constant', 'inhibitory constant', 'equilibrium constant','substrate catalytic rate constant', 'product catalytic rate constant'}';
 
-if options.include_metabolic,
+if pb_options.include_metabolic,
   basic_quantities  = [ basic_quantities;  {'concentration','concentration of enzyme'}' ];
   pseudo_quantities = [ pseudo_quantities; ];
   model_quantities  = [ model_quantities;  {'Michaelis constant product', 'concentration','reaction affinity','concentration of enzyme'}' ];
@@ -89,8 +89,8 @@ end
 % ------------------------------------------------------------------------
 % Load and modify parameter priors
 
-parameter_prior = parameter_balancing_prior([],options.parameter_prior_file);
-parameter_prior = pb_parameter_prior_adjust(parameter_prior, options); 
+parameter_prior = parameter_balancing_prior([],pb_options.parameter_prior_file);
+parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options); 
 
 
 % ----------------------------------------------------------------
@@ -99,14 +99,14 @@ parameter_prior = pb_parameter_prior_adjust(parameter_prior, options);
 %   if kinetic_data is a string: Load data
 
 if isempty(kinetic_data),  
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], 1, 0, options.reaction_column_name, options.compound_column_name);
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], struct('use_sbml_ids', 1, 'use_kegg_ids', 0, 'reaction_column_name', pb_options.reaction_column_name, 'compound_column_name', pb_options.compound_column_name));
 elseif isstr(kinetic_data),
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, kinetic_data, options.use_sbml_ids, options.use_kegg_ids);
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, kinetic_data, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids));
 end
 
 kinetic_data_orig = kinetic_data;
 
-kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options);
+kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
 
 % display the adjusted data
 % data_integration_display_kinetic_data(kinetic_data,network);
@@ -117,6 +117,6 @@ kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, op
 network.kinetics  = set_kinetics(network, 'cs');
 
 task   = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
-result = parameter_balancing_calculation(task, parameter_prior, options);
+result = parameter_balancing_calculation(task, parameter_prior, pb_options);
 
-[r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples] = parameter_balancing_output(result, kinetic_data_orig, options);
+[r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples] = parameter_balancing_output(result, kinetic_data_orig, pb_options);

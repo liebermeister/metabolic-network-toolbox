@@ -13,7 +13,7 @@ function [c, mu0, Keq, A, kinetic_data, r, r_mean, r_std, r_geom_mean, r_geom_st
 % 
 % The flux distribution in 'v' must be thermodynamically feasible
 % 
-% The code assumes that the network structure contains metabolite KEGG IDs.
+% The code assumes that the network structure contains metabolite KEGG IDs and that data in the data file are annotated with KEGG IDs, too.
 % It uses SBtab data files that can contain data on standard chemical potentials,
 % equilibrium constants, concentrations, and reaction affinities
 %
@@ -47,6 +47,9 @@ options = parameter_balancing_update_options(options);
 % (function 'parameter_balancing_quantities' can be used instead)
 
 basic_quantities  = {'standard chemical potential','concentration'}';
+
+pseudo_quantities  = {'equilibrium constant','reaction affinity'}';
+
 model_quantities  = {'standard chemical potential','standard Gibbs energy of reaction','equilibrium constant', 'concentration','reaction affinity'}';
 data_quantities   = {'standard chemical potential','standard Gibbs energy of reaction','equilibrium constant', 'concentration','reaction affinity'}';
 
@@ -119,7 +122,7 @@ parameter_prior.PriorStd{parameter_prior.symbol_index.Keq}   = '0.05';
 
 if isstr(kinetic_data_file),
   my_data_quantities = {'standard chemical potential', 'equilibrium constant', 'concentration', 'reaction affinity'}';
-  kinetic_data       = data_integration_load_kinetic_data(my_data_quantities, [], network, kinetic_data_file, 0, 1);
+  kinetic_data       = data_integration_load_kinetic_data(my_data_quantities, [], network, kinetic_data_file, struct('use_sbml_ids', 0, 'use_kegg_ids', 1, 'use_python_version_defaults', options.use_python_version_defaults));
 else
   kinetic_data = struct;
   if isfield(kinetic_data_file,'mu0'), kinetic_data.mu0 = kinetic_data_file.mu0; end 
@@ -216,6 +219,11 @@ kinetic_data.A.lower(ind_minus) = 1.01 * options.A_fix(ind_minus);
 kinetic_data.A.upper(ind_minus) = 0.99 * options.A_fix(ind_minus);
 
 % ------------------------------------------------------------------------------
+% Update data (in struct "kinetic_data")
+
+kinetic_data_orig = kinetic_data;
+
+options.enforce_flux_directions = 1; 
 
 kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options);
 
@@ -233,10 +241,10 @@ result = parameter_balancing_calculation(task, parameter_prior, struct('use_pseu
 % -----------------------------------------------------
 % Output variables
 
-mu0 = result.kinetics_posterior_mode.mu0;
-Keq = result.kinetics_posterior_mode.Keq;
-c   = result.kinetics_posterior_mode.c;    
-A   = result.kinetics_posterior_mode.A;
+mu0 = result.kinetics.posterior_mode.mu0;
+Keq = result.kinetics.posterior_mode.Keq;
+c   = result.kinetics.posterior_mode.c;    
+A   = result.kinetics.posterior_mode.A;
 
 if options.c_fix_strict, 
   c(isfinite(options.c_fix)) = options.c_fix(isfinite(options.c_fix));
@@ -274,6 +282,6 @@ end
 % ---------------------------------------------------------
 
 if nargout > 5,
-  [r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples]  = parameter_balancing_output(res,kinetic_data_orig,options);
+  [r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples]  = parameter_balancing_output(result,kinetic_data_orig,options);
   network.kinetics      = r; 
 end

@@ -49,9 +49,10 @@ parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options);
 
 if length(data_file), display(sprintf('o Using data file %s', data_file)); end  
 
-kinetic_data      = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, pb_options.use_sbml_ids, pb_options.use_kegg_ids);
+kinetic_data      = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file,struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids, 'use_python_version_defaults', pb_options.use_python_version_defaults));
 kinetic_data_orig = kinetic_data;
 kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
+
 % Show kinetic data importedfile_kinetic_data, 
 % parameter_balancing_kinetic_data_show(kinetic_data);
 

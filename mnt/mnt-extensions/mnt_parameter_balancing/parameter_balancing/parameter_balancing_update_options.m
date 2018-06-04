@@ -13,9 +13,6 @@ if pb_options.enforce_flux_directions,
   pb_options.include_metabolic = 1;
 end
 
-pb_options.use_sbml_ids = 0;
-pb_options.use_kegg_ids = 0;
-
 switch pb_options.preferred_data_element_ids
   case 'sbml';
     pb_options.use_sbml_ids = 1;
@@ -28,3 +25,7 @@ switch pb_options.use_pseudo_values
   case 'True',  pb_options.use_pseudo_values = 1; 
 end
 
+if pb_options.use_python_version_defaults,
+  display('  Changing the default settings to mimic the python version of parameter balancing');
+  pb_options.complete_std_by_DataGeomStd  = 0;
+end

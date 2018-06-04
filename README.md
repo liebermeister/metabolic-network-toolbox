@@ -3,6 +3,8 @@ Metabolic Networks Toolbox for Matlab
 
 Wolfram Liebermeister (2018)
 
+The Metabolic Networks Toolbox contains functions for constructing, simulating, and analysing computational models of metabolism.
+
 Dependencies:
 
   o SBMLtoolbox    (http://sbml.org/Software/SBMLToolbox)

@@ -2,7 +2,7 @@ function M = data_integration_save_kinetic_data(kinetic_data, network, filename,
 
 % M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)
 
-eval(default('options_style','0','filename','[]'));
+eval(default('filename','[]','options_style','0'));
 
 T = data_integration_display_kinetic_data(kinetic_data,network,0);
 

@@ -17,7 +17,6 @@ model_name = 'E coli central metabolism Noor et al (2016)';
 
 pb_options = parameter_balancing_options;
 
-pb_options.v                          = v;
 pb_options.enforce_flux_directions    = 0;
 pb_options.adjust_to_fluxes           = 0;
 pb_options.preferred_data_element_ids = 'sbml';
@@ -25,7 +24,7 @@ pb_options.preferred_data_element_ids = 'sbml';
 % ----------------------------------------------------------------------------
 % Balance the model parameters
 
-[network, r, r_orig, ~, ~, parameter_prior] = parameter_balancing_sbtab(model_file, data_file, pb_options);
+[network, r, r_orig, kinetic_data, ~, parameter_prior] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 
 %----------------------------------------------------- 
 % An alternative (using an SBtab model file) would be:
@@ -44,9 +43,24 @@ network.kinetics = r;
 
 balanced_parameters_sbtab = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',0,'document_name',model_name,'write_concentrations',1,'write_enzyme_concentrations',1));
 
+% Show table contents (to save the table to disc, replace '[]' by output filename)
+% mytable(sbtab_table_save(balanced_parameters_sbtab),0,[])
+
 
 % ----------------------------------------------------------------------------
-% Show table contents (to save the table to disc, replace '[]' by output filename)
+% example usage of function "parameter_balancing_thermodynamic" (uses matlab data structures generated above)
 
-%mytable(sbtab_table_save(balanced_parameters_sbtab),0,[])
+pb_options = struct();
+
+v = ones(30,1); % simple example case: assume equal fluxes in all reactions
+
+[c, mu0, Keq, A, kinetic_data, r, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, network] = parameter_balancing_thermodynamic(network, v, data_file, pb_options);
+
+
+% ----------------------------------------------------------------------------
+% example usage of function "parameter_balancing_kinetic" (uses matlab data structures generated above)
+
+pb_options = struct();
+
+[r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);
 

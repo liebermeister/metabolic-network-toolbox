@@ -16,7 +16,19 @@ function balanced_parameters_SBtab = parameter_balancing(model_file, output_file
 % options_file:   (optional) Options table in SBtab format (path and filename)
 % model_name:     (optional) Model name 
 % options:        (optional) Matlab struct with options, overriding options given in [options_file]
+% 
+% Usage example:
 %  
+% model_file   = '[MNT-PB-PATHNAME]/models/ecoli_noor_2016.xml';
+% data_file    = '[MNT-PB-PATHNAME]/models/ecoli_noor_2016_data.tsv';
+% prior_file   = '[MNT-PB-PATHNAME]/config/pb_prior.tsv';
+% options_file = '[MNT-PB-PATHNAME]/config/pb_options.tsv';
+% output_file  = '[YOUR_OUTPUT_DIRECTORY]/ecoli_noor_2016_result';
+% model_name   = 'E. coli central metabolism, Noor et al (2016)';
+% result       = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name,struct('flag_check',1,'preferred_data_element_ids','id'));
+%
+% where [MNT-PB-PATHNAME] is the path to the MNT toolbox Parameter Balancing directory in your system
+%
 % Optional arguments can be left empty ('[]')
 
 % ----------------------------------------------------------------------
@@ -46,7 +58,7 @@ display(sprintf('Running parameter balancing\n'))
 
 pb_options = join_struct(options,struct('parameter_prior_file', prior_file,'parametrisation','all'));
 
-[network, r_mode, r_orig, ~, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options);
+[network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 
 % ----------------------------------------------------------------------
 % Checks and diagnostic graphics
@@ -69,6 +81,9 @@ if length(output_file),
   display(sprintf('\nWriting output file %s',output_file))
 end
 
+preprocessed_data_SBtab = data_integration_save_kinetic_data(kinetic_data, network, [output_file(1:end-4) '_preprocessed_data.tsv']);
+
+ 
 % ----------------------------------------------------------------------
 % convert posterior samples (kinetics data structure) to SBtab table struct and save to file
 

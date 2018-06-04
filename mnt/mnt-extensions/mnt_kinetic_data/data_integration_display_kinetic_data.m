@@ -22,7 +22,7 @@ for it = 1:length(fn),
                      xx.upper(ii)])];
   
     ind = find(strcmp(fn{it},parameter_prior.Symbol));
-    related_element      = parameter_prior.Element{ind};
+    related_element      = parameter_prior.BiologicalElement{ind};
     quantity_type        = parameter_prior.QuantityType{ind};
     quantity_type_column = [{'!QuantityType'}; repmat({quantity_type},size(T{it},1)-1,1)];
     unit                 = parameter_prior.Unit{ind};
