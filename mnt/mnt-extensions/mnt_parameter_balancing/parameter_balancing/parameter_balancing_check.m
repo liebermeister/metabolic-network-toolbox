@@ -45,7 +45,7 @@ if isfield(r,'mu0'),
     mu0_change = r.mu0-r_orig.mu0; 
     ind_change = find(isfinite(mu0_change) .* abs(mu0_change)>0);
     if length(ind_change),
-      display(sprintf('  Changes of mu0 values (additive change < %f or additive change > %f kJ/mol shown',-threshold_mu, threshold_mu));
+      display(sprintf('  Changes of mu0 values (showing additive change < %f or additive change > %f kJ/mol',-threshold_mu, threshold_mu));
       for it = 1:length(ind_change),
         display(sprintf('    %s: %f', network.metabolites{ind_change(it)}, mu0_change(ind_change(it)))); 
       end
@@ -56,7 +56,7 @@ end
 log_Keq_change = log10(r.Keq./r_orig.Keq); 
 ind_change = find(isfinite(log_Keq_change) .* abs(log_Keq_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('  Fold changes of Keq values (|fold change| > %f shown)',threshold));
+display(sprintf('  Fold changes of Keq values (showing |fold change| > %f)',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Keq_change(ind_change(it)))); 
  end
@@ -66,7 +66,7 @@ end
 log_Kcatf_change = log10(r.Kcatf./r_orig.Kcatf); 
 ind_change = find(isfinite(log_Kcatf_change) .* abs(log_Kcatf_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('    Fold changes of Kcatf values (|fold change| > %f shown)',threshold));
+display(sprintf('    Fold changes of Kcatf values (showing |fold change| > %f)',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Kcatf_change(ind_change(it)))); 
  end
@@ -89,7 +89,7 @@ end
 log_Kcatr_change = log10(r.Kcatr./r_orig.Kcatr); 
 ind_change = find(isfinite(log_Kcatr_change) .* abs(log_Kcatr_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('  Fold changes of Kcatr values (|fold change| > %f shown)',threshold));
+display(sprintf('  Fold changes of Kcatr values (showing |fold change| > %f)',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Kcatr_change(ind_change(it)))); 
  end
@@ -98,7 +98,7 @@ end
 log_KV_change = log10(r.KV./r_orig.KV); 
 ind_change = find(isfinite(log_KV_change) .* abs(log_KV_change) > log10(threshold));
 if length(ind_change),
-  display(sprintf('  Fold changes of KV values (|fold change| > %f shown)',threshold));
+  display(sprintf('  Fold changes of KV values (showing |fold change| > %f)',threshold));
   for it = 1:length(ind_change),
     display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_KV_change(ind_change(it)))); 
   end
@@ -108,7 +108,7 @@ log_KM_change = log10(full(r.KM./r_orig.KM));
 log_KM_change(~isfinite(log_KM_change)) = 0;
 indices = find(abs(log_KM_change(:))>log10(threshold));
 if length(indices), 
-display(sprintf('  Fold changes of KM values (|fold change| > %f shown)',threshold));
+display(sprintf('  Fold changes of KM values (showing |fold change| > %f)',threshold));
 [~,order] = sort(abs(log_KM_change(indices)));
 indices = indices(order(end:-1:1));
 [ind_i,ind_j] = ind2sub(size(log_KM_change), indices);
@@ -123,7 +123,7 @@ indices = find(abs(log_KA_change(:))>log10(threshold));
 [~,order] = sort(abs(log_KA_change(indices)));
 indices = indices(order(end:-1:1));
 if length(indices), 
-display(sprintf('  Fold changes of KA values (|fold change| > %f shown)',threshold));
+display(sprintf('  Fold changes of KA values (showing |fold change| > %f)',threshold));
 [ind_i,ind_j] = ind2sub(size(log_KA_change), indices);
 for it = 1:length(indices),
  display(sprintf('    %s / %s: %f', network.actions{ind_i(it)}, network.metabolites{ind_j(it)}, 10.^log_KA_change(indices(it)))); 
@@ -136,7 +136,7 @@ indices = find(abs(log_KI_change(:))>log10(threshold));
 [~,order] = sort(abs(log_KI_change(indices)));
 indices = indices(order(end:-1:1));
 if length(indices), 
-display(sprintf('  Fold changes of KI values (|fold change| > %f shown)',threshold));
+display(sprintf('  Fold changes of KI values (showing |fold change| > %f)',threshold));
 [ind_i,ind_j] = ind2sub(size(log_KI_change), indices);
 for it = 1:length(indices),
  display(sprintf('    %s / %s: %f', network.actions{ind_i(it)}, network.metabolites{ind_j(it)}, 10.^log_KI_change(indices(it)))); 
@@ -148,7 +148,7 @@ if isfield(r_orig,'c'),
   log_c_change = log10(r.c./r_orig.c);
   ind_change = find(isfinite(log_c_change) .* abs(log_c_change)>log10(threshold));
   if length(ind_change),
-    display(sprintf('  Fold changes of c values (|fold change| > %f shown)',threshold));
+    display(sprintf('  Fold changes of c values (showing |fold change| > %f)',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.metabolites{ind_change(it)}, 10.^log_c_change(ind_change(it)))); 
  end
@@ -162,7 +162,7 @@ if isfield(r_orig,'u'),
   log_u_change = log10(r.u ./r_orig.u); 
   ind_change = find(isfinite(log_u_change) .* abs(log_u_change)>log10(threshold));
   if length(ind_change),
-    display(sprintf('  Fold changes of u values (|fold change| > %f shown)',threshold));
+    display(sprintf('  Fold changes of u values (showing |fold change| > %f)',threshold));
     for it = 1:length(ind_change),
       display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_u_change(ind_change(it)))); 
     end
@@ -369,5 +369,5 @@ hold on;
 end
 
 else 
-  display(sprintf('Model contains less than two reactions; no graphics shown'));
+  display(sprintf('The model contains less than two reactions; no graphics shown'));
 end

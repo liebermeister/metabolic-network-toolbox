@@ -1,8 +1,8 @@
-function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);
+function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h)
 
 % [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);
 
-eval(default('h','ones(size(KV))'));
+if ~exist('h','var'), h = ones(size(KV)); end
 
 log_KV              = log(KV);
 log_Keq             = log(Keq);

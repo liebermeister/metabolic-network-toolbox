@@ -25,7 +25,7 @@ c = [...
     ]/256;
 
 nn  = size(c,1);
-col = interp1(1:nn,c,1:[nn-1]/(n-1):nn,'cubic');
+col = interp1(1:nn,c,1:[nn-1]/(n-1):nn,'pchip');
 
 col = flipud(col);
 

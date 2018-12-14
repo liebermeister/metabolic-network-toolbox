@@ -1,6 +1,6 @@
-function [v, v_std] = load_flux_data(network, flux_data_filename, reaction_field, reaction_column)
+function [v, v_std] = load_flux_data(network, flux_data_filename, reaction_field, reaction_column, value_column, std_column)
 
-% [v, v_std] = load_flux_data(network, flux_data_filename)
+% [v, v_std] = load_flux_data(network, flux_data_filename, reaction_field, reaction_column, value_column, std_column)
 %
 % Load flux data (values and standard deviations for a single flux distribution) and map them to a model.
 %
@@ -10,19 +10,19 @@ function [v, v_std] = load_flux_data(network, flux_data_filename, reaction_field
 % o The values must be in a column Flux, Flux:Value, or Value
 % o The standard deviations must be in a column StdDev, Flux:StdDev, or they are computed from the column Flux:Quantile95
 
-eval(default('reaction_field','''actions''', 'reaction_column','''Reaction'''));
+eval(default('reaction_field','''actions''', 'reaction_column','''Reaction''','column_mean','[]',,'column_std','[]',));
   
 v_data = sbtab_table_load(flux_data_filename);
 
 reaction_names = sbtab_table_get_column(v_data,reaction_column);
 
-if length(sbtab_table_get_column(v_data,'Flux',1,0)),
-  v_values = sbtab_table_get_column(v_data,'Flux',1);
-elseif length(sbtab_table_get_column(v_data,'Flux:Value',1,0)),
-  v_values = sbtab_table_get_column(v_data,'Flux:Value',1);
-else
-  v_values = sbtab_table_get_column(v_data,'Value',1);
+if isempty(column_mean),
+  if sbtab_table_has_column(v_data,'Flux'), column_mean = 'Flux';
+  elseif sbtab_table_has_column(v_data,'Flux:Value'), column_mean = 'Flux:Value';
+  else column_mean = 'Value'; end
 end
+
+v_values = sbtab_table_get_column(v_data,column_mean,1);
 
 v           = nan * ones(size(network.(reaction_field)));
 ll          = label_names(network.(reaction_field),reaction_names);

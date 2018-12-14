@@ -56,7 +56,9 @@ s_ext     = s_init(external);
 volumes = ones(length(internal),1);
 if isfield(network,'metabolite_compartments'),
   ll = label_names(network.metabolite_compartments(internal), network.compartments);
-  volumes = network.compartment_sizes(ll);
+  if isfinite(network.compartment_sizes(ll)),
+    volumes = network.compartment_sizes(ll);
+  end
   if verbose_flag, 
     display('Dynamic simulation: Using given compartment volumes = 1'); end
 else,
@@ -164,7 +166,6 @@ if length(Tmax),
   stop(my_timer);
 end
  
-
 % --------------------------------------------------------------------
 
 function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,verbose_flag)

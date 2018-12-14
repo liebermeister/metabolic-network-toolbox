@@ -55,21 +55,21 @@ ADP	ADP	C00008	True	ADP
 Isocitrate	Isocitrate	C00311	False	Isocitrate		
 D_Ribulose_5_phosphate	D-Ribulose 5-phosphate	C00199	False	D-Ribulose 5-phosphate		
 D_Xylulose_5_phosphate	D-Xylulose 5-phosphate	C00231	False	D-Xylulose 5-phosphate		
-D_Glucose_6_phosphate	D-Glucose 6-phosphate	C00092	True	D-Glucose 6-phosphate		
+D_Glucose_6_phosphate	D-Glucose 6-phosphate	C00092	False	D-Glucose 6-phosphate		
 _3_Phospho_D_glyceroyl_phosphate	3-Phospho-D-glyceroyl phosphate	C00236	False	3-Phospho-D-glyceroyl phosphate		
 CoA	CoA	C00010	False	CoA		
 CO2	CO2	C00011	True	CO2		
 D_Ribose_5_phosphate	D-Ribose 5-phosphate	C00117	False	D-Ribose 5-phosphate		
 Glycerone_phosphate	Glycerone phosphate	C00111	False	Glycerone phosphate		
 D_Glucose	D-Glucose	C00031	True	D-Glucose		
-D_Fructose_1_6_bisphosphate	D-Fructose 1,6-bisphosphate	C00354	True	D-Fructose 1,6-bisphosphate		
-D_Glyceraldehyde_3_phosphate	D-Glyceraldehyde 3-phosphate	C00118	True	D-Glyceraldehyde 3-phosphate		
-Phosphoenolpyruvate	Phosphoenolpyruvate	C00074	True	Phosphoenolpyruvate		
+D_Fructose_1_6_bisphosphate	D-Fructose 1,6-bisphosphate	C00354	False	D-Fructose 1,6-bisphosphate		
+D_Glyceraldehyde_3_phosphate	D-Glyceraldehyde 3-phosphate	C00118	False	D-Glyceraldehyde 3-phosphate		
+Phosphoenolpyruvate	Phosphoenolpyruvate	C00074	False	Phosphoenolpyruvate		
 Citrate	Citrate	C00158	False	Citrate		
 Succinyl_CoA	Succinyl-CoA	C00091	False	Succinyl-CoA		
 _3_Phospho_D_glycerate	3-Phospho-D-glycerate	C00197	False	3-Phospho-D-glycerate		
 D_Glucono_1_5_lactone_6_phosphate	D-Glucono-1,5-lactone 6-phosphate	C01236	False	D-Glucono-1,5-lactone 6-phosphate		
-D_Fructose_6_phosphate	D-Fructose 6-phosphate	C00085	True	D-Fructose 6-phosphate		
+D_Fructose_6_phosphate	D-Fructose 6-phosphate	C00085	False	D-Fructose 6-phosphate		
 _2_Phospho_D_glycerate	2-Phospho-D-glycerate	C00631	False	2-Phospho-D-glycerate		
 Succinate	Succinate	C00042	False	Succinate		
 Sedoheptulose_7_phosphate	Sedoheptulose 7-phosphate	C05382	False	Sedoheptulose 7-phosphate		

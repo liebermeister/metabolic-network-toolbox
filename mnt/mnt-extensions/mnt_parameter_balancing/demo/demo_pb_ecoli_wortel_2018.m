@@ -25,6 +25,8 @@ pb_options.parameter_prior_file       = pb_prior_file;
 pb_options.GFE_fixed                  = 0;
 pb_options.use_pseudo_values          = 1;
 pb_options.preferred_data_element_ids = 'sbml';
+% set this option to use the same settings as n the python version:
+% pb_options.use_python_version_defaults = 1; 
 
 [network, r, r_orig, ~, ~, parameter_prior] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 

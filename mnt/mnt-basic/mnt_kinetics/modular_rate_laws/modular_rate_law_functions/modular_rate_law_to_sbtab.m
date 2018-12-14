@@ -6,16 +6,17 @@ function quantity_table = modular_rate_law_to_sbtab(network,filename,options)
 %
 %   options.use_sbml_ids = 1;
 %   options.write_std = 1;
-%   options.write_all_quantities        = 'no';
+%   options.write_all_quantities        = 'no'; // also {'many', 'all', 'only_kinetic'}
 %   options.write_individual_kcat       = 1;
 %   options.write_concentrations        = 1;
 %   options.write_enzyme_concentrations = 1;
-%   options.write_standard_chemical_potential = 0;
+%   options.write_standard_chemical_potential = 1;
 %   options.write_chemical_potential    = 0;
 %   options.write_reaction_affinity     = 0;
 %   options.kinetics_mode      = [];
 %   options.more_column_names = {};
 %   options.more_column_data      = {};
+%   options.value_column_name ='Mode';
 %   options.modular_rate_law_parameter_id = 0;
 %   options.document_name = '';
 %
@@ -23,13 +24,29 @@ function quantity_table = modular_rate_law_to_sbtab(network,filename,options)
 
 eval(default('options','struct','filename','[]'));
 
-options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_std',1, 'write_concentrations',1,'write_enzyme_concentrations',1,'write_all_quantities', 'no', 'write_standard_chemical_potential', 0, 'write_chemical_potential', 0, 'write_std_GFE_of_reaction', 0, 'write_reaction_affinity', 0, 'modular_rate_law_parameter_id',0,'document_name','','kinetics_mode', []);
+options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_std',1, 'write_concentrations',1,'write_enzyme_concentrations',1,'write_all_quantities', 'no', 'write_standard_chemical_potential', 1, 'write_chemical_potential', 0, 'write_std_GFE_of_reaction', 0, 'write_reaction_affinity', 0, 'modular_rate_law_parameter_id',0,'document_name','','kinetics_mode', [], 'flag_minimal_output', 0);
 options_default.more_column_names = {}; 
 options_default.more_column_data  = {};
+options_default.value_column_name = 'Mode';
+
+if options.flag_minimal_output,
+  options.value_column_name     = 'Value';
+  options.more_column_names     = {};
+  options.more_column_data      = {};
+end
+
 
 options = join_struct(options_default,options);
 
 switch options.write_all_quantities,
+  case 'only_kinetic',
+   options.write_individual_kcat       = 1;
+   options.write_concentrations        = 0;
+   options.write_enzyme_concentrations = 0;
+   options.write_standard_chemical_potential = 0;
+   options.write_chemical_potential    = 0;
+   options.write_reaction_affinity     = 0;
+   options.write_std_GFE_of_reaction   = 0;
   case 'all',
    options.write_individual_kcat       = 1;
    options.write_concentrations        = 1;
@@ -327,10 +344,9 @@ if isfield(network,'metabolite_mass'),
   end
 end
 
+sbtab_attributes = struct('Document',options.document_name, 'TableName','Parameter', 'TableType','Quantity');
 
-sbtab_attributes = struct('SBtabVersion',num2str(sbtab_version),'TableType','Quantity','TableName','Parameter','Document',options.document_name);
-
-quantity_table = sbtab_table_construct(sbtab_attributes, {'QuantityType','Reaction','Compound','Mode','Unit'}, ...
+quantity_table = sbtab_table_construct(sbtab_attributes, {'QuantityType','Reaction','Compound',options.value_column_name,'Unit'}, ...
                                        {column_quantity,column_reaction,column_compound,column_mode,column_unit});
 
 for itt = 1:length(more_column_names),

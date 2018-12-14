@@ -29,11 +29,16 @@ options = join_struct(parameter_balancing_options,options);
 q_prior.cov_inv = diag(sparse(1./task.q.prior.std.^2));
 
 if find(task.xdata.std==0),
-  warning('Zero standard deviations found. Replacing them by 10^-10.'); 
-  task.xdata.std(task.xdata.std==0) = 10^-5;
+  warning('Zero standard deviations found. Replacing them by 10^-3.'); 
+  task.xdata.std(task.xdata.std==0) = 10^-3;
 end
 
-xdata.cov_inv   = diag(sparse(1./task.xdata.std.^2));
+if find(task.xdata.std<10^-3),
+  warning('Zero standard deviations found. Replacing them by 10^-3.'); 
+  task.xdata.std(task.xdata.std<10^-3) = 10^-3;
+end
+
+xdata.cov_inv = diag(sparse(1./task.xdata.std.^2));
 
 xall_pseudo.cov_inv = diag(sparse(1./task.xpseudo.std.^2));
 
@@ -58,6 +63,18 @@ end
 
 % Make Hessian exactly symmetric
 q_posterior_cov_inv  = 0.5 * [q_posterior_cov_inv + q_posterior_cov_inv'];
+
+% Check for ill-conditioned inverse posterior covariance matrix
+eigenvalues = sort(eig(full(q_posterior_cov_inv))); 
+if find(eigenvalues<0), 
+  error('Inverse posterior covariance matrix has negative eigenvalues - please check for unrealistically small error bars in your data file');
+end
+if abs(max(eigenvalues)/min(eigenvalues)) > 10^15,
+  display('  WARNING (parameter_balancing_calculation.m): Inverse posterior covariance matrix appears ill-conditioned - please check for unrealistically small error bars in your data file');
+  max_eigenvalue = max(eigenvalues)
+  min_eigenvalue = min(eigenvalues)
+  figure(1000); plot(eigenvalues); xlabel('ordering'); ylabel('eigenvalue of inverse posterior covariance matrix'); set(gca,'YScale','Log');
+end
 
 q_posterior.mean     = q_posterior_cov_inv \ TT;
 
@@ -120,20 +137,16 @@ xmodel_posterior.std     = sqrt(diag(full(xmodel_posterior.cov)));
 
 if options.n_samples >0,
   display(sprintf('o Generating %d samples from the posterior distribution', options.n_samples ));
-  q_posterior.samples = repmat(q_posterior.mode,1,options.n_samples) ...
-      + real(sqrtm(full(q_posterior.cov))) * randn(length(q_posterior.mean),options.n_samples);
+  q_posterior.samples = repmat(q_posterior.mode,1,options.n_samples) + real(sqrtm(full(q_posterior.cov))) * randn(length(q_posterior.mean),options.n_samples);
   
   if flag_bounds,
     %% Project samples to feasible points (satisfying constraints) (using function at the bottom of this file)    
     for its = 1:options.n_samples,
       q_posterior.samples(:,its) = project_to_constrained_solution(Qconstraints, q_posterior.samples(:,its), q_posterior_cov_inv, xconstraints, epsilon);
     end
-  
     xmodel_posterior.samples = task.Q_xmodel_q * q_posterior.samples;
+  end
 
-end
-
-  
 else
   xmodel_posterior.samples = xmodel_posterior.mode;
 end
@@ -157,6 +170,9 @@ result.xmodel_posterior.mean    = xmodel_posterior.mean;
 result.xmodel_posterior.cov     = xmodel_posterior.cov ;
 result.xmodel_posterior.std     = xmodel_posterior.std ;
 result.xmodel_posterior.samples = xmodel_posterior.samples;
+
+result.constraints_on_q_Aineq  = Qconstraints; 
+result.constraints_on_q_bineq  = xconstraints; 
 
 if length(task.xdata.mean),
   result.xdata_posterior.mode = xdata_posterior.mode ;

@@ -9,7 +9,7 @@ T = data_integration_display_kinetic_data(kinetic_data,network,0);
 M = T{1}(1,:);
 
 for it = 1:length(T),
-  if length(T{it}),
+  if size(T{it},1)>1,
     M = [M; T{it}(2:end,:)];
   end
 end

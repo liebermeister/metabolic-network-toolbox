@@ -13,13 +13,13 @@ for it = 1:length(fn),
   xx  = kinetic_data.(fn{it});
   ii  = find(isfinite(xx.median) + isfinite(xx.mean) + isfinite(xx.std) + isfinite(xx.lower) + isfinite(xx.upper));
   nii = length(ii);
-  
+    
   T{it} = [{'!Median','!Mean','!Std','!Lower','!Upper'}; ...
-           num2cell([xx.median(ii), ...
-                     xx.mean(ii), ...
-                     xx.std(ii), ...
-                     xx.lower(ii), ...
-                     xx.upper(ii)])];
+           num2cell([column(xx.median(ii)), ...
+                     column(xx.mean(ii)), ...
+                     column(xx.std(ii)), ...
+                     column(xx.lower(ii)), ...
+                     column(xx.upper(ii))])];
   
     ind = find(strcmp(fn{it},parameter_prior.Symbol));
     related_element      = parameter_prior.BiologicalElement{ind};
@@ -36,9 +36,9 @@ for it = 1:length(fn),
     switch related_element,
       
       case 'Species',        
-        species_column       = [ {'!Compound'};  network.metabolites(ii)];
+        species_column       = [ {'!Compound'};  column(network.metabolites(ii))];
         if isfield(network, 'metabolite_KEGGID'),
-          species_kegg_column = [{'!Compound:Identifiers:kegg.compound'}; network.metabolite_KEGGID(ii)];
+          species_kegg_column = [{'!Compound:Identifiers:kegg.compound'}; column(network.metabolite_KEGGID(ii))];
         end
         reaction_column      = [{'!Reaction'}; repmat({''},nii,1)];
         if isfield(network, 'MiriamID_urn_miriam_kegg_reaction'),
@@ -52,18 +52,18 @@ for it = 1:length(fn),
           species_kegg_column = [{'!Compound:Identifiers:kegg.compound'}; repmat({''},nii,1)];
         end
         if isfield(network, 'MiriamID_urn_miriam_kegg_reaction'),
-          reaction_kegg_column = [{'!Reaction:Identifiers:kegg.reaction'}; network.MiriamID_urn_miriam_kegg_reaction];
+          reaction_kegg_column = [{'!Reaction:Identifiers:kegg.reaction'}; column(network.MiriamID_urn_miriam_kegg_reaction)];
         end
     
       case 'Reaction/Species',
         [ij,ik] = ind2sub(size(network.N'),ii);
-        species_column       = [ {'!Compound'};  network.metabolites(ik)];
+        species_column       = [ {'!Compound'};  column(network.metabolites(ik))];
         if isfield(network, 'metabolite_KEGGID'),
-          species_kegg_column = [{'!Compound:Identifiers:kegg.compound'}; network.metabolite_KEGGID(ik)];
+          species_kegg_column = [{'!Compound:Identifiers:kegg.compound'}; column(network.metabolite_KEGGID(ik))];
         end
-        reaction_column = [{'!Reaction'}; network.actions(ij)];
+        reaction_column = [{'!Reaction'}; column(network.actions(ij))];
         if isfield(network, 'MiriamID_urn_miriam_kegg_reaction'),
-          reaction_kegg_column = [{'!Reaction:Identifiers:kegg.reaction'}; network.MiriamID_urn_miriam_kegg_reaction(ij)];
+          reaction_kegg_column = [{'!Reaction:Identifiers:kegg.reaction'}; column(network.MiriamID_urn_miriam_kegg_reaction(ij))];
         end
         
       case 'None',

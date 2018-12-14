@@ -36,7 +36,7 @@ function balanced_parameters_SBtab = parameter_balancing(model_file, output_file
   
 eval(default('data_file', '[]', 'prior_file', '[]', 'options_file', '[]', 'model_name', '[]', 'options','struct'));
 
-options_default   = join_struct(parameter_balancing_options, struct('flag_check', 0));
+options_default   = join_struct(parameter_balancing_options, struct('flag_check', 0,'flag_minimal_output',0));
 options_from_file = sbtab_table_convert_to_simple_struct(sbtab_table_load(options_file),'Option','Value'); 
 options           = join_struct(join_struct(options_default,options_from_file),options);
 
@@ -58,7 +58,8 @@ display(sprintf('Running parameter balancing\n'))
 
 pb_options = join_struct(options,struct('parameter_prior_file', prior_file,'parametrisation','all'));
 
-[network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options);
+[network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing_sbtab(model_file, data_file, pb_options);
+
 
 % ----------------------------------------------------------------------
 % Checks and diagnostic graphics
@@ -69,12 +70,14 @@ end
 
 
 % ----------------------------------------------------------------------
-% convert results (kinetics data structure) to SBtab table struct and save to file
+% Convert results (kinetics data structure) to SBtab table struct and save to file
 
-opt                       = struct('write_all_quantities','many','use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
-opt.more_column_names     = {'UnconstrainedGeometricMean', 'UnconstrainedGeometricStd', 'UnconstrainedMean', 'UnconstrainedStd'};
-opt.more_column_data      = {r_geom_mean,r_geom_std,r_mean,r_std};
-balanced_parameters_SBtab = modular_rate_law_to_sbtab(network,[],opt);
+opt_output                     = struct('write_all_quantities',pb_options.write_all_quantities,'use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
+opt_output.more_column_names   = {'UnconstrainedGeometricMean', 'UnconstrainedGeometricStd', 'UnconstrainedMean', 'UnconstrainedStd'};
+opt_output.more_column_data    = {r_geom_mean,r_geom_std,r_mean,r_std};
+opt_output.flag_minimal_output = options.flag_minimal_output;
+
+balanced_parameters_SBtab = modular_rate_law_to_sbtab(network,[],opt_output);
 
 if length(output_file),
   sbtab_table_save(balanced_parameters_SBtab,struct('filename',output_file));
@@ -85,17 +88,39 @@ preprocessed_data_SBtab = data_integration_save_kinetic_data(kinetic_data, netwo
 
  
 % ----------------------------------------------------------------------
-% convert posterior samples (kinetics data structure) to SBtab table struct and save to file
+% Convert posterior samples (kinetics data structure) to SBtab table struct and save to file
 
 if pb_options.n_samples > 0,
-  opt                       = struct('write_all_quantities','many','use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
-  for itt = 1:pb_options.n_samples, opt.more_column_names{itt} = ['Sample', num2str(itt)]; end
-  opt.more_column_data      = r_samples;
-  sampled_parameter_sets_SBtab = modular_rate_law_to_sbtab(network,[],opt);
+  for itt = 1:pb_options.n_samples, 
+    opt_output.more_column_names{itt} = ['Sample', num2str(itt)]; 
+  end
+  opt_output.more_column_data  = r_samples;
+  sampled_parameter_sets_SBtab = modular_rate_law_to_sbtab(network,[],opt_output);
   
   if length(output_file),
-    output_file_samples = [output_file(1:end-4) '_samples' '.tsv'];
+    output_file_samples = [output_file(1:end-4) '_samples.tsv'];
     sbtab_table_save(sampled_parameter_sets_SBtab,struct('filename', output_file_samples));
     display(sprintf('\nWriting sampled parameter sets to output file %s', output_file_samples))
   end
+end
+
+
+% ----------------------------------------------------------------------
+% Save result matrices (describing constraints and posterior) to file
+
+if options.export_posterior_matrices, 
+  output_dir_matrices = [output_file(1:end-4) '_posterior_matrices'];
+  
+  ind_variable_names   = task.q.names;
+  all_variable_names   = task.xmodel.names;
+  constraint_names     = numbered_names('constraint',length(result.constraints_on_q_bineq),0);
+  matrices.MeanVector                        = pm(result.q_posterior.mean,ind_variable_names,{'Value'},1);
+  matrices.CovarianceMatrix                  = pm(result.q_posterior.cov,ind_variable_names,ind_variable_names,1);
+  matrices.InequalityConstraintMatrix        = pm(result.constraints_on_q_Aineq,constraint_names,ind_variable_names,1);
+  matrices.InequalityConstraintRighthandSide = pm(result.constraints_on_q_bineq,constraint_names,{'Value'},1);
+  matrices.ExtensionMatrix                   = pm(task.Q_xmodel_q,all_variable_names,ind_variable_names,1);
+
+  delimiter = ',';
+  save_matlab_structure_to_tsv(matrices, output_dir_matrices,delimiter);
+
 end

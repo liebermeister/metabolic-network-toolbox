@@ -39,6 +39,7 @@ function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_g
 %   pb_options.fix_Keq_in_sampling
 %   pb_options.adjust_to_fluxes
 %   pb_options.v
+%   pb_options.use_python_version_defaults
 %
 % The function assumes that the network structure contains KEGG IDs
 % The standard reaction directions in the model must follow the convention in KEGG
@@ -66,31 +67,20 @@ pb_options = parameter_balancing_update_options(join_struct(parameter_balancing_
 
 [nm,nr] = size(network.N);
 
-
-% ----------------------------------------------------------------
-% Lists of quantities to be considered 
-% (function 'parameter_balancing_quantities' can be used instead)
-
-basic_quantities  = {'standard chemical potential','catalytic rate constant geometric mean', 'Michaelis constant','activation constant', 'inhibitory constant'}';
-
-pseudo_quantities  = {'equilibrium constant','reaction affinity'}';
-
-model_quantities  = {'standard chemical potential','catalytic rate constant geometric mean', 'Michaelis constant','activation constant', 'inhibitory constant', 'equilibrium constant','substrate catalytic rate constant', 'product catalytic rate constant', 'Michaelis constant product'}';
-
-data_quantities   = {'standard Gibbs energy of reaction', 'standard chemical potential','Michaelis constant','activation constant', 'inhibitory constant', 'equilibrium constant','substrate catalytic rate constant', 'product catalytic rate constant'}';
-
-if pb_options.include_metabolic,
-  basic_quantities  = [ basic_quantities;  {'concentration','concentration of enzyme'}' ];
-  pseudo_quantities = [ pseudo_quantities; ];
-  model_quantities  = [ model_quantities;  {'Michaelis constant product', 'concentration','reaction affinity','concentration of enzyme'}' ];
-  data_quantities   = [ data_quantities;   {'concentration','reaction affinity','concentration of enzyme'}' ];
+if isfield(network,'metabolite_is_an_enzyme'),
+  if sum(network.metabolite_is_an_enzyme),
+    warning('At least one of the model species appears to be an enzyme. Parameter balancing currently cannot handle this case. Please remove all enzyme species from your model and run parameter balancing again.')
+  end
 end
+
 
 % ------------------------------------------------------------------------
 % Load and modify parameter priors
 
-parameter_prior = parameter_balancing_prior([],pb_options.parameter_prior_file);
+parameter_prior = parameter_balancing_prior([],pb_options.parameter_prior_file,1);
 parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options); 
+
+[model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_quantities(parameter_prior, network, pb_options);
 
 
 % ----------------------------------------------------------------
@@ -98,18 +88,18 @@ parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options);
 %   if kinetic_data is empty   : Create empty_data structure
 %   if kinetic_data is a string: Load data
 
-if isempty(kinetic_data),  
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], struct('use_sbml_ids', 1, 'use_kegg_ids', 0, 'reaction_column_name', pb_options.reaction_column_name, 'compound_column_name', pb_options.compound_column_name));
-elseif isstr(kinetic_data),
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, kinetic_data, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids));
+if isstr(kinetic_data),
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, kinetic_data, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids,'use_python_version_defaults',pb_options.use_python_version_defaults));
+elseif isempty(kinetic_data),  
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], struct('use_sbml_ids', 1, 'use_kegg_ids', 0, 'reaction_column_name', pb_options.reaction_column_name, 'compound_column_name', pb_options.compound_column_name,'use_python_version_defaults',pb_options.use_python_version_defaults));
 end
 
 kinetic_data_orig = kinetic_data;
+kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
 
-kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
-
-% display the adjusted data
+% Display the adjusted data
 % data_integration_display_kinetic_data(kinetic_data,network);
+
 
 % ----------------------------------------------------------------
 % Run parameter balancing
@@ -117,6 +107,7 @@ kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb
 network.kinetics  = set_kinetics(network, 'cs');
 
 task   = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
+
 result = parameter_balancing_calculation(task, parameter_prior, pb_options);
 
 [r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples] = parameter_balancing_output(result, kinetic_data_orig, pb_options);

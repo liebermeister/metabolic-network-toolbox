@@ -1,4 +1,4 @@
-function kinetic_data_sub = data_integration_subselect_kinetic_data(kinetic_data,ind_m,ind_r,parameter_prior)
+function kinetic_data_sub = data_integration_subselect_kinetic_data(kinetic_data, ind_m, ind_r, parameter_prior)
 
 % kinetic_data_sub = data_integration_subselect_kinetic_data(kinetic_data,ind_m,ind_r,parameter_prior)
 
@@ -10,9 +10,9 @@ for it = 1:length(fn),
 
   ind             = find(strcmp(fn{it},parameter_prior.Symbol));
   if ind, 
-  related_element      = parameter_prior.RelatedElement{ind};
+    related_element      = parameter_prior.RelatedElement{ind};
   else
-  related_element      = 'None';
+    related_element      = 'None';
   end
   
   switch related_element,

@@ -171,6 +171,6 @@ if norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) >
   display('Warning (project_fluxes.m); projection changes fluxes considerably'); 
   %%  display('Original fluxes / Projected fluxes');
   %%  [v_mean(ind_finite) v_projected(ind_finite)]
-  figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),'.'); 
-  xlabel('Given flux'); ylabel('Projected flux'); title('Flux change in project\_fluxes.m')
+  %figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),'.'); 
+  %xlabel('Given flux'); ylabel('Projected flux'); title('Flux change in project\_fluxes.m')
 end

@@ -1,31 +1,37 @@
 function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, options)
 
-% kinetic_data = kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file)
+% kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, options)
 %
-% Read model-related biochemical data from an SBtab file 
+% Read biochemical (kinetic or thermodynamic) data from SBtab file and map them to network model
 %
 % Data are read from file 'data_file' 
 %  - if no filename is provided, an empty data structure is generated)
-%  - if 'data_file' contains a list of files, they are all read
+%  - if 'data_file' contains a list of files, they are all used
 %
 % Output: 
-%   Data structure 'kinetic_data' of kinetic quantities to be used in a model
+%   Data structure 'kinetic_data' of kinetic quantities (to be used in a model)
 %   It contains a field for every quantity type listed in 'data_quantities'
-%   For displaying this data structure, use 'parameter_balancing_kinetic_data_show(kinetic_data);'
-
-% fill in values from "kinetic_data_table"
-% take logarithms where necessary
-% values are NOT averaged but OVERWRITTEN!
 %
 % Options
-% options.use_sbml_ids
-% options.use_kegg_ids
-% options.flag_invent_std
-% options.verbose
-% options.filter_column
-% options.filter_entry
-% options.reaction_column_name
-% options.compound_column_name
+%   options.use_sbml_ids
+%   options.use_kegg_ids
+%   options.flag_invent_std
+%   options.verbose
+%   options.filter_column
+%   options.filter_entry
+%   options.reaction_column_name
+%   options.compound_column_name
+%   options.use_python_version_defaults
+%
+% Other functions for kinetic data structure:
+%   Display data values:             parameter_balancing_kinetic_data_show.m
+%   Save data to file  :             data_integration_save_kinetic_data.m
+%   Insert bounds and pseudo values: data_integration_bounds_pseudovalues.m
+%   Select data for a submodel:      data_integration_subselect_kinetic_data.m
+ 
+% values are NOT averaged but OVERWRITTEN!
+% fill in values from "kinetic_data_table"
+% take logarithms where necessary
   
 if ~exist('sbtab_version','file'), error('For this function, the SBtab toolbox must be installed'); end
 
@@ -38,7 +44,8 @@ options_default = struct('use_sbml_ids',0, ...
                          'filter_column',[], ...
                          'filter_entry',[], ...
                          'reaction_column_name', [], ...
-                         'compound_column_name', []);
+                         'compound_column_name', [], ...
+                         'use_python_version_defaults', 0);
 
 options = join_struct(options_default,options);
 
@@ -61,12 +68,10 @@ if isempty(data_file),
   display('o No data file provided. Creating empty data structure');
   options.verbose   = 0;
   data_file = [];
-else
-  if isstr(data_file),
-   if options.verbose, 
-     display(sprintf('o Collecting data from file %s', data_file));
-   end
- end
+elseif isstr(data_file),
+  if options.verbose, 
+    display(sprintf('o Collecting data from file %s', data_file));
+  end
 end
 
 
@@ -82,11 +87,18 @@ if iscell(data_file),
   if isempty(options.compound_column_name), options.compound_column_name = repmat({[]},length(data_file),1); end
   if prod(size(options.use_kegg_ids))==1, options.use_kegg_ids = options.use_kegg_ids * ones(length(data_file),1); end
   
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file{1}, options.use_sbml_ids, options.use_kegg_ids(1), options.flag_invent_std, options.verbose, options.filter_column, options.filter_entry,options.reaction_column_name{1},options.compound_column_name{1});
+  my_opt = options;
+  my_opt.reaction_column_name = options.reaction_column_name{1};
+  my_opt.compound_column_name = options.compound_column_name{1};
+  kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file{1}, my_opt);
   fn = fieldnames(kinetic_data);
 
   for it = 2:length(data_file),
-    my_kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file{it}, options.use_sbml_ids, options.use_kegg_ids(2), options.flag_invent_std, options.verbose, options.filter_column, options.filter_entry,options.reaction_column_name{it},options.compound_column_name{it});
+    my_opt = options;
+    my_opt.use_kegg_ids = options.use_kegg_ids(2);
+    my_opt.reaction_column_name = options.reaction_column_name{it};
+    my_opt.compound_column_name = options.compound_column_name{it};
+    my_kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file{it}, my_opt);
     for it2 = 1:length(fn)
       ii = isfinite(my_kinetic_data.(fn{it2}).median);
       kinetic_data.(fn{it2}).median(ii) = my_kinetic_data.(fn{it2}).median(ii);
@@ -123,8 +135,15 @@ end
 % at the end, such that they will be used!
 
 if length(data_file),
-  kinetic_data_sbtab = sbtab_table_load(data_file);
+  if isstr(data_file),
+    kinetic_data_sbtab = sbtab_table_load(data_file);
+  else
+    kinetic_data_sbtab = data_file; data_file='[...]';
+  end
   kinetic_data_table = sbtab_table_get_all_columns(kinetic_data_sbtab);
+  if ~isfield(kinetic_data_table,'Unit'),
+    error(sprintf('Column "Unit" missing in data file %s',data_file));
+  end
   if length(options.filter_column),
     if isfield(kinetic_data_table,options.filter_column),
       display(sprintf('File %s:\n  Preferring entries marked as %s in column %s', data_file, options.filter_entry, options.filter_column));
@@ -151,7 +170,7 @@ end
 if options.use_sbml_ids,
   if ~isfield(kinetic_data_table,'Reaction_SBML_reaction_id'),
     if ~isfield(kinetic_data_table,'Compound_SBML_species_id'),
-      display('    WARNING: No SBML IDs found in data file');
+      display(sprintf('    WARNING: No SBML IDs found in data file %s', data_file));
       options.use_sbml_ids = 0; 
     end
   end
@@ -160,7 +179,7 @@ end
 if options.use_kegg_ids,
   if ~isfield(kinetic_data_table,'Reaction_Identifiers_kegg_reaction'),
     if ~isfield(kinetic_data_table,'Compound_Identifiers_kegg_compound'),
-      display('    WARNING: No KEGG IDs found in data file');
+      display(sprintf('    WARNING: No KEGG IDs found in data file', data_file));
       options.use_kegg_ids = 0; 
     end
   end
@@ -188,10 +207,10 @@ end
 
 if ~isempty(data_file),
   if ~isfield(kinetic_data_table,options.compound_column_name),
-    error(sprintf('No column %s found in data file',options.compound_column_name));
+    warning(sprintf('No column %s found in data file %s',options.compound_column_name, data_file));
   end
   if ~isfield(kinetic_data_table,options.reaction_column_name),
-    error(sprintf('No column %s found in data file',options.reaction_column_name));
+    warning(sprintf('No column %s found in data file %s',options.reaction_column_name, data_file));
   end
 end
 
@@ -227,7 +246,7 @@ if options.use_kegg_ids,
   end
       
   if ~isfield(network,'metabolite_KEGGID'), 
-    if options.verbose, display('    WARNING: Metabolite Kegg IDs missing in network'); end
+    if options.verbose, display('    WARNING: Metabolite KEGG IDs missing in network'); end
   elseif ~isfield(kinetic_data_table,options.compound_column_name), 
     if options.verbose, display(sprintf('    WARNING: No compound KEGG IDs found')); end
   else,
@@ -235,7 +254,7 @@ if options.use_kegg_ids,
   end
 
   if ~isfield(network,'reaction_KEGGID'), 
-    if options.verbose, display('    WARNING: Reaction Kegg IDs missing in network'); end
+    if options.verbose, display('    WARNING: Reaction KEGG IDs missing in network'); end
   elseif ~isfield(kinetic_data_table,options.reaction_column_name), 
     if options.verbose, display(sprintf('    WARNING: No reaction KEGG IDs found')); end
   else
@@ -311,12 +330,12 @@ for it = 1:length(data_quantities),
 
   ind_outside_range = [find(my_mean < allowed_min); find(my_mean > allowed_max)];
   if length(ind_outside_range),
-    display(sprintf('  WARNING (data_integration_load_kinetic_data): %s data values outside allowed range. I ignore these values',symbol));
+    display(sprintf('  WARNING (data_integration_load_kinetic_data.m): %s data values outside allowed range in file %s. I ignore these values',symbol,data_file));
     my_mean(ind_outside_range) = nan;
   end
   ind_outside_range = [find(my_median<allowed_min); find(my_median>allowed_max)];
   if length(ind_outside_range),
-    display(sprintf('  WARNING (data_integration_load_kinetioc_data): %s data values outside allowed range. I ignore these values',symbol));
+    display(sprintf('  WARNING (data_integration_load_kinetic_data.m): %s data values outside allowed range in file %s. I ignore these values',symbol,data_file));
     my_median(ind_outside_range) = nan;
   end
 
@@ -413,7 +432,9 @@ for it = 1:length(data_quantities),
       cindices = repmat(1,length(rindices),1);
       if find(rindices==0),
         display(sprintf('  WARNING (data_integration_load_kinetic_data.m): Unknown species ID for %s encountered in data file',symbol));
-        unknown_species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(rindices==0))),0)
+        if options.verbose,
+          unknown_species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(rindices==0))),0)
+        end
       end
       
     case 'Reaction',
@@ -431,7 +452,9 @@ for it = 1:length(data_quantities),
         cindices = repmat(1,length(rindices),1);      
         if find(rindices==0),
           display(sprintf('  WARNING (data_integration_load_kinetic_data.m): Unknown reaction ID for %s encountered in data file',symbol));
-          unknown_reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(rindices==0))),0)
+          if options.verbose,
+            unknown_reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(rindices==0))),0)
+          end
         end
         
     case 'Reaction/Species',   
@@ -445,13 +468,17 @@ for it = 1:length(data_quantities),
       end
       if find(rindices==0),
         display(sprintf('  WARNING (data_integration_load_kinetic_data.m): Unknown reaction ID for %s encountered in data file',symbol));
-        unknown_reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(rindices==0))),0)
-        species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(rindices==0))),0)
+        if options.verbose,
+          unknown_reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(rindices==0))),0)
+          species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(rindices==0))),0)
+        end
       end
       if find(cindices==0),
         display(sprintf('  WARNING (data_integration_load_kinetic_data.m): Unknown species ID for %s encountered in data file',symbol));
-        unknown_species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(cindices==0))),0)
-        reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(cindices==0))),0)
+        if options.verbose,
+          unknown_species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(cindices==0))),0)
+          reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(cindices==0))),0)
+        end
       end
       
     case 'None',   

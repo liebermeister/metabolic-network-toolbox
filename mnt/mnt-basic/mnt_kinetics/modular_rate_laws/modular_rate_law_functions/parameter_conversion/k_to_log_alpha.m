@@ -2,7 +2,7 @@ function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);
 
 % log_alpha_X,log_beta_X: sparse matrices
 
-eval(default('hill','1'));
+if ~exist('hill','var'), hill = 1; end
 
 [nr,nm] = size(KX);
 ind_KX  = find(KX);

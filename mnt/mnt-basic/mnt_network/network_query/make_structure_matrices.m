@@ -20,8 +20,9 @@ Wplus   =     W .*(W>0);
 Wminus  = abs(W).*(W<0);
 
 N_int  = N(setdiff(1:nm,ind_ext),:);
+
 ind_M  = find(Mplus+Mminus);
 ind_Wp = find(Wplus);
 ind_Wm = find(Wminus);
-ind_Mp  = find(Mplus);
-ind_Mm  = find(Mminus);
+ind_Mp = find(Mplus);
+ind_Mm = find(Mminus);

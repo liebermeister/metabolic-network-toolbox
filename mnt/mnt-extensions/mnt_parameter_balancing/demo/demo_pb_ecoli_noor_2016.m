@@ -20,6 +20,8 @@ pb_options = parameter_balancing_options;
 pb_options.enforce_flux_directions    = 0;
 pb_options.adjust_to_fluxes           = 0;
 pb_options.preferred_data_element_ids = 'sbml';
+% set this option to use the same settings as n the python version:
+% pb_options.use_python_version_defaults = 1; 
 
 % ----------------------------------------------------------------------------
 % Balance the model parameters
@@ -27,9 +29,15 @@ pb_options.preferred_data_element_ids = 'sbml';
 [network, r, r_orig, kinetic_data, ~, parameter_prior] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 
 %----------------------------------------------------- 
-% An alternative (using an SBtab model file) would be:
-% [network, v, c_data, u_data, conc_min, conc_max, positions, warnings] = load_model_and_data_sbtab(sbtab_model_file, data_file, pb_options);
-% [r, r_orig, ~, ~, parameter_prior] = parameter_balancing_kinetic(network, data_file, pb_options);
+% Alternative (using SBtab model file):
+% sbtab_model_file = [model_file(1:end-4) '.tsv'];
+% [r, r_orig, ~, ~, parameter_prior] = parameter_balancing_sbtab(sbtab_model_file, data_file, pb_options);
+%----------------------------------------------------- 
+
+%----------------------------------------------------- 
+% Alternative (using function parameter_balancing_kinetic.m):
+% [network] = load_model_and_data_sbtab(sbtab_model_file, data_file);
+% [r, r_orig, ~, ~, parameter_prior] = parameter_balancing_kinetic(network, kinetic_data, pb_options);
 %----------------------------------------------------- 
 
 parameter_balancing_check(r, r_orig, network, parameter_prior,1,1)

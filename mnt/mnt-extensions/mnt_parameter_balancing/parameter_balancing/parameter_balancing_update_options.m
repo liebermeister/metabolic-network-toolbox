@@ -1,6 +1,6 @@
 function pb_options = parameter_balancing_update_options(pb_options)
   
-display('Updating the parameters for parameter_balancing');
+display('Updating settings for parameter_balancing');
 
 pb_options_default = parameter_balancing_options;
 pb_options         = join_struct(pb_options_default,pb_options);
