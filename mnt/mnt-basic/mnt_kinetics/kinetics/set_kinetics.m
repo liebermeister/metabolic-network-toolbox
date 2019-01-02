@@ -2,7 +2,7 @@
 %
 % construct a 'kinetics' field for a metabolic network
 %
-% type can be {'mass-action','standard','numeric'}
+% type can be {'cs','ds','ms','rp','fd','convenience','numeric','mass-action','standard','ready_made'}
 % depending on the type, this function calls one of the following m-files
 %  set_mass_action_kinetics
 %  set_numeric_kinetics
@@ -15,7 +15,7 @@
 function kinetics = set_kinetics(network,type,parameters)
 
 if ~exist('parameters','var'), parameters = []; end
-if ~exist('type','var'),       type = 'mass-action'; end 
+if ~exist('type','var'),       type = 'cs'; end 
 
 switch type,
   case 'numeric',          kinetics = set_numeric_kinetics(network,parameters);

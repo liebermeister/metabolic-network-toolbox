@@ -2,7 +2,7 @@ function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, 
 
 % PARAMETER_BALANCING_SBTAB - Wrapper function for parameter balancing 
 %
-%  [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)
+%  [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing_sbtab(model_file, data_file, pb_options)
 %
 % Wrapper function for parameter balancing, with filenames (for model and data) as input arguments
 %  o reads input data (model, priors, kinetic and metabolic data) from SBtab files
@@ -24,6 +24,7 @@ eval(default('pb_options', 'struct'));
 
 pb_options = parameter_balancing_update_options(join_struct(parameter_balancing_options, pb_options));
 
+log_text = '';
 
 % ----------------------------------------------------------
 % load model

@@ -24,19 +24,19 @@
 <div class="box"><strong>PARAMETER_BALANCING_KINETIC Determine a consistent kinetic parameter set</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, options); </strong></div>
+<div class="box"><strong>function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options); </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> PARAMETER_BALANCING_KINETIC Determine a consistent kinetic parameter set
 
- [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, options);
+ [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_geom_mean,r_geom_std] = parameter_balancing_kinetic(network, kinetic_data, pb_options);
 
  Wrapper function for parameter balancing, with matlab data structures (for model and data) as input arguments
 
  Input
    network         Metabolic network data structure
    kinetic_data    Kinetic_data used
-   options         Parameter balancing options used (see 'parameter_balancing_options')
+   pb_options         Parameter balancing options used (see 'parameter_balancing_options')
 
  Output
    r               Kinetic constants (posterior mode values, respecting the linear constraints)
@@ -49,23 +49,24 @@
  
  This function uses (potentially) the options
 
-   options.flag_given_kinetics
-   options.reaction_column_name  (only if no kinetic data are given)
-   options.compound_column_name  (only if no kinetic data are given)
-   options.kcat_usage            {'use','none','forward'} (default: 'use')
-   options.kcat_prior_median
-   options.kcat_prior_log10_std
-   options.kcat_lower
-   options.kcatr_lower
-   options.kcat_upper
-   options.KM_lower
-   options.Keq_upper
-   options.parameter_prior_file
-   options.GFE_fixed
-   options.use_pseudo_values
-   options.fix_Keq_in_sampling
-   options.adjust_to_fluxes
-   options.v
+   pb_options.flag_given_kinetics
+   pb_options.reaction_column_name  (only if no kinetic data are given)
+   pb_options.compound_column_name  (only if no kinetic data are given)
+   pb_options.kcat_usage            {'use','none','forward'} (default: 'use')
+   pb_options.kcat_prior_median
+   pb_options.kcat_prior_log10_std
+   pb_options.kcat_lower
+   pb_options.kcatr_lower
+   pb_options.kcat_upper
+   pb_options.KM_lower
+   pb_options.Keq_upper
+   pb_options.parameter_prior_file
+   pb_options.GFE_fixed
+   pb_options.use_pseudo_values
+   pb_options.fix_Keq_in_sampling
+   pb_options.adjust_to_fluxes
+   pb_options.v
+   pb_options.use_python_version_defaults
 
  The function assumes that the network structure contains KEGG IDs
  The standard reaction directions in the model must follow the convention in KEGG
@@ -87,15 +88,15 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt-basic/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/mnt-basic/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../../../mnt/mnt-extensions/mnt_kinetic_data/data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)">data_integration_load_kinetic_data</a>	kinetic_data = kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose, filter_column, filter_entry, reaction_column_name, compound_column_name)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_calculation.html" class="code" title="function [result, exitflag] = parameter_balancing_calculation(task, parameter_prior, options)">parameter_balancing_calculation</a>	[result, exitflag] = parameter_balancing(task, parameter_prior, options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_output.html" class="code" title="function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res, kinetic_data_orig, options)">parameter_balancing_output</a>	[r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res,kinetic_data_orig,options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_prior.html" class="code" title="function [parameter_prior, parameter_prior_filename] = parameter_balancing_prior(omit_quantities, parameter_prior_filename, verbose)">parameter_balancing_prior</a>	parameter_prior = parameter_balancing_prior(omit_quantities,parameter_prior_filename)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic)">parameter_balancing_task</a>	[task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_update_options.html" class="code" title="function pb_options = parameter_balancing_update_options(pb_options)">parameter_balancing_update_options</a>	</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/pb_kinetic_data_adjust.html" class="code" title="function kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options)">pb_kinetic_data_adjust</a>	If desired, insert given Keq values</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/pb_parameter_prior_adjust.html" class="code" title="function parameter_prior = pb_parameter_prior_adjust(parameter_prior, options)">pb_parameter_prior_adjust</a>	</li><li><a href="parameter_balancing_options.html" class="code" title="function options = parameter_balancing_options()">parameter_balancing_options</a>	PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values</li></ul>
+<li><a href="../../../mnt/mnt-basic/mnt_kinetics/kinetics/set_kinetics.html" class="code" title="function kinetics = set_kinetics(network,type,parameters)">set_kinetics</a>	kinetics = set_kinetics(network,type,parameters)</li><li><a href="../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/mnt-basic/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../../../mnt/mnt-extensions/mnt_kinetic_data/data_integration_load_kinetic_data.html" class="code" title="function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, options)">data_integration_load_kinetic_data</a>	kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_calculation.html" class="code" title="function [result, exitflag] = parameter_balancing_calculation(task, parameter_prior, options)">parameter_balancing_calculation</a>	[result, exitflag] = parameter_balancing(task, parameter_prior, options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_output.html" class="code" title="function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res, kinetic_data_orig, options)">parameter_balancing_output</a>	[r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res,kinetic_data_orig,options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_prior.html" class="code" title="function [parameter_prior, parameter_prior_filename] = parameter_balancing_prior(omit_quantities, parameter_prior_filename, verbose)">parameter_balancing_prior</a>	parameter_prior = parameter_balancing_prior(omit_quantities,parameter_prior_filename)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_quantities.html" class="code" title="function [model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_quantities(parameter_prior,network,options)">parameter_balancing_quantities</a>	[model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_relevant_quantities(parameter_prior,network,options)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_task.html" class="code" title="function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic)">parameter_balancing_task</a>	[task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_update_options.html" class="code" title="function pb_options = parameter_balancing_update_options(pb_options)">parameter_balancing_update_options</a>	</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/pb_kinetic_data_adjust.html" class="code" title="function kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options)">pb_kinetic_data_adjust</a>	If desired, insert given Keq values</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/pb_parameter_prior_adjust.html" class="code" title="function parameter_prior = pb_parameter_prior_adjust(parameter_prior, options)">pb_parameter_prior_adjust</a>	</li><li><a href="parameter_balancing_options.html" class="code" title="function options = parameter_balancing_options()">parameter_balancing_options</a>	PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-</ul>
+<li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/demo/demo_pb_ecoli_noor_2016.html" class="code" title="">demo_pb_ecoli_noor_2016</a>	---------------------------------------------------------------------------------------------</li></ul>
 <!-- crossreference -->
 
 
 
 
-<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 02-Jan-2019 19:42:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

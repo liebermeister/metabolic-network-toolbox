@@ -17,7 +17,7 @@ function sbtab_document = network_to_sbtab(network, options)
 % modular_rate_law_table: produce table with modular rate law kinetic constants 
 % modular_rate_law_kinetics: write kinetics strings for modular rate law kinetics
 % modular_rate_law_parameter_id: flag: include column with parameter ids?
-% save_in_one_file      : flag for saving SBtab in one file (default = 0)
+% save_in_one_file      : flag for saving SBtab in one file (default = 1)
 % c                     : concentration vector to be saved
 % document_name         : (for SBtab attribute Document)
 % graphics_positions    : flag: add table with x and y coordinates

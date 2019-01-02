@@ -64,9 +64,9 @@ end
 if options.adjust_to_fluxes,
   
   v = options.v;
-  display(sprintf('  (The balanced kcat values and enzyme levels have been adjusted to the predefined fluxes.)\n  (Assuming rate law of type "%s")',r.type));
-   display('  (Note that weighting with standard deviations has not yet been implemented)');
-   display('  (Adjusted enzyme levels may be outside the allowed range)');
+  log_text = [log_text, sprintf('\n  (The balanced kcat values and enzyme levels have been adjusted to the predefined fluxes.)\n  (Assuming rate law of type "%s")',r.type)];
+   log_text = [log_text, '\n  (Note that weighting with standard deviations has not yet been implemented)'];
+   log_text = [log_text, '\n  (Adjusted enzyme levels may be outside the allowed range)'];
    v_pred = network_velocities(r.c,network,r);
   
    ind_wrong_direction = find(v .* v_pred < 0);

@@ -43,14 +43,26 @@
  options_file:   (optional) Options table in SBtab format (path and filename)
  model_name:     (optional) Model name 
  options:        (optional) Matlab struct with options, overriding options given in [options_file]
+ 
+ Usage example:
   
+ model_file   = '[MNT-PB-PATHNAME]/models/ecoli_noor_2016.xml';
+ data_file    = '[MNT-PB-PATHNAME]/models/ecoli_noor_2016_data.tsv';
+ prior_file   = '[MNT-PB-PATHNAME]/config/pb_prior.tsv';
+ options_file = '[MNT-PB-PATHNAME]/config/pb_options.tsv';
+ output_file  = '[YOUR_OUTPUT_DIRECTORY]/ecoli_noor_2016_result';
+ model_name   = 'E. coli central metabolism, Noor et al (2016)';
+ result       = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name,struct('flag_check',1,'preferred_data_element_ids','id'));
+
+ where [MNT-PB-PATHNAME] is the path to the MNT toolbox Parameter Balancing directory in your system
+
  Optional arguments can be left empty ('[]')</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt-basic/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>	quantity_table = modular_rate_law_to_sbtab(network,filename,options)</li><li><a href="../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/mnt-basic/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_check.html" class="code" title="function parameter_balancing_check(r, r_orig, network, parameter_prior, show_graphics, show_concentrations)">parameter_balancing_check</a>	ECM_CHECK_PARAMETER_BALANCING - Checks for balanced parameters</li><li><a href="parameter_balancing_options.html" class="code" title="function options = parameter_balancing_options()">parameter_balancing_options</a>	PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values</li><li><a href="parameter_balancing_sbtab.html" class="code" title="function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std] = parameter_balancing_sbtab(model_file, data_file, pb_options)">parameter_balancing_sbtab</a>	PARAMETER_BALANCING_SBTAB - Wrapper function for parameter balancing</li></ul>
+<li><a href="../../../mnt/mnt-basic/mnt_kinetics/modular_rate_laws/modular_rate_law_functions/modular_rate_law_to_sbtab.html" class="code" title="function quantity_table = modular_rate_law_to_sbtab(network,filename,options)">modular_rate_law_to_sbtab</a>	quantity_table = modular_rate_law_to_sbtab(network,filename,options)</li><li><a href="../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li><li><a href="../../../mnt/mnt-basic/utils/join_struct.html" class="code" title="function a = join_struct(a,b)">join_struct</a>	a = join_struct(a,b)</li><li><a href="../../../mnt/mnt-basic/utils/numbered_names.html" class="code" title="function list = numbered_names(name,n_max,flag_brackets)">numbered_names</a>	list = numbered_names(name,n_max,flag_brackets)</li><li><a href="../../../mnt/mnt-basic/utils/pm.html" class="code" title="function b = pm(matrix,rownames,colnames)">pm</a>	</li><li><a href="../../../mnt/mnt-extensions/mnt_kinetic_data/data_integration_save_kinetic_data.html" class="code" title="function M = data_integration_save_kinetic_data(kinetic_data, network, filename, options_style)">data_integration_save_kinetic_data</a>	M = data_integration_save_kinetic_data(kinetic_data,network,filename,options_style)</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_check.html" class="code" title="function parameter_balancing_check(r, r_orig, network, parameter_prior, show_graphics, show_concentrations)">parameter_balancing_check</a>	ECM_CHECK_PARAMETER_BALANCING - Checks for balanced parameters</li><li><a href="parameter_balancing_options.html" class="code" title="function options = parameter_balancing_options()">parameter_balancing_options</a>	PARAMETER_BALANCING_OPTIONS Options for parameter balancing - Data structure with default values</li><li><a href="parameter_balancing_sbtab.html" class="code" title="function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing_sbtab(model_file, data_file, pb_options)">parameter_balancing_sbtab</a>	PARAMETER_BALANCING_SBTAB - Wrapper function for parameter balancing</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
 <li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/demo/demo_pb_sbtab.html" class="code" title="">demo_pb_sbtab</a>	-------------------------------------------------------------------------</li><li><a href="../../../mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/parameter_balancing_Keq.html" class="code" title="function [Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename, options)">parameter_balancing_Keq</a>	[Keq, mu0, c, my_kinetic_data] = parameter_balancing_Keq(network, filename,options)</li></ul>
@@ -59,6 +71,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 02-Jan-2019 19:42:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

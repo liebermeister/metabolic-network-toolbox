@@ -33,16 +33,17 @@
 
    options.use_sbml_ids = 1;
    options.write_std = 1;
-   options.write_all_quantities        = 'no';
+   options.write_all_quantities        = 'no'; // also {'many', 'all', 'only_kinetic'}
    options.write_individual_kcat       = 1;
    options.write_concentrations        = 1;
    options.write_enzyme_concentrations = 1;
-   options.write_standard_chemical_potential = 0;
+   options.write_standard_chemical_potential = 1;
    options.write_chemical_potential    = 0;
    options.write_reaction_affinity     = 0;
    options.kinetics_mode      = [];
    options.more_column_names = {};
    options.more_column_data      = {};
+   options.value_column_name ='Mode';
    options.modular_rate_law_parameter_id = 0;
    options.document_name = '';
 
@@ -61,6 +62,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Sat 02-Jun-2018 17:37:55 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Wed 02-Jan-2019 19:42:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

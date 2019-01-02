@@ -29,7 +29,7 @@ import_compartments = 1;   % import compartments from model
 
 if isstr(s),
   if exist('dirname','var'); cd(dirname); end 
-  s = TranslateSBML(s);
+  [s,errors] = TranslateSBML(s);
 end
 
 % -----------------------------------------------------------------------------

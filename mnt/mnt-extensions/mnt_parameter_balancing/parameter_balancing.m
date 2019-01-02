@@ -40,9 +40,10 @@ options_default   = join_struct(parameter_balancing_options, struct('flag_check'
 options_from_file = sbtab_table_convert_to_simple_struct(sbtab_table_load(options_file),'Option','Value'); 
 options           = join_struct(join_struct(options_default,options_from_file),options);
 
-
 if ~options.use_data, data_file = []; end
 
+global log_text
+log_text = '';
 
 % ----------------------------------------------------------------------
 % Banner
@@ -52,14 +53,20 @@ display(sprintf('Parameter balancing for kinetic metabolic models'));
 display(sprintf('------------------------------------------------\n'));
 display(sprintf('Running parameter balancing\n'))
 
-
 % ----------------------------------------------------------------------
 % Parameter balancing; builds model struct 'network' with balanced kinetic parameters (in field 'kinetics')
 
 pb_options = join_struct(options,struct('parameter_prior_file', prior_file,'parametrisation','all'));
 
+tic
+
 [network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 
+elapsed_time = toc;
+
+if length(log_text), 
+  display(sprintf(log_text))
+end
 
 % ----------------------------------------------------------------------
 % Checks and diagnostic graphics
@@ -124,3 +131,24 @@ if options.export_posterior_matrices,
   save_matlab_structure_to_tsv(matrices, output_dir_matrices,delimiter);
 
 end
+
+% ----------------------------------------------------------------------
+% Write log file
+
+log_file = [output_file(1:end-4) '_log.txt'];
+
+if options.write_log_file,
+  display(sprintf('Writing log file %s',log_file));
+  fid = fopen(log_file,'w');
+
+  fprintf(fid,'------------------------------------------------\n');
+  fprintf(fid,'Parameter balancing for kinetic metabolic models\n');
+  fprintf(fid,'------------------------------------------------\n');
+  fprintf(fid,log_text);
+  fprintf(fid,'\nNumber of metabolic reactions: %d\n',size(network.N,2));
+  fprintf(fid,'Number of model parameters:    %d\n',length(result.xmodel_posterior.mode));
+  fprintf(fid,'Calculation time:              %f seconds\n',elapsed_time);
+  fclose(fid);
+end
+
+log_text = '';

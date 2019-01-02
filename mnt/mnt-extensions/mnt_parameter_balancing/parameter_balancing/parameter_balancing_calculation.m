@@ -17,6 +17,7 @@ function [result, exitflag] = parameter_balancing_calculation(task, parameter_pr
 %                   options.use_bounds_from_prior_table
 %                   options.fix_Keq_in_sampling
 
+global log_text % text for the log file is added to this variable 
 
 eval(default('parameter_prior','[]','options','struct'));
 
@@ -70,7 +71,7 @@ if find(eigenvalues<0),
   error('Inverse posterior covariance matrix has negative eigenvalues - please check for unrealistically small error bars in your data file');
 end
 if abs(max(eigenvalues)/min(eigenvalues)) > 10^15,
-  display('  WARNING (parameter_balancing_calculation.m): Inverse posterior covariance matrix appears ill-conditioned - please check for unrealistically small error bars in your data file');
+  log_text = [log_text, '\n  WARNING (parameter_balancing_calculation.m): Inverse posterior covariance matrix appears ill-conditioned - please check for unrealistically small error bars in your data file'];
   max_eigenvalue = max(eigenvalues)
   min_eigenvalue = min(eigenvalues)
   figure(1000); plot(eigenvalues); xlabel('ordering'); ylabel('eigenvalue of inverse posterior covariance matrix'); set(gca,'YScale','Log');
@@ -105,7 +106,7 @@ q_posterior.mode = q_posterior.mean;
 flag_bounds = length(task.xlower.value_nat) + length(task.xupper.value_nat) > 0;
 
 if options.ignore_all_constraints,
-  display('o Ignoring all constraints (option "ignore_all_constraints" was chosen)');
+  log_text = [log_text, '\no Ignoring all constraints (option "ignore_all_constraints" was chosen)'];
   flag_bounds = 0;
   active_constraints = zeros(size(xconstraints));
 end
@@ -127,7 +128,7 @@ xmodel_posterior.cov     = task.Q_xmodel_q * q_posterior.cov * task.Q_xmodel_q';
 
 if isfield(options,'fix_Keq_in_sampling'),
 if options.fix_Keq_in_sampling,
-  display('  Keeping equilibrium constants fixed while computing the posterior covariance, standard deviations, and samples');
+  log_text = [log_text, '\n  Keeping equilibrium constants fixed while computing the posterior covariance, standard deviations, and samples'];
   my_ind = [task.q.indices.KV; task.q.indices.KM; task.q.indices.KA; task.q.indices.KI];
   xmodel_posterior.cov     = task.Q_xmodel_q(:,my_ind) * q_posterior.cov(my_ind,my_ind) * task.Q_xmodel_q(:,my_ind)';
 end
@@ -136,7 +137,7 @@ end
 xmodel_posterior.std     = sqrt(diag(full(xmodel_posterior.cov)));
 
 if options.n_samples >0,
-  display(sprintf('o Generating %d samples from the posterior distribution', options.n_samples ));
+   display(sprintf('o Generating %d samples from the posterior distribution', options.n_samples ));
   q_posterior.samples = repmat(q_posterior.mode,1,options.n_samples) + real(sqrtm(full(q_posterior.cov))) * randn(length(q_posterior.mean),options.n_samples);
   
   if flag_bounds,
@@ -285,6 +286,8 @@ end
 
 function q_posterior_mode = project_to_constrained_solution(Qconstraints, q_posterior_mean, q_posterior_cov_inv, xconstraints, epsilon)
 
+  global log_text % text for the log file is added to this variable 
+
 active_constraints = double([Qconstraints * q_posterior_mean > xconstraints] - epsilon);
 ind_active         = find(active_constraints);
 
@@ -293,9 +296,11 @@ if length(ind_active),
   ub = []; %ub =  10^15*ones(size(q_posterior_mean));
 
   if exist('cplexqp','file'),
+    log_text = [log_text, 'Using CPLEX for quadratic optimisation'];
     opt =  cplexoptimset('Display','off');
     [q_posterior_mode,fval,exitflag] = cplexqp(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,[],[],lb,ub,[],opt);
   else,
+    log_text = [log_text, 'Using Matlab quadprog for quadratic optimisation'];
      opt = optimset('Display','off','Algorithm','active-set','MaxIter',10^8);
      [q_posterior_mode,fval,exitflag] = quadprog(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,[],[],lb,ub,[],opt);
   end

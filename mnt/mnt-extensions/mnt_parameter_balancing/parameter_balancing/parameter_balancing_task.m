@@ -25,41 +25,42 @@ function [task, prior] = parameter_balancing_task(network, kinetic_data, paramet
 
 eval(default('kinetic_data','[]','parameter_prior','[]','model_quantities','[]', 'basic_quantities','[]','include_metabolic','0'));
 
+global log_text % text for the log file is added to this variable 
+
 % -------------------------------------------------------
 % Potential problems in stoichiometric matrix
 
 if prod(size(network.N))>100000,
   error('The model is too large - parameter balancing is not possible'); 
 end
-
 ind_noninteger = find(network.N ~= ceil(network.N));
 if length(ind_noninteger),
-  display(sprintf('  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.'));
+  log_text = [log_text, sprintf('\n  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.')];
   network.N(ind_noninteger) = sign(network.N(ind_noninteger));
 end
 
 ind_large = find(abs(network.N)>2);
 if length(ind_large),
-  display(sprintf('  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than 1).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.'));
+    log_text = [log_text, sprintf('\n  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than 1).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.')];
   network.N(ind_large) = sign(network.N(ind_large));
 end
 
 reactant_numbers = sum(network.N~=0, 1);
 if max(reactant_numbers)>6,
-  display('  WARNING: The following reactions contain more than 6 reactants each; this may cause troubles!')
+  display('\n  WARNING: The following reactions contain more than 6 reactants each; this may cause troubles!');
   ind_problematic = find(reactant_numbers>6);
   pm(reactant_numbers(ind_problematic)',network.actions(ind_problematic))
 end
 
 ind_no_substrates = find(sum(network.N<0) ==0);
 if length(ind_no_substrates),
-  display('  WARNING: The following reactions have no reaction substrates; this may cause troubles!')
+    display('  WARNING: The following reactions have no reaction substrates; this may cause troubles!');
   mytable(network.actions(ind_no_substrates),0)
 end
 
 ind_no_products   = find(sum(network.N>0) ==0);
 if length(ind_no_products),
-  display('  WARNING: The following reactions have no reaction products; this may cause troubles!')
+  display('  WARNING: The following reactions have no reaction products; this may cause troubles!');
   mytable(network.actions(ind_no_products),0)
 end
 
