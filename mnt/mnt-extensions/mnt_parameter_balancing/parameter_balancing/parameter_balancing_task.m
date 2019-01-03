@@ -30,8 +30,8 @@ global log_text % text for the log file is added to this variable
 % -------------------------------------------------------
 % Potential problems in stoichiometric matrix
 
-if prod(size(network.N))>100000,
-  error('The model is too large - parameter balancing is not possible'); 
+if size(network.N,2)>250,
+  error('The model contains more than 250 reactions - parameter balancing is currently prohibited for models of this size'); 
 end
 ind_noninteger = find(network.N ~= ceil(network.N));
 if length(ind_noninteger),
