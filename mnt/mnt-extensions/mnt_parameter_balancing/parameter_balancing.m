@@ -17,17 +17,7 @@ function balanced_parameters_SBtab = parameter_balancing(model_file, output_file
 % model_name:     (optional) Model name 
 % options:        (optional) Matlab struct with options, overriding options given in [options_file]
 % 
-% Usage example:
-%  
-% model_file   = '[MNT-PB-PATHNAME]/models/ecoli_noor_2016.xml';
-% data_file    = '[MNT-PB-PATHNAME]/models/ecoli_noor_2016_data.tsv';
-% prior_file   = '[MNT-PB-PATHNAME]/config/pb_prior.tsv';
-% options_file = '[MNT-PB-PATHNAME]/config/pb_options.tsv';
-% output_file  = '[YOUR_OUTPUT_DIRECTORY]/ecoli_noor_2016_result';
-% model_name   = 'E. coli central metabolism, Noor et al (2016)';
-% result       = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name,struct('flag_check',1,'preferred_data_element_ids','id'));
-%
-% where [MNT-PB-PATHNAME] is the path to the MNT toolbox Parameter Balancing directory in your system
+% For a usage example, see demo_parameter_balancing.m
 %
 % Optional arguments can be left empty ('[]')
 
@@ -37,7 +27,7 @@ function balanced_parameters_SBtab = parameter_balancing(model_file, output_file
 eval(default('data_file', '[]', 'prior_file', '[]', 'options_file', '[]', 'model_name', '[]', 'options','struct'));
 
 options_default   = join_struct(parameter_balancing_options, struct('flag_check', 0,'flag_minimal_output',0));
-options_from_file = sbtab_table_convert_to_simple_struct(sbtab_table_load(options_file),'Option','Value'); 
+options_from_file = sbtab_table_to_simple_struct(sbtab_table_load(options_file),'Option','Value'); 
 options           = join_struct(join_struct(options_default,options_from_file),options);
 
 if ~options.use_data, data_file = []; end
@@ -56,7 +46,7 @@ display(sprintf('Running parameter balancing\n'))
 % ----------------------------------------------------------------------
 % Parameter balancing; builds model struct 'network' with balanced kinetic parameters (in field 'kinetics')
 
-pb_options = join_struct(options,struct('parameter_prior_file', prior_file,'parametrisation','all'));
+pb_options = join_struct(options,struct('parameter_prior_file', prior_file, 'parametrisation','all'));
 
 tic
 
@@ -79,9 +69,11 @@ end
 % ----------------------------------------------------------------------
 % Convert results (kinetics data structure) to SBtab table struct and save to file
 
-opt_output                     = struct('write_all_quantities',pb_options.write_all_quantities,'use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
-opt_output.more_column_names   = {'UnconstrainedGeometricMean', 'UnconstrainedGeometricStd', 'UnconstrainedMean', 'UnconstrainedStd'};
-opt_output.more_column_data    = {r_geom_mean,r_geom_std,r_mean,r_std};
+opt_output                     = struct('write_all_quantities', pb_options.write_all_quantities, 'use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
+if options.flag_minimal_output,
+  opt_output.more_column_names   = {'UnconstrainedGeometricMean', 'UnconstrainedGeometricStd', 'UnconstrainedMean', 'UnconstrainedStd'};
+  opt_output.more_column_data    = {r_geom_mean,r_geom_std,r_mean,r_std};
+end
 opt_output.flag_minimal_output = options.flag_minimal_output;
 
 balanced_parameters_SBtab = modular_rate_law_to_sbtab(network,[],opt_output);
@@ -91,8 +83,9 @@ if length(output_file),
   display(sprintf('\nWriting output file %s',output_file))
 end
 
-preprocessed_data_SBtab = data_integration_save_kinetic_data(kinetic_data, network, [output_file(1:end-4) '_preprocessed_data.tsv']);
-
+if length(output_file),
+  preprocessed_data_SBtab = kinetic_data_save(kinetic_data, network, [output_file(1:end-4) '_preprocessed_data.tsv']);
+end
  
 % ----------------------------------------------------------------------
 % Convert posterior samples (kinetics data structure) to SBtab table struct and save to file
@@ -128,7 +121,7 @@ if options.export_posterior_matrices,
   matrices.ExtensionMatrix                   = pm(task.Q_xmodel_q,all_variable_names,ind_variable_names,1);
 
   delimiter = ',';
-  save_matlab_structure_to_tsv(matrices, output_dir_matrices,delimiter);
+  save_matlab_structure_to_tsv(matrices, output_dir_matrices, delimiter);
 
 end
 

@@ -1,1 +1,0 @@
-% Utility functions used by Metabolic Network Toolbox

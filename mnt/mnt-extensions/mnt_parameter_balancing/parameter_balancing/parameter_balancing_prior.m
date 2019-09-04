@@ -9,8 +9,7 @@ end
 eval(default('omit_quantities','[]','parameter_prior_filename','[]','verbose','0'));
 
 if isempty(parameter_prior_filename),
-  pb_dir     = [fileparts(which(mfilename)) filesep '../'];
-  parameter_prior_filename = [ pb_dir 'config/pb_prior.tsv'];
+  parameter_prior_filename = [ pb_DIR 'config/pb_prior.tsv'];
 end
 
 if verbose, 

@@ -340,8 +340,8 @@ if show_concentrations,
   %% blue bars:     original 
   %% beig bars: balanced
   
-    nk = nk + 1;
-    subplot(ni,nj,nk); 
+  nk = nk + 1;
+  subplot(ni,nj,nk); 
   hold on;
   edges = log10(lower_bound(i_c)):1:log10(upper_bound(i_c));
   bar(edges+0.5,[histc(log10(r.c), edges), histc(log10(r_orig.c), edges)],'grouped');
@@ -352,8 +352,8 @@ if show_concentrations,
   plot([log10(prior_median(i_c)) + prior_std(i_c) *[-1,1] ], 0.95*a(4)*[1,1],'b-','Linewidth',2);
   axis([log10(lower_bound(i_c))-1,log10(upper_bound(i_c))+1,0,a(4)]);
   
-    nk = nk + 1;
-    subplot(ni,nj,nk); 
+  nk = nk + 1;
+  subplot(ni,nj,nk); 
 hold on;
   edges = log10(lower_bound(i_u)):0.5:log10(upper_bound(i_u));
   bar(edges+0.25,[histc(log10(r.u), edges), histc(log10(r_orig.u), edges)],'grouped'); 

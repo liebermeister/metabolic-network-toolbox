@@ -10,7 +10,7 @@ end
 
 % If desired, replace missing data values by pseudo values
 
-kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,options.insert_pseudo_values,network);
+kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,options.insert_pseudo_values,network);
 
 if options.use_pseudo_values,
   display('o Using pseudo values');

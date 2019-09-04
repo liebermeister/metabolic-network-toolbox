@@ -1,12 +1,12 @@
-function [network,v,c_data,u_data, conc_min, conc_max, met_fix, conc_fix,positions, enzyme_cost_weights, warnings] = load_model_and_data_sbtab(filename_model,filename_validation_data)
+function [network, v, c_data, u_data, conc_min, conc_max, met_fix, conc_fix,positions, enzyme_cost_weights, warnings] = load_model_and_data_sbtab(filename_model, filename_validation_data)
 
 % LOAD_MODEL_AND_DATA_SBTAB - Load model and data from SBtab file
 %
-% [network,v,c_data,u_data, conc_min, conc_max, positions, warnings] = load_model_and_data_sbtab(filename)
+% [network, v, c_data, u_data, conc_min, conc_max, positions, warnings] = load_model_and_data_sbtab(filename)
 %
 %Load SBtab file containing (model and data) information for Enzyme Cost Minimization
 %
-%For saving an SBtab file, see 'help save_model_and_data_sbtab'
+%For saving an SBtab file, see 'help ecm_save_model_and_data_sbtab'
 %
 %Arguments
 % filename_model         filename for SBtab intput (model and data: "..._ECM_Model.tsv")

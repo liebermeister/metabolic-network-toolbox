@@ -7,6 +7,8 @@ The Metabolic Networks Toolbox contains functions for constructing, simulating, 
 
 Dependencies:
 
+  o Matlab utility functions    (https://github.com/liebermeister/matlab-utils)
+
   o SBMLtoolbox    (http://sbml.org/Software/SBMLToolbox)
 
   o SBtab toolbox  (https://github.com/liebermeister/sbtab-matlab)

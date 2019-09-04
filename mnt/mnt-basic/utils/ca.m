@@ -1,3 +1,0 @@
-function ca()
-
-close all;

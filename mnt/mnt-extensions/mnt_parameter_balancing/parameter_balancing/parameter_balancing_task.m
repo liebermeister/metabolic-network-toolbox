@@ -8,7 +8,7 @@ function [task, prior] = parameter_balancing_task(network, kinetic_data, paramet
 %   network
 %
 % Optional inputs
-%   kinetic_data      (see data_integration_load_kinetic_data)
+%   kinetic_data      (see kinetic_data_load)
 %   parameter_prior     (see biochemical_parameter_prior)
 %   model_quantities  list of quantities needed for the model
 %   basic_quantities  list of basic quantities to be used
@@ -47,7 +47,7 @@ end
 
 reactant_numbers = sum(network.N~=0, 1);
 if max(reactant_numbers)>6,
-  display('\n  WARNING: The following reactions contain more than 6 reactants each; this may cause troubles!');
+  display(sprintf('\n  WARNING: The following reactions contain more than 6 reactants each; this may cause troubles!'));
   ind_problematic = find(reactant_numbers>6);
   pm(reactant_numbers(ind_problematic)',network.actions(ind_problematic))
 end
@@ -67,7 +67,7 @@ end
 % -------------------------------------------------------
 
 if isempty(kinetic_data),
-  kinetic_data = data_integration_load_kinetic_data([],[], network);
+  kinetic_data = kinetic_data_load([],[], network);
 end
 
 if isempty(parameter_prior),

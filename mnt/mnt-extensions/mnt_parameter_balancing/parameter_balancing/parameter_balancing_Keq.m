@@ -42,7 +42,7 @@ options = join_struct(options_default,options);
 
 data_quantities = {'standard chemical potential','equilibrium constant', 'concentration'}';
 parameter_prior   = biochemical_parameter_prior;
-kinetic_data    = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, filename, 0, 1);
+kinetic_data    = kinetic_data_load(data_quantities, parameter_prior, network, filename, 0, 1);
 
 % for which metabolites do we have standard chemical potentials?
 % mu0 = kinetic_data.mu0.median;
@@ -98,7 +98,7 @@ parameter_prior.PriorStd{parameter_prior.symbol_index.Keq}   = '0.05';
 
 my_kinetic_data.mu0.std = options.sigma_mu0 * ones(nm,1);
 
-my_kinetic_data = data_integration_bounds_pseudovalues(my_kinetic_data,parameter_prior,options.flag_pseudo_values,network);
+my_kinetic_data = kinetic_data_complete(my_kinetic_data,parameter_prior,options.flag_pseudo_values,network);
 
 my_kinetic_data.c.lower    = 0.0001 * ones(nm,1);
 my_kinetic_data.c.upper    = 100 * ones(nm,1);

@@ -20,7 +20,7 @@ function [c, mu0, Keq, A, kinetic_data, r, r_mean, r_std, r_geom_mean, r_geom_st
 % The argument 'kinetic_data_file' can contain either
 %   o the name of a file with numerical input data, 
 %   o a list of such kinetic_data_files
-%   o a kinetic data object, previously obtained by 'data_integration_load_kinetic_data.m'
+%   o a kinetic data object, previously obtained by 'kinetic_data_load.m'
 %
 %
 % kinetic_data: data and assumptions finally used in the optimisation task
@@ -122,7 +122,7 @@ parameter_prior.PriorStd{parameter_prior.symbol_index.Keq}   = '0.05';
 
 if isstr(kinetic_data_file),
   my_data_quantities = {'standard chemical potential', 'equilibrium constant', 'concentration', 'reaction affinity'}';
-  kinetic_data       = data_integration_load_kinetic_data(my_data_quantities, [], network, kinetic_data_file, struct('use_sbml_ids', 0, 'use_kegg_ids', 1, 'use_python_version_defaults', options.use_python_version_defaults));
+  kinetic_data       = kinetic_data_load(my_data_quantities, [], network, kinetic_data_file, struct('use_sbml_ids', 0, 'use_kegg_ids', 1, 'use_python_version_defaults', options.use_python_version_defaults));
 else
   kinetic_data = struct;
   if isfield(kinetic_data_file,'mu0'), kinetic_data.mu0 = kinetic_data_file.mu0; end 
@@ -173,7 +173,7 @@ end
 % ------------------------------------------------------------------------
 % Impose lower and upper bounds on concentrations; first from prior table, then from options given
 
-kinetic_data = data_integration_bounds_pseudovalues(kinetic_data,parameter_prior,options.use_pseudo_values,network);
+kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,options.use_pseudo_values,network);
 
 if options.set_water_conc_to_one, 
   options.c_fix(options.ind_water) = 1; 
@@ -228,7 +228,7 @@ options.enforce_flux_directions = 1;
 kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options);
 
 % display the adjusted data
-% data_integration_display_kinetic_data(kinetic_data,network);
+% kinetic_data_print(kinetic_data,network);
 
 
 % -----------------------------------------------------

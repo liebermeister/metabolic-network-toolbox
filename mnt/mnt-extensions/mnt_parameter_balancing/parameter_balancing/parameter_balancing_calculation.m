@@ -30,12 +30,12 @@ options = join_struct(parameter_balancing_options,options);
 q_prior.cov_inv = diag(sparse(1./task.q.prior.std.^2));
 
 if find(task.xdata.std==0),
-  warning('Zero standard deviations found. Replacing them by 10^-3.'); 
+  warning('Vanishing standard deviations found. Replacing them by 10^-3.'); 
   task.xdata.std(task.xdata.std==0) = 10^-3;
 end
 
 if find(task.xdata.std<10^-3),
-  warning('Zero standard deviations found. Replacing them by 10^-3.'); 
+  warning('Vanishing standard deviations found. Replacing them by 10^-3.'); 
   task.xdata.std(task.xdata.std<10^-3) = 10^-3;
 end
 
@@ -52,8 +52,10 @@ TT                  = q_prior.cov_inv * task.q.prior.mean;
 
 %% Add pseudo values terms
 if options.use_pseudo_values,
-  q_posterior_cov_inv = q_posterior_cov_inv + task.Q_xpseudo_q' * xall_pseudo.cov_inv * task.Q_xpseudo_q;
-  TT                  = TT                  + task.Q_xpseudo_q' * xall_pseudo.cov_inv * task.xpseudo.mean;
+  if prod(size(xall_pseudo.cov_inv)),
+    q_posterior_cov_inv = q_posterior_cov_inv + task.Q_xpseudo_q' * xall_pseudo.cov_inv * task.Q_xpseudo_q;
+    TT                  = TT                  + task.Q_xpseudo_q' * xall_pseudo.cov_inv * task.xpseudo.mean;
+  end
 end
 
 % Add data terms

@@ -89,16 +89,16 @@ parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options);
 %   if kinetic_data is a string: Load data
 
 if isstr(kinetic_data),
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, kinetic_data, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids,'use_python_version_defaults',pb_options.use_python_version_defaults));
+  kinetic_data = kinetic_data_load(data_quantities, [], network, kinetic_data, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids,'use_python_version_defaults',pb_options.use_python_version_defaults));
 elseif isempty(kinetic_data),  
-  kinetic_data = data_integration_load_kinetic_data(data_quantities, [], network, [], struct('use_sbml_ids', 1, 'use_kegg_ids', 0, 'reaction_column_name', pb_options.reaction_column_name, 'compound_column_name', pb_options.compound_column_name,'use_python_version_defaults',pb_options.use_python_version_defaults));
+  kinetic_data = kinetic_data_load(data_quantities, [], network, [], struct('use_sbml_ids', 1, 'use_kegg_ids', 0, 'reaction_column_name', pb_options.reaction_column_name, 'compound_column_name', pb_options.compound_column_name,'use_python_version_defaults',pb_options.use_python_version_defaults));
 end
 
 kinetic_data_orig = kinetic_data;
 kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
 
 % Display the adjusted data
-% data_integration_display_kinetic_data(kinetic_data,network);
+% kinetic_data_print(kinetic_data,network);
 
 
 % ----------------------------------------------------------------
