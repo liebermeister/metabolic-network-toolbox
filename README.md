@@ -17,8 +17,11 @@ The Metabolic Networks Toolbox contains functions for constructing, simulating, 
 
 Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
 
+## Installation
+Please see the [installation instructions](INSTALLATION).
+
 ## License
-This package is released under the [GNU General Public License](COPYING).
+This package is released under the [GNU General Public License](LICENSE).
 
 ## Contact
 Please contact [Wolfram Liebermeister](wolfram.liebermeister@gmail.com) with any questions or comments.
