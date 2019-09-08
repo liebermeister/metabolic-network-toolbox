@@ -20,6 +20,8 @@ Please make sure that these matlab packages are installed in your system and tha
 ## Installation
 Please see the [installation instructions](INSTALLATION).
 
+HTML documentation is available in the subdirectory doc
+
 ## License
 This package is released under the [GNU General Public License](LICENSE).
 
