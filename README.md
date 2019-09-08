@@ -1,11 +1,9 @@
 Metabolic Networks Toolbox for Matlab
 =====================================
 
-Wolfram Liebermeister (2018)
-
 The Metabolic Networks Toolbox contains functions for constructing, simulating, and analysing computational models of metabolism.
 
-Dependencies:
+## Dependencies:
 
   o Matlab utility functions    (https://github.com/liebermeister/matlab-utils)
 
@@ -19,4 +17,8 @@ Dependencies:
 
 Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
 
-Contact: <wolfram.liebermeister@gmail.com>
+## License
+This package is released under the [GNU General Public License](COPYING).
+
+## Contact
+Please contact [Wolfram Liebermeister](wolfram.liebermeister@gmail.com) with any questions or comments.
