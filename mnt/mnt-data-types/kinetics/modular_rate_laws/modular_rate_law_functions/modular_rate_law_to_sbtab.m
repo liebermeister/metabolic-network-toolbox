@@ -344,7 +344,7 @@ if isfield(network,'metabolite_mass'),
   end
 end
 
-sbtab_attributes = struct('Document',options.document_name, 'TableID', 'Parameter', 'TableType','Quantity', 'TableName','Parameter');
+sbtab_attributes = struct('TableID', 'Parameter', 'TableType','Quantity', 'TableName','Parameter');
 
 quantity_table = sbtab_table_construct(sbtab_attributes, {'QuantityType','Reaction','Compound',options.value_column_name,'Unit'}, ...
                                        {column_quantity,column_reaction,column_compound,column_mode,column_unit});

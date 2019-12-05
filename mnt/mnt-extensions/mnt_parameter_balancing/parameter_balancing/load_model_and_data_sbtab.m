@@ -9,7 +9,7 @@ function [network, v, c_data, u_data, conc_min, conc_max, met_fix, conc_fix,posi
 %For saving an SBtab file, see 'help ecm_save_model_and_data_sbtab'
 %
 %Arguments
-% filename_model         filename for SBtab intput (model and data: "..._ECM_Model.tsv")
+% filename_model           filename for SBtab intput (model and data: "..._ECM_Model.tsv")
 % filename_validation_data filename for SBtab intput (separate file for validation data: "..._ECM_ValidationData.tsv")
 %
 %

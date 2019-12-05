@@ -1,7 +1,11 @@
 function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)
 
 % [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)
-
+% 
+% Build 'kinetics' data structure from kinetic data (in SBtab file)
+%
+% Similar functions: 'ms_import_kinetic', 'sbtab_to_modular_rate_law'
+  
 eval(default('options','struct'));
 
 options_default = struct('use_sbml_ids',1,'kinetic_law','cs','verbose','0');
@@ -17,7 +21,7 @@ data_quantities = {'equilibrium constant','catalytic rate constant geometric mea
 
 parameter_prior = biochemical_parameter_prior;
 
-kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, file_kinetic_data, options.use_sbml_ids, 1, 1, options.verbose);
+kinetic_data = kinetic_data_load_(data_quantities, parameter_prior, network, file_kinetic_data, options.use_sbml_ids, 1, 1, options.verbose);
 
 if options.use_sbml_ids,
   if isfield(network,'sbml_id_species')

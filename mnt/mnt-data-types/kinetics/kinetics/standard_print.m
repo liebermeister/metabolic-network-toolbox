@@ -1,6 +1,8 @@
 function s = standard_print(kinetics,n,actions,network)
 
 % s = standard_print(kinetics,n,actions,network)
+% 
+% Display kinetic rate laws
 
 s = [];
 nmax = length(kinetics.reactions);  n = 1:nmax;

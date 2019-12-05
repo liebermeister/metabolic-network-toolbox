@@ -1,7 +1,9 @@
 function kinetics_print(kinetics,verbose)
 
 % kinetics_print(kinetics,verbose)
-
+%
+% Display kinetic parameters
+  
 if ~exist('verbose'), verbose =0; end
 
 fprintf('Type: %s\n\n',kinetics.type);

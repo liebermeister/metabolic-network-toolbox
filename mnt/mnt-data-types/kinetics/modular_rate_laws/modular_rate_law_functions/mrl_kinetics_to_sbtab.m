@@ -1,7 +1,9 @@
 function s = mrl_kinetics_to_sbtab(network, kinetics, parameter_prior, save_quantities, file_basename)
 
 % s = mrl_kinetics_to_sbtab(network, kinetics, parameter_prior, save_quantities, file_basename)
-
+% 
+% Export kinetic parameters to SBtab format
+  
 eval(default('file_basename','[]', 'parameter_prior', 'biochemical_parameter_prior','save_quantities','[]'));
 
 if isempty(save_quantities),

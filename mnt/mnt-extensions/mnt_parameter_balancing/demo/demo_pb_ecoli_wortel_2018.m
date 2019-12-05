@@ -40,7 +40,7 @@ balanced_parameters_SBtab = modular_rate_law_to_sbtab(network,[],struct('use_sbm
 
 
 % ----------------------------------------------------------------------------
-% Show table contents (to save the table to disc, insert filename instead of '[]')
+% Show table contents (to save the table to disc, replace '[]' by filename)
 
 mytable(sbtab_table_save(balanced_parameters_SBtab),0,[])
 

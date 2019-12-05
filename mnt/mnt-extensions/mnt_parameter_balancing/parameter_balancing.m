@@ -1,9 +1,13 @@
-function balanced_parameters_SBtab = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name, options)
+function [balanced_parameters_SBtab, pb_options] = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name, options)
 
 % PARAMETER_BALANCING Read model from SBML file; read data and general options from SBtab files; write results to output files
 %
-% parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name, options)
+% balanced_parameters_SBtab = parameter_balancing(model_file, output_file, data_file, prior_file, options_file, model_name, options)
 %
+% Output:
+%  balanced_parameters_SBtab: (struct) SBtab data structure containing the balanced model parameters
+%  pb_options (struct) Options used for parameter balancing
+% 
 % Additional options can be provided as a matlab struct "options". 
 % (for a list of possible options, see "parameter_balancing_options")
 %
@@ -27,7 +31,11 @@ function balanced_parameters_SBtab = parameter_balancing(model_file, output_file
 eval(default('data_file', '[]', 'prior_file', '[]', 'options_file', '[]', 'model_name', '[]', 'options','struct'));
 
 options_default   = join_struct(parameter_balancing_options, struct('flag_check', 0,'flag_minimal_output',0));
-options_from_file = sbtab_table_to_simple_struct(sbtab_table_load(options_file),'Option','Value'); 
+if options_file,
+  options_from_file = sbtab_table_to_simple_struct(sbtab_table_load(options_file),'Option','Value'); 
+else
+  options_from_file = struct;
+end
 options           = join_struct(join_struct(options_default,options_from_file),options);
 
 if ~options.use_data, data_file = []; end
@@ -69,7 +77,7 @@ end
 % ----------------------------------------------------------------------
 % Convert results (kinetics data structure) to SBtab table struct and save to file
 
-opt_output                     = struct('write_all_quantities', pb_options.write_all_quantities, 'use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
+opt_output = struct('write_all_quantities', pb_options.write_all_quantities, 'use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
 if options.flag_minimal_output,
   opt_output.more_column_names   = {'UnconstrainedGeometricMean', 'UnconstrainedGeometricStd', 'UnconstrainedMean', 'UnconstrainedStd'};
   opt_output.more_column_data    = {r_geom_mean,r_geom_std,r_mean,r_std};
@@ -104,6 +112,15 @@ if pb_options.n_samples > 0,
   end
 end
 
+% ----------------------------------------------------------------------
+% Save options to SBtab file
+
+if length(output_file),
+  output_file_options = [output_file(1:end-4) '_options.tsv'];
+  sbtab_table_save(options_to_sbtab(pb_options,struct('filename', output_file_options,'TableName','Options for parameter balancing','TableID','OptionsPB','Method','parameter-balancing')));
+  display(sprintf('Writing options to file %s', output_file_options))
+end
+
 
 % ----------------------------------------------------------------------
 % Save result matrices (describing constraints and posterior) to file
@@ -124,6 +141,7 @@ if options.export_posterior_matrices,
   save_matlab_structure_to_tsv(matrices, output_dir_matrices, delimiter);
 
 end
+
 
 % ----------------------------------------------------------------------
 % Write log file

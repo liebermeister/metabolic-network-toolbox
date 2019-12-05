@@ -1,7 +1,9 @@
-function T = kinetic_data_print(kinetic_data,network,flag_display)
+function T = kinetic_data_print(kinetic_data, network, flag_display)
 
-% T = kinetic_data_print(kinetic_data,network,flag_display)
-
+% T = kinetic_data_print(kinetic_data, network, flag_display)
+%
+% Display data in 'kinetic_data' structure
+  
 eval(default('flag_display','1'));
 
 fn = fieldnames(kinetic_data);
@@ -9,11 +11,10 @@ fn = fieldnames(kinetic_data);
 parameter_prior = parameter_balancing_prior;
 
 for it = 1:length(fn),
-
   xx  = kinetic_data.(fn{it});
   ii  = find(isfinite(xx.median) + isfinite(xx.mean) + isfinite(xx.std) + isfinite(xx.lower) + isfinite(xx.upper));
   nii = length(ii);
-    
+
   T{it} = [{'!Median','!Mean','!Std','!Lower','!Upper'}; ...
            num2cell([column(xx.median(ii)), ...
                      column(xx.mean(ii)), ...
@@ -71,9 +72,11 @@ for it = 1:length(fn),
         reaction_kegg_column = [];
 
     end
+    
     if nii,
       T{it} = [ quantity_type_column, species_column, reaction_column, unit_column, T{it}, species_kegg_column, reaction_kegg_column];
     end
+  
     if flag_display, 
       if size(T{it},1)>1,
         display(['Field ' fn{it}])

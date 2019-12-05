@@ -129,7 +129,7 @@ switch pars.method,
       opt = cplexoptimset('Display','off');
       [v_projected,~,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     else
-      opt = optimset('Display','off','Algorithm','active-set');
+      opt = optimset('Display','off','Algorithm','interior-point-convex'); % 'active-set'
       [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     end
     if exitflag <0,

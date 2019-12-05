@@ -1,6 +1,10 @@
 function [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)
 
 % [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)
+%
+% Build 'kinetics' data structure from kinetic data (in SBtab file)
+%
+% Similar functions: 'ms_import_kinetic', 'sbtab_to_modular_rate_law_via_kinetic_data'
 
 eval(default('options','struct'));
 

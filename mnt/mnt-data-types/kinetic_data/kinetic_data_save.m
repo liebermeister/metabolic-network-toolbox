@@ -6,15 +6,24 @@ eval(default('filename','[]','options_style','0'));
 
 T = kinetic_data_print(kinetic_data,network,0);
 
-M = T{1}(1,:);
+M = [];
+
+attribute_line_written = 0;
 
 for it = 1:length(T),
   if size(T{it},1)>1,
-    M = [M; T{it}(2:end,:)];
+    if attribute_line_written == 0;
+      M = [M; T{it}(1:end,:)];
+      attribute_line_written = 1;
+    else
+      M = [M; T{it}(2:end,:)];
+    end    
   end
 end
 
-M = [[{'!!SBtab TableType="Quantity"'}, repmat({''},1,size(M,2)-1)]; M];
+% add attribute line
+
+M = [[{sprintf('!!SBtab TableType=''Quantity''')}, repmat({''},1,size(M,2)-1)]; M];
 
 if length(filename),
   display(sprintf('Saving kinetic data to file %s ',filename));

@@ -65,7 +65,7 @@ end
 [network.metabolites,network.actions] = network_adjust_names_for_sbml_export(network.metabolites,network.actions);
 network.formulae = network_print_formulae(network,network.actions,network.metabolites);
 
-reaction_table = sbtab_table_construct(struct('Document',options.document_name,'TableID','Reaction','TableType','Reaction','TableName','Reaction'),{'ID','ReactionFormula'},{network.actions,network.formulae});
+reaction_table = sbtab_table_construct(struct('TableID','Reaction','TableType','Reaction','TableName','Reaction'),{'ID','ReactionFormula'},{network.actions,network.formulae});
 
 if isfield(network, 'reaction_names'),
   reaction_table = sbtab_table_add_column(reaction_table,'Name', network.reaction_names);
@@ -134,11 +134,11 @@ if options.modular_rate_law_kinetics,
   end
 end
 
-sbtab_document = sbtab_document_construct(struct,{'Reaction'},{reaction_table});;
+sbtab_document = sbtab_document_construct(struct('Document',options.document_name),{'Reaction'},{reaction_table});;
 
 if ~options.only_reaction_table,
 
-  compound_table = sbtab_table_construct(struct('Document',options.document_name,'TableID','Compound','TableType','Compound','TableName','Compound'),{'ID'},{network.metabolites});
+  compound_table = sbtab_table_construct(struct('TableID','Compound','TableType','Compound','TableName','Compound'),{'ID'},{network.metabolites});
 
   if isfield(network, 'metabolite_names'),
     compound_table = sbtab_table_add_column(compound_table,'Name', network.metabolite_names);
@@ -175,8 +175,8 @@ if options.graphics_positions,
   if isfield(network,'graphics_par')
     %% beim einlesen: network = netgraph_read_positions(network, table_positions)
     [names, positions] = netgraph_print_positions(network);
-    position_table = sbtab_table_construct(struct('Document',options.document_name,'TableID','Layout','TableType','Layout','TableName','Layout'),{'Element','PositionX','PositionY'},{names,positions(1,:)',positions(2,:)'}); 
-    sbtab_document = sbtab_document_add_table(sbtab_document,'Layout',position_table);
+    position_table = sbtab_table_construct(struct('TableID','Position','TableType','Position','TableName','Position'),{'Element','PositionX','PositionY'},{names,positions(1,:)',positions(2,:)'}); 
+    sbtab_document = sbtab_document_add_table(sbtab_document,'Position',position_table);
   end
 end
 

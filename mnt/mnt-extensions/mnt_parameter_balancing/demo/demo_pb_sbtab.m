@@ -39,7 +39,7 @@ options.flag_check                 = 1;
 
 model_name = test_example;
 
-% EDIT: output_file = 'PATHNAME/FILENAME';
+% To save result to disc, replace '[]' by [PATHNAME]/[FILENAME]
 
 output_file = [];
 

@@ -20,7 +20,7 @@
 
 function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)
 
-eval(default('metabolites','[]','actions','[]','reversible','ones(size(N,2),1)','ind_external','[]','no_graphics','[]','flag_kinetics','0'));
+eval(default('N','[]','reversible','[]','ind_external','[]','metabolites','[]','actions','[]','reversible','ones(size(N,2),1)','ind_external','[]','no_graphics','[]','flag_kinetics','0'));
 
 if isempty('no_graphics'), no_graphics=0; end
 

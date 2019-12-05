@@ -303,7 +303,7 @@ if length(ind_active),
     [q_posterior_mode,fval,exitflag] = cplexqp(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,[],[],lb,ub,[],opt);
   else,
     log_text = [log_text, 'Using Matlab quadprog for quadratic optimisation'];
-     opt = optimset('Display','off','Algorithm','active-set','MaxIter',10^8);
+     opt = optimset('Display','off','Algorithm','interior-point-convex','MaxIter',10^8); % 'active-set'
      [q_posterior_mode,fval,exitflag] = quadprog(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,[],[],lb,ub,[],opt);
   end
 

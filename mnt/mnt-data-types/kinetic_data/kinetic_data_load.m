@@ -65,7 +65,9 @@ if isempty(data_quantities),
 end
 
 if isempty(data_file),
-  display('o No data file provided. Creating empty data structure');
+  if options.verbose,
+    display('o No data file provided. Creating empty data structure');
+  end
   options.verbose   = 0;
   data_file = [];
 elseif isstr(data_file),
@@ -301,7 +303,7 @@ for it = 1:length(data_quantities),
     %% omit data with non-standard units
     my_units = kinetic_data_table.Unit(ind);
     is_ok = double(strcmp(my_units,default_unit));
-    if sum(is_ok==0), display(sprintf('  WARNING: The data file contains "%s" values with unknown units. I ignore these values.',quantitytype)); end
+    if sum(is_ok==0), display(sprintf('  WARNING (kinetic_data_load.m): The data file contains "%s" values with unknown units. I ignore these values.',quantitytype)); end
     ind = ind(find(is_ok));
   end
   
@@ -328,7 +330,6 @@ for it = 1:length(data_quantities),
       if options.verbose, warning('  WARNING: No column with data values found'); end
     end
   end
-
   ind_outside_range = [find(my_mean < allowed_min); find(my_mean > allowed_max)];
   if length(ind_outside_range),
     display(sprintf('  WARNING (kinetic_data_load.m): %s data values outside allowed range in file %s. I ignore these values',symbol,data_file));
@@ -426,7 +427,7 @@ for it = 1:length(data_quantities),
         rindices = repmat(0,length(ind),1);
         if options.verbose, 
           if isfield(kinetic_data, symbol),
-            display(sprintf('    WARNING: Looking for %s data: Compound IDs cannot be matched',symbol));
+            display(sprintf('    WARNING (kinetic_data_load.m): Looking for %s data: Compound IDs cannot be matched',symbol));
           end
         end
       end
@@ -446,7 +447,7 @@ for it = 1:length(data_quantities),
           rindices = repmat(1,length(ind),1);
           if options.verbose,
             if isfield(kinetic_data, symbol),
-              display(sprintf('    WARNING: Looking for %s data: Reaction IDs cannot be matched',symbol));
+              display(sprintf('    WARNING (kinetic_data_load.m): Looking for %s data: Reaction IDs cannot be matched',symbol));
             end
           end
         end
@@ -617,7 +618,9 @@ end
 % if Keq values are missing, get them from dmu0 values
 
 if isfield(kinetic_data,'Keq') * isfield(kinetic_data,'dmu0'),
-  display('  (Completing missing Keq values)');
+  if options.verbose,
+    display('  (Completing missing Keq values)');
+  end
   ind_missing = find(isnan(kinetic_data.Keq.median));
   kinetic_data.Keq.median(ind_missing) = exp(-1/RT * kinetic_data.dmu0.median(ind_missing));
   [kinetic_data.Keq.mean(ind_missing),kinetic_data.Keq.std(ind_missing)] = lognormal_log2normal(-1/RT * kinetic_data.dmu0.mean(ind_missing),1/RT * kinetic_data.dmu0.std(ind_missing));

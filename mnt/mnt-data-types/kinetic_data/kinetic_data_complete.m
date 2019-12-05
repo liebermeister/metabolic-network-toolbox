@@ -1,7 +1,11 @@
 function kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,insert_pseudo_values,network,verbose)
 
-% kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,insert_pseudo_values,network);
-
+% kinetic_data = kinetic_data_complete(kinetic_data, parameter_prior, insert_pseudo_values,network);
+%
+% Complete missing entries in 'kinetic_data' data structure:
+%  - complete missing logarithmic data values based on known non-logarithmic ones (and vice versa)
+%  - if desired, replace unknown data values by pseudo values
+  
 eval(default('insert_pseudo_values','0','verbose','1','network','[]'));
 
 if insert_pseudo_values,
