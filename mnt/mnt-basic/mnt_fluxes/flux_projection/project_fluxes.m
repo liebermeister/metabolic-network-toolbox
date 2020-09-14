@@ -1,4 +1,4 @@
-function [v_projected,ind_non_orthogonal,v_projected_std] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);
+function [v_projected, ind_non_orthogonal, v_projected_std] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);
 
 % v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);
 %

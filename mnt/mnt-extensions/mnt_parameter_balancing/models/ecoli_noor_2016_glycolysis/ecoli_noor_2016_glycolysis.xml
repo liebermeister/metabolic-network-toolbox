@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version2" level="2" version="2">
+  <model name="E__coli_Noor_(2016),_glycolysis_subnetwork">
+    <listOfCompartments>
+      <compartment id="compartment" name="compartment" spatialDimensions="3" constant="false"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="Acetyl_CoA" name="Acetyl_CoA" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Orthophosphate" name="Orthophosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Pyruvate" name="Pyruvate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="NADH" name="NADH" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="NADplus" name="NADplus" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="ATP" name="ATP" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="ADP" name="ADP" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="D_Glucose_6_phosphate" name="D_Glucose_6_phosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="_3_Phospho_D_glyceroyl_phosphate" name="_3_Phospho_D_glyceroyl_phosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CoA" name="CoA" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CO2" name="CO2" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Glycerone_phosphate" name="Glycerone_phosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="D_Glucose" name="D_Glucose" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="D_Fructose_1_6_bisphosphate" name="D_Fructose_1_6_bisphosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="D_Glyceraldehyde_3_phosphate" name="D_Glyceraldehyde_3_phosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="Phosphoenolpyruvate" name="Phosphoenolpyruvate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="_3_Phospho_D_glycerate" name="_3_Phospho_D_glycerate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="D_Fructose_6_phosphate" name="D_Fructose_6_phosphate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="_2_Phospho_D_glycerate" name="_2_Phospho_D_glycerate" compartment="compartment" initialConcentration="NaN" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="PTS_RPTSsy" name="PTS_RPTSsy" reversible="true">
+        <listOfReactants>
+          <speciesReference species="D_Glucose" stoichiometry="1"/>
+          <speciesReference species="Phosphoenolpyruvate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Pyruvate" stoichiometry="1"/>
+          <speciesReference species="D_Glucose_6_phosphate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PGI_R02740" name="PGI_R02740" reversible="true">
+        <listOfReactants>
+          <speciesReference species="D_Glucose_6_phosphate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D_Fructose_6_phosphate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PFK_R04779" name="PFK_R04779" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ATP" stoichiometry="1"/>
+          <speciesReference species="D_Fructose_6_phosphate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ADP" stoichiometry="1"/>
+          <speciesReference species="D_Fructose_1_6_bisphosphate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="ALD_R01070" name="ALD_R01070" reversible="true">
+        <listOfReactants>
+          <speciesReference species="D_Fructose_1_6_bisphosphate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Glycerone_phosphate" stoichiometry="1"/>
+          <speciesReference species="D_Glyceraldehyde_3_phosphate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="TIM_R01015" name="TIM_R01015" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Glycerone_phosphate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="D_Glyceraldehyde_3_phosphate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="GAP_R01061" name="GAP_R01061" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Orthophosphate" stoichiometry="1"/>
+          <speciesReference species="NADplus" stoichiometry="1"/>
+          <speciesReference species="D_Glyceraldehyde_3_phosphate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="NADH" stoichiometry="1"/>
+          <speciesReference species="_3_Phospho_D_glyceroyl_phosphate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PGK_R01512" name="PGK_R01512" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ADP" stoichiometry="1"/>
+          <speciesReference species="_3_Phospho_D_glyceroyl_phosphate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="ATP" stoichiometry="1"/>
+          <speciesReference species="_3_Phospho_D_glycerate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PGM_R01518" name="PGM_R01518" reversible="true">
+        <listOfReactants>
+          <speciesReference species="_3_Phospho_D_glycerate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="_2_Phospho_D_glycerate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PGH_R00658" name="PGH_R00658" reversible="true">
+        <listOfReactants>
+          <speciesReference species="_2_Phospho_D_glycerate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Phosphoenolpyruvate" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PYK_R00200" name="PYK_R00200" reversible="true">
+        <listOfReactants>
+          <speciesReference species="ADP" stoichiometry="1"/>
+          <speciesReference species="Phosphoenolpyruvate" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Pyruvate" stoichiometry="1"/>
+          <speciesReference species="ATP" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="PDH_R00209" name="PDH_R00209" reversible="true">
+        <listOfReactants>
+          <speciesReference species="Pyruvate" stoichiometry="1"/>
+          <speciesReference species="NADplus" stoichiometry="1"/>
+          <speciesReference species="CoA" stoichiometry="1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="Acetyl_CoA" stoichiometry="1"/>
+          <speciesReference species="NADH" stoichiometry="1"/>
+          <speciesReference species="CO2" stoichiometry="1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

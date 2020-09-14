@@ -1,6 +1,6 @@
-function [network,N,metabolites] = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns)
+function [network,N,metabolites] = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns,filename_regulation)
 
-% network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns)
+% network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns,filename_regulation)
 %
 % Build matlab network structure from reactions contained in SBtab file
 % (to build a network structure directly from a reaction list, use network_build_from_sum_formulae_list
@@ -19,7 +19,7 @@ function [network,N,metabolites] = network_build_from_sum_formulae(filename_reac
 % other network entries can also be given
 % -- OR: use the wrapper function network_build_from_sum_formulae_list --
 
-eval(default('filename_compounds','[]','columns','[]'));
+eval(default('filename_compounds','[]','columns','[]','filename_regulation','[]'));
 
 if length(filename_reactions),
   if isstr(filename_reactions),
@@ -43,8 +43,12 @@ end
 
 metab_collect = {};
 
-compound_table = sbtab_table_remove_comment_lines(compound_table);
-reaction_table = sbtab_table_remove_comment_lines(reaction_table);
+if exist('compound_table','var'),
+  compound_table = sbtab_table_remove_comment_lines(compound_table);
+end
+if exist('reaction_table','var'),
+  reaction_table = sbtab_table_remove_comment_lines(reaction_table);
+end
 
 for it = 1:length(columns.ReactionFormula),
   sum_formula              = columns.ReactionFormula{it};
@@ -91,7 +95,7 @@ for it = 1:length(columns.ReactionFormula),
   N(lp,it) = pstoich{it};
 end
 
-regulation_matrix = zeros(length(columns.ReactionFormula),length(metabolites));
+regulation_matrix = sparse(zeros(length(columns.ReactionFormula),length(metabolites)));
 
 if isfield(columns,'MetabolicRegulation'),
 for it = 1:length(columns.ReactionFormula),
@@ -157,6 +161,16 @@ if exist('compound_columns','var'),
     compound_columns = rmfield(compound_columns,'Identifiers_kegg_compound');
   end
 
+  if isfield(compound_columns,'Identifiers'),
+    dum = compound_columns.Identifiers(ll);
+    for it = 1:length(dum),
+      if strcmp(dum{it}(1:5),'kegg:')
+        network.metabolite_KEGGID{it,1} = dum{it}(6:end);
+      end
+    end
+    compound_columns = rmfield(compound_columns,'Identifiers');
+  end
+
   if isfield(compound_columns,'IsCofactor'),
     network.is_cofactor = cell_string2num(compound_columns.IsCofactor(ll));
     compound_columns = rmfield(compound_columns,'IsCofactor');
@@ -189,6 +203,16 @@ if isfield(columns,'Identifiers_kegg_reaction'),
   columns = rmfield(columns,'Identifiers_kegg_reaction');
 end
 
+if isfield(columns,'Identifiers'),
+  dum = columns.Identifiers;
+  for it = 1:length(dum),
+    if strcmp(dum{it}(1:5),'kegg:')
+      network.reaction_KEGGID{it,1} = dum{it}(6:end);
+    end
+  end
+  columns = rmfield(columns,'Identifiers');
+end
+
 if isfield(columns,'Identifiers_ec_code'),
   network.EC = columns.Identifiers_ec_code;
   columns = rmfield(columns,'Identifiers_ec_code');
@@ -202,6 +226,28 @@ end
 
 network = join_struct(network,columns);
 
+
+% -------------------------------------------
+% Regulation (optional)
+
+if length(filename_regulation),
+  my_compounds = sbtab_table_get_column(filename_regulation,'Compound');
+  my_reactions = sbtab_table_get_column(filename_regulation,'Reaction');
+  my_regulation_types = sbtab_table_get_column(filename_regulation,'RegulationType');
+  % compare by compound names: das allgemeiner machen, ueber kegg IDs - generische funktion!
+  ind_compounds = label_names(my_compounds,network.metabolites);
+  ind_reactions = label_names(my_reactions,network.actions);
+  my_regulation_types_numeric = strcmp(my_regulation_types,'activation') - strcmp(my_regulation_types,'inhibition');
+  is_ok = find(ind_compounds.*ind_reactions.*my_regulation_types_numeric);
+  W = spconvert([ind_reactions(is_ok), ind_compounds(is_ok), my_regulation_types_numeric(is_ok)]);
+  [nm, nr] = size(network.N);
+  if size(W,1)<nr + size(W,2)<nm,
+    W(nr,nm) = 0; 
+  end
+  network.regulation_matrix = W;
+end
+
+% -------------------------------------
 
 function [rstoic,rmetab] = analyse_regulation(regulation)
 
@@ -246,3 +292,5 @@ end
 if length(smetab{1})==0, 
   smetab=[];
 end
+
+

@@ -51,7 +51,7 @@ graphics_object.actnames       = actnames;
 graphics_object.arrowstyle     = 'directions';  % 'fluxes', 'none'
 
 graphics_object.squaresize     = 0.2/sqrt(length(metnames));
-graphics_object.arrowsize      = 0.08/sqrt(length(metnames));
+graphics_object.arrowsize      = 0.03;% 0.08/sqrt(length(metnames));
 graphics_object.lambda         = 1;
 graphics_object.N              = network.N;
 

@@ -143,11 +143,14 @@ end
 N=zeros(length(metabolites),length(reaction_id));
 
 for it=1:length(s.reaction),
-  substrate_indices =  label_names(substrate{it},metabolites,'single');
-  if length(substrate_indices), N(substrate_indices,it) = N(substrate_indices,it)-sstoichiometries{it}'; end 
-  product_indices =  label_names(product{it},metabolites,'single');
+  substrate_indices = label_names(substrate{it},metabolites,'single');
+  if length(substrate_indices), 
+    N(substrate_indices,it) = N(substrate_indices,it)-sstoichiometries{it}'; 
+  end 
+  product_indices = label_names(product{it},metabolites,'single');
   if length(product_indices),
-    N(product_indices,it) = N(product_indices,it) + pstoichiometries{it}' ; end
+    N(product_indices,it) = N(product_indices,it) + pstoichiometries{it}' ; 
+  end
 end
 
 % --------------------------------------------------------------------------------------------

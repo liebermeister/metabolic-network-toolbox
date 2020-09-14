@@ -4,6 +4,10 @@ function [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(n
 %
 % Build 'kinetics' data structure from kinetic data (in SBtab file)
 %
+% Keq values are assumed to refer to a standard concentration of mM.
+% If in the data file, Keq values refer to a standard concentration of M, this needs to be indicated by the table attribute StandardConcentration='M' (in the Parameter table)
+% The values will then be converted by this function.
+%
 % Similar functions: 'ms_import_kinetic', 'sbtab_to_modular_rate_law_via_kinetic_data'
 
 eval(default('options','struct'));
@@ -23,8 +27,20 @@ else
   %% assume that file_kinetic_data contains already an sbtab data structure
   sbtab_table  = file_kinetic_data;
 end
+
+table_attributes = sbtab_table_get_attributes(sbtab_table);
+if isfield(table_attributes,'StandardConcentration'),
+  standard_concentration = table_attributes.StandardConcentration;
+else
+  standard_concentration = 'mM';
+end
+
 QuantityType = sbtab_table_get_column(sbtab_table,'QuantityType');
-Value        = cell_string2num(sbtab_table_get_column(sbtab_table,'Value'));
+if sbtab_table_has_column(sbtab_table,'Value')
+  Value        = cell_string2num(sbtab_table_get_column(sbtab_table,'Value'));
+else
+  Value        = cell_string2num(sbtab_table_get_column(sbtab_table,'Mode'));
+end
 Compound     = sbtab_table_get_column(sbtab_table,'Compound');
 Reaction     = sbtab_table_get_column(sbtab_table,'Reaction');
 compound_ind = label_names(Compound,network.metabolites);
@@ -35,6 +51,20 @@ reaction_ind = label_names(Reaction,network.actions);
 ind_Keq = find(strcmp(QuantityType,'equilibrium constant'));
 ind_Keq = ind_Keq(label_names(Reaction(ind_Keq),network.actions));
 kinetics.Keq = Value(ind_Keq);
+
+if length(ind_Keq),
+  if strcmp(standard_concentration,'M'),
+    %% convert equilibrium constants: standard concentration M -> standard concentration mM
+    ind_water = network_find_water(network);
+    N_for_dissolved_compounds = network.N;
+    N_for_dissolved_compounds(ind_water,:) = 0;
+    molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
+    kinetics.Keq = kinetics.Keq .* 1000.^column(molecularity_mismatch);
+    display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
+  else
+    display('I assume that equilibrium constants given in the data file refer to a standard concentration of mM. If this is not the case, please indicate this by adding the table attribute StandardConcentration=''M'' to your data file');
+  end
+end
 
 ind_KV = find(strcmp(QuantityType,'catalytic rate constant geometric mean'));
 ind_KV = ind_KV(label_names(Reaction(ind_KV),network.actions));
@@ -86,12 +116,21 @@ ll = label_names(network.actions,Reaction(ind_EnzymeMass));
 other_parameters.enzyme_mass   = nan * ones(nr,1);
 other_parameters.enzyme_mass(find(ll))     = Value(ind_EnzymeMass(ll(find(ll))));
 
+if isempty(kinetics.Keq),
+  error('No Keq values found');
+end
+
+% -----------------------
+% Double check consistency between kinetic constants
+
 [computed_Kcatf, computed_Kcatr] = modular_KV_Keq_to_kcat(network.N,kinetics,kinetics.KV,kinetics.Keq,kinetics.KM,kinetics.h);
 
 if norm(log(computed_Kcatf) - log(kinetics.Kcatf)) > 0.01 * length(computed_Kcatf), 
-  warning('Given Kcat values and Kcat values computed from other parameters do not match'); 
+  warning('Haldane relationships seem to be violated (Kcat data values do not match the Kcat values computed from the other parameters)'); 
+  [log(computed_Kcatf) log(kinetics.Kcatf)]
 end 
 
 if norm(log(computed_Kcatr) - log(kinetics.Kcatr)) > 0.01 * length(computed_Kcatr), 
   warning('Given Kcat values and Kcat values computed from other parameters do not match'); 
+  [log(computed_Kcatr) log(kinetics.Kcatr)]
 end 

@@ -10,9 +10,8 @@ stoich_coeffs = column(stoich_coeffs);
 ll = label_names(reactants,network.metabolites);
 new_metabolites = column(reactants(find(ll==0)));
 
-new_external = external(label_names(new_metabolites,reactants));
-
 if length(new_metabolites),
+  new_external = external(label_names(new_metabolites,reactants));
   network = network_add_metabolites(network,new_metabolites,new_external);
 end
 

@@ -25,10 +25,10 @@ options = join_struct(opt_def,options);
 
 if strcmp(options.actstyle, 'none'),
   if ~strcmp(options.arrowstyle,'none'),
-  if isempty(options.arrowvalues),
-    options.arrowvalues = J;
-    options.arrowstyle = 'fluxes';
-  end
+    if isempty(options.arrowvalues),
+      options.arrowvalues = J;
+      options.arrowstyle = 'fluxes';
+    end
   end
 end
 
@@ -38,7 +38,7 @@ if options.scale_arrowvalues,
   end
 end
 
-opt = struct('metstyle','fixed','metvalues',S,'actvalues',J,'arrowcolor',[0.7 0.7 0.7],'linecolor',[0 0 0]);
+opt = struct('metstyle','fixed','metvalues',S,'actvalues',J,'arrowcolor',[1 0 0],'linecolor',[0 0 0]);
 if isempty(J),
 %  opt = join_struct(opt,struct('arrowstyle','none'));
 else

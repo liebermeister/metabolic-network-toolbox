@@ -30,7 +30,7 @@ quantities = parameter_prior.QuantityType;
 keep = ones(size(quantities));
 
 if options.include_metabolic ==0,
-  keep = keep .* double(~strcmp(parameter_prior.Constant,'Dynamic'));
+  keep = keep .* double(~strcmp(parameter_prior.PhysicalType,'Dynamic'));
 end
 
 if options.enzymes_explicit,

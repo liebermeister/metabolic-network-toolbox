@@ -683,6 +683,10 @@ if p.omit_zeros,
   if ~isempty(normvalues_std), normvalues_std = normvalues_std .* nonzero;  end
 end
 
+if isnan(valuesmin), 
+  valuesmin = -abs(valuesmax);
+end
+
 % ----------------------------------------
 
 function this_colorbar(num,colmap)

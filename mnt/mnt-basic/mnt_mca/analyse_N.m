@@ -1,4 +1,4 @@
-%  [ K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)
+%  [ K, L, NR, null_l, pinv_NR, independent_metabolites, N1, Nint] = analyse_N(N,external)
 %
 % Analyse a stoichiometric matrix N
 % external (optional) column bitvector indicating external metabolites
@@ -12,7 +12,7 @@
 % indep    indices of independent metabolites
 % N_1      stoiciometric matrix for dependent metabolites
 
-function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1] = analyse_N(N,external)
+function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1, Nint] = analyse_N(N,external)
 
 Ntot = N;
 if exist('external','var'), N = N(find(external ==0),:); end

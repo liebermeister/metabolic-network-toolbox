@@ -164,6 +164,7 @@ if length(data_file),
 else
   % create empty table
   kinetic_data_table = struct('QuantityType',[],'Compound_SBML_species_id',[]);
+  kinetic_data_sbtab = [];
 end
 
 
@@ -581,6 +582,55 @@ for it = 1:length(data_quantities),
   kinetic_data.(symbol) = quantity_entry; 
   
 end
+
+% --------------------------------------------------------------------------------------
+% make sure important fields in kinetic_data are considered
+
+% convert Keq values from standard concentration M to standard concentration mM if necessary
+
+standard_concentration = 'mM';
+
+if length(kinetic_data_sbtab),
+  table_attributes = sbtab_table_get_attributes(kinetic_data_sbtab);
+  if isfield(table_attributes,'StandardConcentration'),
+    standard_concentration = table_attributes.StandardConcentration;
+  end
+end
+
+if strcmp(standard_concentration,'M'),
+  ind_water = network_find_water(network);
+  N_for_dissolved_compounds = network.N;
+  N_for_dissolved_compounds(ind_water,:) = 0;
+  molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
+
+  if isfield(kinetic_data,'Keq'),
+    %% convert equilibrium constants: standard concentration M -> standard concentration mM
+    kinetic_data.Keq.median   = kinetic_data.Keq.median   .* 1000.^column(molecularity_mismatch);
+    kinetic_data.Keq.mean     = kinetic_data.Keq.mean     .* 1000.^column(molecularity_mismatch);
+    kinetic_data.Keq.std      = kinetic_data.Keq.std      .* 1000.^column(molecularity_mismatch);
+    kinetic_data.Keq.lower    = kinetic_data.Keq.lower    .* 1000.^column(molecularity_mismatch);
+    kinetic_data.Keq.upper    = kinetic_data.Keq.upper    .* 1000.^column(molecularity_mismatch);
+    kinetic_data.Keq.mean_ln  = kinetic_data.Keq.mean_ln   + log(1000.^column(molecularity_mismatch));
+    kinetic_data.Keq.lower_ln = kinetic_data.Keq.lower_ln  + log(1000.^column(molecularity_mismatch));
+    kinetic_data.Keq.upper_ln = kinetic_data.Keq.upper_ln  + log(1000.^column(molecularity_mismatch));
+    display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
+  else
+    display('I assume that equilibrium constants given in the data file refer to a standard concentration of mM. If this is not the case, please indicate this by adding the table attribute StandardConcentration=''M'' to your data file');
+  end
+
+  if isfield(kinetic_data,'dmu0'),
+    %% convert equilibrium constants: standard concentration M -> standard concentration mM
+    kinetic_data.dmu0.median   = kinetic_data.dmu0.median   - RT * log(1000.^column(molecularity_mismatch));
+    kinetic_data.dmu0.mean     = kinetic_data.dmu0.mean     - RT * log(1000.^column(molecularity_mismatch));
+    kinetic_data.dmu0.lower    = kinetic_data.dmu0.lower    - RT * log(1000.^column(molecularity_mismatch));
+    kinetic_data.dmu0.upper    = kinetic_data.dmu0.upper    - RT * log(1000.^column(molecularity_mismatch));
+    display('Converting standard reaction GFE from a convention with standard concentration M -> standard concentration mM.');
+  else
+    display('I assume that standard reaction GFE given in the data file refer to a standard concentration of mM. If this is not the case, please indicate this by adding the table attribute StandardConcentration=''M'' to your data file');
+  end
+
+end
+
 
 % --------------------------------------------------------------------------------------
 % make sure important fields in kinetic_data are considered

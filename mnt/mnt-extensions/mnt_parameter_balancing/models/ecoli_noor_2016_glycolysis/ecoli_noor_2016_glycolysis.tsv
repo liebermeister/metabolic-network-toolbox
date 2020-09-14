@@ -1,0 +1,37 @@
+!!!SBtab Document='Model'			
+			
+!!SBtab TableID='Reaction' TableType='Reaction' TableName='Reaction'			
+!ID	!ReactionFormula	!Name	!IsReversible
+PTS_RPTSsy	D_Glucose + Phosphoenolpyruvate <=> Pyruvate + D_Glucose_6_phosphate	PTS_RPTSsy	True
+PGI_R02740	D_Glucose_6_phosphate <=> D_Fructose_6_phosphate	PGI_R02740	True
+PFK_R04779	ATP + D_Fructose_6_phosphate <=> ADP + D_Fructose_1_6_bisphosphate	PFK_R04779	True
+ALD_R01070	D_Fructose_1_6_bisphosphate <=> Glycerone_phosphate + D_Glyceraldehyde_3_phosphate	ALD_R01070	True
+TIM_R01015	Glycerone_phosphate <=> D_Glyceraldehyde_3_phosphate	TIM_R01015	True
+GAP_R01061	Orthophosphate + NADplus + D_Glyceraldehyde_3_phosphate <=> NADH + _3_Phospho_D_glyceroyl_phosphate	GAP_R01061	True
+PGK_R01512	ADP + _3_Phospho_D_glyceroyl_phosphate <=> ATP + _3_Phospho_D_glycerate	PGK_R01512	True
+PGM_R01518	_3_Phospho_D_glycerate <=> _2_Phospho_D_glycerate	PGM_R01518	True
+PGH_R00658	_2_Phospho_D_glycerate <=> Phosphoenolpyruvate	PGH_R00658	True
+PYK_R00200	ADP + Phosphoenolpyruvate <=> Pyruvate + ATP	PYK_R00200	True
+PDH_R00209	Pyruvate + NADplus + CoA <=> Acetyl_CoA + NADH + CO2	PDH_R00209	True
+			
+!!SBtab TableID='Compound' TableType='Compound' TableName='Compound'			
+!ID	!Name	!Identifiers:kegg.compound	!IsConstant
+Acetyl_CoA	Acetyl-CoA	C00024	False
+Orthophosphate	Orthophosphate	C00009	False
+Pyruvate	Pyruvate	C00022	False
+NADH	NADH	C00004	False
+NADplus	NAD+	C00003	False
+ATP	ATP	C00002	False
+ADP	ADP	C00008	False
+D_Glucose_6_phosphate	D-Glucose 6-phosphate	C00092	False
+_3_Phospho_D_glyceroyl_phosphate	3-Phospho-D-glyceroyl phosphate	C00236	False
+CoA	CoA	C00010	False
+CO2	CO2	C00011	False
+Glycerone_phosphate	Glycerone phosphate	C00111	False
+D_Glucose	D-Glucose	C00031	False
+D_Fructose_1_6_bisphosphate	D-Fructose 1,6-bisphosphate	C00354	False
+D_Glyceraldehyde_3_phosphate	D-Glyceraldehyde 3-phosphate	C00118	False
+Phosphoenolpyruvate	Phosphoenolpyruvate	C00074	False
+_3_Phospho_D_glycerate	3-Phospho-D-glycerate	C00197	False
+D_Fructose_6_phosphate	D-Fructose 6-phosphate	C00085	False
+_2_Phospho_D_glycerate	2-Phospho-D-glycerate	C00631	False

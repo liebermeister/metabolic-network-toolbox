@@ -1,6 +1,17 @@
 function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);
 
-% log_alpha_X,log_beta_X: sparse matrices
+%function [log_alpha_X,log_beta_X] = k_to_log_alpha(KX,c,hill);
+%
+%Let nm x nr be the size of the stoichiometric matrix 
+%
+% Input:
+% KX       nr x nm sparse matrix of KM values, (Michaelis-Menten), KA values (activation), or KI values (inhibition)
+% c        mn x 1 column vector of metabolite concentrations
+% hill     nr x 1 column vector of "cooperativity factors" (usually, they can all be set to 1)
+%
+% Output:
+% log_alpha_X: nr x nm sparse matrix of log saturation values, where alpha = 1 / (1 + c/KX)
+% log_beta_X:  nr x nm sparse matrix of log saturation values, where beta (c/KX) / (1 + c/KX)
 
 if ~exist('hill','var'), hill = 1; end
 

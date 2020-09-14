@@ -2,6 +2,27 @@ function [v, v_plus, v_minus, D, regulation_term] = modular_velocities(kinetic_l
 
 % [v, v_plus, v_minus] = modular_velocities(kinetic_law,N,W,ind_ext,u,c,KA,KI,KM,KV,Keq,h,Mplus, Mminus, Wplus, Wminus, nm, nr)
 
+% kinetic_law  string:  {'cs','ms','ds','rp','fd'}, corresponding to rate laws in modular rate law paper
+% nm       # metabolites
+% nr       # reactions
+% N        mn x nr Stoichiometric matric
+% W        nr x nm Allosteric regulation matrix (+1 for activator, -1 for inhibitor) 
+% ind_ext  vector of indices of external metabolites (numbers between 1 and nm)
+% u        nr x 1 column vector of enzyme concentrations
+% c        nm x 1 column vector of enzyme concentrations
+% KA       nr x nm sparse matrix of KA values (activation)
+% KI       nr x nm sparse matrix of KI values (inhibition)
+% KM       nr x nm sparse matrix of KM values (Michaelis-Menten)
+% KV       nr x 1 column vector of KV values (velocity constants, defined as sqrt(Kcat_forward * Kcat_reverse)
+% Keq      nr x 1 column vector of equilibrium constants
+% h        nr x 1 column vector of "cooperativity factors" (usually, they can all be set to 1)
+% Mplus    nr x nm matrix of forward molecularities (ie |N|, but only for substrate elements)
+% Mminus   nr x nm matrix of reverse molecularities (ie N, but only for product elements)
+% Wplus    nr x nm matrix of activations (ie W, but only for activation elements)
+% Wminus   nr x nm matrix of inhibitions (ie |W|, but only for inhibition elements)
+% 
+% Note that Mplus, Mminus, Wplus, Wminus, nm, nr can be computed from N,W,ind_ext,h by using the matlab function make_structure_matrices
+    
 c(find(c<10^-14)) = 10^-14;
 
 %% Global variables to speed up this function; see ecm_one_run.m and convex_parameter_estimation.m
@@ -31,9 +52,6 @@ switch kinetic_law,
     psi_minus   = exp( sum( Mminus .* log(1+exp(log_c_by_k)) , 2) );    
 end
 
-% complete allosteric regulation
-regulation_term = exp( sum( Wplus .* log_beta_A + Wminus .* log_alpha_I, 2) );
-
 switch kinetic_law,  
   case 'cs', D = psi_plus + psi_minus - 1;
   case 'ms', D = psi_plus .* psi_minus;
@@ -41,6 +59,9 @@ switch kinetic_law,
   case 'rp', D = 1;
   case 'fd', D = sqrt(theta_plus .* theta_minus);
 end
+
+% complete allosteric regulation
+regulation_term = exp( sum( Wplus .* log_beta_A + Wminus .* log_alpha_I, 2) );
 
 v_plus  = u .* regulation_term .* Kplus  .* theta_plus  ./ D;
 v_minus = u .* regulation_term .* Kminus .* theta_minus ./ D;

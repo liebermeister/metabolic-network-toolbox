@@ -1,6 +1,6 @@
-function [v,value,lambda_ind_int] = fba(network,fba_constraints)
+function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 
-% [v,benefit] = fba(network,fba_constraints)
+% [v,benefit] = fba(network,fba_constraints,solver)
 %
 % flux balance analysis; solves
 % max = z' * v  where N_internal * v = 0  and vmin <= v <= vmax
@@ -17,6 +17,8 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints)
 % fba_constraints.production: production rates (values for internal metabolites 
 %                             will replace the zeros in the stationarity condition)
 %
+% solver = {'cplex','linprog'};
+%
 % simple usage:
 % fba_constraints = fba_default_options(network);
 % fba_constraints.zv = zeros(size(fba_constraints.zv));
@@ -24,6 +26,8 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints)
 % [v,value] = fba(network,fba_constraints)
 
 %fprintf('FBA: ');
+
+eval(default('solver','''cplex'''));
 
 lambda_ind_int = [];
 
@@ -88,15 +92,21 @@ else,
 end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
-if exist('cplexlp','file'),
-  opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
-  [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
-  lambda_ind_int = lambda.eqlin(1:size(NR,1));
-  %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
-  %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
-else
-  [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off'));
+if ~exist('cplexlp','file'),
+  solver = 'linprog';
 end
+
+switch solver,
+  case 'cplex',
+    opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
+    [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
+    lambda_ind_int = lambda.eqlin(1:size(NR,1));
+    %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
+    %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
+  case 'linprog',
+    [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off'));
+end
+
 if exitflag~=1,
   %% Check if at least zero flux is a solution
   %% v_eq = zeros(size(fba_constraints.v_min));  

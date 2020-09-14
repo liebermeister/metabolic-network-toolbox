@@ -9,7 +9,7 @@ eval(default('layout_file','[]','offsets','[]','policy','[]','flag_KEGG_ids','1'
 
 if flag_KEGG_ids,
   if ~[isfield(network,'metabolite_KEGGID') * isfield(network,'reaction_KEGGID')],
-    warning('KEGG IDs missing in model - using model element IDs in position file');
+    %warning('KEGG IDs missing in model - using model element IDs in position file');
     flag_KEGG_ids=0;
   end
 end

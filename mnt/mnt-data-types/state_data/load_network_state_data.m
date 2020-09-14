@@ -60,7 +60,7 @@ switch quantity_type,
     end
 
   otherwise 
-    error('unknown data type');
+    error(sprintf('unknown data type %s',quantity_type));
     
 end
 

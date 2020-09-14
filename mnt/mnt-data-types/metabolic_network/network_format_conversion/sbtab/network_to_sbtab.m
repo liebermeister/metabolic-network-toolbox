@@ -19,8 +19,11 @@ function sbtab_document = network_to_sbtab(network, options)
 % modular_rate_law_parameter_id: flag: include column with parameter ids?
 % save_in_one_file      : flag for saving SBtab in one file (default = 1)
 % c                     : concentration vector to be saved
+% v                     : flux vector to be saved
 % document_name         : (for SBtab attribute Document)
 % graphics_positions    : flag: add table with x and y coordinates
+%
+% To convert sbtab -> network, use 'sbtab_to_network'
 
 try
   sbtab_version;
@@ -29,7 +32,7 @@ catch err,
 end
 
 eval(default('options','struct'));
-options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',1,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 1, 'modular_rate_law_parameter_id', 0, 'c', [],'document_name','Model', 'graphics_positions', 1);
+options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',1,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 1, 'modular_rate_law_parameter_id', 0, 'c', [], 'v', [], 'document_name','Model', 'graphics_positions', 1, 'omit_kegg_ids',0);
 
 options = join_struct(options_default,options);
 
@@ -48,8 +51,20 @@ else
 end
 
 if isfield(network,'reaction_KEGGID'),
+  if isempty(network.reaction_KEGGID'),
+    network = rmfield(network,'reaction_KEGGID');
+  end
+end
+
+if isfield(network,'reaction_KEGGID'),
   if sum(cellfun('length',network.reaction_KEGGID))==0, 
     network = rmfield(network,'reaction_KEGGID');
+  end
+end
+
+if isfield(network,'metabolite_KEGGID'),
+  if isempty(network.metabolite_KEGGID),
+    network = rmfield(network,'metabolite_KEGGID');
   end
 end
 
@@ -185,9 +200,19 @@ if options.modular_rate_law_table,
     case 'numeric',
       quantity_table = numeric_to_sbtab(network,options);
     otherwise,
-      quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations,'write_enzyme_concentrations',options.write_enzyme_concentrations,'document_name',options.document_name,'modular_rate_law_parameter_id',options.modular_rate_law_parameter_id,'flag_minimal_output',0));
+      quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations,'write_enzyme_concentrations',options.write_enzyme_concentrations,'document_name',options.document_name,'modular_rate_law_parameter_id',options.modular_rate_law_parameter_id,'flag_minimal_output',0,'omit_kegg_ids',options.omit_kegg_ids));
   end
   sbtab_document = sbtab_document_add_table(sbtab_document,'Parameter',quantity_table);
+end
+
+if options.c,
+  concentration_table = sbtab_table_construct(struct('TableID','MetaboliteConcentration','TableType','Quantity','TableName','Metabolite concentration'),{'QuantityType','Metabolite','Value'},{repmat({'concentration'},length(options.c),1),network.metabolites,options.c,}); 
+  sbtab_document = sbtab_document_add_table(sbtab_document,'MetaboliteConcentration',concentration_table);
+end
+
+if options.v,
+  flux_table = sbtab_table_construct(struct('TableID','Flux','TableType','Quantity','TableName','Flux'),{'QuantityType','Reaction','Value'},{repmat({'rate of reaction'},length(options.v),1),network.actions,options.v,}); 
+  sbtab_document = sbtab_document_add_table(sbtab_document,'Flux',flux_table);
 end
 
 if ~isempty(options.filename),

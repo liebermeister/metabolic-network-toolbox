@@ -10,19 +10,19 @@ function [v, v_std] = flux_data_load(network, flux_data_filename, reaction_field
 % o The values must be in a column Flux, Flux:Value, or Value
 % o The standard deviations must be in a column StdDev, Flux:StdDev, or they are computed from the column Flux:Quantile95
 
-eval(default('reaction_field','''actions''', 'reaction_column','''Reaction''','column_mean','[]',,'column_std','[]',));
+eval(default('reaction_field','''actions''', 'reaction_column','''Reaction''','value_column','[]','std_column','[]'));
   
 v_data = sbtab_table_load(flux_data_filename);
 
 reaction_names = sbtab_table_get_column(v_data,reaction_column);
 
-if isempty(column_mean),
-  if sbtab_table_has_column(v_data,'Flux'), column_mean = 'Flux';
-  elseif sbtab_table_has_column(v_data,'Flux:Value'), column_mean = 'Flux:Value';
-  else column_mean = 'Value'; end
+if isempty(value_column),
+  if sbtab_table_has_column(v_data,'Flux'), value_column = 'Flux';
+  elseif sbtab_table_has_column(v_data,'Flux:Value'), value_column = 'Flux:Value';
+  else value_column = 'Value'; end
 end
 
-v_values = sbtab_table_get_column(v_data,column_mean,1);
+v_values = sbtab_table_get_column(v_data,value_column,1);
 
 v           = nan * ones(size(network.(reaction_field)));
 ll          = label_names(network.(reaction_field),reaction_names);
@@ -32,15 +32,22 @@ if sum(isnan(v)),
   warning('Some flux data are missing'); 
 end
 
-v_values_std = [];
+if isempty(std_column),
+  if sbtab_table_has_column(v_data,'StdDev'), std_column = 'StdDev';
+  elseif sbtab_table_has_column(v_data,'Std'), std_column = 'Std';
+  elseif sbtab_table_has_column(v_data,'Flux:StdDev'), std_column = 'Flux:StdDev';
+  elseif sbtab_table_has_column(v_data,'Flux:Std'), std_column = 'Flux:Std';
+  else value_column = 'Value'; end
+end
 
-if length(sbtab_table_get_column(v_data,'StdDev',1,0)),
-  v_values_std   = sbtab_table_get_column(v_data,'StdDev',1);
-elseif length(sbtab_table_get_column(v_data,'Flux:StdDev',1,0)),
-  v_values_std   = sbtab_table_get_column(v_data,'Flux:StdDev',1);
-elseif length(sbtab_table_get_column(v_data,'Flux:Quantile95',1,0)),
-  %% 95% of all values are within 1.96 sigma)
-  v_values_std   = 1/[2*1.96] * sbtab_table_get_column(v_data,'Flux:Quantile95',1); % 
+if length(std_column)
+  v_values_std = sbtab_table_get_column(v_data,std_column,1);
+else
+  v_values_std = [];
+  if length(sbtab_table_get_column(v_data,'Flux:Quantile95',1,0)),
+    %% 95% of all values are within 1.96 sigma)
+    v_values_std   = 1/[2*1.96] * sbtab_table_get_column(v_data,'Flux:Quantile95',1); % 
+  end
 end
 
 if length(v_values_std),

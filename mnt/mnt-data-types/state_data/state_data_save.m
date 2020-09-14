@@ -61,11 +61,15 @@ end
 for it = 1:n_samples,
   if options.use_measurement_table,
     c_table = sbtab_table_add_column(c_table, ['>' samples{it} '_Mean'], c_mean(:,it), 1);
-    c_table = sbtab_table_add_column(c_table, ['>' samples{it} '_Std'],  c_std(:,it), 1);
+    if length(c_std),
+      c_table = sbtab_table_add_column(c_table, ['>' samples{it} '_Std'],  c_std(:,it), 1);
+    end
   else
     c_table = sbtab_table_add_column(c_table, [samples{it} '_Mean'], c_mean(:,it), 0);
-    c_table = sbtab_table_add_column(c_table, [samples{it} '_Std'],  c_std(:,it), 0);
-  end
+    if length(c_std),
+      c_table = sbtab_table_add_column(c_table, [samples{it} '_Std'],  c_std(:,it), 0);
+    end
+    end
 end
 
 
@@ -81,11 +85,15 @@ end
 for it = 1:n_samples,
   if options.use_measurement_table,
     u_table = sbtab_table_add_column(u_table, ['>' samples{it} '_Mean'], u_mean(:,it), 1);
+    if length(u_std),
     u_table = sbtab_table_add_column(u_table, ['>' samples{it} '_Std'],  u_std(:,it), 1);
+    end
   else
     u_table = sbtab_table_add_column(u_table, [samples{it} '_Mean'], u_mean(:,it), 0);
-    u_table = sbtab_table_add_column(u_table, [samples{it} '_Std'],  u_std(:,it), 0);
-  end
+    if length(u_std),
+      u_table = sbtab_table_add_column(u_table, [samples{it} '_Std'],  u_std(:,it), 0);
+    end
+    end
 end
 
 
@@ -101,10 +109,14 @@ end
 for it = 1:n_samples,
   if options.use_measurement_table,
     v_table = sbtab_table_add_column(v_table, ['>' samples{it} '_Mean'], v_mean(:,it), 1);
-    v_table = sbtab_table_add_column(v_table, ['>' samples{it} '_Std'],  v_std(:,it), 1);
+    if length(v_std),
+    v_table = sbtab_table_add_column(v_table, ['>' samples{it} '_Std'],  v_std(:,it), 1);  
+    end
   else
     v_table = sbtab_table_add_column(v_table, [samples{it} '_Mean'], v_mean(:,it), 0);
-    v_table = sbtab_table_add_column(v_table, [samples{it} '_Std'],  v_std(:,it), 0);
+    if length(v_std),
+    v_table = sbtab_table_add_column(v_table, [samples{it} '_Std'],  v_std(:,it), 0);  
+    end
   end
 end
 
@@ -123,10 +135,14 @@ if length(A_forward),
   for it = 1:n_samples,
     if options.use_measurement_table,
       A_forward_table = sbtab_table_add_column(A_forward_table, ['>' samples{it} '_Mean'], A_forward_mean(:,it), 1);
+    if length(A_forward_std),
       A_forward_table = sbtab_table_add_column(A_forward_table, ['>' samples{it} '_Std'],  A_forward_std(:,it), 1);
+    end
     else
       A_forward_table = sbtab_table_add_column(A_forward_table, [samples{it} '_Mean'], A_forward_mean(:,it), 0);
+    if length(A_forward_std),
       A_forward_table = sbtab_table_add_column(A_forward_table, [samples{it} '_Std'],  A_forward_std(:,it), 0);
+    end
     end
   end
   

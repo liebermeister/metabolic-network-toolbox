@@ -70,7 +70,9 @@ end
 % Checks and diagnostic graphics
 
 if options.flag_check,
-  parameter_balancing_check(network.kinetics, r_orig, network, parameter_prior,1,1)
+  show_concentrations = 1;
+  if options.include_metabolic == 0, show_concentrations = 0; end
+  parameter_balancing_check(network.kinetics, r_orig, network, parameter_prior,1,show_concentrations)
 end
 
 

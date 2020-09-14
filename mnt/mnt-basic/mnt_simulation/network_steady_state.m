@@ -52,7 +52,10 @@ end
 error = max(abs(Sdot./S(internal)));
 
 if error > 10^-3, 
-  warning(['Maximal error (relative change of metabolite) in output state is ' num2str(error)]); 
+%  warning(sprintf('Maximal error (relative change of metabolite) in output state is %f - running steady-state calculation again \n', num2str(error))); 
+  if integrate_time < 10^7,
+    [S, J, Sdot, error] = network_steady_state(network,s,10*integrate_time,L_int,NR_int,indep_met_int,dilution_rate);
+  end
 end
 
 

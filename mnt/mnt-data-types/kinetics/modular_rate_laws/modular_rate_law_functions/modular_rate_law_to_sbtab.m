@@ -24,7 +24,7 @@ function quantity_table = modular_rate_law_to_sbtab(network,filename,options)
 
 eval(default('options','struct','filename','[]'));
 
-options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_std',1, 'write_concentrations',1,'write_enzyme_concentrations',1,'write_all_quantities', 'no', 'write_standard_chemical_potential', 1, 'write_chemical_potential', 0, 'write_std_GFE_of_reaction', 0, 'write_reaction_affinity', 0, 'modular_rate_law_parameter_id',0,'document_name','','kinetics_mode', [], 'flag_minimal_output', 0);
+options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_std',1, 'write_concentrations',1,'write_enzyme_concentrations',1,'write_all_quantities', 'no', 'write_standard_chemical_potential', 1, 'write_chemical_potential', 0, 'write_std_GFE_of_reaction', 0, 'write_reaction_affinity', 0, 'modular_rate_law_parameter_id',0,'document_name','','kinetics_mode', [], 'flag_minimal_output', 0, 'omit_kegg_ids',0);
 
 options_default.more_column_names = {}; 
 options_default.more_column_data  = {};
@@ -355,14 +355,18 @@ for itt = 1:length(more_column_names),
 end
 
 if isfield(network, 'reaction_KEGGID'),
-  if sum(cellfun('length',network.reaction_KEGGID)),
-    quantity_table = sbtab_table_add_column(quantity_table,'Reaction:Identifiers:kegg.reaction',column_reaction_KEGGID);
+  if ~options.omit_kegg_ids,
+    if sum(cellfun('length',network.reaction_KEGGID)),
+      quantity_table = sbtab_table_add_column(quantity_table,'Reaction:Identifiers:kegg.reaction',column_reaction_KEGGID);
+    end
   end
 end
 
 if isfield(network, 'metabolite_KEGGID'),
-  if sum(cellfun('length',network.metabolite_KEGGID)),
+  if ~options.omit_kegg_ids,
+    if sum(cellfun('length',network.metabolite_KEGGID)),
     quantity_table = sbtab_table_add_column(quantity_table,'Compound:Identifiers:kegg.compound',column_compound_KEGGID);
+    end
   end
 end
 

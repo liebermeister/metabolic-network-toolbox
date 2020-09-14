@@ -21,6 +21,9 @@ switch test_example,
   case 'ecoli_noor_2016',
     model_file  = [ get_pb_directory '/models/ecoli_noor_2016.xml'];
     data_file   = [ get_pb_directory '/models/ecoli_noor_2016_data.tsv'];
+  case 'ecoli_noor_2016_glycolysis',
+    model_file  = [ get_pb_directory '/models/ecoli_noor_2016_glycolysis/ecoli_noor_2016_glycolysis.xml'];
+    data_file   = [ get_pb_directory '/models/ecoli_noor_2016_data.tsv'];
   case 'ecoli_wortel_2018',
     model_file  = [ get_pb_directory '/models/ecoli_wortel_2018.xml'];
     data_file   = [ get_pb_directory '/models/ecoli_wortel_2018_data.tsv'];

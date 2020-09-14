@@ -18,7 +18,7 @@
 % no_graphics          flag: 1: do not construct field 'graphics_par'
 % flag_kinetics        flag: 0: construct field 'kinetics' with cs kinetics as default
 
-function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix)
+function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)
 
 eval(default('N','[]','reversible','[]','ind_external','[]','metabolites','[]','actions','[]','reversible','ones(size(N,2),1)','ind_external','[]','no_graphics','[]','flag_kinetics','0'));
 
