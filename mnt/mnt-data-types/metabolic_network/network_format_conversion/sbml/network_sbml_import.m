@@ -15,14 +15,14 @@
 %(see http://sbml.org/software/sbmltoolbox/)
 
 function [network,s] = network_sbml_import(s,dirname,verbose)
-
+  
 if ~exist('TranslateSBML','file'),
   error('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.');
 end
 
 eval(default('verbose','0'));
 
-create_annotations  = 0;  % CONSTRUCT UNIQUE ANNOTATIONS ?
+create_annotations  = 0;   % CONSTRUCT UNIQUE ANNOTATIONS ?
 graphics_flag       = 0;   % SHOW GRAPHICS?
 import_names        = 1;   % import names from model
 import_compartments = 1;   % import compartments from model

@@ -5,9 +5,9 @@ The Metabolic Networks Toolbox contains functions for constructing, simulating, 
 
 ## Dependencies:
 
-  o Matlab utility functions    (https://github.com/liebermeister/matlab-utils)
+  o Matlab utility functions (https://github.com/liebermeister/matlab-utils)
 
-  o SBMLtoolbox    (http://sbml.org/Software/SBMLToolbox)
+  o SBML toolbox    (http://sbml.org/Software/SBMLToolbox)
 
   o SBtab toolbox  (https://github.com/liebermeister/sbtab-matlab)
 
@@ -15,7 +15,7 @@ The Metabolic Networks Toolbox contains functions for constructing, simulating, 
 
   o efmtool        (http://www.csb.ethz.ch/tools/efmtool)
 
-Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
+For reading and writing cobra files, the matlab cobra toolbox is additionally required. Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
 
 ## Installation
 Please see the [installation instructions](INSTALLATION).

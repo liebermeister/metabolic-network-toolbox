@@ -1,3 +1,4 @@
+clear global
 
 data_dir = [fileparts(which(mfilename)) '/data'];
 

@@ -90,11 +90,12 @@ conc_fix = conc_min(ind);
 
 % network for plots
 
-if sbtab_table_has_column(positions,'HideInPlot'),
-  elements      = sbtab_table_get_column(positions,'Element',0);
-  hide_elements = sbtab_table_get_column(positions,'HideInPlot',1);
-  metabolites_to_hide = elements(find(hide_elements==1));
-  network_for_plots = netgraph_simple_graph(network,metabolites_to_hide);
-else
-  network_for_plots = network;
+network_for_plots = network;
+if length(positions),
+  if sbtab_table_has_column(positions,'HideInPlot'),
+    elements      = sbtab_table_get_column(positions,'Element',0);
+    hide_elements = sbtab_table_get_column(positions,'HideInPlot',1);
+    metabolites_to_hide = elements(find(hide_elements==1));
+    network_for_plots = netgraph_simple_graph(network,metabolites_to_hide);
+  end
 end

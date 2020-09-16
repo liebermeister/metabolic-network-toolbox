@@ -1,9 +1,8 @@
+function [names, positions] = netgraph_print_positions(network, layout_file, offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
+
 % [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 %
 % Argument 'policy': possible choices {'replace file', 'add nonexistent', 'replace elements'}
-
-
-function [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 
 eval(default('layout_file','[]','offsets','[]','policy','[]','flag_KEGG_ids','1','flag_element_names','1','flag_fixed','1','flag_invisible','1'));
 
@@ -117,7 +116,7 @@ end
 
 % ----------------------------------------------------------------
 
-sbtab_out = sbtab_table_construct( struct('TableType','Layout'), ...
+sbtab_out = sbtab_table_construct( struct('TableType','Position','TableID','Position'), ...
                     {'PositionX','PositionY'},  {positions(1,:),positions(2,:)}); 
 
 if flag_element_names,
