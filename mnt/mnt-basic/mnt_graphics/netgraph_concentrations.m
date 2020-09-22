@@ -51,7 +51,7 @@ if ~flag_text,
 end
 
 opt = join_struct(opt,options);
-subplot('Position', [0 0 1 1]);
+subplot('Position', [0 0 1 0.90]);
 
 netgraph_draw(network, opt);
 

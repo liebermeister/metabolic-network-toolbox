@@ -2,7 +2,8 @@ clear global
 
 data_dir = [fileparts(which(mfilename)) '/data'];
 
-mnt_dependencies;
+% check dependencies of the Metabolic Network Toolbox:
+% mnt_dependencies;
 
 close all;
 echo on;

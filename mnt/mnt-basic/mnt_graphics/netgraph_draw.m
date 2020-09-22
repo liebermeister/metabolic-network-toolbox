@@ -108,9 +108,9 @@ x     = p.x;
 
 if p.hold_on==1, hold on; else, cla;  end
 if ~isempty(p.figure_position), set(gcf,'Position',p.figure_position); end
-if ~isempty(p.subplot_position), 
-  subplot('Position',p.subplot_position); 
-end
+ if ~isempty(p.subplot_position), 
+   subplot('Position',p.subplot_position); 
+ end
 
 hold on;
 
@@ -691,16 +691,15 @@ end
 
 function this_colorbar(num,colmap)
 
-colorbar('off'); colormap(colmap); h = colorbar; nc = size(colmap,1);
-%this_xtick = 1+ceil([nc-1]*(0:1:length(num)-1)/(length(num)-1));
+colorbar('off');
+colormap(colmap);
+h = colorbar('Location','West'); 
 
-max_scale  = max(num);
 min_scale  = min(num); %-max(abs(num));
-this_xtick = 1+ceil([nc-1]*[num - min_scale] / [max_scale-min_scale]);
+max_scale  = max(num);
 
-%set(h,'Location','SouthOutside');%,'XLim',[1 nc],'XTick',this_xtick,'XTickLabel',[0],'Position', [0.25 0.05 0.50.015]);
-set(h,'Location','West','YLim',[1 nc],'YTick',this_xtick,'YTickLabel',num);
-
+set(h,'YLim',[min_scale, max_scale],'YTick',num,'YTickLabel',num);
+caxis([min_scale, max_scale]);
 
 % -------------------------------------------------
  

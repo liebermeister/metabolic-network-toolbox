@@ -48,7 +48,7 @@ thermo_pb_options_default.c_max        = 10^3     * ones(size(N,1),1);
 thermo_pb_options_default.c_fix        = nan      * ones(size(N,1),1);
 thermo_pb_options_default.delta_G0     = nan      * zeros(size(N,2),1);
 thermo_pb_options_default.delta_G0_std = 10       * ones(size(N,2),1);
-% USAGE OF delta_G0_fix IS COMMENTED OUT BECAUSE FIXING THE DELTA G0 VALUES LEAD TO NUMERICAL PROBLEMS (NUCLEAR WHY)
+% USAGE OF delta_G0_fix IS COMMENTED OUT BECAUSE FIXING THE DELTA G0 VALUES LEAD TO NUMERICAL PROBLEMS (NOT CLEAR WHY)
 thermo_pb_options_default.delta_G0_fix = nan      * zeros(size(N,2),1);
 thermo_pb_options_default.dG_threshold = 0.1;
 

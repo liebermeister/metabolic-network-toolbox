@@ -5,7 +5,7 @@
 
 function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)
 
-if sum(network.external==0)==0, S = s; J= network_velocities(s,network); return; end 
+if sum(network.external==0)==0, S = s; J = network_velocities(s,network); return; end 
 
 eval(default('s','ones(size(network.metabolites))','integrate_time','1000','L_int','[]','dilution_rate','[]'));
 

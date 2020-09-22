@@ -36,12 +36,17 @@ if isempty(Mplus),
   [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
 end
 
+% calculation
+
 [log_alpha_A, log_beta_A] = k_to_log_alpha(KA,c);
 [log_alpha_I            ] = k_to_log_alpha(KI,c);
-[Kplus,Kminus]            = ms_compute_Kcat(N,KM,KV,Keq);
 
-log_c_by_k        = repmat(log(c)',nr,1);
-log_c_by_k(ind_M) = log_c_by_k(ind_M) - log(KM(ind_M)+10^-15);
+[Kcat_plus, Kcat_minus]   = ms_compute_Kcat(N,KM,KV,Keq);
+
+% KMones: KM matrix, with missing elements replaces by 1
+KMones           = ones(size(KM)); 
+KMones(find(KM)) = KM(find(KM));
+log_c_by_k       = log(1./KMones * diag(c));
 
 theta_plus  = exp( sum( Mplus  .* log_c_by_k, 2) );
 theta_minus = exp( sum( Mminus .* log_c_by_k, 2) );
@@ -63,9 +68,10 @@ end
 % complete allosteric regulation
 regulation_term = exp( sum( Wplus .* log_beta_A + Wminus .* log_alpha_I, 2) );
 
-v_plus  = u .* regulation_term .* Kplus  .* theta_plus  ./ D;
-v_minus = u .* regulation_term .* Kminus .* theta_minus ./ D;
+v_plus  = u .* regulation_term .* Kcat_plus  .* theta_plus  ./ D;
+v_minus = u .* regulation_term .* Kcat_minus .* theta_minus ./ D;
 
 v_plus  = real(full(v_plus));
 v_minus = real(full(v_minus));
 v       = v_plus - v_minus;
+

@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------
 Metabolic Networks Toolbox for Matlab
 
-Wolfram Liebermeister (2013)
+Wolfram Liebermeister (2020)
 ---------------------------------------------------------------------
 
 
@@ -10,24 +10,23 @@ INSTALLATION
   1. Unpack the files
   2. Include the subdirectory 'mnt' into your Matlab path
   3. Make sure that the following toolboxes are installed:
-      o SBML Toolbox    (http://sbml.org/Software/SBMLToolbox)
-      o SBtab           (https://github.com/liebermeister/sbtab-matlab)
-      o Tensor Toolbox  (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
-      o efmtool         (see http://www.csb.ethz.ch/tools/efmtool)
-
-  4. For a little demo, run 'mnt_demo'
+      o Matlab utility functions (https://github.com/liebermeister/matlab-utils)
+      o SBML Toolbox             (http://sbml.org/Software/SBMLToolbox)
+      o SBtab Toolbox            (https://github.com/liebermeister/sbtab-matlab)
+      o Tensor Toolbox           (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
+      o efmtool                  (http://www.csb.ethz.ch/tools/efmtool)
+     For reading and writing cobra files, the matlab cobra toolbox is also required.
+     
+  4. For a little demo, run 'demo_mnt'
 
 
 REQUIREMENTS
 
   The functions were developed and tested with matlab6.
 
-  Other MATLAB toolboxes required:
-    SBMLtoolbox    - SBML import / export  (see http://sbml.org/Software/SBMLToolbox)
-    SBtab toolbox  - SBtab format (https://github.com/liebermeister/sbtab-matlab)
-    Tensor toolbox - Tensors (http://www.sandia.gov/~tgkolda/TensorToolbox/index-2.5.html)
-    efmtool        - Elementary flux modes (see http://www.csb.ethz.ch/tools/efmtool)
+  If CPLEX for matlab is installed in your system, this will speed up some calculations.
 
+  They require the matlab toolboxes mentioned above.
 
 STATE OF THE SOFTWARE.
 
