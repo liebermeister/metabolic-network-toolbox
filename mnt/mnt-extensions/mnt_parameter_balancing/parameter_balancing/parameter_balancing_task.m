@@ -9,19 +9,60 @@ function [task, prior] = parameter_balancing_task(network, kinetic_data, paramet
 %
 % Optional inputs
 %   kinetic_data      (see kinetic_data_load)
-%   parameter_prior     (see biochemical_parameter_prior)
+%   parameter_prior   (see biochemical_parameter_prior)
 %   model_quantities  list of quantities needed for the model
 %   basic_quantities  list of basic quantities to be used
-%   include_metabolic (consider metabolic quantities? only used if arguments
-%                      'model_quantities' and 'basic_quantities' are not provided)
+%   include_metabolic (flag: consider metabolic quantities? 
+%                      used only if arguments 'model_quantities' and 'basic_quantities' are not provided)
 % 
-% For types of quantities to be used, see 'parameter_prior' structure 
-% produced by biochemical_parameter_prior
+% For types of quantities to be used, see 'parameter_prior' structure produced by biochemical_parameter_prior
 %
 % Outputs: 
-%   task   vectors and matrices needed for parameter balancing
-%          (q and x values are given in "natural" scaling (i.e., logarithms wherever suitable)
 %   prior  has the same data format as kinetic_data (for export to table files)
+%   task   vectors and matrices needed for parameter balancing
+%          (constraints are written as Q_x_q * q <= x)
+%          (q and x values are given in "natural" scaling (i.e., logarithms wherever suitable)
+%    fields: 
+%    .network          
+%    .model_quantities 
+%    .basic_quantities 
+%    .data_quantities
+%    .q.names          
+%      .scaling        
+%      .indices        
+%      .prior.mean     
+%      .prior.std      
+%      .numbers        
+%    .xmodel.names     
+%           .scaling   
+%           .indices   
+%    .Q_xmodel_q
+%    .xdata.names   
+%          .scaling 
+%          .mean    
+%          .std     
+%          .mean    
+%          .indices 
+%          .numbers
+%    .Q_xdata_q     
+%    .xall          
+%    .Q_xall_q      
+%    .xpseudo.names
+%            .mean 
+%            .std  
+%    .Q_xpseudo_q   
+%    .xlower.names  
+%           .scaling
+%           .value_nat
+%           .indices
+%           .numbers
+%    .Q_xlower_q
+%    .xupper.names  
+%           .scaling
+%           .value_nat
+%           .indices
+%           .numbers
+%    .Q_xupper_q
 
 eval(default('kinetic_data','[]','parameter_prior','[]','model_quantities','[]', 'basic_quantities','[]','include_metabolic','0'));
 
@@ -30,38 +71,53 @@ global log_text % text for the log file is added to this variable
 % -------------------------------------------------------
 % Potential problems in stoichiometric matrix
 
-if size(network.N,2)>250,
-  error('The model contains more than 250 reactions - parameter balancing is currently prohibited for models of this size'); 
+if size(network.N,2)>400,
+  error(sprintf('The model contains more than %d reactions - parameter balancing is currently prohibited for models of this size',400)); 
 end
-ind_noninteger = find(network.N ~= ceil(network.N));
-if length(ind_noninteger),
-  log_text = [log_text, sprintf('\n  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.')];
+
+ind_noninteger  = find(network.N ~= ceil(network.N));
+ind_noninteger2 = find(sum(network.N ~= ceil(network.N),1));
+if length(ind_noninteger2),
+  display(sprintf('  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be replaced by values of 1. The Haldane relationships of the balanced parameters will not be exactly satisfied in the reactions:'));
+  display(mytable(network.actions(ind_noninteger2)))
+  message = sprintf('\n  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.');
+  log_text = [log_text, message];
   network.N(ind_noninteger) = sign(network.N(ind_noninteger));
 end
 
-ind_large = find(abs(network.N)>2);
+stoich_max = 8;
+ind_large = find(abs(network.N)>stoich_max);
 if length(ind_large),
-    log_text = [log_text, sprintf('\n  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than 1).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.')];
+  display(sprintf('  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than %d).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.',stoich_max));
+  network.actions(ind_large)
+  message = sprintf('\n  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than %d).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.',stoich_max);
+  log_text = [log_text, message];
   network.N(ind_large) = sign(network.N(ind_large));
 end
 
 reactant_numbers = sum(network.N~=0, 1);
 if max(reactant_numbers)>6,
-  display(sprintf('\n  WARNING: The following reactions contain more than 6 reactants each; this may cause troubles!'));
+  display(sprintf('  WARNING (parameter_balancing_task.m): Some reactions contain more than 6 reactants:'));
+  message = sprintf('\n  WARNING (parameter_balancing_task.m): Some reactions contain more than 6 reactants:');
+  log_text = [log_text, message];
   ind_problematic = find(reactant_numbers>6);
-  pm(reactant_numbers(ind_problematic)',network.actions(ind_problematic))
+  display(pm(reactant_numbers(ind_problematic)',network.actions(ind_problematic)))
 end
 
 ind_no_substrates = find(sum(network.N<0) ==0);
 if length(ind_no_substrates),
-    display('  WARNING: The following reactions have no reaction substrates; this may cause troubles!');
-  mytable(network.actions(ind_no_substrates),0)
+  display('  WARNING (parameter_balancing_task.m): Some reactions have no reaction substrates:');
+  message = '  WARNING (parameter_balancing_task.m): Some reactions have no reaction substrates:';
+  log_text = [log_text, message];
+  display(mytable(network.actions(ind_no_substrates),0))
 end
 
 ind_no_products   = find(sum(network.N>0) ==0);
 if length(ind_no_products),
-  display('  WARNING: The following reactions have no reaction products; this may cause troubles!');
-  mytable(network.actions(ind_no_products),0)
+  display('  WARNING (parameter_balancing_task.m): Some reactions have no reaction products:');
+  message = '  WARNING (parameter_balancing_task.m): Some reactions have no reaction products:';
+  log_text = [log_text, message];
+  display(mytable(network.actions(ind_no_products),0))
 end
 
 % -------------------------------------------------------
@@ -244,7 +300,7 @@ x_data_upper = [];
 
 x_data.names   = {};
 x_data.scaling = {};
-num_data     = parameter_balancing_quantity_numbers(data_quantities,parameter_prior,network);
+num_data       = parameter_balancing_quantity_numbers(data_quantities,parameter_prior,network);
 
 for it = 1:length(data_quantities),
   
@@ -257,17 +313,26 @@ for it = 1:length(data_quantities),
   x_data.scaling(my_indices,:)  = repmat({my_scaling}, num_data(it),1);
   x_data.indices.(my_symbol)    = my_indices;
 
- switch my_scaling,
+  my_x_mean  =  [];
+  my_x_std   =  [];
+  my_x_lower =  [];
+  my_x_upper =  [];
+  
+  switch my_scaling,
     
-   case 'Additive',
-      my_x_mean  = kinetic_data.(my_symbol).mean;
-      my_x_std   = kinetic_data.(my_symbol).std;
+    case 'Additive',
+      if isfield(kinetic_data.(my_symbol),'mean'),
+        my_x_mean  = kinetic_data.(my_symbol).mean;
+        my_x_std   = kinetic_data.(my_symbol).std;
+      end
       my_x_lower = kinetic_data.(my_symbol).lower;
       my_x_upper = kinetic_data.(my_symbol).upper;
     
     case 'Multiplicative',
-      my_x_mean  = kinetic_data.(my_symbol).mean_ln;
-      my_x_std   = kinetic_data.(my_symbol).std_ln;
+      if isfield(kinetic_data.(my_symbol),'mean_ln'),
+        my_x_mean  = kinetic_data.(my_symbol).mean_ln;
+        my_x_std   = kinetic_data.(my_symbol).std_ln;
+      end
       my_x_lower = kinetic_data.(my_symbol).lower_ln;
       my_x_upper = kinetic_data.(my_symbol).upper_ln;
   end

@@ -35,7 +35,9 @@ end
 	  end
 	  fprintf('\n');
       end
-      
+  case 'cs',
+    kinetics
+    Kcat = [kinetics.Kcatf, kinetics.Kcatr]
   otherwise fprintf('Warning: kinetics type not supported\n');
 
 end

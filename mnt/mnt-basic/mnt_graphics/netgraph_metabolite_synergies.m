@@ -1,10 +1,10 @@
-% netgraph_metabolite_interactions(network, influence_values, interaction_values, col, gp)
+% netgraph_metabolite_synergies(network, influence_values, synergy_values, col, gp)
 %
-% For reaction interactions, see 'interaction_network_plot'
+% For reaction synergies, see 'synergy_network_plot'
 
-function netgraph_metabolite_interactions(network, influence_values, interaction_values, col, gp)
+function netgraph_metabolite_synergies(network, influence_values, synergy_values, col, gp)
 
-% to make this script nicer, update it according to interaction_network_plot
+% to make this script nicer, update it according to synergy_network_plot
 
 eval(default('col','my_colors(250)','gp','struct','influence_values','[]'));
 
@@ -23,10 +23,10 @@ else,
   metmap = 1:nm;
 end
 
-if size(interaction_values,1) ~= max(metmap), error('Wrong matrix size'); end
+if size(synergy_values,1) ~= max(metmap), error('Wrong matrix size'); end
 
 if gp.show_diagonal_values,
-  influence_values = diag(interaction_values);
+  influence_values = diag(synergy_values);
 end
 
 % normalise by maximal absolute value
@@ -34,19 +34,19 @@ if gp.normalise_values,
   if length(isfinite(influence_values)),
     influence_values = influence_values/max(abs(influence_values(metmap)));
   end
-  interaction_values = interaction_values - diag(diag(interaction_values));
-  interaction_values = interaction_values/nanmax(nanmax(abs(interaction_values(metmap,metmap))));
+  synergy_values = synergy_values - diag(diag(synergy_values));
+  synergy_values = synergy_values/nanmax(nanmax(abs(synergy_values(metmap,metmap))));
 end
 
 if gp.relative_threshold,
-  interaction_values(abs(interaction_values)<gp.relative_threshold*max(abs(interaction_values(:)))) = 0;
+  synergy_values(abs(synergy_values)<gp.relative_threshold*max(abs(synergy_values(:)))) = 0;
 end
 
 % the loop plots only upper triangle values!!
-interaction_values = interaction_values';
+synergy_values = synergy_values';
 
 % replace nan by zeros for graphics
-interaction_values(isnan(interaction_values)) = 0;
+synergy_values(isnan(synergy_values)) = 0;
 
 colors  = [];
 i1_list = [];
@@ -56,7 +56,7 @@ z = 1;
 
 for i1 = 1:nm,
   for i2 = i1+1:nm,
-    my_value = interaction_values(metmap(i1),metmap(i2));
+    my_value = synergy_values(metmap(i1),metmap(i2));
     if isfinite(my_value),
       if sign(my_value),
         i1_list(z) = i1;

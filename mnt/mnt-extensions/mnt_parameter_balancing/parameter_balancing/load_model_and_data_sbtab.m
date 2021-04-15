@@ -6,7 +6,9 @@ function [network, v, c_data, u_data, conc_min, conc_max, met_fix, conc_fix, pos
 %
 %Load SBtab file containing (model and data) information for Enzyme Cost Minimization
 %
-%For saving an SBtab file, see 'help ecm_save_model_and_data_sbtab'
+%!!! The data files must list metabolites and fluxes EXACTLY IN THE SAME ORDER as in the model !!!
+%
+%For saving an SBtab file, see 'help save_model_and_data_sbtab'
 %
 %Arguments
 % filename_model           filename for SBtab intput (model and data: "..._ECM_Model.tsv")
@@ -27,7 +29,12 @@ function [network, v, c_data, u_data, conc_min, conc_max, met_fix, conc_fix, pos
 % warnings
   
 my_sbtab_model      = sbtab_document_load_from_one(filename_model);
-my_sbtab_validation = sbtab_document_load_from_one(filename_validation_data);  
+
+if length(filename_validation_data),
+  my_sbtab_validation = sbtab_document_load_from_one(filename_validation_data);  
+else
+  my_sbtab_validation = struct;
+end
 
 options = struct;
 
@@ -47,19 +54,44 @@ positions = [];
 enzyme_cost_weights = ones(nr,1);
 
 try
-  v = sbtab_table_get_column(my_sbtab_model.tables.Flux,'Value',1);
+  if isfield(my_sbtab_model.tables,'FluxData'),
+    v = sbtab_table_get_column(my_sbtab_model.tables.FluxData,'Value',1);
+  else
+    %% use deprecated table name
+    v = sbtab_table_get_column(my_sbtab_model.tables.Flux,'Value',1);    
+  end
 catch err
   warnings = 'Flux table missing';
 end
 
+if length(v)~=nr, error('Data and model do notch match!'); end
+
 try
-  c_data = sbtab_table_get_column(my_sbtab_validation.tables.Concentration,'Value',1);
+  if isfield(my_sbtab_validation.tables,'MetaboliteConcentrationData')
+    c_data = sbtab_table_get_column(my_sbtab_validation.tables.MetaboliteConcentrationData,'Value',1);
+  elseif isfield(my_sbtab_validation.tables,'ConcentrationData') 
+    %% use deprecated table name
+    c_data = sbtab_table_get_column(my_sbtab_validation.tables.ConcentrationData,'Value',1);    
+  else
+    %% use deprecated table name
+    c_data = sbtab_table_get_column(my_sbtab_validation.tables.Concentration,'Value',1);    
+  end
 catch err
   warnings = [warnings, '; Concentration table missing'];
 end
 
+if length(c_data)~=nm, error('Data and model do notch match!'); end
+
 try
-  u_data    = sbtab_table_get_column(my_sbtab_validation.tables.EnzymeConcentration,'Value',1);
+  if isfield(my_sbtab_validation.tables,'EnzymeConcentrationData')
+    u_data    = sbtab_table_get_column(my_sbtab_validation.tables.EnzymeConcentrationData,'Value',1);
+  elseif isfield(my_sbtab_validation.tables,'EnzymeData')
+    %% use deprecated table name
+    u_data    = sbtab_table_get_column(my_sbtab_validation.tables.EnzymeData,'Value',1);
+  else
+    %% use deprecated table name
+    u_data    = sbtab_table_get_column(my_sbtab_validation.tables.EnzymeConcentration,'Value',1);
+  end
 catch err
   warnings = [warnings, '; Enzyme concentration table missing'];
 end
@@ -71,15 +103,17 @@ try
     warnings = [warnings, '; Concentration constraint table missing'];
 end
 
+if length(u_data)~=nr, error('Data and model do notch match!'); end
+
 try
-  enzyme_cost_weight  = sbtab_table_get_column(my_sbtab_model.tables.EnzymeCostWeight,'Value',1);
+  enzyme_cost_weights = sbtab_table_get_column(my_sbtab_model.tables.EnzymeCostWeight,'Value',1);
   catch err
     warning('Enzyme cost weight table missing in model file; I will use equal cost weights for all enzymes');
     warnings = [warnings, '; Enzyme cost weight table missing'];
 end
 
 try
-  positions = my_sbtab_model.tables.Layout;
+  positions = my_sbtab_model.tables.Position;
 catch err
   warnings = [warnings, '; Position table missing'];
 end

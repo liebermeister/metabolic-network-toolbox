@@ -4,6 +4,14 @@ function [data, q_info] = cmb_state_data_to_data(kinetic_data, state_data, cmb_o
 %
 % kinetic_data, state_data: matlab structs, describing kinetic data and metabolic state data
 %                           defined Metabolic Network Toolbox (see 'help kinetic data', 'help state_data')
+%
+% options used in this function (fields of cmb_options):
+%   cmb_options.quantities.c.min
+%   cmb_options.quantities.c.max
+%   cmb_options.data_kin_geom_std
+%   cmb_options.data_C_geom_std
+%   cmb_options.data_E_geom_std
+%   cmb_options.define_parameterisation
 
 [nm,ns] = size(state_data.metabolite_data.Mean);
 
@@ -24,28 +32,30 @@ state_data.metabolite_data.Mean(state_data.metabolite_data.Mean > cmb_options.qu
 % --------------------------------------------------------------
 
 if sum(isfinite(state_data.metabolite_data.Std))==0,
-  warning('No metabolite error bars are available: using simple estimate');
+  display('- (state_data_to_data.m): No metabolite error bars are available: using simple estimate');
   state_data.metabolite_data.Std = [];
 end
 
 if sum(isfinite(state_data.enzyme_data.Std))==0,
-  warning('No enzyme error bars are available: using simple estimate');
+  display('- (state_data_to_data.m): No enzyme error bars are available: using simple estimate');
   state_data.enzyme_data.Std = [];
 end
 
 
 if length(state_data.metabolite_data.Std),
   [data.X.mean,data.X.std] = lognormal_normal2log(state_data.metabolite_data.Mean,state_data.metabolite_data.Std);
+  data.X.std(~isfinite(data.X.std)) = log(cmb_options.data_C_geom_std);
 else
   data.X.mean = log(state_data.metabolite_data.Mean);
   data.X.std  = log(cmb_options.data_C_geom_std) * ones(size(data.X.mean));
 end
 
-data.E.mean = state_data.enzyme_data.Mean;
 if length(state_data.enzyme_data.Std),
-  data.E.std = state_data.enzyme_data.Std;
+  [data.lnE.mean, data.lnE.std] = lognormal_normal2log(state_data.enzyme_data.Mean,state_data.enzyme_data.Std);
+  data.lnE.std(~isfinite(data.lnE.std)) = log(cmb_options.data_E_geom_std);
 else
-  data.E.std  = [cmb_options.data_E_geom_std-1] * data.E.mean;
+  data.lnE.mean = log(state_data.enzyme_data.Mean);
+  data.lnE.std  = log(cmb_options.data_E_geom_std) * ones(size(data.lnE.mean));
 end
 
 data.V.mean = state_data.flux_data.Mean;
@@ -63,8 +73,8 @@ q_info = cmb_define_parameterisation(network, cmb_options);
 
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);
 
-nn             = network;
-nn.kinetics    = kinetic_data_to_kinetics(network.kinetics, kinetic_data);
+nn          = network;
+nn.kinetics = kinetic_data_to_kinetics([], kinetic_data, network);
 if ~isfield(nn.kinetics,'Kcatf')
   nn.kinetics.Kcatf = nan * nn.kinetics.KV;
 end
@@ -79,5 +89,14 @@ data.qall.mean(q_info.qall.index.KA)    = log(nn.kinetics.KA(KA_indices));
 data.qall.mean(q_info.qall.index.KI)    = log(nn.kinetics.KI(KI_indices));
 data.qall.mean(q_info.qall.index.Kcatf) = log(nn.kinetics.Kcatf);
 data.qall.mean(q_info.qall.index.Kcatr) = log(nn.kinetics.Kcatr);
-data.qall.std  = log(cmb_options.data_kin_geom_std) * ones(q_info.qall.number,1);
+
+data.qall.std = nan * ones(q_info.qall.number,1);
+data.qall.std(q_info.qall.index.Keq)   = log(nn.kinetics.STD_nat.Keq);
+data.qall.std(q_info.qall.index.KM)    = log(nn.kinetics.STD_nat.KM(KM_indices));
+data.qall.std(q_info.qall.index.KA)    = log(nn.kinetics.STD_nat.KA(KA_indices));
+data.qall.std(q_info.qall.index.KI)    = log(nn.kinetics.STD_nat.KI(KI_indices));
+data.qall.std(q_info.qall.index.Kcatf) = log(nn.kinetics.STD_nat.Kcatf);
+data.qall.std(q_info.qall.index.Kcatr) = log(nn.kinetics.STD_nat.Kcatr);
+
+data.qall.std(~isfinite(data.qall.std)) = log(cmb_options.data_kin_geom_std);
 data.qall.std(isnan(data.qall.mean)) = nan;

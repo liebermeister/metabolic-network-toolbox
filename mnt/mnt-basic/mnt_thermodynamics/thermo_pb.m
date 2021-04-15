@@ -7,7 +7,7 @@ function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)
 % This function is independent of the general parameter balancing functions
 % (the formulae for thermodynamic parameter balancing problem are explictly solved)
 % 
-% (for an alternative function that imports all model data in a data structure, 
+% (for an alternative function that imports all model data in a data structure,
 %  see 'parameter_balancing_thermodynamic')
 %
 % All quantitative information (bounds and fixed values for metabolites)
@@ -43,16 +43,24 @@ eval(default('verbose','1'));
 thermo_pb_options_default.ind_ignore_reactions = [];
 thermo_pb_options_default.log_c        = log(0.1) * ones(size(N,1),1);
 thermo_pb_options_default.log_c_std    = log(100) * ones(size(N,1),1);
-thermo_pb_options_default.c_min        = 10^-10   * ones(size(N,1),1);
-thermo_pb_options_default.c_max        = 10^3     * ones(size(N,1),1);
+thermo_pb_options_default.c_min        = [];
+thermo_pb_options_default.c_max        = [];
 thermo_pb_options_default.c_fix        = nan      * ones(size(N,1),1);
 thermo_pb_options_default.delta_G0     = nan      * zeros(size(N,2),1);
 thermo_pb_options_default.delta_G0_std = 10       * ones(size(N,2),1);
-% USAGE OF delta_G0_fix IS COMMENTED OUT BECAUSE FIXING THE DELTA G0 VALUES LEAD TO NUMERICAL PROBLEMS (NOT CLEAR WHY)
+% USAGE OF delta_G0_fix IS COMMENTED OUT BECAUSE FIXING THE DELTA G0 VALUES 
+% LEAD TO NUMERICAL PROBLEMS (NOT CLEAR WHY)
 thermo_pb_options_default.delta_G0_fix = nan      * zeros(size(N,2),1);
 thermo_pb_options_default.dG_threshold = 0.1;
 
 thermo_pb_options = join_struct(thermo_pb_options_default,thermo_pb_options);
+
+if isempty(thermo_pb_options.c_min),
+  thermo_pb_options.c_min        = 10^-10   * ones(size(N,1),1);
+end
+if isempty(thermo_pb_options.c_max),
+  thermo_pb_options.c_max        = 10^3     * ones(size(N,1),1);
+end
 
 % ------------------------------------------------------------
 % compute c
@@ -134,12 +142,15 @@ epsilon = thermo_pb_options.dG_threshold;
 
 % The variable vector is [log_c; dG0]
 
+y_min = -inf * [ones(nm,1); ones(nr,1)];
+y_max =  inf * [ones(nm,1); ones(nr,1)];
+
 % THIS IS COMMENTED OUT BECAUSE FIXING THE DELTA G0 VALUES LEAD TO NUMERICAL PROBLEMS (NUCLEAR WHY)
 %y_min = [log_c_min; -inf*ones(nr,1)];
 %y_max = [log_c_max;  inf*ones(nr,1)];
 
-y_min = [-inf *ones(nm,1); -inf*ones(nr,1)];
-y_max = [ inf *ones(nm,1);  inf*ones(nr,1)];
+% y_min = -10^20 * [ones(nm,1); ones(nr,1)];
+% y_max =  10^20 * [ones(nm,1); ones(nr,1)];
 
 %y_min(nm+ind_delta_G0_fix) = thermo_pb_options.delta_G0_fix(ind_delta_G0_fix);
 %y_max(nm+ind_delta_G0_fix) = thermo_pb_options.delta_G0_fix(ind_delta_G0_fix);
@@ -179,16 +190,17 @@ end
 
 M = diag(1./[log_c_std; dG0_std].^2);
 mean_values = [log_c_mean; dG0_mean];
+mean_values(~isfinite(mean_values))=0;
 
-m = -M*mean_values;
+m = -M * mean_values;
 y_start = [log_c_mean; dG0_mean];
 
 if exist('cplexqp','file'),
   opt = cplexoptimset('Display','off');
-  [y,~,exitflag,output]  = cplexqp(M, m, A, b, A_eq, b_eq, y_min, y_max, y_start,opt);
+  [y,~,exitflag,output] = cplexqp(M, m, A, b, A_eq, b_eq, y_min, y_max, y_start,opt);
 else
   opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');
-  [y,~,exitflag]  = quadprog(M, m, full(A),b,full(A_eq),b_eq,y_min,y_max,[],opt);
+  [y,~,exitflag] = quadprog(M, m, full(A), b, full(A_eq), b_eq, y_min, y_max, [], opt);
 end
 
 if exitflag~=1,

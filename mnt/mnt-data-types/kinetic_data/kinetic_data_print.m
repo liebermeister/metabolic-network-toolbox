@@ -10,6 +10,8 @@ fn = fieldnames(kinetic_data);
 
 parameter_prior = parameter_balancing_prior;
 
+T = {};
+
 for it = 1:length(fn),
   xx  = kinetic_data.(fn{it});
   ii  = find(isfinite(xx.median) + isfinite(xx.mean) + isfinite(xx.std) + isfinite(xx.lower) + isfinite(xx.upper));
@@ -33,7 +35,7 @@ for it = 1:length(fn),
     
     species_kegg_column  = [];
     reaction_kegg_column = [];
-    
+
     switch related_element,
       
       case 'Species',        
@@ -47,13 +49,14 @@ for it = 1:length(fn),
         end
         
       case 'Reaction', 
+
         species_column  = [{'!Compound'}; repmat({''},nii,1)];
         reaction_column = [{'!Reaction'}; network.actions(ii)];
         if isfield(network, 'metabolite_KEGGID'),
           species_kegg_column = [{'!Compound:Identifiers:kegg.compound'}; repmat({''},nii,1)];
         end
         if isfield(network, 'reaction_KEGGID'),
-          reaction_kegg_column = [{'!Reaction:Identifiers:kegg.reaction'}; column(network.reaction_KEGGID)];
+          reaction_kegg_column = [{'!Reaction:Identifiers:kegg.reaction'}; column(network.reaction_KEGGID(ii))];
         end
     
       case 'Reaction/Species',
@@ -72,7 +75,7 @@ for it = 1:length(fn),
         reaction_kegg_column = [];
 
     end
-    
+
     if nii,
       T{it} = [ quantity_type_column, species_column, reaction_column, unit_column, T{it}, species_kegg_column, reaction_kegg_column];
     end

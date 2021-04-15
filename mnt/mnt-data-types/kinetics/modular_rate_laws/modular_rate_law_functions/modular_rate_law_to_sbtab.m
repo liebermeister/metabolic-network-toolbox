@@ -265,7 +265,7 @@ if options.write_reaction_affinity,
 end
 
 if options.write_std_GFE_of_reaction,
-  column_quantity        = [ column_quantity; repmat({'standard Gibbs energy of reaction'},nr,1)];
+  column_quantity        = [ column_quantity; repmat({'standard Gibbs free energy of reaction'},nr,1)];
   column_parameterID     = [ column_parameterID; numbered_names_simple('deltaGFE0_R',nr)];
   column_mode            = [ column_mode; -RT * log(kinetics_mode.Keq)];
   column_unit            = [ column_unit; repmat({'kJ/mol'},nr,1)];
@@ -344,7 +344,7 @@ if isfield(network,'metabolite_mass'),
   end
 end
 
-sbtab_attributes = struct('TableID', 'Parameter', 'TableType','Quantity', 'TableName','Parameter');
+sbtab_attributes = struct('TableID', 'Parameter', 'TableType','Quantity', 'TableName','Parameter', 'StandardConcentration', 'mM');
 
 quantity_table = sbtab_table_construct(sbtab_attributes, {'QuantityType','Reaction','Compound',options.value_column_name,'Unit'}, ...
                                        {column_quantity,column_reaction,column_compound,column_mode,column_unit});

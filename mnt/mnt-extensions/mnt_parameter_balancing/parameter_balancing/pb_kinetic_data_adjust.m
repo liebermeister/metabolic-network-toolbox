@@ -9,6 +9,7 @@ else
 end
 
 % If desired, replace missing data values by pseudo values
+% Insert lower and upper bounds (from prior table) where no such bounds are given
 
 kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,options.insert_pseudo_values,network);
 
@@ -18,7 +19,7 @@ else
   display('o Not using pseudo values - Note that this may result, e.g., in ill-determined Kcat values!');
 end
 
-% If desired, fix the Delta G0 values and the ensuiing equilibrium constants
+% If desired, fix the Delta G0 values and the ensuing equilibrium constants
 
 if options.GFE_fixed,
   display(sprintf('  Fixing GFE (assuming very small std devs) for parameter balancing'));

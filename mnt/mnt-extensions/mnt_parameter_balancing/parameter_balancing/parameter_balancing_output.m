@@ -1,9 +1,19 @@
-function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res, kinetic_data_orig, options)
+function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res, kinetic_data_orig, options, network)
   
 % [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res,kinetic_data_orig,options)
 %
 % Convert parameter sets, previously obtained by parameter balancing, into the format 
 % used to describe kinetic parameters in the Metabolic Network Toolbox.
+%
+% Output data structures of data type 'kinetics' 
+%   r_mode       posterior mode (considering constraints)
+%   r_mean       posterior mode (ignoring constraints, may be outside the feasible range)
+%   r_std        posterior std  (per parameter; ignoring constraints, >= actual posterior std)
+%   r_geom_mean  posterior mode (ignoring constraints, may be outside the feasible range)
+%   r_geom_std   posterior geom std  (per param.; ignoring constraints, >= actual posterior geom std)
+%   r            balanced values
+%   r_orig       original values
+%   r_samples    cell array of data struct with sampled parameter values
 %
 % If option "adjust_to_fluxes" is set, the resulting parameter set (constrained posterior mode)
 % is additionally adjusted to yield the predefined flux distribution (vector given in options.v)
@@ -11,7 +21,7 @@ function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_f
 eval(default('kinetic_data_orig','[]', 'options','struct'));
 
 % ------------------------------------------------
-% r: "kinetics" data structure, balanced values
+% r: output 'kinetics' data structure with balanced values
 
 r_mode.type  = options.kinetics;
 r_mode.h     = myround(ones(size(res.kinetics.posterior_mode.Keq)));
@@ -28,27 +38,23 @@ end
 
 
 % ------------------------------------------------
-% r_orig: original values
+% r_orig: output 'kinetics' data structure with original values
+
+r_orig = struct;
 
 if length(kinetic_data_orig),
-  fn = fieldnames(kinetic_data_orig);
-  for it = 1:length(fn),
-    r_orig.(fn{it})    = myround(kinetic_data_orig.(fn{it}).median   );
-  end
+  r_orig = kinetic_data_to_kinetics(set_kinetics(network),kinetic_data_orig,network);
   if isfield(options,'Keq_given'),
     if length(options.Keq_given),
       ind_finite = find(isfinite(options.Keq_given));
       r_orig.Keq(ind_finite) = myround(my_options.Keq_given(ind_finite));
     end
   end
-  if isfield(r_orig,'dmu0'), 
-    r_orig.Keq(isnan(r_orig.Keq)) = myround(exp(-1/RT * r_orig.dmu0(isnan(r_orig.Keq))));
-  end
 end
 
 
 % ------------------------------------------------
-% r_samples: sampled values
+% r_samples: data structure with sampled parameter values
 
 if isfield(options,'n_samples'),
   if options.n_samples,
@@ -57,6 +63,7 @@ if isfield(options,'n_samples'),
     r_samples = [];
   end
 end
+
 
 % ----------------------------------------------------------------
 % Adjust solution (in struct 'r_mode') to predefined fluxes

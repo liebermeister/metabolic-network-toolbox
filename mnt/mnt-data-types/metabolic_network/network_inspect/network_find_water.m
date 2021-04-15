@@ -16,5 +16,5 @@ function ind_water = network_find_water(network)
   else
     ind_5=0; ind_6=0;
   end
-  ind = unique([ind_1, ind_2, ind_3, ind_4, ind_5, ind_6]);
+  ind = unique([ind_1; ind_2; ind_3; ind_4; ind_5; ind_6]);
   ind_water = ind(find(ind~=0));

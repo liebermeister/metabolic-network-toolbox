@@ -2,7 +2,15 @@ function [kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminu
 
 % [kinetics,KV,Keq] = modular_kcat_to_KV_Keq(N,kinetics,kcatplus,kcatminus,Keq)
 
-eval(default('kcatminus','[]','Keq','[]'));
+eval(default('kcatplus','[]','kcatminus','[]','Keq','[]'));
+
+if isempty(kcatminus),
+  kcatminus = kinetics.Kcatr;
+end
+
+if isempty(kcatplus),
+  kcatplus = kinetics.Kcatf;
+end
 
 all_KM              = ones(size(N'));
 all_KM(find(N'~=0)) = kinetics.KM(find(N'~=0));

@@ -6,22 +6,32 @@ function netgraph_concentrations(network,S,J,flag_text,options)
 
 eval(default('S','[]','J','[]','flag_text','0','options','struct'));
 
-opt_def = struct('actstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)),'canvas',[],'scale_arrowvalues',1);%,'colormap',rb_colors);
+opt_def = struct('actstyle','none','arrowstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)),'canvas',[],'scale_arrowvalues',1);%,'colormap',rb_colors);
 
-if isfield(options,'arrowvalues'), 
-  opt_def.arrowvaluesmax = max(abs(options.arrowvalues));
-  opt_def.arrowstyle = 'fluxes';
-  opt_def.actstyle   = 'fluxes';
-else
-  opt_def.arrowstyle  = 'none';
+if isfield(network,'graphics_par'),
+  opt_def = join_struct(network.graphics_par,opt_def);
+end
+
+options = join_struct(opt_def, options);
+
+options.actvalues = J;
+options.metvalues = S;
+
+if strcmp(options.arrowstyle,'fluxes')
+  if strcmp(options.arrowvalues,[]),
+    options.arrowvalues = J;
+  end
+end
+
+if isfield(options,'arrowvalues'),
+  options.arrowvaluesmax = max(abs(options.arrowvalues));
+  options.arrowstyle = 'fluxes';
+  options.actstyle   = 'fluxes';
 end
 
 if length(J), 
-  opt_def.actstyle = 'fixed';
+  options.actstyle = 'fixed';
 end
-
-eval(default('options','struct'));
-options = join_struct(opt_def,options);
 
 if strcmp(options.actstyle, 'none'),
   if ~strcmp(options.arrowstyle,'none'),

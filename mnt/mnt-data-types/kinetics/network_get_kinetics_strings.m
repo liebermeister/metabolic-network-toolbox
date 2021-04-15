@@ -8,6 +8,10 @@ rate_law_names.cs = 'Common saturable (CM)';
 rate_law_names.rp = 'Power-law  (PM)';
 rate_law_names.ds = 'Direct saturable (DM)';
 
+if ~isfield(network.kinetics,'type'),
+  network.kinetics.type = 'cs';
+end
+
 switch network.kinetics.type,
   
   case {'ms','cs','rp','ds'},

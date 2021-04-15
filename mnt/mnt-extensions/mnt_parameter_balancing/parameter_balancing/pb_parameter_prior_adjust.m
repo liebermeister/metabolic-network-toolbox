@@ -1,5 +1,19 @@
 function parameter_prior = pb_parameter_prior_adjust(parameter_prior, options)
-  
+
+% parameter_prior = pb_parameter_prior_adjust(parameter_prior, options)
+%
+% Replace same values in prior table according to user options:
+% 
+% options.kcat_prior_median
+% options.kcat_prior_log10_std
+% options.kcat_lower
+% options.kcatr_lower
+% options.KM_lower
+% options.keq_upper
+% options.kcat_upper
+% options.conc_min
+% options.conc_max
+
 if length(options.kcat_prior_median),
   display(sprintf('  Adjusting the prior: Setting kcat prior median value to %f', options.kcat_prior_median));
   ll = label_names({'catalytic rate constant geometric mean', 'substrate catalytic rate constant','product catalytic rate constant'},  parameter_prior.QuantityType);
@@ -46,4 +60,16 @@ if length(options.kcat_upper),
   display(sprintf('  Adjusting the prior: Setting kcat upper bound to %2.3f', options.kcat_upper));
   ll = label_names({'catalytic rate constant geometric mean', 'substrate catalytic rate constant','product catalytic rate constant'},  parameter_prior.QuantityType);
   parameter_prior.UpperBound(ll) = repmat({num2str(options.kcat_upper)},3,1);
+end
+
+ll = label_names({'concentration'},  parameter_prior.QuantityType);
+
+if options.conc_min ~= eval(parameter_prior.LowerBound{ll}),
+  display(sprintf('Setting default minimum concentration to %f',options.conc_min)); 
+  parameter_prior.LowerBound{ll} = num2str(options.conc_min); 
+end
+
+if options.conc_max ~= eval(parameter_prior.UpperBound{ll}), 
+  display(sprintf('Setting default maximum concentration to %f',options.conc_max)); 
+  parameter_prior.UpperBound{ll} = num2str(options.conc_max); 
 end

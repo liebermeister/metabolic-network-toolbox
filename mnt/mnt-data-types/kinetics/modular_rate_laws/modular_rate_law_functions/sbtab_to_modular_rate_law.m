@@ -53,16 +53,18 @@ ind_Keq = ind_Keq(label_names(Reaction(ind_Keq),network.actions));
 kinetics.Keq = Value(ind_Keq);
 
 if length(ind_Keq),
-  if strcmp(standard_concentration,'M'),
-    %% convert equilibrium constants: standard concentration M -> standard concentration mM
-    ind_water = network_find_water(network);
-    N_for_dissolved_compounds = network.N;
-    N_for_dissolved_compounds(ind_water,:) = 0;
-    molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
-    kinetics.Keq = kinetics.Keq .* 1000.^column(molecularity_mismatch);
-    display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
-  else
-    display('I assume that equilibrium constants given in the data file refer to a standard concentration of mM. If this is not the case, please indicate this by adding the table attribute StandardConcentration=''M'' to your data file');
+  switch standard_concentration,
+    case {'M','1M','1 M'},
+      %% convert equilibrium constants: standard concentration M -> standard concentration mM
+      ind_water = network_find_water(network);
+      N_for_dissolved_compounds = network.N;
+      N_for_dissolved_compounds(ind_water,:) = 0;
+      molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
+      kinetics.Keq = kinetics.Keq .* 1000.^column(molecularity_mismatch);
+      display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
+    case {'mM','1mM','1 mM'},
+    otherwise
+      warning('I assume that equilibrium constants given in the data file refer to a standard concentration of mM. If this is not the case, please indicate this by adding the table attribute StandardConcentration=''M'' to your data file');
   end
 end
 
@@ -123,14 +125,5 @@ end
 % -----------------------
 % Double check consistency between kinetic constants
 
-[computed_Kcatf, computed_Kcatr] = modular_KV_Keq_to_kcat(network.N,kinetics,kinetics.KV,kinetics.Keq,kinetics.KM,kinetics.h);
-
-if norm(log(computed_Kcatf) - log(kinetics.Kcatf)) > 0.01 * length(computed_Kcatf), 
-  warning('Haldane relationships seem to be violated (Kcat data values do not match the Kcat values computed from the other parameters)'); 
-  [log(computed_Kcatf) log(kinetics.Kcatf)]
-end 
-
-if norm(log(computed_Kcatr) - log(kinetics.Kcatr)) > 0.01 * length(computed_Kcatr), 
-  warning('Given Kcat values and Kcat values computed from other parameters do not match'); 
-  [log(computed_Kcatr) log(kinetics.Kcatr)]
-end 
+modular_rate_law_haldane(network,kinetics);
+modular_rate_law_haldane_kcat(network,kinetics);

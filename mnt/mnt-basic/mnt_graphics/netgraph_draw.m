@@ -78,6 +78,8 @@
 %COLORSCALE AND LINES
 % colorbar (0/1)
 % colorbar_numbers
+% colorbar_fontsize
+% colorbar_location (string, e.g. 'West' or 'South')
 % linecolor 
 % linewidth
 % colormap        (default rb_colors)
@@ -86,6 +88,7 @@
 % shade_long_lines  (value) if ~=0 : length above which  lines are shaded 
 % shade_cofactor_lines  (bitstring denoting the cofactors)
 %
+% canvas_position [xmin ymin xsize ysize] values for figure "Position" property
 % canvas (flag, default []): show light grey background; or rgb vector with background color
 % figure_axis: coordinate vector for figure axis
 % figure_position
@@ -122,19 +125,6 @@ if length(p.canvas),
 end
 
 x_arrowlistN = zeros(n_met,n_act,2);
-
-if p.colorbar,
-  if isempty(p.colorbar_numbers),
-    if length(p.metvaluesmax),
-      p.colorbar_numbers = [p.metvaluesmin,p.metvaluesmax]; 
-    elseif length(p.actvaluesmax),
-      p.colorbar_numbers = [p.actvaluesmin,p.actvaluesmax]; 
-    elseif p.edgevaluesmax,
-      p.colorbar_numbers = [p.edgevaluesmin,p.edgevaluesmax]; 
-    end
-  end
-  this_colorbar(p.colorbar_numbers, p.colormap);
-end
 
 % ------------------------------------------------------------------------------
 % only lines
@@ -490,24 +480,62 @@ end
 
 % figure general layout
 
+
+
 set(gca,'YDir',p.YDir);
 
 noticks;
 
-a = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
-     -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) + 0.000000000001,...
-     1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
-     -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) + 0.000000000001];
+% a = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
+%      -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) + 0.000000000001,...
+%      1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
+%      -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) + 0.000000000001];
+% 
+% if ~isempty(p.figure_axis), 
+%   a = p.figure_axis;
+% end 
 
-if ~isempty(p.figure_axis), a = p.figure_axis;
-end 
-
-axis(a);
+%axis(a);
+axis tight;
 axis off;
 axis equal;
 
+% add colorbar
+if p.colorbar,
+  if isempty(p.colorbar_numbers),
+    if length(p.metvaluesmax),
+      p.colorbar_numbers = [p.metvaluesmin,p.metvaluesmax]; 
+    elseif length(p.actvaluesmax),
+      p.colorbar_numbers = [p.actvaluesmin,p.actvaluesmax]; 
+    elseif p.edgevaluesmax,
+      p.colorbar_numbers = [p.edgevaluesmin,p.edgevaluesmax]; 
+    end
+  end
+  if max(p.colorbar_numbers)>min(p.colorbar_numbers),
+    this_colorbar(p.colorbar_numbers, p.colormap, p.colorbar_location, p.colorbar_fontsize);
+  end
+end
+
+% increase figure size to fill space
+ax = gca;
+outerpos = ax.OuterPosition;
+ax.Position = [0.05, 0.05, 0.9, 0.9];
+if p.colorbar,
+  switch p.colorbar_location,
+    case 'South',
+      ax.Position = [0, 0.1 1 0.85];
+    case 'West',
+      ax.Position = [0.1, 0,  0.85,  1];
+  end
+end
+
 network.graphics_par = p;
 
+% -----------------------------------------------------
+
+if length(network.graphics_par.canvas_position),
+  set(gcf,'Position',network.graphics_par.canvas_position);
+end
 
 % -----------------------------------------------------
 % END OF MAIN PROGRAM
@@ -689,16 +717,20 @@ end
 
 % ----------------------------------------
 
-function this_colorbar(num,colmap)
+function this_colorbar(num,colmap,location,colorbar_fontsize)
 
 colorbar('off');
 colormap(colmap);
-h = colorbar('Location','West'); 
 
-min_scale  = min(num); %-max(abs(num));
-max_scale  = max(num);
+h = colorbar('Location', location); 
 
-set(h,'YLim',[min_scale, max_scale],'YTick',num,'YTickLabel',num);
+min_scale  = round(min(num),2,'significant');
+%-max(abs(num));
+max_scale  = round(max(num),2,'significant');
+if strcmp(location,'South'),
+  set(h,'Position',[0.05 0.05 0.90 0.03]);
+end
+set(h,'YLim',[min_scale, max_scale],'YTick',[min_scale:(max_scale-min_scale)/5:max_scale],'YTickLabel',[min_scale:(max_scale-min_scale)/5:max_scale],'FontSize',colorbar_fontsize);
 caxis([min_scale, max_scale]);
 
 % -------------------------------------------------
@@ -778,6 +810,7 @@ p_default = struct(...
     'arrowvalues_std',     zeros(size(p.arrowvalues)), ...
     'arrow_shift',     0.7,  ...
     'arrowcolor',      [0.7 0.7 0.7],  ...
+    'colorbar_fontsize', 14, ...
     'linewidth', 1, ...
     'single_arrow', 0, ...
     'edgevalues',      [],  ...
@@ -800,6 +833,8 @@ p_default = struct(...
     'figure_axis',     [], ...
     'black_and_white', 0, ...
     'colormap',        rb_colors(250), ...
+    'colorbar_location', 'South', ...
+    'canvas_position', [], ...
     'linecolor',       [0 0 1], ...
     'rlinecolor',      [1 .3 0.], ...
     'text_offset',     [0.01,-0.01], ...

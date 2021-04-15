@@ -50,8 +50,8 @@ basic_quantities  = {'standard chemical potential','concentration'}';
 
 pseudo_quantities  = {'equilibrium constant','reaction affinity'}';
 
-model_quantities  = {'standard chemical potential','standard Gibbs energy of reaction','equilibrium constant', 'concentration','reaction affinity'}';
-data_quantities   = {'standard chemical potential','standard Gibbs energy of reaction','equilibrium constant', 'concentration','reaction affinity'}';
+model_quantities  = {'standard chemical potential','standard Gibbs free energy of reaction','equilibrium constant', 'concentration','reaction affinity'}';
+data_quantities   = {'standard chemical potential','standard Gibbs free energy of reaction','equilibrium constant', 'concentration','reaction affinity'}';
 
 
 % --------------------------------------------------------
@@ -131,6 +131,7 @@ else
   if isfield(kinetic_data_file,'A'),   kinetic_data.A   = kinetic_data_file.A;   end 
 end
 
+
 % Check: for which metabolite concentrations do we have standard chemical potentials?
 % mu0 = kinetic_data.mu0.median;
 % figure(2); netgraph_concentrations(network_CoHid,isfinite(mu0),[],1,gp) 
@@ -161,14 +162,14 @@ end
 % IN PARAMETER BALANCING (QUADPROG)
 
 %kinetic_data.mu0.std(find(isfinite(kinetic_data.mu0.std))) = 10^-4;
-kinetic_data.mu0.std = options.sigma_mu0 * ones(nm,1);
+if isfield(kinetic_data,'mu0'),
+  kinetic_data.mu0.std = options.sigma_mu0 * ones(nm,1);
+end
 
 if isfield(kinetic_data,'c'),
   kinetic_data.c.std(find(isfinite(kinetic_data.c.std)))       = 10^-4;
   kinetic_data.c.std_ln(find(isfinite(kinetic_data.c.std_ln))) = 10^-4;
 end
-
-
 
 % ------------------------------------------------------------------------
 % Impose lower and upper bounds on concentrations; first from prior table, then from options given
@@ -176,7 +177,7 @@ end
 kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,options.use_pseudo_values,network);
 
 if options.set_water_conc_to_one, 
-  options.c_fix(options.ind_water) = 1; 
+  options.c_fix(options.ind_water) = 1;
 end
 
 options.c_min(isnan(options.c_min)) = options.conc_min;
@@ -204,19 +205,21 @@ kinetic_data.c.upper_ln = log(kinetic_data.c.upper);
 % ------------------------------------------------------------------------
 % Impose lower and upper bounds on A values
 
-ind = find(isfinite(options.A_lower));
-kinetic_data.A.lower(ind) = max(kinetic_data.A.lower(ind), options.A_lower(ind));
-
-ind = find(isfinite(options.A_upper));
-kinetic_data.A.upper(ind) = min(kinetic_data.A.upper(ind), options.A_upper(ind));
-
-ind_plus = find(options.A_fix>0);
-kinetic_data.A.lower(ind_plus) = 0.99 * options.A_fix(ind_plus);
-kinetic_data.A.upper(ind_plus) = 1.01 * options.A_fix(ind_plus);
-
-ind_minus = find(options.A_fix<0);
-kinetic_data.A.lower(ind_minus) = 1.01 * options.A_fix(ind_minus);
-kinetic_data.A.upper(ind_minus) = 0.99 * options.A_fix(ind_minus);
+if isfield(kinetic_data,'A'),
+  ind = find(isfinite(options.A_lower));
+  kinetic_data.A.lower(ind) = max(kinetic_data.A.lower(ind), options.A_lower(ind));
+  
+  ind = find(isfinite(options.A_upper));
+  kinetic_data.A.upper(ind) = min(kinetic_data.A.upper(ind), options.A_upper(ind));
+  
+  ind_plus = find(options.A_fix>0);
+  kinetic_data.A.lower(ind_plus) = 0.99 * options.A_fix(ind_plus);
+  kinetic_data.A.upper(ind_plus) = 1.01 * options.A_fix(ind_plus);
+  
+  ind_minus = find(options.A_fix<0);
+  kinetic_data.A.lower(ind_minus) = 1.01 * options.A_fix(ind_minus);
+  kinetic_data.A.upper(ind_minus) = 0.99 * options.A_fix(ind_minus);
+end
 
 % ------------------------------------------------------------------------------
 % Update data (in struct "kinetic_data")
@@ -282,6 +285,6 @@ end
 % ---------------------------------------------------------
 
 if nargout > 5,
-  [r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples]  = parameter_balancing_output(result,kinetic_data_orig,options);
+  [r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples]  = parameter_balancing_output(result,kinetic_data_orig,options,network);
   network.kinetics      = r; 
 end

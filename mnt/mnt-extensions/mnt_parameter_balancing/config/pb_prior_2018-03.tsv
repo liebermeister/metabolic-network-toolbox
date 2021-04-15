@@ -1,7 +1,7 @@
 !!SBtab TableID="Parameter prior" TableType="QuantityInfo" Date="2017-10-30"
 !QuantityType	!Symbol	!Unit	!Constant	!Element	!Scaling	!Dependence	!PriorMedian	!PriorStd	!PriorGeometricStd	!LowerBound	!UpperBound	!DataStd	!SBMLElement 	!Abbreviation	!MatrixInfo
 standard chemical potential	mu0	kJ/mol	Thermodynamic	Species	Original	Basic	-880	1500		-3000	2000	10	Global parameter 	scp	[I_species, 0, 0, 0, 0, 0, 0, 0]
-standard Gibbs energy of reaction	dmu0	kJ/mol	Thermodynamic	Reaction	Original	Derived	0	1500		-1000	1000	10	Global parameter 	dscp	[Nt, 0, 0, 0, 0, 0, 0, 0]
+standard Gibbs free energy of reaction	dmu0	kJ/mol	Thermodynamic	Reaction	Original	Derived	0	1500		-1000	1000	10	Global parameter 	dscp	[Nt, 0, 0, 0, 0, 0, 0, 0]
 catalytic rate constant geometric mean	KV	1/s	Kinetic	Reaction	Logarithmic	Basic	10	2	100	0.0000001	10000	0.5	Local parameter	kcrg	[0, I_reaction, 0, 0, 0, 0, 0, 0]
 substrate catalytic rate constant	Kcatf	1/s	Kinetic	Reaction	Logarithmic	Derived	10	2	100	0.01	10000000	0.5	Local parameter  	kcrf	[[-0.5/RT * Nt], I_reaction, [-0.5 * Nkm], 0, 0, 0, 0, 0]
 product catalytic rate constant	Kcatr	1/s	Kinetic	Reaction	Logarithmic	Derived	10	2	100	0.000000001	10000000	0.5	Local parameter 	kcrr	[[0.5/RT * Nt], I_reaction, [0.5 * Nkm], 0, 0, 0, 0, 0]

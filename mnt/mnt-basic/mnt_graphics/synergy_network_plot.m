@@ -1,6 +1,6 @@
-function interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)
+function synergy_network_plot(network, reaction_values, reaction_pair_values, col, gp)
 
-% interaction_network_plot(network, reaction_values, reaction_pair_values, col, gp)
+% synergy_network_plot(network, reaction_values, reaction_pair_values, col, gp)
 %
 % Arguments:
 % reaction_values       (vector) values for single reactions 
@@ -12,7 +12,7 @@ function interaction_network_plot(network, reaction_values, reaction_pair_values
 %                          gp.normalise_values
 %                          gp.relative_threshold
 % 
-% FOR METABOLITE INTERACTIONS SEE netgraph_metabolite_interactions
+% FOR METABOLITE SYNERGIES SEE netgraph_metabolite_synergies
 
 eval(default('col','[]','gp','struct'));
 

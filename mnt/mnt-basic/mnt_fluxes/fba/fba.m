@@ -19,10 +19,10 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 %
 % solver = {'cplex','linprog'};
 %
-% simple usage:
+% Usage example
 % fba_constraints = fba_default_options(network);
 % fba_constraints.zv = zeros(size(fba_constraints.zv));
-% fba_constraints.zv(#biomass_reaction) = 1;
+% fba_constraints.zv(#biomass_reaction) = 1;  % insert the right #biomass_reaction !!
 % [v,value] = fba(network,fba_constraints)
 
 %fprintf('FBA: ');

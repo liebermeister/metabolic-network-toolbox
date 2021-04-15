@@ -1,4 +1,4 @@
-% network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positionss);
+% network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);
 %
 % create or modify structure describing the graphical appearance of a metabolic network
 

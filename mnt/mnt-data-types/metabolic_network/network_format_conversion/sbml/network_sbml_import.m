@@ -110,7 +110,7 @@ for it=1:length(listOfReactants),
     sstoichiometries{it}= [sstoichiometries{it} listOfReactants{it}(itt).stoichiometry];
   end
 end
-  
+
 for it=1:length(listOfProducts),
   product{it}={};
   pstoichiometries{it}=[];
@@ -145,7 +145,7 @@ N=zeros(length(metabolites),length(reaction_id));
 for it=1:length(s.reaction),
   substrate_indices = label_names(substrate{it},metabolites,'single');
   if length(substrate_indices), 
-    N(substrate_indices,it) = N(substrate_indices,it)-sstoichiometries{it}'; 
+    N(substrate_indices,it) = N(substrate_indices,it) - sstoichiometries{it}'; 
   end 
   product_indices = label_names(product{it},metabolites,'single');
   if length(product_indices),

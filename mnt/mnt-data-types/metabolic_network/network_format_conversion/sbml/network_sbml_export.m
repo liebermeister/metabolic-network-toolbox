@@ -104,6 +104,9 @@ if isfield(network,'kinetics'),
 
     case {'ms','cs','ds','rp'},	
       
+      if ~isfield(network.kinetics,'c'),
+        network.kinetics.c = nan * ones(size(network.metabolites));
+      end
       for it = 1:length(network.metabolites),
         species{it} = Species_setInitialConcentration(species{it},network.kinetics.c(it));
       end
@@ -148,6 +151,9 @@ if isfield(network,'kinetics'),
 	kinetic_law{it} = KineticLaw_setFormula(kinetic_law{it}, formula);
 	kinetic_law{it} = KineticLaw_setMathFromFormula(kinetic_law{it});
 
+        if ~isfield(kk,'u'),
+          kk.u = nan * ones(size(network.actions));
+        end
         parameter       = Parameter_create(sbml_level,sbml_version);
         parameter       = Parameter_setName(parameter, ['u_' r_name ]);
         parameter       = Parameter_setId(  parameter, ['u_' r_name ]);

@@ -168,7 +168,7 @@ end
 
 % if flux changes considerably -> notify the user
 if norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) > 0.5,
-  display('Warning (project_fluxes.m); projection changes fluxes considerably'); 
+  display('- (project_fluxes.m): projected fluxes differ strongly from original fluxes'); 
   %%  display('Original fluxes / Projected fluxes');
   %%  [v_mean(ind_finite) v_projected(ind_finite)]
   %figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),'.'); 

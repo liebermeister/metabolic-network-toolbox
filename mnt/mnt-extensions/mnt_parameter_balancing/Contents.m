@@ -2,7 +2,7 @@
 % Parameter balancing for kinetic metabolic models
 % ------------------------------------------------
 %
-% The parameter balancing functions are part of the Metabolic Network Toolbox (MNT),
+% Parameter balancing functions in the Metabolic Network Toolbox (MNT),
 % subdirectory 'mnt-advanced/mnt_parameter_balancing/'
 %
 % Convenience functions
@@ -15,14 +15,14 @@
 % The calculation procedure can be customised. For a list of options, see "parameter_balancing_options.m"
 %
 % Demo scripts
-%
-%   demo_pb_sbtab.m                   - Example models from the website www.parameterbalancing.net
-%   demo_pb_ecoli_noor_2016.m         - Model E. coli central carbon metabolism from Noor et al. (2016) 
-%   demo_pb_ecoli_wortel_2017.m       - Model E. coli central carbon metabolism from Wortel et al. (2017) 
+%   demo_parameter_balancing        - Model E. coli central carbon metabolism from Noor et al. (2016) [SBML input file]
+%   demo_pb_ecoli_noor_2016         - Model E. coli central carbon metabolism from Noor et al. (2016) 
+%   demo_pb_ecoli_wortel_2017       - Model E. coli central carbon metabolism from Wortel et al. (2017) 
+%   demo_pb_sbtab                   - Example models from the website www.parameterbalancing.net
 %
 % Configuration files
 %
-%   Configuration files (pb_prior.tsv and pb_options.tsv) can be found in the "config" directory.
+%   Default configuration files (pb_prior.tsv and pb_options.tsv) can be found in the "config" directory.
 %
 % Example models
 %

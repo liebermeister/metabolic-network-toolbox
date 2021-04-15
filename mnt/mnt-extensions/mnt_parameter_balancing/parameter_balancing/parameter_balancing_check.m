@@ -1,17 +1,32 @@
 % ECM_CHECK_PARAMETER_BALANCING - Checks for balanced parameters
 %
-% parameter_balancing_check(r, r_orig, network, parameter_prior, show_graphics, show_concentrations)
+% parameter_balancing_check(r, r_orig, network, parameter_prior, show_graphics, show_concentrations,show_dmu0,show_enzyme)
+%
+% Summary of changes from original parameters to balanced parameters: 
+% Show diagnostic plots and show lists of large fold changes
+%
+% show_dmu0: show standard Delta G values instead of equilibrium constants 
 
-function parameter_balancing_check(r, r_orig, network, parameter_prior, show_graphics, show_concentrations)
+function parameter_balancing_check(r, r_orig, network, parameter_prior, show_graphics, show_concentrations, show_dmu0,show_enzyme)
 
+eval(default('show_concentrations','0','show_dmu0','0','show_enzyme','0'));
+  
+if ~length(fieldnames(r_orig)),
+  error('Empty data structure "r_orig"')
+end
+  
 show_KV = 1;
 show_KI = double(sum(r.KI(:))>0);
 show_KA = double(sum(r.KA(:))>0);
 
 if ~isfield(r_orig,'KV'),
-  show_KV = 0;
-  r_orig.KV = nan * r_orig.Kcatf;
+  r_orig.KV = nan * ones(size(network.actions));
 end
+
+if sum(isfinite(r_orig.KV))==0,
+  show_KV = 0;
+end
+
 if ~isfield(r,'KV'),
   show_KV = 0;
   r.KV = nan * r.Kcatf;
@@ -19,9 +34,10 @@ end
 
 display(sprintf('\nChecking the balanced parameters'))  
 
-eval(default('show_graphics','1','parameter_prior','[]','show_concentrations','0'));
+eval(default('show_graphics','1','parameter_prior','[]','show_concentrations','0','show_enzyme','0'));
 
 i_mu0   = label_names('mu0', parameter_prior.Symbol);
+i_dmu0  = label_names('dmu0', parameter_prior.Symbol);
 i_Keq   = label_names('Keq', parameter_prior.Symbol);
 i_Kcatf = label_names('Kcatf', parameter_prior.Symbol);
 i_Kcatr = label_names('Kcatr', parameter_prior.Symbol);
@@ -66,7 +82,7 @@ end
 log_Kcatf_change = log10(r.Kcatf./r_orig.Kcatf); 
 ind_change = find(isfinite(log_Kcatf_change) .* abs(log_Kcatf_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('    Fold changes of Kcatf values (showing |fold change| > %f)',threshold));
+display(sprintf('  Fold changes of Kcatf values (showing |fold change| > %f)',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Kcatf_change(ind_change(it)))); 
  end
@@ -144,21 +160,23 @@ end
 end
 
 if isfield(r,'c'), 
-if isfield(r_orig,'c'), 
-  log_c_change = log10(r.c./r_orig.c);
-  ind_change = find(isfinite(log_c_change) .* abs(log_c_change)>log10(threshold));
-  if length(ind_change),
-    display(sprintf('  Fold changes of c values (showing |fold change| > %f)',threshold));
- for it = 1:length(ind_change),
-   display(sprintf('    %s: %f', network.metabolites{ind_change(it)}, 10.^log_c_change(ind_change(it)))); 
- end
+if isfield(r_orig,'c'),
+  if length(r_orig.c),
+    log_c_change = log10(r.c./r_orig.c);
+    ind_change = find(isfinite(log_c_change) .* abs(log_c_change)>log10(threshold));
+    if length(ind_change),
+      display(sprintf('  Fold changes of c values (showing |fold change| > %f)',threshold));
+      for it = 1:length(ind_change),
+        display(sprintf('    %s: %f', network.metabolites{ind_change(it)}, 10.^log_c_change(ind_change(it)))); 
+      end
+    end
  end
 end
 end
-
 
 if isfield(r,'u'), 
 if isfield(r_orig,'u'), 
+ if length(r_orig.u),
   log_u_change = log10(r.u ./r_orig.u); 
   ind_change = find(isfinite(log_u_change) .* abs(log_u_change)>log10(threshold));
   if length(ind_change),
@@ -167,6 +185,7 @@ if isfield(r_orig,'u'),
       display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_u_change(ind_change(it)))); 
     end
   end
+ end
 end
 end
 
@@ -174,30 +193,60 @@ if length(network.actions)>1,
 
 if show_graphics,
 
-  [ni,nj] = subplot_n(4+show_KA+show_KI+show_KV+2*show_concentrations);
-  figure(1); clf;
+  show_std = isfield(r_orig,'STD_nat');
+  
+  [ni,nj] = subplot_n(4+show_KA+show_KI+show_KV+show_concentrations+show_enzyme);
 
-  subplot(ni,nj,1); plot(r_orig.Keq,  r.Keq, 'ro'); 
-  title('Keq'); xlabel('Original data'); ylabel('Balanced values'); 
-  set(gca, 'XScale','log','YScale','log'); 
-  hold on; a = [min(r.Keq) max(r.Keq)]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+  figure(1); clf; set(gcf,'Position',[40,140,800,800]);
+
+  subplot(ni,nj,1); 
+  if show_dmu0,
+    plot(r_orig.dmu0,  r.dmu0, 'ro'); 
+    title('dmu0'); xlabel('Original data'); ylabel('Balanced values'); 
+    hold on; a = [min([r.dmu0,r_orig.dmu0]) max([r.dmu0,r_orig.dmu0])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+  else
+    if show_std,
+      errorbar(r_orig.Keq, r.Keq, [],[], [1-exp(-r_orig.STD_nat.Keq)].*r_orig.Keq, [exp(r_orig.STD_nat.Keq)-1].*r.Keq, 'o','Color',[1,.7,.7]); hold on; 
+    end
+    plot(r_orig.Keq,  r.Keq, 'ro'); 
+    title('Keq'); xlabel('Original data'); ylabel('Balanced values'); 
+    set(gca, 'XScale','log','YScale','log');
+    ind = find([r.Keq~=0].*isfinite(r.Keq.*r_orig.Keq));
+    hold on; a = [min([r.Keq(ind);r_orig.Keq(ind)]) max([r.Keq(ind);r_orig.Keq(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+  end
   
   subplot(ni,nj,2); plot(r_orig.Kcatf,r.Kcatf,'ro'); 
+  if show_std,
+    errorbar(r_orig.Kcatf, r.Kcatf, [],[], [1-exp(-r_orig.STD_nat.Kcatf)].*r_orig.Kcatf, [exp(r_orig.STD_nat.Kcatf)-1].*r.Kcatf, 'o','Color',[1,.7,.7]); hold on;
+  end
+  plot(r_orig.Kcatf,r.Kcatf,'ro'); 
   title('Kcatf'); xlabel('Original data'); ylabel('Balanced values');
   set(gca, 'XScale','log','YScale','log'); 
-  hold on; a = [min(r.Kcatf) max(r.Kcatf)]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
-
+  ind = find([r.Kcatf~=0].*isfinite(r.Kcatf.*r_orig.Kcatf));
+  hold on; a = [min([r.Kcatf(ind);r_orig.Kcatf(ind)]) max([r.Kcatf(ind);r_orig.Kcatf(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+  
   subplot(ni,nj,3); plot(r_orig.Kcatr,r.Kcatr,'ro'); 
+  if show_std,
+    errorbar(r_orig.Kcatr, r.Kcatr, [],[], [1-exp(-r_orig.STD_nat.Kcatr)].*r_orig.Kcatr, [exp(r_orig.STD_nat.Kcatr)-1].*r.Kcatr, 'o','Color',[1,.7,.7]); hold on
+  end
+  plot(r_orig.Kcatr,r.Kcatr,'ro'); 
   title('Kcatr'); xlabel('Original data'); ylabel('Balanced values');
   set(gca, 'XScale','log','YScale','log'); 
-  hold on; a = [min(r.Kcatr) max(r.Kcatr)]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+  ind = find([r.Kcatr~=0].*isfinite(r.Kcatr.*r_orig.Kcatr));
+  hold on; a = [min([r.Kcatr(ind);r_orig.Kcatr(ind)]) max([r.Kcatr(ind);r_orig.Kcatr(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
 
-  subplot(ni,nj,4); plot(r_orig.KM(:),r.KM(:),'ro'); 
+  subplot(ni,nj,4); 
+  if show_std,
+    errorbar(r_orig.KM, r.KM, [],[], [1-exp(-r_orig.STD_nat.KM)].*r_orig.KM, [exp(r_orig.STD_nat.KM)-1].*r.KM,  'o','Color',[1,.7,.7]); hold on
+  end
+  plot(r_orig.KM(:),r.KM(:),'ro'); 
   title('KM'); xlabel('Original data'); ylabel('Balanced values'); 
   set(gca, 'XScale','log','YScale','log'); 
-  hold on; a = [min(r.KM(r.KM>0)), max(r.KM(:))];
+  hold on; 
+  ind = find([r.KM>0].*isfinite(r.KM.*r_orig.KM));
+  a = [min([r.KM(ind);r_orig.KM(ind)]), max([r.KM(ind);r_orig.KM(ind)])];
   plot([a(1) a(2)],[a(1) a(2)],'-k');
-  axis tight; 
+  axis tight; axis equal; 
 
   nk = 4;
   
@@ -206,8 +255,8 @@ if show_graphics,
     subplot(ni,nj,nk); 
     plot(r_orig.KA(:),r.KA(:),'ro'); 
     title('KA'); xlabel('Original data'); ylabel('Balanced values');
-    set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min(r.KA(r.KA>0)), max(r.KA(:))]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+    set(gca, 'XScale','log','YScale','log');
+    hold on; a = [min([r.KA(r.KA>0);r_orig.KA(r_orig.KA>0)]), max([r.KA(:);r_orig.KA(:)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
   end
   
   if show_KI,
@@ -216,16 +265,19 @@ if show_graphics,
     plot(r_orig.KI(:),r.KI(:),'ro'); 
     title('KI'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min(r.KI(r.KI>0)), max(r.KI(:))]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+    hold on; a = [min([r.KI(r.KI>0);r_orig.KI(r_orig.KI>0)]), max([r.KI(:);r_orig.KI(:)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
   end
 
   if show_KV,
     nk = nk + 1;
     subplot(ni,nj,nk); 
+    if show_std,
+      errorbar(r_orig.KV, r.KV, [],[], [1-exp(-r_orig.STD_nat.KV)].*r_orig.KV, [exp(r_orig.STD_nat.KV)-1].*r.KV,  'o','Color',[1,.7,.7]); hold on
+  end
     plot(r_orig.KV,r.KV,'ro'); 
     title('KV'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min(r.KV) max(r.KV)]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+    hold on; a = [min([r.KV;r_orig.KV]); max([r.KV;r_orig.KV])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
   end
 
   if show_concentrations,
@@ -234,33 +286,39 @@ if show_graphics,
     plot(r_orig.c,r.c,'ro'); 
     title('c'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min(r.c) max(r.c)]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+    hold on; a = [min([r.c;r_orig.c]) max([r.c;r_orig.c])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+  end
   
-      nk = nk + 1;
+  if show_enzyme,
+    nk = nk + 1;
     subplot(ni,nj,nk); 
     plot(r_orig.u,r.u,'ro'); 
     title('u'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min(r.u) max(r.u)]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; 
+    hold on; a = [min([r.u;r_orig.u]) max([r.u;r_orig.u])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
   end
 
-  figure(2); clf 
-  %% blue bars:     original 
-  %% beige bars: balanced
+  figure(2); clf; set(gcf,'Position',[600,100,800,800]); 
+
+  if show_KA+show_KI+show_KV+show_concentrations + show_enzyme==0,
+    ni = 4+show_KA+show_KI+show_KV+show_concentrations+show_enzyme; 
+    nj = 1;
+  end
 
   subplot(ni,nj,1); hold on;
   edges = log10(lower_bound(i_Keq)):1:log10(upper_bound(i_Keq));
-  bar(edges+0.5,[histc(log10(r.Keq), edges), histc(log10(r_orig.Keq), edges)],'grouped');
+  bar(edges+0.5,[histc(log10(r_orig.Keq), edges), histc(log10(r.Keq), edges)],'grouped');
   title('log_{10} Keq'); a = axis; 
   plot(log10(lower_bound(i_Keq)) *[1 1],[0,a(4)],'k-');
-  plot(log10(upper_bound(i_Keq)) *[1 1],[0,a(4)],'k-');
-  plot(log10(prior_median(i_Keq)) *[1 1],[0,a(4)],'b-');
   plot([log10(prior_median(i_Keq)) + prior_std(i_Keq) *[-1,1] ], 0.95*a(4)*[1,1],'b-','Linewidth',2);
+  plot(log10(prior_median(i_Keq)) *[1 1],[0,a(4)],'b-');
+  plot(log10(upper_bound(i_Keq)) *[1 1],[0,a(4)],'k-');
   axis([log10(lower_bound(i_Keq))-1,log10(upper_bound(i_Keq))+1,0,a(4)]);
-  
+  legend('Original','Balanced','Range','Prior');
+
   subplot(ni,nj,2); hold on;
   edges = log10(lower_bound(i_Kcatf)):0.5:log10(upper_bound(i_Kcatf));
-  bar(edges+0.25,[histc(log10(r.Kcatf), edges), histc(log10(r_orig.Kcatf), edges)],'grouped'); 
+  bar(edges+0.25,[histc(log10(r_orig.Kcatf), edges),histc(log10(r.Kcatf), edges)],'grouped'); 
   title('log_{10} Kcatf'); a = axis; 
   plot(log10(lower_bound(i_Kcatf)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_Kcatf)) *[1 1],[0,a(4)],'k-');
@@ -270,7 +328,7 @@ if show_graphics,
 
   subplot(ni,nj,3); hold on;
   edges = log10(lower_bound(i_Kcatr)):0.5:log10(upper_bound(i_Kcatr));
-  bar(edges+0.25,[histc(log10(r.Kcatr), edges), histc(log10(r_orig.Kcatr), edges)],'grouped');
+  bar(edges+0.25,[histc(log10(r_orig.Kcatr), edges),histc(log10(r.Kcatr), edges)],'grouped');
   title('log_{10} Kcatr'); a = axis; 
   plot(log10(lower_bound(i_Kcatr)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_Kcatr)) *[1 1],[0,a(4)],'k-');
@@ -280,7 +338,7 @@ if show_graphics,
 
   subplot(ni,nj,4); hold on;
   edges = log10(lower_bound(i_KM)):0.5:log10(upper_bound(i_KM));
-  bar(edges+0.25,[histc(full(log10(r.KM(r.KM~=0))), edges), histc(log10(full(r_orig.KM(r_orig.KM~=0))), edges)],'grouped');
+  bar(edges+0.25,[histc(log10(full(r_orig.KM(r_orig.KM~=0))), edges),histc(full(log10(r.KM(r.KM~=0))), edges)],'grouped');
   title('log_{10} KM'); a = axis; 
   plot(log10(lower_bound(i_KM)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_KM)) *[1 1],[0,a(4)],'k-');
@@ -294,7 +352,7 @@ if show_graphics,
     subplot(ni,nj,nk); 
     hold on;
   edges = log10(lower_bound(i_KA)):0.5:log10(upper_bound(i_KA));
-  bar(edges+0.25,[histc(full(log10(r.KA(r.KA~=0))), edges), histc(full(log10(r_orig.KA(r_orig.KA~=0))), edges)],'grouped');
+  bar(edges+0.25,[histc(full(log10(r_orig.KA(r_orig.KA~=0))), edges),histc(full(log10(r.KA(r.KA~=0))), edges)],'grouped');
   title('log_{10} KA'); a = axis; 
   plot(log10(lower_bound(i_KA)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_KA)) *[1 1],[0,a(4)],'k-');
@@ -308,7 +366,7 @@ if show_graphics,
     subplot(ni,nj,nk); 
  hold on;
   edges = log10(lower_bound(i_KI)):0.5:log10(upper_bound(i_KI));
-  bar(edges+0.25,[histc(full(log10(r.KI(r.KI~=0))), edges), histc(full(log10(r_orig.KI(r_orig.KI~=0))), edges)],'grouped');
+  bar(edges+0.25,[histc(full(log10(r_orig.KI(r_orig.KI~=0))), edges), histc(full(log10(r.KI(r.KI~=0))), edges)],'grouped');
   title('log_{10} KI'); a = axis; 
   plot(log10(lower_bound(i_KI)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_KI)) *[1 1],[0,a(4)],'k-');
@@ -322,7 +380,7 @@ if show_graphics,
     subplot(ni,nj,nk); 
  hold on;
   edges = log10(lower_bound(i_KV)):0.5:log10(upper_bound(i_KV));
-  bar(edges+0.25,[histc(log10(r.KV), edges), histc(log10(r_orig.KV), edges)],'grouped');
+  bar(edges+0.25,[histc(log10(r_orig.KV), edges), histc(log10(r.KV), edges)],'grouped');
   title('log_{10} KV'); a = axis; 
   plot(log10(lower_bound(i_KV)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_KV)) *[1 1],[0,a(4)],'k-');
@@ -344,19 +402,21 @@ if show_concentrations,
   subplot(ni,nj,nk); 
   hold on;
   edges = log10(lower_bound(i_c)):1:log10(upper_bound(i_c));
-  bar(edges+0.5,[histc(log10(r.c), edges), histc(log10(r_orig.c), edges)],'grouped');
+  bar(edges+0.5,[histc(log10(r_orig.c), edges), histc(log10(r.c), edges)],'grouped');
   title('log_{10} c'); a = axis; 
   plot(log10(lower_bound(i_c)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_c)) *[1 1],[0,a(4)],'k-');
   plot(log10(prior_median(i_c)) *[1 1],[0,a(4)],'b-');
   plot([log10(prior_median(i_c)) + prior_std(i_c) *[-1,1] ], 0.95*a(4)*[1,1],'b-','Linewidth',2);
   axis([log10(lower_bound(i_c))-1,log10(upper_bound(i_c))+1,0,a(4)]);
-  
+end
+
+if show_enzyme,
   nk = nk + 1;
   subplot(ni,nj,nk); 
 hold on;
   edges = log10(lower_bound(i_u)):0.5:log10(upper_bound(i_u));
-  bar(edges+0.25,[histc(log10(r.u), edges), histc(log10(r_orig.u), edges)],'grouped'); 
+  bar(edges+0.25,[histc(log10(r_orig.u), edges), histc(log10(r.u), edges)],'grouped'); 
   title('log_{10} u'); a = axis; 
   plot(log10(lower_bound(i_u)) *[1 1],[0,a(4)],'k-');
   plot(log10(upper_bound(i_u)) *[1 1],[0,a(4)],'k-');

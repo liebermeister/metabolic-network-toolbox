@@ -374,7 +374,7 @@ protein molecular mass	FUM_R01082		60000	Da	R01082
 protein molecular mass	MDH_R00342		32337	Da	R00342	
 protein molecular mass	PPC_R00345		198120	Da	R00345	
 %						
-!!SBtab TableID='Layout' TableType='Position' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.0'						
+!!SBtab TableID='Position' TableType='Position' Document='E. coli central carbon metabolism - unbalanced kinetic data' SBtabVersion='1.0'						
 !Element	!PositionX	!PositionY				
 _S__Malate	0.32772	0.095058				
 Acetyl_CoA	0.359426	0.22902				

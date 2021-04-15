@@ -39,6 +39,10 @@ eval(default('verbose','1'));
 %   [c,A] = mdf(network.N, v, keq, mdf_options);
 % end
 
+if ~isfield(mdf_options,'ind_ignore_reactions'),
+  mdf_options.ind_ignore_reactions = [];
+end
+
 % ------------------------------------------------------------
 % compute c
 

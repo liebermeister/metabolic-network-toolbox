@@ -1,15 +1,24 @@
-% ---------------------------------------------------------------------------------------------
-% Parameter balancing - Example E. coli central carbon metabolism model from Noor et al. (2016)
-% Usage example for script 'parameter_balancing_sbtab'
-% ---------------------------------------------------------------------------------------------
-
+% --------------------------------------------------
+% Parameter balancing demo script
+% Usage example for matlab functions 'parameter_balancing_sbtab'
+%                                    'parameter_balancing_thermodynamic'
+%                                    'parameter_balancing_kinetic'
+%
+% Example model: E. coli central carbon metabolism, from Noor et al. 2016 (PLoS Comp Biol)
+%
+% Input files
+%   model_file:   (SBML format)  from models/ecoli_noor_2016.xml      
+%   data_file :   (SBtab format) from models/ecoli_noor_2016_data.tsv 
+%   prior_file:   default from subdirectory config/
+%   options_file: default from subdirectory config/
+%
+% --------------------------------------------------
 
 % ----------------------------------------------------------------------------
 % Load prepared model and data
 
-model_name = 'E coli central metabolism Noor et al (2016)';
-
-[model_file, data_file] = pb_example_files('ecoli_noor_2016');
+% read model files
+[model_name, model_file, data_file] = pb_example_files('ecoli_noor_2016');
 
 
 % ----------------------------------------------------------------------------
@@ -25,13 +34,14 @@ pb_options.preferred_data_element_ids = 'sbml';
 
 % ----------------------------------------------------------------------------
 % Balance the model parameters
+% Note that the function parameter_balancing_sbtab also accepts model files in sbml format
 
 [network, r, r_orig, kinetic_data, ~, parameter_prior] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 
 %----------------------------------------------------- 
 % Alternative (using SBtab model file):
 % sbtab_model_file = [model_file(1:end-4) '.tsv'];
-% [r, r_orig, ~, ~, parameter_prior] = parameter_balancing_sbtab(sbtab_model_file, data_file, pb_options);
+% [network, r, r_orig, ~, ~, parameter_prior] = parameter_balancing_sbtab(sbtab_model_file, data_file, pb_options);
 %----------------------------------------------------- 
 
 %----------------------------------------------------- 
@@ -44,8 +54,7 @@ parameter_balancing_check(r, r_orig, network, parameter_prior,1,1)
 
 
 % ----------------------------------------------------------------------------
-% Convert "kinetics" data structure (used in metabolic network toolbox models)
-% into sbtab data structure
+% Convert "kinetics" data structure (used in MNT models) into sbtab data structure
 
 network.kinetics = r;
 

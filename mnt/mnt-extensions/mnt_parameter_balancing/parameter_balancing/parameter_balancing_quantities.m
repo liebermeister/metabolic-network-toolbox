@@ -9,9 +9,12 @@ function [model_quantities, basic_quantities, data_quantities, pseudo_quantities
 %
 % Options used
 %  options.include_metabolic (default 0) 
+%  options.include_enzyme_conc (default 0) 
+%  options.use_deltaG0_data  (default 1)
 %  options.enzymes_explicit  (default 1)
 %  options.parametrisation   (default 'catalytic rate constant');
 
+  
 eval(default('parameter_prior','[]','options','struct'));
 
 if isempty(parameter_prior),
@@ -32,6 +35,8 @@ keep = ones(size(quantities));
 if options.include_metabolic ==0,
   keep = keep .* double(~strcmp(parameter_prior.PhysicalType,'Dynamic'));
 end
+
+keep(find(strcmp(parameter_prior.QuantityType,'concentration of enzyme'))) = options.include_enzyme_conc;
 
 if options.enzymes_explicit,
   keep(find(strcmp(parameter_prior.QuantityType,'forward maximal velocity')))   = 0;
@@ -86,8 +91,9 @@ keep_basic(find(strcmp(parameter_prior.QuantityType,'pH')))   = 0;
 % keep_data
 
 % omit all quantities marked by UseAsPriorInformation == 0 in prior table
-
-keep_data(find(strcmp(parameter_prior.UseAsPriorInformation,'0')))=0;
+if isfield(parameter_prior,'UseAsPriorInformation'),
+  keep_data(find(strcmp(parameter_prior.UseAsPriorInformation,'0')))=0;
+end
 %keep_data(find(strcmp(parameter_prior.QuantityType,'catalytic rate constant geometric mean')))   = 0;
 keep_data(find(strcmp(parameter_prior.QuantityType,'pH')))   = 0;
 keep_data(find(strcmp(parameter_prior.QuantityType,'chemical potential')))   = 0;
@@ -100,8 +106,9 @@ keep_data(find(strcmp(parameter_prior.QuantityType,'standard chemical potential'
 % omit all quantities that are basic quantities
 keep_pseudo(find(is_basic)) = 0;
 % omit all quantities marked by UseAsPriorInformation == 0 in prior table
-keep_pseudo(find(strcmp(parameter_prior.UseAsPriorInformation,'0')))=0;
-
+if isfield(parameter_prior,'UseAsPriorInformation'),
+  keep_pseudo(find(strcmp(parameter_prior.UseAsPriorInformation,'0')))=0;
+end
 
 % -----------------------------------------------------------------------------
 % basic parameters could be further reduced to those on which any of the 
@@ -111,3 +118,11 @@ model_quantities  = quantities(find(keep_model));
 basic_quantities  = quantities(find(keep_basic));
 data_quantities   = quantities(find(keep_data)); 
 pseudo_quantities = quantities(find(keep_pseudo)); 
+
+if options.use_deltaG0_data,
+  data_quantities = [data_quantities; {'standard Gibbs free energy of reaction'}];
+end
+
+if options.include_metabolic,
+  data_quantities = [data_quantities; {'Gibbs free energy of reaction'}];
+end

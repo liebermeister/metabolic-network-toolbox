@@ -7,7 +7,8 @@ function [v, c, u] = state_data_load(network, flux_data_file, protein_data_file,
 % !!! This function is OUTDATED. Please use load_network_state_data.m instead !!!
   
 % load fluxes
-  
+
+% ERROR? 'flux' should be 'rate of reaction' !!!
 v = sbtab_load_quantity_data(flux_data_file, [], 'flux', '!Reaction:Identifiers:kegg.reaction', network.reaction_KEGGID, {'Value'},1);
 
 % load protein levels

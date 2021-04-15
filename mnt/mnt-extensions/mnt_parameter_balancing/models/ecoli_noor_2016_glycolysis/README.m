@@ -1,5 +1,5 @@
 % ---------------------------------------------------------------------------------
-% Smaller version of E. coli model from Noor et al 2016, containing only glycolysis
+% Smaller version of E. coli model (Noor et al 2016) containing only glycolysis
 % ---------------------------------------------------------------------------------
 
 network = network_sbml_import('ecoli_noor_2016.xml','/home/wolfram/matlab/wolf_packages/mnt/mnt/mnt-extensions/mnt_parameter_balancing/parameter_balancing/../models/',0);

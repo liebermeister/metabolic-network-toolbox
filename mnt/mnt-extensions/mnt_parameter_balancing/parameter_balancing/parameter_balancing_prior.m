@@ -1,7 +1,9 @@
 function [parameter_prior, parameter_prior_filename] = parameter_balancing_prior(omit_quantities, parameter_prior_filename, verbose)
 
 % parameter_prior = parameter_balancing_prior(omit_quantities,parameter_prior_filename)
-
+%
+% Data structure containing information about parameter priors (read from the Prior table file)
+  
 if ~exist('sbtab_version','file'),
   error('For this function, the SBtab toolbox must be installed');
 end

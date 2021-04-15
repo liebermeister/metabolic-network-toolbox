@@ -30,8 +30,27 @@ if isfield(parameters,'c'),       c   = parameters.c;     end
 if isfield(parameters,'KA'),      KA  = parameters.KA;    end 
 if isfield(parameters,'KI'),      KI  = parameters.KI;    end 
 if isfield(parameters,'KM'),      KM  = parameters.KM;    end 
-if isfield(parameters,'KV'),      KV  = parameters.KV;    end 
-if isfield(parameters,'Keq'),     Keq = parameters.Keq;   end 
+
+if isfield(parameters,'KV'),        
+  KV  = parameters.KV;
+elseif isfield(parameters,'Kcatf'),
+  KV  = sqrt(parameters.Kcatf .* parameters.Kcatr);
+end
+
+if isfield(parameters,'dmu0'),
+  dmu0 = parameters.dmu0;
+elseif isfield(parameters,'mu0'),
+  dmu0 = network.N' * parameters.mu0;
+end
+
+if isfield(parameters,'Keq'),     
+  Keq = parameters.Keq;   
+elseif exist('dmu0','var'),
+  Keq = exp(-1/RT * dmu0);
+end 
+
 if isfield(parameters,'h'),       h   = parameters.h;     end 
 
-kinetics = struct('type','ms','u',u,'c',c,'KA',KA,'KI',KI,'KM',KM,'KV',KV,'Keq',Keq,'h',h);
+[kcatplus, kcatminus] = modular_KV_Keq_to_kcat(network.N,[],KV,Keq,KM,h);
+
+kinetics = struct('type','ms','u',u,'c',c,'KA',KA,'KI',KI,'KM',KM,'KV',KV,'Keq',Keq,'Kcatf',kcatplus,'Kcatr',kcatminus,'h',h);

@@ -1,18 +1,18 @@
-% [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)
+% [n2,keep_met,keep_react] = netgraph_simple_graph(n1,names_met_hide,met_fixed,met_fixed_positions,ind_react_hide)
 % 
 % Make a new network in which 
-%  - some metabolites are removed (indices given in list met_hide)
+%  - some metabolites are removed (metablite names given in list names_met_hide)
 %  - some metabolites may have prescribed positions (indices given in met_fixed,
 %        positions given in met_fixed_positions
-%  - some reactions are removed (indices given in list react_hide)
+%  - some reactions are removed (indices given in list ind_react_hide)
 
-function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,met_hide,met_fixed,met_fixed_positions,react_hide)
+function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,names_met_hide,met_fixed,met_fixed_positions,ind_react_hide)
 
-eval(default('met_fixed','[]','met_fixed_positions','[]','react_hide','[]'));
+eval(default('met_fixed','[]','met_fixed_positions','[]','ind_react_hide','[]'));
 
-keep_met             = setdiff(1:length(n1.metabolites),network_find_metabolites(n1,met_hide));
+keep_met             = setdiff(1:length(n1.metabolites),network_find_metabolites(n1,names_met_hide));
 %keep_react          = 1:length(n1.actions);
-keep_react           = setdiff(find(sum(abs(n1.N(keep_met,:)),1)), react_hide);
+keep_react           = setdiff(find(sum(abs(n1.N(keep_met,:)),1)), ind_react_hide);
 n2                   = network_subnetwork(n1,keep_met,keep_react);
 
 if length(met_fixed),

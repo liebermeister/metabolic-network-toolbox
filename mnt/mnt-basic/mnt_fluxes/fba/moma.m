@@ -58,9 +58,9 @@ end
 M  = eye(length(v_ref));
 m  = -v_ref;
 
-if exist('cplexqp','file'),
-  [v,value,exitflag] = cplexqp(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
-else
+%if exist('cplexqp','file'),
+%  [v,value,exitflag] = cplexqp(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
+%else
   [v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
-end
+%end
 value = fba_constraints.zv' * v;

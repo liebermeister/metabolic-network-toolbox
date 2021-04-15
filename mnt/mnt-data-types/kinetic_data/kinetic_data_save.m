@@ -1,6 +1,8 @@
 function M = kinetic_data_save(kinetic_data, network, filename, options_style)
 
 % M = kinetic_data_save(kinetic_data,network,filename,options_style)
+%
+% also see kinetic_data_load
 
 eval(default('filename','[]','options_style','0'));
 
@@ -23,10 +25,10 @@ end
 
 % add attribute line
 
-M = [[{sprintf('!!SBtab TableType=''Quantity''')}, repmat({''},1,size(M,2)-1)]; M];
+M = [[{sprintf('!!SBtab TableID=''ParameterData'' TableType=''Quantity''')}, repmat({''},1,size(M,2)-1)]; M];
 
 if length(filename),
-  display(sprintf('Saving kinetic data to file %s ',filename));
+  display(sprintf('Writing kinetic data to SBtab file %s ',filename));
   mytable(M,options_style,filename);
 else,
   mytable(M,options_style)

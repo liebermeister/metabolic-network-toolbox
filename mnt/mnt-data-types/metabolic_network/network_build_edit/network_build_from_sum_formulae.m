@@ -68,7 +68,7 @@ end
 
 if isfield(columns,'MetabolicRegulation'),
   for it = 1:length(columns.MetabolicRegulation),
-    regulation_formula       = columns.MetabolicRegulation{it};
+    regulation_formula           = columns.MetabolicRegulation{it};
     [rstoich{it,1},rmetab{it,1}] = analyse_regulation(regulation_formula);
   end
 end
@@ -100,7 +100,9 @@ regulation_matrix = sparse(zeros(length(columns.ReactionFormula),length(metaboli
 if isfield(columns,'MetabolicRegulation'),
 for it = 1:length(columns.ReactionFormula),
   l = label_names(rmetab{it},metabolites);
-  regulation_matrix(it,l) = rstoich{it};
+  if length(l),
+    regulation_matrix(it,l) = rstoich{it};
+  end
 end
 end
 

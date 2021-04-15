@@ -17,7 +17,7 @@ function [r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std,r_g
 %   r_mean          Kinetic constants (posterior means, ignoring the  linear constraints)
 %   r_std           Kinetic constants (posterior standard deviations, ignoring the  linear constraints)
 %   r_samples       Kinetic constants sampled from the posterior
-%   kinetic_data    Kinetic_data used
+%   kinetic_data    Kinetic_data used (possibly modified by pb_kinetic_data_adjust.m)
 %   parameter_prior Prior distributions used
 % 
 % This function uses (potentially) the options
@@ -110,4 +110,4 @@ task   = parameter_balancing_task(network, kinetic_data, parameter_prior, model_
 
 result = parameter_balancing_calculation(task, parameter_prior, pb_options);
 
-[r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples] = parameter_balancing_output(result, kinetic_data_orig, pb_options);
+[r,r_mean,r_std,r_geom_mean,r_geom_std,r_orig,r_samples] = parameter_balancing_output(result, kinetic_data_orig, pb_options, network);

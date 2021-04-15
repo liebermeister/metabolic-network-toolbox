@@ -25,12 +25,12 @@ function [v, v_plus, v_minus, D, regulation_term] = modular_velocities(kinetic_l
     
 c(find(c<10^-14)) = 10^-14;
 
-%% Global variables to speed up this function; see ecm_one_run.m and convex_parameter_estimation.m
-global global_structure_matrices 
-
-if exist('global_structure_matrices','var'),
-  global Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm
-end
+% Global variables to speed up this function; see ecm_one_run.m and model_balancing.m
+ global global_structure_matrices 
+ 
+ if exist('global_structure_matrices','var'),
+   global Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm
+ end
 
 if isempty(Mplus),
   [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
