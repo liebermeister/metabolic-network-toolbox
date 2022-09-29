@@ -5,6 +5,8 @@ The Metabolic Networks Toolbox contains functions for constructing, simulating, 
 
 ## Dependencies:
 
+  o Matlab Optimization Toolbox (for command quadprog used in some functions)
+
   o Matlab utility functions (https://github.com/liebermeister/matlab-utils)
 
   o SBML toolbox    (http://sbml.org/Software/SBMLToolbox)
