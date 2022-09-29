@@ -1,6 +1,6 @@
 % [n2,keep_met,keep_react] = netgraph_simple_graph(n1,names_met_hide,met_fixed,met_fixed_positions,ind_react_hide)
-% 
-% Make a new network in which 
+
+% Make a new network structure in which 
 %  - some metabolites are removed (metablite names given in list names_met_hide)
 %  - some metabolites may have prescribed positions (indices given in met_fixed,
 %        positions given in met_fixed_positions

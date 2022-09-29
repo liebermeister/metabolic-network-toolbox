@@ -1,4 +1,4 @@
-function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res, kinetic_data_orig, options, network)
+function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std, r_min, r_max]  = parameter_balancing_output(res, kinetic_data_orig, options, network)
   
 % [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_flux_adjusted, r_flux_adjusted_std]  = parameter_balancing_output(res,kinetic_data_orig,options)
 %
@@ -20,6 +20,9 @@ function [r_mode, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, r_f
   
 eval(default('kinetic_data_orig','[]', 'options','struct'));
 
+r_flux_adjusted = [];
+r_flux_adjusted_std = [];
+
 % ------------------------------------------------
 % r: output 'kinetics' data structure with balanced values
 
@@ -34,6 +37,8 @@ for it = 1:length(fn),
   r_std.(fn{it})       = myround(res.kinetics.unconstrained_posterior_std.(fn{it}));
   r_geom_mean.(fn{it}) = myround(res.kinetics.unconstrained_posterior_median.(fn{it}));
   r_geom_std.(fn{it})  = myround(res.kinetics.unconstrained_posterior_geom_std.(fn{it}));
+  r_min.(fn{it})       = myround(res.kinetics.posterior_min.(fn{it}));
+  r_max.(fn{it})       = myround(res.kinetics.posterior_max.(fn{it}));
 end
 
 

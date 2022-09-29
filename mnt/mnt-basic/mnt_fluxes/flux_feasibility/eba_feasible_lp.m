@@ -47,15 +47,13 @@ Ktot     = analyse_N(Ntot);
 eba_feasible = 1;
 
 if sum(isfinite(dmu_fix)) == length(v),
-  %% complete dmu_fix vector given as input: just check if it works
-  
+  %% complete dmu_fix vector given as input: just check if it works  
   if max(abs(Ktot'*dmu_fix)) > epsilon,             eba_feasible = 0; end
   if sum( [v~=0] .* [ sign(v).*dmu_fix > -dmu_abs_min] ),   eba_feasible = 0; end
   dmu = dmu_fix;
   
 else,
   %% try to find feasible dmu vector
-
   c       = ones(nr,1);
   h       = [dmu_abs_min * ones(nr,1);  ];    h(find(v==0)) = -1;
   G       = [-diag(sign(v));     ];
@@ -72,9 +70,10 @@ else,
   ub =   dmu_abs_max * ones(nr,1);
 
   if exist('cplexlp','file'),
-    opt         = cplexoptimset();%'linprog');
-    opt.MaxIter = 10^10;
-    opt.Display = 'off';
+    opt =  cplexoptimset('cplex');
+    %opt         = cplexoptimset();%'linprog');
+    %opt.MaxIter = 10^10;
+    %opt.Display = 'off';
     [dmu, dum, exitflag] = cplexlp(-c, -G, -h, A, b, lb, ub, [], opt);
   else
     opt         = optimset('linprog');

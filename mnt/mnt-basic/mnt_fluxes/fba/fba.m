@@ -12,8 +12,7 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 % fba_constraints.v_max:      vector of upper bounds
 % fba_constraints.v_sign:     vector of signs, overrides v_min and v_max
 % fba_constraints.v_fix:      vector of fixed fluxes, overrides everything else
-% fba_constraints.ext_sign:   sign vector for external metabolite production
-%                             undefined signs: nan
+% fba_constraints.ext_sign:   sign vector for external metabolite production; undefined signs: nan
 % fba_constraints.production: production rates (values for internal metabolites 
 %                             will replace the zeros in the stationarity condition)
 %
@@ -72,22 +71,22 @@ b  = [internal_production;...
 
 my_eye = eye(nr);
 
+  G  = [   my_eye(ind_notfix,:);...
+         - my_eye(ind_notfix,:)];
+
+  h  = [   fba_constraints.v_max(ind_notfix,:); ...
+         - fba_constraints.v_min(ind_notfix,:)];  
+
 if sum(isfinite(fba_constraints.ext_sign)),
   %% if any external production signs are predefined
   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
-
-  G  = [  my_eye(ind_notfix,:); ...
-        - my_eye(ind_notfix,:); ...
-        - diag(fba_constraints.ext_sign(ind_ext_sign))*network.N(ind_ext_sign,:); ...
+  ind_external = find(network.external);
+  G  = [ G; ...
+         - diag(fba_constraints.ext_sign(ind_ext_sign)) * network.N(ind_external(ind_ext_sign),:); ...
        ];
-  h  = [    fba_constraints.v_max(ind_notfix,:); ...
-          - fba_constraints.v_min(ind_notfix,:); ...
-            zeros(length(ind_ext_sign),1);];
-else,
-  G  = [    my_eye(ind_notfix,:);...
-          - my_eye(ind_notfix,:)];
-  h  = [    fba_constraints.v_max(ind_notfix,:); ...
-          - fba_constraints.v_min(ind_notfix,:)];  
+  
+  h  = [ h; ...
+           zeros(length(ind_ext_sign),1);];
 
 end
 
@@ -98,7 +97,8 @@ end
 
 switch solver,
   case 'cplex',
-    opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
+    opt =  cplexoptimset('cplex');
+    %opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
     [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
     lambda_ind_int = lambda.eqlin(1:size(NR,1));
     %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))

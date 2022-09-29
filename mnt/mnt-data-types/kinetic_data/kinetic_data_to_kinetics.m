@@ -5,7 +5,6 @@ function kinetics = kinetic_data_to_kinetics(kinetics, kinetic_data, network);
 % Generate 'kinetics' data structure from median values in 'kinetic_data' data structure
 %
 % the field .std_nat contains the standard deviations of quantities in the "natural scaling" (linear or logarithmic, depending on the type of quantity
-  
 
 if isempty(kinetics), 
   kinetics = set_kinetics(network,'cs');
@@ -31,9 +30,11 @@ if ~isfield(kinetics,'Kcatf'),
     kinetics.Kcatf = kinetic_data.Kcatf.median;
     kinetics.Kcatr = kinetic_data.Kcatr.median;
   else
-  [kinetics.Kcatf, kinetics.Kcatr] = modular_KV_Keq_to_kcat(network.N,kinetics,kinetics.KV,kinetics.Keq,kinetics.KM,kinetics.h);
+    [kinetics.Kcatf, kinetics.Kcatr] = modular_KV_Keq_to_kcat(network.N,kinetics,kinetics.KV,kinetics.Keq,kinetics.KM,kinetics.h);
   end
 end
+
+kinetics.KV = sqrt(kinetics.Kcatf .* kinetics.Kcatr);
 
 % ------------------------
 % kinetics_std

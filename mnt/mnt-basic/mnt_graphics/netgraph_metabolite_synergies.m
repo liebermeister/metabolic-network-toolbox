@@ -23,7 +23,9 @@ else,
   metmap = 1:nm;
 end
 
-if size(synergy_values,1) ~= max(metmap), error('Wrong matrix size'); end
+if size(synergy_values,1) < max(metmap), 
+  error('Wrong matrix size'); 
+end
 
 if gp.show_diagonal_values,
   influence_values = diag(synergy_values);

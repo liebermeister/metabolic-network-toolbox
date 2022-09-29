@@ -47,6 +47,7 @@ if isfield(network.graphics_par,'metinvisible'),
 else
   invisible = [];
 end
+
 % -------------------------------------------------
 
 if length(layout_file),
@@ -66,7 +67,7 @@ if length(layout_file),
     kegg_reaction_in = repmat({''},length(elements),1);
 
     if flag_KEGG_ids,
-      if  sbtab_table_has_column(t,'Element_Identifiers_kegg_compound'),
+      if sbtab_table_has_column(t,'Element_Identifiers_kegg_compound'),
         kegg_compound_in = sbtab_table_get_column(t,'Element_Identifiers_kegg_compound');
       end      
       if  sbtab_table_has_column(t,'Element_Identifiers_kegg_reaction'),
@@ -76,15 +77,15 @@ if length(layout_file),
 
     fixed_in  = repmat(0,length(elements),1);
     if flag_fixed,
-      if  sbtab_table_has_column(t,'IsFixed'),
-        fixed_in = sbtab_table_get_column(t,'IsFixed');
+      if sbtab_table_has_column(t,'IsFixed'),
+        fixed_in = sbtab_table_get_column(t,'IsFixed',1);
       end
     end
 
     invisible_in  = repmat(0,length(elements),1);
     if flag_invisible,
       if  sbtab_table_has_column(t,'IsInvisible'),
-        invisible_in = sbtab_table_get_column(t,'IsInvisible');
+        invisible_in = sbtab_table_get_column(t,'IsInvisible',1);
       end
     end
 
@@ -107,9 +108,8 @@ if length(layout_file),
         kegg_compound = [kegg_compound(ind_keep);      kegg_compound_in];
         kegg_reaction = [kegg_reaction(ind_keep);      kegg_reaction_in];
         positions     = [ [x(ind_keep)';y(ind_keep)'], positions];
-        fixed         = [ fixed(ind_keep);              fixed_in; ];
-        invisible         = [ invisible(ind_keep);              invisible_in; ];
-    
+        %fixed         = [ fixed(ind_keep);             fixed_in; ];
+        %invisible     = [ invisible(ind_keep);         invisible_in; ];
     end
   
 end
@@ -140,25 +140,4 @@ if length(layout_file),
   sbtab_table_save( sbtab_out, struct('filename', layout_file));
 end
 
-% fid = fopen(layout_file,'w');
-% 
-% fprintf(fid,'!!SBtab TableType="Layout"\n');
-% 
-% 
-% if flag_KEGG_ids,
-%   fprintf(fid,'!Element\t!PositionX\t!PositionY\t!Element:Identifiers:kegg:compound\t!Element:Identifiers:kegg:reaction\n');
-%   for it = 1:length(names),
-%     fprintf(fid,'%s\t%f\t%f\t%s\t%s\n',names{it},positions(1,it),positions(2,it),kegg_compound{it},kegg_reaction{it});
-%   end
-% else
-%   fprintf(fid,'!Element\t!PositionX\t!PositionY\n');
-%   for it = 1:length(names),
-%     fprintf(fid,'%s\t%f\t%f\n',names{it},positions(1,it),positions(2,it));
-%   end
-% end,
-% 
-% fclose(fid);
-
 end
-
-%output = mytable([names,cellstr(num2str(positions(1,:)')),cellstr(num2str(positions(2,:)'))],0,layout_file)

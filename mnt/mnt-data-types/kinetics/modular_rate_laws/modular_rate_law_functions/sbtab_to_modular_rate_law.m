@@ -4,9 +4,11 @@ function [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(n
 %
 % Build 'kinetics' data structure from kinetic data (in SBtab file)
 %
-% Keq values are assumed to refer to a standard concentration of mM.
-% If in the data file, Keq values refer to a standard concentration of M, this needs to be indicated by the table attribute StandardConcentration='M' (in the Parameter table)
-% The values will then be converted by this function.
+% Please note:
+%   Keq values are assumed to refer to a standard concentration of mM.
+%   If in the data file, Keq values refer to a standard concentration of M, 
+%   this needs to be indicated by the table attribute StandardConcentration='M' (in the Parameter table)
+%   The values will then be converted by this function.
 %
 % Similar functions: 'ms_import_kinetic', 'sbtab_to_modular_rate_law_via_kinetic_data'
 
@@ -18,14 +20,14 @@ options         = join_struct(options_default,options);
 switch options.kinetic_law,
   case {'cs','ms','rp','ma','fm'}, % UPDATE rate law names!
      kinetics = set_kinetics(network,options.kinetic_law);
-  otherwise, error('Conversion is only possible for modular rate law');
+  otherwise, error('Conversion is only possible for modular rate laws');
 end
 
 if isstr(file_kinetic_data),
-  sbtab_table  = sbtab_table_load(file_kinetic_data);
+  sbtab_table = sbtab_table_load(file_kinetic_data);
 else
   %% assume that file_kinetic_data contains already an sbtab data structure
-  sbtab_table  = file_kinetic_data;
+  sbtab_table = file_kinetic_data;
 end
 
 table_attributes = sbtab_table_get_attributes(sbtab_table);
@@ -45,7 +47,13 @@ Compound     = sbtab_table_get_column(sbtab_table,'Compound');
 Reaction     = sbtab_table_get_column(sbtab_table,'Reaction');
 compound_ind = label_names(Compound,network.metabolites);
 reaction_ind = label_names(Reaction,network.actions);
-
+sdm = setdiff(network.metabolites,Compound);
+sdr = setdiff(network.actions,Reaction);
+if length(sdm)+length(sdr),
+  sdm
+  sdr
+  error('Information about metabolites and / or reactions missing in data file');
+end
 [nr,nm,nx,ind_KM,ind_KA,ind_KI,nKM,nKA,nKI] = network_numbers(network);
 
 ind_Keq = find(strcmp(QuantityType,'equilibrium constant'));

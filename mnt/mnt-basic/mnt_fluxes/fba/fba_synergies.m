@@ -1,6 +1,6 @@
-function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = moma_interactions(network,fba_constraints,inhibition_factor,v_ref)
+function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_synergies(network,fba_constraints,inhibition_factor)
 
-% [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_interactions(network,fba_constraints,inhibition_factor)
+% [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = fba_synergies(network,fba_constraints,inhibition_factor)
 %
 % f_ref      unperturbed objective value
 % f_single   single-perturbation objectives (vector)
@@ -8,14 +8,13 @@ function [f_ref,f_single,f_double,v_ref,v_single,v_double,df1,df2] = moma_intera
 % v_ref      unperturbed flux mode
 % v_single   single-perturbation flux modes (matrix)
 % v_double   double-perturbation flux modes (tensor)
-%
-% Identical to fba_interactions.m (except for use of moma instead of fba)
+% df1        single-perturbation objective deficits (vector)
+% df2        double-perturbation synergistic objective deficits (matrix)
 
 epsilon = 10^-8;
 
 [nm,nr]        = size(network.N);
-%[v_ref, f_ref] = fba(network,fba_constraints);
-f_ref = fba_constraints.zv' * v_ref;
+[v_ref, f_ref] = fba(network,fba_constraints);
 
 for it1 = 1:nr,
 
@@ -29,7 +28,7 @@ for it1 = 1:nr,
   end
 
   %% second order
-  [v_single(:,it1),f_single(it1,1)] = moma(network,fba_constraints_1,v_ref);
+  [v_single(:,it1),f_single(it1,1)] = fba(network,fba_constraints_1);
   for it2 = 1:it1-1,
     fba_constraints_2 = fba_constraints_1;
     if v_ref(it2)>0,
@@ -38,7 +37,7 @@ for it1 = 1:nr,
     if v_ref(it2)<0,
       fba_constraints_2.v_min(it2) = inhibition_factor * v_ref(it2);
     end
-    [v_double(:,it1,it2),f_double(it1,it2)] = moma(network,fba_constraints_2,v_ref);
+    [v_double(:,it1,it2),f_double(it1,it2)] = fba(network,fba_constraints_2);
   end
 
   % diagonal elements (square perturbation!)
@@ -50,7 +49,7 @@ for it1 = 1:nr,
   if v_ref(it2)<0,
     fba_constraints_2.v_min(it2) = inhibition_factor^2 * v_ref(it2);
   end
-  [v_double(:,it1,it2),f_double(it1,it2)] = moma(network,fba_constraints_2,v_ref);
+  [v_double(:,it1,it2),f_double(it1,it2)] = fba(network,fba_constraints_2);
 end
 
 f_double = f_double + f_double' - diag(diag(f_double));

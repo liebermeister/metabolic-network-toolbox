@@ -64,6 +64,8 @@ else
   dummi(find(network.external))=1;
   subnetwork.external   = bit_vector(find(dummi(indm)),length(subnetwork.metabolites));
   
+  if isfield(network,'metabolite_NameForPlots'), subnetwork.metabolite_NameForPlots = network.metabolite_NameForPlots(indm); end
+  if isfield(network,'reaction_NameForPlots'),   subnetwork.reaction_KEGGID   = network.reaction_NameForPlots(indr); end
   if isfield(network,'metabolite_KEGGID'), subnetwork.metabolite_KEGGID = network.metabolite_KEGGID(indm); end
   if isfield(network,'reaction_KEGGID'),   subnetwork.reaction_KEGGID   = network.reaction_KEGGID(indr); end
   if isfield(network,'EC'),                subnetwork.EC                = network.EC(indr); end

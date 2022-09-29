@@ -14,4 +14,4 @@ else
   KX      = KX.^(1./repmat(hill,1,size(alpha_X,2)));  
 end
 
-KX      = KX * diag(sparse(c));
+KX = KX * diag(sparse(c));

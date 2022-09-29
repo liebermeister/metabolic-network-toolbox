@@ -18,7 +18,7 @@ if verbose,
   display(sprintf('o Using parameter prior file %s', parameter_prior_filename));
 end
 
-parameter_prior_sbtab = sbtab_table_load(parameter_prior_filename);
+parameter_prior_sbtab = sbtab_table_load(parameter_prior_filename,[],[],'Prior');
 parameter_prior       = sbtab_table_get_all_columns(parameter_prior_sbtab);
 
 if isfield(parameter_prior,'PriorGeometricStd'),

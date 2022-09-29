@@ -48,10 +48,8 @@ if exist('sbtab_version','file'),
   
   A{2} = sbtab_table_get_column(sbtab_table,'PositionX',1);
   A{3} = sbtab_table_get_column(sbtab_table,'PositionY',1);
-  %A{2} = sbtab_table_get_column(sbtab_table,'Position_x',1);
-  %A{3} = sbtab_table_get_column(sbtab_table,'Position_y',1);
-
   A{4} = ones(size(A{2}));
+  
   if flag_fixed,
     if sbtab_table_has_column(sbtab_table,'IsFixed');
       A{4} = sbtab_table_get_column(sbtab_table,'IsFixed',1);
@@ -65,7 +63,7 @@ if exist('sbtab_version','file'),
   end
 
 else,
-
+  warning('SBtab package is not installed; please install it!');
   fid = fopen(layout_file);
   A   = textscan(fid,'%s%f%f','delimiter','\t');
   fclose(fid);
@@ -119,7 +117,6 @@ if length(unique(model_reaction_names)) < length(model_reaction_names),
 l1 = label_names(A{1},model_metabolite_names);
 l1(isnan(A{2})) = 0;
 ok = find(l1);
-
 x(1,l1(ok)) = A{2}(ok)';
 x(2,l1(ok)) = A{3}(ok)';
 ll = label_names(model_metabolite_names,A{1});
@@ -155,5 +152,5 @@ end
 
 network.graphics_par.x = x;
 network.graphics_par.fixed     = fixed;
-network.graphics_par.metinvisible = invisible(1:length(model_metabolite_names));
-network.graphics_par.actinvisible = invisible(length(model_metabolite_names)+1:end);
+network.graphics_par.metinvisible = double(invisible(1:length(model_metabolite_names))==1);
+network.graphics_par.actinvisible = double(invisible(length(model_metabolite_names)+1:end)==1);

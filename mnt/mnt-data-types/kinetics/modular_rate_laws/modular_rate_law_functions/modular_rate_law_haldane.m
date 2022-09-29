@@ -19,8 +19,10 @@ if max(abs(log10(network.kinetics.Keq ./ Keq_from_Haldane))) > epsilon,
   plot(log10(network.kinetics.Keq),log10(Keq_from_Haldane),'.');
   text(log10(network.kinetics.Keq(ind)), log10(Keq_from_Haldane(ind)), strrep(network.actions(ind),'_','-'));
   xlabel('log10 Keq in model'); ylabel('log10 Keq obtained from Haldane relationship');
-  title('- (modular_rate_law_haldane.m): Some Haldane relationships are violated!')
-  display(sprintf('- modular_rate_law_haldane.m: Some Haldane relationships are violated! (difference of log10 Keq values > %f)',epsilon))
+  title(sprintf('Some Haldane relationships are violated! (at precision %f)',epsilon));
+  keq = network.kinetics.Keq
+  Keq_from_Haldane
+  display(sprintf('- (modular_rate_law_haldane.m): Some Haldane relationships are violated! (difference of log10 Keq values > %f)',epsilon))
 else
-  %display('All Haldane relationships are satisfied')
+  % display('All Haldane relationships are satisfied')
 end

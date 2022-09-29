@@ -17,6 +17,8 @@ The Metabolic Networks Toolbox contains functions for constructing, simulating, 
 
 For reading and writing cobra files, the matlab cobra toolbox is also required. Please make sure that these matlab packages are installed in your system and that all these directories and subdirectories are included in your matlab path.
 
+Some functions employ linear or quadratic optimisation. If CPLEX is installed in your system, version 12.10 is required. If CPLEX is not installed, native matlab functions for optimisation are used instead.  
+
 ## Installation
 Please see the [installation instructions](INSTALLATION).
 

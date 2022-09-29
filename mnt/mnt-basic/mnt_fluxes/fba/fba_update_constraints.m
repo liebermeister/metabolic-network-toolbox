@@ -27,9 +27,9 @@ fba_constraints.zv(isnan(fba_constraints.zv)) = 0;
 ind_ext = find(network.external);
 
 if isfield(fba_constraints,'production'),
-if sum(isfinite(fba_constraints.production(ind_ext))),
-  fba_constraints.ext_sign(ind_ext) = sign(fba_constraints.production(ind_ext));
-end
+  if sum(isfinite(fba_constraints.production(ind_ext))),
+    fba_constraints.ext_sign(ind_ext) = sign(fba_constraints.production(ind_ext));
+  end
 else
   fba_constraints.production  = nan * ones(size(network.metabolites)); 
 end
@@ -37,3 +37,5 @@ end
 if ~isfield(fba_constraints,'cost_weights'),
   fba_constraints.cost_weights =  ones(size(network.actions)); 
 end
+
+fba_constraints.ext_sign(fba_constraints.ext_sign==0) = nan; 

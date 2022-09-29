@@ -6,13 +6,17 @@ function netgraph_concentrations(network,S,J,flag_text,options)
 
 eval(default('S','[]','J','[]','flag_text','0','options','struct'));
 
-opt_def = struct('actstyle','none','arrowstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)),'canvas',[],'scale_arrowvalues',1);%,'colormap',rb_colors);
+opt_def = struct('actstyle','none','arrowstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)),'canvas',[],'scale_arrowvalues',1,'keep_subplot',0);%,'colormap',rb_colors);
 
 if isfield(network,'graphics_par'),
   opt_def = join_struct(network.graphics_par,opt_def);
 end
 
 options = join_struct(opt_def, options);
+
+if ~flag_text,
+  options = join_struct(options, struct('metprintnames',0,'actprintnames',0));
+end
 
 options.actvalues = J;
 options.metvalues = S;
@@ -56,12 +60,10 @@ else
   opt = join_struct(opt,struct('arrowvalues',J,'arrowstyle','fluxes'));
 end
 
-if ~flag_text,
-  opt = join_struct(opt, struct('metprintnames',0,'actprintnames',0));
-end
-
 opt = join_struct(opt,options);
-subplot('Position', [0 0 1 0.90]);
+if opt.keep_subplot==0,
+  subplot('Position', [0 0 1 0.90]);
+end
 
 netgraph_draw(network, opt);
 

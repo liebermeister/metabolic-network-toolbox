@@ -16,10 +16,16 @@ if find(cellfun('length',metabolites) ==0),
   error('Empty metabolite name');
 end
 
-if isempty(actions), actions=network.actions; end
+if isempty(actions), 
+  actions=network.actions; 
+end
+
+if ~isfield(network,'reversible'),
+  all_reversible = 1;
+end
 
 if all_reversible,
-  network.reversible = ones(size(network.reversible));
+  network.reversible = ones(size(network.actions));
 end
 
 all_result = {};
@@ -27,10 +33,11 @@ for i=1:length(actions)
   result = '';
 %  result =  [result sprintf('%i:\t',i)];
 %  result =  [result sprintf('%s:\t',actions{i})];
-  dum = find(network.N(:,i)<0);
+  it = label_names(actions{i}, network.actions);
+  dum = find(network.N(:,it)<0);
   for j=1:length(dum); 
     if j>1, result = [result  sprintf(' + ') ];  end
-    coeff =  full(abs(network.N(dum(j),i)));
+    coeff =  full(abs(network.N(dum(j),it)));
     if coeff ~= 1,
       if coeff == ceil(coeff),
           result = [result sprintf('%d ',coeff) ];       
@@ -41,16 +48,16 @@ for i=1:length(actions)
     result = [result sprintf('%s', metabolites{dum(j)}) ];     
   end
   
-  if network.reversible(i), 
+  if network.reversible(it), 
     result = [result  sprintf(' <=> ')]; 
   else 
     result = [result sprintf(' => ') ]; 
   end
 
-  dum = find(network.N(:,i)>0);
+  dum = find(network.N(:,it)>0);
   for j=1:length(dum);
     if j>1, result = [result  sprintf(' + ') ]; end
-    coeff = full(network.N(dum(j),i));
+    coeff = full(network.N(dum(j),it));
     if coeff ~= 1,
       if coeff == ceil(coeff),
           result = [result sprintf('%d ',coeff) ];       

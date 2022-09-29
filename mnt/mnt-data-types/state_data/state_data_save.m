@@ -54,7 +54,7 @@ end
 % -----------------------------------------------
 % fluxes
 
-v_table = sbtab_table_construct(struct('TableName','Metabolic fluxes','TableID','MetabolicFluxData','TableType','QuantityMatrix','Unit','mM/s'),{'QuantityType','Reaction',},{repmat({'rate of reaction'},nr,1),network.actions});
+v_table = sbtab_table_construct(struct('TableName','Metabolic fluxes','TableID','FluxData','TableType','QuantityMatrix','Unit','mM/s'),{'QuantityType','Reaction',},{repmat({'rate of reaction'},nr,1),network.actions});
 
 if options.consistent, 
   v_table.TableID = 'Flux';

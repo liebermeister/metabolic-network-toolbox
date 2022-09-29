@@ -2,6 +2,8 @@ function [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(N,kinetics,KV,Keq,KM,h)
 
 % [kcatplus, kcatminus] = modular_kcat_to_KV_Keq(N,kinetics,KV,Keq,KM)
 
+eval(default('kinetics','[]'));
+  
 if ~exist('KV', 'var'), 
   KV  = kinetics.KV;   
   Keq = kinetics.Keq;

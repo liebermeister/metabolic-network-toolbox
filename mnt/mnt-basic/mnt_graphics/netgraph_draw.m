@@ -111,9 +111,9 @@ x     = p.x;
 
 if p.hold_on==1, hold on; else, cla;  end
 if ~isempty(p.figure_position), set(gcf,'Position',p.figure_position); end
- if ~isempty(p.subplot_position), 
-   subplot('Position',p.subplot_position); 
- end
+if ~isempty(p.subplot_position), 
+   subplot('position',p.subplot_position); 
+end
 
 hold on;
 
@@ -169,7 +169,6 @@ end
 % lines and triangles
 
 if p.straightlines,   % straight lines
-  
   [ind_met,ind_act] = find(m(p.metindshow, end-n_act+p.actindshow));
   ind_met = p.metindshow(ind_met);
   ind_act = p.actindshow(ind_act);
@@ -342,9 +341,9 @@ if p.show_metvalues,
     p.norm_metvalues      = [p.norm_metvalues + 1]/2;
     p.norm_metvalues_std  = 0.5 * p.norm_metvalues_std;
   end
-  
+
   p.norm_metvalues = abs(p.norm_metvalues);
-  
+
   switch p.metstyle
     case 'box',    p.norm_metvalues_std = 0*p.norm_metvalues_std;
     case 'none',   p.show_actvalues = 0;
@@ -423,7 +422,6 @@ if p.show_arrowvalues * p.single_arrow,
   end
 end
 
-
 % ---------------------------------------------------
 % text
 
@@ -480,8 +478,6 @@ end
 
 % figure general layout
 
-
-
 set(gca,'YDir',p.YDir);
 
 noticks;
@@ -516,6 +512,7 @@ if p.colorbar,
   end
 end
 
+if p.keep_subplot ==0,
 % increase figure size to fill space
 ax = gca;
 outerpos = ax.OuterPosition;
@@ -527,6 +524,7 @@ if p.colorbar,
     case 'West',
       ax.Position = [0.1, 0,  0.85,  1];
   end
+end
 end
 
 network.graphics_par = p;
@@ -540,7 +538,6 @@ end
 % -----------------------------------------------------
 % END OF MAIN PROGRAM
 % -----------------------------------------------------
-
 
 % -----------------------------------------------------------------
 
@@ -646,7 +643,7 @@ end
 
 % -----------------------------------------------------------------
 
-function  [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)
+function [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)
  
  % compute height:
  
@@ -695,11 +692,10 @@ else,
 end
 
 if valuesmin == valuesmax,  valuesmax = 10^-10 + valuesmin; end
-
 if p.showsign,
-  normvalues     = values / valuesmax;
+  normvalues     = values / max(abs(values));
 else
-  normvalues     = 2 * [(values - valuesmin)   / ( valuesmax- valuesmin)] - 1;
+  normvalues     = 2 * [(values - valuesmin)   / ( valuesmax - valuesmin)] - 1;
 end
 
 normvalues_std = real(values_std /  ( valuesmax- valuesmin));
@@ -811,8 +807,8 @@ p_default = struct(...
     'arrow_shift',     0.7,  ...
     'arrowcolor',      [0.7 0.7 0.7],  ...
     'colorbar_fontsize', 14, ...
-    'linewidth', 1, ...
-    'single_arrow', 0, ...
+    'linewidth',       1, ...
+    'single_arrow',    0, ...
     'edgevalues',      [],  ...
     'edgevalues_std',  [], ...
     'edgevaluesmax',   [], ...
@@ -835,6 +831,7 @@ p_default = struct(...
     'colormap',        rb_colors(250), ...
     'colorbar_location', 'South', ...
     'canvas_position', [], ...
+    'keep_subplot', 0, ...
     'linecolor',       [0 0 1], ...
     'rlinecolor',      [1 .3 0.], ...
     'text_offset',     [0.01,-0.01], ...
@@ -850,7 +847,7 @@ p_default = struct(...
     'canvas', [],...
     'shade_long_lines', [], ...
     'shade_cofactor_lines', []);
-   
+
 p = join_struct(p_default,p);
 
 % -------------------------
@@ -958,7 +955,7 @@ if isempty(p.actvaluesmin), p.actvaluesmin = min(p.actvalues); end
 if isempty(p.actvaluesmax), p.actvaluesmax = max(p.actvalues); end
 if isempty(p.edgevaluesmin), p.edgevaluesmin = nanmin(p.edgevalues(:)); end
 if isempty(p.edgevaluesmax), p.edgevaluesmax = nanmax(p.edgevalues(:)); end
-  
+
 p.metvalues( find(p.metvalues < p.metvaluesmin) ) = p.metvaluesmin;
 p.metvalues( find(p.metvalues > p.metvaluesmax) ) = p.metvaluesmax;
 p.actvalues( find(p.actvalues < p.actvaluesmin) ) = p.actvaluesmin;
@@ -1014,7 +1011,6 @@ p.actindshow = setdiff(1:length(network.actions),    label_names(p.omitreactions
 p.metindshow = setdiff(1:length(network.metabolites),label_names(p.omitmetabolites,network.metabolites));
 
 % omit metabolites and reactions that are tagged as invisible
-
 p.actindshow = p.actindshow(find(p.actinvisible(p.actindshow)==0));
 p.metindshow = p.metindshow(find(p.metinvisible(p.metindshow)==0));
 
@@ -1052,4 +1048,3 @@ if isfield(p,'split_names'),
 end
 
 if size(p.x,2) == 0, error('No point positions found'); end
-

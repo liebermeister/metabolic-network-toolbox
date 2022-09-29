@@ -23,8 +23,18 @@ else
   end
 end
 
+% remove zero values (may be better than setting them to a minimal number)
+if find(state_data.metabolite_data.Mean == 0),
+  warning('- Metabolite concentration data contain zero values - replacing them by minimal metabolite concentration');
+end
+
 state_data.metabolite_data.Mean(state_data.metabolite_data.Mean < cmb_options.quantities.c.min) = cmb_options.quantities.c.min;
 state_data.metabolite_data.Mean(state_data.metabolite_data.Mean > cmb_options.quantities.c.max) = cmb_options.quantities.c.max;
+
+if find(state_data.enzyme_data.Mean == 0),
+  error('Enzyme concentration data contain zero values');
+end
+
 
 
 % --------------------------------------------------------------
@@ -40,7 +50,6 @@ if sum(isfinite(state_data.enzyme_data.Std))==0,
   display('- (state_data_to_data.m): No enzyme error bars are available: using simple estimate');
   state_data.enzyme_data.Std = [];
 end
-
 
 if length(state_data.metabolite_data.Std),
   [data.X.mean,data.X.std] = lognormal_normal2log(state_data.metabolite_data.Mean,state_data.metabolite_data.Std);

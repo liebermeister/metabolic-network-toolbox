@@ -1,6 +1,6 @@
-function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic)
+function [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities, include_metabolic, pb_options)
 
-% [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic)
+% [task, prior] = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities,include_metabolic, pb_options)
 %
 % Prepare a parameter balancing task
 %
@@ -77,9 +77,12 @@ end
 
 ind_noninteger  = find(network.N ~= ceil(network.N));
 ind_noninteger2 = find(sum(network.N ~= ceil(network.N),1));
+
 if length(ind_noninteger2),
-  display(sprintf('  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be replaced by values of 1. The Haldane relationships of the balanced parameters will not be exactly satisfied in the reactions:'));
-  display(mytable(network.actions(ind_noninteger2)))
+  if pb_options.verbose,
+    display(sprintf('  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be replaced by values of 1. The Haldane relationships of the balanced parameters will not be exactly satisfied in the reactions:'));
+    display(mytable(network.actions(ind_noninteger2)))
+  end
   message = sprintf('\n  WARNING (parameter_balancing_task.m): The model contains non-integer stoichiometric coefficients.\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.');
   log_text = [log_text, message];
   network.N(ind_noninteger) = sign(network.N(ind_noninteger));
@@ -88,7 +91,9 @@ end
 stoich_max = 8;
 ind_large = find(abs(network.N)>stoich_max);
 if length(ind_large),
+  if pb_options.verbose,
   display(sprintf('  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than %d).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.',stoich_max));
+  end
   network.actions(ind_large)
   message = sprintf('\n  WARNING (parameter_balancing_task.m): The model contains large stoichiometric coefficients (bigger than %d).\n    These values will be automatically replaced by values of 1. This will also concern the Haldane relationships of the balanced parameters.',stoich_max);
   log_text = [log_text, message];
@@ -97,27 +102,39 @@ end
 
 reactant_numbers = sum(network.N~=0, 1);
 if max(reactant_numbers)>6,
+  if pb_options.verbose,
   display(sprintf('  WARNING (parameter_balancing_task.m): Some reactions contain more than 6 reactants:'));
+  end
   message = sprintf('\n  WARNING (parameter_balancing_task.m): Some reactions contain more than 6 reactants:');
   log_text = [log_text, message];
   ind_problematic = find(reactant_numbers>6);
+  if pb_options.verbose,
   display(pm(reactant_numbers(ind_problematic)',network.actions(ind_problematic)))
+  end
 end
 
 ind_no_substrates = find(sum(network.N<0) ==0);
 if length(ind_no_substrates),
+  if pb_options.verbose,
   display('  WARNING (parameter_balancing_task.m): Some reactions have no reaction substrates:');
+  end
   message = '  WARNING (parameter_balancing_task.m): Some reactions have no reaction substrates:';
   log_text = [log_text, message];
+  if pb_options.verbose,
   display(mytable(network.actions(ind_no_substrates),0))
+  end
 end
 
 ind_no_products   = find(sum(network.N>0) ==0);
 if length(ind_no_products),
+  if pb_options.verbose,
   display('  WARNING (parameter_balancing_task.m): Some reactions have no reaction products:');
+  end
   message = '  WARNING (parameter_balancing_task.m): Some reactions have no reaction products:';
   log_text = [log_text, message];
+  if pb_options.verbose,
   display(mytable(network.actions(ind_no_products),0))
+  end
 end
 
 % -------------------------------------------------------
@@ -471,6 +488,8 @@ task.Q_xupper_q = Q_data(ind_rel,:);
 % --------------------------------------------------------------------
 
 if find(isnan(task.xdata.std)), 
-  warning('  Some standard deviations are missing in data file; replacing them by 1.');
+  if pb_options.verbose,
+    display('  WARNING Some standard deviations are missing in data file; replacing them by 1.');
+  end
   task.xdata.std(find(isnan(task.xdata.std))) = 1; 
 end

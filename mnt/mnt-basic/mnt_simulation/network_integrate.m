@@ -106,7 +106,6 @@ switch network.kinetics.type,
      [t,s_int_t] = ode15s(@integrate_network_der_MA,T,s_int,optoptions,s_ext,Nfint,Nbint,Nk_fwdT,Nk_bwdT);
      
    otherwise,
-     
      odeoptions = odeset('NonNegative',1:length(s_int),'RelTol', 1e-6);
      
      if length(dilution_rate),

@@ -4,6 +4,8 @@ function [v_projected, ind_non_orthogonal, v_projected_std] = project_fluxes(N, 
 %
 % project fluxes to stationary subspace (different methods)
 %
+% pars.ext_sign:          vector of signs of external metabolite production (for constraints)
+%                         0 or nan means that no constraint is given
 % pars.method:            'simple', 'one_norm', 'lasso', 'euclidean', 'thermo_correct', 
 % pars.prior_for unknown_fluxes: in method 'euclidean', use prior to keep unknown fluxes small
 % pars.remove_eba_cycles: (flag) if set to 1, a matrix pars.C of eba-cycles has to be provided
@@ -22,6 +24,12 @@ else
 end
 
 eval(default('pars','struct','v_std','[]','v_sign','[]','v_fix','[]'));
+
+if isfield(pars,'ext_sign'),
+  pars.ext_sign(pars.ext_sign==0) = nan; 
+else
+  pars.ext_sign = nan * v_mean;
+end
 
 pars_default = struct('C', nan, 'dilution_flux',0, 'prior_for_unknown_fluxes',0); 
 pars = join_struct(pars_default,pars);
@@ -77,6 +85,13 @@ switch pars.method,
     [nm,nr] = size(N);
     A = N(external == 0,:);
     b = zeros(size(A,1),1);
+    if sum(isfinite(pars.ext_sign)),
+      ind_ext_sign = find(isfinite(pars.ext_sign));
+      A  = [ A; ...
+             - diag(pars.ext_sign(ind_ext_sign)) * N(ind_ext(ind_ext_sign),:)];
+      b  = [ b; ...
+             zeros(length(ind_ext_sign),1);];
+    end
     lb = v_mean(ind_finite)-v_std(ind_finite);
     ub = v_mean(ind_finite)+v_std(ind_finite);
     v_projected = my_lp_one_norm(A,b,lb,ub,100000);
@@ -115,6 +130,13 @@ switch pars.method,
     Nint= N(find(external ==0),:); 
     A   = [];
     b   = [];
+    if sum(isfinite(pars.ext_sign)),
+      ind_ext_sign = find(isfinite(pars.ext_sign));
+      A  = [ A; ...
+             - diag(pars.ext_sign(ind_ext_sign)) * N(ind_ext(ind_ext_sign),:)];
+      b  = [ b; ...
+             zeros(length(ind_ext_sign),1);];
+    end
     Aeq = eye(length(v_mean));
     Aeq = Aeq(isfinite(v_fix),:);
     Aeq = [full(Nint); ...
@@ -126,7 +148,7 @@ switch pars.method,
     lb(v_sign>0) = 0;
     ub(v_sign<0) = 0;
     if exist('cplexqp','file'),
-      opt = cplexoptimset('Display','off');
+      opt =  cplexoptimset('cplex');
       [v_projected,~,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     else
       opt = optimset('Display','off','Algorithm','interior-point-convex'); % 'active-set'

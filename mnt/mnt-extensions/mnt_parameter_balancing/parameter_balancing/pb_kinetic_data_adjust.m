@@ -1,9 +1,9 @@
-function kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, options)
+function kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options)
 
 % If desired, insert given Keq values
   
-if isfield(options, 'Keq_given'),
-  Keq_given = options.Keq_given;
+if isfield(pb_options, 'Keq_given'),
+  Keq_given = pb_options.Keq_given;
 else
   Keq_given = [];
 end
@@ -11,20 +11,24 @@ end
 % If desired, replace missing data values by pseudo values
 % Insert lower and upper bounds (from prior table) where no such bounds are given
 
-kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,options.insert_pseudo_values,network);
+kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,pb_options.insert_pseudo_values,network);
 
-if options.use_pseudo_values,
-  display('o Using pseudo values');
-else
-  display('o Not using pseudo values - Note that this may result, e.g., in ill-determined Kcat values!');
+if pb_options.verbose,
+  if pb_options.use_pseudo_values,
+    display('o Using pseudo values');
+  else
+    display('o Not using pseudo values - Note that this may result, e.g., in ill-determined Kcat values!');
+  end
 end
 
 % If desired, fix the Delta G0 values and the ensuing equilibrium constants
 
-if options.GFE_fixed,
+if pb_options.GFE_fixed,
+if pb_options.verbose,
   display(sprintf('  Fixing GFE (assuming very small std devs) for parameter balancing'));
   display(sprintf('  Recomputing equilibrium constants from GFE values'));
-  dmu0_is_given = prod(double(isfinite(kinetic_data.dmu0.median)));
+end
+dmu0_is_given = prod(double(isfinite(kinetic_data.dmu0.median)));
   if dmu0_is_given,
     kinetic_data.dmu0.std = 0.0001 * ones(size(network.actions));
     Keq_given = exp(-1/RT * kinetic_data.dmu0.median);  
@@ -35,8 +39,10 @@ if options.GFE_fixed,
 end
 
 if length(Keq_given),
+if pb_options.verbose,
   display('Keeping Keq values very close to given data values')
-  ind_finite = find(isfinite(Keq_given));
+end
+ind_finite = find(isfinite(Keq_given));
   kinetic_data.Keq.median(ind_finite)  = Keq_given(ind_finite);
   kinetic_data.Keq.mean(ind_finite)    = Keq_given(ind_finite);
   kinetic_data.Keq.std(ind_finite)     = 0.0001 * Keq_given(ind_finite);
@@ -48,7 +54,7 @@ end
 % -------------------------------------------------------------------------
 % If desired, modify the kcat values
 
-switch options.kcat_usage
+switch pb_options.kcat_usage
   
   case 'none',  
     %% do not use any kcat data
@@ -73,9 +79,9 @@ switch options.kcat_usage
     ind_m = find(v<0);
     emp   = ones(size(ind_p));
     emm   = ones(size(ind_m));      
-    if isempty(options.kcat_prior_median), error('Kcat standard value missing'); end
+    if isempty(pb_options.kcat_prior_median), error('Kcat standard value missing'); end
     kk                      = kinetic_data;
-    kcat_forward_value      = options.kcat_prior_median; % unit: 1/s
+    kcat_forward_value      = pb_options.kcat_prior_median; % unit: 1/s
     kk.Kcatf.median(ind_p)  =     kcat_forward_value  * emp; 
     kk.Kcatr.median(ind_m)  =     kcat_forward_value  * emm; 
     kk.Kcatf.mean_ln(ind_p) = log(kcat_forward_value) * emp; 
@@ -92,7 +98,10 @@ switch options.kcat_usage
     
 end
 
-if options.enforce_flux_directions, 
-  display('  Setting reaction affinity bounds to enforce predefined flux directions');
-  kinetic_data = pb_enforce_flux_directions(kinetic_data,options.v,options.A_min,options.A_max);
+if pb_options.enforce_flux_directions, 
+  if pb_options.verbose,
+    display('  Setting reaction affinity bounds to enforce predefined flux directions');
+  end
+  kinetic_data = pb_enforce_flux_directions(kinetic_data,pb_options.v,pb_options.A_min,pb_options.A_max);
 end
+

@@ -1,4 +1,4 @@
-function [balanced_parameters_SBtab, pb_options, network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing(model_file, output_file, data_file, prior_file, pb_options_file, model_name, pb_options_in)
+function [balanced_parameters_SBtab, pb_options, network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result, matrices, r_min, r_max] = parameter_balancing(model_file, output_file, data_file, prior_file, pb_options_file, model_name, pb_options_in)
 
 % PARAMETER_BALANCING Read model from SBML file; read data and general options from SBtab files; write results to output files
 %
@@ -52,22 +52,27 @@ log_text = '';
 % ----------------------------------------------------------------------
 % Banner
 
-display(sprintf('------------------------------------------------'));
-display(sprintf('Parameter balancing for kinetic metabolic models'));
-display(sprintf('------------------------------------------------\n'));
-display(sprintf('Running parameter balancing\n'))
+if pb_options.verbose,
+  display(sprintf('------------------------------------------------'));
+  display(sprintf('Parameter balancing for kinetic metabolic models'));
+  display(sprintf('------------------------------------------------\n'));
+  display(sprintf('Running parameter balancing\n'))
+end
+
 
 % ----------------------------------------------------------------------
 % Parameter balancing; builds model struct 'network' with balanced kinetic parameters (in field 'kinetics')
 
 tic
 
-[network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing_sbtab(model_file, data_file, pb_options);
+[network, r_mode, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result, r_min, r_max] = parameter_balancing_sbtab(model_file, data_file, pb_options);
 
 elapsed_time = toc;
 
 if length(log_text), 
-  display(sprintf(log_text))
+  if pb_options.verbose,
+    display(sprintf(log_text))
+  end
 end
 
 
@@ -83,15 +88,15 @@ if pb_options.flag_check,
   %% --------------------
   %% check for violated haldane relationships
 
-  modular_rate_law_haldane(network,[],3);
-
-  ind_violated_haldane = find(abs(log10(r_orig.Keq))>30); 
-  if length(ind_violated_haldane), 
-    display('Violoated Haldane relationships:');
-    network.actions(ind_violated_haldane)
-  end
-
   modular_rate_law_haldane_kcat(network);
+
+  %% modular_rate_law_haldane(network,[],3);
+  %% 
+  %% ind_violated_haldane = find(abs(log10(r_orig.Keq))>30); 
+  %% if length(ind_violated_haldane), 
+  %%   display('Violated Haldane relationships in original data:');
+  %%   network.actions(ind_violated_haldane)
+  %% end
   
 end
 
@@ -100,6 +105,7 @@ end
 % Convert results (kinetics data structure) to SBtab table struct and save to file
 
 opt_output = struct('write_all_quantities', pb_options.write_all_quantities, 'use_sbml_ids',0,'document_name',model_name,'kinetics_mode',r_mode);
+
 if pb_options.flag_minimal_output,
   opt_output.more_column_names   = {'UnconstrainedGeometricMean', 'UnconstrainedGeometricStd', 'UnconstrainedMean', 'UnconstrainedStd'};
   opt_output.more_column_data    = {r_geom_mean,r_geom_std,r_mean,r_std};
@@ -110,12 +116,19 @@ opt_output.flag_minimal_output = pb_options.flag_minimal_output;
 balanced_parameters_SBtab = modular_rate_law_to_sbtab(network,[],opt_output);
 
 if length(output_file),
-  sbtab_table_save(balanced_parameters_SBtab,struct('filename',output_file));
-  display(sprintf('\nWriting output SBtab file %s', output_file))
-end
+  if strcmp(output_file(end-3:end), '.tsv'), 
+    output_file = output_file(1:end-4);
+  end
+  
+  %% save table with preprocessed data
+  preprocessed_data_SBtab = kinetic_data_save(kinetic_data, network, [output_file '_preprocessed_data.tsv'], [], pb_options.verbose);
 
-if length(output_file),
-  preprocessed_data_SBtab = kinetic_data_save(kinetic_data, network, [output_file(1:end-4) '_preprocessed_data.tsv']);
+  %% save table with balanced parameters
+  output_file_pb_options = [output_file '_balanced_parameters.tsv'];
+  sbtab_table_save(balanced_parameters_SBtab,struct('filename',[output_file '_balanced_parameters.tsv']));
+  if pb_options.verbose,
+    display(sprintf('\nWriting output SBtab file %s', output_file))
+  end
 end
 
 
@@ -132,7 +145,9 @@ if pb_options.n_samples > 0,
   if length(output_file),
     output_file_samples = [output_file(1:end-4) '_samples.tsv'];
     sbtab_table_save(sampled_parameter_sets_SBtab,struct('filename', output_file_samples),struct('verbose',0));
-    display(sprintf('\nWriting sampled parameter sets to output file %s', output_file_samples))
+    if pb_options.verbose,
+      display(sprintf('\nWriting sampled parameter sets to output file %s', output_file_samples))
+    end
   end
 end
 
@@ -141,9 +156,11 @@ end
 % Save options to SBtab file
 
 if length(output_file),
-  output_file_pb_options = [output_file(1:end-4) '_options.tsv'];
+  output_file_pb_options = [output_file '_options.tsv'];
   sbtab_table_save(options_to_sbtab(pb_options,struct('filename', output_file_pb_options,'TableName','Options for parameter balancing','TableID','OptionsPB','Method','parameter-balancing','verbose',0)));
-  display(sprintf('Writing options to SBtab file %s', output_file_pb_options))
+  if pb_options.verbose,
+    display(sprintf('Writing options to SBtab file %s', output_file_pb_options))
+  end
 end
 
 
@@ -151,23 +168,34 @@ end
 % Save result matrices (describing constraints and posterior) to file
 
 if pb_options.export_posterior_matrices, 
-  output_dir_matrices = [output_file(1:end-4) '_posterior_matrices'];
+  output_dir_matrices = [output_file '_posterior_matrices'];
   
   ind_variable_names   = task.q.names;
   all_variable_names   = task.xmodel.names;
   constraint_names     = numbered_names('constraint',length(result.constraints_on_q_bineq),0);
-  matrices.MeanVector                        = pm(result.q_posterior.mean,ind_variable_names,{'Value'},1);
-  matrices.CovarianceMatrix                  = pm(result.q_posterior.cov,ind_variable_names,ind_variable_names,1);
-  matrices.InequalityConstraintMatrix        = pm(result.constraints_on_q_Aineq,constraint_names,ind_variable_names,1);
-  matrices.InequalityConstraintRighthandSide = pm(result.constraints_on_q_bineq,constraint_names,{'Value'},1);
-  matrices.ExtensionMatrix                   = pm(task.Q_xmodel_q,all_variable_names,ind_variable_names,1);
+  precision = 15; % digits
+  matrices_txt.DependenceMatrix                  = pm(task.Q_xmodel_q,all_variable_names,ind_variable_names,1,precision);
+  matrices_txt.MeanVector                        = pm(result.q_posterior.mean,ind_variable_names,{'Value'},1,precision);
+  matrices_txt.CovarianceMatrix                  = pm(result.q_posterior.cov,ind_variable_names,ind_variable_names,1,precision);
+  matrices_txt.InequalityConstraintMatrix        = pm(result.constraints_on_q_Aineq,constraint_names,ind_variable_names,1,precision);
+  matrices_txt.InequalityConstraintRighthandSide = pm(result.constraints_on_q_bineq,constraint_names,{'Value'},1,precision);
 
   delimiter = ',';
-  save_matlab_structure_to_tsv(matrices, output_dir_matrices, delimiter);
+  save_matlab_structure_to_tsv(matrices_txt, output_dir_matrices, delimiter);
 
+  matrices.MeanVector                        = result.q_posterior.mean;
+  matrices.CovarianceMatrix                  = result.q_posterior.cov;
+  matrices.InequalityConstraintMatrix        = result.constraints_on_q_Aineq;
+  matrices.InequalityConstraintRighthandSide = result.constraints_on_q_bineq;
+  matrices.ExtensionMatrix                   = task.Q_xmodel_q;
+
+else
+  matrices = [];
 end
 
-display(sprintf('Calculation time: %f seconds\n',elapsed_time));
+if pb_options.verbose,
+  display(sprintf('Calculation time: %f seconds\n',elapsed_time));
+end
 
 % ----------------------------------------------------------------------
 % Write log file
@@ -175,7 +203,9 @@ display(sprintf('Calculation time: %f seconds\n',elapsed_time));
 log_file = [output_file(1:end-4) '_log.txt'];
 
 if pb_options.write_log_file,
-  display(sprintf('Writing log file %s',log_file));
+  if pb_options.verbose,
+    display(sprintf('Writing log file %s',log_file));
+  end
   fid = fopen(log_file,'w');
 
   fprintf(fid,'------------------------------------------------\n');

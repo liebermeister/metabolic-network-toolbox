@@ -23,6 +23,8 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %   options.compound_column_name
 %   options.use_python_version_defaults
 %   options.expected_unit
+%   options.enforce_ranges
+%   options.table_id (optional, table ID if the input file contains several tables)
 %
 % Other functions for kinetic data structure:
 %   Display data values:             parameter_balancing_kinetic_data_show.m
@@ -47,9 +49,13 @@ options_default = struct('use_sbml_ids',0, ...
                          'reaction_column_name', [], ...
                          'compound_column_name', [], ...
                          'use_python_version_defaults', 0, ...
-                         'expected_unit',[]);
+                         'expected_unit',[],...
+                         'enforce_ranges',1,...
+                         'table_id',[]);
 
 options = join_struct(options_default,options);
+
+verbose = options.verbose;
 
 if isempty(parameter_prior), 
   parameter_prior = parameter_balancing_prior; 
@@ -69,14 +75,14 @@ end
 flag_construct_empty_data_structure = 0;
 
 if isempty(data_file),
-  if options.verbose,
+  if verbose,
     display('o No data file provided. Creating empty data structure');
   end
   flag_construct_empty_data_structure = 1;
-  options.verbose = 0;
+  verbose = 0;
   data_file       = [];
 elseif isstr(data_file),
-  if options.verbose, 
+  if verbose, 
     display(sprintf('o Collecting data from file %s', data_file));
   end
 end
@@ -101,6 +107,7 @@ if iscell(data_file),
     my_opt.reaction_column_name = options.reaction_column_name{1};
   end
   my_opt.compound_column_name = options.compound_column_name{1};
+  my_opt.table_id = options.table_id;
   kinetic_data = kinetic_data_load(data_quantities, parameter_prior, network, data_file{1}, my_opt);
   fn = fieldnames(kinetic_data);
 
@@ -151,7 +158,7 @@ end
 
 if length(data_file),
   if isstr(data_file),
-    kinetic_data_sbtab = sbtab_table_load(data_file);
+    kinetic_data_sbtab = sbtab_table_load(data_file,[],[],options.table_id);
   else
     kinetic_data_sbtab = data_file; data_file='[...]';
   end
@@ -167,7 +174,9 @@ if length(data_file),
   end
   if length(options.filter_column),
     if isfield(kinetic_data_table,options.filter_column),
+        if verbose,
       display(sprintf('File %s:\n  Preferring entries marked as %s in column %s', data_file, options.filter_entry, options.filter_column));
+      end
       ind_good_entries = find(strcmp(kinetic_data_table.(options.filter_column),options.filter_entry));
       ind_bad_entries  = find(strcmp(kinetic_data_table.(options.filter_column),options.filter_entry)==0);
       my_fn = fieldnames(kinetic_data_table);
@@ -177,7 +186,9 @@ if length(data_file),
     end
   else
     if length(options.filter_column),
-      display(sprintf('No column %s found in file %s - no preference for entries', options.filter_column, data_file));
+      if verbose,
+        display(sprintf('No column %s found in file %s - no preference for entries', options.filter_column, data_file));
+      end
     end
   end
 else
@@ -202,14 +213,18 @@ if options.use_sbml_ids,
   if sbml_ids_found;
     use_IDs = 'sbml';
   else
-    display(sprintf('- (kinetic_data_load.m): No SBML IDs found in data file', data_file));
+    if verbose,
+      display(sprintf('- (kinetic_data_load.m): No SBML IDs found in data file', data_file));
+    end
   end
 end
 if options.use_kegg_ids,
   if kegg_ids_found, 
     use_IDs = 'kegg';
   else
-    display(sprintf('- (kinetic_data_load.m): No KEGG IDs found in data file', data_file));
+    if verbose,
+      display(sprintf('- (kinetic_data_load.m): No KEGG IDs found in data file', data_file));  
+    end
   end
 end
 
@@ -233,13 +248,17 @@ switch use_IDs,
     end
   case 'sbml',
     if ~sbml_ids_found,
-      display(sprintf('- (kinetic_data_load.m): No SBML IDs found in data file %s; trying to use SBtab IDs instead', data_file));
+      if verbose,
+        display(sprintf('- (kinetic_data_load.m): No SBML IDs found in data file %s; trying to use SBtab IDs instead', data_file));
+      end
       options.use_sbml_ids = 0;
       use_sbtab_ids = 1;
     end
   case 'sbtab',
     if ~sbtab_ids_found,
-      display(sprintf('- (kinetic_data_load.m): No SBML IDs found in data file %s; trying to use SBML IDs instead', data_file));
+      if verbose,
+        display(sprintf('- (kinetic_data_load.m): No SBML IDs found in data file %s; trying to use SBML IDs instead', data_file));
+      end
       options.use_sbml_ids = 1;
     end
 end
@@ -298,17 +317,17 @@ if options.use_kegg_ids,
   end
       
   if ~isfield(network,'metabolite_KEGGID'), 
-    if options.verbose, display('- (kinetic_data_load.m): Metabolite KEGG IDs missing in network'); end
+    if verbose, display('- (kinetic_data_load.m): Metabolite KEGG IDs missing in network'); end
   elseif ~isfield(kinetic_data_table,options.compound_column_name), 
-    if options.verbose, display(sprintf('- (kinetic_data_load.m): No compound KEGG IDs found')); end
+    if verbose, display(sprintf('- (kinetic_data_load.m): No compound KEGG IDs found')); end
   else,
     metabolites = network.metabolite_KEGGID;
   end
 
   if ~isfield(network,'reaction_KEGGID'), 
-    if options.verbose, display('- (kinetic_data_load.m): Reaction KEGG IDs missing in network'); end
+    if verbose, display('- (kinetic_data_load.m): Reaction KEGG IDs missing in network'); end
   elseif ~isfield(kinetic_data_table,options.reaction_column_name), 
-    if options.verbose, display(sprintf('- (kinetic_data_load.m): No reaction KEGG IDs found')); end
+    if verbose, display(sprintf('- (kinetic_data_load.m): No reaction KEGG IDs found')); end
   else
     reactions = network.reaction_KEGGID;
   end
@@ -324,7 +343,9 @@ kinetic_data = struct;
 for it = 1:length(data_quantities),
   flag_mean_is_given      = 0;
   ind                     = find(strcmp(data_quantities{it},parameter_prior.QuantityType));
-  if isempty(ind), error(sprintf('Unknown quantity "%s"',data_quantities{it})); end
+  if isempty(ind), 
+    error(sprintf('Unknown quantity "%s"',data_quantities{it})); 
+  end
   symbol                  = parameter_prior.Symbol{ind};
   quantitytype            = parameter_prior.QuantityType{ind};
   scaling                 = parameter_prior.MathematicalType{ind};
@@ -350,7 +371,7 @@ for it = 1:length(data_quantities),
     case 'None',             ss = [1];
   end
   
-  if options.verbose,
+  if verbose,
     if ~isempty(data_file),
       if require_compound_id,
         if ~isfield(kinetic_data_table,options.compound_column_name),
@@ -375,7 +396,9 @@ for it = 1:length(data_quantities),
     my_units = kinetic_data_table.Unit(ind);
     is_ok = double(strcmp(my_units,default_unit));
     if sum(is_ok==0), 
+      if verbose,
       display(sprintf('- (kinetic_data_load.m): The data file contains "%s" values with unknown units. I ignore these values.',quantitytype)); 
+      end
       data_file
       default_unit
       units_found = my_units
@@ -417,25 +440,33 @@ for it = 1:length(data_quantities),
     end
   end
 
-  ind_mean_too_low    = find(my_mean   < allowed_min);
-  ind_mean_too_high   = find(my_mean   > allowed_max);
-  ind_median_too_low  = find(my_median < allowed_min);
-  ind_median_too_high = find(my_median > allowed_max);
+  if options.enforce_ranges,
+    
+    ind_mean_too_low    = find(my_mean   < allowed_min);
+    ind_mean_too_high   = find(my_mean   > allowed_max);
+    ind_median_too_low  = find(my_median < allowed_min);
+    ind_median_too_high = find(my_median > allowed_max);
+    
+    if length(ind_mean_too_low) + length(ind_mean_too_high) + length(ind_median_too_low) + length(ind_median_too_high),
+      if verbose,
+        display(sprintf('- (kinetic_data_load.m): %s data values outside allowed range in file %s. \n  I replace these values by the minimal or maximal allowed values %f and %f', symbol, data_file,allowed_min, allowed_max));
+        display([my_mean(ind_mean_too_low); my_mean(ind_mean_too_high); my_median(ind_median_too_low); my_median(ind_median_too_high)])
+      end
+      my_mean(ind_mean_too_low)      = allowed_min;
+      my_mean(ind_mean_too_high)     = allowed_max;
+      my_median(ind_median_too_low)  = allowed_min;
+      my_median(ind_median_too_high) = allowed_max;
+    end
   
-  if length(ind_mean_too_low) + length(ind_mean_too_high) + length(ind_median_too_low) + length(ind_median_too_high),
-    display(sprintf('- (kinetic_data_load.m): %s data values outside allowed range in file %s. \n  I replace these values by the minimal or maximal allowed values %f and %f', symbol, data_file,allowed_min, allowed_max));
-    display([my_mean(ind_mean_too_low); my_mean(ind_mean_too_high); my_median(ind_median_too_low); my_median(ind_median_too_high)])
-    my_mean(ind_mean_too_low)      = allowed_min;
-    my_mean(ind_mean_too_high)     = allowed_max;
-    my_median(ind_median_too_low)  = allowed_min;
-    my_median(ind_median_too_high) = allowed_max;
   end
-
+  
   switch scaling,
     case 'Multiplicative',
       ind_zero_values = find([my_mean==0]+[my_median==0]);
       if length(ind_zero_values),
-        display(sprintf('- (kinetic_data_load.m): The data for quantity "%s" contain zero values. I will ignore them', symbol));
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): The data for quantity "%s" contain zero values. I will ignore them', symbol));
+        end
         my_mean(ind_zero_values)  = nan;
         my_median(ind_zero_values)= nan;
       end
@@ -446,35 +477,38 @@ for it = 1:length(data_quantities),
   end
   ind_zero_values = find(my_std==0);
   if length(ind_zero_values),
-    display(sprintf('- (kinetic_data_load.m): The data for quantity "%s" contain zero standard deviations. I will ignore them', symbol));
+    if verbose,
+      display(sprintf('- (kinetic_data_load.m): The data for quantity "%s" contain zero standard deviations. I will ignore them', symbol));
+    end
     my_std(ind_zero_values)=nan;
   end
   
   if options.flag_invent_std,
     indices_std_missing = find( [isfinite(my_mean) + isfinite(my_median)] .* [~isfinite(my_std)]);
-    if options.verbose, 
+    if verbose, 
       if length(indices_std_missing),
-        display(sprintf('    Quantity %s: Inventing standard deviations',symbol)); 
+        if verbose,
+          display(sprintf('    Quantity %s: Inventing standard deviations',symbol)); 
         end
+      end
     end
 
-    if options.use_python_version_defaults,
+    %if options.use_python_version_defaults,
       %% Possibility 1: complete missing data error by using default geometric standard deviation
       switch scaling,
         case 'Additive',
-          my_std_guess = errstd;
+          my_std_guess = errstd * ones(size(my_median));
         case 'Multiplicative',
           if flag_mean_is_given,
-            my_std_guess = my_mean * sqrt(exp(log(errgeomstd).^2)-1); % formula assuming log-normal distribution 
+            my_std_guess = my_mean * sqrt(exp(log(errgeomstd).^2)-1); % formula assuming log-normal distribution
           else
-            [~,my_std_guess] = lognormal_log2normal(log(my_median),errgeomstd * ones(size(my_median)));
+            [~,my_std_guess] = lognormal_log2normal(log(my_median),log(errgeomstd) * ones(size(my_median)));
           end
       end
-    else
-      %% Possibility 2: complete missing data error by default standard deviation
-      my_std_guess = errstd * ones(size(my_std));
-    end
-    
+    %else
+    %  %% Possibility 2: complete missing data error by default standard deviation
+    %  my_std_guess = errstd * ones(size(my_std));
+    %end
     my_std(indices_std_missing) = my_std_guess(indices_std_missing);
   end
 
@@ -482,16 +516,19 @@ for it = 1:length(data_quantities),
     case 'Additive',
       if flag_mean_is_given, my_median = my_mean;
       else,                  my_mean = my_median;
-    end
+      end
+      my_geomstd = nan * my_mean;
     case 'Multiplicative',
       if flag_mean_is_given,
         [my_mean_ln,my_std_ln] = lognormal_normal2log(my_mean,my_std);
         my_median(isfinite(my_mean_ln)) = exp(my_mean_ln(isfinite(my_mean_ln)));
+        my_geomstd(isfinite(my_std_ln)) = exp(my_std_ln(isfinite(my_std_ln)));        
       else,
         %% THIS IS A FIX! Use predefined geometric standard deviation
         my_mean_ln = log(my_median);
         my_std_ln  = log(errgeomstd) * ones(size(my_mean_ln));
         [my_mean,my_std] = lognormal_log2normal(my_mean_ln,my_std_ln);
+        my_geomstd(isfinite(my_std_ln)) = exp(my_std_ln(isfinite(my_std_ln)));        
       end
   end
 
@@ -516,21 +553,29 @@ for it = 1:length(data_quantities),
       if isfield(kinetic_data_table,options.compound_column_name),
         rindices = label_names(kinetic_data_table.(options.compound_column_name)(ind),metabolites);%,'multiple');
       else
-        display(sprintf('- (kinetic_data_load.m): Looking for %s data: Compound IDs cannot be matched',symbol));
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): Looking for %s data: Compound IDs cannot be matched',symbol));
+        end
         rindices = repmat(0,length(ind),1);
-        if options.verbose, 
+        if verbose, 
           if isfield(kinetic_data, symbol),
-            display(sprintf('- (kinetic_data_load.m): Looking for %s data: Compound IDs cannot be matched',symbol));
+            if verbose,
+              display(sprintf('- (kinetic_data_load.m): Looking for %s data: Compound IDs cannot be matched',symbol));
+            end
           end
         end
       end
       cindices = repmat(1,length(rindices),1);
       if find(rindices==0),
-        display(sprintf('- (kinetic_data_load.m): Unknown species ID for %s encountered in data file',symbol));
-        if options.verbose,
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): Unknown species ID for %s encountered in data file',symbol));
+        end
+        if verbose,
           unknown_species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(rindices==0))),0)
         else
-          display('Set option "verbose" to see the species ID');
+          if verbose,
+            display('Set option "verbose" to see the species ID');
+          end
         end
       end
       
@@ -539,18 +584,24 @@ for it = 1:length(data_quantities),
       if isfield(kinetic_data_table,options.reaction_column_name),
         rindices = label_names(kinetic_data_table.(options.reaction_column_name)(ind),reactions);%,'multiple');
       else
-        display(sprintf('- (kinetic_data_load.m): Looking for %s data: Reaction IDs cannot be matched',symbol));
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): Looking for %s data: Reaction IDs cannot be matched',symbol));
+        end
         rindices = repmat(1,length(ind),1);
-        if options.verbose,
+        if verbose,
           if isfield(kinetic_data, symbol),
-            display(sprintf('- (kinetic_data_load.m): Looking for %s data: Reaction IDs cannot be matched',symbol));
+            if verbose,
+              display(sprintf('- (kinetic_data_load.m): Looking for %s data: Reaction IDs cannot be matched',symbol));
+            end
           end
         end
       end
       cindices = repmat(1,length(rindices),1);      
       if find(rindices==0),
-        display(sprintf('- (kinetic_data_load.m): Unknown reaction ID for %s encountered in data file',symbol));
-        if options.verbose,
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): Unknown reaction ID for %s encountered in data file',symbol));
+        end
+        if verbose,
           unknown_reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(rindices==0))),0)
         end
       end
@@ -560,28 +611,36 @@ for it = 1:length(data_quantities),
         rindices = label_names(kinetic_data_table.(options.reaction_column_name)(ind),reactions);%,  'multiple');
         cindices = label_names(kinetic_data_table.(options.compound_column_name)(ind),metabolites);%,'multiple');
       else
-        if options.verbose, 
+        if verbose, 
           display(sprintf('    Quantity %s: Joint Compound and Reaction IDs cannot be matched',symbol)); 
         end         
         rindices = repmat(1,length(ind),1);
         cindices = repmat(1,length(rindices),1);
       end
       if find(rindices==0),
-        display(sprintf('- (kinetic_data_load.m): Unknown reaction ID for %s encountered in data file',symbol));
-        if options.verbose,
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): Unknown reaction ID for %s encountered in data file',symbol));
+        end
+        if verbose,
           unknown_reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(rindices==0))),0)
           species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(rindices==0))),0)
         else
-          display('Set option "verbose" to see the reaction ID');
+          if verbose,
+            display('Set option "verbose" to see the reaction ID');
+          end
         end
       end
       if find(cindices==0),
-        display(sprintf('- (kinetic_data_load.m): Unknown species ID for %s encountered in data file',symbol));
-        if options.verbose,
+        if verbose,
+          display(sprintf('- (kinetic_data_load.m): Unknown species ID for %s encountered in data file',symbol));
+        end
+        if verbose,
           unknown_species_ids = mytable(kinetic_data_table.(options.compound_column_name)(ind(find(cindices==0))),0)
           reaction_ids = mytable(kinetic_data_table.(options.reaction_column_name)(ind(find(cindices==0))),0)
         else
-          display('Set option "verbose" to see the species ID');
+          if verbose,
+            display('Set option "verbose" to see the species ID');
+          end
         end
       end
       
@@ -616,6 +675,7 @@ for it = 1:length(data_quantities),
       new.my_median(it5,1) = nanmean(my_median(my_ind));
       new.my_mean(it5,1)   = nanmean(my_mean(my_ind));
       new.my_std(it5,1)    = nanmean(my_std(my_ind));
+      new.my_geomstd(it5,1)    = nanmean(my_geomstd(my_ind));
       new.my_mean_ln(it5,1)= nanmean(my_mean_ln(my_ind));
       new.my_std_ln(it5,1) = nanmean(my_std_ln(my_ind));
       new.my_upper(it5,1)  = nanmin(my_upper(my_ind));
@@ -627,6 +687,7 @@ for it = 1:length(data_quantities),
     my_median = new.my_median(ind_ok);
     my_mean   = new.my_mean(ind_ok);
     my_std    = new.my_std(ind_ok);
+    my_geomstd    = new.my_geomstd(ind_ok);
     my_mean_ln= new.my_mean_ln(ind_ok);
     my_std_ln = new.my_std_ln(ind_ok);
     my_upper  = new.my_upper(ind_ok);
@@ -664,6 +725,7 @@ for it = 1:length(data_quantities),
       case 'Multiplicative',
         quantity_entry.mean_ln(rindices(ind_ok(itt)), cindices(ind_ok(itt))) = my_mean_ln(ind_ok(itt));
         quantity_entry.std_ln(rindices(ind_ok(itt)), cindices(ind_ok(itt)))  = my_std_ln(ind_ok(itt));
+        quantity_entry.geomstd(rindices(ind_ok(itt)), cindices(ind_ok(itt))) = my_geomstd(ind_ok(itt));
     end  
   end
   
@@ -677,10 +739,13 @@ for it = 1:length(data_quantities),
         ii = find(isfinite(quantity_entry.std_ln));
         [quantity_entry.mean(ii), quantity_entry.std(ii)] = lognormal_log2normal(quantity_entry.mean_ln(ii), quantity_entry.std_ln(ii));
       end
+      quantity_entry.geomstd = exp(quantity_entry.std_ln);
       quantity_entry.lower_ln = log(quantity_entry.lower);
       quantity_entry.upper_ln = log(quantity_entry.upper);
+    case 'Additive',
+      quantity_entry.geomstd = nan * quantity_entry.mean;
   end
-  
+
   kinetic_data.(symbol) = quantity_entry; 
   
 end
@@ -724,10 +789,14 @@ if isfield(kinetic_data,'Keq'),
       kinetic_data.Keq.mean_ln  = kinetic_data.Keq.mean_ln   + log(1000.^column(molecularity_mismatch));
       kinetic_data.Keq.lower_ln = kinetic_data.Keq.lower_ln  + log(1000.^column(molecularity_mismatch));
       kinetic_data.Keq.upper_ln = kinetic_data.Keq.upper_ln  + log(1000.^column(molecularity_mismatch));
-      display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
+      if verbose,
+        display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
+      end
     case {'mM','1mM','1 mM'},
     case 'undefined',
-      display(sprintf('- (kinetic_data_load.m):\n  Thermodynamic quantities in the data file are assumed to refer to a standard concentration of mM.\n  (To change this, please add the attribute StandardConcentration=''M'' to your data file.)'));
+      if verbose,
+        display(sprintf('- (kinetic_data_load.m):\n  Thermodynamic quantities in the data file are assumed to refer to a standard concentration of mM.\n  (To change this, please add the attribute StandardConcentration=''M'' to your data file.)'));
+      end
   end
 end
 
@@ -739,17 +808,20 @@ if isfield(kinetic_data,'dmu0'),
     kinetic_data.dmu0.mean     = kinetic_data.dmu0.mean     - RT * log(1000.^column(molecularity_mismatch));
     kinetic_data.dmu0.lower    = kinetic_data.dmu0.lower    - RT * log(1000.^column(molecularity_mismatch));
     kinetic_data.dmu0.upper    = kinetic_data.dmu0.upper    - RT * log(1000.^column(molecularity_mismatch));
-    display('Converting standard reaction GFE from a convention with standard concentration M -> standard concentration mM.');
+    if verbose,
+      display('Converting standard reaction GFE from a convention with standard concentration M -> standard concentration mM.');
+    end
     case {'mM','1mM','1 mM'},
     case 'undefined',
-      display(sprintf('- (kinetic_data_load.m):\n  Thermodynamic quantities in the data file are assumed to refer to a standard concentration of mM.\n  (To change this, please add the attribute StandardConcentration=''M'' to your data file.)'));
+      if verbose,
+        display(sprintf('- (kinetic_data_load.m):\n  Thermodynamic quantities in the data file are assumed to refer to a standard concentration of mM.\n  (To change this, please add the attribute StandardConcentration=''M'' to your data file.)'));
+      end
   end
 end
 
 
-
 % --------------------------------------------------------------------------------------
-% make sure important fields in kinetic_data are considered
+% lower and upper values: make sure important fields in kinetic_data are considered
 
 if isfield(kinetic_data,'Keq'),
   if sum(isfinite(kinetic_data.Keq.lower_ln )) == 0, 
@@ -784,10 +856,13 @@ end
 % if Keq values are missing, get them from dmu0 values
 
 if isfield(kinetic_data,'Keq') * isfield(kinetic_data,'dmu0'),
-  display('- (kinetic_data_load.m): Completing missing Keq values based on standard Gibbs free energies of reaction (in kinetic_data_load)');
+  if verbose,
+    display('- (kinetic_data_load.m): Completing missing Keq values based on standard Gibbs free energies of reaction (in kinetic_data_load)');
+  end
   ind_missing = find(isnan(kinetic_data.Keq.median));
   kinetic_data.Keq.median(ind_missing) = exp(-1/RT * kinetic_data.dmu0.median(ind_missing));
   kinetic_data.Keq.mean_ln(ind_missing)  = -1/RT * kinetic_data.dmu0.mean(ind_missing);
   kinetic_data.Keq.std_ln(ind_missing)   =  1/RT * kinetic_data.dmu0.std(ind_missing);
   [kinetic_data.Keq.mean(ind_missing),kinetic_data.Keq.std(ind_missing)] = lognormal_log2normal(kinetic_data.Keq.mean_ln(ind_missing),kinetic_data.Keq.std_ln(ind_missing));
+  kinetic_data.Keq.geomstd(ind_missing)   =  exp(kinetic_data.Keq.std_ln(ind_missing));
 end

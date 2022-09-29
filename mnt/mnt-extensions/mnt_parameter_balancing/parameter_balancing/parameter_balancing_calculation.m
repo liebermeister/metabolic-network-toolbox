@@ -46,7 +46,9 @@ xdata.cov_inv = diag(sparse(1./task.xdata.std.^2));
 
 if isfield(task.xdata.indices,'dmu0') * isfield(pb_options,'dg_precision_file'),
   if length(pb_options.dg_precision_file),
+    if pb_options.verbose,
     display(sprintf('Reading Delta G covariance matrix from file %s',pb_options.dg_precision_file));
+    end
     load(pb_options.dg_precision_file);
     % if rxn_id is not a cell array (but a character array), then convert it to a cell array
     if ischar(rxn_id),
@@ -72,10 +74,14 @@ if isfield(task.xdata.indices,'dmu0') * isfield(pb_options,'dg_precision_file'),
       eig_min = min(eig(dg_precision));
       eig_max = max(eig(dg_precision));
       if eig_min < (10^-10)*eig_max,
-        display('  (parameter_balancing_calculation.m): The delta G precision matrix contains negative eigenvalues or is badly conditioned. I shift all eigenvalues up');
+        if pb_options.verbose,
+          display('  (parameter_balancing_calculation.m): The delta G precision matrix contains negative eigenvalues or is badly conditioned. I shift all eigenvalues up');
+          end
         dg_precision = dg_precision + [-min(eig_min,0)+(10^-10)*eig_max] * eye(size(dg_precision,1));
       end
+        if pb_options.verbose,
       display('Using prepared covariance matrix for standard delta G values');
+      end
       xdata.cov_inv(task.xdata.indices.dmu0,task.xdata.indices.dmu0) = dg_precision;
     end
   end
@@ -157,7 +163,7 @@ end
 
 if use_constraints,
   % make the constraints a bit stricter, to ensure that solutions (even with numerical errors) will satisfy the constraints 
-  epsilon = 10^-4;
+  epsilon = pb_options.epsilon;
   %% Project solution to feasible point (satisfying constraints) (using function at the bottom of this file)
   q_posterior.mode = compute_posterior_mode_with_constraints(q_posterior.mean, q_posterior_cov_inv, Qconstraints, xconstraints, Qeqconstraints, xeqconstraints, epsilon);
 else
@@ -166,25 +172,27 @@ end
 
 %  ----------------------------------------------------------
 
-q_posterior.cov          = inv(q_posterior_cov_inv);
+q_posterior.cov          = make_symmetric(inv(q_posterior_cov_inv));
 q_posterior.std          = sqrt(diag(q_posterior.cov));
 
 xmodel_posterior.mode    = task.Q_xmodel_q * q_posterior.mode;
 xmodel_posterior.mean    = task.Q_xmodel_q * q_posterior.mean;
-xmodel_posterior.cov     = task.Q_xmodel_q * q_posterior.cov * task.Q_xmodel_q';
+xmodel_posterior.cov     = make_symmetric(task.Q_xmodel_q * q_posterior.cov * task.Q_xmodel_q');
 
 if isfield(pb_options,'fix_Keq_in_sampling'),
   if pb_options.fix_Keq_in_sampling,
     log_text = [log_text, '\n  Keeping equilibrium constants fixed while computing the posterior covariance, standard deviations, and samples'];
     my_ind = [task.q.indices.KV; task.q.indices.KM; task.q.indices.KA; task.q.indices.KI];
-    xmodel_posterior.cov     = task.Q_xmodel_q(:,my_ind) * q_posterior.cov(my_ind,my_ind) * task.Q_xmodel_q(:,my_ind)';
+    xmodel_posterior.cov     = make_symmetric(task.Q_xmodel_q(:,my_ind) * q_posterior.cov(my_ind,my_ind) * task.Q_xmodel_q(:,my_ind)');
   end
 end
 
 xmodel_posterior.std     = sqrt(diag(full(xmodel_posterior.cov)));
 
 if pb_options.n_samples >0,
+    if pb_options.verbose,
   display(sprintf('o Generating %d samples from the posterior distribution', pb_options.n_samples ));
+  end
   q_posterior.samples = repmat(q_posterior.mode,1,pb_options.n_samples) + ...
       real(sqrtm(full(q_posterior.cov))) * randn(length(q_posterior.mean),pb_options.n_samples);
   
@@ -206,9 +214,43 @@ end
 if length(task.xdata.mean),
   xdata_posterior.mode   = task.Q_xdata_q * q_posterior.mode;
   xdata_posterior.mean   = task.Q_xdata_q * q_posterior.mean;
-  xdata_posterior.cov    = task.Q_xdata_q * q_posterior.cov * task.Q_xdata_q';
+  xdata_posterior.cov    = make_symmetric(task.Q_xdata_q * q_posterior.cov * task.Q_xdata_q');
   xdata_posterior.std    = sqrt(diag(xdata_posterior.cov));
 end
+
+
+% -----------------------------------------------------------------------
+% Variability analysis
+
+if pb_options.run_variability_analysis,
+  if pb_options.verbose,
+  display('- Running variability analysis');
+  end
+  opt = optimset('Display','off');
+  nq = length(task.q.names);
+  nx = length(task.xmodel.names);
+  xmodel_min = [];
+  xmodel_max = [];
+  for it = 1:nx,
+    [~,XM,exitflag] = linprog( task.Q_xmodel_q(it,:)', full(Qconstraints), xconstraints - epsilon,full(Qeqconstraints), xeqconstraints,-10^10*ones(nq,1),10^10*ones(nq,1),opt);
+    if exitflag ~=1, error('error in LP problem'); end 
+    xmodel_min(it,1) = XM;
+    [~,XM,exitflag] = linprog(-task.Q_xmodel_q(it,:)', full(Qconstraints), xconstraints - epsilon,full(Qeqconstraints), xeqconstraints,-10^10*ones(nq,1),10^10*ones(nq,1),opt);
+    if exitflag ~=1, error('error in LP problem'); end 
+    xmodel_max(it,1) = -XM;
+    %task.xmodel.names{it},    xmodel_min(it,1),xmodel_max(it,1)
+  end
+else
+  if pb_options.verbose,
+  display('- Omitting variability analysis');
+end
+  nx = length(task.xmodel.names);
+  xmodel_min = nan * ones(nx,1);
+  xmodel_max = nan * ones(nx,1);
+end
+
+xmodel_posterior.min = xmodel_min;
+xmodel_posterior.max = xmodel_max;
 
 
 % -----------------------------------------------------------------------
@@ -223,6 +265,9 @@ result.xmodel_posterior.mean    = xmodel_posterior.mean;
 result.xmodel_posterior.cov     = xmodel_posterior.cov ;
 result.xmodel_posterior.std     = xmodel_posterior.std ;
 result.xmodel_posterior.samples = xmodel_posterior.samples;
+
+result.xmodel_posterior.min     = xmodel_min;
+result.xmodel_posterior.max     = xmodel_max;
 
 result.constraints_on_q_Aineq  = Qconstraints; 
 result.constraints_on_q_bineq  = xconstraints; 
@@ -252,6 +297,8 @@ for it = 1:length(task.model_quantities),
   my_x_mode       = xmodel_posterior.mode(my_indices);
   my_x_mean       = xmodel_posterior.mean(my_indices);
   my_x_std        = xmodel_posterior.std(my_indices);
+  my_x_min        = xmodel_posterior.min(my_indices);
+  my_x_max        = xmodel_posterior.max(my_indices);
   my_x_samples    = xmodel_posterior.samples(my_indices,:);
 
   if strcmp(my_scaling, 'Multiplicative'),
@@ -259,6 +306,8 @@ for it = 1:length(task.model_quantities),
      my_x_median          = exp(my_x_mean);
      my_x_geom_std        = exp(my_x_std);
      my_x_samples         = exp(my_x_samples);
+     my_x_min             = exp(my_x_min);
+     my_x_max             = exp(my_x_max);
     [my_x_mean, my_x_std] = lognormal_log2normal(my_x_mean, my_x_std,'arithmetic');
   else
     my_x_median          = nan * my_x_mode;
@@ -298,6 +347,8 @@ for it = 1:length(task.model_quantities),
   kpm_std.(my_symbol)      = my_x_std;
   kpm_median.(my_symbol)   = my_x_median;
   kpm_geom_std.(my_symbol) = my_x_geom_std;
+  kpm_min.(my_symbol)      = my_x_min;
+  kpm_max.(my_symbol)      = my_x_max;
 
   for itt=1:pb_options.n_samples,
   switch my_symbol, 
@@ -319,6 +370,8 @@ end
 % -------------------------------------------------------------
 
 result.kinetics.posterior_mode                   = kpm_mode;
+result.kinetics.posterior_min                    = kpm_min;
+result.kinetics.posterior_max                    = kpm_max;
 result.kinetics.unconstrained_posterior_mean     = kpm_mean;
 result.kinetics.unconstrained_posterior_std      = kpm_std;
 result.kinetics.unconstrained_posterior_median   = kpm_median;
@@ -351,17 +404,22 @@ else
   ub = []; %ub =  10^15*ones(size(q_posterior_mean));
 
   if exist('cplexqp','file') * [size(q_posterior_cov_inv,1)>1000],
+  if pb_options.verbose,
     display('  (parameter_balancing_calculation.m): Problem size is too large for CPLEX community edition; using matlab quadprog function instead')
+  end
   end
 
   if exist('cplexqp','file')* [size(q_posterior_cov_inv,1)<=1000],
     log_text = [log_text, 'Using CPLEX for quadratic optimisation'];
-    opt =  cplexoptimset('Display','off');
+    opt =  cplexoptimset('cplex');
+    %opt =  cplexoptimset('Display','off');
     [q_posterior_mode,fval,exitflag] = cplexqp(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,full(Qeqconstraints), xeqconstraints,lb,ub,[],opt);
   else,
     log_text = [log_text, 'Using Matlab quadprog for quadratic optimisation'];
+  if pb_options.verbose,
      opt = optimset('Display','off','Algorithm','interior-point-convex','MaxIter',10^8); % 'active-set'
-     [q_posterior_mode,fval,exitflag] = quadprog(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,full(Qeqconstraints), xeqconstraints,lb,ub,[],opt);
+  end
+  [q_posterior_mode,fval,exitflag] = quadprog(full(q_posterior_cov_inv), full(-q_posterior_cov_inv * q_posterior_mean), full(Qconstraints), xconstraints - epsilon,full(Qeqconstraints), xeqconstraints,lb,ub,[],opt);
   end
 
   if exitflag~=1,

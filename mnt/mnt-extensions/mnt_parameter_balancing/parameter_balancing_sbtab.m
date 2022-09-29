@@ -1,4 +1,4 @@
-function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result] = parameter_balancing_sbtab(model_file, data_file, pb_options)
+function [network, r, r_orig, kinetic_data, r_samples, parameter_prior, r_mean, r_std, r_geom_mean, r_geom_std, task, result, r_min, r_max] = parameter_balancing_sbtab(model_file, data_file, pb_options)
 
 % PARAMETER_BALANCING_SBTAB - Wrapper function for parameter balancing 
 %
@@ -38,9 +38,27 @@ log_text = '';
 % ----------------------------------------------------------
 % load model
 
-display(sprintf('o Using model file %s', model_file))
+if pb_options.verbose,
+  display(sprintf('o Using model file %s', model_file))
+end
 
-network = network_import_model(model_file);
+network = network_import_model(model_file, struct('load_quantity_table',0));
+
+if pb_options.set_water_conc_to_one,
+  if pb_options.verbose,
+    display('o Setting water concentration to 1 and removing water from the stoichiometric matrix (setting its stoichiometric coefficients to 0');
+  end
+  if isempty(pb_options.ind_water),
+    pb_options.ind_water = network_find_water(network);
+  end
+  pb_options.c_fix(pb_options.ind_water) = 1;
+  network.N(pb_options.ind_water,:) = 0;
+elseif length(network_find_water(network)),
+  if pb_options.verbose,
+    display('The network contains water as a species, you might want to remove it by setting the option "pb_options.set_water_conc_to_one=1"');
+  end
+end
+
 
 if isfield(network,'metabolite_is_an_enzyme'),
   if sum(network.metabolite_is_an_enzyme),
@@ -48,29 +66,31 @@ if isfield(network,'metabolite_is_an_enzyme'),
   end
 end
 
+
 % ----------------------------------------------------------
 % load parameter_prior and define relevant quantities
 
-parameter_prior = parameter_balancing_prior([],pb_options.parameter_prior_file,1); 
+parameter_prior = parameter_balancing_prior([],pb_options.parameter_prior_file, pb_options.verbose); 
 parameter_prior = pb_parameter_prior_adjust(parameter_prior, pb_options); 
 
 [model_quantities, basic_quantities, data_quantities, pseudo_quantities] = parameter_balancing_quantities(parameter_prior, network, pb_options);
 
-
 % ----------------------------------------------------------
 % load kinetic data
 
-if length(data_file), 
-  if iscell(data_file),
-    for it = 1:length(data_file),
-      display(sprintf('o Using data file %s', data_file{it})); 
+if pb_options.verbose,
+  if length(data_file), 
+    if iscell(data_file),
+      for it = 1:length(data_file),
+        display(sprintf('o Using data file %s', data_file{it})); 
+      end
+    else
+      display(sprintf('o Using data file %s', data_file)); 
     end
-  else
-    display(sprintf('o Using data file %s', data_file)); 
   end
 end
 
-kinetic_data = kinetic_data_load(data_quantities, parameter_prior, network, data_file, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids, 'use_python_version_defaults', pb_options.use_python_version_defaults, 'verbose', pb_options.verbose));
+kinetic_data = kinetic_data_load(data_quantities, parameter_prior, network, data_file, struct('use_sbml_ids', pb_options.use_sbml_ids, 'use_kegg_ids', pb_options.use_kegg_ids, 'use_python_version_defaults', pb_options.use_python_version_defaults, 'verbose', pb_options.verbose, 'table_id','Parameter', 'enforce_ranges', pb_options.enforce_ranges));
 
 kinetic_data_orig = kinetic_data;
 kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, pb_options);
@@ -81,11 +101,11 @@ kinetic_data      = pb_kinetic_data_adjust(kinetic_data, parameter_prior, networ
 % -----------------------------------------------------------
 % Run parameter balancing
 
-task = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
+task = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities,[],pb_options);
 
 result = parameter_balancing_calculation(task, parameter_prior, pb_options);
 
-[r, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples] = parameter_balancing_output(result, kinetic_data_orig, pb_options, network);
+[r, r_mean, r_std, r_geom_mean, r_geom_std, r_orig, r_samples, ~, ~, r_min, r_max] = parameter_balancing_output(result, kinetic_data_orig, pb_options, network);
 
 if pb_options.fix_irreversible_reactions,
   %% irreversible reactions are reactions whose log10 Keq value, divided by 
@@ -97,7 +117,9 @@ if pb_options.fix_irreversible_reactions,
   ind_irreversible   = find(abs(log10_Keq) ./ molecularity_sums > 5);
   if length(ind_irreversible),
     sign_irreversible  = sign(log10_Keq(ind_irreversible));
-    display('parameter_balancing_sbtab: setting backward Kcat values of supposedly irreversible reactions (and forward Kcat values of supposedly irreversible reactions in reverse direction) to 0');
+    if pb_options.verbose,
+      display('parameter_balancing_sbtab: setting backward Kcat values of supposedly irreversible reactions (and forward Kcat values of supposedly irreversible reactions in reverse direction) to 0');
+    end
     network.actions(ind_irreversible);
     r.Kcatr(sign_irreversible==1)  = 0;
     r.Kcatf(sign_irreversible==-1) = 0;

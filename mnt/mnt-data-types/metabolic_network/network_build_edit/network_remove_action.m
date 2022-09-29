@@ -21,13 +21,13 @@ ind = ind(find(ind~=0));
 keep_actions = setdiff(1:length(network.actions), ind)';
 
 if flag_remove_metabolites,
-  keep = find( sum(network.N(:,keep_actions)~=0 ,2));
+  keep = find(sum(network.N(:,keep_actions)~=0 ,2));
 else
   keep = 1:length(network.metabolites);
 end
 
 network1 = network_choose(network,keep,keep_actions,1);
- 
+
 %% network1.metabolites = network.metabolites(keep);
 %% network1.N           = network.N(keep,keep_actions);
 %%  

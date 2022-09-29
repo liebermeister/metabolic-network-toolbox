@@ -27,7 +27,7 @@ function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)
 %   thermo_pb_options.delta_G0_fix
 %   thermo_pb_options.log_c (natural log of concentration in mM)
 %   thermo_pb_options.log_c_std
-%   thermo_pb_options.dG_threshold
+%   thermo_pb_options.theta_threshold
 %
 % Usage example:
 %   complete the concentration vector for a network with given fluxes and equilibrium constants, 
@@ -51,7 +51,7 @@ thermo_pb_options_default.delta_G0_std = 10       * ones(size(N,2),1);
 % USAGE OF delta_G0_fix IS COMMENTED OUT BECAUSE FIXING THE DELTA G0 VALUES 
 % LEAD TO NUMERICAL PROBLEMS (NOT CLEAR WHY)
 thermo_pb_options_default.delta_G0_fix = nan      * zeros(size(N,2),1);
-thermo_pb_options_default.dG_threshold = 0.1;
+thermo_pb_options_default.theta_threshold = 0.1;
 
 thermo_pb_options = join_struct(thermo_pb_options_default,thermo_pb_options);
 
@@ -136,7 +136,7 @@ end
 %                      log_c = log_c_fix  (wherever specified)
 %                        dG0 = delta_G0_fix  (wherever specified) 
 
-epsilon = thermo_pb_options.dG_threshold;
+epsilon = thermo_pb_options.theta_threshold;
 
 [nm,nr] = size(N);
 
@@ -196,7 +196,7 @@ m = -M * mean_values;
 y_start = [log_c_mean; dG0_mean];
 
 if exist('cplexqp','file'),
-  opt = cplexoptimset('Display','off');
+  opt =  cplexoptimset('cplex');
   [y,~,exitflag,output] = cplexqp(M, m, A, b, A_eq, b_eq, y_min, y_max, y_start,opt);
 else
   opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');

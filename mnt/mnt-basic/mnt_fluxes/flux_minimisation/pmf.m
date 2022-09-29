@@ -82,7 +82,7 @@ zred = [zeros(nred,1); cost_weights];
 opt  = optimset('Display','off');
 
 if exist('cplexlp','file'),
-  [y,fval,exitflag] = cplexlp(my_cost_weights,A,b,A_eq,b_eq,[],[],y0,opt);
+  [y,fval,exitflag] = cplexlp(my_cost_weights,A,b,A_eq,b_eq,[],[],y0);
 else
   [y,fval,exitflag] = linprog(my_cost_weights,A,b,A_eq,b_eq,[],[],y0,opt);
 end

@@ -29,16 +29,16 @@ function [c, mu0, Keq, A, kinetic_data, r, r_mean, r_std, r_geom_mean, r_geom_st
 
 eval(default('options','struct'));
 
-options = join_struct(parameter_balancing_options, options);
+pb_options = parameter_balancing_options;
+pb_options.c_min   = nan * ones(nm,1);
+pb_options.c_max   = nan * ones(nm,1);
+pb_options.c_fix   = nan * ones(nm,1);
+pb_options.A_fix   = nan * ones(nr,1);
+pb_options.A_lower = nan * ones(nr,1);
+pb_options.A_upper = nan * ones(nr,1);
+pb_options.v = v;
 
-options.c_min   = nan * ones(nm,1);
-options.c_max   = nan * ones(nm,1);
-options.c_fix   = nan * ones(nm,1);
-options.A_fix   = nan * ones(nr,1);
-options.A_lower = nan * ones(nr,1);
-options.A_upper = nan * ones(nr,1);
-
-options.v = v;
+options = join_struct(pb_options,options);
 
 options = parameter_balancing_update_options(options);
 
@@ -176,8 +176,13 @@ end
 
 kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,options.use_pseudo_values,network);
 
-if options.set_water_conc_to_one, 
+if options.set_water_conc_to_one,
+  display('o Setting water concentration to 1 and removing water from the stoichiometric matrix (setting its stoichiometric coefficients to 0');
+  if isempty(options.ind_water),
+    options.ind_water = network_find_water(network);
+  end
   options.c_fix(options.ind_water) = 1;
+  network.N(options.ind_water,:) = 0;
 end
 
 options.c_min(isnan(options.c_min)) = options.conc_min;
@@ -185,10 +190,10 @@ options.c_max(isnan(options.c_max)) = options.conc_max;
 
 kinetic_data.c.lower = options.c_min;
 kinetic_data.c.upper = options.c_max;
-
 ind_fix = find(isfinite(options.c_fix));
 if length(ind_fix),
   if options.c_fix_strict, 
+    display('Fixed predefined concentrations in parameter_balancing_thermodynamic.m');
     kinetic_data.c.lower(ind_fix) = options.c_fix(ind_fix);
     kinetic_data.c.upper(ind_fix) = options.c_fix(ind_fix);
   else
@@ -238,7 +243,7 @@ kinetic_data = pb_kinetic_data_adjust(kinetic_data, parameter_prior, network, op
 % Parameter balancing
 
 task   = parameter_balancing_task(network, kinetic_data, parameter_prior, model_quantities, basic_quantities, pseudo_quantities);
-result = parameter_balancing_calculation(task, parameter_prior, struct('use_pseudo_values',options.use_pseudo_values,'fix_Keq_in_sampling',options.fix_Keq_in_sampling));
+result = parameter_balancing_calculation(task, parameter_prior, join_struct(options,struct('use_pseudo_values',options.use_pseudo_values,'fix_Keq_in_sampling',options.fix_Keq_in_sampling)));
 
 
 % -----------------------------------------------------

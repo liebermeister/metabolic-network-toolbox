@@ -57,7 +57,7 @@ end
 % SBML object
 
 
-SBMLmodel = Model_create(sbml_level,sbml_version);
+SBMLmodel = model_create(sbml_level,sbml_version);
 SBMLmodel = Model_setName(SBMLmodel,name);
 SBMLmodel = Model_setId(SBMLmodel,name);
 

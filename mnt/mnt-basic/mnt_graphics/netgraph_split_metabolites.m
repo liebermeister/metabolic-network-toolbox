@@ -112,7 +112,7 @@ network_split.graphics_par.metabolite_mapping = back_mapping;
 [nm,nr] = size(network.N);
  
 for it1 = 1:nm,
-   network_split.regulation_matrix(:,split_mapping{it1}(2:end)) = 0;
+  network_split.regulation_matrix(:,split_mapping{it1}(2:end)) = 0;
 end
 
 network_split.graphics_par.regulation_matrix = [...

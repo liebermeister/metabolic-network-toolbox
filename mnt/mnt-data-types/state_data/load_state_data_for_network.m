@@ -57,7 +57,7 @@ switch quantity_type,
   
   case 'reaction_rate',
     quantity_type = 'rate of reaction'; 
-    table_name = 'MetabolicFlux';
+    table_name = 'Flux';
     switch file_options.match_data_by,
       case 'KeggId',
         element_IDs   = network.reaction_KEGGID;

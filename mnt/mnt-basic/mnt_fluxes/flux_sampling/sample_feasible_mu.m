@@ -87,7 +87,7 @@ switch method,
       if options.verbose, display(sprintf('Dimension %d/%d',it,n_mured)); end
       vec = zeros(n_mured,1); vec(it) = 1;
       if exist('cplexlp','file'),
-        opt = cplexoptimset('Display','off'); 
+        opt =  cplexoptimset('cplex');
         [mured_lower_opt,fval,exitflag] = cplexlp(vec, A, b, [],[],[],[],[],opt);
       else
         opt = optimset('Display','off'); 
@@ -97,7 +97,7 @@ switch method,
         error('Error during linear programming problem for finding feasible chemical potentials'); 
       end 
       if exist('cplexlp','file'),
-        opt = cplexoptimset('Display','off'); 
+        opt =  cplexoptimset('cplex');
         [mured_upper_opt,fval,exitflag] = cplexlp(-vec, A, b, [],[],[],[],[],opt);
       else
         opt = optimset('Display','off'); 

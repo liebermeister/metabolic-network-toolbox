@@ -72,7 +72,7 @@ end
 log_Keq_change = log10(r.Keq./r_orig.Keq); 
 ind_change = find(isfinite(log_Keq_change) .* abs(log_Keq_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('  Fold changes of Keq values (showing |fold change| > %f)',threshold));
+display(sprintf('  Keq values fold changes |fold change| > %f',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Keq_change(ind_change(it)))); 
  end
@@ -82,7 +82,7 @@ end
 log_Kcatf_change = log10(r.Kcatf./r_orig.Kcatf); 
 ind_change = find(isfinite(log_Kcatf_change) .* abs(log_Kcatf_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('  Fold changes of Kcatf values (showing |fold change| > %f)',threshold));
+display(sprintf('  Kcatf values fold changes |fold change| > %f',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Kcatf_change(ind_change(it)))); 
  end
@@ -105,7 +105,7 @@ end
 log_Kcatr_change = log10(r.Kcatr./r_orig.Kcatr); 
 ind_change = find(isfinite(log_Kcatr_change) .* abs(log_Kcatr_change) > log10(threshold));
 if length(ind_change),
-display(sprintf('  Fold changes of Kcatr values (showing |fold change| > %f)',threshold));
+display(sprintf('  Kcatr values fold changes |fold change| > %f',threshold));
  for it = 1:length(ind_change),
    display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_Kcatr_change(ind_change(it)))); 
  end
@@ -114,7 +114,7 @@ end
 log_KV_change = log10(r.KV./r_orig.KV); 
 ind_change = find(isfinite(log_KV_change) .* abs(log_KV_change) > log10(threshold));
 if length(ind_change),
-  display(sprintf('  Fold changes of KV values (showing |fold change| > %f)',threshold));
+  display(sprintf('  KV values fold changes |fold change| > %f',threshold));
   for it = 1:length(ind_change),
     display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_KV_change(ind_change(it)))); 
   end
@@ -124,7 +124,7 @@ log_KM_change = log10(full(r.KM./r_orig.KM));
 log_KM_change(~isfinite(log_KM_change)) = 0;
 indices = find(abs(log_KM_change(:))>log10(threshold));
 if length(indices), 
-display(sprintf('  Fold changes of KM values (showing |fold change| > %f)',threshold));
+display(sprintf('  KM values fold changes |fold change| > %f',threshold));
 [~,order] = sort(abs(log_KM_change(indices)));
 indices = indices(order(end:-1:1));
 [ind_i,ind_j] = ind2sub(size(log_KM_change), indices);
@@ -139,7 +139,7 @@ indices = find(abs(log_KA_change(:))>log10(threshold));
 [~,order] = sort(abs(log_KA_change(indices)));
 indices = indices(order(end:-1:1));
 if length(indices), 
-display(sprintf('  Fold changes of KA values (showing |fold change| > %f)',threshold));
+display(sprintf('  KA values fold changes |fold change| > %f',threshold));
 [ind_i,ind_j] = ind2sub(size(log_KA_change), indices);
 for it = 1:length(indices),
  display(sprintf('    %s / %s: %f', network.actions{ind_i(it)}, network.metabolites{ind_j(it)}, 10.^log_KA_change(indices(it)))); 
@@ -152,7 +152,7 @@ indices = find(abs(log_KI_change(:))>log10(threshold));
 [~,order] = sort(abs(log_KI_change(indices)));
 indices = indices(order(end:-1:1));
 if length(indices), 
-display(sprintf('  Fold changes of KI values (showing |fold change| > %f)',threshold));
+display(sprintf('  KI values |fold change| > %f',threshold));
 [ind_i,ind_j] = ind2sub(size(log_KI_change), indices);
 for it = 1:length(indices),
  display(sprintf('    %s / %s: %f', network.actions{ind_i(it)}, network.metabolites{ind_j(it)}, 10.^log_KI_change(indices(it)))); 
@@ -165,7 +165,7 @@ if isfield(r_orig,'c'),
     log_c_change = log10(r.c./r_orig.c);
     ind_change = find(isfinite(log_c_change) .* abs(log_c_change)>log10(threshold));
     if length(ind_change),
-      display(sprintf('  Fold changes of c values (showing |fold change| > %f)',threshold));
+      display(sprintf('  Fold changes of metabolite concentrations |fold change| > %f',threshold));
       for it = 1:length(ind_change),
         display(sprintf('    %s: %f', network.metabolites{ind_change(it)}, 10.^log_c_change(ind_change(it)))); 
       end
@@ -180,7 +180,7 @@ if isfield(r_orig,'u'),
   log_u_change = log10(r.u ./r_orig.u); 
   ind_change = find(isfinite(log_u_change) .* abs(log_u_change)>log10(threshold));
   if length(ind_change),
-    display(sprintf('  Fold changes of u values (showing |fold change| > %f)',threshold));
+    display(sprintf('  Fold changes of enzyme concentrations |fold change| > %f',threshold));
     for it = 1:length(ind_change),
       display(sprintf('    %s: %f', network.actions{ind_change(it)},10.^log_u_change(ind_change(it)))); 
     end
@@ -203,7 +203,7 @@ if show_graphics,
   if show_dmu0,
     plot(r_orig.dmu0,  r.dmu0, 'ro'); 
     title('dmu0'); xlabel('Original data'); ylabel('Balanced values'); 
-    hold on; a = [min([r.dmu0,r_orig.dmu0]) max([r.dmu0,r_orig.dmu0])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.dmu0,r_orig.dmu0]) max([r.dmu0,r_orig.dmu0])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal;  axis square
   else
     if show_std,
       errorbar(r_orig.Keq, r.Keq, [],[], [1-exp(-r_orig.STD_nat.Keq)].*r_orig.Keq, [exp(r_orig.STD_nat.Keq)-1].*r.Keq, 'o','Color',[1,.7,.7]); hold on; 
@@ -212,7 +212,7 @@ if show_graphics,
     title('Keq'); xlabel('Original data'); ylabel('Balanced values'); 
     set(gca, 'XScale','log','YScale','log');
     ind = find([r.Keq~=0].*isfinite(r.Keq.*r_orig.Keq));
-    hold on; a = [min([r.Keq(ind);r_orig.Keq(ind)]) max([r.Keq(ind);r_orig.Keq(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.Keq(ind);r_orig.Keq(ind)]) max([r.Keq(ind);r_orig.Keq(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; axis square
   end
   
   subplot(ni,nj,2); plot(r_orig.Kcatf,r.Kcatf,'ro'); 
@@ -223,7 +223,7 @@ if show_graphics,
   title('Kcatf'); xlabel('Original data'); ylabel('Balanced values');
   set(gca, 'XScale','log','YScale','log'); 
   ind = find([r.Kcatf~=0].*isfinite(r.Kcatf.*r_orig.Kcatf));
-  hold on; a = [min([r.Kcatf(ind);r_orig.Kcatf(ind)]) max([r.Kcatf(ind);r_orig.Kcatf(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+  hold on; a = [min([r.Kcatf(ind);r_orig.Kcatf(ind)]) max([r.Kcatf(ind);r_orig.Kcatf(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal;  axis square
   
   subplot(ni,nj,3); plot(r_orig.Kcatr,r.Kcatr,'ro'); 
   if show_std,
@@ -233,7 +233,7 @@ if show_graphics,
   title('Kcatr'); xlabel('Original data'); ylabel('Balanced values');
   set(gca, 'XScale','log','YScale','log'); 
   ind = find([r.Kcatr~=0].*isfinite(r.Kcatr.*r_orig.Kcatr));
-  hold on; a = [min([r.Kcatr(ind);r_orig.Kcatr(ind)]) max([r.Kcatr(ind);r_orig.Kcatr(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+  hold on; a = [min([r.Kcatr(ind);r_orig.Kcatr(ind)]) max([r.Kcatr(ind);r_orig.Kcatr(ind)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal;  axis square
 
   subplot(ni,nj,4); 
   if show_std,
@@ -246,7 +246,7 @@ if show_graphics,
   ind = find([r.KM>0].*isfinite(r.KM.*r_orig.KM));
   a = [min([r.KM(ind);r_orig.KM(ind)]), max([r.KM(ind);r_orig.KM(ind)])];
   plot([a(1) a(2)],[a(1) a(2)],'-k');
-  axis tight; axis equal; 
+  axis tight; axis equal;  axis square 
 
   nk = 4;
   
@@ -256,7 +256,7 @@ if show_graphics,
     plot(r_orig.KA(:),r.KA(:),'ro'); 
     title('KA'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log');
-    hold on; a = [min([r.KA(r.KA>0);r_orig.KA(r_orig.KA>0)]), max([r.KA(:);r_orig.KA(:)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.KA(r.KA>0);r_orig.KA(r_orig.KA>0)]), max([r.KA(:);r_orig.KA(:)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; axis square 
   end
   
   if show_KI,
@@ -265,7 +265,7 @@ if show_graphics,
     plot(r_orig.KI(:),r.KI(:),'ro'); 
     title('KI'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min([r.KI(r.KI>0);r_orig.KI(r_orig.KI>0)]), max([r.KI(:);r_orig.KI(:)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.KI(r.KI>0);r_orig.KI(r_orig.KI>0)]), max([r.KI(:);r_orig.KI(:)])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; axis square 
   end
 
   if show_KV,
@@ -277,7 +277,7 @@ if show_graphics,
     plot(r_orig.KV,r.KV,'ro'); 
     title('KV'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min([r.KV;r_orig.KV]); max([r.KV;r_orig.KV])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.KV;r_orig.KV]); max([r.KV;r_orig.KV])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; axis square 
   end
 
   if show_concentrations,
@@ -286,7 +286,7 @@ if show_graphics,
     plot(r_orig.c,r.c,'ro'); 
     title('c'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min([r.c;r_orig.c]) max([r.c;r_orig.c])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.c;r_orig.c]) max([r.c;r_orig.c])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; axis square 
   end
   
   if show_enzyme,
@@ -295,7 +295,7 @@ if show_graphics,
     plot(r_orig.u,r.u,'ro'); 
     title('u'); xlabel('Original data'); ylabel('Balanced values');
     set(gca, 'XScale','log','YScale','log'); 
-    hold on; a = [min([r.u;r_orig.u]) max([r.u;r_orig.u])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal; 
+    hold on; a = [min([r.u;r_orig.u]) max([r.u;r_orig.u])]; plot([a(1) a(2)],[a(1) a(2)],'-k'); axis tight; axis equal;  axis square
   end
 
   figure(2); clf; set(gcf,'Position',[600,100,800,800]); 

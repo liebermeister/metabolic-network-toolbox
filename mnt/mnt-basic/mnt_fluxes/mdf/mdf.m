@@ -1,6 +1,6 @@
-function [c, A, feasible] = mdf(N, v, keq, mdf_options, verbose)
+function [c, A, feasible, theta] = mdf(N, v, keq, mdf_options, verbose)
 
-% [c,A] = mdf(N, v, keq, mdf_options)
+% [c,A, feasible, theta] = mdf(N, v, keq, mdf_options)
 %
 %Max-min driving force method
 %
@@ -188,7 +188,7 @@ if nargout > 1,
 
   A = RT * [mdf_options.log_keq - N' * log(c)];
   
-  relevant_reactions = setdiff(1:length(v),mdf_options.ind_ignore_reactions);
+  relevant_reactions = setdiff(1:length(v),[mdf_options.ind_ignore_reactions; find(v==0)]);
 
   if sum(A(relevant_reactions).*v(relevant_reactions)<0),
     feasible = 0;
@@ -199,4 +199,6 @@ if nargout > 1,
     if verbose, display('All reactions are thermodynamically feasible'); end
   end
 
+  theta = A/RT;
 end
+
