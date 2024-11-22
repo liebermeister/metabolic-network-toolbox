@@ -137,7 +137,11 @@ for it = 1:nm,
   s = [s sprintf('      <species id="%s" name="%s" ', metabolite_id{it}, network.metabolites{it})]; 
   s = [s sprintf('initialAmount="%d" ',initial_amount(it))];  
   s = [s sprintf('compartment="compartment" ')];
-  s = [s sprintf('boundaryCondition="false" ')];
+  if network.external(it),
+    s = [s sprintf('boundaryCondition="true" ')];
+  else
+    s = [s sprintf('boundaryCondition="false" ')];
+  end
   if verbose,
     s = [s sprintf('>\n      <notes>  <body xmlns="http://www.w3.org/1999/xhtml"> Metabolite %s </body> </notes>\n    </species>\n',network.metabolites{it})]; 
   else,

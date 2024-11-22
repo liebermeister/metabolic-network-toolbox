@@ -38,8 +38,10 @@ metpositions = network.graphics_par.x(:,1:nm) + repmat(offsets',1,nm);
 actpositions = network.graphics_par.x(:,nm+1:end) + repmat(offsets',1,nr);
 
 names         = [metnames; actnames];
-kegg_compound = [kegg_metnames; repmat({''},nr,1)];
-kegg_reaction = [repmat({''},nm,1); kegg_actnames];
+if flag_KEGG_ids,
+  kegg_compound = [kegg_metnames; repmat({''},nr,1)];
+  kegg_reaction = [repmat({''},nm,1); kegg_actnames];
+end
 positions     = [metpositions, actpositions];
 fixed         = column(network.graphics_par.fixed);
 if isfield(network.graphics_par,'metinvisible'),
@@ -98,18 +100,20 @@ if length(layout_file),
         kegg_compound = [kegg_compound_in; kegg_metnames(ind_keep)];
         kegg_reaction = [kegg_reaction_in; kegg_actnames(ind_keep)];
         positions     = [[x';y'], positions(:,ind_keep) ];
-        fixed         = [fixed_in; fixed(ind_keep)];
-        invisible     = [invisible_in; invisible(ind_keep)];
+        fixed         = [fixed_in];%; fixed(ind_keep)];
+        invisible     = [invisible];%_in; invisible(ind_keep)];
       
       case 'replace elements',  
         ll            = label_names(elements,names); 
         ind_keep      = find(ll==0);
         names         = [elements(ind_keep);           names];
-        kegg_compound = [kegg_compound(ind_keep);      kegg_compound_in];
-        kegg_reaction = [kegg_reaction(ind_keep);      kegg_reaction_in];
+        if flag_KEGG_ids,
+          kegg_compound = [kegg_compound(ind_keep);      kegg_compound_in];
+          kegg_reaction = [kegg_reaction(ind_keep);      kegg_reaction_in];
+        end
         positions     = [ [x(ind_keep)';y(ind_keep)'], positions];
-        %fixed         = [ fixed(ind_keep);             fixed_in; ];
-        %invisible     = [ invisible(ind_keep);         invisible_in; ];
+        fixed         = [ fixed_in ]; % fixed(ind_keep);             
+        invisible     = [ invisible_in ]; % invisible(ind_keep);         
     end
   
 end
@@ -137,7 +141,7 @@ if flag_invisible,
 end
 
 if length(layout_file),
-  sbtab_table_save( sbtab_out, struct('filename', layout_file));
+  sbtab_table_save(sbtab_out, struct('filename', layout_file));
 end
 
 end

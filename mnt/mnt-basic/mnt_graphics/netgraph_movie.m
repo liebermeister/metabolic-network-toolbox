@@ -27,7 +27,6 @@
 
 function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);
 
-
 eval(default('options','struct','data_type','''concentrations''','n_frames','[]','text_flag','0'));
 
 if ~exist('options','var'), options = struct; end
@@ -83,12 +82,12 @@ switch data_type,
     nm    = 0;
     nr    = size(s_t,1);
   case 'both',
-    warning('data type "both" is not fully supported'); 
-    nm = options.nm;
-    nr = options.nr;
+    %% warning('data type "both" is not fully supported'); 
+    [nm,nr] = size(network.N);
     s_t_c = s_t(1:nm,:);
     s_t_v = s_t(nm+1:end,:);
-  otherwise, error('Unknown function option'); 
+  otherwise, 
+    error('Unknown function option'); 
 end
 
 metvalues = zeros(nm,length(T));
@@ -109,7 +108,7 @@ for j = 1:length(T),
       actvalues(:,j) =  s_t_v(:,j);
       options.metstyle = 'none';
     case 'both',
-      warning('data type "both" is not fully supported'); 
+      %% warning('data type "both" is not fully supported'); 
       metvalues(:,j) = s_t_c(:,j);
       actvalues(:,j) = s_t_v(:,j);
     case 'compute reactions',     

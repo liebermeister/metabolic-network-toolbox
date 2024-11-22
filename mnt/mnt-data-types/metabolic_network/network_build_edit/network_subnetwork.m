@@ -66,12 +66,14 @@ for it = 1:length(fnames),
 end
 
 if isfield(network,'kinetics'), 
+  if isfield(network.kinetics,'type'),
   switch network.kinetics.type,
     case 'mass-action',
       subnetwork.kinetics.type='mass-action';
       subnetwork.kinetics.k_fwd=network.kinetics.k_fwd(ind_r);
       subnetwork.kinetics.k_bwd=network.kinetics.k_bwd(ind_r);
 %    otherwise,      warning('I cannot set the kinetic law for the subnetwork'); 
+  end
   end
 end
 

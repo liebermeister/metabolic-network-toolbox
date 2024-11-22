@@ -163,11 +163,26 @@ if exist('compound_columns','var'),
     compound_columns = rmfield(compound_columns,'Identifiers_kegg_compound');
   end
 
+  if isfield(compound_columns,'Identifiers_bigg_compound'),
+    network.metabolite_BIGGID = compound_columns.Identifiers_bigg_compound(ll);
+    compound_columns = rmfield(compound_columns,'Identifiers_bigg_compound');
+  end
+
   if isfield(compound_columns,'Identifiers'),
     dum = compound_columns.Identifiers(ll);
     for it = 1:length(dum),
       if strcmp(dum{it}(1:5),'kegg:')
         network.metabolite_KEGGID{it,1} = dum{it}(6:end);
+      end
+    end
+    compound_columns = rmfield(compound_columns,'Identifiers');
+  end
+
+  if isfield(compound_columns,'Identifiers'),
+    dum = compound_columns.Identifiers(ll);
+    for it = 1:length(dum),
+      if strcmp(dum{it}(1:5),'bigg:')
+        network.metabolite_BIGGID{it,1} = dum{it}(6:end);
       end
     end
     compound_columns = rmfield(compound_columns,'Identifiers');
@@ -205,11 +220,26 @@ if isfield(columns,'Identifiers_kegg_reaction'),
   columns = rmfield(columns,'Identifiers_kegg_reaction');
 end
 
+if isfield(columns,'Identifiers_bigg_reaction'),
+  network.reaction_BIGGID = columns.Identifiers_bigg_reaction;
+  columns = rmfield(columns,'Identifiers_bigg_reaction');
+end
+
 if isfield(columns,'Identifiers'),
   dum = columns.Identifiers;
   for it = 1:length(dum),
     if strcmp(dum{it}(1:5),'kegg:')
       network.reaction_KEGGID{it,1} = dum{it}(6:end);
+    end
+  end
+  columns = rmfield(columns,'Identifiers');
+end
+
+if isfield(columns,'Identifiers'),
+  dum = columns.Identifiers;
+  for it = 1:length(dum),
+    if strcmp(dum{it}(1:5),'bigg:')
+      network.reaction_BIGGID{it,1} = dum{it}(6:end);
     end
   end
   columns = rmfield(columns,'Identifiers');

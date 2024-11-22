@@ -3,6 +3,10 @@ function [my_kinetics_strings,my_kinetic_laws] = network_get_kinetics_strings(ne
 my_kinetics_strings = [];
 my_kinetic_laws     = [];
 
+if ~isfield(network.kinetics,'KM'),
+  return
+end
+
 rate_law_names.ms = 'Simultaneous binding (SM)';
 rate_law_names.cs = 'Common saturable (CM)';
 rate_law_names.rp = 'Power-law  (PM)';

@@ -10,15 +10,20 @@ function [M, ids, states] = load_state_data_for_network(network, data_file, quan
 %   file_options.columns_mean           = [];
 %   file_options.columns_std            = [];
 %   file_options.replace_ids_in_network = [];
-%   file_options.match_data_by          = 'ModelElementId'; % KeggId
+%   file_options.match_data_by          = 'ModelElementId'; % KeggId; 'BiggId'
 % 
 % To load a model (with kinetic data) and state data, use sbtab_load_network_model_and_data
 
+if isempty(data_file),
+  M = []; ids= []; states = [];
+  return
+end
+  
 eval(default('file_options','struct', 'table_id','[]'));
 file_options_default.columns_mean = [];
 file_options_default.columns_std = [];
 file_options_default.replace_ids_in_network = [];
-file_options_default.match_data_by = 'ModelElementId'; % 'KeggId'; % 
+file_options_default.match_data_by = 'ModelElementId'; % 'KeggId'; ; 'BiggId'% 
 file_options = join_struct(file_options_default,file_options);
   
 if isempty(file_options.columns_mean),
@@ -35,6 +40,9 @@ switch quantity_type,
     quantity_type = 'concentration';
     table_name = 'MetaboliteConcentration';
     switch file_options.match_data_by,
+      case 'BiggId',
+        element_IDs   = network.metabolite_BIGGID;
+        id_column     = '!Compound:Identifiers:bigg.compound';
       case 'KeggId',
         element_IDs   = network.metabolite_KEGGID;
         id_column     = '!Compound:Identifiers:kegg.compound';
@@ -47,6 +55,9 @@ switch quantity_type,
     quantity_type = 'concentration of enzyme';      
     table_name = 'EnzymeConcentration';
     switch file_options.match_data_by,
+      case 'BiggId',
+        element_IDs   = network.reaction_BIGGID;
+        id_column     = '!Reaction:Identifiers:bigg.reaction';
       case 'KeggId',
         element_IDs   = network.reaction_KEGGID;
         id_column     = '!Reaction:Identifiers:kegg.reaction';
@@ -59,6 +70,9 @@ switch quantity_type,
     quantity_type = 'rate of reaction'; 
     table_name = 'Flux';
     switch file_options.match_data_by,
+      case 'BiggId',
+        element_IDs   = network.reaction_BIGGID;
+        id_column     = '!Reaction:Identifiers:bigg.reaction';
       case 'KeggId',
         element_IDs   = network.reaction_KEGGID;
         id_column     = '!Reaction:Identifiers:kegg.reaction';
@@ -71,6 +85,9 @@ switch quantity_type,
     quantity_type = 'Gibbs energy of reaction'; 
     table_name = 'ReactionGibbsFreeEnergy';
     switch file_options.match_data_by,
+      case 'BiggId',
+        element_IDs   = network.reaction_BIGGID;
+        id_column     = '!Reaction:Identifiers:bigg.reaction';
       case 'KeggId',
         element_IDs   = network.reaction_KEGGID;
         id_column     = '!Reaction:Identifiers:kegg.reaction';

@@ -1,4 +1,4 @@
-function state_data = cmb_data_to_state_data(data)
+function state_data = data_to_state_data(data)
 
 % state_data = cmb_data_to_state_data(data)
 

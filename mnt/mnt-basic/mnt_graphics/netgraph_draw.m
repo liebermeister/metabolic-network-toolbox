@@ -74,6 +74,7 @@
 % FontSize 
 % Rotation  (for all text items)
 % text_offset
+% value_text_offset
 %
 %COLORSCALE AND LINES
 % colorbar (0/1)
@@ -288,14 +289,17 @@ end
   
 x_arrowlistW = zeros(n_act,n_met,2);
 if p.show_regulation,
-  [indr,indm] = find(p.regulation_matrix);
+  [indr,indm] = find(network.regulation_matrix);
   for itt=1:length(indr),
     %%-n_met
+    % p.actindshow
+    % p.metindshow
+%    [sum(indr(itt) == p.actindshow),sum(indm(itt) == p.metindshow)]
     if sum(indr(itt) == p.actindshow) * sum(indm(itt) == p.metindshow),
       %%network.actions{indr(itt)}
       %%network.metabolites{indm(itt)}
-      this_sign = sign(p.regulation_matrix(indr(itt),indm(itt)));
-      if this_sign>0, linecolor = [0 0.2 1];
+      this_sign = sign(network.regulation_matrix(indr(itt),indm(itt)));
+      if this_sign>0, linecolor = [0 0.7 1];
       else,           linecolor = [1 0 0]; 
       end
       [x3,arcx,arcy] = arc(x(:,indr(itt)+n_met),x(:,indm(itt)),0.2,0.5);
@@ -445,9 +449,9 @@ if p.metprintvalues,
  else 
    strings = num2str(p.metvalues,3); 
  end
- offset=0.5*p.squaresize;%*(0.5+p.metvalues_std');
+ offset=0.5*p.squaresize * [1,1]+ p.value_text_offset;%*(0.5+p.metvalues_std');
 % text(x(1,p.metindshow) + offset,x(2,p.metindshow)+offset,strings(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle); 
- text(x(1,1:n_met) + offset,x(2,1:n_met)+offset,strings,'FontSize',p.FontSize,'Rotation',p.fontangle); 
+ text(x(1,1:n_met) + offset(1),x(2,1:n_met)+offset(2),strings,'FontSize',p.FontSize,'Rotation',p.fontangle); 
 end
 
 if p.actprintvalues, 
@@ -458,8 +462,8 @@ if p.actprintvalues,
   strings = cellstr(strings);
   for it = 1:length(strings), strings{it} = strrep(strings{it},'NaN',''); end   
   ppos = x(:,n_met+1:end);
-  offset=0.5*p.squaresize;%*(0.5+p.actvalues_std(p.actindshow)');
-  text(ppos(1,p.actindshow) + offset, ppos(2,p.actindshow)+offset, strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle); 
+  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;%*(0.5+p.actvalues_std(p.actindshow)');
+  text(ppos(1,p.actindshow) + offset(1), ppos(2,p.actindshow)+offset(2), strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle); 
 end
 
 if p.arrowprintvalues, 
@@ -470,8 +474,8 @@ if p.arrowprintvalues,
   strings = cellstr(strings);
   for it = 1:length(strings), strings{it} = strrep(strings{it},'NaN',''); end   
   ppos = x(:,n_met+1:end);
-  offset=0.5*p.squaresize;%*(0.5+p.arrowvalues_std(p.actindshow)');
-  text(ppos(1,p.actindshow) + offset, ppos(2,p.actindshow)+offset, strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle); 
+  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;%*(0.5+p.arrowvalues_std(p.actindshow)');
+  text(ppos(1,p.actindshow) + offset(1), ppos(2,p.actindshow)+offset(2), strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle); 
 end
 
 % ---------------------------------------------------
@@ -835,6 +839,7 @@ p_default = struct(...
     'linecolor',       [0 0 1], ...
     'rlinecolor',      [1 .3 0.], ...
     'text_offset',     [0.01,-0.01], ...
+    'value_text_offset',     [0.01,-0.01], ...
     'straightlines',   1,       ...
     'arrowsize',       0.03,        ...
     'figure_position', [],  ...

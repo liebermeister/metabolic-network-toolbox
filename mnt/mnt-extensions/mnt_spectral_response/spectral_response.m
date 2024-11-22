@@ -61,19 +61,21 @@ if size(M0),
   end
   
   set(gca,'Fontsize',20); hold on;
-  line([0 0],[-21 21]);  line([-100 1],[0 0]);
-  h(1) = plot(real(eigs),imag(eigs),'ro','Markersize',10); 
+  line([0 0],[-21 21],'Color','k', 'LineStyle','--');  
+  line([-100 1],[0 0],'Color','k', 'LineStyle','--');
+  h(1) = plot(real(eigs),imag(eigs),'r.','Markersize',30); 
   legend(h,'Eigenvalues');
   if length(order), 
-    h(2) = plot(real(eigs), imag(eigs)-omega_0,'r*'); 
+    h(2) = plot(real(eigs), imag(eigs)-omega_0,'b*','Markersize',10); 
     legend(h,'Eigenvalues','Shifted down by excitation frequency');
   end
+  legend('Location','Best');
   hold off
   
   mmin = min(real(eigs)); axis([1.1 * mmin, 0.1, -21, 21,]); 
-  xlabel('Real part','Fontsize',16); ylabel('Imaginary part','Fontsize',16);
-  set(gca,'Fontsize',20);
-  %title('Eigenvalues of Jacobian','Fontsize',16); 
+  xlabel('Real part','Fontsize',10); ylabel('Imaginary part','Fontsize',10);
+  set(gca,'Fontsize',14);
+  % title('Eigenvalues of Jacobian','Fontsize',16); 
   
 end
 
@@ -107,7 +109,7 @@ v = [];
 
 orderx = 1:sum(network.external==0);
 orderv = 1:length(network.actions);
-color  = 'copper';
+color  = 'color_scale_blue';
 t_sim  = [0:0.005:1] * 2*pi/delta_par.omega;
 
 [K, L, N0] = network_analyse(network);
@@ -121,7 +123,7 @@ epsilon_2 = elasticities_ss.un_E_cc(:,ind_int,ind_int);
 rho_2     = elasticities_ss.un_E_cu(:,ind_int,:);
 pi_2      = elasticities_ss.un_E_uu;
 
-[RS_omega, RV_omega] = osc_resp_plot_timecourses(network,t_sim,c_ss,v_ss,t,x,v,M0,delta_par, epsilon_1, pi_1, epsilon_2, rho_2, pi_2, color, orderx,[],fignum);
+[RS_omega, RV_omega] = osc_resp_plot_timecourses(network,t_sim,c_ss,v_ss,t,x,v,M0,delta_par, epsilon_1, pi_1, epsilon_2, rho_2, pi_2, color, orderx, [], fignum);
 
 [nm,nr] = size(network.N);
 

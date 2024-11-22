@@ -52,7 +52,6 @@ if isempty(v_std),  v_std  = guess_flux_std(v_mean); end
 if isempty(v_sign), v_sign = nan * v_mean; end 
 if isempty(v_fix),  v_fix  = nan * v_mean; end 
 
-
 % make sure that reference fluxes respect zero flux and sign constraints
 
 v_mean(v_sign == 0 )           = 0;
@@ -74,7 +73,7 @@ switch pars.method,
 
   case 'simple',
 
-    display('Simple projection - flux sign constraints are ignored');
+    if pars.verbose, display('Simple projection - flux sign constraints are ignored'); end
     network.N                 = N;
     network.external          = zeros(size(N,1),1);
     network.external(ind_ext) = 1;
@@ -82,6 +81,7 @@ switch pars.method,
 
   case 'one_norm',    
 
+    if pars.verbose, display('One-norm projection');end
     [nm,nr] = size(N);
     A = N(external == 0,:);
     b = zeros(size(A,1),1);
@@ -98,20 +98,24 @@ switch pars.method,
 
   case 'lasso',    %% lasso regression
 
+    if pars.verbose, display('Lasso regression');end
     v_cov_inv  = diag(1./v_std(ind_finite).^2);
     if exist('external','var'), Nint = N(find(external ==0),:); end
     K = null(full(Nint));
-    display('Running lasso regression, this can take a while');
+    if pars.verbose, display('Running lasso regression, this can take a while');end
     rho_mean = lasso( sqrt(v_cov_inv)* K(ind_finite,:), v_mean(ind_finite),0.1);%,10^-2,10^-1)
     v_projected = K * rho_mean;
 
   case 'euclidean', %% two-norm regression with constraints
+
+    if pars.verbose, display('Euclidean projection');end
 
     %% update v_sign and v_fix
     v_sign(v_fix==0) = 0;
     v_sign(v_fix>0)  = 1;
     v_sign(v_fix<0)  = -1;
     v_fix(v_sign==0) = 0;
+
     if sum(v_fix(v_sign>0) == 0) + sum(v_fix(v_sign<0) == 0),
       error('contradicting constraints');
     end
@@ -119,12 +123,14 @@ switch pars.method,
     ind_isnan = find(isnan(v_mean.*v_std));
     v_std_inv = 1./v_std;
     v_mean(ind_isnan)    = 0;
+
     if pars.prior_for_unknown_fluxes, 
       %% use broad prior for unknown fluxes, centred around 0
       v_std_inv(ind_isnan) = 1/nanmean(100 * v_std);
     else
       v_std_inv(ind_isnan) = 0;
     end    
+
     M   = diag(v_std_inv.^2);
     m   = - M * v_mean;
     Nint= N(find(external ==0),:); 
@@ -147,6 +153,7 @@ switch pars.method,
     ub =   pars.vmax * ones(size(v_mean));
     lb(v_sign>0) = 0;
     ub(v_sign<0) = 0;
+
     if exist('cplexqp','file'),
       opt =  cplexoptimset('cplex');
       [v_projected,~,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
@@ -154,6 +161,7 @@ switch pars.method,
       opt = optimset('Display','off','Algorithm','interior-point-convex'); % 'active-set'
       [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     end
+
     if exitflag <0,
       if exitflag ==-2, 
       error('No feasible flux distribution found');
@@ -162,12 +170,14 @@ switch pars.method,
         error('Error in quadprog');
       end
     end
+
     Kernel_of_Aeq = null(Aeq); % Kern(Aeq);
     P = Kernel_of_Aeq * Kernel_of_Aeq'; % Projector on Kern(Aeq);
     v_projected_std = 1./sqrt(diag(P'*M*P));
     
   case 'thermo_correct',
 
+    if pars.verbose, display('Thermodynamically correct projection');end
     dd.v.mean = v_mean;
     dd.v.std  = v_std;
     [options,es_constraints]  = es_default_options(pars.network);
@@ -183,7 +193,7 @@ v_projected(abs(v_projected)/max(abs(v_projected))<10^-8) = 0;
 if pars.remove_eba_cycles,
   [feasible,pars.C,ind_non_orthogonal] = eba_feasible(v_projected,N,pars.C,[],'loose');
   if ~feasible,
-    display('Removing unfeasible cycles');
+    if pars.verbose, display('Removing unfeasible cycles');end
     v_projected = eba_make_feasible(v_projected,N,'loose',pars.C,[],'beard',ind_ext,v_sign);
   end
 end

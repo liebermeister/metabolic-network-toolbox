@@ -8,6 +8,10 @@ eval(default('S','[]','J','[]','flag_text','0','options','struct'));
 
 opt_def = struct('actstyle','none','arrowstyle','none','arrowvalues',[],'actprintnames',0,'flag_edges',1,'arrowvaluesmax',max(abs(J)),'canvas',[],'scale_arrowvalues',1,'keep_subplot',0);%,'colormap',rb_colors);
 
+if length(J),
+  opt_def.arrowstyle = 'fluxes';
+end
+
 if isfield(network,'graphics_par'),
   opt_def = join_struct(network.graphics_par,opt_def);
 end
@@ -29,12 +33,12 @@ end
 
 if isfield(options,'arrowvalues'),
   options.arrowvaluesmax = max(abs(options.arrowvalues));
-  options.arrowstyle = 'fluxes';
-  options.actstyle   = 'fluxes';
+  %options.arrowstyle = 'fluxes';
+  %options.actstyle   = 'fluxes';
 end
 
 if length(J), 
-  options.actstyle = 'fixed';
+  %options.actstyle = 'fixed';
 end
 
 if strcmp(options.actstyle, 'none'),

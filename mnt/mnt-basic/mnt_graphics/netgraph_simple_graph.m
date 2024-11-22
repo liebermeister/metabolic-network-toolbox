@@ -36,10 +36,10 @@ n2.graphics_par.metvalues = [];
 n2.graphics_par.actvalues = [];
 
 if isfield(n1,'graphics_par'),
-if isfield(n1.graphics_par,'subplot_position'), 
-  n2.graphics_par.subplot_position = n1.graphics_par.subplot_position;
-end
-if isfield(n1.graphics_par,'figure_position'), 
-  n2.graphics_par.figure_position  = n1.graphics_par.figure_position;
-end
+  if isfield(n1.graphics_par,'subplot_position'), 
+    n2.graphics_par.subplot_position = n1.graphics_par.subplot_position;
+  end
+  if isfield(n1.graphics_par,'figure_position'), 
+    n2.graphics_par.figure_position  = n1.graphics_par.figure_position;
+  end
 end

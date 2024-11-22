@@ -5,10 +5,12 @@ eval(default('options','struct'));
 options_default.sbtab_attributes = struct('DocumentName','Metabolic state data');
 options_default.use_measurement_table = 0;
 options_default.sbtab_attributes      = struct;
+% Flag denoting that data are consistent within a model:
 options_default.consistent            = 0;
-  % Flag denoting that data are consistent within a model
+% Save standard deviations (or omit the columns?):
+options_default.save_std             = 1;
 options = join_struct(options_default,options);
-  
+
 [nm,nr] = size(network.N);
 
 metabolite_KEGGID = [];
@@ -22,6 +24,20 @@ reaction_KEGGID = [];
 if isfield(network,'reaction_KEGGID'),
   if sum(cellfun('length',network.reaction_KEGGID)),
     reaction_KEGGID = network.reaction_KEGGID;
+  end
+end
+
+metabolite_BIGGID = [];
+if isfield(network,'metabolite_BIGGID'),
+  if sum(cellfun('length',network.metabolite_BIGGID)),
+    metabolite_BIGGID = network.metabolite_BIGGID;
+  end
+end
+
+reaction_BIGGID = [];
+if isfield(network,'reaction_BIGGID'),
+  if sum(cellfun('length',network.reaction_BIGGID)),
+    reaction_BIGGID = network.reaction_BIGGID;
   end
 end
 
@@ -64,15 +80,19 @@ if length(reaction_KEGGID),
   v_table = sbtab_table_add_column(v_table,'Reaction:Identifiers:kegg.reaction',reaction_KEGGID,1);
 end
 
+if length(reaction_BIGGID),
+  v_table = sbtab_table_add_column(v_table,'Reaction:Identifiers:bigg.reaction',reaction_BIGGID,1);
+end
+
 for it = 1:n_samples,
   if options.use_measurement_table,
     v_table = sbtab_table_add_column(v_table, ['>' samples{it} '_Mean'], v_mean(:,it), 1);
-    if length(v_std),
+    if length(v_std) * options.save_std,
     v_table = sbtab_table_add_column(v_table, ['>' samples{it} '_Std'],  v_std(:,it), 1);  
     end
   else
     v_table = sbtab_table_add_column(v_table, [samples{it} '_Mean'], v_mean(:,it), 0);
-    if length(v_std),
+    if length(v_std)* options.save_std,
     v_table = sbtab_table_add_column(v_table, [samples{it} '_Std'],  v_std(:,it), 0);  
     end
   end
@@ -92,15 +112,19 @@ if length(metabolite_KEGGID),
   c_table = sbtab_table_add_column(c_table,'Compound:Identifiers:kegg.compound',metabolite_KEGGID,1);
 end
 
+if length(metabolite_BIGGID),
+  c_table = sbtab_table_add_column(c_table,'Compound:Identifiers:bigg.compound',metabolite_BIGGID,1);
+end
+
 for it = 1:n_samples,
   if options.use_measurement_table,
     c_table = sbtab_table_add_column(c_table, ['>' samples{it} '_Mean'], c_mean(:,it), 1);
-    if length(c_std),
+    if length(c_std)* options.save_std,
       c_table = sbtab_table_add_column(c_table, ['>' samples{it} '_Std'],  c_std(:,it), 1);
     end
   else
     c_table = sbtab_table_add_column(c_table, [samples{it} '_Mean'], c_mean(:,it), 0);
-    if length(c_std),
+    if length(c_std)* options.save_std,
       c_table = sbtab_table_add_column(c_table, [samples{it} '_Std'],  c_std(:,it), 0);
     end
     end
@@ -121,15 +145,19 @@ if length(reaction_KEGGID),
   u_table = sbtab_table_add_column(u_table,'Reaction:Identifiers:kegg.reaction',reaction_KEGGID,1);
 end
 
+if length(reaction_BIGGID),
+  u_table = sbtab_table_add_column(u_table,'Reaction:Identifiers:bigg.reaction',reaction_BIGGID,1);
+end
+
 for it = 1:n_samples,
   if options.use_measurement_table,
     u_table = sbtab_table_add_column(u_table, ['>' samples{it} '_Mean'], u_mean(:,it), 1);
-    if length(u_std),
+    if length(u_std)* options.save_std,
     u_table = sbtab_table_add_column(u_table, ['>' samples{it} '_Std'],  u_std(:,it), 1);
     end
   else
     u_table = sbtab_table_add_column(u_table, [samples{it} '_Mean'], u_mean(:,it), 0);
-    if length(u_std),
+    if length(u_std)* options.save_std,
       u_table = sbtab_table_add_column(u_table, [samples{it} '_Std'],  u_std(:,it), 0);
     end
     end
@@ -151,15 +179,19 @@ if length(A_forward),
     A_forward_table = sbtab_table_add_column(A_forward_table,'Reaction:Identifiers:kegg.reaction',reaction_KEGGID,1);
   end
   
+  if length(reaction_BIGGID),
+    A_forward_table = sbtab_table_add_column(A_forward_table,'Reaction:Identifiers:bigg.reaction',reaction_BIGGID,1);
+  end
+
   for it = 1:n_samples,
     if options.use_measurement_table,
       A_forward_table = sbtab_table_add_column(A_forward_table, ['>' samples{it} '_Mean'], A_forward_mean(:,it), 1);
-    if length(A_forward_std),
+    if length(A_forward_std)* options.save_std,
       A_forward_table = sbtab_table_add_column(A_forward_table, ['>' samples{it} '_Std'],  A_forward_std(:,it), 1);
     end
     else
       A_forward_table = sbtab_table_add_column(A_forward_table, [samples{it} '_Mean'], A_forward_mean(:,it), 0);
-    if length(A_forward_std),
+    if length(A_forward_std)* options.save_std,
       A_forward_table = sbtab_table_add_column(A_forward_table, [samples{it} '_Std'],  A_forward_std(:,it), 0);
     end
     end
@@ -183,6 +215,7 @@ sbtab_document = sbtab_document_construct(options.sbtab_attributes);
 sbtab_document = sbtab_document_add_table(sbtab_document,'Flux',v_table);
 sbtab_document = sbtab_document_add_table(sbtab_document,'Concentration',c_table);
 sbtab_document = sbtab_document_add_table(sbtab_document,'EnzymeConcentration',u_table);
+
 if length(A_forward),
   sbtab_document = sbtab_document_add_table(sbtab_document,'ReactionAffinity',A_forward_table);
 end

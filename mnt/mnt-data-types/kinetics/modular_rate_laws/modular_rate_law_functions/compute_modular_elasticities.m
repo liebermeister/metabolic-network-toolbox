@@ -1,6 +1,6 @@
 function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback, flag_second_order)
 
-% E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback,flag_second_order)
+% E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, alpha_I, alpha_M, v, A, u, c, h, v_plus_fallback, v_minus_fallback,flag_second_order, limit_elasticities_in_multireactions)
 %
 % compute first- and second-order elasticities for modular rate laws
 %
@@ -101,7 +101,6 @@ E_sc_c_thermo(ind_act,:) = diag(1./(sparse(zeta(ind_act)-1))) * ...
 
 E_un_c_thermo     = sparse(nr,nm);
 E_un_c_thermo(ind_act,:) = [diag(v_plus(ind_act)) * Mplus(ind_act,:) - diag(v_minus(ind_act)) * Mminus(ind_act,:)] * diag(1./c);
-
 
 E_sc_c_regulation = alpha_A .* Wplus - beta_I .* Wminus; 
 

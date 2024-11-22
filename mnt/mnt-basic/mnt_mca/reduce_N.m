@@ -14,4 +14,4 @@ L                                 = echelon(1:length(independent_metabolites),:)
 dependent_metabolites = setdiff(1:size(N,1),independent_metabolites);
 N1                    = N(dependent_metabolites,:);
 
-L=sparse(L);
+L = sparse(L);

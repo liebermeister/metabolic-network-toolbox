@@ -47,6 +47,12 @@ n.reversible  = reversible;
 n.external    = zeros(size(N,1),1);
 n.external(ind_external) = 1;
 
+% field names for compartments
+% n.compartments:            list of compartment names 
+% n.compartment_sizes:       vector of compartment volumes
+% n.metabolite_compartments: list of compartment names for all metabolites
+% n.metabolite_compounds:    list of compound names for all metabolites (where metabolites can be localised, compounds are general)
+
 if exist('regulation_matrix','var'),
 n.regulation_matrix = regulation_matrix;
   else

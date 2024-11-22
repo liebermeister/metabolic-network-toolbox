@@ -95,13 +95,17 @@ figure(fignum+1); clf
 [ni,nk] = subplot_n(length(orderx)+n_osc);
 for it = 1:n_osc,
   subplot(nk,ni,it); % set(gca,'FontSize',6);
-  plot(t_appr,real(p_value(it) + delta_par_struct.value(it) * exp( i * delta_par_struct.omega*t_appr)).','k'); 
-  title(['\Delta' delta_par_struct.name{it},0]); axis tight; % set(gca,'FontSize',6);
+  plot(t_appr,real(p_value(it) + delta_par_struct.value(it) * exp( i * delta_par_struct.omega*t_appr)).','Color',[0.7696    0.4810    0.3063]); 
+  title(['\Delta' delta_par_struct.name{it},0]); 
+  %set(gca,'FontSize',6);
+  %axis tight; 
+  axis_almost_tight_positive
+
 end
 
 if color,
 
-for k=1:length(orderx),  
+for k=1:length(orderx),
   subplot(nk,ni,k+n_osc);
   l = orderx(k);
   if size(x),
@@ -113,7 +117,9 @@ for k=1:length(orderx),
   line3 = plot(t_appr,x_appr(:,l),'r'); 
   line4 = plot(t_appr,x_appr2(:,l),'m'); 
   if strcmp(delta_par_struct.type,'cos'),  plot(t_appr,((x_ss_int(l)+real(delta_S2_0(l))))*ones(size(t_appr)),'c-.'); end
-  axis tight
+%  axis tight
+    axis_almost_tight_positive
+
   line_colors([line1,line2,line3,line4]',color);
   title(network.metabolites{ind_int(l)}); 
   if k<20, set(gca,'XTick',[]); end
@@ -131,7 +137,8 @@ for k=1:length(orderx),
   line3 = plot(t_appr,x_appr(:,l),'r:'); 
   line4 = plot(t_appr,x_appr2(:,l),'m--'); 
   if strcmp(delta_par_struct.type,'cos'),  plot(t_appr,((x_ss_int(l)+real(delta_S2_0(l))))*ones(size(t_appr)),'c-.'); end
-  axis tight
+ % axis tight
+  axis_almost_tight_positive
   title(network.metabolites{ind_int(l)},0); 
   if k<20, set(gca,'XTick',[]); end
   hold off
@@ -170,7 +177,8 @@ for k=1:n_rea,
     line4 = plot(t_appr,v_appr2(:,l),'k--'); 
     line_colors([line1,line2,line3,line4]',color);    
   end
-  axis tight
+  %axis tight
+  axis_almost_tight_positive
   title(network.actions{l}); 
   if k<20, set(gca,'XTick',[]); end
   hold off
