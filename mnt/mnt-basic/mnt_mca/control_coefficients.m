@@ -40,16 +40,16 @@ if sum(external==0)==0,
 end
 
 if length(dilution_rate),
- %% build explicit model with dilution reactions (because dilution
- %% changes the conservation relations!
- [nm,nr]  = size(N);
- ind_int  = find(exteral~=0);
- my_N     = N;
- my_N(ind_int, nr+1:length(ind_int)) = -eye(length(ind_int));
- my_Ec = Ec;
- my_Ec(nr+1:length(ind_int),ind_int) = dilution_rate * eye(length(ind_int)); 
- [CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(my_N, my_Ec, external);
- return
+  %% build explicit model with dilution reactions (because dilution
+  %% changes the conservation relations!
+  [nm,nr]  = size(N);
+  ind_int  = find(exteral~=0);
+  my_N     = N;
+  my_N(ind_int, nr+1:length(ind_int)) = -eye(length(ind_int));
+  my_Ec = Ec;
+  my_Ec(nr+1:length(ind_int),ind_int) = dilution_rate * eye(length(ind_int)); 
+  [CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(my_N, my_Ec, external);
+  return
 end
 
 ind_ext = find(external);
@@ -91,7 +91,7 @@ end
 %% if this still doesn't help:
 eigmax = max(real(eig(M)));
 if eigmax > 0,
-  display(sprintf(' * The steady state is unstable; maximal eigenvalue %f',eigmax)); 
+  display(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax)); 
   %% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');
   display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax));
   M_adj = M - [ eigmax + 10^-10] * eye(size(M)); 

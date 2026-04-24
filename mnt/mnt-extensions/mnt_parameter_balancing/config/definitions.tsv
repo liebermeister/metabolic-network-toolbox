@@ -280,23 +280,28 @@ Unit	Column	Measurement	string	Measurement unit
 ValueType	Column	Measurement	string	Type of value (mean, standard deviation, etc)
 Description	Column	Measurement	string	Description of data value
 QuantityType	Column	QuantityInfo	string	QuantityType (e.g. from SBO)
-Symbol	Column	QuantityInfo	symbol	Symbol for the quantity type
+ID	Column	QuantityInfo	string	Abbreviation of quantity type
 Unit	Column	QuantityInfo	string	Unit for the Median value
+BiologicalElement	Column	QuantityInfo	string	Biological element
+MathematicalType	Column	QuantityInfo	string	Mathematical type
+Symbol	Column	QuantityInfo	symbol	Symbol for the quantity type
 Constant	Column	QuantityInfo	str	Is this value constant
 Element	Column	QuantityInfo	string	A related element
 RelatedElement	Column	QuantityInfo	string	A related element
 Scaling	Column	QuantityInfo	str	A scaling factor
+PhysicalType	Column	QuantityInfo	string	Physical Type
 Dependence	Column	QuantityInfo	string	Is this value dependent on something
 PriorMedian	Column	QuantityInfo	float	Prior median value
 PriorStd	Column	QuantityInfo	float	Prior median standard deviation
+PriorGeometricStd	Column	QuantityInfo	float	Prior Geometric Std
 LowerBound	Column	QuantityInfo	float	Lower bound for this quantity type
 UpperBound	Column	QuantityInfo	float	Upper bound for this quantity type
 ErrorStd	Column	QuantityInfo	float	Error of standard deviation
 DataStd	Column	QuantityInfo	float	Error of standard deviation
+UseAsPriorInformation	Column	QuantityInfo	Boolean	Use as prior information
 SBMLElement	Column	QuantityInfo	string	Corresponding SBML element
 SBMLElementType	Column	QuantityInfo	string	Corresponding SBML element
 Abbreviation	Column	QuantityInfo	string	Abbreviation of quantity type
-ID	Column	QuantityInfo	string	Abbreviation of quantity type
 MatrixInfo	Column	QuantityInfo	string	Information on the matrix production
 Option	Column	PbConfig	string	Which option is addressed
 Value	Column	PbConfig	string	What value is the option set to
