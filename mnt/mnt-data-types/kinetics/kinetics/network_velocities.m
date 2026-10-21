@@ -3,6 +3,8 @@
 % calculate flux velocities for a network, given a data structure
 % describing the kinetics type and containing the kinetic parameters
 %
+% wrapper function for different types of kinetics
+%
 % the field 'network.kinetics' is overridden by 'kinetics', if
 % given as an argument
 %
@@ -10,7 +12,9 @@
 % For a description, see 'help kinetics_structure'
 %
 % s: metabolite concentrations
+% split: rate vector contains forward and backward rates separately
 % indices: indices of reaction velocities to be computed (default: all reactions)
+% t: (optional) time argument passed on to function that evaluates the rates
 %
 % Note: this function is slow. For integration steps, use 'integrate_network_der' instead.
 

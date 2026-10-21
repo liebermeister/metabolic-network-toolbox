@@ -16,6 +16,10 @@ eval(default('parameters','struct()'));
 
 [nm,nr] = size(network.N);
 
+if ~isfield(network,'regulation_matrix'),
+  network.regulation_matrix = zeros(nr,nm);
+end
+
 u   = ones(nr,1);
 c   = ones(nm,1);
 KA  = sparse(double(network.regulation_matrix>0));

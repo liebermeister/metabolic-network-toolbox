@@ -1,9 +1,10 @@
 function result = load_any_table(filename,delimiter)
 
-% list = load_any_table(filename)
+% list = load_any_table(filename, delimiter)
 %
 % loads a tab-delimited file and puts it into a cell array
 % filename: name of tab-delimited file containing strings and numbers
+% delimiter: string describing another delimiter (instead of tab)
 
 if ~exist('delimiter','var'), delimiter = sprintf('\t'); end
 

@@ -519,6 +519,7 @@ for it = 1:length(data_quantities),
       end
       my_geomstd = nan * my_mean;
     case 'Multiplicative',
+      my_geomstd = nan * my_mean;
       if flag_mean_is_given,
         [my_mean_ln,my_std_ln] = lognormal_normal2log(my_mean,my_std);
         my_median(isfinite(my_mean_ln)) = exp(my_mean_ln(isfinite(my_mean_ln)));

@@ -24,8 +24,6 @@
 %   network_steady_state         -  compute the steady state
 %   network_integrate            -  simulate network dynamics
 %
-% Metabolic control analysis     -  see 'mnt_mca'
-%
 % Graphics functions             -  see 'mnt_graphics'
 %
 %
