@@ -13,6 +13,7 @@
 % L_int       link matrix of internal metabolites (see 'reduce_N')
 % NR_int      reduced stoichiometric matrix of internal metabolites
 % 'used'      can be set to [].
+% dilution_rate  (scalar) dilution rate of internal metabolites (default []: no dilution)
 %
 %Outputs
 % CJ, CS      matrices of unscaled flux and concentration control coefficients (first order)
@@ -21,7 +22,7 @@
 
 % CJ2, CS2  arrays of unscaled second order control coefficients
 
-function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal)
+function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal,dilution_rate)
 
 if find(isfinite(Ec)==0), error('Elasticity matrix contains non-finite values'); end
 
@@ -41,14 +42,19 @@ end
 
 if length(dilution_rate),
   %% build explicit model with dilution reactions (because dilution
-  %% changes the conservation relations!
+  %% changes the conservation relations!)
+  %% L_int, NR_int, M, M_adj, and indp_among_internal refer to this extended model
   [nm,nr]  = size(N);
-  ind_int  = find(exteral~=0);
-  my_N     = N;
-  my_N(ind_int, nr+1:length(ind_int)) = -eye(length(ind_int));
-  my_Ec = Ec;
-  my_Ec(nr+1:length(ind_int),ind_int) = dilution_rate * eye(length(ind_int)); 
-  [CJ, CS, L_int, NR_int, M, indp_among_internal] = control_coefficients(my_N, my_Ec, external);
+  ind_int  = find(external==0);
+  n_int    = length(ind_int);
+  my_N     = [N, zeros(nm,n_int)];
+  my_N(ind_int, nr+(1:n_int)) = -eye(n_int);
+  my_Ec    = [Ec; zeros(n_int,nm)];
+  my_Ec(nr+(1:n_int),ind_int) = dilution_rate * eye(n_int);
+  if length(used), used = [used(:); ones(n_int,1)]; end
+  [CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(my_N, my_Ec, external, used);
+  CJ = CJ(1:nr,1:nr);
+  CS = CS(:,1:nr);
   return
 end
 

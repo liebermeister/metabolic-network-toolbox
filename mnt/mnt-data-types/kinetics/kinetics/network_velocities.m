@@ -126,11 +126,9 @@ else,
             
             case 'mass-action'	  
               
-	    %% WARNING
-	    Nf  = 1;
-	    Nb  = 1;
-	    
-	    v(it) = prod(s.^Nf)* R.k - prod(s.^Nb) * R.km * network.reversible(i);	    
+	    Nf  = abs(network.N(network.N(:,i)<0,i));
+	    Nb  =     network.N(network.N(:,i)>0,i);
+	    v(it) = prod(S.^Nf)* R.k - prod(P.^Nb) * R.km * network.reversible(i);	    
             case 'michaelis_menten_rev',
               v(it)= ( R.Vm_S/R.Km_S * S -R.Vm_P/R.Km_P * P)/(1+S/R.Km_S+P/R.Km_P);	    
             case 'multiple_michaelis_menten_rev',
@@ -158,8 +156,8 @@ else,
                         + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))...
                         + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );	    
             case 'rev_multiple',
-              Nf  = abs(N(find(network.N(:,i)<0),i).*(N(find(network.N(:,i)<0),i)<0));
-              Nr  = abs(N(find(network.N(:,i)>0),i).*(N(find(network.N(:,i)>0),i)>0));
+              Nf  = abs(network.N(network.N(:,i)<0,i));
+              Nr  =     network.N(network.N(:,i)>0,i);
               v(it) = ( R.Pk * prod(S.^Nf) - R.Pkm * prod(P.^Nr) ) / ( prod(S.^Nf) * R.k(1) + R.km(1) +  R.k(2) + prod(P.^Nr) * R.km(2));	    
             case 'irrev_uni',
               v(it) =  R.Pk * S / (S * R.k(1) + R.k(2) );	    
@@ -167,7 +165,7 @@ else,
               v(it) = ( R.Pk * S(1) * S(2) ) /...
                       (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) );	
 	  case 'irrev_multiple',
-	    Nf  = abs(N(find(network.N(:,i)<0),i).*(N(find(network.N(:,i)<0),i)<0));
+	    Nf  = abs(network.N(network.N(:,i)<0,i));
 	    v(it) = ( R.Pk * prod(S.^Nf)  ) / ( prod(S.^Nf) * R.k(1) +  R.k(2) );	    
 	    
             case {'standard_irrev_uni'},	    
@@ -264,7 +262,9 @@ else,
 	switch R.type,
 	  
 	  case 'mass-action'	  
-	    v(2*it-1:2*it) = [prod(s.^Nf)* R.k;  prod(s.^Nb) * R.km * network.reversible(i)];	    
+	    Nf  = abs(network.N(network.N(:,i)<0,i));
+	    Nb  =     network.N(network.N(:,i)>0,i);
+	    v(2*it-1:2*it) = [prod(S.^Nf)* R.k;  prod(P.^Nb) * R.km * network.reversible(i)];	    
 	  case 'michaelis_menten_rev',
 	    v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * S ; R.Vm_P/R.Km_P * P]/(1+S/R.Km_S+P/R.Km_P);	    
 	  case 'multiple_michaelis_menten_rev',
