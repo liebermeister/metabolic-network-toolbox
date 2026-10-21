@@ -1,4 +1,4 @@
-function s = numeric_print(kinetics,n,actions,network)
+function s = kinetic_strings_print(kinetics,n,actions,network)
 
 % s = numeric_print(kinetics,n,actions,network)
 

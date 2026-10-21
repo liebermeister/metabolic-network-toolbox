@@ -21,7 +21,7 @@
 
 % C_J2, C_S2  arrays of flux and concentration control coefficients (second order)
 
-function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = control_coefficients(N,epsilon,external,used,NR_int,L_int,J)
+function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = flux_control_coefficients_split(N,epsilon,external,used,NR_int,L_int,J)
 
 if ~exist('used','var'), used=[]; end
 

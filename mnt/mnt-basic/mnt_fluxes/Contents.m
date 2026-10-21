@@ -60,10 +60,10 @@
 % [A, mu] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)
 %  Determine feasible A and mu given fluxes v and es_constraints
 %
-% dmu = optimize_delta_mu_given_signs(N,parameter_prior,data,v,options)
+% dmu = optimise_delta_mu_given_signs(N,parameter_prior,data,v,options)
 %  Optimise delta_mu (given mean and covariance) under thermo constraints
 %
-% [dmu, dmu_score, mu] = optimize_mu_given_signs(N,parameter_prior,data,...)
+% [dmu, dmu_score, mu] = optimise_mu_given_signs(N,parameter_prior,data,...)
 %  Optimise delta_mu and mu (given mean and covariance) under thermo constraints
 %
 % mu = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)

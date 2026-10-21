@@ -1,4 +1,4 @@
-function [delta_mu, delta_mu_ind_score] = optimize_delta_mu_given_signs(N,parameter_prior,data,v,options)
+function [delta_mu, delta_mu_ind_score] = optimise_delta_mu_given_signs(N,parameter_prior,data,v,options)
 
 %delta_mu = optimize_delta_mu_given_signs(N,parameter_prior,data,v,options)
 %

@@ -1,4 +1,4 @@
-function s = network_kinetics_print(network)
+function s = network_print_kinetics(network)
 
 % s = network_kinetics_print(network)
 %

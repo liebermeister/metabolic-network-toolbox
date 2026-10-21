@@ -1,4 +1,4 @@
-function network = cobra_to_network(json_file,options)
+function network = cobra_json_to_network(json_file,options)
 
 % network = cobra_to_network(json_file,options)
 

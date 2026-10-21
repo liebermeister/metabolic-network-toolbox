@@ -2,7 +2,7 @@
 %
 % put values from parameters vector v into parameters structure p
 
-function pp=vector2numeric_par(v,p)
+function pp=vector2kinetic_strings_par(v,p)
 
 f = fieldnames(p);
 pp=p;

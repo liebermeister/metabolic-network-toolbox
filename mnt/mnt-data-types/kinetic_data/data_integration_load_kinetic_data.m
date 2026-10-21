@@ -1,4 +1,4 @@
-function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)
+function kinetic_data = data_integration_load_kinetic_data(data_quantities, parameter_prior, network, data_file, use_sbml_ids, use_kegg_ids, flag_invent_std, verbose)
 
 % wrapper function, used for backward compatibility
   

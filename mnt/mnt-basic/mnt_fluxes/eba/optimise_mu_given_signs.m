@@ -1,4 +1,4 @@
-function [delta_mu, delta_mu_score, this_mu] = optimize_mu_given_signs(N,parameter_prior,data,v,options,constraints)
+function [delta_mu, delta_mu_score, this_mu] = optimise_mu_given_signs(N,parameter_prior,data,v,options,constraints)
 
 % [delta_mu,delta_mu_score,this_mu] = optimize_mu_given_signs(N,parameter_prior,data,v,options,constraints)
 %

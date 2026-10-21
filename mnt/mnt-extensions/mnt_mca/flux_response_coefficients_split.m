@@ -2,7 +2,7 @@
 %
 % Response coefficients of first and second order
 
-function [RS,RJ,RS_2,RJ_2] = response_coefficients(CS,epsilon_1,pi_1,epsilon_2,rho_2,pi_2,split)
+function [RS,RJ,RS_2,RJ_2] = flux_response_coefficients_split(CS,epsilon_1,pi_1,epsilon_2,rho_2,pi_2,split)
 
 n_react = size(epsilon_1,1);
 

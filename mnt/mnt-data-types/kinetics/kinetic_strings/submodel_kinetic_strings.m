@@ -2,7 +2,7 @@
 %
 % Extract kinetics (of type 'numeric') for a submodel
 
-function sub_kinetics = submodel_numeric(kinetics,n_met,met_indices,act_indices)
+function sub_kinetics = submodel_kinetic_strings(kinetics,n_met,met_indices,act_indices)
 
 new_met_indices = zeros(n_met,1);
 new_met_indices(met_indices) = 1:length(met_indices);

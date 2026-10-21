@@ -1,3 +1,3 @@
-function f = eba1(x)
+function f = ebaf1(x)
 
 f = sum(x.^2);

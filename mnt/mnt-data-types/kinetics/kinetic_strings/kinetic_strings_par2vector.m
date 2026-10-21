@@ -1,4 +1,4 @@
-function [v,names]=numeric_par2vector(p)
+function [v,names]=kinetic_strings_par2vector(p)
 
 % function v = par2vector(p)
 %

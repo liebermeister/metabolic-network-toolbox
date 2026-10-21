@@ -1,4 +1,4 @@
-function stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)
+function stochasticJ_show_distribution(list,Jtotvalues,pJtot,fignum)
 
 % stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)
 

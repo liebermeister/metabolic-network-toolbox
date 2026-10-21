@@ -1,4 +1,4 @@
-function data_std = replace_zero_std(data_std,data_mean,method,qquantile);
+function data_std = replace_small_std(data_std,data_mean,method,qquantile);
 
 % substitute standard deviations below 'qquantile' by value at 'qquantile'
 % substitute standard deviations above '1-qquantile' by value at '1-qquantile'

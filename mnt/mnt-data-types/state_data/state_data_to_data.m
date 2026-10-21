@@ -1,4 +1,4 @@
-function [data, q_info] = cmb_state_data_to_data(kinetic_data, state_data, cmb_options, network)
+function [data, q_info] = state_data_to_data(kinetic_data, state_data, cmb_options, network)
 
 % [data, q_info] = cmb_state_data_to_data(kinetic_data, state_data, cmb_options, network)
 %

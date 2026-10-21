@@ -1,4 +1,4 @@
-function [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network, file_kinetic_data, options)
+function [kinetics, kinetic_data] = sbtab_to_modular_rate_law_via_kinetic_data(network, file_kinetic_data, options)
 
 % [kinetics, kinetic_data] = sbtab_to_modular_rate_law(network,file_kinetic_data,options)
 % 
