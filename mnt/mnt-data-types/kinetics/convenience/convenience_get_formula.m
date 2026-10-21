@@ -31,7 +31,7 @@ end
 formula =  [ ' ( ' tail 'Vf1 * ' prodA ' - ' tail 'Vr1 * ' prodP ' ) / ( ' prodA1 ' + ' prodP1 ' - 1 )'];
 
 for it2 = 1:length(act),
-  formula  = [ act{it2} ' / ' tail 'KA' num2str(it2) ' / ( 1 + ' act{it2} ' / ' tail ' KA' num2str(it2) ' ) * ( ' formula ' )'] ;
+  formula  = [ act{it2} ' / ' tail 'KA' num2str(it2) ' / ( 1 + ' act{it2} ' / ' tail 'KA' num2str(it2) ' ) * ( ' formula ' )'] ;
 end
 
 for it2 = 1:length(inh),
