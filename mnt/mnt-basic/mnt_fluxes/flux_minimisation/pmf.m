@@ -79,13 +79,7 @@ b_eq = [fba_constraints.v_fix(ind_fix); benefit];
 
 zred = [zeros(nred,1); cost_weights];
 
-opt  = optimset('Display','off');
-
-if exist('cplexlp','file'),
-  [y,fval,exitflag] = cplexlp(my_cost_weights,A,b,A_eq,b_eq,[],[],y0);
-else
-  [y,fval,exitflag] = linprog(my_cost_weights,A,b,A_eq,b_eq,[],[],y0,opt);
-end
+[y,fval,exitflag] = lp_solve(my_cost_weights,A,b,A_eq,b_eq);
 
 if exitflag<=0,
   exitflag

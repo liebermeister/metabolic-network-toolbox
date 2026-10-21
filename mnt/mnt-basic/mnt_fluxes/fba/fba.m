@@ -17,6 +17,8 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 %                             will replace the zeros in the stationarity condition)
 %
 % solver = {'cplex','linprog'};
+%   'cplex' (default, if CPLEX is installed): also returns lambda_ind_int
+%   'linprog': solve with lp_solve (matlab-utils); lambda_ind_int is empty
 %
 % Usage example
 % fba_constraints = fba_default_options(network);
@@ -104,7 +106,7 @@ switch solver,
     %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
     %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
   case 'linprog',
-    [v,value,exitflag] = linprog(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off'));
+    [v,value,exitflag] = lp_solve(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max);
 end
 
 if exitflag~=1,

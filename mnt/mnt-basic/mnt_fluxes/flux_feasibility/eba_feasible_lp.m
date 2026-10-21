@@ -69,18 +69,7 @@ else,
   lb = - dmu_abs_max * ones(nr,1); 
   ub =   dmu_abs_max * ones(nr,1);
 
-  if exist('cplexlp','file'),
-    opt =  cplexoptimset('cplex');
-    %opt         = cplexoptimset();%'linprog');
-    %opt.MaxIter = 10^10;
-    %opt.Display = 'off';
-    [dmu, dum, exitflag] = cplexlp(-c, -G, -h, A, b, lb, ub, [], opt);
-  else
-    opt         = optimset('linprog');
-    opt.MaxIter = 10^10;
-    opt.Display = 'off';
-    [dmu, dum, exitflag] = linprog(-c, -G, -h, A, b, lb, ub, [], opt);
-  end
+  [dmu, dum, exitflag] = lp_solve(-c, -G, -h, A, b, lb, ub);
 
   % if exitflag ~=1,
   %   exitflag

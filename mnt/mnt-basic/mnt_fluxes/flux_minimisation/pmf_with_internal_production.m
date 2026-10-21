@@ -84,14 +84,7 @@ b_eq = [internal_production; ...
 
 zred = [zeros(nr,1); cost_weights];
 
-opt  = optimset('Display','off');
-
-if exist('cplexlp','file'),
-  [y,fval,exitflag] = cplexlp(zred,A,b,A_eq,b_eq,[],[],y0,opt);
-  %[A*y<b]
-else
-  [y,fval,exitflag] = linprog(zred,A,b,A_eq,b_eq,[],[],y0,opt);
-end
+[y,fval,exitflag] = lp_solve(zred,A,b,A_eq,b_eq);
 
 if exitflag<=0,
   exitflag

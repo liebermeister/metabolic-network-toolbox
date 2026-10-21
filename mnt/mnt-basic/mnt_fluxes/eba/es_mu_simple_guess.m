@@ -103,11 +103,7 @@ b = [...
 
 z = -N*zv;
 
-if exist('cplexlp','file'),
-  [my_mu, val, exitflag] = cplexlp(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max,[]);
-else
-  [my_mu, val, exitflag] = linprog(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max,[]);
-end
+[my_mu, val, exitflag] = lp_solve(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max);
 
 if exitflag ~=1,
   exitflag
