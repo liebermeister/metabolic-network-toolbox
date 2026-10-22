@@ -3,7 +3,7 @@
 %Import a network from SBML format.
 %
 %s can be:
-%- a SBML structure (as defined by the SBMLToolbox)
+%- a SBML structure (as returned by libSBML's TranslateSBML)
 %- a filename. In this case, the firectory name has to be given 
 %  in the argument 'dirname'
 %
@@ -11,13 +11,13 @@
 %
 %Note that semantic annotations will not be read from the file! 
 %
-%This function requiers the SBMLToolbox to be installed
-%(see http://sbml.org/software/sbmltoolbox/)
+%This function requires the Matlab interface of libSBML
+%(TranslateSBML; see https://sbml.org/software/libsbml/)
 
 function [network,s] = network_sbml_import(s,dirname,verbose)
   
 if ~exist('TranslateSBML','file'),
-  error('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.');
+  error('Please install the Matlab interface of libSBML (https://sbml.org/software/libsbml/) - Otherwise the SBML import/export functions do not work.');
 end
 
 eval(default('verbose','0'));

@@ -3,19 +3,13 @@ function [mu,A,R] = flux2entropy_production(network,v,mu_ext)
 % [mu,A,R] = flux2entropy_production(network,v,mu_ext)
 %
 % Determine all mu and A from fluxes and external mu
-
-if 0,
-  N             = [-1 0; 1 -1; 0 1];
-  reversible    = [1 1]';
-  external_ind  = [1 3 ];
-  network       = network_construct(N,reversible,external_ind);
-  K             = network_analyse(network);
-  v             = full(K);
-  mu_ext        = [1 0]';
-  [mu,A,R] = flux2entropy_production(network,v,mu_ext)
-  sum(1./R)
-  netgraph_concentrations(network,mu);
-end
+%
+% Example:
+%   N        = [-1 0; 1 -1; 0 1];
+%   network  = network_construct(N, [1 1]', [1 3]);
+%   v        = full(network_analyse(network));
+%   [mu,A,R] = flux2entropy_production(network, v, [1 0]')
+%   netgraph_concentrations(network,mu);
 
 [nm,nr] = size(network.N);
 

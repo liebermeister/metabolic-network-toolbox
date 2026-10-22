@@ -55,18 +55,3 @@ end
 
 v = x(1:nr);
 mu = x(nr+1:end);
-
-return
-
-%check
-%[v eba_constraints.v_min eba_constraints.v_max eba_constraints.v_fix]
-%N_int * v
-%[v, N'*mu]
-
-if sum(v<eba_constraints.v_min), warning('Solution violates constraint'); end
-if sum(v>eba_constraints.v_max), warning('Solution violates constraint'); end
-if sum(abs(v(isfinite(eba_constraints.v_fix)) - eba_constraints.v_fix(isfinite(eba_constraints.v_fix)))>10^-8), 
-  warning('Solution violates constraint'); 
-end
-if sum(abs(N_int*v) > 10^-8), warning('Solution violates constraint'); end
-if sum(v.*(N'*mu)>0), warning('Solution violates constraint'); end

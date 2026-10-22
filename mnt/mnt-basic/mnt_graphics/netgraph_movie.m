@@ -113,8 +113,6 @@ for j = 1:length(T),
       actvalues(:,j) = s_t_v(:,j);
     case 'compute reactions',     
       error('data type "compute reactions" is currently not supported'); 
-      metvalues(:,j) = s_t_c(:,j);
-      actvalues(:,j) = network_velocities(metvalues(:,j),network,network.kinetics);    
    otherwise, error('Unknown function option'); 
   end
 end

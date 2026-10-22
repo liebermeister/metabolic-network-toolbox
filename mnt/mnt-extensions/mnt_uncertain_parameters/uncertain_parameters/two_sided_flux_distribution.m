@@ -23,15 +23,6 @@ pplus = 1/(sqrt(2*pi*logJ_cov(1,1))) * 1./Jvalues .* exp( -0.5*((log(Jvalues)-mu
 
 pminus = 1/(sqrt(2*pi*logJ_cov(2,2))) * 1./Jvalues .* exp( -0.5*((log(Jvalues)-mu_minus).^2 / logJ_cov(2,2)));
 
-if 0,
-figure(1)
-subplot(2,1,1); plot(Jvalues,pplus,'r'); 
-subplot(2,1,2); plot(Jvalues,pminus,'r');
-
-sum(pplus)*dJvalues
-sum(pminus)*dJvalues
-end
-
 [Jplus,Jminus] = meshgrid(Jvalues,Jvalues);
 
 C = inv(diag(diag(logJ_cov)));

@@ -81,30 +81,3 @@ function dz_dt = integrate_network_der(t,z,network,L,NR_int,N_ind,T,indep_metabo
  [epsilon_S, epsilon_P, parameter_names ] = elasticities(network,s); 
  fRS_ind = NR_int * ( epsilon_S * L * RS_ind + epsilon_S(:,dep_metabolites) * dT_dq  + [epsilon_P(:,1:n_par) zeros(size(epsilon_S))]);
  dz_dt   = [f; reshape(fRS_ind,na*nb,1)];
-
-% --------------------------------------------------------------------
-
-return
-
-% Test example from Ingalls and Sauro (2002)
-
-N            = [1 -1 0; 0 1 -1];
-reversible   = [0 1 0]';
-metabolites  = {'S1','S2'}';
-external_ind = [];
-network      = network_construct(N,reversible,external_ind,metabolites);
-
-network.kinetics.k_fwd = [4;   3; 2];
-network.kinetics.k_bwd = [0; 0.5; 0];
-
-s_init = [5/3; 2];  % stable steady state
-
-[t, s, RS, s_ind, RS_ind, parameters, parameter_names] = time_response_coefficients(network, s_init, 4);
-
-parameter_names
-
-figure(1); plot(t,squeeze(RS(:,2,:))) % k2+ (called k1)
-figure(2); plot(t,squeeze(RS(:,5,:))) % k2- (called k-1)
-
-figure(3); plot(t,squeeze(RS(:,7,:))) % S1
-
