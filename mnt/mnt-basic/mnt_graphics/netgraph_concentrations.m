@@ -26,7 +26,7 @@ options.actvalues = J;
 options.metvalues = S;
 
 if strcmp(options.arrowstyle,'fluxes')
-  if strcmp(options.arrowvalues,[]),
+  if isempty(options.arrowvalues),
     options.arrowvalues = J;
   end
 end

@@ -54,7 +54,7 @@ s_ext     = s(external);
 
 volumes = ones(length(internal),1);
 if isfield(network,'metabolite_compartments'),
-  ll = label_names(metabolite_compartments(internal), network.compartments);
+  ll = label_names(network.metabolite_compartments(internal), network.compartments);
   volumes = network.compartment_sizes(ll);
   display('Dynamic simulation: Using given compartment volumes = 1');
 else,
@@ -87,7 +87,7 @@ switch network.kinetics.type,
     df = prod( repmat(s(external),1,n_A) .^ Nf(external,:))';
     db = prod( repmat(s(external),1,n_A) .^ Nb(external,:))';
 
-    [t,s_int_t] = ode23(@integrate_network_der_MA,[0:dt:T],s_int,[],s_ext,Nfint,Nbint,network,par_osc);
+    [t,s_int_t] = ode23(@integrate_network_der_MA,[0:dt:T],s_int,[],s_ext,Nfint,Nbint,network,par_osc,N_int,df,db);
 
   case 'numeric',
      if length(T)==1,
@@ -138,7 +138,7 @@ met_int = network.metabolites(internal);
 
 % --------------------------------------------------------------------
 
-function f = integrate_network_der_MA(t,s_int,s_ext,Nf_int,Nb_int,network,par_osc)
+function f = integrate_network_der_MA(t,s_int,s_ext,Nf_int,Nb_int,network,par_osc,N_int,df,db)
 
 % vector f contains time derivative of the internal metabolites
 

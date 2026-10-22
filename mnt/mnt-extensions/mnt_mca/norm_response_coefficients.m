@@ -1,4 +1,4 @@
-function [RS_norm,RJ_norm,RS2_norm,RJ2_norm] = norm_response_coefficients(s,j,p,RS,RJ,RS2,RJ2)
+function [RS_norm,RJ_norm,RS2_norm,RJ2_norm] = norm_response_coefficients(s,j,p,RS,RJ,RS2,RJ2,used_J)
 
 % [RS_norm,RJ_norm,RS2_norm,RJ2_norm] = norm_response_coefficients(s,j,p,RS,RJ,RS2,RJ2,used_J)
 %
@@ -9,7 +9,7 @@ n_rea = length(j);
 
 RS_norm   = diag(1./s) * RS * diag(p);
 
-if exist('used_J','var'), j_inv = zeros(size(j)); J_inv(find(used_J)) = 1./j(find(used_j));
+if exist('used_J','var'), j_inv = zeros(size(j)); j_inv(find(used_J)) = 1./j(find(used_J));
 else, j_inv = 1./j; end
 
 RJ_norm   = diag(j_inv) * RJ * diag(p);

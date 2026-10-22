@@ -106,7 +106,7 @@ if isfield(network,'kinetics'),
     case 'saturated',
       subnetwork.kinetics.reactions = subnetwork.kinetics.reactions(indr); 
     case 'kinetic_strings',
-      subnetwork.kinetics = submodel_kinetic_strings(subnetwork.kinetics,length(subnetwork.metabolites),indices_met_sub,indr);
+      subnetwork.kinetics = submodel_kinetic_strings(subnetwork.kinetics,length(network.metabolites),indm,indr);
     case {'cs','ms','rp','ma','fm'},
       subnetwork.kinetics = modular_reduce_to_subnetwork(network.kinetics,indm,indr);
     otherwise,
