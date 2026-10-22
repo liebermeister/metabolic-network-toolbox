@@ -33,7 +33,7 @@ function [v,mu,value] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0
 
 eval(default('x0','[]'));
 
-if isfinite(eba_options.seed), rand('state',eba_options.seed); end
+if isfinite(eba_options.seed), rng(eba_options.seed); end
 
 [nm,nr] = size(N);
 

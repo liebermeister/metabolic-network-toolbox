@@ -23,8 +23,7 @@ if ~exist('constraints','var')
 end
 
 if ~isnan(options.seed)
-  randn('state',options.seed);
-  rand('state',options.seed);
+  rng(options.seed);
 end
 
 if sum(isnan(constraints.v_fix))==0

@@ -4,7 +4,7 @@
 
 function x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions)
 
-randn('state',0)
+rng(0)
 
 if ~exist('fixed_positions','var')
   indices_fixed = [];
