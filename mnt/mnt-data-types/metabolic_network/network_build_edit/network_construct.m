@@ -3,7 +3,7 @@
 %Construct network data structures from stoichiometric matrix
 %  network structure has mandatory fields 
 %  'metabolites','actions','N','reversible','external'
-%  see 'network_structure'
+%  see 'help metabolic_network'
 %
 %ARGUMENT
 % N           stoichiometric matrix

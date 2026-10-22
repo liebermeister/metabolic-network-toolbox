@@ -9,7 +9,7 @@
 % given as an argument
 %
 % There are alternative ways to specify the kinetics, indicated by kinetics.type:
-% For a description, see 'help kinetics_structure'
+% For a description, see 'help kinetics'
 %
 % s: metabolite concentrations
 % split: rate vector contains forward and backward rates separately

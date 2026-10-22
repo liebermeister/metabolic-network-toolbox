@@ -12,4 +12,4 @@
 %
 %   set_kinetics            Construct a field 'kinetics' in the network data structure
 %                           describing the enzyme kinetics
-%   network_kinetics_print  Display kinetics of a metabolic network
+%   network_print_kinetics  Display kinetics of a metabolic network

@@ -3,7 +3,7 @@ clear global
 data_dir = [fileparts(which(mfilename)) '/data'];
 
 % check dependencies of the Metabolic Network Toolbox:
-% mnt_dependencies;
+mnt_dependencies;
 
 close all;
 echo on;
@@ -103,7 +103,7 @@ clc
 %----------------------------------------------
 % Until here, we only considered the network structure.
 % Kinetic rate laws can be stored in the field 'network.kinetics'. 
-% There are different ways to specify them (see 'kinetics_structure'). 
+% There are different ways to specify them (see 'help kinetics'). 
 % This is how we choose common modular rate laws for all reactions.
  
 network.kinetics = set_kinetics(network,'cs');

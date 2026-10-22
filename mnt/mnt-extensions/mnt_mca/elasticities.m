@@ -3,7 +3,7 @@
 % Numerical calculation of reaction elasticities
 %
 %FUNCTION ARGUMENTS:
-%  network     network structure (type 'help network_structure')
+%  network     network structure (type 'help metabolic_network')
 %  s           column vector of metabolite concentrations
 %  options     fields with default values:
 %    split:              0     flag (1: forward and backward directions are described separately)

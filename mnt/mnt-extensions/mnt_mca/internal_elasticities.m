@@ -7,7 +7,7 @@
 %
 %
 %FUNCTION ARGUMENTS:
-%  network     network structure (type 'help network_structure')
+%  network     network structure (type 'help metabolic_network')
 %  s           column vector of metabolite concentrations
 
 function [epsilon,epsilonP,parameters] = internal_elasticities(network,s,enzyme_factor,relevant_parameters);

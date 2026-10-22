@@ -1,17 +1,30 @@
 function mnt_dependencies()
 
+% mnt_dependencies()
+%
+% Check whether the packages used by the Metabolic Network Toolbox are installed
+% (see README.md for details)
+
 if ~exist('matlab_utils_installed','file'),
-  warning('Please install the Matlab utility functions (https://github.com/liebermeister/matlab-utils)');
+  warning('Please install the Matlab utility functions (https://github.com/liebermeister/matlab-utils) - They are required by the Metabolic Network Toolbox.');
 end
 
-if ~exist('sbtab_version','file'),
-  warning('Please install the SBtab Toolbox (https://github.com/wolframliebermeister/sbtab-matlab) - Otherwise SBtab import and export will not work.');
+if ~exist('linprog','file'),
+  warning('Please install the Matlab Optimization Toolbox - Otherwise many flux analysis functions will not work.');
 end
 
 if ~exist('TranslateSBML','file'),
-  warning('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the SBML import/export functions will not work.');
+  warning('Please install the Matlab interface of libSBML (https://sbml.org/software/libsbml/) - Otherwise the SBML import/export functions will not work.');
+end
+
+if ~exist('sbtab_version','file'),
+  warning('Please install SBtab for Matlab (https://github.com/liebermeister/sbtab-matlab) - Otherwise SBtab import and export will not work.');
+end
+
+if ~exist('sptensor','file'),
+  warning('Please install the Tensor Toolbox (https://www.tensortoolbox.org) - Otherwise second-order elasticities and response coefficients cannot be computed.');
 end
 
 if ~exist('CalculateFluxModes','file'),
-  warning('Please install the efmtool Toolbox (http://www.csb.ethz.ch/tools/efmtool) - Otherwise certain flux analysis functions will not work.');
+  warning('Please install efmtool (https://csb.ethz.ch/tools/software/efmtool.html) - Otherwise elementary flux modes cannot be computed.');
 end

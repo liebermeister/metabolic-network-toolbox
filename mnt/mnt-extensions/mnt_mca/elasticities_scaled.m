@@ -4,7 +4,7 @@
 % ('scaled elasticities')
 %
 %FUNCTION ARGUMENTS:
-%  network     network structure (type 'help network_structure')
+%  network     network structure (type 'help metabolic_network')
 %  s           column vector of metabolite concentrations
 %
 %OUTPUT:
