@@ -695,7 +695,7 @@ function [normvalues, normvalues_std, valuesmax, valuesmin] = normalise(values,v
 
   if valuesmin == valuesmax,  valuesmax = 10^-10 + valuesmin; end
   if p.showsign
-    normvalues     = values / max(abs(values));
+    normvalues     = values / max(abs(values(:)));
   else
     normvalues     = 2 * [(values - valuesmin)   / ( valuesmax - valuesmin)] - 1;
   end

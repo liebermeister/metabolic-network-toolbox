@@ -22,7 +22,7 @@ function [es_options, es_constraints] = es_default_options(N)
 % es_constraints.v_mean             nr x 1  fluxes data (can also be a matrix)
 % es_constraints.v_std              nr x 1  fluxes data error bars (can also be a matrix)
 % es_constraints.Keq_fix            nr x 1  equilibrium constants predefined values
-% es_constraints.ext_sign           nx x 1  signs of production rates of external metabolites
+% es_constraints.ext_signs          nm x 1  signs of production rates of external metabolites (nan for internal metabolites)
 % es_constraints.log_c_fix          nm x 1  ln metabolite levels predefined values
 % es_constraints.log_c_min          nm x 1  ln metabolite levels lower bounds
 % es_constraints.log_c_max          nm x 1  ln metabolite levels upper bounds
@@ -92,7 +92,7 @@ function [es_options, es_constraints] = es_default_options(N)
 %                                              loops (only in for flux correction by loop substraction)
 % es_options.zc                   []         Metabolite derivative of objective function
 % es_options.zv                   []         Flux derivative of objective function
-% es_options_in_silico.limit_elasticities_in_multireactions = 1; normalise scaled elasticities in multireactions (eg biomass reaction) to an sum of absolute values = 1
+% es_options.limit_elasticities_in_multireactions = 1; normalise scaled elasticities in multireactions (eg biomass reaction) to an sum of absolute values = 1
 % es_options.verbose              (boolean)  Verbose output?
 % es_options.graphics_flag        (boolean)  Show graphics?
 % es_options.print_graphics       (boolean)  Save graphics to file?
@@ -181,7 +181,7 @@ es_options.h                    = ones(nr,1); % reaction cooperativity
 es_options.limit_cooperativity  = 2;
 es_options.zc                   = []; % metabolite derivative of target function
 es_options.zv                   = []; % flux derivative of target function
-es_options_in_silico.limit_elasticities_in_multireactions = 1;
+es_options.limit_elasticities_in_multireactions = 1;
 es_options.flag_second_order    = 1;
 es_options.no_equilibrium       = 1;
 es_options.ind_ignore           = [];

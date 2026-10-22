@@ -18,7 +18,7 @@ success_flag = 1;
 [nm,nr]      = size(N);
 
 if ~isfield(es_options,'seed'), es_options.seed = 0; end
-if ~isnan(es_options.seed), randn('state',es_options.seed); end
+if ~isnan(es_options.seed), rng(es_options.seed); end
 
 epsilon     = RT/es_constraints.rho;
 v_signs     = sign(v);

@@ -9,7 +9,7 @@ function [sample_v, best_v, C] = sample_fluxes_given_data(N,ind_ext,v_mean,v_std
 %  - recombine samples for different states, resulting in n_recombine_v sampled matrices
 % The first sample is supposed to be the central one
 
-if exist('seed','var'), randn('state',seed); end
+if exist('seed','var'), rng(seed); end
 
 eval(default('ind_ignore','[]'));
 

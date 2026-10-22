@@ -20,7 +20,7 @@ success_flag = 1;
 
 if ~isfield(options,'verbose'),         options.verbose = 0; end
 if ~isfield(options,'seed'),            options.seed = 0; end
-if ~isnan(options.seed), randn('state', options.seed); end
+if ~isnan(options.seed), rng(options.seed); end
 
 % compute minimal bounding box for reduced chemical potentials
 % U consists of the linearly independent columns of N'
