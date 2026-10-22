@@ -1,5 +1,12 @@
 function sbtab_document = state_data_save(state_data,network,filename_state_data,options)
 
+% sbtab_document = state_data_save(state_data,network,filename_state_data,options)
+%
+% Save metabolic state data to SBtab file
+%
+% NOTE: this function is unfinished: the option use_measurement_table = 1 does not work
+% (the variable c is not defined)
+
 eval(default('options','struct'));
 
 options_default.sbtab_attributes = struct('DocumentName','Metabolic state data');

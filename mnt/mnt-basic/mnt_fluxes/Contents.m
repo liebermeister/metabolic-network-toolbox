@@ -90,8 +90,5 @@
 % [v, mu] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0)
 %  Determine feasible flux vector v and chemical potentials mu under constraints 
 %
-% [v, mu] = find_v_and_mu(N,K,external,constraints,options)
-%  Determine feasible v and mu satisfying all constraints and minimising the euclidean norm
-%
 % [v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)
 %  Determine v and A from "Ohmian law" and minimal entropy production

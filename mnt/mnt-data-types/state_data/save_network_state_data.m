@@ -3,6 +3,9 @@ function sbtab_out = save_network_state_data(network, data_file, quantity_type, 
 % sbtab_out = save_network_state_data(network, data_file, quantity_type, M, options) % ids, states, 
 %
 % Save metabolite, flux, or enzyme data to SBtab data file
+%
+% NOTE: this function is unfinished: the options handling is commented out,
+% and the variables M_std and c_mat are not defined
 
 %  eval(default('options','struct'));
 %

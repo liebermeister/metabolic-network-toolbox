@@ -5,6 +5,9 @@ function K = kinetics_distribution_par(reaction, d, q_mean, q_cov,r_mean,r_cov);
 % Compute mean and covariance of logarithmic parameters 
 % for a single reaction of arbitrary type 
 % (see 'set_standard_kinetics_type')
+%
+% NOTE: this function is unfinished: it returns a preliminary dummy solution
+% (zero mean, covariance 0.01 * identity matrix)
 
 K.type       = reaction.type;
 K.parameters = reaction.parameters;
@@ -15,7 +18,7 @@ n_par        = sum(reaction.sizes);
 K.log_mean = zeros(n_par,1);
 K.log_cov  = sparse(0.01*eye(n_par));
 
-'kinetics_distribution_par: preliminary dummy solution!!!'
+warning('kinetics_distribution_par: preliminary dummy solution');
 
 return;
 
