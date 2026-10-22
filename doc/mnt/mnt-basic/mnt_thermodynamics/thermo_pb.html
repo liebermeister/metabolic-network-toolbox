@@ -4,7 +4,7 @@
 <head>
   <title>Description of thermo_pb</title>
   <meta name="keywords" content="thermo_pb">
-  <meta name="description" content="[c,A] = thermo_pb(N, v, thermo_pb_options, verbose)">
+  <meta name="description" content="[c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -12,7 +12,7 @@
 </head>
 <body>
 <a name="_top"></a>
-<div><a href="../../../index.html">Home</a> &gt;  <a href="#">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_thermodynamics</a> &gt; thermo_pb.m</div>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">mnt</a> &gt; <a href="../index.html">mnt-basic</a> &gt; <a href="index.html">mnt_thermodynamics</a> &gt; thermo_pb.m</div>
 
 <!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
 <td align="right"><a href="index.html">Index for mnt/mnt-basic/mnt_thermodynamics&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
@@ -21,20 +21,24 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>[c,A] = thermo_pb(N, v, thermo_pb_options, verbose)</strong></div>
+<div class="box"><strong>[c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="box"><strong>function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> [c,A] = thermo_pb(N, v, thermo_pb_options, verbose)
+<div class="fragment"><pre class="comment"> [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)
 
  Thermodynamic parameter balancing (uses stoichiometric matrix as an input)
 
- This function is independent of the general parameter balancing functions
+ Outputs: 
+   c (concentrations); dG0 (standard Gibbs free energy of reaction), A (reaction affinity) AFTER BALANCING
+   feasible (flag): do all reaction directions agree with the signs of thermodynamic forces?
+ 
+ This function is independent of the main parameter balancing functions
  (the formulae for thermodynamic parameter balancing problem are explictly solved)
  
- (for an alternative function that imports all model data in a data structure, 
+ (for an alternative function that imports all model data in a data structure,
   see 'parameter_balancing_thermodynamic')
 
  All quantitative information (bounds and fixed values for metabolites)
@@ -44,29 +48,37 @@
  If vanishing or negative fluxes occur, the problem is converted into a problem
  with positive fluxes. The output, however, refers to the original problem again.
 
- Options (in struct 'options'):
+ Options (in struct 'thermo_pb_options'):
    thermo_pb_options.c_min; % concentration vector (mM); nan if not specified
    thermo_pb_options.c_max; % concentration vector (mM); nan if not specified
    thermo_pb_options.c_fix; % concentration vector (mM); nan if not specified
    thermo_pb_options.ind_ignore_reactions; indices of reactions to be ignored
    thermo_pb_options.delta_G0  (referring to standard concentration 1mM)
    thermo_pb_options.delta_G0_std
+   thermo_pb_options.delta_G0_fix
    thermo_pb_options.log_c (natural log of concentration in mM)
-   thermo_pb_options.log_c_std</pre></div>
+   thermo_pb_options.log_c_std
+   thermo_pb_options.theta_threshold
+
+ Usage example:
+   complete the concentration vector for a network with given fluxes and equilibrium constants, 
+   and (some) given concentrations (non-nan values in vector c) to be kept fixed:
+   delta_G0 = -RT * log(network.kinetics.Keq);
+   [c, dG0, A, feasible] = thermo_pb(network.N, v, struct('c_fix', c_data, 'delta_G0_fix', delta_G0), 1);</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="../../../mnt/mnt-basic/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li><li><a href="thermo_pb.html" class="code" title="function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)">thermo_pb</a>	[c,A] = thermo_pb(N, v, thermo_pb_options, verbose)</li><li><a href="../../../mnt/mnt-basic/utils/default.html" class="code" title="function commandstring = default(varargin)">default</a>	commandstring = default(varname1,defaultvalue1,varname2,defaultvalue2,...)</li></ul>
+<li><a href="../../../mnt/mnt-basic/mnt_numbers/RT.html" class="code" title="function result = RT(temperature)">RT</a>	result = RT(temperature)</li><li><a href="thermo_pb.html" class="code" title="function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)">thermo_pb</a>	[c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="thermo_pb.html" class="code" title="function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)">thermo_pb</a>	[c,A] = thermo_pb(N, v, thermo_pb_options, verbose)</li></ul>
+<li><a href="thermo_pb.html" class="code" title="function [c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)">thermo_pb</a>	[c, dG0, A, feasible] = thermo_pb(N, v, thermo_pb_options, verbose)</li></ul>
 <!-- crossreference -->
 
 
 
 
-<hr><address>Generated on Wed 02-Jan-2019 19:42:46 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Thu 22-Oct-2026 19:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
