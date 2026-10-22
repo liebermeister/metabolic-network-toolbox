@@ -10,16 +10,16 @@
 % If the argument filename (string) is given, the model is directly written 
 % to an SBML (.xml) file (in the present directory; no path can be given)
 % 
-% You can also use SaveSBMLModel(SBMLmodel) from the SBMLToolbox
-% to save the model to a .mat file, or OutputSBML(SBMLmodel,filename);
-% to export it to an SBML (.xml) file
+% You can also use OutputSBML(SBMLmodel,filename) to export the model 
+% to an SBML (.xml) file
 % 
-% This function requires the SBMLToolbox (see http://sbml.org/software/sbmltoolbox/)
+% This function requires the Matlab interface of libSBML 
+% (TranslateSBML and OutputSBML; see https://sbml.org/software/libsbml/)
 
 function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
 
 if ~exist('TranslateSBML','file'),
-  error('Please install the SBML Toolbox (http://sbml.org/Software/SBMLToolbox) - Otherwise the  SBML import/export functions do not work.');
+  error('Please install the Matlab interface of libSBML (https://sbml.org/software/libsbml/) - Otherwise the SBML import/export functions do not work.');
 end
 
 eval(default('verbose','0','name','''Model''','notes','''''','sbml_level','2','sbml_version','2','filename','[]'));
@@ -34,10 +34,6 @@ name = strrep(name,'.','_');
 % Adjust names to SBML conventions
 
 [network.metabolites,network.actions] = network_adjust_names_for_sbml_export(network.metabolites,network.actions);
-
-for it=1:length(network.metabolites),
-  metabolite_id{it,1}       = network.metabolites{it};
-end
 
 if length(network.metabolites) ~= length(unique(network.metabolites)),
   warning('Error in conversion of metabolite names');
@@ -55,19 +51,23 @@ end
 
 % -------------------------------------------------------------
 % SBML object
+%
+% The model is built as a Matlab struct in the format used by libSBML's
+% TranslateSBML and OutputSBML. Empty structs of the right format are
+% obtained from a minimal SBML file (see sbml_templates below).
 
+t = sbml_templates(sbml_level,sbml_version);
 
-SBMLmodel = model_create(sbml_level,sbml_version);
-SBMLmodel = Model_setName(SBMLmodel,name);
-SBMLmodel = Model_setId(SBMLmodel,name);
+SBMLmodel      = t.model;
+SBMLmodel.name = name;
+SBMLmodel.id   = name;
 
-compartment = Compartment_create(sbml_level,sbml_version);
-compartment = Compartment_setId(compartment,'compartment');
-compartment = Compartment_setName(compartment,'compartment');
-if sbml_level >2,
-  compartment = Compartment_setVolume(compartment,1);
-end
-SBMLmodel   = Model_addCompartment(SBMLmodel,compartment);
+compartment      = t.compartment;
+compartment.id   = 'compartment';
+compartment.name      = 'compartment';
+compartment.size      = 1;
+compartment.isSetSize = 1;
+SBMLmodel.compartment = compartment;
 
 % notes
 % Model %s written by the Metabolic Network Toolbox</p>\n',name)]; 
@@ -78,20 +78,19 @@ SBMLmodel   = Model_addCompartment(SBMLmodel,compartment);
 
 if verbose, fprintf('  Converting the metabolites: '); end
 
+species = t.species([]);
+
 for it = 1:length(network.metabolites),
   if verbose,  fprintf('%d ',it); end 
-  species{it} = Species_create(sbml_level,sbml_version);
-  species{it} = Species_setId(species{it},metabolite_id{it});
-  species{it} = Species_setName(species{it},network.metabolites{it});
-  species{it} = Species_setCompartment(species{it},'compartment');
-  if sbml_level >2,
-    species{it} = Species_setUnits(species{it},'mmol/l');
-  end
-  species{it} = Species_setBoundaryCondition(species{it},double(network.external(it)));
+  species(it)                   = t.species;
+  species(it).id                = network.metabolites{it};
+  species(it).name              = network.metabolites{it};
+  species(it).compartment       = 'compartment';
+  species(it).boundaryCondition = double(network.external(it));
   if isfield(network,'s_init'),  
-    species{it} = Species_setInitialConcentration(species{it},network.s_init(it));
+    species(it) = set_initial_concentration(species(it),network.s_init(it));
   else,
-    species{it} = Species_setInitialConcentration(species{it},0);
+    species(it) = set_initial_concentration(species(it),0);
   end
 end
 
@@ -108,7 +107,7 @@ if isfield(network,'kinetics'),
         network.kinetics.c = nan * ones(size(network.metabolites));
       end
       for it = 1:length(network.metabolites),
-        species{it} = Species_setInitialConcentration(species{it},network.kinetics.c(it));
+        species(it) = set_initial_concentration(species(it),network.kinetics.c(it));
       end
 
       metnames = network.metabolites;      
@@ -147,92 +146,33 @@ if isfield(network,'kinetics'),
             kk.KVratio = ms_KM_KVratio_to_Keq(network.N,kk.KM,kk.Keq);
         end
         
-	kinetic_law{it} = KineticLaw_create(sbml_level,sbml_version);
-	kinetic_law{it} = KineticLaw_setFormula(kinetic_law{it}, formula);
-	kinetic_law{it} = KineticLaw_setMathFromFormula(kinetic_law{it});
-
         if ~isfield(kk,'u'),
           kk.u = nan * ones(size(network.actions));
         end
-        parameter       = Parameter_create(sbml_level,sbml_version);
-        parameter       = Parameter_setName(parameter, ['u_' r_name ]);
-        parameter       = Parameter_setId(  parameter, ['u_' r_name ]);
-        parameter       = Parameter_setValue(parameter,kk.u(it));
-        parameter       = Parameter_setConstant(parameter,1);
-        if sbml_level >2,
-          parameter     = Parameter_setUnits(parameter,'mmol/l');
-        end
-        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
-        
-        parameter       = Parameter_create(sbml_level,sbml_version);
-        parameter       = Parameter_setName(parameter, ['kC_' r_name ]);
-        parameter       = Parameter_setId(  parameter, ['kC_' r_name ]);
-        parameter       = Parameter_setValue(parameter,kk.KV(it));
-        parameter       = Parameter_setConstant(parameter,1);
-        if sbml_level >2,
-          parameter     = Parameter_setUnits(parameter,'1/s');         
-        end        
-        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
 
-        parameter       = Parameter_create(sbml_level,sbml_version);
-        parameter       = Parameter_setName(parameter, ['kEQ_' r_name ]);
-        parameter       = Parameter_setId(  parameter, ['kEQ_' r_name ]);
-        parameter       = Parameter_setValue(parameter,kk.Keq(it));
-        parameter       = Parameter_setConstant(parameter,1);
-        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
-        
+        par_ids    = {['u_' r_name ], ['kC_' r_name ], ['kEQ_' r_name ]};
+        par_values = [kk.u(it), kk.KV(it), kk.Keq(it)];
 	for itt = 1:length(rea),
-          parameter       = Parameter_create(sbml_level,sbml_version);
-          parameter       = Parameter_setName(parameter, ['kM_' r_name '_' metnames{rea(itt)} ]);
-          parameter       = Parameter_setId(  parameter, ['kM_' r_name '_' metnames{rea(itt)} ]);
-          parameter       = Parameter_setValue(parameter,kk.KM(it,rea(itt)));
-          parameter       = Parameter_setConstant(parameter,1);
-        if sbml_level >2,
-          parameter       = Parameter_setUnits(parameter,'mmol/l');        
+          par_ids{end+1}    = ['kM_' r_name '_' metnames{rea(itt)} ];
+          par_values(end+1) = kk.KM(it,rea(itt));
         end
-        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
-        end
-
         for itt = 1:length(act),
-          parameter       = Parameter_create(sbml_level,sbml_version);
-          parameter       = Parameter_setName(parameter, ['kA_' r_name '_' metnames{act(itt)} ]);
-          parameter       = Parameter_setId(  parameter, ['kA_' r_name '_' metnames{act(itt)} ]);
-          parameter       = Parameter_setValue(parameter,kk.KA(it,act(itt)));
-          parameter       = Parameter_setConstant(parameter,1);
-        if sbml_level >2,
-          parameter       = Parameter_setUnits(parameter,'mmol/l');        
-        end          
-        kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
+          par_ids{end+1}    = ['kA_' r_name '_' metnames{act(itt)} ];
+          par_values(end+1) = kk.KA(it,act(itt));
+        end
+        for itt = 1:length(inh),
+          par_ids{end+1}    = ['kI_' r_name '_' metnames{inh(itt)} ];
+          par_values(end+1) = kk.KI(it,inh(itt));
         end
 
-        for itt = 1:length(inh),
-          parameter       = Parameter_create(sbml_level,sbml_version);
-          parameter       = Parameter_setName(parameter, ['kI_' r_name '_' metnames{inh(itt)} ]);
-          parameter       = Parameter_setId(  parameter, ['kI_' r_name '_' metnames{inh(itt)} ]);
-          parameter       = Parameter_setValue(parameter,kk.KI(it,inh(itt)));
-          parameter       = Parameter_setConstant(parameter,1);
-          if sbml_level >2,
-            parameter       = Parameter_setUnits(parameter,'mmol/l');
-          end
-          kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);
-        end
-      
+        kinetic_law{it} = make_kinetic_law(t, formula, par_ids, par_values);
       end
     
     case 'kinetic_strings',
     
       for it = 1:length(network.actions),
-	kinetic_law{it} = KineticLaw_create(sbml_level,sbml_version);
 	r = network.kinetics.reactions{it};
-	kinetic_law{it}.math = strrep(r.string,'power','pow');
-	kinetic_law{it} = KineticLaw_setFormulaFromMath(kinetic_law{it});
-	for p_ind = 1:length(r.parameters),
-	  thispar            = Parameter_create(sbml_level,sbml_version);
-	  thispar.id         = r.parameters{p_ind};
-	  thispar.value      = r.parameter_values(p_ind);
-	  thispar.isSetValue = 1;
-	  kinetic_law{it}    = KineticLaw_addParameter(kinetic_law{it}, thispar);
-	end
+	kinetic_law{it} = make_kinetic_law(t, strrep(r.string,'power','pow'), r.parameters, r.parameter_values);
       end
       
     case 'numeric',
@@ -240,19 +180,12 @@ if isfield(network,'kinetics'),
       if isfield(network.kinetics,'velocity_strings'),
         my_strings = feval(network.kinetics.velocity_strings);
         for itt = 1:length(my_strings),
-          kinetic_law{itt} = KineticLaw_create(sbml_level,sbml_version);
-          kinetic_law{itt} = KineticLaw_setFormula(kinetic_law{itt}, my_strings{itt});
-          kinetic_law{itt} = KineticLaw_setMathFromFormula(kinetic_law{itt});
+          kinetic_law{itt} = make_kinetic_law(t, my_strings{itt}, {}, []);
         end
       
         parnames = fieldnames(network.kinetics.parameters);
         for itt = 1:length(parnames),
-          parameter = Parameter_create(sbml_level,sbml_version);
-          parameter = Parameter_setName(parameter, parnames{itt});
-          parameter = Parameter_setId(  parameter, parnames{itt});
-          parameter = Parameter_setValue(parameter,network.kinetics.parameters.(parnames{itt}));
-          parameter = Parameter_setConstant(parameter,1);
-          SBMLmodel = Model_addParameter(SBMLmodel,parameter);
+          SBMLmodel.parameter(itt) = make_parameter(t.parameter, parnames{itt}, network.kinetics.parameters.(parnames{itt}));
         end       
       end
       
@@ -261,9 +194,7 @@ if isfield(network,'kinetics'),
   end
 end
 
-for it = 1:length(network.metabolites),
-  SBMLmodel = Model_addSpecies(SBMLmodel,species{it});
-end
+SBMLmodel.species = species;
 
 
 % -----------------------------------------------------------
@@ -271,52 +202,46 @@ end
 
 if verbose, fprintf('\n  Converting the reactions: '); end
 
+reactions = t.reaction([]);
+
 for it = 1:length(network.actions),
 
  if verbose,  fprintf('%d ',it); end
-  reaction = Reaction_create(sbml_level,sbml_version);
-  reaction = Reaction_setId(reaction,network.actions{it});
-  reaction = Reaction_setName(reaction,network.actions{it});
-  reaction = Reaction_setReversible(reaction,network.reversible(it));
+  reaction            = t.reaction;
+  reaction.id         = network.actions{it};
+  reaction.name       = network.actions{it};
+  reaction.reversible = double(network.reversible(it));
   if exist('kinetic_law','var'),
-    reaction = Reaction_setKineticLaw(reaction,kinetic_law{it});  
+    reaction.kineticLaw = kinetic_law{it};  
   end  
 
   sub_ind = find(network.N(:,it)<0);
-  
-  if length(sub_ind),
-    for itt = 1:length(sub_ind),
-      reactant = SpeciesReference_create(sbml_level,sbml_version);
-      reactant.species = network.metabolites{sub_ind(itt)};
-      reactant.stoichiometry = abs(network.N(sub_ind(itt),it));      
-      reaction = Reaction_addReactant(reaction, reactant);
-    end
+  for itt = 1:length(sub_ind),
+    reaction.reactant(itt)               = t.speciesReference;
+    reaction.reactant(itt).species       = network.metabolites{sub_ind(itt)};
+    reaction.reactant(itt).stoichiometry = abs(network.N(sub_ind(itt),it));      
   end
   
   prod_ind = find(network.N(:,it)>0);
-
-  if length(prod_ind),
-    for itt = 1:length(prod_ind),
-      product = SpeciesReference_create(sbml_level,sbml_version);
-      product.species = network.metabolites{prod_ind(itt)};
-      product.stoichiometry = abs(network.N(prod_ind(itt),it));      
-      reaction = Reaction_addProduct(reaction, product);  
-    end
+  for itt = 1:length(prod_ind),
+    reaction.product(itt)               = t.speciesReference;
+    reaction.product(itt).species       = network.metabolites{prod_ind(itt)};
+    reaction.product(itt).stoichiometry = abs(network.N(prod_ind(itt),it));      
   end
 
-  mod_ind = find(network.regulation_matrix(it,:));
-  
-  if length(mod_ind),
+  if isfield(network,'regulation_matrix'),
+    mod_ind = find(network.regulation_matrix(it,:));
     for itt = 1:length(mod_ind),
-      modifier = ModifierSpeciesReference_create(sbml_level,sbml_version);
-      modifier.species = network.metabolites{mod_ind(itt)};
-      reaction = Reaction_addModifier(reaction, modifier);
+      reaction.modifier(itt)         = t.modifier;
+      reaction.modifier(itt).species = network.metabolites{mod_ind(itt)};
     end
   end
   
-  SBMLmodel = Model_addReaction(SBMLmodel,reaction);
+  reactions(it) = reaction;
 
 end
+
+SBMLmodel.reaction = reactions;
 
 if verbose, fprintf('\n',it); end
 
@@ -328,73 +253,111 @@ end
 
 % -------------------------------------------------------------------
 
-%     case 'kinetic_strings',
-%       
-%       s = [s sprintf('        <kineticLaw formula="%s">\n',network.kinetics.reactions{it}.string)]; 
-%       s = [s sprintf('          <listOfParameters>\n')];
-%       parameters = network.kinetics.reactions{it}.parameters;
-%       
-%       for itt = 1:length(parameters),
-% 	s = [s sprintf('            <parameter name="%s" value="%d"/>\n',parameters{itt}.name,network.kinetics.parameter_values(parameters{itt}.index))]; 
-%       end
-%       s = [s sprintf('          </listOfParameters>\n')]; 
-%       s = [s sprintf('        </kineticLaw>\n')]; 
-%       
-%     case 'mass-action',
-%       
-%       substrate_ind = find(network.N(:,it)<0);
-%       product_ind   = find(network.N(:,it)>0);
-%       
-%       substrates='';
-%       for itt = 1: length(substrate_ind), 
-% 	substrates = [substrates ' * ' network.metabolites{substrate_ind(itt)} ];
-%       end
-%       products='';
-%       for itt = 1: length(product_ind), 
-% 	products = [products ' * ' network.metabolites{product_ind(itt)} ];
-%       end
-%       
-%       s = [s sprintf('        <kineticLaw formula="kp%s - km%s">\n',substrates, products  )]; 
-%       s = [s sprintf('          <listOfParameters>\n')];
-%       s = [s sprintf('            <parameter name="kp" value="%d"/>\n',network.kinetics.k_fwd(it))]; 
-%       s = [s sprintf('            <parameter name="km" value="%d"/>\n',network.kinetics.k_bwd(it))]; 
-%       s = [s sprintf('          </listOfParameters>\n')]; 
-%       s = [s sprintf('        </kineticLaw>\n')]; 
-%       
-%     case 'standard',	
-% 
-%       for it = 1:length(network.actions),
-% 	
-% 	sub_ind = find(network.N(:,it)<0);
-% 	prod_ind = find(network.N(:,it)>0);
-% 	if isfield(network,'regulation_matrix'),
-% 	  act_ind = find(network.regulation_matrix(it,:)>0);
-% 	  inh_ind = find(network.regulation_matrix(it,:)<0);
-% 	end	  	  
-% 	
-% 	kinetic_law{it} = KineticLaw_create(sbml_level,sbml_version);
-% 
-% 	substrates  = network.metabolites(sub_ind);
-% 	products    = network.metabolites(prod_ind);
-% 	activators  = network.metabolites(act_ind);
-% 	inhibitors  = network.metabolites(inh_ind);
-% 	formula     = get_formula(network.kinetics.reactions{it},substrates,products,inhibitors,activators,it);
-% 	kinetic_law{it} = KineticLaw_setFormula(kinetic_law{it}, formula);
-% 	kinetic_law{it} = KineticLaw_setMathFromFormula(kinetic_law{it});
-% 
-% 	parameters = network.kinetics.reactions{it}.parameters;
-% 	psizes = network.kinetics.reactions{it}.sizes;
-% 	
-% 	for itt = 1:length(parameters),
-%           dum = getfield(network.kinetics.reactions{it},parameters{itt});
-%           for itt2= 1:psizes(itt),
-%             parameter = Parameter_create(sbml_level,sbml_version);
-%             parameter = Parameter_setName(parameter, [  'R' num2str(it)  '_' parameters{itt} num2str(itt2) ]);
-%             parameter = Parameter_setId(  parameter, [  'R' num2str(it) '_'  parameters{itt} num2str(itt2) ]);
-%             parameter = Parameter_setValue(parameter,dum(itt2));
-%             kinetic_law{it} = KineticLaw_addParameter(kinetic_law{it}, parameter);	    
-%           end
-% 	end
-% 	
-%       end
-% 
+function t = sbml_templates(sbml_level,sbml_version)
+
+% Empty libSBML structs (model, compartment, species, parameter, reaction, 
+% species reference, modifier, kinetic law, and kinetic law parameter) 
+% for a given SBML level and version, obtained by reading a minimal SBML 
+% file with TranslateSBML
+
+if sbml_level < 3,
+  xml = sprintf(['<?xml version="1.0" encoding="UTF-8"?>\n' ...
+                 '<sbml xmlns="http://www.sbml.org/sbml/level%d/version%d" level="%d" version="%d">\n' ...
+                 '<model id="m">\n' ...
+                 '<listOfCompartments><compartment id="c"/></listOfCompartments>\n' ...
+                 '<listOfSpecies><species id="A" compartment="c"/></listOfSpecies>\n' ...
+                 '<listOfParameters><parameter id="p"/></listOfParameters>\n' ...
+                 '<listOfReactions><reaction id="r">\n' ...
+                 '<listOfReactants><speciesReference species="A"/></listOfReactants>\n' ...
+                 '<listOfModifiers><modifierSpeciesReference species="A"/></listOfModifiers>\n' ...
+                 '<kineticLaw><math xmlns="http://www.w3.org/1998/Math/MathML"><ci>A</ci></math>\n' ...
+                 '<listOfParameters><parameter id="k"/></listOfParameters></kineticLaw>\n' ...
+                 '</reaction></listOfReactions>\n' ...
+                 '</model>\n</sbml>\n'], sbml_level, sbml_version, sbml_level, sbml_version);
+else,
+  xml = sprintf(['<?xml version="1.0" encoding="UTF-8"?>\n' ...
+                 '<sbml xmlns="http://www.sbml.org/sbml/level%d/version%d/core" level="%d" version="%d">\n' ...
+                 '<model id="m">\n' ...
+                 '<listOfCompartments><compartment id="c" constant="true"/></listOfCompartments>\n' ...
+                 '<listOfSpecies><species id="A" compartment="c" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/></listOfSpecies>\n' ...
+                 '<listOfParameters><parameter id="p" constant="true"/></listOfParameters>\n' ...
+                 '<listOfReactions><reaction id="r" reversible="true" fast="false">\n' ...
+                 '<listOfReactants><speciesReference species="A" constant="true"/></listOfReactants>\n' ...
+                 '<listOfModifiers><modifierSpeciesReference species="A"/></listOfModifiers>\n' ...
+                 '<kineticLaw><math xmlns="http://www.w3.org/1998/Math/MathML"><ci>A</ci></math>\n' ...
+                 '<listOfLocalParameters><localParameter id="k"/></listOfLocalParameters></kineticLaw>\n' ...
+                 '</reaction></listOfReactions>\n' ...
+                 '</model>\n</sbml>\n'], sbml_level, sbml_version, sbml_level, sbml_version);
+end
+
+filename = [tempname '.xml'];
+fid = fopen(filename,'w'); fprintf(fid,'%s',xml); fclose(fid);
+m = TranslateSBML(filename);
+delete(filename);
+
+t.compartment      = m.compartment;
+t.species          = m.species;
+t.parameter        = m.parameter;
+t.speciesReference = m.reaction.reactant;
+t.modifier         = m.reaction.modifier;
+if isfield(t.speciesReference,'isSetStoichiometry'), % SBML level 3
+  t.speciesReference.isSetStoichiometry = 1;
+end
+
+t.kineticLaw = m.reaction.kineticLaw;
+if isfield(t.kineticLaw,'localParameter'),
+  t.kinetic_law_parameter_field = 'localParameter';
+else,
+  t.kinetic_law_parameter_field = 'parameter';
+end
+t.kinetic_law_parameter = t.kineticLaw.(t.kinetic_law_parameter_field);
+t.kineticLaw.(t.kinetic_law_parameter_field) = t.kinetic_law_parameter([]);
+t.kineticLaw.formula = '';
+t.kineticLaw.math    = '';
+
+t.reaction            = m.reaction;
+t.reaction.reactant   = t.speciesReference([]);
+t.reaction.product    = t.speciesReference([]);
+t.reaction.modifier   = t.modifier([]);
+t.reaction.kineticLaw = [];
+
+t.model             = m;
+t.model.id          = '';
+t.model.compartment = t.compartment([]);
+t.model.species     = t.species([]);
+t.model.parameter   = t.parameter([]);
+t.model.reaction    = t.reaction([]);
+
+
+% -------------------------------------------------------------------
+
+function kinetic_law = make_kinetic_law(t, formula, par_ids, par_values)
+
+kinetic_law         = t.kineticLaw;
+kinetic_law.formula = formula;
+kinetic_law.math    = formula;
+for it = 1:length(par_ids),
+  kinetic_law.(t.kinetic_law_parameter_field)(it) = make_parameter(t.kinetic_law_parameter, par_ids{it}, par_values(it));
+end
+
+
+% -------------------------------------------------------------------
+
+function parameter = make_parameter(template, id, value)
+
+parameter            = template;
+parameter.id         = id;
+parameter.name       = id;
+parameter.value      = value;
+parameter.isSetValue = 1;
+if isfield(parameter,'constant'),
+  parameter.constant = 1;
+end
+
+
+% -------------------------------------------------------------------
+
+function species = set_initial_concentration(species, value)
+
+species.initialConcentration      = value;
+species.isSetInitialConcentration = double(isfinite(value));
