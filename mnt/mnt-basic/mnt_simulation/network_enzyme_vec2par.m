@@ -24,4 +24,3 @@ theta.betaI             = theta_vec(1+n_KM+n_KA+[1:n_KI]);
 theta.betaY             = theta_vec(1+n_KM+n_KA+n_KI+[1:n_KY]);
 theta.log_met_imbalance = theta_vec(1+n_KM+n_KA+n_KI+n_KY+[1:nr]);
 theta.enzyme_min        = theta_vec(1+n_KM+n_KA+n_KI+n_KY+nr+[1:n_enzymes]);
-

@@ -6,7 +6,7 @@ function [delta_mu, delta_mu_ind_score] = optimise_delta_mu_given_signs(N,parame
 % (with distribution parameters mean: delta_mu_mean and covariance: delta_mu_cov)
 % while satisfying the sign constraints v~=0 -> sign(delta_mu) = -sign(v)
 %
-% v: (size nr x n_exp) flux matrix, only used for sign constraints 
+% v: (size nr x n_exp) flux matrix, only used for sign constraints
 
 [nm,nr] = size(N);
 n_exp   = size(v,2);
@@ -17,7 +17,7 @@ is isfield(data,'delta_mu'), delta_mu_data = data.dmu; end
 %------------------------------------------------------------------
 % requested signs of delta_mu  as a (nr x n_exp) matrix
 
-delta_mu_signs = - sign(v); 
+delta_mu_signs = - sign(v);
 delta_mu_signs = reshape(delta_mu_signs,nr*n_exp,1);
 
 % use combined vector b = [mu0; log_c];
@@ -26,7 +26,7 @@ b_mean = [parameter_prior.mu0.mean; reshape(data.log_c.mean,nm*n_exp,1)];
 b_cov  = matrix_add_block(parameter_prior.mu0.cov,diag(reshape(data.log_c.std,nm*n_exp,1).^2));
 
 % set delta_mu = L * delta_mu_ind
-% delta_mu_ind follows a multivariate gaussian with 
+% delta_mu_ind follows a multivariate gaussian with
 % parameters delta_mu_ind_mean, delta_mu_ind_cov
 
 % build matrix M_ind such that delta_mu_ind = M_ind * b;
@@ -69,7 +69,7 @@ Lm                     = Lm(ind_ok,:);
 % the sign constraint sign(delta_mu) = delta_mu_signs
 % is formulated as options.epsilon_delta_mu < delta_mu_signs * LL * delta_mu_ind = LLL * delta_mu_ind
 % (rows for unspecified signs because of (v_r = 0) are removed in LLL)
-% 
+%
 % in addition, we require that  LLL * delta_mu_ind < options.max_delta_mu
 % (upper limit on all absolute values of delta_mu)
 
@@ -80,14 +80,14 @@ LLL         = diag(delta_mu_signs(rel_signs)) * LL(rel_signs,:);
 A    = full( [-LLL;  LLL; -LL(irrel_signs,:); LL(irrel_signs,:) ]);
 xmax = options.max_delta_mu;
 b    = [-options.epsilon_delta_mu * ones(size(LLL,1),1); ...
-         xmax * ones(size(LLL,1),1); 
+         xmax * ones(size(LLL,1),1);
         -xmax * ones(length(irrel_signs),1);
-         xmax * ones(length(irrel_signs),1);]; 
+         xmax * ones(length(irrel_signs),1);];
 
 
 H = delta_mu_ind_cov_inv;
 % epsilon_reg = 0.0001 * max(eig(H)); % regularisation!!!
-% H = H + epsilon_reg * eye(size(H,1)); 
+% H = H + epsilon_reg * eye(size(H,1));
 H = 1/2*(H+H');
 f = - H * delta_mu_ind_mean;
 n_mu_ind = length(f);
@@ -95,9 +95,9 @@ x_upper = xmax * ones(n_mu_ind,1);
 
 opt = optimset; opt.MaxIter = 10000; opt.LargeScale = 'off';
 
-if exist('cplexqp','file'),
+if exist('cplexqp','file')
   [delta_mu_ind,fval,exitflag] = cplexqp(H,f,A,b,[],[], -x_upper, x_upper, delta_mu_ind_mean, opt);
-else,
+else
   [delta_mu_ind,fval,exitflag] = quadprog(H,f,A,b,[],[], -x_upper, x_upper, delta_mu_ind_mean, opt);
 end
 

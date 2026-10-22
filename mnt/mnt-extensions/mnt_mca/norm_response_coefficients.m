@@ -14,22 +14,22 @@ else, j_inv = 1./j; end
 
 RJ_norm   = diag(j_inv) * RJ * diag(p);
 
-if nargout>2,
+if nargout>2
 
-for it=1:n_met,
-  term1S(it,:,:) = RS_norm(it,:)' * RS_norm(it,:);
-  term3S(it,:,:) = diag(RS_norm(it,:));
-end
-term2S =  tensor_scale(tensor_scale(tensor_scale(RS2,1,(1./s)),2,p),3,p) ;
+  for it=1:n_met
+    term1S(it,:,:) = RS_norm(it,:)' * RS_norm(it,:);
+    term3S(it,:,:) = diag(RS_norm(it,:));
+  end
+  term2S =  tensor_scale(tensor_scale(tensor_scale(RS2,1,(1./s)),2,p),3,p) ;
 
-RS2_norm = - term1S + term2S  + term3S;
+  RS2_norm = - term1S + term2S  + term3S;
 
-for it=1:n_rea,
-  term1J(it,:,:) = RJ_norm(it,:)' * RJ_norm(it,:);
-  term3J(it,:,:) = diag(RJ_norm(it,:));
-end
-term2J = tensor_scale(tensor_scale(tensor_scale(RJ2,1,(j_inv)),2,p),3,p);
+  for it=1:n_rea
+    term1J(it,:,:) = RJ_norm(it,:)' * RJ_norm(it,:);
+    term3J(it,:,:) = diag(RJ_norm(it,:));
+  end
+  term2J = tensor_scale(tensor_scale(tensor_scale(RJ2,1,(j_inv)),2,p),3,p);
 
-RJ2_norm = - term1J + term2J + term3J;
+  RJ2_norm = - term1J + term2J + term3J;
 
 end

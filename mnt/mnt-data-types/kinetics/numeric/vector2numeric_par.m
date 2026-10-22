@@ -6,6 +6,6 @@ function p = vector2numeric_par(v,p)
 
 f = fieldnames(p);
 
-for i=1:length(v),
+for i=1:length(v)
   p.(f{i}) =  v(i);
 end

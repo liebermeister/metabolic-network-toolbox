@@ -36,7 +36,7 @@ b  = [zeros(size(A,1),1);...
 
 my_eye = eye(nr);
 
-if sum(isfinite(fba_constraints.ext_sign)),
+if sum(isfinite(fba_constraints.ext_sign))
 
   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
 
@@ -47,12 +47,12 @@ if sum(isfinite(fba_constraints.ext_sign)),
   h  = [    fba_constraints.v_max(ind_notfix,:); ...
           - fba_constraints.v_min(ind_notfix,:); ...
             zeros(length(ind_ext_sign),1);];
-else,
+else
 
   G  = [    my_eye(ind_notfix,:);...
           - my_eye(ind_notfix,:)];
   h  = [    fba_constraints.v_max(ind_notfix,:); ...
-          - fba_constraints.v_min(ind_notfix,:)];  
+          - fba_constraints.v_min(ind_notfix,:)];
 
 end
 M  = eye(length(v_ref));
@@ -61,6 +61,6 @@ m  = -v_ref;
 %if exist('cplexqp','file'),
 %  [v,value,exitflag] = cplexqp(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
 %else
-  [v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
+[v,value,exitflag] = quadprog(M,m,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],optimset('Display','off','Algorithm','interior-point-convex'));
 %end
 value = fba_constraints.zv' * v;

@@ -7,6 +7,6 @@ function setup_test_path()
 
 addpath(genpath(fullfile(fileparts(mfilename('fullpath')), '..', 'mnt')));
 
-if ~exist('lp_solve','file'),
+if ~exist('lp_solve','file')
   error('Please add matlab-utils (https://github.com/liebermeister/matlab-utils) to the Matlab path');
 end

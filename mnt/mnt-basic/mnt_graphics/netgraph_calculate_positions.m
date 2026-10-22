@@ -2,8 +2,8 @@ function [x, fixed] = netgraph_calculate_positions(network, x_init, set_position
 
 % [x, fixed] = netgraph_calculate_positions(network, x_init, set_positions);
 
-if ~exist('x_init','var'),        x_init = []; end 
-if ~exist('set_positions','var'), set_positions = []; end 
+if ~exist('x_init','var'),        x_init = []; end
+if ~exist('set_positions','var'), set_positions = []; end
 
 nm        = length(network.metabolites);
 
@@ -11,14 +11,14 @@ nm        = length(network.metabolites);
 
 % small network
 
-if isempty(x_init),
+if isempty(x_init)
   a = [0 1 0 1];
-else,
+else
   a = [min(x_init(1,:)),max(x_init(1,:)),min(x_init(2,:)),max(x_init(2,:))];
 end
 
 % typical distance between equally spaced dots
-size_unit  = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);  
+size_unit  = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);
 force_unit = 0.5;
 
 gridsize = 0.01 * size_unit;   % distance between discrete x values
@@ -27,9 +27,9 @@ k2       = .2 * size_unit;     % overall repulsion scale
 k3       = 0.1 * force_unit;   % neighbour attraction strength
 k4       = 0.5 * size_unit;    % neighbour attraction scale
 
-if isempty(set_positions),
+if isempty(set_positions)
   x = netgraph_find_x(network,gridsize,k1,k2,k3,k4);
-else,
+else
   x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,[set_positions'; x_init(:,set_positions)]');
 end
 

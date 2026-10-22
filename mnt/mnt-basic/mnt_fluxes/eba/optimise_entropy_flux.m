@@ -16,8 +16,8 @@ function [v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)
 
 ind_int = find(network.external==0);
 ind_ext = find(network.external);
-N_int = network.N(ind_int,:); 
-N_ext = network.N(ind_ext,:); 
+N_int = network.N(ind_int,:);
+N_ext = network.N(ind_ext,:);
 
 n_int = length(ind_int);
 
@@ -25,9 +25,9 @@ n_int = length(ind_int);
 %  <=>    diag(1./kappa) * v + N_int' * mu_int = - N_ext' * mu_ext
 %  <=>    [diag(1./kappa), N_int'] * x = - N_ext' * mu_ext   where x = [v; mu_int]
 % and      N_int * v                   = 0;
-% and  max == sum(v .* A) = sum( v .* (-N' * mu) ) 
-%                         = sum( v .* (-N_int' * mu_int) )  + sum( v .* (-N_ext' * mu_ext) ) 
-% and  R >= 0 
+% and  max == sum(v .* A) = sum( v .* (-N' * mu) )
+%                         = sum( v .* (-N_int' * mu_int) )  + sum( v .* (-N_ext' * mu_ext) )
+% and  R >= 0
 
 M   = [ [zeros(nr), -N_int']; [-N_int, zeros(n_int)] ];
 f   = zeros(nr+n_int,1);

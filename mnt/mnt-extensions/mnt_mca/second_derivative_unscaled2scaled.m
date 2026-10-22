@@ -9,8 +9,8 @@ function D2_sc = second_derivative_unscaled2scaled(D2_un,D_un,f,x)
 nr = length(f);
 dd = [];
 
-for it = 1:nr,
- dd(it,:,:) = - 1/f(it) * D_un(it,:)' * D_un(it,:) + diag(D_un(it,:)' ./ x);
+for it = 1:nr
+  dd(it,:,:) = - 1/f(it) * D_un(it,:)' * D_un(it,:) + diag(D_un(it,:)' ./ x);
 end
 
 D2_sc = tensor_scale(D2_un + dd,1,1./f);

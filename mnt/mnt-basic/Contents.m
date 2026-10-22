@@ -1,8 +1,8 @@
 % Metabolic Networks Toolbox - Version 1.2  May 2013
 %
-% The toolbox provides functions to create, edit, display, and simulate 
-% biochemical reaction networks. Networks are represented by a STRUCT 
-% matlab data structure. For details, type 'help metabolic_network'. 
+% The toolbox provides functions to create, edit, display, and simulate
+% biochemical reaction networks. Networks are represented by a STRUCT
+% matlab data structure. For details, type 'help metabolic_network'.
 % For a usage example, run 'demo_mnt'.
 %
 % Build and query network structure
@@ -29,5 +29,5 @@
 %
 % Other packages required: see README.md
 %
-% Copyright (C) 2006-2013 
+% Copyright (C) 2006-2013
 % Wolfram Liebermeister <wolfram.liebermeister@gmail.com>

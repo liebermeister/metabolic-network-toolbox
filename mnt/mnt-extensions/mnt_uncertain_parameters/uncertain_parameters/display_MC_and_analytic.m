@@ -8,13 +8,13 @@ set(gca,'FontSize',16);
 
 h1 = plot(Y_mean,Y_std,'r.'); hold on
 
-for it=1:size(Y_list,1); 
-  if isfinite(Y_mean(it)),
+for it=1:size(Y_list,1);
+  if isfinite(Y_mean(it))
     [mu,sig]=resampling(Y_list(it,:),n_boot);
     %%  h0 = plot(mu,sig,'y.');                           % plot results from single bootstrap runs
-    if max(sig)>0,
+    if max(sig)>0
       ellipse = covariance_ellipse([mu; sig]);
-      if sum(sum((isreal(ellipse)-1))) == 0,
+      if sum(sum((isreal(ellipse)-1))) == 0
         plot(ellipse(1,:),ellipse(2,:),'r');
       end
     end
@@ -33,7 +33,7 @@ h3=plot(Y_mean_unc2,Y_std_unc2,'o'); hold on;
 title(figure_title);
 hold off
 
-xlabel('Mean'); ylabel('Standard deviation'); 
+xlabel('Mean'); ylabel('Standard deviation');
 
 set(gca,'FontSize',12);
 

@@ -5,7 +5,7 @@ function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options
 % Compute (this is no actual sampling!) a number of mu vectors that agree with a given flux vector v
 %
 % Compute delta_mu vectors at the boundaries of the feasible region
-% set by the (previously sampled or determined) flux directions 
+% set by the (previously sampled or determined) flux directions
 % compute the corresponding mu vectors using the pseudoinverse of N'
 % method: 'extreme_points': compute all extreme dmu vectors, covert back to mu vectors
 % method: 'sample':         sample n_sample dmu vectors, covert back to mu vectors
@@ -13,7 +13,7 @@ function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options
 
 eval(default('method','''extreme_points''','n_sample','1','options','struct'));
 
-mu           = []; 
+mu           = [];
 success_flag = 1;
 
 [nm,nr] = size(N);
@@ -47,10 +47,10 @@ constraints.dmu_min(find(double([v<0]).*double([constraints.dmu_min< dmu_limit_m
 
 ind_dmu_fix = find(isfinite(constraints.dmu_fix));
 
-if ind_dmu_fix,
- display('Using fixed dmu values'),
- constraints.dmu_max(ind_dmu_fix) = constraints.dmu_fix(ind_dmu_fix);
- constraints.dmu_min(ind_dmu_fix) = constraints.dmu_fix(ind_dmu_fix);
+if ind_dmu_fix
+  display('Using fixed dmu values'),
+  constraints.dmu_max(ind_dmu_fix) = constraints.dmu_fix(ind_dmu_fix);
+  constraints.dmu_min(ind_dmu_fix) = constraints.dmu_fix(ind_dmu_fix);
 end
 
 epsilon     = RT/constraints.rho;
@@ -61,7 +61,7 @@ v_sign_U    = v_sign_U(ind_nonzero,:);
 
 A =  [- eye(n_mured); eye(n_mured); ...
      [- eye(nr); eye(nr) ] * U;
-        v_sign_U]; 
+        v_sign_U];
 
 b = [- constraints.mured_min; constraints.mured_max;
      - constraints.dmu_min;   constraints.dmu_max;...
@@ -70,9 +70,9 @@ b = [- constraints.mured_min; constraints.mured_max;
 % avoid inf values in linprog
 b(isinf(b))= sign(b(isinf(b))) * 10^10;
 
-switch method, 
-  
-  case 'extreme_points',
+switch method
+
+  case 'extreme_points'
 
     %% optimise: vec * mured = min while A * mured <= b
     %%
@@ -82,29 +82,29 @@ switch method,
     %% - U mured           <= dmu_min     i.e.  dmu   >= dmu_min
     %%   U mured           <= dmu_max     i.e.  dmu   <= dmu_max
     %%  dg(v_sign)*U*mured <= -epsilon    i.e.  sign(v) * dmu < epsilon <= 0
-    
-    for it = 1:n_mured,
+
+    for it = 1:n_mured
       if options.verbose, display(sprintf('Dimension %d/%d',it,n_mured)); end
       vec = zeros(n_mured,1); vec(it) = 1;
       [mured_lower_opt,fval,exitflag] = lp_solve(vec, A, b);
       if exitflag <=0, exitflag
-        error('Error during linear programming problem for finding feasible chemical potentials'); 
-      end 
+        error('Error during linear programming problem for finding feasible chemical potentials');
+      end
       [mured_upper_opt,fval,exitflag] = lp_solve(-vec, A, b);
       if exitflag <=0, exitflag
-        error('Error during linear programming problem for finding feasible chemical potentials'); 
-      end 
+        error('Error during linear programming problem for finding feasible chemical potentials');
+      end
       dmu_lower(:,it) = U * mured_lower_opt;
       dmu_upper(:,it) = U * mured_upper_opt;
     end
 
     all_dmu = [dmu_lower, dmu_upper];
 
-   case 'central',
+  case 'central'
     all_dmu = find_polytope_centre([],[],A,b);
-    
-   case 'sample',
-     all_dmu = convex_sampling(A,b,[],[],1);
+
+  case 'sample'
+    all_dmu = convex_sampling(A,b,[],[],1);
 
 end
 

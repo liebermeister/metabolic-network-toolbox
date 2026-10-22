@@ -14,13 +14,13 @@ theta_minus = exp( sum( pars.Mminus .* log_c_by_k, 2) );
 [log_alpha_I            ] = k_to_log_alpha_fast(pars.KI,pars.KI_rel,c,pars.ind_KI,pars.ind_KI_metabolite_index,pars);
 regulation_term           = exp( sum( pars.Wplus .* log_beta_A + pars.Wminus .* log_alpha_I, 2) );
 
-switch kinetic_law,  
-  case {'cs','ms'},
+switch kinetic_law
+  case {'cs','ms'}
     psi_plus    = exp( sum( pars.Mplus  .* log( 1 + exp(log_c_by_k)) , 2) );
-    psi_minus   = exp( sum( pars.Mminus .* log( 1 + exp(log_c_by_k)) , 2) );    
+    psi_minus   = exp( sum( pars.Mminus .* log( 1 + exp(log_c_by_k)) , 2) );
 end
 
-switch kinetic_law,  
+switch kinetic_law
   case 'cs', D = psi_plus + psi_minus - 1;
   case 'ms', D = psi_plus .* psi_minus;
   case 'ds', D = theta_plus + theta_minus + 1;
@@ -38,4 +38,3 @@ v       = v_plus - v_minus;
 % check
 %ma_ratio = exp(pars.N'*log(c));
 %[ma_ratio(1) pars.Keq(1) sign(v(1))]
-

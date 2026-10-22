@@ -9,10 +9,10 @@ new_met_indices(met_indices) = 1:length(met_indices);
 
 keep_parameters = [];
 
-for it = 1:length(act_indices),
+for it = 1:length(act_indices)
   index = act_indices(it);
-  for it2 = 1:length(kinetics.reactions{index}.parameters),
-  keep_parameters = [ keep_parameters;  kinetics.reactions{index}.parameters{it2}.index];
+  for it2 = 1:length(kinetics.reactions{index}.parameters)
+    keep_parameters = [ keep_parameters;  kinetics.reactions{index}.parameters{it2}.index];
   end
 end
 
@@ -24,9 +24,9 @@ kinetics.parameter_values = kinetics.parameter_values(keep_parameters);
 new_index=zeros(size(kinetics.parameters));
 new_index(keep_parameters)=1:length(keep_parameters);
 
-for it = 1:length(kinetics.reactions),
-  for it2 = 1:length(kinetics.reactions{it}.parameters),
-  kinetics.reactions{it}.parameters{it2}.index = new_index(  kinetics.reactions{it}.parameters{it2}.index );
+for it = 1:length(kinetics.reactions)
+  for it2 = 1:length(kinetics.reactions{it}.parameters)
+    kinetics.reactions{it}.parameters{it2}.index = new_index(  kinetics.reactions{it}.parameters{it2}.index );
   end
 end
 

@@ -20,13 +20,13 @@ RJ    = CJ * Ep;
 
 % second order
 
-if nargout > 2,
+if nargout > 2
 
-  %% convert back to full tensors 
+  %% convert back to full tensors
   %% Ecc = double(full(Ecc));
   %% Ecp = double(full(Ecp));
   %% Epp = double(full(Epp));
-  %% 
+  %%
   %% Gamma =  ...
   %%     tensor_product(tensor_product(Ecc,RS,3,1),RS,2,1) ...
   %%     + tensor_product(Ecp,RS,2,1) ...
@@ -34,14 +34,14 @@ if nargout > 2,
   %%     + Epp;
 
   %% .. or go on computing with sparse tensors
-  
+
   Gamma = ttt(ttt(Ecc,sptensor(RS),2,1),sptensor(RS),2,1) ...
           + ttt(Ecp,sptensor(RS),2,1) ...
           + permute(ttt(Ecp,sptensor(RS),2,1),[1,3,2]) ...
           + Epp;
 
   Gamma = double(full(Gamma));
-  
+
   RS2 = tensor_product(CS,Gamma);
   RJ2 = tensor_product(CJ,Gamma);
 

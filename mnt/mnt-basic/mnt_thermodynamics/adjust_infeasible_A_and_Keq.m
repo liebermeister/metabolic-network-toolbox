@@ -6,7 +6,7 @@ function [Keq,A] = adjust_infeasible_A_and_Keq(v,Keq,A,A_min_adjusted);
 % c stays unchanged; the Keq do not satisfy the Wegscheider conditions anymore
 
 % problem 1: negative driving forces
-needs_adjustment1 = double([A.* sign(v)] < 0); 
+needs_adjustment1 = double([A.* sign(v)] < 0);
 A_adjustment1     = -sign(A) .* [A_min_adjusted + abs(A)] .* needs_adjustment1;
 % problem 2: positive driving forces that are below A_min_adjusted
 needs_adjustment2 = double([A.* sign(v)] >= 0) .* double([A.* sign(v)] < A_min_adjusted);

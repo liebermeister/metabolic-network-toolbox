@@ -12,11 +12,11 @@ eval(default('flag_reduce_network','0','es_constraints','[]','zv','ones(size(v))
 %   - network.N(:,ind_forward)' * mu >= 0
 %   - network.N(:,ind_reverse)' * mu <= 0
 % Lower and upper bounds on mu differences
-%   network.N' * mu >= dmu_min 
-%   network.N' * mu <= dmu_max 
+%   network.N' * mu >= dmu_min
+%   network.N' * mu <= dmu_max
 % Lower and upper bounds on mu
-%   mu >= mu_min 
-%   mu <= mu_max 
+%   mu >= mu_min
+%   mu <= mu_max
 % Optimality criterion
 %   linear weight vector could, e.g.,  be chosen as for fba
 %   max = zv .* network.N' * mu
@@ -24,9 +24,9 @@ eval(default('flag_reduce_network','0','es_constraints','[]','zv','ones(size(v))
 v(abs(v) < 10^-10 * max(abs(v)) ) = 0;
 
 N_orig = N;
-v_orig = v; 
+v_orig = v;
 
-if flag_reduce_network,
+if flag_reduce_network
   %consider only subnetwork of reactions with finite fluxes
   %(some thermodynamic es_constraints can get lost!!!)
   [nm_tot, nr_tot] = size(N);
@@ -49,12 +49,12 @@ M = [...
     -N(:,ind_reverse)'; ...
     -N'; ...
      N'; ...
-];
+ ];
 
 isforward = [v>=0];
 isreverse = [v<0];
 no_dmu_max = ~isfinite(es_constraints.dmu_max);
-no_dmu_min = ~isfinite(es_constraints.dmu_min);  
+no_dmu_min = ~isfinite(es_constraints.dmu_min);
 
 es_constraints.dmu_min(find([isforward .* no_dmu_min])) = -es_constraints.dmu_limit;
 es_constraints.dmu_max(find([isforward .* no_dmu_max])) = -es_constraints.dmu_limit_min;
@@ -77,7 +77,7 @@ z = -N*zv;
 
 [my_mu, val, exitflag] = lp_solve(-z,M,b,[],[],es_constraints.mu_min,es_constraints.mu_max);
 
-if exitflag ~=1,
+if exitflag ~=1
   exitflag
   error('No solution found');
 end
@@ -85,10 +85,10 @@ end
 %violation_ratio = sum(M*mu>b)/length(b);
 my_A   = -N'*my_mu;
 
-if flag_reduce_network,
+if flag_reduce_network
   mu = zeros(nm_tot,1); mu(ind_metabolites) = my_mu;
   A  = -N_orig'*mu;
-else,
+else
   A  = my_A;
   mu = my_mu;
 end

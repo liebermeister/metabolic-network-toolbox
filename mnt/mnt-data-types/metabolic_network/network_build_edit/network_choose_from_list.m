@@ -4,7 +4,7 @@
 
 function [n_sub,metindices_chosen,metindices,actindices] = network_choose_from_list(network,metnames,indices)
 
-if ~exist('metnames','var'); metnames = network.metabolites; end 
+if ~exist('metnames','var'); metnames = network.metabolites; end
 if ~exist('indices','var'); indices = []; end
 
 [metindices_chosen,h]    = listbox(metnames,indices);

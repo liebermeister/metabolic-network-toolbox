@@ -1,13 +1,13 @@
 % Methods for computing and checking flux distributions in metabolic networks
 %
 % Subdirectories
-%  fba                Flux balance analysis 
+%  fba                Flux balance analysis
 %  eba                Energy balance analysis
 %  flux_minimisation  Principle of minimal fluxes
 %  flux_feasibility   Feasibility tests for flux modes
 %  flux_projections   Projection and correction of flux modes
 %  flux_sampling      Sampling of flux modes
-% 
+%
 %
 % ---------------------------------------------------------------------------
 % Adjust given flux distribution v
@@ -30,7 +30,7 @@
 %
 % ---------------------------------------------------------------------------
 % Determine fluxes v
-% 
+%
 % v = fba(network,fba_constraints)
 %  Flux balance analysis
 %
@@ -51,7 +51,7 @@
 %  Sample flux vector v fulfilling all (also thermo) constraints
 %
 % [sample_v, best_v, C] = sample_fluxes_given_data(N, ind_ext, v_mean, v_std, ...);
-%  Sample fluxes (free of thermodyn. cycles) close to data 
+%  Sample fluxes (free of thermodyn. cycles) close to data
 %
 %
 % ---------------------------------------------------------------------------
@@ -69,7 +69,7 @@
 % mu = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)
 %  Compute (no actual sampling!) mu vectors that agree with a given flux vector v
 %  Methods: 'extreme_points', 'sample', 'centre'
-%   
+%
 % mu = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)
 %  Sample feasible dmu vectors given a flux vector v and es_constraints
 %
@@ -88,7 +88,7 @@
 % Determine fluxes v and chemical potentials mu
 %
 % [v, mu] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0)
-%  Determine feasible flux vector v and chemical potentials mu under constraints 
+%  Determine feasible flux vector v and chemical potentials mu under constraints
 %
 % [v, mu, A] = optimise_entropy_flux(network, kappa, mu_ext)
 %  Determine v and A from "Ohmian law" and minimal entropy production

@@ -4,7 +4,7 @@ function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scal
 %
 % Efficient calculation of scaled response coefficients for a target function z
 %
-% The LOGARITHM of z must be a LINEAR function of the LOGARITHMIC 
+% The LOGARITHM of z must be a LINEAR function of the LOGARITHMIC
 % concentrations and fluxes
 %
 % zc_scaled, zv_scaled: scaled derivatives of target function by c and v
@@ -14,7 +14,7 @@ function [Rtarget_sc_u, Rtarget_sc_uu] = compute_modular_response_second(zc_scal
 
 eval(default('v_plus_fallback','1', 'v_minus_fallback','1'));
 
-maxv = 10^20; 
+maxv = 10^20;
 
 [nm,nr] = size(N);
 if ~length(zc_scaled), zc_scaled = 0 * c; end
@@ -22,7 +22,7 @@ if ~length(zc_scaled), zv_scaled = 0 * v; end
 
 zy = [c .* zc_scaled; v .* zv_scaled];
 
-z = sum(zy); 
+z = sum(zy);
 
 Elasticities = compute_modular_elasticities(...
     kinetic_law,N,W,ind_ext,alpha_A,alpha_I,alpha_M, ...
@@ -32,14 +32,14 @@ Ec_sc  = lim(Elasticities.sc_E_c, maxv);  % lim : dirty fix
 Eu_sc  = lim(Elasticities.sc_E_u, maxv);  % lim : dirty fix
 ext    = zeros(nm,1); ext(ind_ext) = 1;
 
-if ~exist('CS_un','var'),
+if ~exist('CS_un','var')
   ext = zeros(size(N,1));
   ext(ind_ext) = 1;
   [CJ_un, CS_un] = control_coefficients(N, Elasticities.un_E_c, ext);
 end
 
-CS_sc  = diag(1./c) * CS_un * diag(v); 
-CJ_sc  = diag(1./v) * CJ_un * diag(v); 
+CS_sc  = diag(1./c) * CS_un * diag(v);
+CJ_sc  = diag(1./v) * CJ_un * diag(v);
 RSu_sc = CS_sc * Eu_sc;
 RJu_sc = CJ_sc * Eu_sc;
 
@@ -85,10 +85,10 @@ Rtarget_sc_uu = 1/z * ...
 
 function X = lim(X,maxv);
 
-if find(abs(X)>maxv), 
-  warning('Extremely large values encountered; replaing them by threshold values');
-end
-  
-X(~isfinite(X)) = 0;
-X(X>maxv)       = maxv;
-X(X<-maxv)      = -maxv;
+  if find(abs(X)>maxv)
+    warning('Extremely large values encountered; replaing them by threshold values');
+  end
+
+  X(~isfinite(X)) = 0;
+  X(X>maxv)       = maxv;
+  X(X<-maxv)      = -maxv;

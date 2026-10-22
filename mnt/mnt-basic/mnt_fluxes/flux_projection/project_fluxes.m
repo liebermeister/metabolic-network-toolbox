@@ -6,38 +6,38 @@ function [v_projected, ind_non_orthogonal, v_projected_std] = project_fluxes(N, 
 %
 % pars.ext_sign:          vector of signs of external metabolite production (for constraints)
 %                         0 or nan means that no constraint is given
-% pars.method:            'simple', 'one_norm', 'lasso', 'euclidean', 'thermo_correct', 
+% pars.method:            'simple', 'one_norm', 'lasso', 'euclidean', 'thermo_correct',
 % pars.prior_for unknown_fluxes: in method 'euclidean', use prior to keep unknown fluxes small
 % pars.remove_eba_cycles: (flag) if set to 1, a matrix pars.C of eba-cycles has to be provided
 % pars.vmax               default inf
-% pars.dilution_flux      default []; if given, the balance equation for each internal metabolite 
-%                         must not yield 0, but this dilution flux; in models with moiety conservation, 
+% pars.dilution_flux      default []; if given, the balance equation for each internal metabolite
+%                         must not yield 0, but this dilution flux; in models with moiety conservation,
 %                         a stationary flux will be impossible
 % option 'thermo_correct' requires par.network
 
-if sum(isfinite(v_mean))==0,
+if sum(isfinite(v_mean))==0
   error('Flux vector does not contain any finite values');
 else
-  if norm(v_mean(isfinite(v_mean)))==0,
+  if norm(v_mean(isfinite(v_mean)))==0
     error('Flux vector does not contain any non-zero values');
-  end    
+  end
 end
 
 eval(default('pars','struct','v_std','[]','v_sign','[]','v_fix','[]'));
 
-if isfield(pars,'ext_sign'),
-  pars.ext_sign(pars.ext_sign==0) = nan; 
+if isfield(pars,'ext_sign')
+  pars.ext_sign(pars.ext_sign==0) = nan;
 else
   pars.ext_sign = nan * v_mean;
 end
 
-pars_default = struct('C', nan, 'dilution_flux',0, 'prior_for_unknown_fluxes',0); 
+pars_default = struct('C', nan, 'dilution_flux',0, 'prior_for_unknown_fluxes',0);
 pars = join_struct(pars_default,pars);
 
 ind_finite        = find(isfinite(v_mean));
 
-if size(v_mean,2)>1,
-  for it = 1:size(v_mean,2),
+if size(v_mean,2)>1
+  for it = 1:size(v_mean,2)
     if length(v_std), vv1 = v_std(:,it); else vv1 = []; end
     if length(v_sign), vv2 = v_sign(:,it); else vv2 = []; end
     [v_projected(:,it),~,v_projected_std(:,it)] = project_fluxes(N, ind_ext, v_mean(:,it), vv1, vv2, pars);
@@ -48,9 +48,9 @@ end
 default_pars = struct('method','euclidean','ind_ignore',[],'remove_eba_cycles',0,'verbose',0,'vmax',inf);
 pars         = join_struct(default_pars,pars);
 
-if isempty(v_std),  v_std  = guess_flux_std(v_mean); end 
-if isempty(v_sign), v_sign = nan * v_mean; end 
-if isempty(v_fix),  v_fix  = nan * v_mean; end 
+if isempty(v_std),  v_std  = guess_flux_std(v_mean); end
+if isempty(v_sign), v_sign = nan * v_mean; end
+if isempty(v_fix),  v_fix  = nan * v_mean; end
 
 % make sure that reference fluxes respect zero flux and sign constraints
 
@@ -59,19 +59,19 @@ v_fix( v_sign == 0 )           = 0;
 v_std( find(v_mean.*v_sign)<0) = nan;
 v_mean(find(v_mean.*v_sign)<0) = nan;
 
-external          = zeros(size(N,1),1); 
+external          = zeros(size(N,1),1);
 external(ind_ext) = 1;
 
-if pars.verbose,
+if pars.verbose
   display(sprintf('\n  Projecting fluxes using "%s" method', pars.method));
 end
 
 ind_non_orthogonal = [];
 v_projected_std = nan * ones(size(N,2),1);
 
-switch pars.method,
+switch pars.method
 
-  case 'simple',
+  case 'simple'
 
     if pars.verbose, display('Simple projection - flux sign constraints are ignored'); end
     network.N                 = N;
@@ -79,13 +79,13 @@ switch pars.method,
     network.external(ind_ext) = 1;
     v_projected               = es_make_fluxes_stationary(network,v_mean);
 
-  case 'one_norm',    
+  case 'one_norm'
 
     if pars.verbose, display('One-norm projection');end
     [nm,nr] = size(N);
     A = N(external == 0,:);
     b = zeros(size(A,1),1);
-    if sum(isfinite(pars.ext_sign)),
+    if sum(isfinite(pars.ext_sign))
       ind_ext_sign = find(isfinite(pars.ext_sign));
       A  = [ A; ...
              - diag(pars.ext_sign(ind_ext_sign)) * N(ind_ext(ind_ext_sign),:)];
@@ -96,7 +96,7 @@ switch pars.method,
     ub = v_mean(ind_finite)+v_std(ind_finite);
     v_projected = my_lp_one_norm(A,b,lb,ub,100000);
 
-  case 'lasso',    %% lasso regression
+  case 'lasso'  %% lasso regression
 
     if pars.verbose, display('Lasso regression');end
     v_cov_inv  = diag(1./v_std(ind_finite).^2);
@@ -106,7 +106,7 @@ switch pars.method,
     rho_mean = lasso( sqrt(v_cov_inv)* K(ind_finite,:), v_mean(ind_finite),0.1);%,10^-2,10^-1)
     v_projected = K * rho_mean;
 
-  case 'euclidean', %% two-norm regression with constraints
+  case 'euclidean'  %% two-norm regression with constraints
 
     if pars.verbose, display('Euclidean projection');end
 
@@ -116,27 +116,27 @@ switch pars.method,
     v_sign(v_fix<0)  = -1;
     v_fix(v_sign==0) = 0;
 
-    if sum(v_fix(v_sign>0) == 0) + sum(v_fix(v_sign<0) == 0),
+    if sum(v_fix(v_sign>0) == 0) + sum(v_fix(v_sign<0) == 0)
       error('contradicting constraints');
     end
-    
+
     ind_isnan = find(isnan(v_mean.*v_std));
     v_std_inv = 1./v_std;
     v_mean(ind_isnan)    = 0;
 
-    if pars.prior_for_unknown_fluxes, 
+    if pars.prior_for_unknown_fluxes
       %% use broad prior for unknown fluxes, centred around 0
       v_std_inv(ind_isnan) = 1/nanmean(100 * v_std);
     else
       v_std_inv(ind_isnan) = 0;
-    end    
+    end
 
     M   = diag(v_std_inv.^2);
     m   = - M * v_mean;
-    Nint= N(find(external ==0),:); 
+    Nint= N(find(external ==0),:);
     A   = [];
     b   = [];
-    if sum(isfinite(pars.ext_sign)),
+    if sum(isfinite(pars.ext_sign))
       ind_ext_sign = find(isfinite(pars.ext_sign));
       A  = [ A; ...
              - diag(pars.ext_sign(ind_ext_sign)) * N(ind_ext(ind_ext_sign),:)];
@@ -154,7 +154,7 @@ switch pars.method,
     lb(v_sign>0) = 0;
     ub(v_sign<0) = 0;
 
-    if exist('cplexqp','file'),
+    if exist('cplexqp','file')
       opt =  cplexoptimset('cplex');
       [v_projected,~,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     else
@@ -162,10 +162,10 @@ switch pars.method,
       [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
     end
 
-    if exitflag <0,
-      if exitflag ==-2, 
-      error('No feasible flux distribution found');
-      else,
+    if exitflag <0
+      if exitflag ==-2
+        error('No feasible flux distribution found');
+      else
         exitflag
         error('Error in quadprog');
       end
@@ -174,35 +174,35 @@ switch pars.method,
     Kernel_of_Aeq = null(Aeq); % Kern(Aeq);
     P = Kernel_of_Aeq * Kernel_of_Aeq'; % Projector on Kern(Aeq);
     v_projected_std = 1./sqrt(diag(P'*M*P));
-    
-  case 'thermo_correct',
+
+  case 'thermo_correct'
 
     if pars.verbose, display('Thermodynamically correct projection');end
     dd.v.mean = v_mean;
     dd.v.std  = v_std;
     [options,es_constraints]  = es_default_options(pars.network);
     es_constraints.ext_sign   = nan * ones(length(ind_ext),1);
-    es_constraints.v_sign     = v_sign; 
-    es_constraints.ind_ignore = pars.ind_ignore; 
+    es_constraints.v_sign     = v_sign;
+    es_constraints.ind_ignore = pars.ind_ignore;
     v_projected               = feasible_fluxes(N,ind_ext,dd,es_constraints);
-    
+
 end
 
 v_projected(abs(v_projected)/max(abs(v_projected))<10^-8) = 0;
 
-if pars.remove_eba_cycles,
+if pars.remove_eba_cycles
   [feasible,pars.C,ind_non_orthogonal] = eba_feasible(v_projected,N,pars.C,[],'loose');
-  if ~feasible,
+  if ~feasible
     if pars.verbose, display('Removing unfeasible cycles');end
     v_projected = eba_make_feasible(v_projected,N,'loose',pars.C,[],'beard',ind_ext,v_sign);
   end
 end
 
 % if flux changes considerably -> notify the user
-if norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) > 0.5,
-  display('- (project_fluxes.m): projected fluxes differ strongly from original fluxes'); 
+if norm(v_projected(ind_finite)-v_mean(ind_finite)) / norm(v_mean(ind_finite)) > 0.5
+  display('- (project_fluxes.m): projected fluxes differ strongly from original fluxes');
   %%  display('Original fluxes / Projected fluxes');
   %%  [v_mean(ind_finite) v_projected(ind_finite)]
-  %figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),'.'); 
+  %figure(1000); plot(v_mean(ind_finite),v_projected(ind_finite),'.');
   %xlabel('Given flux'); ylabel('Projected flux'); title('Flux change in project\_fluxes.m')
 end

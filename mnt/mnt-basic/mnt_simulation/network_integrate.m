@@ -30,15 +30,15 @@ if ~exist('verbose_flag','var'),  verbose_flag = 0; end
 if ~exist('Tmax','var'),          Tmax    = []; end
 if ~exist('dilution_rate','var'), dilution_rate = []; end
 if ~exist('ode_opt','var'),       ode_opt = []; end
-if ~isfield(network.kinetics,'assignment_function'), 
-  network.kinetics.assignment_function = []; 
+if ~isfield(network.kinetics,'assignment_function')
+  network.kinetics.assignment_function = [];
 end
 
-if length(Tmax),
+if length(Tmax)
   my_timer = timer('TimerFcn',@timer_error, 'Period', Tmax);
 end
 
-if ~isempty(network.kinetics.assignment_function),
+if ~isempty(network.kinetics.assignment_function)
   [dd,ddd] = feval(network.kinetics.assignment_function,s_init,network.kinetics.parameters);
   ind_assignment = label_names(ddd, network.metabolites);
   ind_assignment = ind_assignment(find(ind_assignment));
@@ -54,15 +54,15 @@ s_int     = s_init(internal);
 s_ext     = s_init(external);
 
 volumes = ones(length(internal),1);
-if isfield(network,'metabolite_compartments'),
+if isfield(network,'metabolite_compartments')
   ll = label_names(network.metabolite_compartments(internal), network.compartments);
-  if isfinite(network.compartment_sizes(ll)),
+  if isfinite(network.compartment_sizes(ll))
     volumes = network.compartment_sizes(ll);
   end
-  if verbose_flag, 
+  if verbose_flag
     display('Dynamic simulation: Using given compartment volumes = 1'); end
-else,
-  if verbose_flag, 
+else
+  if verbose_flag
     display('Dynamic simulation: Assuming compartment volumes = 1'); end
 end
 
@@ -71,136 +71,136 @@ N_int = diag(1./volumes) * N(internal,:);
 
 if length(T)==1, T = [0,T]; end
 
-switch network.kinetics.type,
-  
-  case 'numeric',
+switch network.kinetics.type
+
+  case 'numeric'
     [t, s_t] = network_integrate_kin(s_init,network.kinetics.parameters,0,T,N,network.kinetics.velocity_function,[],network.external,[],verbose_flag);
     s_int_t = s_t(:,internal);
 
-  case 'mass-action',
+  case 'mass-action'
     [n_met,n_A] = size(N);
-    
-    if isfield(network.kinetics,'exponents'),
+
+    if isfield(network.kinetics,'exponents')
       Nf = network.kinetics.exponents.*(N<0);
       Nb = network.kinetics.exponents.*(N>0);
-    else,
+    else
       Nf  = abs(N.*(N<0));
-      Nb  =     N.*(N>0);      
-     end
+      Nb  =     N.*(N>0);
+    end
 
-     Nfint = Nf(internal,:);
-     Nbint = Nb(internal,:);
-     
-     if isempty(external), 
-       Nk_fwdT = Nf(external,:); 
-       Nk_bwdT = Nf(external,:);
-     else,
-       df = prod( repmat(s_init(external),1,n_A) .^ Nf(external,:));
-       db = prod( repmat(s_init(external),1,n_A) .^ Nb(external,:));
-       k_fwdT = network.kinetics.k_fwd .* df';
-       k_bwdT = network.kinetics.k_bwd .* db';
-       Nk_fwdT = N_int * sparse(diag(k_fwdT));
-       Nk_bwdT = N_int * sparse(diag(k_bwdT));
-     end
-     optoptions = odeset('NonNegative',1:length(s_int),'RelTol', 1e-6);
-     [t,s_int_t] = ode15s(@integrate_network_der_MA,T,s_int,optoptions,s_ext,Nfint,Nbint,Nk_fwdT,Nk_bwdT);
-     
-   otherwise,
-     odeoptions = odeset('NonNegative',1:length(s_int),'RelTol', 1e-6);
-     
-     if length(dilution_rate),
-       [t,s_int_t] = ode15s(@integrate_network_der_dil,T,s_int,odeoptions,network,...
-                            internal,external,s_ext,N_int,verbose_flag,dilution_rate);
-     else,
-       [t,s_int_t] = ode15s(@integrate_network_der,T,s_int,odeoptions,network,...
-                            internal,external,s_ext,N_int,verbose_flag);
-     end
+    Nfint = Nf(internal,:);
+    Nbint = Nb(internal,:);
+
+    if isempty(external)
+      Nk_fwdT = Nf(external,:);
+      Nk_bwdT = Nf(external,:);
+    else
+      df = prod( repmat(s_init(external),1,n_A) .^ Nf(external,:));
+      db = prod( repmat(s_init(external),1,n_A) .^ Nb(external,:));
+      k_fwdT = network.kinetics.k_fwd .* df';
+      k_bwdT = network.kinetics.k_bwd .* db';
+      Nk_fwdT = N_int * sparse(diag(k_fwdT));
+      Nk_bwdT = N_int * sparse(diag(k_bwdT));
+    end
+    optoptions = odeset('NonNegative',1:length(s_int),'RelTol', 1e-6);
+    [t,s_int_t] = ode15s(@integrate_network_der_MA,T,s_int,optoptions,s_ext,Nfint,Nbint,Nk_fwdT,Nk_bwdT);
+
+  otherwise
+    odeoptions = odeset('NonNegative',1:length(s_int),'RelTol', 1e-6);
+
+    if length(dilution_rate)
+      [t,s_int_t] = ode15s(@integrate_network_der_dil,T,s_int,odeoptions,network,...
+                           internal,external,s_ext,N_int,verbose_flag,dilution_rate);
+    else
+      [t,s_int_t] = ode15s(@integrate_network_der,T,s_int,odeoptions,network,...
+                           internal,external,s_ext,N_int,verbose_flag);
+    end
 
 end
- 
+
 s_int_t         = s_int_t';
-s_t             = ones(n_S,length(t)); 
-s_t(internal,:) = s_int_t; 
+s_t             = ones(n_S,length(t));
+s_t(internal,:) = s_int_t;
 
 if length(external), s_t(external,:) = repmat(s_ext,1,length(t)); end
 
-if ~isempty(ind_assignment),
-  for it = 1:length(t),
+if ~isempty(ind_assignment)
+  for it = 1:length(t)
     this_s = s_t(:,it);
     [this_assignment,ddd] = feval(network.kinetics.assignment_function,this_s,network.kinetics.parameters);
     ii = label_names(ddd,network.metabolites); ii = ii(find(ii));
     s_t(ind_assignment,it) = this_assignment(ii);
-   end
+  end
 end
- 
+
 met_int = network.metabolites(internal);
 
 %% --------------------------------------------------------------------
 %% compute fluxes
 
-if nargout > 4,
-  
-  switch network.kinetics.type,
-    
-    case 'numeric',
-      for it=1:length(t),
+if nargout > 4
+
+  switch network.kinetics.type
+
+    case 'numeric'
+      for it=1:length(t)
         v(:,it) = feval(network.kinetics.velocity_function,s_t(:,it),network.kinetics.parameters,t(it));
       end
-      
-    otherwise,
-      for it=1:length(t),
+
+    otherwise
+      for it=1:length(t)
         v(:,it) = network_velocities(s_t(:,it),network);
       end
   end
 
-  if ~isempty(network.kinetics.assignment_function),
-    for it=1:length(t),
+  if ~isempty(network.kinetics.assignment_function)
+    for it=1:length(t)
       x_assign(:,it) = feval(network.kinetics.assignment_function,s_t(:,it),network.kinetics.parameters);
     end
   end
 
 end
- 
-if length(Tmax),
+
+if length(Tmax)
   stop(my_timer);
 end
- 
+
 % --------------------------------------------------------------------
 
 function f = integrate_network_der(t,s_int,network,internal,external,s_ext,N_int,verbose_flag)
 
-%if verbose_flag,
-%  t
-%end
+  %if verbose_flag,
+  %  t
+  %end
 
-% vector f contains time derivative of the internal metabolites
+  % vector f contains time derivative of the internal metabolites
 
-s(internal)  = s_int;
-s(external)  = s_ext;
-f            = N_int * network_velocities(s,network);
+  s(internal)  = s_int;
+  s(external)  = s_ext;
+  f            = N_int * network_velocities(s,network);
 
-% --------------------------------------------------------------------
+  % --------------------------------------------------------------------
 
 function f = integrate_network_der_dil(t,s_int,network,internal,external,s_ext,N_int,verbose_flag,dilution_rate)
 
-% vector f contains time derivative of the internal metabolites
+  % vector f contains time derivative of the internal metabolites
 
-s(internal)  = s_int;
-s(external)  = s_ext;
-f            = N_int * network_velocities(s,network) - dilution_rate * s_int;
+  s(internal)  = s_int;
+  s(external)  = s_ext;
+  f            = N_int * network_velocities(s,network) - dilution_rate * s_int;
 
-% --------------------------------------------------------------------
+  % --------------------------------------------------------------------
 
 function f = integrate_network_der_MA(t,s_int,s_ext,Nf_int,Nb_int,Nk_fwdT,Nk_bwdT)
 
-% vector f contains time derivative of the internal metabolites
+  % vector f contains time derivative of the internal metabolites
 
-log_s_int = log(s_int+10^-14);
-f         = Nk_fwdT *  exp(Nf_int' * log_s_int )   -   Nk_bwdT *  exp(Nb_int' * log_s_int);
+  log_s_int = log(s_int+10^-14);
+  f         = Nk_fwdT *  exp(Nf_int' * log_s_int )   -   Nk_bwdT *  exp(Nb_int' * log_s_int);
 
-% --------------------------------------------------------------------
+  % --------------------------------------------------------------------
 
 function f = timer_error()
 
-display('Calculation time exceeded');
-error
+  display('Calculation time exceeded');
+  error

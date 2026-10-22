@@ -25,7 +25,7 @@ print_matrix(v(order(1:n_show)), network.reaction_names(order(1:n_show)))
 % ------------------------------------------------------------------------------
 % 3. network graphics with n_show largest flux reactions
 
-if isempty(cofactors),
+if isempty(cofactors)
   %cofactors = {'h[c]','atp[c]','atp[m]','atp[n]','adp[c]','adp[m]','adp[n]','o2[c]','o2[e]','o2[x]',  'nad[c]',   'nad[m]',  'nadh[c]', 'nadh[m]','nadp[c]' ,'nadph[c]', 'nh4[c]', 'nh4[e]', 'pi[c]', 'pi[m]', 'h[e]', 'h[m]', 'hco3[c]', 'hco3[e]', 'h2o[c]', 'h2o[l]', 'h2o[m]', 'co2[c]', 'co2[e]', 'co2[m]', 'amp[c]', 'cmp[n]', 'gtp[n]', 'h2o2[c]', 'h2o2[l]', 'h2o2[x]', 'udp[c]', 'ump[c]', 'utp[c]'}';
 end
 
@@ -38,11 +38,11 @@ cofactors = setdiff(cofactors, not_cofactors);
 
 nn = netgraph_simple_graph(network,cofactors);
 
-if isfield(nn,'metabolite_names'),
+if isfield(nn,'metabolite_names')
   nn.metabolites = nn.metabolite_names;
 end
 %nn = netgraph_make_graph(nn);
-if length(table_positions),
+if length(table_positions)
   nn = netgraph_read_positions(nn,table_positions,[0,0],1,0);
 end
 

@@ -1,12 +1,12 @@
 function kinetics_strings = kinetics_to_strings(network,kinetics)
 
-switch kinetics.type,
-  case 'kinetic_strings',
+switch kinetics.type
+  case 'kinetic_strings'
     kinetics_strings = kinetics;
-  case {'cs','ms'},
+  case {'cs','ms'}
     [formula, global_assignment, local_assignment] = modular_kinetic_formulae(network,kinetics);
     kinetics_strings.type = 'kinetic_strings';
-    for it = 1:length(formula),
+    for it = 1:length(formula)
       kinetics_strings.reactions{it,1}.string = formula{it};
       local_parameters = fieldnames(local_assignment{it});
       kinetics_strings.reactions{it}.parameters = local_parameters';
@@ -21,7 +21,6 @@ switch kinetics.type,
     for it=1:length(global_parameters)
       kinetics_strings.parameter_values(it,1) = global_assignment.(global_parameters{it});
     end
-  otherwise,
+  otherwise
     error('Kinetics type %s cannot be converted into string format', kinetics.type);
 end
-

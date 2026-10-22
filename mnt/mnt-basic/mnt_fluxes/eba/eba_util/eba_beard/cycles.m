@@ -9,8 +9,8 @@ n = size(C,2);
 
 i = 1;
 
-while i<n,
-%  display(sprintf('check %d/%d',i,n))
+while i<n
+  %  display(sprintf('check %d/%d',i,n))
   j = i+1;
   while j <= n
     Cnew = linear_combos(C(:,i), C(:,j));

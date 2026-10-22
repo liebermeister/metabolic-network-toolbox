@@ -2,7 +2,7 @@ function [data, q_info] = state_data_to_data(kinetic_data, state_data, cmb_optio
 
 % [data, q_info] = state_data_to_data(kinetic_data, state_data, cmb_options, network)
 %
-% This function requires the model balancing package 
+% This function requires the model balancing package
 % (https://github.com/liebermeister/model-balancing)
 %
 % kinetic_data, state_data: matlab structs, describing kinetic data and metabolic state data
@@ -18,43 +18,42 @@ function [data, q_info] = state_data_to_data(kinetic_data, state_data, cmb_optio
 
 [nm,ns] = size(state_data.metabolite_data.Mean);
 
-if isfield(state_data,'samples'),
+if isfield(state_data,'samples')
   data.samples = state_data.samples;
 else
-  for it = 1:ns,
+  for it = 1:ns
     data.samples{it,1} = ['S' num2str(it)];
   end
 end
 
 % remove zero values (may be better than setting them to a minimal number)
-if find(state_data.metabolite_data.Mean == 0),
+if find(state_data.metabolite_data.Mean == 0)
   warning('- Metabolite concentration data contain zero values - replacing them by minimal metabolite concentration');
 end
 
 state_data.metabolite_data.Mean(state_data.metabolite_data.Mean < cmb_options.quantities.c.min) = cmb_options.quantities.c.min;
 state_data.metabolite_data.Mean(state_data.metabolite_data.Mean > cmb_options.quantities.c.max) = cmb_options.quantities.c.max;
 
-if find(state_data.enzyme_data.Mean == 0),
+if find(state_data.enzyme_data.Mean == 0)
   error('Enzyme concentration data contain zero values');
 end
-
 
 
 % --------------------------------------------------------------
 % insert unknown standard deviations
 % --------------------------------------------------------------
 
-if sum(isfinite(state_data.metabolite_data.Std))==0,
+if sum(isfinite(state_data.metabolite_data.Std))==0
   display('- (state_data_to_data.m): No metabolite error bars are available: using simple estimate');
   state_data.metabolite_data.Std = [];
 end
 
-if sum(isfinite(state_data.enzyme_data.Std))==0,
+if sum(isfinite(state_data.enzyme_data.Std))==0
   display('- (state_data_to_data.m): No enzyme error bars are available: using simple estimate');
   state_data.enzyme_data.Std = [];
 end
 
-if length(state_data.metabolite_data.Std),
+if length(state_data.metabolite_data.Std)
   [data.X.mean,data.X.std] = lognormal_normal2log(state_data.metabolite_data.Mean,state_data.metabolite_data.Std);
   data.X.std(~isfinite(data.X.std)) = log(cmb_options.data_C_geom_std);
 else
@@ -62,7 +61,7 @@ else
   data.X.std  = log(cmb_options.data_C_geom_std) * ones(size(data.X.mean));
 end
 
-if length(state_data.enzyme_data.Std),
+if length(state_data.enzyme_data.Std)
   [data.lnE.mean, data.lnE.std] = lognormal_normal2log(state_data.enzyme_data.Mean,state_data.enzyme_data.Std);
   data.lnE.std(~isfinite(data.lnE.std)) = log(cmb_options.data_E_geom_std);
 else
@@ -71,17 +70,17 @@ else
 end
 
 data.V.mean = state_data.flux_data.Mean;
-if length(state_data.flux_data.Std),
+if length(state_data.flux_data.Std)
   data.V.std  = state_data.flux_data.Std;
 else
   data.V.std  = nan * state_data.flux_data.Mean;
 end
 
 % --------------------------------------------------------------
-% Add information on kinetics 
+% Add information on kinetics
 % --------------------------------------------------------------
 
-q_info = cmb_define_parameterisation(network, cmb_options); 
+q_info = cmb_define_parameterisation(network, cmb_options);
 
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);
 

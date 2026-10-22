@@ -12,7 +12,7 @@ nr = length(f);
 nm = size(D_sc,2);
 dd = sptensor([nr,nm,nm]);
 
-for it = 1:nr,
+for it = 1:nr
   dd(it,:,:) = sptensor(D_sc(it,:)' * D_sc(it,:) - diag(D_sc(it,:)));
 end
 

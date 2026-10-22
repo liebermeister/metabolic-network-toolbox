@@ -19,7 +19,7 @@ types.KI = ss + (1:length(KI_indices));     ss = ss + length(KI_indices);
 types.E  = ss + (1:nr);                     ss = ss + nr;
 types.S  = ss + (1:nm);                     ss = ss + nm;
 
-if dependent_flag,
+if dependent_flag
   types.q   = ss + (1:nr);             ss = ss + nr;
   types.KCp = ss + (1:nr);             ss = ss + nr;
   types.KCm = ss + (1:nr);             ss = ss + nr;
@@ -27,7 +27,7 @@ if dependent_flag,
   types.VMm = ss + (1:nr);             ss = ss + nr;
 end
 
-if dynamic_flag,
+if dynamic_flag
   types.w      = ss + (1:nw*n_exp);    ss = ss + nw*n_exp;
   types.deltaE = ss + (1:nr*n_exp);    ss = ss + nr*n_exp;
   types.deltaS = ss + (1:nm*n_exp);    ss = ss + nm*n_exp;

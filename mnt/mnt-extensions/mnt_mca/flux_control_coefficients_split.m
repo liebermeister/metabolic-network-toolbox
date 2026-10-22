@@ -36,13 +36,13 @@ if ~exist('NR_int','var'), [ L_int, NR_int ] = reduce_N(N_int); end;
 
 epsilon_int(find(1-used)) = 0;
 
-M   = NR_int * epsilon_int * L_int; 
+M   = NR_int * epsilon_int * L_int;
 
 C_S = - L_int * pinv( full(M) ) * NR_int;
 C_J = eye(n_react) + epsilon_int * C_S;
 
-CCS = zeros(n_metab_int+length(external),n_react); 
-CCS(internal,:) = C_S; C_S = CCS; 
+CCS = zeros(n_metab_int+length(external),n_react);
+CCS(internal,:) = C_S; C_S = CCS;
 
 C_J = chop(C_J);
 C_S = chop(C_S);
@@ -58,7 +58,7 @@ C_S(:,find(1-used))=0;
 %	tensor_product(tensor_product(epsilon_2,C_S),C_S,2,1) ...
 %	+ tensor_product(rho_2,C_S,2,1) ...
 %	+ permute(tensor_product(rho_2,C_S,2,1),[1,3,2]);
-%    
+%
 %    C_S2 =   tensor_product(C_S,Gamma);
 %    C_J2 =   tensor_product(C_J,Gamma);
 %end

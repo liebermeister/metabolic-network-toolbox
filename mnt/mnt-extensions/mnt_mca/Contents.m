@@ -1,7 +1,7 @@
 %Metabolic Network Toolbox - Functions for Metabolic Control Analysis
 %
-%All functions (except for 'time_response_coefficients') 
-%operate on matrices or tensors and therefore do not require 
+%All functions (except for 'time_response_coefficients')
+%operate on matrices or tensors and therefore do not require
 %a network data structure
 %
 %
@@ -21,7 +21,7 @@
 %Control and response coefficients
 %---------------------------------
 %
-% basic_control_analysis          compute first order elasticities, 
+% basic_control_analysis          compute first order elasticities,
 %                                 control and response coefficients in one step
 %
 % control_coefficients            control coefficients

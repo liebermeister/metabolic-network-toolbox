@@ -2,9 +2,9 @@ function kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)
 
 % kinetics = modular_reduce_to_subnetwork(kinetics, indm, indr)
 
-switch kinetics.type,
-  case {'cs','ms','rp','ma','fm'},
-  
+switch kinetics.type
+  case {'cs','ms','rp','ma','fm'}
+
     kinetics.u   =     kinetics.u(indr)   ;
     kinetics.c   =     kinetics.c(indm)   ;
     kinetics.KA  =     kinetics.KA(indr,indm)  ;

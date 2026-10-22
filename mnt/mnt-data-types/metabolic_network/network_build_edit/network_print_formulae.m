@@ -3,7 +3,7 @@
 % Convert a network structure into reaction formulae
 % (to build a network structure from a reaction list, use network_build_from_sum_formulae_list
 %  to build a network structure from a reaction list in an SBtab file, use network_build_from_sum_formulae)
-% 
+%
 % actions, metabolites (optional): names to be used in the formulae
 % (column lists of strings)
 
@@ -12,60 +12,60 @@ function all_result = network_print_formulae(network,actions,metabolites,all_rev
 eval(default('all_reversible','1'));
 if ~exist('actions','var'), actions=[]; end
 if ~exist('metabolites','var'), metabolites=network.metabolites; end
-if find(cellfun('length',metabolites) ==0), 
+if find(cellfun('length',metabolites) ==0)
   error('Empty metabolite name');
 end
 
-if isempty(actions), 
-  actions=network.actions; 
+if isempty(actions)
+  actions=network.actions;
 end
 
-if ~isfield(network,'reversible'),
+if ~isfield(network,'reversible')
   all_reversible = 1;
 end
 
-if all_reversible,
+if all_reversible
   network.reversible = ones(size(network.actions));
 end
 
 all_result = {};
 for i=1:length(actions)
   result = '';
-%  result =  [result sprintf('%i:\t',i)];
-%  result =  [result sprintf('%s:\t',actions{i})];
+  %  result =  [result sprintf('%i:\t',i)];
+  %  result =  [result sprintf('%s:\t',actions{i})];
   it = label_names(actions{i}, network.actions);
   dum = find(network.N(:,it)<0);
-  for j=1:length(dum); 
+  for j=1:length(dum);
     if j>1, result = [result  sprintf(' + ') ];  end
     coeff =  full(abs(network.N(dum(j),it)));
-    if coeff ~= 1,
-      if coeff == ceil(coeff),
-          result = [result sprintf('%d ',coeff) ];       
-      else,
-          result = [result sprintf('%2.2f ',coeff) ]; 
+    if coeff ~= 1
+      if coeff == ceil(coeff)
+        result = [result sprintf('%d ',coeff) ];
+      else
+        result = [result sprintf('%2.2f ',coeff) ];
       end
     end
-    result = [result sprintf('%s', metabolites{dum(j)}) ];     
+    result = [result sprintf('%s', metabolites{dum(j)}) ];
   end
-  
-  if network.reversible(it), 
-    result = [result  sprintf(' <=> ')]; 
-  else 
-    result = [result sprintf(' => ') ]; 
+
+  if network.reversible(it)
+    result = [result  sprintf(' <=> ')];
+  else
+    result = [result sprintf(' => ') ];
   end
 
   dum = find(network.N(:,it)>0);
   for j=1:length(dum);
     if j>1, result = [result  sprintf(' + ') ]; end
     coeff = full(network.N(dum(j),it));
-    if coeff ~= 1,
-      if coeff == ceil(coeff),
-          result = [result sprintf('%d ',coeff) ];       
-      else,
-        result = [result sprintf('%2.2f ',coeff) ]; 
+    if coeff ~= 1
+      if coeff == ceil(coeff)
+        result = [result sprintf('%d ',coeff) ];
+      else
+        result = [result sprintf('%2.2f ',coeff) ];
       end
     end
-    result = [result sprintf('%s', metabolites{dum(j)}) ];     
+    result = [result sprintf('%s', metabolites{dum(j)}) ];
   end
 
   all_result{i,1} = result;

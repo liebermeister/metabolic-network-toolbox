@@ -10,15 +10,15 @@ x_ss_int = x_ss(ind_int);
 
 eval(default('color','[]','orderv','[]','network_CoSplit','network'));
 
-if isfield(network.kinetics,'parameters'),
+if isfield(network.kinetics,'parameters')
   p       = network.kinetics.parameters;
-  if iscell(delta_par_struct.name),
+  if iscell(delta_par_struct.name)
     ind_delta_par = [];
-    for it=1:length(delta_par_struct.name),
+    for it=1:length(delta_par_struct.name)
       p_value(it) = getfield(p,delta_par_struct.name{it});
       ind_delta_par = [ind_delta_par, find(strcmp(fields(p),delta_par_struct.name{it}))];
     end
-  else,
+  else
     p_value = getfield(p,delta_par_struct.name);
     ind_delta_par = find(strcmp(fields(p),delta_par_struct.name));
   end
@@ -60,8 +60,8 @@ delta_V    = 1/sqrt(2*pi) *                      RV_omega * delta_par;
 delta_V2   = 1/sqrt(2*pi) * 0.5 * tensor_product(RV_2_2omega, delta_par,2,1) * delta_par;
 delta_V2_0 = 1/sqrt(2*pi) * 0.5 * tensor_product(RV_2_2omega0,delta_par,2,1) * (delta_par.'');
 
-switch delta_par_struct.type,
-  case 'cos',
+switch delta_par_struct.type
+  case 'cos'
     x_order0 = repmat(x_ss_int + real(delta_S2_0),1,length(t_appr)).';
     x_order1 = real(delta_S *  exp( i *     delta_par_struct.omega*t_appr)).';
     x_order2 = real(delta_S2 * exp( i * 2 * delta_par_struct.omega*t_appr)).';
@@ -69,17 +69,17 @@ switch delta_par_struct.type,
     v_order0 = repmat(v_ss+real(delta_V2_0),1,length(t_appr)).' ;
     v_order1 = real(delta_V *  exp( i *     delta_par_struct.omega*t_appr)).';
     v_order2 = real(delta_V2 * exp( i * 2 * delta_par_struct.omega*t_appr)).';
-  
-case 'complex',
-  x_order0 = repmat(x_ss_int ,1,length(t_appr) ).';
-  x_order1 = real((delta_S *  exp( i *     delta_par_struct.omega*t_appr)).');
-  x_order2 = real((delta_S2 * exp( i * 2 * delta_par_struct.omega*t_appr)).');
-  x        = real(x);
 
-  v_order0 = repmat(v_ss,1,length(t_appr)).' ;
-  v_order1 = real((delta_V *  exp( i *     delta_par_struct.omega*t_appr)).');
-  v_order2 = real((delta_V2 * exp( i * 2 * delta_par_struct.omega*t_appr)).');
-  v        = real(v);
+  case 'complex'
+    x_order0 = repmat(x_ss_int ,1,length(t_appr) ).';
+    x_order1 = real((delta_S *  exp( i *     delta_par_struct.omega*t_appr)).');
+    x_order2 = real((delta_S2 * exp( i * 2 * delta_par_struct.omega*t_appr)).');
+    x        = real(x);
+
+    v_order0 = repmat(v_ss,1,length(t_appr)).' ;
+    v_order1 = real((delta_V *  exp( i *     delta_par_struct.omega*t_appr)).');
+    v_order2 = real((delta_V2 * exp( i * 2 * delta_par_struct.omega*t_appr)).');
+    v        = real(v);
 end
 
 x_appr  = x_order0 + x_order1;
@@ -93,56 +93,56 @@ n_osc = length(delta_par_struct.value);
 
 figure(fignum+1); clf
 [ni,nk] = subplot_n(length(orderx)+n_osc);
-for it = 1:n_osc,
+for it = 1:n_osc
   subplot(nk,ni,it); % set(gca,'FontSize',6);
-  plot(t_appr,real(p_value(it) + delta_par_struct.value(it) * exp( i * delta_par_struct.omega*t_appr)).','Color',[0.7696    0.4810    0.3063]); 
-  title(['\Delta' delta_par_struct.name{it},0]); 
+  plot(t_appr,real(p_value(it) + delta_par_struct.value(it) * exp( i * delta_par_struct.omega*t_appr)).','Color',[0.7696    0.4810    0.3063]);
+  title(['\Delta' delta_par_struct.name{it},0]);
   %set(gca,'FontSize',6);
-  %axis tight; 
+  %axis tight;
   axis_almost_tight_positive
 
 end
 
-if color,
+if color
 
-for k=1:length(orderx),
-  subplot(nk,ni,k+n_osc);
-  l = orderx(k);
-  if size(x),
-    line1 = plot(t,x(:,l)); 
-  else line1 = plot([],[]);
-  end
-  hold on; 
-  line2 = plot(t_appr,x_ss_int(l)*ones(size(t_appr)),'g');
-  line3 = plot(t_appr,x_appr(:,l),'r'); 
-  line4 = plot(t_appr,x_appr2(:,l),'m'); 
-  if strcmp(delta_par_struct.type,'cos'),  plot(t_appr,((x_ss_int(l)+real(delta_S2_0(l))))*ones(size(t_appr)),'c-.'); end
-%  axis tight
+  for k=1:length(orderx)
+    subplot(nk,ni,k+n_osc);
+    l = orderx(k);
+    if size(x)
+      line1 = plot(t,x(:,l));
+    else line1 = plot([],[]);
+    end
+    hold on;
+    line2 = plot(t_appr,x_ss_int(l)*ones(size(t_appr)),'g');
+    line3 = plot(t_appr,x_appr(:,l),'r');
+    line4 = plot(t_appr,x_appr2(:,l),'m');
+    if strcmp(delta_par_struct.type,'cos'),  plot(t_appr,((x_ss_int(l)+real(delta_S2_0(l))))*ones(size(t_appr)),'c-.'); end
+    %  axis tight
     axis_almost_tight_positive
 
-  line_colors([line1,line2,line3,line4]',color);
-  title(network.metabolites{ind_int(l)}); 
-  if k<20, set(gca,'XTick',[]); end
-  hold off
-  line_colors([line1,line2,line3,line4]',color);
-end
+    line_colors([line1,line2,line3,line4]',color);
+    title(network.metabolites{ind_int(l)});
+    if k<20, set(gca,'XTick',[]); end
+    hold off
+    line_colors([line1,line2,line3,line4]',color);
+  end
 
-else, % black and white
-  
-for k=1:length(orderx),  
-  subplot(nk,ni,k+1);
-  l=orderx(k);  
-  line1 = plot(t,x(:,l)); hold on; 
-  line2 = plot(t_appr,x_ss_int(l)*ones(size(t_appr)),'g');
-  line3 = plot(t_appr,x_appr(:,l),'r:'); 
-  line4 = plot(t_appr,x_appr2(:,l),'m--'); 
-  if strcmp(delta_par_struct.type,'cos'),  plot(t_appr,((x_ss_int(l)+real(delta_S2_0(l))))*ones(size(t_appr)),'c-.'); end
- % axis tight
-  axis_almost_tight_positive
-  title(network.metabolites{ind_int(l)},0); 
-  if k<20, set(gca,'XTick',[]); end
-  hold off
-end
+else  % black and white
+
+  for k=1:length(orderx)
+    subplot(nk,ni,k+1);
+    l=orderx(k);
+    line1 = plot(t,x(:,l)); hold on;
+    line2 = plot(t_appr,x_ss_int(l)*ones(size(t_appr)),'g');
+    line3 = plot(t_appr,x_appr(:,l),'r:');
+    line4 = plot(t_appr,x_appr2(:,l),'m--');
+    if strcmp(delta_par_struct.type,'cos'),  plot(t_appr,((x_ss_int(l)+real(delta_S2_0(l))))*ones(size(t_appr)),'c-.'); end
+    % axis tight
+    axis_almost_tight_positive
+    title(network.metabolites{ind_int(l)},0);
+    if k<20, set(gca,'XTick',[]); end
+    hold off
+  end
 
 end
 
@@ -151,35 +151,35 @@ end
 figure(fignum+2); clf
 [ni,nk] = subplot_n(n_rea);
 
-for k=1:n_rea,
+for k=1:n_rea
   subplot(nk,ni,k);
   l=orderv(k);
-  if length(v),
-  plot(t,v(:,l)); 
-  else plot([],[]); 
+  if length(v)
+    plot(t,v(:,l));
+  else plot([],[]);
   end
-  hold on; 
-  if color,
+  hold on;
+  if color
     line1 = plot(t_appr,v_ss(l)*ones(size(t_appr)));
-    if strcmp(delta_par_struct.type,'cos'),  
-      line2 = plot(t_appr,((v_ss(l)+real(delta_V2_0(l))))*ones(size(t_appr))); 
+    if strcmp(delta_par_struct.type,'cos')
+      line2 = plot(t_appr,((v_ss(l)+real(delta_V2_0(l))))*ones(size(t_appr)));
     else line2 = plot([]);
     end
-    line3 = plot(t_appr,v_appr(:,l)); 
-    line4 = plot(t_appr,v_appr2(:,l)); 
+    line3 = plot(t_appr,v_appr(:,l));
+    line4 = plot(t_appr,v_appr2(:,l));
     line_colors([line1,line2,line3,line4]','color_scale_grey');
-  else,
+  else
     line1 = plot(t_appr,v_ss(l)*ones(size(t_appr)),'k');
-    if strcmp(delta_par_struct.type,'cos'),  
-      line2 = plot(t_appr,((v_ss(l)+real(delta_V2_0(l))))*ones(size(t_appr)),'k-.'); 
+    if strcmp(delta_par_struct.type,'cos')
+      line2 = plot(t_appr,((v_ss(l)+real(delta_V2_0(l))))*ones(size(t_appr)),'k-.');
     end
-    line3 = plot(t_appr,v_appr(:,l),'k:'); 
-    line4 = plot(t_appr,v_appr2(:,l),'k--'); 
-    line_colors([line1,line2,line3,line4]',color);    
+    line3 = plot(t_appr,v_appr(:,l),'k:');
+    line4 = plot(t_appr,v_appr2(:,l),'k--');
+    line_colors([line1,line2,line3,line4]',color);
   end
   %axis tight
   axis_almost_tight_positive
-  title(network.actions{l}); 
+  title(network.actions{l});
   if k<20, set(gca,'XTick',[]); end
   hold off
 end

@@ -6,7 +6,7 @@ function [v,names]=kinetic_strings_par2vector(p)
 
 f = fields(p);
 for i=1:length(f)
-  if isnumeric(getfield(p,f{i})),
+  if isnumeric(getfield(p,f{i}))
     v(i)= getfield(p,f{i});
   else
     break;

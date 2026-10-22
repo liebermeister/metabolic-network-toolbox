@@ -16,9 +16,9 @@ im(enzyme_subset_matrix)
 
 enzyme_subsets = {};
 ee = enzyme_subset_matrix;
-for it = 1:nr,
+for it = 1:nr
   ii = find(ee(it,:));
-  if length(ii)>1,
+  if length(ii)>1
     enzyme_subsets = [ enzyme_subsets, {ii'}];
     ee(:,ii) = 0;
   end

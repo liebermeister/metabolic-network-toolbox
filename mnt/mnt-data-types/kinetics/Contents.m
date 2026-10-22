@@ -4,9 +4,9 @@
 %
 %   Modular rate laws {'ms' 'cs', 'ds', 'rp', 'fd'}
 %
-%   Rate laws given in a matlab function 'numeric' 
+%   Rate laws given in a matlab function 'numeric'
 %
-%   Rate laws given as strings 'kinetic_strings' 
+%   Rate laws given as strings 'kinetic_strings'
 %
 % Main functions
 %

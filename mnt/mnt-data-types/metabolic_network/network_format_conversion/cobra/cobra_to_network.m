@@ -16,15 +16,15 @@ else
   ind_ext = [];
 end
 
-if options.flag_restrict,
+if options.flag_restrict
   display('Removing some metabolites and reactions');
   ind_rem   = label_names(options.rem,model.mets);
   ind_keepm = setdiff(1:length(model.mets),ind_rem);
   ind_keepr = find(~strcmp(model.subSystems,'Exchange'));
-else,
+else
   ind_keepm = 1:length(model.mets);
   ind_keepr = 1:length(model.rxns);
-end  
+end
 
 network.metabolites       = model.mets(ind_keepm);
 network.actions           = model.rxns(ind_keepr);
@@ -37,10 +37,10 @@ network.regulation_matrix = sparse(zeros(size(network.N')));
 network.formulae          = network_print_formulae(network);
 network.metabolite_names  = model.metNames(ind_keepm);
 network.reaction_names    = model.rxnNames(ind_keepr);
-if isfield(model,'metKeggId'),
+if isfield(model,'metKeggId')
   network.metabolite_KEGGID  = model.metKeggId(ind_keepm);
-end  
+end
 
-if options.flag_set_external,
- network = network_set_external(network,1);
+if options.flag_set_external
+  network = network_set_external(network,1);
 end

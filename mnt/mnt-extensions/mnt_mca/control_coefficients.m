@@ -28,19 +28,19 @@ if find(isfinite(Ec)==0), error('Elasticity matrix contains non-finite values');
 
 eval(default('used','[]','NR_int','[]','L_int','[]','dilution_rate','[]'));
 
-if sum(external==0)==0,
+if sum(external==0)==0
   [nm,nr]  = size(N);
   CJ = eye(nr);
   CS = zeros(nm,nr);
-  L_int = []; 
-  NR_int = zeros(0,nr); 
-  M = []; 
-  M_adj = []; 
+  L_int = [];
+  NR_int = zeros(0,nr);
+  M = [];
+  M_adj = [];
   indp_among_internal = [];
   return
 end
 
-if length(dilution_rate),
+if length(dilution_rate)
   %% build explicit model with dilution reactions (because dilution
   %% changes the conservation relations!)
   %% L_int, NR_int, M, M_adj, and indp_among_internal refer to this extended model
@@ -67,8 +67,8 @@ Ec_int  = Ec(:,ind_int);
 
 if isempty(used), used = ones(n_react,1); end
 
-if isempty(NR_int), 
-  [L_int, NR_int, indp_among_internal] = reduce_N(N_int); 
+if isempty(NR_int)
+  [L_int, NR_int, indp_among_internal] = reduce_N(N_int);
 end;
 
 Ec_int(find(1-used))   = 0;
@@ -79,7 +79,7 @@ N_int(:,find(1-used))  = 0;
 ind_int_react = find(sum(abs(N_int),1));
 N_int         = N_int(:,ind_int_react);
 
-if length(NR_int),
+if length(NR_int)
   NR_int        = NR_int(:,ind_int_react);
 end
 Ec_int        = Ec_int(ind_int_react,:);
@@ -89,24 +89,24 @@ M = full(NR_int * Ec_int * L_int);
 %% if maximal real part of eigenvalues < numerical error, correct M
 
 eigmax = max(real(eig(M)));
-if [eigmax > 0] * [eigmax < 10^-10], 
+if [eigmax > 0] * [eigmax < 10^-10]
   display(sprintf(' * Maximal real part of eigenvalues %f < numerical error, correcting M',eigmax));
-  M_adj = M - 5 * eigmax * eye(size(M)); 
+  M_adj = M - 5 * eigmax * eye(size(M));
 end
 
 %% if this still doesn't help:
 eigmax = max(real(eig(M)));
-if eigmax > 0,
-  display(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax)); 
+if eigmax > 0
+  display(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax));
   %% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');
   display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax));
-  M_adj = M - [ eigmax + 10^-10] * eye(size(M)); 
+  M_adj = M - [ eigmax + 10^-10] * eye(size(M));
 else
   M_adj = M;
 end
 
-if rank(M_adj) == size(M_adj,1), 
-  CS_int  = - L_int * [ full(M_adj) \ NR_int ];  
+if rank(M_adj) == size(M_adj,1)
+  CS_int  = - L_int * [ full(M_adj) \ NR_int ];
 else
   display('  * Jacobian is rank-deficient; using pseudoinverse instead of inverse (in control_coefficients.m)');
   %% sprintf('size of NR_int * Ec_int:')
@@ -123,8 +123,8 @@ else
   CS_int = - L_int * [ pinv(M_adj) * NR_int ];
 end
 
-CS = zeros(n_metab_int + length(ind_ext), n_react); 
-CS(ind_int,ind_int_react) = CS_int; 
+CS = zeros(n_metab_int + length(ind_ext), n_react);
+CS(ind_int,ind_int_react) = CS_int;
 
 CS  = chop(CS);
 
@@ -143,8 +143,7 @@ CJ(find(1-used),:) = 0;
 %  Gamma = tensor_product(tensor_product(Ec_2,CS),CS,2,1) ...
 %	   + tensor_product(rho_2,CS,2,1) ...
 %	   + permute(tensor_product(rho_2,CS,2,1),[1,3,2]);
-%    
+%
 %  CS2 = tensor_product(CS,Gamma);
 %  CJ2 = tensor_product(CJ,Gamma);
 %end
-

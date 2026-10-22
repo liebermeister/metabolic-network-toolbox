@@ -4,7 +4,7 @@ function  [E_kX_sc,kX_names,kX] = compute_modular_kX_elasticities(kinetic_law,ne
 
 eval(default('kinetic_law','cs'));
 
-switch kinetic_law, 
+switch kinetic_law
   case 'cs', [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);
   case 'ds', error('compute_modular_kX_elasticities is not implemented for kinetics of type ''ds''');
   case 'ms', [E_kX_sc,kX_names,kX] = compute_ms_kX_elasticities(network, c);

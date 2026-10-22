@@ -14,19 +14,19 @@ function network = network_set_external(network,strict,metabolite_list,internal_
 
 if ~exist('strict','var'), strict = 0; end
 
-if strict,
+if strict
   network.external = zeros(size(network.metabolites));
 end
 
-if exist('metabolite_list','var'), 
+if exist('metabolite_list','var')
   dummy = network_find_metabolites(network,metabolite_list);
   network.external(dummy(find(dummy))) = 1;
-else,
+else
   external_metabolites = network_find_ext_metabolites(network);
   network.external(external_metabolites) = 1;
 end
 
-if exist('internal_list'),
+if exist('internal_list')
   dummy = network_find_metabolites(network,internal_list);
   network.external(dummy) = 0;
 end

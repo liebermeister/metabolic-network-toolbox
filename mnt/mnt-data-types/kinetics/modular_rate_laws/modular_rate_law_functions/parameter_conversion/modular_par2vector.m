@@ -8,9 +8,9 @@ function [v,names] = modular_par2vector(p,network,no_names)
 
 v = [p.u; p.c; column(p.KA(KA_indices)); column(p.KI(KI_indices)); column(p.KM(KM_indices)); p.KV; p.Keq];
 
-if no_names,
+if no_names
   names =[];
-else,
+else
   u_names        = numbered_names('u',nr);
   c_names        = numbered_names('c',nm);
   KA_names       = numbered_names('KA',[nr,nm]);

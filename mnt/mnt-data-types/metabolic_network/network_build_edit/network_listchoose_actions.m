@@ -2,8 +2,8 @@
 
 function [n_sub,actindices,metindices] = network_listchoose_actions(network,actnames,indices)
 
-if ~exist('actnames','var'); actnames = network.actions; end 
-if ~exist('indices','var'); indices = []; end 
+if ~exist('actnames','var'); actnames = network.actions; end
+if ~exist('indices','var'); indices = []; end
 
 [actindices,h] = listbox(actnames,indices);
 

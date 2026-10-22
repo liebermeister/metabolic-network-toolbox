@@ -5,15 +5,15 @@ function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h)
 % Let
 % nm       # metabolites
 % nr       # reactions
-%  
-% Input:  
+%
+% Input:
 % N        mn x nr Stoichiometric matric
 % KM       nr x nm sparse matrix of KM values (Michaelis-Menten)
 % KV       nr x 1 column vector of KV values (velocity constants, defined as sqrt(Kcat_forward * Kcat_reverse)
 % Keq      nr x 1 column vector of equilibrium constants
 % h        nr x 1 column vector of "cooperativity factors" (usually, they can all be set to 1)
 %
-% Output: 
+% Output:
 % log_kcatplus  nr x 1 column vector of log forward kcat values
 % log_kcatminus nr x 1 column vector of log reverse kcat values
 

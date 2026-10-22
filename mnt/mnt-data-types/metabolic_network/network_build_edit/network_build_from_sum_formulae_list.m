@@ -7,6 +7,6 @@ function network = network_build_from_sum_formulae_list(reactions)
 
 % wrapper around network_build_from_sum_formulae for matlab reaction list as input
 
-dum            = struct; 
+dum            = struct;
 dum.ReactionFormula = reactions;
 network        = network_build_from_sum_formulae([],[],dum);

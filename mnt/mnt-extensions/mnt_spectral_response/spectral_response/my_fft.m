@@ -6,7 +6,7 @@ function [omega,y] = my_fft(x,T)
 % calculate values of y and omega such that
 % y(omega) is (approximately) the continuous Fourier transform of x(t)
 
-if ~exist('T','var'), T=1; end 
+if ~exist('T','var'), T=1; end
 
 dt = 2*T / (length(x)-1 );
 y  = fftshift(fft(ifftshift(x)));

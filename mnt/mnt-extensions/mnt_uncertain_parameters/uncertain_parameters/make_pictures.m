@@ -1,8 +1,9 @@
 [X,Y] = meshgrid(0:.08:3);
 Z = lognpdf(X,0.2,0.3).*lognpdf(Y,0.5,0.2);
 %colormap(1-gray)
-       mesh(X,Y,Z);
-% shading interp  
+
+mesh(X,Y,Z);
+% shading interp
 xlabel '\pi_1'
 ylabel '\pi_2'
 zlabel 'p_\Pi(\pi_1,\pi_2)'
@@ -48,11 +49,11 @@ p1=betapdf(q,n+1,N-n+1);
 N=100; n=75
 p2=betapdf(q,n+1,N-n+1);
 
-plot(q,p1); hold on; plot(q,p2); hold off; 
+plot(q,p1); hold on; plot(q,p2); hold off;
 xlabel 'q'
 ylabel 'p(q)'
 text(0.8,7,'N=100, n=75')
-text(0.5,3.2,'N=10, n=6')  
-     text(0.68,0.8,'q_{true}')
+text(0.5,3.2,'N=10, n=6')
+text(0.68,0.8,'q_{true}')
 
 print q_post.ps -f1 -dps

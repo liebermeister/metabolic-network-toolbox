@@ -6,6 +6,6 @@ scale_G = convert_G_scale;
 
 log_q = - N' * log_g / scale_G;
 
-if nargout>1,
+if nargout>1
   log_q_cov =  1/scale_G^2 * N' * log_g_cov * N;
 end

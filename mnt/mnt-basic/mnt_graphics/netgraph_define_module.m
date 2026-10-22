@@ -6,7 +6,7 @@ function [m,n] = netgraph_define_module(network)
 [m,p] = netgraph_mark_metabolites(network);
 m = find(m);
 
-if nargout>1,
-n = network_choose(network,m);
-n.kinetics = set_kinetics(n,network.kinetics.type)
+if nargout>1
+  n = network_choose(network,m);
+  n.kinetics = set_kinetics(n,network.kinetics.type)
 end

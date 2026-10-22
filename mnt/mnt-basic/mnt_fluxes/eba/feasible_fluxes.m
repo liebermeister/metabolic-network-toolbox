@@ -10,11 +10,11 @@ function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)
 % v is a column vector (but can also be a matrix containing several column vectors)
 % (in this case all relevant inputs have to be matrices)
 
-% IDEA: 
-%  First determine a stationary flux mode satisfying the upper and lower bounds 
+% IDEA:
+%  First determine a stationary flux mode satisfying the upper and lower bounds
 %    (and possibly the bounds on production terms) close to the data
-%  If EBA constraints are violated, repeat the entire thing; but for the null space, 
-%    do not use N, but add the cycles from the violated conditions as rows to N 
+%  If EBA constraints are violated, repeat the entire thing; but for the null space,
+%    do not use N, but add the cycles from the violated conditions as rows to N
 %    (in order to make the flux distribution orthogonal on these cycles; then iterate
 
 eval(default('eba_condition','''loose''','C','nan'))
@@ -25,7 +25,7 @@ n_ext = length(ind_ext);
 % -------------------------------
 % initialise
 
-external          = zeros(size(N,1),1); 
+external          = zeros(size(N,1),1);
 external(ind_ext) = 1;
 
 %% EFM instead?
@@ -45,25 +45,25 @@ es_constraints = fba_update_constraints(es_constraints);
 % inequality constraints:
 % [-K; K] * w <= [-es_constraints.v_min; es_constraints.v_max]
 
-for it = 1:n_exp,
+for it = 1:n_exp
   A = [-K; ...
         K; ...
         N(find(es_constraints.ext_sign(:,it)==-1),:) * K; ...
        -N(find(es_constraints.ext_sign(:,it)== 1),:) * K; ...
       ];
-  
+
   b = [-es_constraints.v_min(:,it); ...
         es_constraints.v_max(:,it); ...
         zeros(sum(abs(es_constraints.ext_sign(:,it)) ==1),1) ];
 
   ind_data = find(isfinite(data.v.mean(:,it)));
-  
+
   H =  K(ind_data,:)' * diag(data.v.std(ind_data,it).^-2) * K(ind_data,:);
   f = -K(ind_data,:)' * diag(data.v.std(ind_data,it).^-2) * data.v.mean(ind_data,it);
-  
-  if exist('cplexqp','file'),
+
+  if exist('cplexqp','file')
     w = cplexqp(full(H),full(f),full(A),full(b));
-  else  
+  else
     w = quadprog(full(H),full(f),full(A),full(b));
   end
 

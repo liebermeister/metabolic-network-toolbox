@@ -24,7 +24,7 @@ metnames = strrep(metnames,'S-','');
 metnames = strrep(metnames,'(S)-','');
 metnames = strrep(metnames,'alpha','\alpha');
 metnames = strrep(metnames,'beta','\beta');
-  
+
 actnames = strrep(network.actions,'_',' ');
 actnames = strrep(actnames,'PseudoBioObj.','');
 actnames = strrep(actnames,'Enzyme.','');
@@ -60,9 +60,9 @@ graphics_object.reaction_mapping   = (1:length(actnames))';
 graphics_object.metinvisible       = zeros(length(metnames),1);
 graphics_object.actinvisible       = zeros(length(actnames),1);
 
-% adjacency matrix between metabolites and reactions 
+% adjacency matrix between metabolites and reactions
 
-if isfield(network,'regulation_matrix'),
+if isfield(network,'regulation_matrix')
   graphics_object.regulation_matrix = ...
       [sparse(zeros(length(network.metabolites)))...
        sparse(network.regulation_matrix)';...
@@ -75,13 +75,13 @@ m = [sparse(zeros(length(network.metabolites))) sparse(network.N~=0); sparse(net
 
 m = m-diag(diag(m));
 db = graph_shortest_path(m,4,0);
-db(find(~isfinite(db)))=5; 
+db(find(~isfinite(db)))=5;
 
 graphics_object.m  = m;
 graphics_object.db = db;
 
 network.graphics_par = graphics_object;
 
-if ~exist('x_init','var'), x_init = []; end 
+if ~exist('x_init','var'), x_init = []; end
 
 [network.graphics_par.x, network.graphics_par.fixed] = netgraph_calculate_positions(network, x_init, set_positions);

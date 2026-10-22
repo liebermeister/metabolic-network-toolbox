@@ -11,7 +11,7 @@ eval(default('flag_KEGG_ids','0','gp','[]','reaction_KEGG_IDs','[]','flag_elemen
 
 if isempty(gp), gp=struct; end
 
-if length(reaction_KEGG_IDs),
+if length(reaction_KEGG_IDs)
   network.reaction_KEGGID = reaction_KEGG_IDs;
 end
 
@@ -23,7 +23,7 @@ network = netgraph_read_positions(network, layout_file, [0,0], 1, flag_KEGG_ids,
 
 network = netgraph_move(network,'all',gp);
 
-if flag_save_metabolites_as_fixed, 
+if flag_save_metabolites_as_fixed
   network.graphics_par.fixed(1:length(network.metabolites)) = 1;
 end
 

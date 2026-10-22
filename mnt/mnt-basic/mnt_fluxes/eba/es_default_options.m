@@ -3,14 +3,14 @@ function [es_options, es_constraints] = es_default_options(N)
 % ES_DEFAULT_OPTIONS - Set default values in 'es_options' and 'es_constraints'
 %
 % [es_options, es_constraints] = es_default_options(N)
-% 
+%
 % Initialise structures 'es_options' and 'es_constraints' used to define tasks in elasticity sampling
-% 
-% Function arguments: 
+%
+% Function arguments:
 % N can be the (complete) stoichiometric matrix or a 'network' data structure from the Metabolic Network Toolbox)
-% 
+%
 % Function outputs:
-% 
+%
 % Structure 'es_constraints': directives for defining the constraints in model sampling
 %
 % Field name                        Size    Meaning
@@ -21,23 +21,23 @@ function [es_options, es_constraints] = es_default_options(N)
 % es_constraints.v_sign             nr x 1  fluxes signs (overrides vmin and vmax)
 % es_constraints.v_mean             nr x 1  fluxes data (can also be a matrix)
 % es_constraints.v_std              nr x 1  fluxes data error bars (can also be a matrix)
-% es_constraints.Keq_fix            nr x 1  equilibrium constants predefined values 
+% es_constraints.Keq_fix            nr x 1  equilibrium constants predefined values
 % es_constraints.ext_sign           nx x 1  signs of production rates of external metabolites
 % es_constraints.log_c_fix          nm x 1  ln metabolite levels predefined values
-% es_constraints.log_c_min          nm x 1  ln metabolite levels lower bounds 
-% es_constraints.log_c_max          nm x 1  ln metabolite levels upper bounds 
+% es_constraints.log_c_min          nm x 1  ln metabolite levels lower bounds
+% es_constraints.log_c_max          nm x 1  ln metabolite levels upper bounds
 % es_constraints.log_c_mean         nm x 1  ln metabolite levels data
 % es_constraints.log_c0_mean        nm x 1  ln equilibrium metabolite levels data
 % es_constraints.log_c0_std         nm x 1  ln equilibrium metabolite levels data error bars
-% es_constraints.mu0_fix            nm x 1  std chemical potentials predefined values 
-% es_constraints.mu0_min            nm x 1  std chemical potentials lower bounds     
-% es_constraints.mu0_max            nm x 1  std chemical potentials upper bounds     
+% es_constraints.mu0_fix            nm x 1  std chemical potentials predefined values
+% es_constraints.mu0_min            nm x 1  std chemical potentials lower bounds
+% es_constraints.mu0_max            nm x 1  std chemical potentials upper bounds
 % es_constraints.mu_fix             nm x 1  chemical potentials predefined values
-% es_constraints.mu_min             nm x 1  chemical potentials lower bounds     
-% es_constraints.mu_max             nm x 1  chemical potentials upper bounds     
+% es_constraints.mu_min             nm x 1  chemical potentials lower bounds
+% es_constraints.mu_max             nm x 1  chemical potentials upper bounds
 % es_constraints.dmu_fix            nr x 1  Reaction Gibbs free energies predefined values
-% es_constraints.dmu_min            nr x 1  Reaction Gibbs free energies lower bounds  
-% es_constraints.dmu_max            nr x 1  Reaction Gibbs free energies upper bounds  
+% es_constraints.dmu_min            nr x 1  Reaction Gibbs free energies lower bounds
+% es_constraints.dmu_max            nr x 1  Reaction Gibbs free energies upper bounds
 % es_constraints.dmu_limit           1 x 1  Reaction Gibbs free energies upper limit for absolute values
 % es_constraints.dmu_limit_min       1 x 1  Reaction Gibbs free energies lower limit for absolute values
 % es_constraints.log_u_mean         nr x 1  ln enzyme levels data
@@ -53,7 +53,7 @@ function [es_options, es_constraints] = es_default_options(N)
 % es_constraints.alpha_I_std        nr x nm std dev values for alpha_I (only for beta distribution)
 % es_constraints.alpha_M_mean       nr x nm mean values for alpha_M    (only for beta distribution)
 % es_constraints.alpha_M_std        nr x nm std dev values for alpha_M (only for beta distribution)
-% es_constraints.rho                 1 x 1  upper bound on v+/v or v-/v 
+% es_constraints.rho                 1 x 1  upper bound on v+/v or v-/v
 % es_constraints.dmu_eqconstraint  struct  Fields .matrix, .vector define equality constraints
 % es_constraints.mu_eqconstraint   struct  Fields .matrix, .vector define equality constraints
 %
@@ -63,14 +63,14 @@ function [es_options, es_constraints] = es_default_options(N)
 %
 % 2. Structure 'es_options': general directives for the algorithm
 %
-% Name                        Type/default   Meaning 
+% Name                        Type/default   Meaning
 % ----                        ------------   -------
 % es_options.seed                            Random seed
-% es_options.sampling_method                 Strategy for steady state sampling 
+% es_options.sampling_method                 Strategy for steady state sampling
 %                                              'v from data'
 %                                              'v and mu'
 %                                              'c0 and c'
-% es_options.method_flux_sampling            Strategy for flux sampling 
+% es_options.method_flux_sampling            Strategy for flux sampling
 %                                              'sample_and_discard'
 %                                              'convex_optimisation'
 %                                              'cycle_correction'
@@ -88,7 +88,7 @@ function [es_options, es_constraints] = es_default_options(N)
 % es_options.KV_prior_mean       = 1;        kV value to be substituted in inactive reactions
 % es_options.limit_cooperativity = 2;        threshold value for reaction cooperativity
 % es_options.no_equilibrium       boolean    If rates vanish, assume that zero enzyme levels are the reason
-% es_options.ind_ignore           []         Indices of reactions to be ignored when computing thermodynamic 
+% es_options.ind_ignore           []         Indices of reactions to be ignored when computing thermodynamic
 %                                              loops (only in for flux correction by loop substraction)
 % es_options.zc                   []         Metabolite derivative of objective function
 % es_options.zv                   []         Flux derivative of objective function
@@ -153,14 +153,14 @@ es_constraints.beta_I_fix  = nan*ones(nr,nm);
 es_constraints.alpha_min            = 0.05;
 es_constraints.alpha_max            = 0.95;
 es_constraints.alpha_A_mean         = [];
-es_constraints.alpha_A_std          = [];   
+es_constraints.alpha_A_std          = [];
 es_constraints.alpha_I_mean         = [];
 es_constraints.alpha_I_std          = [];
-es_constraints.alpha_M_mean         = []; 
+es_constraints.alpha_M_mean         = [];
 es_constraints.alpha_M_std          = [];
 
 es_constraints.rho             = 100;
-                               
+
 es_options.seed                = nan;
 es_options.sampling_method     = 'v and mu';
 es_options.method_flux_sampling= 'sample_and_discard';
@@ -181,10 +181,10 @@ es_options.h                    = ones(nr,1); % reaction cooperativity
 es_options.limit_cooperativity  = 2;
 es_options.zc                   = []; % metabolite derivative of target function
 es_options.zv                   = []; % flux derivative of target function
-es_options_in_silico.limit_elasticities_in_multireactions = 1; 
+es_options_in_silico.limit_elasticities_in_multireactions = 1;
 es_options.flag_second_order    = 1;
-es_options.no_equilibrium       = 1;  
+es_options.no_equilibrium       = 1;
 es_options.ind_ignore           = [];
-es_options.graphics_flag        = 1;   
+es_options.graphics_flag        = 1;
 es_options.print_graphics       = 0;
-es_options.flag_test            = 0;   
+es_options.flag_test            = 0;

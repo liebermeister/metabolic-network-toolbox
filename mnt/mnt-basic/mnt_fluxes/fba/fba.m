@@ -7,13 +7,13 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 %
 % fba_constraints: see fba_default_options
 %
-% fba_constraints.zv:         linear weights in the objective function  
+% fba_constraints.zv:         linear weights in the objective function
 % fba_constraints.v_min:      vector of lower bounds
 % fba_constraints.v_max:      vector of upper bounds
 % fba_constraints.v_sign:     vector of signs, overrides v_min and v_max
 % fba_constraints.v_fix:      vector of fixed fluxes, overrides everything else
 % fba_constraints.ext_sign:   sign vector for external metabolite production; undefined signs: nan
-% fba_constraints.production: production rates (values for internal metabolites 
+% fba_constraints.production: production rates (values for internal metabolites
 %                             will replace the zeros in the stationarity condition)
 %
 % solver = {'cplex','linprog'};
@@ -47,7 +47,7 @@ c  = fba_constraints.zv;
 
 N = network.N(network.external==0,:);
 
-if sum(isfinite(fba_constraints.production(ind_int)))==0,
+if sum(isfinite(fba_constraints.production(ind_int)))==0
   %% no internal production rates predefined
   [echelon,independent_metabolites] = rref(N');
   NR                                = N(independent_metabolites,:);
@@ -73,45 +73,45 @@ b  = [internal_production;...
 
 my_eye = eye(nr);
 
-  G  = [   my_eye(ind_notfix,:);...
-         - my_eye(ind_notfix,:)];
+G  = [   my_eye(ind_notfix,:);...
+       - my_eye(ind_notfix,:)];
 
-  h  = [   fba_constraints.v_max(ind_notfix,:); ...
-         - fba_constraints.v_min(ind_notfix,:)];  
+h  = [   fba_constraints.v_max(ind_notfix,:); ...
+       - fba_constraints.v_min(ind_notfix,:)];
 
-if sum(isfinite(fba_constraints.ext_sign)),
+if sum(isfinite(fba_constraints.ext_sign))
   %% if any external production signs are predefined
   ind_ext_sign = find(isfinite(fba_constraints.ext_sign));
   ind_external = find(network.external);
   G  = [ G; ...
          - diag(fba_constraints.ext_sign(ind_ext_sign)) * network.N(ind_external(ind_ext_sign),:); ...
        ];
-  
+
   h  = [ h; ...
            zeros(length(ind_ext_sign),1);];
 
 end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
-if ~exist('cplexlp','file'),
+if ~exist('cplexlp','file')
   solver = 'linprog';
 end
 
-switch solver,
-  case 'cplex',
+switch solver
+  case 'cplex'
     opt =  cplexoptimset('cplex');
     %opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
     [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
     lambda_ind_int = lambda.eqlin(1:size(NR,1));
     %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
     %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
-  case 'linprog',
+  case 'linprog'
     [v,value,exitflag] = lp_solve(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max);
 end
 
-if exitflag~=1,
+if exitflag~=1
   %% Check if at least zero flux is a solution
-  %% v_eq = zeros(size(fba_constraints.v_min));  
+  %% v_eq = zeros(size(fba_constraints.v_min));
   %% %flux_check_stationarity(network,v_eq)
   %% eq_flux_satisfies_inequalities = prod(double([G * v_eq <= h]))
   %% eq_flux_satisfies_equalities   = prod(double([A * v_eq == b]))
@@ -120,12 +120,12 @@ if exitflag~=1,
   if exitflag == -4, error('Nan value encountered.'); end
   value = nan; v = nan;
   exitflag
-  error('No FBA solution found.'); 
+  error('No FBA solution found.');
 else
   value = c'*v;
 end
 
-% check: [v >= fba_constraints.v_min, v <= fba_constraints.v_max] 
+% check: [v >= fba_constraints.v_min, v <= fba_constraints.v_max]
 
 % omit very small fluxes
 v(abs(v) < 10^-12 * max(abs(v)) )=0;
@@ -136,4 +136,3 @@ v(abs(v) < 10^-12 * max(abs(v)) )=0;
 %    v(find(v.*fba_constraints.v_sign<0)) = 0;
 %  end
 %end
-
