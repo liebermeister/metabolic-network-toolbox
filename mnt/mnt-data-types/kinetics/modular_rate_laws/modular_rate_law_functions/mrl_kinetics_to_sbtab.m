@@ -3,8 +3,11 @@ function s = mrl_kinetics_to_sbtab(network, kinetics, parameter_prior, save_quan
 % s = mrl_kinetics_to_sbtab(network, kinetics, parameter_prior, save_quantities, file_basename)
 % 
 % Export kinetic parameters to SBtab format
+%
+% If parameter_prior is not given, the default prior from the parameter balancing
+% package (https://github.com/liebermeister/parameter-balancing-matlab) is used
   
-eval(default('file_basename','[]', 'parameter_prior', 'biochemical_parameter_prior','save_quantities','[]'));
+eval(default('file_basename','[]', 'parameter_prior', 'parameter_balancing_prior','save_quantities','[]'));
 
 if isempty(save_quantities),
   ll = label_names(fieldnames(network.kinetics),parameter_prior.Symbol);

@@ -1,6 +1,9 @@
 function [data, q_info] = state_data_to_data(kinetic_data, state_data, cmb_options, network)
 
-% [data, q_info] = cmb_state_data_to_data(kinetic_data, state_data, cmb_options, network)
+% [data, q_info] = state_data_to_data(kinetic_data, state_data, cmb_options, network)
+%
+% This function requires the model balancing package 
+% (https://github.com/liebermeister/model-balancing)
 %
 % kinetic_data, state_data: matlab structs, describing kinetic data and metabolic state data
 %                           defined Metabolic Network Toolbox (see 'help kinetic data', 'help state_data')

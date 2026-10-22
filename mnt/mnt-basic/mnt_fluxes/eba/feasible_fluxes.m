@@ -35,7 +35,7 @@ K = analyse_N(N,external);
 
 %figure(1); netgraph_concentrations(network_CoHid,[],C(:,2))
 
-es_constraints = es_constraints_update(es_constraints);
+es_constraints = fba_update_constraints(es_constraints);
 
 % -------------------------------
 % determine flux distribution

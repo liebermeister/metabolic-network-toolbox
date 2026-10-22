@@ -45,6 +45,10 @@ b_ineq = [ dmu_max; ...
          ];
 
 
+if isempty(es_constraints.dmu_eqconstraint),
+  es_constraints.dmu_eqconstraint = struct('matrix',zeros(0,nr),'vector',zeros(0,1));
+end
+
 A_eq = [ee(find(isfinite(es_constraints.dmu_fix)),:); ...
         es_constraints.dmu_eqconstraint.matrix;...
        ];
@@ -53,7 +57,7 @@ b_eq = [ es_constraints.dmu_fix(find(isfinite(es_constraints.dmu_fix))); ...
          es_constraints.dmu_eqconstraint.vector; ...
        ];
 
-[dmu, success_flag] = sample_convex(A_ineq, b_ineq, A_eq, b_eq, es_options.n_dmu_samples);
+[dmu, ~, ~, success_flag] = convex_sampling(A_ineq, b_ineq, A_eq, b_eq, es_options.n_dmu_samples);
 
 % check inequality constraints and equality constraints 
 % if success_flag,

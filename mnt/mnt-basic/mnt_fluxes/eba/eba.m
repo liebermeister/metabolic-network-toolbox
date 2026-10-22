@@ -31,6 +31,9 @@ function [j,delta_mu] = eba(network,eba_constraints)
 %         delta_mu_min <=  delta_mu <=  delta_mu_max
 %
 % for fields of 'eba_constraints' and 'eba_options', see 'eba_default_options'
+%
+% NOTE: this function is unfinished: it only solves the FBA part of the problem 
+% (without the constraints on delta_mu) and returns an empty delta_mu
 
 
  [nm,nr] = size(network.N);
@@ -49,7 +52,9 @@ function [j,delta_mu] = eba(network,eba_constraints)
  A  = network.N(find(network.external==0),:);
  b  = zeros(sum(network.external==0),1);
  
- [j,s,z,y,status] = lp236a(-c,G,h,A,b);
+ [j,~,exitflag] = lp_solve(-c,G,h,A,b);
  
- if isempty(j), warning('No FBA solution found.'); end
+ if exitflag~=1, j = []; warning('No FBA solution found.'); end
+
+ delta_mu = [];
 

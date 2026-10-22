@@ -24,7 +24,7 @@ switch kinetics.type,
   case 'cs',               s = cs_print(kinetics,n,actions,network);
   case 'ds',               s = cs_print(kinetics,n,actions,network);
   case 'rp',               s = rp_print(kinetics,n,actions,network);
-  case 'fd',               s = fd_print(kinetics,n,actions,network);
+  case 'fd',               error('Printing is not implemented for kinetics of type ''fd''');
   case 'convenience',      s = convenience_print(kinetics,n,actions,network);
   case 'numeric',  s = numeric_print(kinetics,n,actions,network);
   case 'standard',         s = standard_print(kinetics,n,actions,network);

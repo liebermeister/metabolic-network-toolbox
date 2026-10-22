@@ -73,4 +73,4 @@ column_names = [options.columns_mean, options.columns_std];
 sbtab_1 = sbtab_table_construct(struct('TableID','MetaboliteConcentration','TableType','QuantityMatrix'), {'Compound','Identifiers:kegg.compound'},{network.metabolites,network.metabolite_KEGGID});
 sbtab_2 = matrix_to_sbtab_table(c_mat,'MetaboliteConcentration');
 
-sbtab_out = sbtab_table_combine(sbtab_1, sbtab_2);
+sbtab_out = sbtab_table_combine_horizontally(sbtab_1, sbtab_2);

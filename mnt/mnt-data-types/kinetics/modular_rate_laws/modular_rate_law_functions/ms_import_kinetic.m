@@ -8,7 +8,7 @@ function [kin_data, parameter_prior] = ms_import_kinetic(network,kinetic_balance
 % collect all parameters that are useful for a given metabolic network
 % and put them into a matlab ms kinetics data structure
 %
-% Similar functions: 'sbtab_to_modular_rate_law', 'sbtab_to_modular_rate_law_via_kinetic_data'
+% Similar functions: 'sbtab_to_modular_rate_law'
   
 eval(default('verbose','1'));
 

@@ -100,9 +100,11 @@ else
     for it =1:n_vred,
       c                = zeros(n_vred,1); 
       c(it)            = 1;
-      vred_opt         = linprog(c,G,h,[],[]);
+      [vred_opt,~,exitflag] = lp_solve(c,G,h);
+      if exitflag~=1, error('The set of feasible fluxes is unbounded or empty. Please check the flux bounds (constraints.v_min, constraints.v_max)'); end
       vred_lower(it,1) = vred_opt(it);
-      vred_opt         = linprog(-c,G,h,[],[]);
+      [vred_opt,~,exitflag] = lp_solve(-c,G,h);
+      if exitflag~=1, error('The set of feasible fluxes is unbounded or empty. Please check the flux bounds (constraints.v_min, constraints.v_max)'); end
       vred_upper(it,1) = vred_opt(it);
     end
     

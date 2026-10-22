@@ -10,7 +10,7 @@ function [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(n
 %   this needs to be indicated by the table attribute StandardConcentration='M' (in the Parameter table)
 %   The values will then be converted by this function.
 %
-% Similar functions: 'ms_import_kinetic', 'sbtab_to_modular_rate_law_via_kinetic_data'
+% Similar functions: 'ms_import_kinetic'
 
 eval(default('options','struct'));
 
