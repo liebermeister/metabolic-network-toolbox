@@ -24,18 +24,18 @@ if max(max(abs(E_sc)))>1
   warning('Elasticity out of range; trying to rescale all elasticities');
   E_sc = 0.99 * 1/max(max(abs(E_sc))) * E_sc;
 end
-if min(min([Mplus - E_sc]))<0,
-  error('Unsucessful');  
+if min(min([Mplus - E_sc]))<0
+  error('Unsucessful');
 end
 
-for i = 1:nr,
-%  if min([Mplus(i,:) - E_sc(i,:)])>=0,
-    zeta0(i) =  nanmax(abs(Mminus(i,:) - E_sc(i,:)) ./ [Mplus(i,:) - E_sc(i,:)]);
-    zeta1(i) =  nanmax(abs(Mplus(i,:) + E_sc(i,:)) ./ [Mminus(i,:) + E_sc(i,:)]);
-    zeta(i,1)  = max(zeta0(i)+epsilon,zeta1(i)+epsilon);
-%  else
-%    error('Elasticity out of range');
-%  end
+for i = 1:nr
+  %  if min([Mplus(i,:) - E_sc(i,:)])>=0,
+  zeta0(i) =  nanmax(abs(Mminus(i,:) - E_sc(i,:)) ./ [Mplus(i,:) - E_sc(i,:)]);
+  zeta1(i) =  nanmax(abs(Mplus(i,:) + E_sc(i,:)) ./ [Mminus(i,:) + E_sc(i,:)]);
+  zeta(i,1)  = max(zeta0(i)+epsilon,zeta1(i)+epsilon);
+  %  else
+  %    error('Elasticity out of range');
+  %  end
 end
 
 A = RT * log(zeta)./h;
@@ -45,17 +45,17 @@ Keq = exp(-network.N' * mu0);
 
 E_T = diag(1./[zeta-1]) * [ diag(zeta) * Mplus - Mminus];
 beta_M = [E_T - E_sc]./ [Mplus + Mminus];
-if find( [beta_M<0] + [beta_M>1]), 
+if find( [beta_M<0] + [beta_M>1])
   E_sc
   beta_M
-  error('wrong beta_M'); 
-end 
+  error('wrong beta_M');
+end
 
-alpha_M = 1-beta_M; 
+alpha_M = 1-beta_M;
 
 %% elasticities due to allosteric regulation are ignored until now. FIX THIS!!
-alpha_A = zeros(size(network.N')); 
-alpha_I = zeros(size(network.N')); 
+alpha_A = zeros(size(network.N'));
+alpha_I = zeros(size(network.N'));
 
 kinetics.type= 'ms';
 kinetics.u   = u;

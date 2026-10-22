@@ -6,7 +6,7 @@ function [v, v_plus, v_minus, D, regulation_term] = modular_velocities(kinetic_l
 % nm       # metabolites
 % nr       # reactions
 % N        mn x nr Stoichiometric matric
-% W        nr x nm Allosteric regulation matrix (+1 for activator, -1 for inhibitor) 
+% W        nr x nm Allosteric regulation matrix (+1 for activator, -1 for inhibitor)
 % ind_ext  vector of indices of external metabolites (numbers between 1 and nm)
 % u        nr x 1 column vector of enzyme concentrations
 % c        nm x 1 column vector of enzyme concentrations
@@ -20,20 +20,20 @@ function [v, v_plus, v_minus, D, regulation_term] = modular_velocities(kinetic_l
 % Mminus   nr x nm matrix of reverse molecularities (ie N, but only for product elements)
 % Wplus    nr x nm matrix of activations (ie W, but only for activation elements)
 % Wminus   nr x nm matrix of inhibitions (ie |W|, but only for inhibition elements)
-% 
+%
 % Note that Mplus, Mminus, Wplus, Wminus, nm, nr can be computed from N,W,ind_ext,h by using the matlab function make_structure_matrices
 
 c(find(c<10^-14)) = 10^-14;
 
 % Global variables to speed up this function; see ecm_one_run.m and model_balancing.m
-%  global global_structure_matrices 
-%  
+%  global global_structure_matrices
+%
 %  if exist('global_structure_matrices','var'),
 %    global Mplus Mminus Wplus Wminus nm nr ind_M ind_Wp ind_Wm
 %  end
-% 
+%
 % if isempty(Mplus),
-  [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
+[Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h);
 % end
 
 % calculation
@@ -44,20 +44,20 @@ c(find(c<10^-14)) = 10^-14;
 [Kcat_plus, Kcat_minus]   = ms_compute_Kcat(N,KM,KV,Keq);
 
 % KMones: KM matrix, with missing elements replaces by 1
-KMones           = ones(size(KM)); 
+KMones           = ones(size(KM));
 KMones(find(KM)) = KM(find(KM));
 log_c_by_k       = log(1./KMones * diag(c));
 
 theta_plus  = exp( sum( Mplus  .* log_c_by_k, 2) );
 theta_minus = exp( sum( Mminus .* log_c_by_k, 2) );
 
-switch kinetic_law,  
-  case {'cs','ms'},
+switch kinetic_law
+  case {'cs','ms'}
     psi_plus    = exp( sum( Mplus  .* log(1+exp(log_c_by_k)) , 2) );
-    psi_minus   = exp( sum( Mminus .* log(1+exp(log_c_by_k)) , 2) );    
+    psi_minus   = exp( sum( Mminus .* log(1+exp(log_c_by_k)) , 2) );
 end
 
-switch kinetic_law,  
+switch kinetic_law
   case 'cs', D = psi_plus + psi_minus - 1;
   case 'ms', D = psi_plus .* psi_minus;
   case 'ds', D = theta_plus + theta_minus + 1;
@@ -74,4 +74,3 @@ v_minus = u .* regulation_term .* Kcat_minus .* theta_minus ./ D;
 v_plus  = real(full(v_plus));
 v_minus = real(full(v_minus));
 v       = v_plus - v_minus;
-

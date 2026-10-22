@@ -13,7 +13,7 @@ n_cycles           = size(C,2);
 ind_common_support = find(abs(sign_J)' * abs(C));
 CC                 = C(:,ind_common_support);
 ind_non_orthogonal = [];
-if size(CC,2),
+if size(CC,2)
   ind_non_orthogonal = find(abs(sign_J'*CC) >= abs(diag(sign(CC)'*sign(CC)))');
 end
 feasible           = isempty(ind_non_orthogonal);

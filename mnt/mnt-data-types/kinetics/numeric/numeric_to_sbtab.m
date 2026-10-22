@@ -4,11 +4,11 @@ pn = fieldnames(network.kinetics.parameters);
 parameter_values = [];
 parameter_names  = {};
 parameter_units  = {};
-for it = 1:length(pn),
-  if isnumeric(network.kinetics.parameters.(pn{it})),
+for it = 1:length(pn)
+  if isnumeric(network.kinetics.parameters.(pn{it}))
     parameter_values{it,1} = network.kinetics.parameters.(pn{it});
     parameter_names{it,1} = pn{it};
-    if isfield(network.kinetics,'parameter_units'),
+    if isfield(network.kinetics,'parameter_units')
       parameter_units{it,1} = network.kinetics.parameter_units.(pn{it});
     else
       parameter_units{it,1} = '';

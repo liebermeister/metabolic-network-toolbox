@@ -6,7 +6,7 @@ function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp
 % nr       # reactions
 %
 % N        mn x nr Stoichiometric matric
-% W        nr x nm Allosteric regulation matrix (+1 for activator, -1 for inhibitor) 
+% W        nr x nm Allosteric regulation matrix (+1 for activator, -1 for inhibitor)
 % ind_ext  vector of indices of external metabolites (numbers between 1 and nm)
 % h        nr x 1 column vector of "cooperativity factors" (usually, they can all be set to 1)
 %
@@ -22,7 +22,7 @@ W = double(sparse(W));
 
 [nm,nr] = size(N);
 
-if isempty(h),
+if isempty(h)
   h = ones(nr,1);
 end
 

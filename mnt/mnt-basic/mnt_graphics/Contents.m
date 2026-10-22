@@ -22,9 +22,9 @@
 %A network structure with a m x n stoichiometric matrix contains
 %a field 'graphics_par' to determine the graphics appearance.
 %
-%For a list of all possible fields, see 'netgraph_draw'. 
+%For a list of all possible fields, see 'netgraph_draw'.
 %Here is a short example list:
-% 
+%
 %          metstyle: 'box'
 %       metcolstyle: 'values'
 %            metcol: color ('c')

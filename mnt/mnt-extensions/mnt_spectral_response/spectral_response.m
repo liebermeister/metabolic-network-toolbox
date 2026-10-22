@@ -21,7 +21,7 @@ function [c_osc, v_osc, u_osc, RS_omega, RV_omega] = spectral_response(network, 
 %   v_osc     - Flux amplitudes
 %   u_osc     - Enzyme level amplitudes
 %   RS_omega  - Spectral concentration response matrix
-%   RV_omega  - Spectral flux response matrix 
+%   RV_omega  - Spectral flux response matrix
 
 %metabolite_color = [0.7 0.4 0.1];
 %flux_color       = [0.3 0.3 0.5];
@@ -34,7 +34,7 @@ eval(default('delta_par','[]', 'M0','[]','network_CoSplit','network','fontsize',
 
 ind_int = find(network.external==0);
 
-if isempty(M0),
+if isempty(M0)
   N_int   = network.N(ind_int,:);
   Ec_int  = elasticities_ss.un_E_c(:,ind_int);
   [L_int, NR_int] = reduce_N(N_int);
@@ -46,37 +46,37 @@ end
 
 figure(fignum+11);
 
-if size(M0),
-  
+if size(M0)
+
   [nm,nr]  = size(network.N);
   eigs     = eig(M0);
   osc_eigs = eigs(find(imag(eigs)~=0));
 
   %% are there oscillatory eigenvalues?
   [dum,order] = sort(-real(osc_eigs));
-  if length(order),
+  if length(order)
     lambda_0 = real(osc_eigs(order(1)))
     omega_0  = abs(imag(osc_eigs(order(1))))
     period   = 2 * pi/omega_0
   end
-  
+
   set(gca,'Fontsize',20); hold on;
-  line([0 0],[-21 21],'Color','k', 'LineStyle','--');  
+  line([0 0],[-21 21],'Color','k', 'LineStyle','--');
   line([-100 1],[0 0],'Color','k', 'LineStyle','--');
-  h(1) = plot(real(eigs),imag(eigs),'r.','Markersize',30); 
+  h(1) = plot(real(eigs),imag(eigs),'r.','Markersize',30);
   legend(h,'Eigenvalues');
-  if length(order), 
-    h(2) = plot(real(eigs), imag(eigs)-omega_0,'b*','Markersize',10); 
+  if length(order)
+    h(2) = plot(real(eigs), imag(eigs)-omega_0,'b*','Markersize',10);
     legend(h,'Eigenvalues','Shifted down by excitation frequency');
   end
   legend('Location','Best');
   hold off
-  
-  mmin = min(real(eigs)); axis([1.1 * mmin, 0.1, -21, 21,]); 
+
+  mmin = min(real(eigs)); axis([1.1 * mmin, 0.1, -21, 21,]);
   xlabel('Real part','Fontsize',10); ylabel('Imaginary part','Fontsize',10);
   set(gca,'Fontsize',14);
-  % title('Eigenvalues of Jacobian','Fontsize',16); 
-  
+  % title('Eigenvalues of Jacobian','Fontsize',16);
+
 end
 
 
@@ -97,7 +97,7 @@ end
 % -----------------------------------------
 % simulate forced oscillations
 
-%T1      = min(500,5/abs(max(real(eigs)))); 
+%T1      = min(500,5/abs(max(real(eigs))));
 %T2      = 1/delta_par.f;
 %[t,x,v] = network_integrate(c_ss,p,T1,T2,network.N,network.kinetics.velocity_function,delta_par);
 
@@ -131,7 +131,7 @@ pi_2      = elasticities_ss.un_E_uu;
 % ----------------------------------------------------
 % show 1st order results on network
 
-circle_size = squaresize; 
+circle_size = squaresize;
 
 pp = delta_par.ind_delta_par;
 rm = network_CoSplit.graphics_par.reaction_mapping;
@@ -152,4 +152,3 @@ display_periodic_quantities_on_network(network_CoSplit, network, c_osc, v_osc, c
 % display relative change
 
 display_periodic_quantities_on_network(network_CoSplit, network, c_osc./c_ss, v_osc./v_ss, c_ss, v_ss, squaresize, circle_size, fontsize, [fignum+14, fignum+15], metabolite_color, flux_color);
-

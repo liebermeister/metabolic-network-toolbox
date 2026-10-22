@@ -1,9 +1,9 @@
 %network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)
 %
 %Construct network data structures from stoichiometric matrix
-%  network structure has mandatory fields 
+%  network structure has mandatory fields
 %  'metabolites','actions','N','reversible','external'
-%  see 'network_structure'
+%  see 'help metabolic_network'
 %
 %ARGUMENT
 % N           stoichiometric matrix
@@ -13,7 +13,7 @@
 % actions              names of reactions    (column list of strings)
 % reversible           column vector (elements 0,1) indicating reversible actions.
 %                      default: all reversible
-% ind_external indices (vector) of external (=fixed) metabolites.    
+% ind_external indices (vector) of external (=fixed) metabolites.
 %                      default: all internal
 % no_graphics          flag: 1: do not construct field 'graphics_par'
 % flag_kinetics        flag: 0: construct field 'kinetics' with cs kinetics as default
@@ -24,13 +24,13 @@ eval(default('N','[]','reversible','[]','ind_external','[]','metabolites','[]','
 
 if isempty('no_graphics'), no_graphics=0; end
 
-if length(N),
-  if isempty(metabolites),
+if length(N)
+  if isempty(metabolites)
     metabolites = cellstr([repmat('S',size(N,1),1)  num2str((1:size(N,1))')]);
     for i = 1:length(metabolites), metabolites{i}=metabolites{i}(find(metabolites{i}~=' ')); end
   end
-  
-  if isempty(actions),   
+
+  if isempty(actions)
     actions = cellstr([repmat('E',size(N,2),1)  num2str((1:size(N,2))')]);
     for i = 1:length(actions), actions{i}=actions{i}(find(actions{i}~=' ')); end
   end
@@ -48,18 +48,18 @@ n.external    = zeros(size(N,1),1);
 n.external(ind_external) = 1;
 
 % field names for compartments
-% n.compartments:            list of compartment names 
+% n.compartments:            list of compartment names
 % n.compartment_sizes:       vector of compartment volumes
 % n.metabolite_compartments: list of compartment names for all metabolites
 % n.metabolite_compounds:    list of compound names for all metabolites (where metabolites can be localised, compounds are general)
 
-if exist('regulation_matrix','var'),
-n.regulation_matrix = regulation_matrix;
-  else
-n.regulation_matrix = sparse(zeros(size(n.N))');
+if exist('regulation_matrix','var')
+  n.regulation_matrix = regulation_matrix;
+else
+  n.regulation_matrix = sparse(zeros(size(n.N))');
 end
 
-if flag_kinetics, 
+if flag_kinetics
   n.kinetics    = set_kinetics(n,'cs');
   %%n.h           = ones(length(actions),1);
 end

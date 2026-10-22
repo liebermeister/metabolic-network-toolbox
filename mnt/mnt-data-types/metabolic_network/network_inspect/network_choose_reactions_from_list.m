@@ -4,8 +4,8 @@
 
 function [n_sub,actindices_chosen,metindices] = network_choose_reactions_from_list(network,actnames,indices)
 
-if ~exist('actnames','var'); actnames = network.actions; end 
-if ~exist('indices','var'); indices = []; end 
+if ~exist('actnames','var'); actnames = network.actions; end
+if ~exist('indices','var'); indices = []; end
 [actindices_chosen,h]    = listbox(actnames,indices);
 metindices = find(sum(network.N(:,actindices_chosen)~=0,2));
 

@@ -17,30 +17,30 @@ plot_parameters = join_struct(plot_parameters,gp);
 
 [nm,nr] = size(network.N);
 
-if isfield(network.graphics_par, 'metabolite_mapping'),
+if isfield(network.graphics_par, 'metabolite_mapping')
   metmap = network.graphics_par.metabolite_mapping;
-else,
+else
   metmap = 1:nm;
 end
 
-if size(synergy_values,1) < max(metmap), 
-  error('Wrong matrix size'); 
+if size(synergy_values,1) < max(metmap)
+  error('Wrong matrix size');
 end
 
-if gp.show_diagonal_values,
+if gp.show_diagonal_values
   influence_values = diag(synergy_values);
 end
 
 % normalise by maximal absolute value
-if gp.normalise_values,
-  if length(isfinite(influence_values)),
+if gp.normalise_values
+  if length(isfinite(influence_values))
     influence_values = influence_values/max(abs(influence_values(metmap)));
   end
   synergy_values = synergy_values - diag(diag(synergy_values));
   synergy_values = synergy_values/nanmax(nanmax(abs(synergy_values(metmap,metmap))));
 end
 
-if gp.relative_threshold,
+if gp.relative_threshold
   synergy_values(abs(synergy_values)<gp.relative_threshold*max(abs(synergy_values(:)))) = 0;
 end
 
@@ -54,13 +54,13 @@ colors  = [];
 i1_list = [];
 i2_list = [];
 value_list = [];
-z = 1; 
+z = 1;
 
-for i1 = 1:nm,
-  for i2 = i1+1:nm,
+for i1 = 1:nm
+  for i2 = i1+1:nm
     my_value = synergy_values(metmap(i1),metmap(i2));
-    if isfinite(my_value),
-      if sign(my_value),
+    if isfinite(my_value)
+      if sign(my_value)
         i1_list(z) = i1;
         i2_list(z) = i2;
         value_list(z) = my_value;
@@ -78,4 +78,4 @@ colors = colors(order,:);
 
 netgraph_concentrations(network,influence_values,[],1,plot_parameters); hold on;
 
-draw_metabolite_arcs(network,colors,i1_list,i2_list,gp.linewidth);   
+draw_metabolite_arcs(network,colors,i1_list,i2_list,gp.linewidth);

@@ -8,10 +8,10 @@ eval(default('hill','1'));
 KX      = sparse(nr,nm);
 KX(find(alpha_X)) = alpha_X(find(alpha_X))./(1-alpha_X(find(alpha_X)));
 
-if length(hill)==1, 
+if length(hill)==1
   KX      = KX.^(1/hill);
 else
-  KX      = KX.^(1./repmat(hill,1,size(alpha_X,2)));  
+  KX      = KX.^(1./repmat(hill,1,size(alpha_X,2)));
 end
 
 KX = KX * diag(sparse(c));

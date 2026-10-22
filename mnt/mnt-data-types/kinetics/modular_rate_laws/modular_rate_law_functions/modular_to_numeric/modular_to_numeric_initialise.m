@@ -2,7 +2,7 @@ function [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(netw
 
 % [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(network,kinetics,dilution);
 %
-% translate metabolic network datastructure with modular kinetics 
+% translate metabolic network datastructure with modular kinetics
 % into metabolic network data structure with "numeric" kinetics,
 % including a dilution term for every molecular species
 
@@ -10,13 +10,13 @@ function [numeric_network,numeric_kinetics] = modular_to_numeric_initialise(netw
 
 p = struct;
 
-for it = 1:nr,
+for it = 1:nr
   p = setfield(p,['u_',num2str(it)],kinetics.u(it));
 end
 
-if exist('dilution','var'), 
-  p.mu = dilution; 
-  p.external = network.external; 
+if exist('dilution','var')
+  p.mu = dilution;
+  p.external = network.external;
 end
 
 p.kinetics = kinetics;

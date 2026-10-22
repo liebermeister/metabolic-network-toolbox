@@ -6,7 +6,7 @@ function [v,names]=numeric_par2vector(p)
 
 f = column(fields(p));
 for it=1:length(f)
-  if isnumeric(getfield(p,f{it})),
+  if isnumeric(getfield(p,f{it}))
     v(it,1) = getfield(p,f{it});
   else
     break;

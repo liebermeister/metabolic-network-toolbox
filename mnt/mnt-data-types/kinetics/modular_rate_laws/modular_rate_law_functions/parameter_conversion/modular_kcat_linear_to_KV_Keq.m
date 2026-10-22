@@ -12,12 +12,12 @@ all_KM_plus(find(N'<0)) = kinetics.KM(find(N'<0));
 KMprod_plus             = prod(all_KM_plus.^(N'),2);
 kcatplus                = kcat_linear_plus .* KMprod_plus;
 
-if length(kcat_linear_minus),
+if length(kcat_linear_minus)
   all_KM_minus             = ones(size(N'));
   all_KM_minus(find(N'>0)) = kinetics.KM(find(N'>0));
   KMprod_minus             = prod(all_KM_minus.^(N'),2);
   kcatminus                = kcat_linear_minus.* KMprod_minus;
-else, 
+else
   kcatminus = [];
 end
 

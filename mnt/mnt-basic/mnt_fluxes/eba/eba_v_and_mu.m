@@ -3,8 +3,8 @@ function [v,mu,value] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0
 % [v,mu, value] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0)
 %
 % Determine feasible flux vector v and chemical potentials mu
-% under EBA eba_constraints 
-% 
+% under EBA eba_constraints
+%
 % x0 starting point for optimisation (if known)
 
 % ------------------------------------------------------------
@@ -20,13 +20,12 @@ function [v,mu,value] = eba_v_and_mu(N,K,external,eba_constraints,eba_options,x0
 % feasible signs   : diag(x(1:nr)) * N' * x(nr+1:end) <= -epsilon < 0
 % regularisation   : min != sum(x.^2);
 %
-% Rewrite this in the form 
-% 
+% Rewrite this in the form
+%
 %   A * x <= b
 % Aeq * x  = beq
 %       C  = ebaf2(x,N)   (for signs)
 %     min != ebaf1(x)     (regularisation)
-
 
 
 %  ------------------------------------------------------------
@@ -40,7 +39,7 @@ if isfinite(eba_options.seed), rand('state',eba_options.seed); end
 
 ind_fix      = find(isfinite(eba_constraints.v_fix));
 ind_extsigns = find(isfinite(eba_constraints.ext_sign));
-n_int        = sum(external==0); 
+n_int        = sum(external==0);
 N_int        = N(find(external==0),:);
 my_eye       = eye(nr);
 ind_dmu_max   = find(isfinite(eba_constraints.dmu_max));
@@ -73,33 +72,33 @@ xmax = [eba_constraints.v_max; eba_constraints.mu_max];
 % ----------------------------------------------------------
 % optimisation
 
-for it = 1:eba_options.n_trials,
+for it = 1:eba_options.n_trials
 
   exitflag = -1;
   opt = optimset('MaxFunEvals',1000000,'MaxIter',1000000);
   if eba_options.relax_eba_constraint, epsilon = -10^-5;
   else, epsilon = 10^-5;
   end
-  
-  while exitflag<=0,
+
+  while exitflag<=0
     if isempty(x0), x0 = xmin + rand(size(xmin)) .* [xmax-xmin];  end
 
-%%    x0 > xmin
-%%    x0 < xmax
-%%    ebaf2(x0,full(N),epsilon)<0
-%%    A*x0<b
-%%    Aeq*x0 ==beq
-    
-    switch eba_options.optimality_criterion,
-      case 'z',
+    %%    x0 > xmin
+    %%    x0 < xmax
+    %%    ebaf2(x0,full(N),epsilon)<0
+    %%    A*x0<b
+    %%    Aeq*x0 ==beq
+
+    switch eba_options.optimality_criterion
+      case 'z'
         [x,value,exitflag] = fmincon(@(x)-ebaf3(x,eba_constraints.zv),x0,A,b,Aeq,beq,xmin,xmax,@(x)ebaf2(x,full(N),epsilon),opt);
-      case 'minimum_norm',
+      case 'minimum_norm'
         [x,value,exitflag] = fmincon(@ebaf1,x0,A,b,Aeq,beq,xmin,xmax,@(x)ebaf2(x,full(N),epsilon),opt);
     end
     value = -value;
   end
   xlist(:,it) = x;
-  valuelist(it) = value;  
+  valuelist(it) = value;
 end
 
 [value,ind] = max(valuelist);
@@ -114,8 +113,8 @@ mu = x(nr+1:end);
 
 if sum(v<eba_constraints.v_min), warning('Solution violates lower limit constraint'); end
 if sum(v>eba_constraints.v_max), warning('Solution violates upper limit constraint'); end
-if sum(abs(v(isfinite(eba_constraints.v_fix)) - eba_constraints.v_fix(isfinite(eba_constraints.v_fix)))>10^-8), 
-  warning('Solution violates prescribed flux constraint'); 
+if sum(abs(v(isfinite(eba_constraints.v_fix)) - eba_constraints.v_fix(isfinite(eba_constraints.v_fix)))>10^-8)
+  warning('Solution violates prescribed flux constraint');
 end
 if sum(abs(N_int*v) > 10^-8), warning('Solution violates stationarity constraint'); end
 if sum(v.*(N'*mu)>-epsilon), warning('Solution violates energy constraint'); end

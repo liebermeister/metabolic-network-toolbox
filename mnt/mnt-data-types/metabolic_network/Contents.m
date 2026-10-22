@@ -25,7 +25,7 @@
 % regulation_matrix   n x m matrix denoting metabolites that influence a reaction
 %
 % s_init              vector of initial concentrations
-% kinetics            structure (see 'kinetics_structure')
+% kinetics            structure (see 'help kinetics')
 %
 % graphics_parameters structure (see below)
 %

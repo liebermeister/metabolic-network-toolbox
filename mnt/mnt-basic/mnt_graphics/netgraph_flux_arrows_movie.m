@@ -8,22 +8,22 @@ clear M_time
 ns          = size(J_matrix,2);
 time_points = cellstr(num2str([1:ns]'));
 
-if length(gp.background_colors),
+if length(gp.background_colors)
   nb = size(gp.background_colors,1);
   gp.background_colors = interp1(0:1/[nb-1]:1,gp.background_colors,0:1/[ns-1]:1);
 end
 
-for it = 1:ns,
+for it = 1:ns
   gp.arrowstyle  = 'fluxes';
   gp.arrowvalues = J_matrix_scaled(:,it);
   gp.arrow_shift = it/(ns+1);
   gp.arrowcolor = [1 0 0];
-  subplot('position',[ 0 0 1 1]); 
+  subplot('position',[ 0 0 1 1]);
   if gp.background_colors, gp.canvas = gp.background_colors(it,:); end
   netgraph_concentrations(network,[],[],text_flag,gp);
-  if it==1, a = axis; end    
-  if gp.timebar,
-    hold on;  
+  if it==1, a = axis; end
+  if gp.timebar
+    hold on;
     ss = network.graphics_par.squaresize;
     amin = a(1) + 0.05 *[a(2)-a(1)];
     amax = a(2) - 0.05 *[a(2)-a(1)];

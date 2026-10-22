@@ -16,8 +16,8 @@ M = [];
 
 attribute_line_written = 0;
 
-for it = 1:length(T),
-  if size(T{it},1)>1,
+for it = 1:length(T)
+  if size(T{it},1)>1
     if attribute_line_written == 0;
       M = [M; T{it}(1:end,:)];
       attribute_line_written = 1;
@@ -31,11 +31,11 @@ end
 
 M = [[{sprintf('!!SBtab TableID=''ParameterData'' TableType=''Quantity''')}, repmat({''},1,size(M,2)-1)]; M];
 
-if length(filename),
-  if verbose,
+if length(filename)
+  if verbose
     display(sprintf('Writing kinetic data to SBtab file %s ',filename));
   end
   mytable(M,options_style,filename);
-else,
+else
   mytable(M,options_style)
 end

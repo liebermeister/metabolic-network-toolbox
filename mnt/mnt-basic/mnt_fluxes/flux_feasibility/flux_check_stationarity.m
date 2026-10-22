@@ -1,9 +1,9 @@
 function isStationary = flux_check_stationarity(network,v,chop_epsilon)
 
-if find(~isfinite(v)),
+if find(~isfinite(v))
   display('Flux contains NaN values');
 end
-  
+
 eval(default('chop_epsilon','10^-10'));
 
 % flux_check_stationarity(network,v)
@@ -13,7 +13,7 @@ mismatch = network.N(ind_int,:) * v;
 mismatch = mismatch(find(abs(mismatch) > chop_epsilon));
 isStationary = [norm(mismatch) < 0.005 * norm(v)];
 
-if ~isStationary,
+if ~isStationary
   display('Internal metabolites not balanced:');
   print_matrix(mismatch, network.metabolites(ind_int(find(mismatch))))
   norm_mismatch = norm(mismatch)

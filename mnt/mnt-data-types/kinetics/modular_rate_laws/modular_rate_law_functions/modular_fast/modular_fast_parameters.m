@@ -22,7 +22,7 @@ pars.ind_KI        = find(pars.Wminus);
 [dummi,pars.ind_KI_metabolite_index] = ind2sub([nr,nm],pars.ind_KI);
 
 pars.KM_rel        = KM(pars.ind_KM);
-pars.KA_rel        = KA(pars.ind_KA); 
+pars.KA_rel        = KA(pars.ind_KA);
 pars.KI_rel        = KI(pars.ind_KI);
 
 pars.Keq = Keq;

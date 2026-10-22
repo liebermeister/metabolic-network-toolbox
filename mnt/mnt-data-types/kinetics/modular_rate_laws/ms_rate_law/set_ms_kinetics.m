@@ -16,6 +16,10 @@ eval(default('parameters','struct()'));
 
 [nm,nr] = size(network.N);
 
+if ~isfield(network,'regulation_matrix')
+  network.regulation_matrix = zeros(nr,nm);
+end
+
 u   = ones(nr,1);
 c   = ones(nm,1);
 KA  = sparse(double(network.regulation_matrix>0));
@@ -25,31 +29,31 @@ KV  = ones(nr,1);
 Keq = ones(nr,1);
 h   = ones(nr,1);
 
-if isfield(parameters,'u'),       u   = parameters.u;     end 
-if isfield(parameters,'c'),       c   = parameters.c;     end 
-if isfield(parameters,'KA'),      KA  = parameters.KA;    end 
-if isfield(parameters,'KI'),      KI  = parameters.KI;    end 
-if isfield(parameters,'KM'),      KM  = parameters.KM;    end 
+if isfield(parameters,'u'),       u   = parameters.u;     end
+if isfield(parameters,'c'),       c   = parameters.c;     end
+if isfield(parameters,'KA'),      KA  = parameters.KA;    end
+if isfield(parameters,'KI'),      KI  = parameters.KI;    end
+if isfield(parameters,'KM'),      KM  = parameters.KM;    end
 
-if isfield(parameters,'KV'),        
+if isfield(parameters,'KV')
   KV  = parameters.KV;
-elseif isfield(parameters,'Kcatf'),
+elseif isfield(parameters,'Kcatf')
   KV  = sqrt(parameters.Kcatf .* parameters.Kcatr);
 end
 
-if isfield(parameters,'dmu0'),
+if isfield(parameters,'dmu0')
   dmu0 = parameters.dmu0;
-elseif isfield(parameters,'mu0'),
+elseif isfield(parameters,'mu0')
   dmu0 = network.N' * parameters.mu0;
 end
 
-if isfield(parameters,'Keq'),     
-  Keq = parameters.Keq;   
-elseif exist('dmu0','var'),
+if isfield(parameters,'Keq')
+  Keq = parameters.Keq;
+elseif exist('dmu0','var')
   Keq = exp(-1/RT * dmu0);
-end 
+end
 
-if isfield(parameters,'h'),       h   = parameters.h;     end 
+if isfield(parameters,'h'),       h   = parameters.h;     end
 
 [kcatplus, kcatminus] = modular_KV_Keq_to_kcat(network.N,[],KV,Keq,KM,h);
 

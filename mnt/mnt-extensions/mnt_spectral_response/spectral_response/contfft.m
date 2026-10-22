@@ -1,6 +1,6 @@
 function [X,w] = contfft(x,T);
 % CONTFFT [X,w] = contfft(x,T)
-%  
+%
 % STOLEN FROM http://users.ece.gatech.edu/~bonnie/book/mfiles/contfft.m
 %
 % Computes the Fourier transform of a continuous time signal
@@ -8,8 +8,9 @@ function [X,w] = contfft(x,T);
 %  time signal x and the sampling time T.  The output is
 %  the Fourier transform X(w) and the frequency vector w.
 %
+
 [n,m] = size(x);
-if n<m,
+if n<m
   x = x';
 end
 Xn = fft(x);

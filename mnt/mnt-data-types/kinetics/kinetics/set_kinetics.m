@@ -15,10 +15,10 @@
 function kinetics = set_kinetics(network,type,parameters)
 
 if ~exist('parameters','var'), parameters = []; end
-if ~exist('type','var'),       type = 'cs'; end 
+if ~exist('type','var'),       type = 'cs'; end
 
-switch type,
-  case 'numeric',          kinetics = set_numeric_kinetics(network,parameters);
+switch type
+  case 'numeric',          error('Kinetics of type ''numeric'' cannot be set with set_kinetics; please define them directly (see ''help kinetics'')');
   case 'cs',               kinetics = set_cs_kinetics(network,parameters);
   case 'ds',               kinetics = set_ds_kinetics(network,parameters);
   case 'ms',               kinetics = set_ms_kinetics(network,parameters);

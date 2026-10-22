@@ -10,4 +10,3 @@ ind_remove = find(prod(abs(v),2)<=epsilon);
 [network,ind_m,ind_r] = network_remove_action(network,ind_remove);
 
 %network = network_set_external(network,1);
- 

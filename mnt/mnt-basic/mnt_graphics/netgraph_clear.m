@@ -10,8 +10,8 @@ p.metnames = network.metabolites;
 p.actnames = network.actions;
 
 p.metstyle       = 'box';
-p.metcolstyle    = 'values'; 
-p.metcol         = 'c'; 
+p.metcolstyle    = 'values';
+p.metcol         = 'c';
 p.metprintnames  = 1;
 p.metprintvalues = 0;
 p.metvalues      = zeros(length(network.metabolites),1);
@@ -22,8 +22,8 @@ p.actcolstyle    = 'values';
 p.actcol         = 'r';
 p.actprintnames  = 1;
 p.actprintvalues = 0;
-p.actvalues      = zeros(length(network.actions),1); 
-p.actvalues_std  = zeros(length(network.actions),1); 
+p.actvalues      = zeros(length(network.actions),1);
+p.actvalues_std  = zeros(length(network.actions),1);
 
 p.arrowstyle     = 'none';
 p.arrowvalues    = p.actvalues;

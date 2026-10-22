@@ -5,18 +5,18 @@ eval(default('options','struct'));
 options_default = struct('kinetic_law','cs');
 options = join_struct(options_default,options);
 
-% REDUNDANT WITH FUNCTION network_import!!  
-  
-switch model_file(end-3:end),
-  case '.xml',
+% REDUNDANT WITH FUNCTION network_import!!
+
+switch model_file(end-3:end)
+  case '.xml'
     format = 'sbml';
-  case '.tsv',
+  case '.tsv'
     format = 'sbtab';
   otherwise
     error(sprintf('File %s: unknown file format',model_file));
 end
 
-switch format,
+switch format
   case 'sbml'
     network = network_sbml_import(model_file);
   case 'sbtab'

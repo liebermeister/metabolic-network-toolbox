@@ -1,4 +1,4 @@
-function stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)
+function stochasticJ_show_distribution(list,Jtotvalues,pJtot,fignum)
 
 % stochastic_show_distribution(list,Jtotvalues,pJtot,fignum)
 
@@ -8,7 +8,7 @@ if ~exist('positive','var'), positive=1;  end
 list=list(find(abs(list)<10*abs(median(list))));
 
 nit = length(list);
-[n,bin]=hist(list,20); 
+[n,bin]=hist(list,20);
 hist(list,20); hold on; colormap(1-gray)
 %maxvalue=max(1.1*max(bin),exp(mu+3*sigma))
 maxvalue=1.1*max(bin);

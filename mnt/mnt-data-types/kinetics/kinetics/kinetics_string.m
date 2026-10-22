@@ -11,20 +11,20 @@ if ~exist('actions','var'), actions = []; end
 
 s = [];
 
-if isempty(n),  
-  switch kinetics.type,            
-    case 'convenience',
+if isempty(n)
+  switch kinetics.type
+    case 'convenience'
       nmax     = length(kinetics.r);
       n        = 1:nmax;
   end
 end
 
-switch kinetics.type,  
+switch kinetics.type
   case 'ms',               s = ms_print(kinetics,n,actions,network);
   case 'cs',               s = cs_print(kinetics,n,actions,network);
   case 'ds',               s = cs_print(kinetics,n,actions,network);
   case 'rp',               s = rp_print(kinetics,n,actions,network);
-  case 'fd',               s = fd_print(kinetics,n,actions,network);
+  case 'fd',               error('Printing is not implemented for kinetics of type ''fd''');
   case 'convenience',      s = convenience_print(kinetics,n,actions,network);
   case 'numeric',  s = numeric_print(kinetics,n,actions,network);
   case 'standard',         s = standard_print(kinetics,n,actions,network);

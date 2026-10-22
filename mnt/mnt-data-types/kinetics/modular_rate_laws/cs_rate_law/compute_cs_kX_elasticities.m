@@ -2,7 +2,7 @@ function [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);
 
 % [E_kX_sc,kX_names,kX] = compute_cs_kX_elasticities(network, c);
 %
-% compute the elasticities for the ms kinetics and replace only the KM elasticities, 
+% compute the elasticities for the ms kinetics and replace only the KM elasticities,
 
 [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int] = make_structure_matrices(network.N,network.regulation_matrix,find(network.external),network.kinetics.h);
 
@@ -21,9 +21,9 @@ E_kM_sc = sparse(nr,length(i1));
 
 psi_plus  = exp(- sum( Mplus  .* log_alpha_M,2));
 psi_minus = exp(- sum( Mminus .* log_alpha_M,2));
-D         = psi_plus + psi_minus - 1; 
+D         = psi_plus + psi_minus - 1;
 
-for it = 1:length(i1),
+for it = 1:length(i1)
   this_beta     = exp(log_beta_M( i1(it),i2(it)) );
   this_Mplus    = Mplus( i1(it),i2(it));
   this_Mminus   = Mminus(i1(it),i2(it));
@@ -31,7 +31,7 @@ for it = 1:length(i1),
   this_psi_minus= psi_minus(i1(it));
   this_D        = D(i1(it));
   E_kM_sc(i1(it), it) = ( (this_Mplus * this_psi_plus) + (this_Mminus * this_psi_minus) ) / this_D * this_beta ...
-                       - 1/2 * ( this_Mplus + this_Mminus); 
+                       - 1/2 * ( this_Mplus + this_Mminus);
 end
 
 E_kX_sc(:,end-(nr+length(i1))+1:end-nr)  = E_kM_sc;

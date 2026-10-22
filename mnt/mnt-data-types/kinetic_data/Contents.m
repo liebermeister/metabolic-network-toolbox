@@ -1,4 +1,4 @@
-% "kinetic data" data structure for kinetic data relevant to a network model 
+% "kinetic data" data structure for kinetic data relevant to a network model
 % (see 'help metabolic_network')
 %
 % Functions for "kinetic data" data structures

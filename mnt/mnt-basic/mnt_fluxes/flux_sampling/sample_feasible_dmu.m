@@ -10,10 +10,10 @@ function [dmu, success_flag] = sample_feasible_dmu(N,ind_ext,v,es_constraints,es
 % But DISREGARD all other entries in 'es_constraints' (about mu, c, c0, Keq)
 %
 % Compute some dmu vectors at the boundaries of the feasible region
-% set by the (previously sampled or determined) flux directions 
+% set by the (previously sampled or determined) flux directions
 % compute the corresponding mu vectors using the pseudoinverse of N'
 
-dmu          = []; 
+dmu          = [];
 success_flag = 1;
 [nm,nr]      = size(N);
 
@@ -45,6 +45,10 @@ b_ineq = [ dmu_max; ...
          ];
 
 
+if isempty(es_constraints.dmu_eqconstraint)
+  es_constraints.dmu_eqconstraint = struct('matrix',zeros(0,nr),'vector',zeros(0,1));
+end
+
 A_eq = [ee(find(isfinite(es_constraints.dmu_fix)),:); ...
         es_constraints.dmu_eqconstraint.matrix;...
        ];
@@ -53,9 +57,9 @@ b_eq = [ es_constraints.dmu_fix(find(isfinite(es_constraints.dmu_fix))); ...
          es_constraints.dmu_eqconstraint.vector; ...
        ];
 
-[dmu, success_flag] = sample_convex(A_ineq, b_ineq, A_eq, b_eq, es_options.n_dmu_samples);
+[dmu, ~, ~, success_flag] = convex_sampling(A_ineq, b_ineq, A_eq, b_eq, es_options.n_dmu_samples);
 
-% check inequality constraints and equality constraints 
+% check inequality constraints and equality constraints
 % if success_flag,
 %   [A_ineq * dmu, b_ineq]
 %   [A_eq * dmu, b_eq]

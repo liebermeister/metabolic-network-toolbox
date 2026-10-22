@@ -46,9 +46,9 @@ E.sc_E_minus_cc  = zeros(nr,nm,nm);
 diagonal_plus  = Wplus .* gamma_A + Wminus .* gamma_I;
 diagonal_minus = Wplus .* gamma_A + Wminus .* gamma_I;
 
-for it = 1:nm,  
-  E.sc_E_plus_cc(:,it,it)  = E.sc_E_plus_cc(:,it,it)  - diagonal_plus(:,it); 
-  E.sc_E_minus_cc(:,it,it) = E.sc_E_minus_cc(:,it,it) - diagonal_minus(:,it); 
+for it = 1:nm
+  E.sc_E_plus_cc(:,it,it)  = E.sc_E_plus_cc(:,it,it)  - diagonal_plus(:,it);
+  E.sc_E_minus_cc(:,it,it) = E.sc_E_minus_cc(:,it,it) - diagonal_minus(:,it);
 end
 
 % -----------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ end
 
 E.un_E_plus_cc  = second_derivative_scaled2unscaled(E.sc_E_plus_cc,E.sc_E_plus_c,vplus,c);
 E.un_E_minus_cc = second_derivative_scaled2unscaled(E.sc_E_minus_cc,E.sc_E_minus_c,vminus,c);
-E.un_E_cc       = E.un_E_plus_cc - E.un_E_minus_cc;                        
+E.un_E_cc       = E.un_E_plus_cc - E.un_E_minus_cc;
 E.sc_E_cc       = second_derivative_unscaled2scaled(E.un_E_cc,E.un_E_c,v,c);
 
 % -----------------------------------------------
@@ -77,7 +77,7 @@ E.un_E_plus_cu   = zeros(nr,nm,nr);
 E.un_E_minus_cu  = zeros(nr,nm,nr);
 E.un_E_cu        = zeros(nr,nm,nr);
 
-for it = 1:nr,
+for it = 1:nr
   E.un_E_plus_cu(it,:,it)  = E.un_E_plus_c(it,:)  / u(it);
   E.un_E_minus_cu(it,:,it) = E.un_E_minus_c(it,:) / u(it);
   E.un_E_cu(it,:,it)       = E.un_E_c(it,:)       / u(it);

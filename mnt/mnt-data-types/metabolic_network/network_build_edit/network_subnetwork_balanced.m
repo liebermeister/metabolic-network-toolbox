@@ -2,13 +2,13 @@ function [network_red,v_red,dmu_red,c_red] = network_subnetwork_balanced(network
 
 % [network_red,v_red,dmu_red,c_red] = network_subnetwork_balanced(network,v,epsilon,vmin,dmu,c)
 %
-% first reduce a network to the reactions carrying considerable flux and then 
+% first reduce a network to the reactions carrying considerable flux and then
 % complement it with reactions mimicking the disregarded production and consumption
-% of internal metabolites such that the new network in in stationary state and 
+% of internal metabolites such that the new network in in stationary state and
 % show the same fluxes as the old network
 
 % ----------------------------------------------------------------
-% 1: omit all reactions with flux smaller than epsilon 
+% 1: omit all reactions with flux smaller than epsilon
 % and balance v again
 
 eval(default('epsilon','10^-10','vmin','0.1'));
@@ -44,9 +44,9 @@ network_red.N(nm+[1:n_met_exchange],nr+[1:n_met_exchange]) = -eye(n_met_exchange
 network_red.reversible = [network2.reversible; ones(n_met_exchange,1)];
 network_red.external   = [network2.external; ones(n_met_exchange,1)];
 
-if isfield(network2,'metabolite_KEGGID'),
+if isfield(network2,'metabolite_KEGGID')
   network_red.metabolite_KEGGID   = [network2.metabolite_KEGGID; repmat({''},n_met_exchange,1)];
-end  
+end
 v_red                  = [v2; -network2.N(ind_met_exchange,:)*v2];
 
 % invent hypothetical concentrations and dmu values

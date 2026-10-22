@@ -7,8 +7,8 @@ function network = netgraph_read_positions(network, layout_file, offsets, fill_n
 %   'fill_nans',    replace undetermined positions by random values
 %   'flag_KEGG_ids' match elements (between model and layout file) by KEGG ids (default: 0)
 %   'flag_fixed'    read information about fixed glyph positions from file
-% 
-% If flag_KEGG_ids is set: 
+%
+% If flag_KEGG_ids is set:
 % use field 'network.metabolite_KEGGID' (or 'network.Identifiers_kegg_compound') for matching metabolites
 % use argument list 'reaction_KEGG_IDs' or field 'network.reaction_KEGGID' for matching reactions
 
@@ -21,9 +21,9 @@ x = nan * ones(2,length(network.metabolites)+length(network.actions));
 fixed     = zeros(1,length(network.metabolites)+length(network.actions));
 invisible = zeros(1,length(network.metabolites)+length(network.actions));
 
-if exist('sbtab_version','file'),
-  
-  if isstr(layout_file),
+if exist('sbtab_version','file')
+
+  if isstr(layout_file)
     sbtab_table = sbtab_table_load(layout_file);
   else
     % assume that 'layout_file' is a SBtab object
@@ -45,12 +45,12 @@ if exist('sbtab_version','file'),
   else
     A{1} = sbtab_table_get_column(sbtab_table,'Element');
   end
-  
+
   A{2} = sbtab_table_get_column(sbtab_table,'PositionX',1);
   A{3} = sbtab_table_get_column(sbtab_table,'PositionY',1);
   A{4} = ones(size(A{2}));
-  
-  if flag_fixed,
+
+  if flag_fixed
     if sbtab_table_has_column(sbtab_table,'IsFixed');
       A{4} = sbtab_table_get_column(sbtab_table,'IsFixed',1);
     end
@@ -62,7 +62,7 @@ if exist('sbtab_version','file'),
     A{5} = [];
   end
 
-else,
+else
   warning('SBtab package is not installed; please install it!');
   fid = fopen(layout_file);
   A   = textscan(fid,'%s%f%f','delimiter','\t');
@@ -72,23 +72,23 @@ end
 
 % ---
 
-switch flag_KEGG_ids,
-  
-  case 0,
+switch flag_KEGG_ids
+
+  case 0
     model_metabolite_names = network.metabolites;
     model_reaction_names   = network.actions;
-  
-  case 1,
 
-    if isfield(network,'metabolite_KEGGID'), 
+  case 1
+
+    if isfield(network,'metabolite_KEGGID')
       model_metabolite_names = network.metabolite_KEGGID;
-    elseif isfield(network,'Identifiers_kegg_compound'), 
+    elseif isfield(network,'Identifiers_kegg_compound')
       model_metabolite_names = network.Identifiers_kegg_compound;
     else
       model_metabolite_names = network.Compound_Identifiers_kegg_compound;
     end
 
-    if length(reaction_KEGG_IDs),
+    if length(reaction_KEGG_IDs)
       model_reaction_names = reaction_KEGG_IDs;
     else
       model_reaction_names = network.reaction_KEGGID;
@@ -96,23 +96,23 @@ switch flag_KEGG_ids,
 
 end
 
-if length(unique(model_metabolite_names)) < length(model_metabolite_names),
-  if flag_KEGG_ids,
+if length(unique(model_metabolite_names)) < length(model_metabolite_names)
+  if flag_KEGG_ids
     warning('non-unique metabolite names');
-  else    
+  else
     sort(model_metabolite_names)
     error('non-unique metabolite names');
   end
 end
 
-if length(unique(model_reaction_names)) < length(model_reaction_names),
-  if flag_KEGG_ids,
+if length(unique(model_reaction_names)) < length(model_reaction_names)
+  if flag_KEGG_ids
     warning('non-unique reaction names');
   else
     error('non-unique reaction names');
   end
-  
-  end
+
+end
 
 l1 = label_names(A{1},model_metabolite_names);
 l1(isnan(A{2})) = 0;
@@ -121,7 +121,7 @@ x(1,l1(ok)) = A{2}(ok)';
 x(2,l1(ok)) = A{3}(ok)';
 ll = label_names(model_metabolite_names,A{1});
 fixed(find(ll)) = A{4}(ll(find(ll)));
-if length(A{5}),
+if length(A{5})
   invisible(find(ll)) = A{5}(ll(find(ll)));
 end
 
@@ -135,18 +135,18 @@ x(1,length(network.metabolites)+l1(ok)) = A{2}(ok)';
 x(2,length(network.metabolites)+l1(ok)) = A{3}(ok)';
 ll = label_names(model_reaction_names,A{1});
 fixed(length(network.metabolites)+find(ll)) = A{4}(ll(find(ll)));
-if length(A{5}),
+if length(A{5})
   invisible(length(network.metabolites)+find(ll)) = A{5}(ll(find(ll)));
 end
 
-if fill_nans,
+if fill_nans
   x(:,find(sum(isnan(x)))) = repmat([nanmean(x(1,:)'); nanmean(x(2,:)')],1,length(find(sum(isnan(x)))));
   x(find(isnan(x))) = randn(size(x(find(isnan(x)))));
 end
 
 x = x - repmat(offsets',1,size(x,2));
 
-if ~isfield(network,'graphics_par'),
+if ~isfield(network,'graphics_par')
   network = netgraph_make_graph(network,[],[]);
 end
 

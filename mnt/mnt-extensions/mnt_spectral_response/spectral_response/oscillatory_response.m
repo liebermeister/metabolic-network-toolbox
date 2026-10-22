@@ -36,27 +36,27 @@ delta_V2_0 = 1/sqrt(2*pi) * 0.5 * tensor_product(RV_2_2omega0,dp,2,1) * (dp.'');
 % the second order response coefficients contain already a factor 1/sqrt(2*pi),
 % so all sqrt(2*pi) factors cancel out in the end
 
-switch delta_par.type,
-  
-  case 'cos',
+switch delta_par.type
+
+  case 'cos'
     x_order0 = repmat(x_ss(ind_int),1,length(t)).';
     x_order1 = real( delta_S *  exp( i     * omega * t) ).';
     x_order2 = 0.25 * real( delta_S2 * exp( i * 2 * omega * t) ).' + 0.25 * repmat(real(delta_S2_0),1,length(t)).';
-    
+
     v_order0 = repmat(v_ss,1,length(t)).' ;
     v_order1 = real(delta_V  * exp( i *     omega * t) ).';
     v_order2 = 0.25 * real(delta_V2 * exp( i * 2 * omega * t) ).'  + 0.25 * repmat(real(delta_V2_0),1,length(t)).';
-    
-  case 'complex',
+
+  case 'complex'
     x_order0 = repmat(x_ss(ind_int), 1, length(t) ).';
     x_order1 = real((delta_S  * exp( i *     omega * t)).');
     x_order2 = real((delta_S2 * exp( i * 2 * omega * t)).');
-    
+
     v_order0 = repmat(v_ss, 1, length(t)).' ;
     v_order1 = real((delta_V  * exp( i *     omega * t)).');
     v_order2 = real((delta_V2 * exp( i * 2 * omega * t)).');
 
-  otherwise, error('Type of perturbation not supported');  
+  otherwise, error('Type of perturbation not supported');
 
 end
 
@@ -87,4 +87,3 @@ rr.t          = t;
 %   delta_p = dp * real( exp( i     * omega * t) );
 %   x_assign = feval(network.kinetics.assignment_function,x_ss,network.kinetics.parameters);
 % end
-

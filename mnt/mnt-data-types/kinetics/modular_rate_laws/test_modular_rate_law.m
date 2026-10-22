@@ -6,22 +6,22 @@ function r = test_modular_rate_law(n,kinetics)
 %
 % N = [-1;1]; network = network_construct(N); network.kinetics = set_kinetics(network,'ms');
 
-if exist('kinetics','var'), n.kinetics = kinetics; end 
+if exist('kinetics','var'), n.kinetics = kinetics; end
 N = n.N;
 
 r = n.kinetics;
 r.A = RT*(log(n.kinetics.Keq) - N'*log(n.kinetics.c(:,1)));
 
-switch n.kinetics.type,
-  case 'ms',
+switch n.kinetics.type
+  case 'ms'
     [r.v, r.v_plus, r.v_minus] = ms_velocities(n.N,n.regulation_matrix,find(n.external),n.kinetics.u,n.kinetics.c,n.kinetics.KA,n.kinetics.KI,n.kinetics.KM,n.kinetics.KV,n.kinetics.Keq,n.kinetics.h);
-  case 'cs',
+  case 'cs'
     [r.v, r.v_plus, r.v_minus] = cs_velocities(n.N,n.regulation_matrix,find(n.external),n.kinetics.u,n.kinetics.c,n.kinetics.KA,n.kinetics.KI,n.kinetics.KM,n.kinetics.KV,n.kinetics.Keq,n.kinetics.h);
-  case 'ds',
+  case 'ds'
     [r.v, r.v_plus, r.v_minus] = ds_velocities(n.N,n.regulation_matrix,find(n.external),n.kinetics.u,n.kinetics.c,n.kinetics.KA,n.kinetics.KI,n.kinetics.KM,n.kinetics.KV,n.kinetics.Keq,n.kinetics.h);
-  case 'rp',
+  case 'rp'
     [r.v, r.v_plus, r.v_minus] = rp_velocities(n.N,n.regulation_matrix,find(n.external),n.kinetics.u,n.kinetics.c,n.kinetics.KA,n.kinetics.KI,n.kinetics.KM,n.kinetics.KV,n.kinetics.Keq,n.kinetics.h);
-  case 'fd',
+  case 'fd'
     [r.v, r.v_plus, r.v_minus] = fd_velocities(n.N,n.regulation_matrix,find(n.external),n.kinetics.u,n.kinetics.c,n.kinetics.KA,n.kinetics.KI,n.kinetics.KM,n.kinetics.KV,n.kinetics.Keq,n.kinetics.h);
 end
 

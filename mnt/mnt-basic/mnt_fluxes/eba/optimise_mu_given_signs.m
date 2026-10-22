@@ -1,4 +1,4 @@
-function [delta_mu, delta_mu_score, this_mu] = optimize_mu_given_signs(N,parameter_prior,data,v,options,constraints)
+function [delta_mu, delta_mu_score, this_mu] = optimise_mu_given_signs(N,parameter_prior,data,v,options,constraints)
 
 % [delta_mu,delta_mu_score,this_mu] = optimize_mu_given_signs(N,parameter_prior,data,v,options,constraints)
 %
@@ -6,12 +6,12 @@ function [delta_mu, delta_mu_score, this_mu] = optimize_mu_given_signs(N,paramet
 % (with distribution parameters mean: delta_mu_mean and covariance: delta_mu_cov)
 % while satisfying the sign constraints v~=0 -> sign(delta_mu) = -sign(v)
 %
-% v: (size nr x n_exp) flux matrix, only used for sign constraints 
+% v: (size nr x n_exp) flux matrix, only used for sign constraints
 
 [nm,nr] = size(N);
 n_exp   = size(v,2);
 
-if ~isfield(constraints,'mu_data'),
+if ~isfield(constraints,'mu_data')
   constraints.mu_data.mean = zeros(nm*n_exp,1);
   constraints.mu_data.std  = 10*ones(nm*n_exp,1);
 end
@@ -52,7 +52,7 @@ LL  = []; for it = 1:n_exp, LL = matrix_add_block(LL,N'); end
 % the sign constraint sign(delta_mu) = delta_mu_signs
 % is formulated as options.epsilon_delta_mu < delta_mu_signs * LL * delta_mu_ind = LLL * delta_mu_ind
 % (rows for unspecified signs because of (v_r = 0) are removed in LLL)
-% 
+%
 % in addition, we require that  LLL * delta_mu_ind < options.epsilon_delta_mu
 % (upper limit on all absolute values of delta_mu)
 % requested signs of delta_mu  as a (nr x n_exp) matrix
@@ -71,9 +71,9 @@ A        = full( [-LLL; ...
                   -LL(irrel_signs,:); ...
                    LL(irrel_signs,:) ]);
 b        = [-options.epsilon_delta_mu * ones(size(LLL,1),1); ...
-             xmax * ones(size(LLL,1),1); 
+             xmax * ones(size(LLL,1),1);
             -xmax * ones(length(irrel_signs),1);
-             xmax * ones(length(irrel_signs),1);]; 
+             xmax * ones(length(irrel_signs),1);];
 mu_lower = [constraints.mu_data.mean - constraints.mu_data.std];
 mu_upper = [constraints.mu_data.mean + constraints.mu_data.std];
 mu_init  = constraints.mu_data.mean;
@@ -89,14 +89,13 @@ mu_init  = constraints.mu_data.mean;
 
 %sum((A*this_mu-b)>0)
 
-if sum(LLL*this_mu<0),
+if sum(LLL*this_mu<0)
   warning('  Sign condition violated');
-%  ind = find(LLL*this_mu<0);
-%  this_mu = this_mu - 1.1 * pinv(LLL(ind,:)) * [LLL(ind,:) * this_mu];
+  %  ind = find(LLL*this_mu<0);
+  %  this_mu = this_mu - 1.1 * pinv(LLL(ind,:)) * [LLL(ind,:) * this_mu];
 end
 
 delta_mu_score = gaussian_score(this_mu, mu_mean, mu_cov);
 
 delta_mu = LL * this_mu;
 delta_mu = reshape(delta_mu,nr,n_exp);
-
