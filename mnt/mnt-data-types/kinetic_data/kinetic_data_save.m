@@ -1,10 +1,10 @@
 function M = kinetic_data_save(kinetic_data, network, filename, options_style, verbose)
 
-% M = kinetic_data_save(kinetic_data,network,filename,options_style)
+% M = kinetic_data_save(kinetic_data,network,filename,options_style,verbose)
 %
 % also see kinetic_data_load
 
-eval(default('filename','[]','options_style','[]'));
+eval(default('filename','[]','options_style','[]','verbose','0'));
 
 if isempty(options_style)
   options_style=0;
