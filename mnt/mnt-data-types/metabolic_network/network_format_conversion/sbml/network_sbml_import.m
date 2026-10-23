@@ -29,7 +29,7 @@ import_compartments = 1;   % import compartments from model
 
 if isstr(s)
   if exist('dirname','var'); cd(dirname); end
-  [s,errors] = TranslateSBML(s);
+  [s,errors] = TranslateSBML(s,0,0); % no validation, no interactive prompts
 end
 
 % -----------------------------------------------------------------------------
@@ -46,10 +46,10 @@ for it=1:length(s.species)
   external(it,:) = s.species(it).boundaryCondition;
   s_init(it,:)   = s.species(it).initialConcentration;
   a_init(it,:)   = s.species(it).initialAmount;
-  ind = findstr(s.species(it).annotation,'kegg.compound');
+  ind = strfind(s.species(it).annotation,'kegg.compound'); ind = ind(1:min(end,1));
   if ind, metabolite_kegg_id{it,:} = s.species(it).annotation(ind+14:ind+19);
   else
-    ind = findstr(s.species(it).annotation,'kegg');
+    ind = strfind(s.species(it).annotation,'kegg'); ind = ind(1:min(end,1));
     if ind, metabolite_kegg_id{it,:} = s.species(it).annotation(ind+5:ind+10);
     else
       metabolite_kegg_id{it,:} = '';
@@ -86,7 +86,7 @@ for it=1:length(s.reaction)
   listOfReactants{it,:} = s.reaction(it).reactant;
   listOfProducts{it,:}  = s.reaction(it).product;
   listOfModifiers{it,:} = s.reaction(it).modifier;
-  ind = findstr(s.reaction(it).annotation,'kegg.reaction');
+  ind = strfind(s.reaction(it).annotation,'kegg.reaction'); ind = ind(1:min(end,1));
   if ind
     reaction_kegg_id{it,:} = s.reaction(it).annotation(ind+14:ind+19);
   else
