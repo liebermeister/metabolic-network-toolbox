@@ -7,10 +7,10 @@ thermodynamics, kinetic rate laws, simulation, metabolic control analysis, and g
 
 ## Installation
 
-Download or clone the repository and add the `mnt` folder, with its subfolders, to your Matlab path:
+Download or clone the repository and add the `matlab` folder, with its subfolders, to your Matlab path:
 
 ```matlab
-addpath(genpath('/path/to/metabolic-network-toolbox/mnt'));
+addpath(genpath('/path/to/metabolic-network-toolbox/matlab'));
 savepath;   % optional: keep the folders on the path in future sessions
 ```
 
@@ -46,12 +46,12 @@ Some functions require further packages:
 
 The functions are organised in three folders:
 
-- **`mnt/mnt-data-types`**: data structures for metabolic networks, kinetics (mass-action,
+- **`matlab/mnt-data-types`**: data structures for metabolic networks, kinetics (mass-action,
   convenience kinetics, modular rate laws, ...), kinetic data, and metabolic state data;
   import and export (SBML, SBtab, COBRA)
-- **`mnt/mnt-basic`**: flux analysis (FBA, flux minimisation, flux sampling, energy balance
+- **`matlab/mnt-basic`**: flux analysis (FBA, flux minimisation, flux sampling, energy balance
   analysis, max-min driving force), thermodynamics, simulation and steady states, graphics
-- **`mnt/mnt-control-analysis`**: metabolic control analysis, spectral response coefficients,
+- **`matlab/mnt-control-analysis`**: metabolic control analysis, spectral response coefficients,
   models with uncertain parameters
 
 Networks and their kinetics are represented by Matlab structs; for details, type
