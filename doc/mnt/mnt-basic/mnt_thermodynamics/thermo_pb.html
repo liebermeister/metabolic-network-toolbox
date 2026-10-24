@@ -31,13 +31,13 @@
 
  Thermodynamic parameter balancing (uses stoichiometric matrix as an input)
 
- Outputs: 
+ Outputs:
    c (concentrations); dG0 (standard Gibbs free energy of reaction), A (reaction affinity) AFTER BALANCING
    feasible (flag): do all reaction directions agree with the signs of thermodynamic forces?
- 
+
  This function is independent of the main parameter balancing functions
  (the formulae for thermodynamic parameter balancing problem are explictly solved)
- 
+
  (for an alternative function that imports all model data in a data structure,
   see 'parameter_balancing_thermodynamic')
 
@@ -61,7 +61,7 @@
    thermo_pb_options.theta_threshold
 
  Usage example:
-   complete the concentration vector for a network with given fluxes and equilibrium constants, 
+   complete the concentration vector for a network with given fluxes and equilibrium constants,
    and (some) given concentrations (non-nan values in vector c) to be kept fixed:
    delta_G0 = -RT * log(network.kinetics.Keq);
    [c, dG0, A, feasible] = thermo_pb(network.N, v, struct('c_fix', c_data, 'delta_G0_fix', delta_G0), 1);</pre></div>
@@ -79,6 +79,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 22-Oct-2026 19:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sat 24-Oct-2026 13:52:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

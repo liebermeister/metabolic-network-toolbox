@@ -32,20 +32,20 @@
  Principle of minimal sum of absolute fluxes, solves
 
  min = sum(cost_weights .* abs(v))
- where benefit = z' * v 
-       N_internal * v = 0  
+ where benefit = z' * v
+       N_internal * v = 0
        v_min &lt;= v &lt;= v_max
 
  instead of N_internal * v = 0, N_internal * v = production (with given entries for production) can be solved
 
  entries in fba_constraints: see fba_default_options
 
-  fba_constraints.zv:           linear weights in the objective function  
+  fba_constraints.zv:           linear weights in the objective function
   fba_constraints.v_min:        vector of lower bounds
   fba_constraints.v_max:        vector of upper bounds
   fba_constraints.v_sign:       vector of signs, overrides v_min and v_max
   fba_constraints.v_fix:        vector of fixed fluxes, overrides everything else
-  fba_constraints.production:   vector for internal metabolite production rates (replaces 0 in N_int * v = 0)  
+  fba_constraints.production:   vector for internal metabolite production rates (replaces 0 in N_int * v = 0)
   fba_constraints.cost_weights: (optional) vector of flux cost weights
 
  benefit: predefined value of the objective
@@ -64,6 +64,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 22-Oct-2026 19:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sat 24-Oct-2026 13:52:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
