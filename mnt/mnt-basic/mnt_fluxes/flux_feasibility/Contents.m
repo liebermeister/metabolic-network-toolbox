@@ -6,3 +6,4 @@
 %   es_check_feasibility
 %   es_check_flux_constraints
 %   es_check_velocities_ma_ratios
+%   thermo_feasible_flux            Check if a flux distribution is thermodynamically feasible (EBA)

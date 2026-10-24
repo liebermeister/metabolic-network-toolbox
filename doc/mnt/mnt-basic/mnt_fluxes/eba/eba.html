@@ -32,13 +32,13 @@
  Energy balance analysis (extension of FBA for simultaneous prediction of v and mu/delta mu)
 
  depending on eba_options.compute_mu (possible values 'mu','delta_mu'),
- either mu or delta_mu are included in the variable vector 
+ either mu or delta_mu are included in the variable vector
 
  if mu is chosen, delta_mu is expressed by  N_all' * mu in all above formulas
  to get a unique solution for mu, we require that the sum of squares is minimal
  the formulae read
                              z' * j   =   max
-                     N_internal * j   =   0 
+                     N_internal * j   =   0
           ext_signs_l * (N_ext*j)_l   &gt;   0
  j_l ~=0  =&gt;  j_l * (N_all' * mu)_l   &lt;   0
                    v_min &lt;= j         &lt;=  v_max
@@ -50,7 +50,7 @@
  and no upper and lower constraints on mu are considered. the formulae read
 
                            z' * j  =   max
-                   N_internal * j  =   0 
+                   N_internal * j  =   0
         ext_signs_l * (N_ext*j)_l  &gt;   0
     j_l ~=0  =&gt;  j_l * delta mu_l  &lt;   0
                     K' * delta_mu  =   0
@@ -59,7 +59,7 @@
 
  for fields of 'eba_constraints' and 'eba_options', see 'eba_default_options'
 
- NOTE: this function is unfinished: it only solves the FBA part of the problem 
+ NOTE: this function is unfinished: it only solves the FBA part of the problem
  (without the constraints on delta_mu) and returns an empty delta_mu</pre></div>
 
 <!-- crossreference -->
@@ -75,6 +75,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 22-Oct-2026 19:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sat 24-Oct-2026 13:52:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -34,13 +34,13 @@
  (i)   'numeric': the kinetics of all reactions are defined by a single m-file
          kinetics.velocity_function   function handle the function must have the form
                                       function v = fct_name(s,p,t), where s is a column vector of
-                                      metabolite concentrations and v is a column vector of 
+                                      metabolite concentrations and v is a column vector of
                                       reaction velocities
 
          kinetics.parameters          structure containing the parameters
 
  (ii)  'standard': kinetics contains field 'reactions', a cell structure of
-        structure arrays, each describing one reaction: the kind of kinetics is 
+        structure arrays, each describing one reaction: the kind of kinetics is
         given in the field
 
  (iii)  'kinetic_strings': kinetics contains field 'reactions', a cell structure of
@@ -48,13 +48,13 @@
         names and values are given in a column cell array of strings
         and a column vector, respectively.
 
- (iv)  'mass-action': all reactions are of mass action type 
+ (iv)  'mass-action': all reactions are of mass action type
         the parameters are given as vectors in fields
          kinetics.k_fwd               forward rate constants
-         kinetics.k_bwd               backward rate constants, 
+         kinetics.k_bwd               backward rate constants,
          kinetics.exponents          for reactions of type 2A -&gt; B, optional
 
- (v)  'convenience': all reactions are of convenience type 
+ (v)  'convenience': all reactions are of convenience type
         the parameters are given as vectors in fields
          r    activity constants (geometric mean of forward and backward turnover rate), column vector
          g    energy constants (g = exp((G_formation-G_mean)/RT * scaling factor) ), column vector
@@ -84,6 +84,6 @@ This function is called by:
 
 
 
-<hr><address>Generated on Thu 22-Oct-2026 19:08:00 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sat 24-Oct-2026 13:52:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
