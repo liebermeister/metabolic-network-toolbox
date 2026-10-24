@@ -57,7 +57,7 @@ if T1 > 0
 
       case 'cos'
         [t_pre,x_pre] = ode15s(@der_pert_cos,[ -T1, 0],x0,odeoptions1,N,pp,velocity_function,delta_par);
-        for j=1:size(t_pre)
+        for j=1:size(t_pre,1)
           p_pre(j,:) = getfield(pp,delta_par.name) + real(delta_par.value * exp(i*delta_par.omega*t_pre(j)));
           this_p   = setfield(pp,delta_par.name, p_pre(j,:));
           v_pre(j,:)   = feval(velocity_function,x_pre(j,:).',this_p).';
@@ -65,7 +65,7 @@ if T1 > 0
 
       case 'complex'
         [t_pre,x_pre] = ode15s(@der_pert_complex,[ -T1, 0],x0,odeoptions1,N,pp,velocity_function,delta_par);
-        for j=1:size(t_pre)
+        for j=1:size(t_pre,1)
           p_pre(j,:) = getfield(pp,delta_par.name) + delta_par.value*exp(i*delta_par.omega*t_pre(j));
           this_p   = setfield(pp,delta_par.name, p_pre(j,:));
           v_pre(j,:)   = feval(velocity_function,x_pre(j,:).',this_p).';
@@ -73,7 +73,7 @@ if T1 > 0
 
       case 'prescribed'
         [t_pre,x_pre] = ode15s(@der_pert_prescribed,[ -T1, 0],x0,odeoptions1,N,pp,velocity_function,delta_par);
-        for j=1:size(t_pre)
+        for j=1:size(t_pre,1)
           p_pre(j,:)  = feval(delta_par.parameter_function,t_pre(j),delta_par);
           this_p      = setfield(pp,delta_par.name, p_pre(j,:));
           v_pre(j,:)  = feval(velocity_function,x_pre(j,:).',this_p).';
@@ -84,7 +84,7 @@ if T1 > 0
 
     [t_pre,x_pre]  = ode15s(@derivatives,T2,x0,odeoptions,N,pp,velocity_function);
 
-    for j=1:size(t_pre)
+    for j=1:size(t_pre,1)
       v_pre(j,:)= feval(velocity_function,x_pre(j,:).',pp).';
     end
 
@@ -104,7 +104,7 @@ if ~isempty(delta_par)
 
     case 'cos'
       [t,x] = ode15s(@der_pert_cos,T2,x_init,odeoptions2,N,pp,velocity_function,delta_par);
-      for j=1:size(t)
+      for j=1:size(t,1)
         p(j,:)   = getfield(pp,delta_par.name) + real(delta_par.value * exp(i*delta_par.omega*t(j)));
         this_p   = setfield(pp,delta_par.name, p(j,:));
         v(j,:)   = feval(velocity_function,x(j,:).',this_p).';
@@ -112,7 +112,7 @@ if ~isempty(delta_par)
 
     case 'complex'
       [t,x] = ode15s(@der_pert_complex,T2,x_init,odeoptions2,N,pp,velocity_function,delta_par)
-      for j=1:size(t)
+      for j=1:size(t,1)
         p(j,:) = getfield(pp,delta_par.name) + delta_par.value*exp(i*delta_par.omega*t(j));
         this_p   = setfield(pp,delta_par.name, p(j,:));
         v(j,:)   = feval(velocity_function,x(j,:).',this_p).';
@@ -120,7 +120,7 @@ if ~isempty(delta_par)
 
     case 'prescribed'
       [t,x] = ode15s(@der_pert_prescribed,T2,x_init,odeoptions2,N,pp,velocity_function,delta_par);
-      for j=1:size(t)
+      for j=1:size(t,1)
         p(j,:)   = feval(delta_par.parameter_function,t(j),delta_par);
         this_p   = setfield(pp,delta_par.name, p(j,:));
         v(j,:)   = feval(velocity_function,x(j,:).',this_p).';
@@ -129,7 +129,7 @@ if ~isempty(delta_par)
   end
 else
   [t,x] = ode15s(@derivatives, T2 , x_init, odeoptions, N, pp, velocity_function);
-  for j=1:size(t)
+  for j=1:size(t,1)
     v(j,:)= feval(velocity_function,x(j,:).',pp,t(j)).';
   end
 end
