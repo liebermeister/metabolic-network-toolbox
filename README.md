@@ -51,7 +51,7 @@ The functions are organised in three folders:
   import and export (SBML, SBtab, COBRA)
 - **`mnt/mnt-basic`**: flux analysis (FBA, flux minimisation, flux sampling, energy balance
   analysis, max-min driving force), thermodynamics, simulation and steady states, graphics
-- **`mnt/mnt-extensions`**: metabolic control analysis, spectral response coefficients,
+- **`mnt/mnt-control-analysis`**: metabolic control analysis, spectral response coefficients,
   models with uncertain parameters
 
 Networks and their kinetics are represented by Matlab structs; for details, type
