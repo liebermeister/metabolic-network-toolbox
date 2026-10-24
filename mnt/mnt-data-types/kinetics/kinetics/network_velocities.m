@@ -73,7 +73,7 @@ else
         end
       end
 
-     for it2=1:length(indices)
+      for it2=1:length(indices)
         it = indices(it2);
         r  = kinetics.reactions{it};
         for itt = 1:length(r.parameters)
@@ -126,17 +126,17 @@ else
 
             case 'mass-action'
 
-            Nf  = abs(network.N(network.N(:,i)<0,i));
-            Nb  =     network.N(network.N(:,i)>0,i);
-            v(it) = prod(S.^Nf)* R.k - prod(P.^Nb) * R.km * network.reversible(i);
+              Nf  = abs(network.N(network.N(:,i)<0,i));
+              Nb  =     network.N(network.N(:,i)>0,i);
+              v(it) = prod(S.^Nf)* R.k - prod(P.^Nb) * R.km * network.reversible(i);
             case 'michaelis_menten_rev'
               v(it)= ( R.Vm_S/R.Km_S * S -R.Vm_P/R.Km_P * P)/(1+S/R.Km_S+P/R.Km_P);
             case 'multiple_michaelis_menten_rev'
               v(it)= ( R.Vm_S/R.Km_S * prod(S) -R.Vm_P/R.Km_P * prod(P))/(1+prod(S)/R.Km_S+prod(P)/R.Km_P);
             case 'multiple_michaelis_menten_irrev'
               v(it)= ( R.Vm_S/R.Km_S * prod(S) )/(1+prod(S)/R.Km_S);
-          case 'influx'
-            v(it) = R.v_in;
+            case 'influx'
+              v(it) = R.v_in;
             case 'efflux'
               v(it)= prod(S) * R.k_out;
             case 'rev_uni_uni'
@@ -164,9 +164,9 @@ else
             case 'irrev_bi'
               v(it) = ( R.Pk * S(1) * S(2) ) /...
                       (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) );
-          case 'irrev_multiple'
-            Nf  = abs(network.N(network.N(:,i)<0,i));
-            v(it) = ( R.Pk * prod(S.^Nf)  ) / ( prod(S.^Nf) * R.k(1) +  R.k(2) );
+            case 'irrev_multiple'
+              Nf  = abs(network.N(network.N(:,i)<0,i));
+              v(it) = ( R.Pk * prod(S.^Nf)  ) / ( prod(S.^Nf) * R.k(1) +  R.k(2) );
 
             case {'standard_irrev_uni'}
               v(it) = (R.Vf * S(1)/R.kA) / (1 + S(1)/R.kA);
@@ -176,16 +176,16 @@ else
               An = S(1)/R.kA;
               Pn = P(1)/R.kP;
               v(it) = (R.Vf * An - R.Vr * Pn) / (1 + An + Pn );
-          case {'standard_rev_uni_bi'}
-            An = S(1)/R.kA;
-            Pn = P(1)/R.kP;
-            Qn = P(2)/R.kQ;
-            v(it) = (R.Vf * An - R.Vr * Pn * Qn) /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
+            case {'standard_rev_uni_bi'}
+              An = S(1)/R.kA;
+              Pn = P(1)/R.kP;
+              Qn = P(2)/R.kQ;
+              v(it) = (R.Vf * An - R.Vr * Pn * Qn) /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
             case {'standard_rev_bi_uni'}
               An = S(1)/R.kA;
-            Bn = S(2)/R.kB;
-            Pn = P(1)/R.kP;
-            v(it) = (R.Vf * An * Bn - R.Vr * Pn) / (1 + An + Bn + Pn + An*Bn + An*Pn);
+              Bn = S(2)/R.kB;
+              Pn = P(1)/R.kP;
+              v(it) = (R.Vf * An * Bn - R.Vr * Pn) / (1 + An + Bn + Pn + An*Bn + An*Pn);
             case {'standard_rev_bi_bi'}
               An = S(1)/R.kA;
               Bn = S(2)/R.kB;
@@ -194,10 +194,10 @@ else
               v(it) = (R.Vf * An * Bn - R.Vr * Pn * Qn) / ...
                       (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
             case {'standard_rev_multiple'}
-            Sn = S./R.kf;
-            Pn = P./R.kr;
-            v(it) =  (R.Vf * prod(Sn)  - R.Vr * prod(Pn) ) / ...
-                     (  prod(1+Sn) + prod(1+Pn) -1);
+              Sn = S./R.kf;
+              Pn = P./R.kr;
+              v(it) =  (R.Vf * prod(Sn)  - R.Vr * prod(Pn) ) / ...
+                       (  prod(1+Sn) + prod(1+Pn) -1);
 
             case {'ready_made'}
               nS  = abs(network.N(find(network.N(:,i)<0),i));
@@ -219,33 +219,33 @@ else
               end
 
               activators_ind = find(network.regulation_matrix(i,:)>0);
-            if length( activators_ind)
-              act = s(activators_ind,1);
-              v(it) = v(it) * prod( act ./ R.KA ./ (1+act./R.KA));
-            end
+              if length( activators_ind)
+                act = s(activators_ind,1);
+                v(it) = v(it) * prod( act ./ R.KA ./ (1+act./R.KA));
+              end
 
-            inhibitors_ind = find(network.regulation_matrix(i,:)<0);
-            if length( inhibitors_ind)
-              rep = s(inhibitors_ind,1);
-              v(it) = v(it) * prod( 1./(1 + rep./R.KI) );
-            end
+              inhibitors_ind = find(network.regulation_matrix(i,:)<0);
+              if length( inhibitors_ind)
+                rep = s(inhibitors_ind,1);
+                v(it) = v(it) * prod( 1./(1 + rep./R.KI) );
+              end
 
-        end
+          end
 
-        switch kinetics.reactions{i}.type
-          case {'standard_irrev_uni','standard_irrev_bi','standard_rev_uni_uni',...
-                'standard_rev_uni_bi','standard_rev_bi_uni','standard_rev_bi_bi'},
-            if isfield(R,'Krep')
-              inhibitors_ind = find(network.regulation_matrix(it,:));
-              rep = s(inhibitors_ind,1);
-              v(it) = v(it) * prod(1./(1+rep./R.Krep));
-            end
-            if isfield(R,'Kact')
-              activators_ind = find(network.regulation_matrix(it,:));
-              act = s(activators_ind,1);
-              v(it) = v(it) * prod(act./(act+R.Kact));
-            end
-        end
+          switch kinetics.reactions{i}.type
+            case {'standard_irrev_uni','standard_irrev_bi','standard_rev_uni_uni',...
+                  'standard_rev_uni_bi','standard_rev_bi_uni','standard_rev_bi_bi'},
+              if isfield(R,'Krep')
+                inhibitors_ind = find(network.regulation_matrix(it,:));
+                rep = s(inhibitors_ind,1);
+                v(it) = v(it) * prod(1./(1+rep./R.Krep));
+              end
+              if isfield(R,'Kact')
+                activators_ind = find(network.regulation_matrix(it,:));
+                act = s(activators_ind,1);
+                v(it) = v(it) * prod(act./(act+R.Kact));
+              end
+          end
         end
 
         % SPLITTED kinetics
@@ -254,80 +254,80 @@ else
         v = nan*ones(2*length(indices),1);
 
         for it=1:length(indices)
-        i = indices(it);
-        R   = kinetics.reactions{i};
-        S   = s(find(network.N(:,i)<0));
-        P   = s(find(network.N(:,i)>0));
+          i = indices(it);
+          R   = kinetics.reactions{i};
+          S   = s(find(network.N(:,i)<0));
+          P   = s(find(network.N(:,i)>0));
 
-        switch R.type
+          switch R.type
 
-          case 'mass-action'
-            Nf  = abs(network.N(network.N(:,i)<0,i));
-            Nb  =     network.N(network.N(:,i)>0,i);
-            v(2*it-1:2*it) = [prod(S.^Nf)* R.k;  prod(P.^Nb) * R.km * network.reversible(i)];
-          case 'michaelis_menten_rev'
-            v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * S ; R.Vm_P/R.Km_P * P]/(1+S/R.Km_S+P/R.Km_P);
-          case 'multiple_michaelis_menten_rev'
-            v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S);  R.Vm_P/R.Km_P * prod(P)]/(1+S/R.Km_S+P/R.Km_P);
-          case 'multiple_michaelis_menten_irrev'
-            v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S) /(1+S/R.Km_S); 0];
-          case 'influx'
-            v(2*it-1:2*it) = [R.v_in;0];
-          case 'efflux'
-            v(2*it-1:2*it)= [prod(S) * R.k_out; 0];
-          case 'rev_uni_uni'
-            v(2*it-1:2*it) = [ R.Pk * S; R.Pkm * P ] / ( S * R.k(1) + R.km(1) +  R.k(2) + P * R.km(2));
-          case 'rev_bi_uni'
-            v(2*it-1:2*it) = [ R.Pk * S(1) * S(2) ;  R.Pkm * P ] /...
-                ( ( R.km(2) + S(2)*R.k(2))*(S(1)*R.k(1)+ P*R.km(3)) + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) ...
-                  + R.km(1)*(R.km(2) + R.k(3) + P*R.km(3)) );
-          case 'rev_uni_bi'
-            v(2*it-1:2*it) = [ R.Pk * S ; R.Pkm * P(1) * P(2) ]/...
-                ( ( R.k(2) + P(1)*R.km(2))*(P(2)*R.km(3) + S*R.k(1)) + R.km(1)*(P(2)*R.km(3) + P(1)*R.km(2)) ...
-                  + R.k(3)*(R.k(2) + R.km(1) + S*R.k(1)) );
-          case 'rev_bi_bi'
-            v(2*it-1:2*it) = [ R.Pk * S(1) * S(2);  R.Pkm * P(1) * P(2)]/...
-                ( (R.km(2)+R.k(3))*(R.k(4)*R.km(1) + R.k(1)*R.k(4)*S(1) + R.km(4)*R.km(1)*P(2)) ...
-                  + S(2)*R.k(2) *(R.k(3) *(R.k(4)+R.km(4)*P(2)) + S(1)*R.k(1)*(R.k(3)+R.k(4)))...
-                  + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))...
-                  + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );
-          case 'rev_multiple'
-            v(2*it-1:2*it) = [ R.Pk * prod(S); R.Pkm * prod(P)] / ( prod(S) * R.k(1) + R.km(1) +  R.k(2) + prod(P) * R.km(2));
-          case 'irrev_uni'
-            v(2*it-1:2*it) =  [R.Pk * S / (S * R.k(1) + R.k(2) );0];
-          case 'irrev_bi'
-            v(2*it-1:2*it) = [ ( R.Pk * S(1) * S(2) ) /...
-                               (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) ); 0];
+            case 'mass-action'
+              Nf  = abs(network.N(network.N(:,i)<0,i));
+              Nb  =     network.N(network.N(:,i)>0,i);
+              v(2*it-1:2*it) = [prod(S.^Nf)* R.k;  prod(P.^Nb) * R.km * network.reversible(i)];
+            case 'michaelis_menten_rev'
+              v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * S ; R.Vm_P/R.Km_P * P]/(1+S/R.Km_S+P/R.Km_P);
+            case 'multiple_michaelis_menten_rev'
+              v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S);  R.Vm_P/R.Km_P * prod(P)]/(1+S/R.Km_S+P/R.Km_P);
+            case 'multiple_michaelis_menten_irrev'
+              v(2*it-1:2*it)= [ R.Vm_S/R.Km_S * prod(S) /(1+S/R.Km_S); 0];
+            case 'influx'
+              v(2*it-1:2*it) = [R.v_in;0];
+            case 'efflux'
+              v(2*it-1:2*it)= [prod(S) * R.k_out; 0];
+            case 'rev_uni_uni'
+              v(2*it-1:2*it) = [ R.Pk * S; R.Pkm * P ] / ( S * R.k(1) + R.km(1) +  R.k(2) + P * R.km(2));
+            case 'rev_bi_uni'
+              v(2*it-1:2*it) = [ R.Pk * S(1) * S(2) ;  R.Pkm * P ] /...
+                  ( ( R.km(2) + S(2)*R.k(2))*(S(1)*R.k(1)+ P*R.km(3)) + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) ...
+                    + R.km(1)*(R.km(2) + R.k(3) + P*R.km(3)) );
+            case 'rev_uni_bi'
+              v(2*it-1:2*it) = [ R.Pk * S ; R.Pkm * P(1) * P(2) ]/...
+                  ( ( R.k(2) + P(1)*R.km(2))*(P(2)*R.km(3) + S*R.k(1)) + R.km(1)*(P(2)*R.km(3) + P(1)*R.km(2)) ...
+                    + R.k(3)*(R.k(2) + R.km(1) + S*R.k(1)) );
+            case 'rev_bi_bi'
+              v(2*it-1:2*it) = [ R.Pk * S(1) * S(2);  R.Pkm * P(1) * P(2)]/...
+                  ( (R.km(2)+R.k(3))*(R.k(4)*R.km(1) + R.k(1)*R.k(4)*S(1) + R.km(4)*R.km(1)*P(2)) ...
+                    + S(2)*R.k(2) *(R.k(3) *(R.k(4)+R.km(4)*P(2)) + S(1)*R.k(1)*(R.k(3)+R.k(4)))...
+                    + P(1)*R.km(3)*(R.km(2)*(R.km(1)+R.k(1)*S(1)) + P(2)*R.km(4)*(R.km(1)+R.km(2)))...
+                    + (R.k(1)*S(1)+R.km(4)*P(2))*R.k(2)*R.km(3)*S(2)*P(1) );
+            case 'rev_multiple'
+              v(2*it-1:2*it) = [ R.Pk * prod(S); R.Pkm * prod(P)] / ( prod(S) * R.k(1) + R.km(1) +  R.k(2) + prod(P) * R.km(2));
+            case 'irrev_uni'
+              v(2*it-1:2*it) =  [R.Pk * S / (S * R.k(1) + R.k(2) );0];
+            case 'irrev_bi'
+              v(2*it-1:2*it) = [ ( R.Pk * S(1) * S(2) ) /...
+                                 (  S(2)*R.k(2) * S(1)*R.k(1)  + R.k(3)*(S(1)*R.k(1) + S(2)*R.k(2)) ); 0];
 
-          case {'standard_irrev_uni'}
-            v(2*it-1:2*it) = [ R.Vf * S(1)/R.kA; 0] / (1 + S(1)/R.kA);
-          case {'standard_irrev_bi'}
-            v(2*it-1:2*it) = [R.Vf * S(1)/R.kA * S(2)/R.kB; 0] / (1 + S(1)/R.kA + S(2)/R.kB + S(1)/R.kA * S(2)/R.kB);
-          case {'standard_rev_uni_uni'}
-            An = S(1)/R.kA;
-            Pn = P(1)/R.kP;
-            v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn] / (1 + An + Pn );
-          case {'standard_rev_uni_bi'}
-            An = S(1)/R.kA;
-            Pn = P(1)/R.kP;
-            Qn = P(2)/R.kQ;
-            v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn * Qn] /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
-          case {'standard_rev_bi_uni'}
-            An = S(1)/R.kA;
-            Bn = S(2)/R.kB;
-            Pn = P(1)/R.kP;
-            v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn] / (1 + An + Bn + Pn + An*Bn + An*Pn);
-          case {'standard_rev_bi_bi'}
-            An = S(1)/R.kA;
-            Bn = S(2)/R.kB;
-            Pn = P(1)/R.kP;
-            Qn = P(2)/R.kQ;
-            v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn * Qn] / ...
-                (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
-        end
+            case {'standard_irrev_uni'}
+              v(2*it-1:2*it) = [ R.Vf * S(1)/R.kA; 0] / (1 + S(1)/R.kA);
+            case {'standard_irrev_bi'}
+              v(2*it-1:2*it) = [R.Vf * S(1)/R.kA * S(2)/R.kB; 0] / (1 + S(1)/R.kA + S(2)/R.kB + S(1)/R.kA * S(2)/R.kB);
+            case {'standard_rev_uni_uni'}
+              An = S(1)/R.kA;
+              Pn = P(1)/R.kP;
+              v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn] / (1 + An + Pn );
+            case {'standard_rev_uni_bi'}
+              An = S(1)/R.kA;
+              Pn = P(1)/R.kP;
+              Qn = P(2)/R.kQ;
+              v(2*it-1:2*it) = [R.Vf * An ;  R.Vr * Pn * Qn] /  (1 + An + Pn + Qn + An*Qn + Pn*Qn );
+            case {'standard_rev_bi_uni'}
+              An = S(1)/R.kA;
+              Bn = S(2)/R.kB;
+              Pn = P(1)/R.kP;
+              v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn] / (1 + An + Bn + Pn + An*Bn + An*Pn);
+            case {'standard_rev_bi_bi'}
+              An = S(1)/R.kA;
+              Bn = S(2)/R.kB;
+              Pn = P(1)/R.kP;
+              Qn = P(2)/R.kQ;
+              v(2*it-1:2*it) = [R.Vf * An * Bn ;  R.Vr * Pn * Qn] / ...
+                  (1 + An + Bn + Pn + Qn + An*Bn + Pn*Qn + An*Pn + Bn*Qn + An*Bn*Pn + Bn*Pn*Qn);
+          end
 
         end
       end
   end
 
- end
+end

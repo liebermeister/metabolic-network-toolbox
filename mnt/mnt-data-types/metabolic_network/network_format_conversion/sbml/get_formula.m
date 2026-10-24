@@ -11,10 +11,10 @@
 function formula = get_formula(reaction,s,p,inh,act,rnum)
 
 prod_S = ['(' s{1}]; for it =2:length(s), prod_S = [prod_S '*' s{it}]; end
- prod_S = [prod_S ')'];
+prod_S = [prod_S ')'];
 
 prod_P = ['(' p{1}]; for it =2:length(p), prod_P = [prod_P '*' p{it}]; end
- prod_P = [prod_P ')'];
+prod_P = [prod_P ')'];
 
 switch reaction.type
 
@@ -62,10 +62,10 @@ switch reaction.type
       prodA1 = [prodA1 '* (1+' A{i1} ')'];
     end
 
-   for i1 = 1:length(p);     P{i1} = [p{i1} '/kr' num2str(i1)];   end
+    for i1 = 1:length(p);     P{i1} = [p{i1} '/kr' num2str(i1)];   end
 
-   prodP = P{1};
-   prodP1 = ['(1+' P{1} ')'];
+    prodP = P{1};
+    prodP1 = ['(1+' P{1} ')'];
     for i1 = 2:length(p);
       prodP = [prodP ' * ' P{i1}];
       prodP1 = [prodP1 '* (1+' P{i1} ')'];

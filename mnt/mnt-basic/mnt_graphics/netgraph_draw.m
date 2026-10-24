@@ -1041,12 +1041,12 @@ function p = netgraph_draw_set_parameters(network,vararg)
 
   if isfield(p,'split_names')
     if p.split_names
-    for it = 1:length(p.metnames)
-      p.metnames{it} =  split_name(p.metnames{it},p.split_names);
-    end
-    for it = 1:length(p.actnames)
-       p.actnames{it} =  split_name(p.actnames{it},p.split_names);
-    end
+      for it = 1:length(p.metnames)
+        p.metnames{it} =  split_name(p.metnames{it},p.split_names);
+      end
+      for it = 1:length(p.actnames)
+        p.actnames{it} =  split_name(p.actnames{it},p.split_names);
+      end
     end
   end
 
