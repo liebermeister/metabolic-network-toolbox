@@ -64,79 +64,79 @@ for it = 1:length(columns.ReactionFormula)
   [sstoich{it},smetab{it}] = analyse_one_side(substrate_side);
   [pstoich{it},pmetab{it}] = analyse_one_side(product_side);
   metab_collect            = [metab_collect; column(smetab{it}); column(pmetab{it})];
- end
+end
 
- if isfield(columns,'MetabolicRegulation')
+if isfield(columns,'MetabolicRegulation')
   for it = 1:length(columns.MetabolicRegulation)
     regulation_formula           = columns.MetabolicRegulation{it};
     [rstoich{it,1},rmetab{it,1}] = analyse_regulation(regulation_formula);
   end
- end
+end
 
- if exist('compound_columns','var')
+if exist('compound_columns','var')
   metabolites = compound_columns.ID;
- else
+else
   metabolites = unique(metab_collect);
- end
+end
 
- N = zeros(length(metabolites),length(columns.ReactionFormula));
- for it = 1:length(columns.ReactionFormula)
+N = zeros(length(metabolites),length(columns.ReactionFormula));
+for it = 1:length(columns.ReactionFormula)
   ls = label_names(smetab{it},metabolites);
   lp = label_names(pmetab{it},metabolites);
   if sum(ls==0) * length(smetab{it})
-   mytable(smetab{it}')
-   error(sprintf('Unknown substrate'));
+    mytable(smetab{it}')
+    error(sprintf('Unknown substrate'));
   end
   if sum(lp==0) * length(pmetab{it})
-   mytable(pmetab{it}')
-   error(sprintf('Unknown product'));
+    mytable(pmetab{it}')
+    error(sprintf('Unknown product'));
   end
   N(ls,it) = - sstoich{it};
   N(lp,it) = pstoich{it};
- end
+end
 
- regulation_matrix = sparse(zeros(length(columns.ReactionFormula),length(metabolites)));
+regulation_matrix = sparse(zeros(length(columns.ReactionFormula),length(metabolites)));
 
- if isfield(columns,'MetabolicRegulation')
- for it = 1:length(columns.ReactionFormula)
-  l = label_names(rmetab{it},metabolites);
-  if length(l)
-    regulation_matrix(it,l) = rstoich{it};
+if isfield(columns,'MetabolicRegulation')
+  for it = 1:length(columns.ReactionFormula)
+    l = label_names(rmetab{it},metabolites);
+    if length(l)
+      regulation_matrix(it,l) = rstoich{it};
+    end
   end
- end
- end
+end
 
- if exist('compound_columns','var')
+if exist('compound_columns','var')
   ll = label_names(metabolites,compound_columns.ID);
   if isfield(compound_columns,'External')
     external_ind = find(cell_string2num(compound_columns.External(ll)));
   else
-  external_ind = [];
+    external_ind = [];
   end
- else
+else
   external_ind = [];
- end
+end
 
- if isfield(columns,'ID')
+if isfield(columns,'ID')
   actions = columns.ID;
- else
+else
   if isfield(columns,'Reaction')  % for compatibility with old
     % SBtab files
     actions = columns.Reaction;
   else
     actions = numbered_names('R',length(columns.ReactionFormula));
   end
- end
+end
 
- if isfield(columns,'IsReversible')
+if isfield(columns,'IsReversible')
   reversible = sbtab_table_get_column(reaction_table,'IsReversible',1);
- else
+else
   reversible = ones(length(actions),1);
- end
+end
 
- network = network_construct(N,reversible,external_ind,metabolites,actions,0,regulation_matrix);
+network = network_construct(N,reversible,external_ind,metabolites,actions,0,regulation_matrix);
 
- if exist('compound_columns','var')
+if exist('compound_columns','var')
 
   if isfield(compound_columns,'SBML_species_ID')
     network.sbml_id_species  = compound_columns.SBML_species_ID(ll);
@@ -193,39 +193,39 @@ for it = 1:length(columns.ReactionFormula)
     compound_columns = rmfield(compound_columns,'IsCofactor');
   end
 
- end
+end
 
- if isfield(columns,'Name')
+if isfield(columns,'Name')
   network.reaction_names  = columns.Name;
   columns = rmfield(columns,'Name');
- end
+end
 
- if isfield(columns,'NameForPlots')
+if isfield(columns,'NameForPlots')
   network.reaction_NameForPlots  = columns.NameForPlots;
   columns = rmfield(columns,'NameForPlots');
- end
+end
 
- if isfield(columns,'Gene')
+if isfield(columns,'Gene')
   network.genes  = columns.Gene;
   columns = rmfield(columns,'Gene');
- end
+end
 
- if isfield(columns,'SBML__reaction__ID')
+if isfield(columns,'SBML__reaction__ID')
   network.sbml_id_reaction  = columns.SBML__reaction__ID;
   columns = rmfield(columns,'SBML__reaction__ID');
- end
+end
 
- if isfield(columns,'Identifiers_kegg_reaction')
+if isfield(columns,'Identifiers_kegg_reaction')
   network.reaction_KEGGID = columns.Identifiers_kegg_reaction;
   columns = rmfield(columns,'Identifiers_kegg_reaction');
- end
+end
 
- if isfield(columns,'Identifiers_bigg_reaction')
+if isfield(columns,'Identifiers_bigg_reaction')
   network.reaction_BIGGID = columns.Identifiers_bigg_reaction;
   columns = rmfield(columns,'Identifiers_bigg_reaction');
- end
+end
 
- if isfield(columns,'Identifiers')
+if isfield(columns,'Identifiers')
   dum = columns.Identifiers;
   for it = 1:length(dum)
     if strcmp(dum{it}(1:5),'kegg:')
@@ -233,9 +233,9 @@ for it = 1:length(columns.ReactionFormula)
     end
   end
   columns = rmfield(columns,'Identifiers');
- end
+end
 
- if isfield(columns,'Identifiers')
+if isfield(columns,'Identifiers')
   dum = columns.Identifiers;
   for it = 1:length(dum)
     if strcmp(dum{it}(1:5),'bigg:')
@@ -243,26 +243,26 @@ for it = 1:length(columns.ReactionFormula)
     end
   end
   columns = rmfield(columns,'Identifiers');
- end
+end
 
- if isfield(columns,'Identifiers_ec_code')
+if isfield(columns,'Identifiers_ec_code')
   network.EC = columns.Identifiers_ec_code;
   columns = rmfield(columns,'Identifiers_ec_code');
- end
+end
 
- network.formulae = columns.ReactionFormula;
+network.formulae = columns.ReactionFormula;
 
- if exist('compound_columns','var')
+if exist('compound_columns','var')
   network = join_struct(network,compound_columns);
- end
+end
 
- network = join_struct(network,columns);
+network = join_struct(network,columns);
 
 
 % -------------------------------------------
 % Regulation (optional)
 
- if length(filename_regulation)
+if length(filename_regulation)
   my_compounds = sbtab_table_get_column(filename_regulation,'Compound');
   my_reactions = sbtab_table_get_column(filename_regulation,'Reaction');
   my_regulation_types = sbtab_table_get_column(filename_regulation,'RegulationType');
@@ -277,50 +277,50 @@ for it = 1:length(columns.ReactionFormula)
     W(nr,nm) = 0;
   end
   network.regulation_matrix = W;
- end
+end
 
 % -------------------------------------
 
- function [rstoic,rmetab] = analyse_regulation(regulation)
+function [rstoic,rmetab] = analyse_regulation(regulation)
 
- rstoic = [];
- rmetab = [];
- dum = [' ' regulation];
- dum = strrep(dum,' + ',' | ');
- dum = strrep(dum,' - ',' | ');
- signs = regulation(findstr(dum,'|')-1);
- for it = 1:length(signs)
-  if strcmp(signs(it),'+'), rstoic(it)  =  1; end
-  if strcmp(signs(it),'-'), rstoic(it)  = -1; end
- end
-
- A = Strsplit(' | ',dum); rmetab = A(2:end)';
-
- function [sstoic,smetab] = analyse_one_side(substrate_side)
-
- spos = findstr(substrate_side, ' + ');
- it2 = 1;
- clear sterm
- while length(spos)
-  try
-  sterm{it2} = substrate_side(1:spos(1)-1);
-    wpos = findstr(sterm{it2},' ');
-    if wpos
-      sstoic(it2) = eval(sterm{it2}(1:wpos(1)-1));
-      smetab{it2} = sterm{it2}(wpos(1)+1:end);
-    else
-      sstoic(it2) = 1;
-      smetab{it2} = sterm{it2};
-    end
-    substrate_side = substrate_side(spos(1)+3:end);
-    spos = findstr(substrate_side, ' + ');
-    it2 = it2+1;
-  catch
-    substrate_side(1:spos(1)-1)
-    error('Parsing error');
+  rstoic = [];
+  rmetab = [];
+  dum = [' ' regulation];
+  dum = strrep(dum,' + ',' | ');
+  dum = strrep(dum,' - ',' | ');
+  signs = regulation(findstr(dum,'|')-1);
+  for it = 1:length(signs)
+    if strcmp(signs(it),'+'), rstoic(it)  =  1; end
+    if strcmp(signs(it),'-'), rstoic(it)  = -1; end
   end
- end
 
- if length(smetab{1})==0
-  smetab=[];
- end
+  A = Strsplit(' | ',dum); rmetab = A(2:end)';
+
+function [sstoic,smetab] = analyse_one_side(substrate_side)
+
+  spos = findstr(substrate_side, ' + ');
+  it2 = 1;
+  clear sterm
+  while length(spos)
+    try
+      sterm{it2} = substrate_side(1:spos(1)-1);
+      wpos = findstr(sterm{it2},' ');
+      if wpos
+        sstoic(it2) = eval(sterm{it2}(1:wpos(1)-1));
+        smetab{it2} = sterm{it2}(wpos(1)+1:end);
+      else
+        sstoic(it2) = 1;
+        smetab{it2} = sterm{it2};
+      end
+      substrate_side = substrate_side(spos(1)+3:end);
+      spos = findstr(substrate_side, ' + ');
+      it2 = it2+1;
+    catch
+      substrate_side(1:spos(1)-1)
+      error('Parsing error');
+    end
+  end
+
+  if length(smetab{1})==0
+    smetab=[];
+  end

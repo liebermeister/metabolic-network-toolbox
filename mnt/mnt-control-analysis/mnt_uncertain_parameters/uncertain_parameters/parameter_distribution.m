@@ -223,17 +223,17 @@ switch distribution.kinetics_type
     d.parameter_names = parameter_names;
     d.logk_mean = A * d.logu_mean     + B * d.logq_mean     + D;
     d.logk_cov  = A * d.logu_cov * A' + B * d.logq_cov * B' + C*C';
- end
+end
 
- if sum(sum((diag(diag(d.logk_cov))==d.logk_cov)-1)),  d.logk_cov_sqrt = real(sqrtm(full(d.logk_cov)));
- else,                                                 d.logk_cov_sqrt = diag(sqrt(diag(d.logk_cov)));
- end
+if sum(sum((diag(diag(d.logk_cov))==d.logk_cov)-1)),  d.logk_cov_sqrt = real(sqrtm(full(d.logk_cov)));
+else,                                                 d.logk_cov_sqrt = diag(sqrt(diag(d.logk_cov)));
+end
 
- distribution.parameter_names  =  d.parameter_names;
- distribution.logk_mean        =  d.logk_mean;
- distribution.logk_cov         =  d.logk_cov;
- distribution.logk_cov_sqrt    =  d.logk_cov_sqrt;
+distribution.parameter_names  =  d.parameter_names;
+distribution.logk_mean        =  d.logk_mean;
+distribution.logk_cov         =  d.logk_cov;
+distribution.logk_cov_sqrt    =  d.logk_cov_sqrt;
 
- distribution.logSext_mean     =  d.logSext_mean;
- distribution.logSext_cov      =  d.logSext_cov;
- distribution.logSext_cov_sqrt =  d.logSext_cov_sqrt;
+distribution.logSext_mean     =  d.logSext_mean;
+distribution.logSext_cov      =  d.logSext_cov;
+distribution.logSext_cov_sqrt =  d.logSext_cov_sqrt;

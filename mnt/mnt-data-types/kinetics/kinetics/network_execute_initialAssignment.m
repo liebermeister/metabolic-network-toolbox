@@ -8,9 +8,9 @@ for it = 1:length(network.kinetics.parameters)
   my_parameter = network.kinetics.parameters{it};
   my_parameter_value = network.kinetics.parameter_values(it);
   eval([ my_parameter ' = ' num2str(my_parameter_value) ';']);
- end
+end
 
- for it = 1:length(network.kinetics.initialAssignment)
+for it = 1:length(network.kinetics.initialAssignment)
 
   % try to execute the assignment
 
@@ -36,4 +36,4 @@ for it = 1:length(network.kinetics.parameters)
     network.compartment_sizes(ind) = my_value;
   end
 
- end
+end
