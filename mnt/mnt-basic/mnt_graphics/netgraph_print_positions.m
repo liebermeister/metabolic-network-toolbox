@@ -127,7 +127,7 @@ if length(layout_file)
   % ----------------------------------------------------------------
 
   sbtab_out = sbtab_table_construct( struct('TableType','Position','TableID','Position'), ...
-                      {'PositionX','PositionY'},  {positions(1,:),positions(2,:)});
+                      {'Position:x','Position:y'},  {positions(1,:),positions(2,:)});
 
   if flag_element_names
     sbtab_out = sbtab_table_add_column(sbtab_out,'Element',names,1);
