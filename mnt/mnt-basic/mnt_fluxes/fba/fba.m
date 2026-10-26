@@ -16,9 +16,12 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 % fba_constraints.production: production rates (values for internal metabolites
 %                             will replace the zeros in the stationarity condition)
 %
-% solver = {'cplex','linprog'};
-%   'cplex' (default, if CPLEX is installed): also returns lambda_ind_int
-%   'linprog': solve with lp_solve (matlab-utils); lambda_ind_int is empty
+% The linear program is solved with lp_solve (matlab-utils): by default with
+% linprog, or with Gurobi after optim_solver('gurobi').
+% The argument 'solver' is obsolete and ignored.
+%
+% lambda_ind_int: Lagrange multipliers (linprog convention) of the stationarity
+%                 constraints for the independent internal metabolites
 %
 % Usage example
 % fba_constraints = fba_default_options(network);
@@ -27,10 +30,6 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 % [v,value] = fba(network,fba_constraints)
 
 %fprintf('FBA: ');
-
-eval(default('solver','''cplex'''));
-
-lambda_ind_int = [];
 
 [nm,nr] = size(network.N);
 ind_int = find(network.external==0);
@@ -93,20 +92,10 @@ if sum(isfinite(fba_constraints.ext_sign))
 end
 
 %[v,s,z,y,status] = lp236a(-c,G,h,A,b);
-if ~exist('cplexlp','file')
-  solver = 'linprog';
-end
-
-switch solver
-  case 'cplex'
-    opt =  cplexoptimset('cplex');
-    %opt = cplexoptimset('TolFun',10^-12,'TolRLPFun',10^-12,'Display','off');%,'Diagnostics','off');
-    [v,value,exitflag,output,lambda] = cplexlp(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max,[],opt);
-    lambda_ind_int = lambda.eqlin(1:size(NR,1));
-    %network.metabolites(ind_int(find(abs([A*v-b])>0.000000001)))
-    %network.metabolites(ind_int(find(abs([A*v]./b - 1)>0.1)))
-  case 'linprog'
-    [v,value,exitflag] = lp_solve(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max);
+[v,value,exitflag,output,lambda] = lp_solve(-c,G,h,A,b,fba_constraints.v_min,fba_constraints.v_max);
+lambda_ind_int = [];
+if ~isempty(lambda.eqlin),
+  lambda_ind_int = lambda.eqlin(1:size(NR,1));
 end
 
 if exitflag~=1

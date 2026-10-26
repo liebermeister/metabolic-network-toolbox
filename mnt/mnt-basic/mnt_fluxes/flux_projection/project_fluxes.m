@@ -154,13 +154,8 @@ switch pars.method
     lb(v_sign>0) = 0;
     ub(v_sign<0) = 0;
 
-    if exist('cplexqp','file')
-      opt =  cplexoptimset('cplex');
-      [v_projected,~,exitflag] = cplexqp(M,m,A,b,Aeq,beq,lb,ub,[],opt);
-    else
-      opt = optimset('Display','off','Algorithm','interior-point-convex'); % 'active-set'
-      [v_projected,dum,exitflag] = quadprog(M,m,A,b,Aeq,beq,lb,ub,[],opt);
-    end
+    opt = optimset('Display','off','Algorithm','interior-point-convex'); % 'active-set'
+    [v_projected,dum,exitflag] = qp_solve(M,m,A,b,Aeq,beq,lb,ub,[],opt);
 
     if exitflag <0
       if exitflag ==-2

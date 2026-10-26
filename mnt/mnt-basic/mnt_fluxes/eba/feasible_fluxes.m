@@ -61,11 +61,7 @@ for it = 1:n_exp
   H =  K(ind_data,:)' * diag(data.v.std(ind_data,it).^-2) * K(ind_data,:);
   f = -K(ind_data,:)' * diag(data.v.std(ind_data,it).^-2) * data.v.mean(ind_data,it);
 
-  if exist('cplexqp','file')
-    w = cplexqp(full(H),full(f),full(A),full(b));
-  else
-    w = quadprog(full(H),full(f),full(A),full(b));
-  end
+  w = qp_solve(full(H),full(f),full(A),full(b));
 
   v(:,it) = K * w;
   v(abs(v)<10^-10) = 0;

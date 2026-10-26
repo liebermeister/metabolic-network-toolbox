@@ -27,8 +27,8 @@ To check which of the other packages are installed, run `mnt_dependencies`.
 - Matlab (tested with R2025b)
 - [Matlab utility functions](https://github.com/liebermeister/matlab-utils) (required)
 - Optimization Toolbox (for linear and quadratic optimisation, used in many flux analysis functions).
-  If IBM CPLEX is on the Matlab path, it is used for linear programs instead of `linprog`
-  (see `help lp_solve` in matlab-utils).
+  Optionally, Gurobi can be used instead of `linprog` and `quadprog` in the more demanding
+  functions (see `help optim_solver` in matlab-utils).
 
 Some functions require further packages:
 

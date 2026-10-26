@@ -153,21 +153,10 @@ else
 
   z = [zeros(nm,1); 1];
 
-  % if exist('cplexlp','file'),
-  %   opt = cplexoptimset('Display','off');
-  %   [y,~,exitflag] = cplexlp(z,A,b,A_eq,b_eq,[],[],[],opt);
-  % else
-  %   opt = optimset('Display','off');
-  %   [y,~,exitflag] = linprog(z,A,b,A_eq,b_eq,[],[],[],opt);
-  % end
+  % [y,~,exitflag] = lp_solve(z,A,b,A_eq,b_eq);
 
-  if exist('cplexqp','file')
-    opt = cplexoptimset('Display','off');
-    [y,~,exitflag]  = cplexqp(diag(0.001 + z), z ,full(A),b,full(A_eq),b_eq,[],[],[],opt);
-  else
-    opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');
-    [y,~,exitflag]  = quadprog(diag(0.001 + z), z ,full(A),b,full(A_eq),b_eq,[],[],[],opt);
-  end
+  opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');
+  [y,~,exitflag]  = qp_solve(diag(0.001 + z), z ,full(A),b,full(A_eq),b_eq,[],[],[],opt);
 
   display('Using quadratic regularisation for metabolite values')
 

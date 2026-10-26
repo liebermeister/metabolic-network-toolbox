@@ -205,13 +205,8 @@ else
   m = -M * mean_values;
   y_start = [log_c_mean; dG0_mean];
 
-  if exist('cplexqp','file')
-    opt =  cplexoptimset('cplex');
-    [y,~,exitflag,output] = cplexqp(M, m, A, b, A_eq, b_eq, y_min, y_max, y_start,opt);
-  else
-    opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');
-    [y,~,exitflag] = quadprog(M, m, full(A), b, full(A_eq), b_eq, y_min, y_max, [], opt);
-  end
+  opt = optimset('Algorithm', 'interior-point-convex', 'Display','off');
+  [y,~,exitflag,output] = qp_solve(M, m, full(A), b, full(A_eq), b_eq, y_min, y_max, [], opt);
 
   if exitflag~=1
     output

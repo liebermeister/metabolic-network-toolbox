@@ -32,11 +32,7 @@ Aeq = [diag(v), N_int'];
 beq = - N_ext' * mu_ext;
 lb  = [zeros(nr,1); -inf*ones(n_int,1)];
 
-if exist('cplexqp','file')
-  x   = cplexqp(M,f,[],[],Aeq,beq,lb);
-else
-  x   = quadprog(M,f,[],[],Aeq,beq,lb);
-end
+x   = qp_solve(M,f,[],[],Aeq,beq,lb);
 
 R   = x(1:nr);
 mu(ind_ext,1) = mu_ext;

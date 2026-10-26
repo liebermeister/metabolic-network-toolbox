@@ -82,11 +82,7 @@ for it = 1:n_exp;
   Aeq = K(ind_zeros,:);
   beq = zeros(length(ind_zeros),1);
   warning off all
-  if exist('cplexqp','file')
-    rho_mean = cplexqp(rho_cov_inv,-y_mean,A,b,Aeq,beq);
-  else
-    rho_mean = quadprog(rho_cov_inv,-y_mean,A,b,Aeq,beq);
-  end
+  rho_mean = qp_solve(rho_cov_inv,-y_mean,A,b,Aeq,beq);
   warning on all
   % try fluxes arising from rho_mean
 

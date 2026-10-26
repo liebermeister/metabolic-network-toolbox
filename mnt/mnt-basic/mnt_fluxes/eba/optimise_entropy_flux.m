@@ -33,11 +33,7 @@ M   = [ [zeros(nr), -N_int']; [-N_int, zeros(n_int)] ];
 f   = zeros(nr+n_int,1);
 Aeq = [[diag(1./kappa), N_int']; [N_int, zeros(n_int,n_int)]];
 beq = [- N_ext' * mu_ext; zeros(n_int,1)];
-%if exist('cplexqp','file'),
-%  x   = cplexqp(M,f,[],[],Aeq,beq);
-%else
-%  x   = quadprog(M,f,[],[],Aeq,beq);
-%end
+%x   = qp_solve(M,f,[],[],Aeq,beq);
 x = pinv(full(Aeq))*beq;
 v   = x(1:nr);
 mu(ind_ext,1) = mu_ext;
