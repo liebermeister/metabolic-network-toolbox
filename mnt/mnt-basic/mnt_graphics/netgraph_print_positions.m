@@ -62,8 +62,14 @@ if length(layout_file)
 
       t             = sbtab_table_load(layout_file);
       elements      = sbtab_table_get_column(t,'Element');
-      x             = cell_string2num(sbtab_table_get_column(t,'PositionX'));
-      y             = cell_string2num(sbtab_table_get_column(t,'PositionY'));
+      % positions in columns !Position:x and !Position:y (in older files: !PositionX and !PositionY)
+      if sbtab_table_has_column(t,'Position_x'),
+        x           = cell_string2num(sbtab_table_get_column(t,'Position_x'));
+        y           = cell_string2num(sbtab_table_get_column(t,'Position_y'));
+      else
+        x           = cell_string2num(sbtab_table_get_column(t,'PositionX'));
+        y           = cell_string2num(sbtab_table_get_column(t,'PositionY'));
+      end
 
       kegg_compound_in = repmat({''},length(elements),1);
       kegg_reaction_in = repmat({''},length(elements),1);

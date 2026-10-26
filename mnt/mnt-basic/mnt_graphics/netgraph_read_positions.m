@@ -46,8 +46,14 @@ if exist('sbtab_version','file')
     A{1} = sbtab_table_get_column(sbtab_table,'Element');
   end
 
-  A{2} = sbtab_table_get_column(sbtab_table,'PositionX',1);
-  A{3} = sbtab_table_get_column(sbtab_table,'PositionY',1);
+  % positions in columns !Position:x and !Position:y (in older files: !PositionX and !PositionY)
+  if sbtab_table_has_column(sbtab_table,'Position_x'),
+    A{2} = sbtab_table_get_column(sbtab_table,'Position_x',1);
+    A{3} = sbtab_table_get_column(sbtab_table,'Position_y',1);
+  else
+    A{2} = sbtab_table_get_column(sbtab_table,'PositionX',1);
+    A{3} = sbtab_table_get_column(sbtab_table,'PositionY',1);
+  end
   A{4} = ones(size(A{2}));
 
   if flag_fixed
