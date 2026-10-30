@@ -14,5 +14,8 @@ First version with a release tag (the previous version number was 1.2).
 - Moved here: `parameter_balancing_prior` (from Parameter balancing), `network_derivative` (from matlab-utils), `display_periodic_quantities_on_network` (from optimal-enzyme-rhythms)
 - `state_data_to_data` moved to Model balancing
 - `mnt_dependencies(1)` checks only the required packages
+- Conversion between SBtab and network models, omics data, SBML and COBRA moved here from SBtab for Matlab (folder `mnt_sbtab_conversion`), including their tests
+- `sbtab_load_network_model_and_data` uses `mnt_prior_file` as the default prior table (before: the prior table of Model balancing)
+- `biotable_combine_replicates` moved to Replicate regression
 
 The state before the cleanup of October 2026 is available under the git tag `v0.9-legacy`.

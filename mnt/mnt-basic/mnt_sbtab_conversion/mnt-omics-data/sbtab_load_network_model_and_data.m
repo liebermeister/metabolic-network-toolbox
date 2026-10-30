@@ -18,10 +18,7 @@ function result = sbtab_load_network_model_and_data(data_file, file_options)
 %   also:
 %      file_options.network             network model (needed if the input files do not contain the network model)
 %      file_options.load_quantity_table generate field "network.kinetics" from Parameter table (if it exists) (default 0)
-%      file_options.prior_file          prior file for parameter_table (optional, default value = []; then cmb_prior_file is used)
-%
-% This function requires the packages Parameter balancing (function parameter_balancing_prior)
-% and, if no prior file is given, Model balancing (function cmb_prior_file)
+%      file_options.prior_file          prior file for parameter_table (optional, default value = []; then mnt_prior_file is used)
 %
 % Output
 %   result.network
@@ -68,7 +65,7 @@ end
 
 % extract kinetic constants (if available)
 if isempty(file_options.prior_file)
-  file_options.prior_file = cmb_prior_file;
+  file_options.prior_file = mnt_prior_file;
 end
 
 parameter_prior = parameter_balancing_prior([], file_options.prior_file, 0);

@@ -41,7 +41,7 @@
 % biotable_align                    - reorder the elements
 % biotable_concatenate, biotable_combine_experiments - concatenate samples
 % biotable_join_replicates          - collect data from several replicates
-% biotable_combine_replicates       - combine replicates by replicate regression (requires replicate-regression)
+% (combining replicates by replicate regression: see biotable_combine_replicates in the package replicate-regression)
 % biotable_replicate_mean_std       - mean values and standard deviations of replicates
 % biotable_interpolate, biotable_time_interpolation - interpolation in time
 % biotable_network_interpolate      - fill in missing values from neighbours in the network
