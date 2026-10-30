@@ -39,8 +39,6 @@ Some functions require further packages:
 | [Tensor Toolbox](https://www.tensortoolbox.org) | second-order elasticities and response coefficients |
 | [efmtool](https://csb.ethz.ch/tools/software/efmtool.html) | elementary flux modes (`network_efmtool`, `eba_feasible`) |
 | [COBRA Toolbox](https://opencobra.github.io/cobratoolbox/) | conversion from and to COBRA models |
-| [Parameter balancing](https://github.com/liebermeister/parameter-balancing-matlab) | default parameter prior in `kinetic_data_load`, `kinetic_data_print`, `mrl_kinetics_to_sbtab` |
-| [Model balancing](https://github.com/liebermeister/model-balancing) | `state_data_to_data` |
 
 ## Contents
 
