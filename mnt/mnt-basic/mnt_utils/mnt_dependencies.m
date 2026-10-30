@@ -9,6 +9,10 @@ if ~exist('matlab_utils_installed','file')
   warning('Please install the Matlab utility functions (https://github.com/liebermeister/matlab-utils) - They are required by the Metabolic Network Toolbox.');
 end
 
+if exist('package_version_check','file')
+  package_version_check('The Matlab utility functions', 'matlab_utils_version', '1.0.0');
+end
+
 if ~exist('linprog','file')
   warning('Please install the Matlab Optimization Toolbox - Otherwise many flux analysis functions will not work.');
 end
@@ -19,6 +23,10 @@ end
 
 if ~exist('sbtab_version','file')
   warning('Please install SBtab for Matlab (https://github.com/liebermeister/sbtab-matlab) - Otherwise SBtab import and export will not work.');
+end
+
+if exist('package_version_check','file')
+  package_version_check('SBtab for Matlab', 'sbtab_toolbox_version', '1.0.0');
 end
 
 if ~exist('sptensor','file')

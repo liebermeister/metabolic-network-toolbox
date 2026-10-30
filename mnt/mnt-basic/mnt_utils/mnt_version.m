@@ -1,5 +1,9 @@
-function m = mnt_version()
+function v = mnt_version()
 
-% Metabolic network toolbox version 1.2
+% MNT_VERSION Version number of the Metabolic Network Toolbox (string, like '1.2.3')
+%
+% v = mnt_version()
+%
+% Version numbers have the form MAJOR.MINOR.PATCH; changes are listed in CHANGELOG.md
 
-m = '1.2';
+v = '1.3.0';
