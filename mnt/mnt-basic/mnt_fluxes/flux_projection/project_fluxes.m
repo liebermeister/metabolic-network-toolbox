@@ -77,7 +77,7 @@ switch pars.method
     network.N                 = N;
     network.external          = zeros(size(N,1),1);
     network.external(ind_ext) = 1;
-    v_projected               = es_make_fluxes_stationary(network,v_mean);
+    v_projected               = mnt_make_fluxes_stationary(network,v_mean);
 
   case 'one_norm'
 
@@ -175,11 +175,11 @@ switch pars.method
     if pars.verbose, display('Thermodynamically correct projection');end
     dd.v.mean = v_mean;
     dd.v.std  = v_std;
-    [options,es_constraints]  = es_default_options(pars.network);
-    es_constraints.ext_sign   = nan * ones(length(ind_ext),1);
-    es_constraints.v_sign     = v_sign;
-    es_constraints.ind_ignore = pars.ind_ignore;
-    v_projected               = feasible_fluxes(N,ind_ext,dd,es_constraints);
+    [options,stm_constraints]  = stm_default_options(pars.network);
+    stm_constraints.ext_sign   = nan * ones(length(ind_ext),1);
+    stm_constraints.v_sign     = v_sign;
+    stm_constraints.ind_ignore = pars.ind_ignore;
+    v_projected               = feasible_fluxes(N,ind_ext,dd,stm_constraints);
 
 end
 

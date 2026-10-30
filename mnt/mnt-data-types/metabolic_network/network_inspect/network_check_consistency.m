@@ -2,7 +2,7 @@ function network_check_consistency(network)
 
 % network_check_consistency(network)
 
-[options,constraints]   = es_default_options(network);
+[options,constraints]   = stm_default_options(network);
 ind_biomass_production  = find(strcmp(network.actions,'Biomass production'));
 constraints.ind_ignore  = ind_biomass_production;
 J                       = sample_feasible_v(network.N,find(network.external),constraints,options);

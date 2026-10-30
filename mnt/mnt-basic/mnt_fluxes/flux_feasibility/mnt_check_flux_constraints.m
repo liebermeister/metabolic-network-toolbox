@@ -1,6 +1,6 @@
-function isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)
+function isFeasible = mnt_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)
 
-% isFeasible = es_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)
+% isFeasible = mnt_check_flux_constraints(v,N,ind_ext,constraints,verbose,epsilon_stationary,C)
 %
 % Check whether flux distribution v satisfies constraints
 

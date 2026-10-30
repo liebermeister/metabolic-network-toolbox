@@ -14,12 +14,12 @@ function v = sample_feasible_v(N, ind_ext, constraints, options)
 %  options.epsilon_stationary
 %  options.cycles
 %
-% for information about 'constraints' and 'options', see es_default_options
+% for information about 'constraints' and 'options', see stm_default_options
 
 [nm,nr] = size(N);
 
 if ~exist('constraints','var')
-  [options, constraints] = es_default_options(N);
+  [options, constraints] = stm_default_options(N);
 end
 
 if ~isnan(options.seed)
@@ -30,10 +30,10 @@ if sum(isnan(constraints.v_fix))==0
 
   display(' Using fixed flux distribution');
   v       = constraints.v_fix;
-  correct = es_check_flux_constraints(v,N,ind_ext,constraints,0,options.epsilon_stationary,options.cycles);
+  correct = mnt_check_flux_constraints(v,N,ind_ext,constraints,0,options.epsilon_stationary,options.cycles);
   if ~correct
     warning('Unfeasible flux')
-    %correct = es_check_flux_constraints(v,N,ind_ext,constraints,1,options.epsilon_stationary,options.cycles);
+    %correct = mnt_check_flux_constraints(v,N,ind_ext,constraints,1,options.epsilon_stationary,options.cycles);
   end
 
 else

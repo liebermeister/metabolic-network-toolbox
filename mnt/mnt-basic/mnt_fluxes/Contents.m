@@ -15,7 +15,7 @@
 % v = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);
 %  Make fluxes stationary and complete (several methods)
 %
-% v = es_make_fluxes_stationary(network,v)
+% v = mnt_make_fluxes_stationary(network,v)
 %  Make flux distribution stationary and complete (use pseudoinverse of K)
 %
 % v = flux_least_squares_projection(network,v_pre)
@@ -43,7 +43,7 @@
 % [v, value, Keq, c] = fasimu(network,fba_constraints,thermo_flag)
 %  Flux balance analysis or thermodynamic flux analysis using FASIMU
 %
-% v = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)
+% v = feasible_fluxes(N,ind_ext,data,stm_constraints,eba_condition,C)
 %  Determine flux distribution close to data with (i) flux bounds
 %  (ii) given signs of external production (iii) thermo-constraint ('loose' or 'strict')
 %
@@ -57,8 +57,8 @@
 % ---------------------------------------------------------------------------
 % Determine chemical potentials mu / reaction affinities A for given fluxes v
 %
-% [A, mu] = es_mu_simple_guess(N,v,es_constraints,zv,flag_reduce_network)
-%  Determine feasible A and mu given fluxes v and es_constraints
+% [A, mu] = mnt_mu_simple_guess(N,v,stm_constraints,zv,flag_reduce_network)
+%  Determine feasible A and mu given fluxes v and stm_constraints
 %
 % dmu = optimise_delta_mu_given_signs(N,parameter_prior,data,v,options)
 %  Optimise delta_mu (given mean and covariance) under thermo constraints
@@ -70,8 +70,8 @@
 %  Compute (no actual sampling!) mu vectors that agree with a given flux vector v
 %  Methods: 'extreme_points', 'sample', 'centre'
 %
-% mu = sample_feasible_mu(N, ind_ext, v, es_constraints, es_options)
-%  Sample feasible dmu vectors given a flux vector v and es_constraints
+% mu = sample_feasible_mu(N, ind_ext, v, stm_constraints, stm_options)
+%  Sample feasible dmu vectors given a flux vector v and stm_constraints
 %
 % [mu,A] = flux2entropy_production(network, v, mu_ext)
 %  Determine all mu and A given v and external mu (from minimal entropy production)

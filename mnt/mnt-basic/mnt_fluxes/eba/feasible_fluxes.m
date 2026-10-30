@@ -1,6 +1,6 @@
-function [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)
+function [v, C] = feasible_fluxes(N,ind_ext,data,stm_constraints,eba_condition,C)
 
-% [v, C] = feasible_fluxes(N,ind_ext,data,es_constraints,eba_condition,C)
+% [v, C] = feasible_fluxes(N,ind_ext,data,stm_constraints,eba_condition,C)
 %
 % Determine flux distribution close to given data that
 % (i)   satisfies given upper and lower bounds on fluxes (overridden by sign constraints)
@@ -29,13 +29,13 @@ external          = zeros(size(N,1),1);
 external(ind_ext) = 1;
 
 %% EFM instead?
-if isnan(C), C = eba_my_cycles(N,C,es_constraints.ind_ignore); end
+if isnan(C), C = eba_my_cycles(N,C,stm_constraints.ind_ignore); end
 
 K = analyse_N(N,external);
 
 %figure(1); netgraph_concentrations(network_CoHid,[],C(:,2))
 
-es_constraints = fba_update_constraints(es_constraints);
+stm_constraints = fba_update_constraints(stm_constraints);
 
 % -------------------------------
 % determine flux distribution
@@ -43,18 +43,18 @@ es_constraints = fba_update_constraints(es_constraints);
 % similarity to data:
 % K * w &approx& data.v.mean
 % inequality constraints:
-% [-K; K] * w <= [-es_constraints.v_min; es_constraints.v_max]
+% [-K; K] * w <= [-stm_constraints.v_min; stm_constraints.v_max]
 
 for it = 1:n_exp
   A = [-K; ...
         K; ...
-        N(find(es_constraints.ext_sign(:,it)==-1),:) * K; ...
-       -N(find(es_constraints.ext_sign(:,it)== 1),:) * K; ...
+        N(find(stm_constraints.ext_sign(:,it)==-1),:) * K; ...
+       -N(find(stm_constraints.ext_sign(:,it)== 1),:) * K; ...
       ];
 
-  b = [-es_constraints.v_min(:,it); ...
-        es_constraints.v_max(:,it); ...
-        zeros(sum(abs(es_constraints.ext_sign(:,it)) ==1),1) ];
+  b = [-stm_constraints.v_min(:,it); ...
+        stm_constraints.v_max(:,it); ...
+        zeros(sum(abs(stm_constraints.ext_sign(:,it)) ==1),1) ];
 
   ind_data = find(isfinite(data.v.mean(:,it)));
 

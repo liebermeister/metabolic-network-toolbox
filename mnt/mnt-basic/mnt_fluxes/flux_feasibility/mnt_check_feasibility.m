@@ -1,6 +1,6 @@
-function es_check_feasibility(N, v, delta_mu, mu0, c)
+function mnt_check_feasibility(N, v, delta_mu, mu0, c)
 
-% es_check_feasibility(N, v, delta_mu, mu0, c)
+% mnt_check_feasibility(N, v, delta_mu, mu0, c)
 %
 % check vectors for feasibility:
 %   v          fluxes

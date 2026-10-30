@@ -1,6 +1,6 @@
-function v_stationary = es_make_fluxes_stationary(network,v)
+function v_stationary = mnt_make_fluxes_stationary(network,v)
 
-% v_stationary = es_make_fluxes_stationary(network,v)
+% v_stationary = mnt_make_fluxes_stationary(network,v)
 %
 % project flux distribution (finite entries) to stationary subspace using pseudoinverse of K
 

@@ -23,7 +23,7 @@ assert(max(abs(N(internal,:) * v)) < 1e-6);
 assert(abs(v(4) - 0.8) < 1e-6);
 
 %% sample_feasible_v: samples are stationary and within bounds
-[options, constraints] = es_default_options(network);
+[options, constraints] = stm_default_options(network);
 constraints.v_min = -ones(5,1);
 constraints.v_max =  ones(5,1);
 V = sample_feasible_v(N, [1 2 5 6], constraints, options);
@@ -31,7 +31,7 @@ assert(max(max(abs(N(internal,:) * V))) < 1e-6);
 assert(all(abs(V(:)) <= 1 + 1e-6));
 
 %% sample_feasible_dmu: reaction Gibbs energies have the right signs
-[options, constraints] = es_default_options(network);
+[options, constraints] = stm_default_options(network);
 options.n_dmu_samples = 5;
 v = [1 1 2 1 1]';
 [dmu, success] = sample_feasible_dmu(N, [1 2 5 6], v, constraints, options);
