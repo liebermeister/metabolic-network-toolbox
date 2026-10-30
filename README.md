@@ -67,6 +67,10 @@ From the repository folder, run
 results = runtests('tests')
 ```
 
+## Versions
+
+To see the installed version, type `mnt_version`. Older versions can be downloaded from the [releases page](https://github.com/liebermeister/metabolic-network-toolbox/releases) of this repository, and changes between versions are listed in `CHANGELOG.md`.
+
 ## License
 This package is released under the [GNU General Public License](LICENSE), version 2 or later.
 
