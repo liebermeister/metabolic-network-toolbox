@@ -48,7 +48,8 @@ The functions are organised in three folders:
   convenience kinetics, modular rate laws, ...), kinetic data, and metabolic state data;
   import and export (SBML, SBtab, COBRA)
 - **`mnt/mnt-basic`**: flux analysis (FBA, flux minimisation, flux sampling, energy balance
-  analysis, max-min driving force), thermodynamics, simulation and steady states, graphics
+  analysis, max-min driving force), thermodynamics, simulation and steady states, graphics,
+  conversion between SBtab and networks, omics data, SBML and COBRA (`mnt_sbtab_conversion`)
 - **`mnt/mnt-control-analysis`**: metabolic control analysis, spectral response coefficients,
   models with uncertain parameters
 
