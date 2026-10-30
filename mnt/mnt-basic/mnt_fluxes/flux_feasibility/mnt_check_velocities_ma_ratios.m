@@ -1,6 +1,6 @@
-function correct = es_check_velocities_ma_ratios(N,v,log_c,this_delta_mu)
+function correct = mnt_check_velocities_ma_ratios(N,v,log_c,this_delta_mu)
 
-% correct = es_check_velocities_ma_ratios(N,v,log_c,this_delta_mu)
+% correct = mnt_check_velocities_ma_ratios(N,v,log_c,this_delta_mu)
 %
 % In a feasible model, an increase of the mass action ratio can
 % lead to change from a positive to a negative reaction velocity,

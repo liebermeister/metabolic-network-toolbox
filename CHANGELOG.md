@@ -17,5 +17,6 @@ First version with a release tag (the previous version number was 1.2).
 - Conversion between SBtab and network models, omics data, SBML and COBRA moved here from SBtab for Matlab (folder `mnt_sbtab_conversion`), including their tests
 - `sbtab_load_network_model_and_data` uses `mnt_prior_file` as the default prior table (before: the prior table of Model balancing)
 - `biotable_combine_replicates` moved to Replicate regression
+- `es_default_options` renamed to `stm_default_options`; `es_check_feasibility`, `es_check_flux_constraints`, `es_check_velocities_ma_ratios`, `es_mu_simple_guess` and `es_make_fluxes_stationary` renamed to `mnt_...`; the structs `es_options` and `es_constraints` are now `stm_options` and `stm_constraints`
 
 The state before the cleanup of October 2026 is available under the git tag `v0.9-legacy`.
