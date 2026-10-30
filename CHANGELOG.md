@@ -13,5 +13,6 @@ First version with a release tag (the previous version number was 1.2).
 - New default prior table `mnt_prior.tsv` (function `mnt_prior_file`); other packages can pass their own table to `parameter_balancing_prior`
 - Moved here: `parameter_balancing_prior` (from Parameter balancing), `network_derivative` (from matlab-utils), `display_periodic_quantities_on_network` (from optimal-enzyme-rhythms)
 - `state_data_to_data` moved to Model balancing
+- `mnt_dependencies(1)` checks only the required packages
 
 The state before the cleanup of October 2026 is available under the git tag `v0.9-legacy`.
