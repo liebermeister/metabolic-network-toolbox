@@ -13,6 +13,7 @@ function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, a
 % as well as D (denominator)
 %
 % v_plus_fallback and v_minus_fallback must be given whenever v contains zero values
+% (second-order elasticities of reactions with v==0 are set to zero)
 %
 % Only essential activation and non-competitive inhibition are supported
 % THIS SCRIPT HAS NOT BEEN CAREFULLY TESTED YET!!!!!
@@ -92,8 +93,10 @@ switch kinetic_law
     E_sc_Dc_kinetic = 1/2 * [ Mplus + Mminus ];
 end
 
-%Assume that for equilibrium reactions (v==0) the thermodynamic
-%term vanishes
+% Inactive reactions (v==0): the scaled thermodynamic term is undefined and set to zero.
+% If A~=0, the reaction is switched off, so the unscaled thermodynamic term vanishes as well.
+% If A==0, the reaction is at equilibrium: the unscaled term is computed below
+% from the one-way rates (v_plus_fallback, v_minus_fallback), which must be correct in this case
 ind_act = find(v~=0)';
 E_sc_c_thermo     = sparse(nr,nm);
 E_sc_c_thermo(ind_act,:) = diag(1./(sparse(zeta(ind_act)-1))) * ...
@@ -101,6 +104,9 @@ E_sc_c_thermo(ind_act,:) = diag(1./(sparse(zeta(ind_act)-1))) * ...
 
 E_un_c_thermo     = sparse(nr,nm);
 E_un_c_thermo(ind_act,:) = [diag(v_plus(ind_act)) * Mplus(ind_act,:) - diag(v_minus(ind_act)) * Mminus(ind_act,:)] * diag(1./c);
+
+ind_eq = find((v==0).*(A==0))';
+E_un_c_thermo(ind_eq,:) = [diag(v_plus(ind_eq)) * Mplus(ind_eq,:) - diag(v_minus(ind_eq)) * Mminus(ind_eq,:)] * diag(1./c);
 
 E_sc_c_regulation = alpha_A .* Wplus - beta_I .* Wminus;
 

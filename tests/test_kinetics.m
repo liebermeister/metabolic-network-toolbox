@@ -39,3 +39,13 @@ end
 %% kinetics of type 'standard' give finite rates
 network.kinetics = set_kinetics(network, 'standard');
 assert(all(isfinite(network_velocities(s, network))));
+
+%% ms_compute_Kcat: cooperativity is used in modular_velocities (thermodynamic consistency)
+N_chain = [-1; 1];
+c_eq = [1 3]'; Keq = 3; KM = sparse([1 1]); KV = 1; h = 2;
+v_eq = modular_velocities('ms', N_chain, sparse(1,2), [], 1, c_eq, sparse(1,2), sparse(1,2), KM, KV, Keq, h);
+assert(abs(v_eq) < 1e-10);
+[kp, km]  = ms_compute_Kcat(N_chain, KM, KV, Keq, h);
+assert(abs(kp / km - Keq^h / (KM(2)/KM(1))^h) < 1e-10);
+[kp1,km1] = ms_compute_Kcat(N_chain, KM, KV, Keq, []);
+assert(abs(kp1 / km1 - Keq) < 1e-10);

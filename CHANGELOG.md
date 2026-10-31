@@ -4,6 +4,15 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 ## Not released yet
 
+- `sample_feasible_mu`: default method 'sample' now samples uniformly by hit-and-run (was: 'extreme_points'); methods 'sample' and 'centre' returned wrong vectors; works with rank-deficient stoichiometric matrices; method 'centre' can also be called 'central'
+- `stm_default_options`: new field `mu_sampling_method`; removed unused fields `n_flux_samples`, `n_saturation_samples`, `method_flux_sampling`
+- `modular_velocities`, `modular_KV_Keq_to_kcat` and `modular_fast_parameters` pass the cooperativity `h` to `ms_compute_Kcat`
+- `sample_feasible_v`: predefined non-zero fluxes and bounds `v_min > 0` or `v_max < 0` are respected
+- `compute_modular_elasticities`: reactions at equilibrium (v = 0, A = 0) get their elasticities from the one-way rates
+- `compute_modular_response_second`: corrected second-order response coefficients (scaling, factor 1/z), `zv_scaled` default, and external metabolites
+- `control_coefficients`: error for unstable states, or nan values with the new argument `on_unstable = 'nan'`; new output `stable`; eigenvalues that are positive by numerical error only are corrected, with a tolerance relative to the size of M
+- `response_coefficients_sparse`: fixed crash in small networks (dense intermediate results)
+- `stm_default_options`: `dmu_limit` lowered from 100 to 50 kJ/mol; new fields `flag_control` and `n_max_unstable`
 - New folder structure, with fewer levels and one folder for import and export (see `README.md`). Function names do not change, so calls are not affected, as long as the toolbox is added to the path with its subfolders
 - `help fba`, `help eba`, and `help mdf` now show the functions: their folders were renamed
 - `GUIDE.md` with an overview of common tasks; short examples for single topics in the folder `demo`, which are run by the tests

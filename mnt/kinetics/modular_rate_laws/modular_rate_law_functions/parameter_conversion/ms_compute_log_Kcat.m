@@ -17,7 +17,7 @@ function [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h)
 % log_kcatplus  nr x 1 column vector of log forward kcat values
 % log_kcatminus nr x 1 column vector of log reverse kcat values
 
-if ~exist('h','var'), h = ones(size(KV)); end
+if ~exist('h','var') || isempty(h), h = ones(size(KV)); end
 
 log_KV              = log(KV);
 log_Keq             = log(Keq);

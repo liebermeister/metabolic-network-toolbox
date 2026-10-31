@@ -1,6 +1,6 @@
 % CONTROL_COEFFICIENTS Compute control coefficients (unscaled, first order)
 %
-%[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)
+%[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal, stable] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal, dilution_rate, on_unstable)
 %
 %Metabolic control coefficients (unnormalised, first order)
 %
@@ -16,21 +16,25 @@
 % NR_int      reduced stoichiometric matrix of internal metabolites
 % 'used'      can be set to [].
 % dilution_rate  (scalar) dilution rate of internal metabolites (default []: no dilution)
+% on_unstable    what to do in unstable states: 'error' (default) or 'nan' (CJ and CS are nan)
 %
 %Outputs
 % CJ, CS      matrices of unscaled flux and concentration control coefficients (first order)
 % L_int       link matrix  of internal metabolites (see 'reduce_N')
 % NR_int      reduced stoichiometric matrix of internal metabolites
+% stable      1 if the state is stable, 0 if not (positive eigenvalues of M, beyond numerical error)
 %
 % See also: elasticities, response_coefficients, basic_control_analysis
 
 % CJ2, CS2  arrays of unscaled second order control coefficients
 
-function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal,dilution_rate)
+function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal, stable] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal,dilution_rate,on_unstable)
 
 if find(isfinite(Ec)==0), error('Elasticity matrix contains non-finite values'); end
 
-eval(default('used','[]','NR_int','[]','L_int','[]','dilution_rate','[]'));
+eval(default('used','[]','NR_int','[]','L_int','[]','dilution_rate','[]','on_unstable','''error'''));
+
+stable = 1;
 
 if sum(external==0)==0
   [nm,nr]  = size(N);
@@ -56,7 +60,7 @@ if length(dilution_rate)
   my_Ec    = [Ec; zeros(n_int,nm)];
   my_Ec(nr+(1:n_int),ind_int) = dilution_rate * eye(n_int);
   if length(used), used = [used(:); ones(n_int,1)]; end
-  [CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(my_N, my_Ec, external, used);
+  [CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal, stable] = control_coefficients(my_N, my_Ec, external, used, [], [], [], [], on_unstable);
   CJ = CJ(1:nr,1:nr);
   CS = CS(:,1:nr);
   return
@@ -92,21 +96,24 @@ M = full(NR_int * Ec_int * L_int);
 
 %% if maximal real part of eigenvalues < numerical error, correct M
 
+M_adj  = M;
 eigmax = max(real(eig(M)));
-if [eigmax > 0] * [eigmax < 10^-10]
-  display(sprintf(' * Maximal real part of eigenvalues %f < numerical error, correcting M',eigmax));
-  M_adj = M - 5 * eigmax * eye(size(M));
-end
+if isempty(eigmax), eigmax = 0; end
+eig_tolerance = 10^-10 * max([abs(M(:)); 1]);
 
-%% if this still doesn't help:
-eigmax = max(real(eig(M)));
-if eigmax > 0
-  error(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax));
-  %% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');
-  %%display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax));
-  %% M_adj = M - [ eigmax + 10^-10] * eye(size(M));
-else
-  M_adj = M;
+if eigmax > eig_tolerance
+  stable = 0;
+  switch on_unstable
+    case 'nan'
+      CS = nan * ones(size(N));
+      CJ = nan * ones(size(N,2));
+      return
+    otherwise
+      error(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax));
+  end
+elseif eigmax > 0
+  display(sprintf(' * Maximal real part of eigenvalues %g < numerical error, correcting M',eigmax));
+  M_adj = M - 5 * eigmax * eye(size(M));
 end
 
 if rank(M_adj) == size(M_adj,1)

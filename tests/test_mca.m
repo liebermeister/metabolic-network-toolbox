@@ -39,3 +39,26 @@ for kinetics_type = {'cs', 'ms', 'mass-action', 'convenience'}
   v_pert = network_velocities(s_pert, regulated_network);
   assert(norm(epsilon(:,1) - (v_pert-v)/(s_pert(3)-s_test(3))) < 1e-3);
 end
+
+%% control_coefficients: unstable state gives an error
+Ec_unstable = -Ec;
+failed = 0;
+try
+  control_coefficients(N, Ec_unstable, network.external);
+catch
+  failed = 1;
+end
+assert(failed == 1);
+
+%% control_coefficients: on_unstable = 'nan' and output 'stable'
+[CJ, CS, ~, ~, ~, ~, ~, stable] = control_coefficients(N, -Ec, network.external, [], [], [], [], [], 'nan');
+assert(stable == 0 && all(isnan(CJ(:))) && all(isnan(CS(:))));
+assert(isequal(size(CS), size(N)) && isequal(size(CJ), size(N,2) * [1 1]));
+[~, ~, ~, ~, ~, ~, ~, stable] = control_coefficients(N, Ec, network.external);
+assert(stable == 1);
+
+%% control_coefficients: eigenvalues that are positive by numerical error only give no error
+N1  = [-1 0; 1 -1; 0 1];
+Ec1 = [0 1e-12 0; 0 0 0];
+[~, ~, ~, ~, M, M_adj, ~, stable] = control_coefficients(N1, Ec1, [1 0 1]');
+assert(stable == 1 && max(real(eig(M))) > 0 && max(real(eig(M_adj))) < 0);

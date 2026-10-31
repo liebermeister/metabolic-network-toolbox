@@ -4,18 +4,19 @@ function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options
 %
 % [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)
 %
-% Compute (this is no actual sampling!) a number of mu vectors that agree with a given flux vector v
+% Compute mu vectors that agree with a given flux vector v: delta_mu vectors in the feasible
+% region (set by the previously sampled or determined flux directions and by bounds)
+% are converted to mu vectors using the pseudoinverse of N'
 %
-% Compute delta_mu vectors at the boundaries of the feasible region
-% set by the (previously sampled or determined) flux directions
-% compute the corresponding mu vectors using the pseudoinverse of N'
-% method: 'extreme_points': compute all extreme dmu vectors, covert back to mu vectors
-% method: 'sample':         sample n_sample dmu vectors, covert back to mu vectors
-% method: 'centre':         central dmu vector, covert back to mu vector
+% method: 'sample' or 'hit-and-run' (default): sample n_sample dmu vectors uniformly from the
+%                           feasible polytope (by hit-and-run sampling)
+% method: 'extreme_points': vertices of the feasible polytope with minimal and maximal values
+%                           along the coordinate axes (this is no actual sampling)
+% method: 'centre' or 'central': central dmu vector
 %
 % See also: sample_feasible_v, sample_feasible_dmu
 
-eval(default('method','''extreme_points''','n_sample','1','options','struct'));
+eval(default('method','''sample''','n_sample','1','options','struct'));
 
 mu           = [];
 success_flag = 1;
@@ -104,12 +105,67 @@ switch method
 
     all_dmu = [dmu_lower, dmu_upper];
 
-  case 'central'
-    all_dmu = find_polytope_centre([],[],A,b);
+  case {'centre','central'}
+    all_dmu = U * find_polytope_centre([],[],A,b,[],[]);
 
-  case 'sample'
-    all_dmu = convex_sampling(A,b,[],[],1);
+  case {'sample','hit-and-run'}
+    [all_dmu, success_flag] = sample_dmu_hit_and_run(U,A,b,ind_dmu_fix,constraints.dmu_fix,n_sample);
+    if ~success_flag, return; end
+
+  otherwise
+    error('Unknown method %s',method);
 
 end
 
 mu = pinv(full(N')) * all_dmu;
+
+% ------------------------------------------------------------------------------
+
+function [dmu, success_flag] = sample_dmu_hit_and_run(U,A,b,ind_fix,dmu_fix,n_sample)
+
+% Sample mured uniformly from the polytope A * mured <= b. Since U has full column rank,
+% dmu = U * mured is uniform as well. Predefined dmu values make the polytope flat, so
+% they are treated as equality constraints: mured = mured_fix + K * y
+
+success_flag = 1;
+dmu          = [];
+n_mured      = size(U,2);
+tolerance    = 10^-8;
+
+if isempty(ind_fix)
+  mured_fix = zeros(n_mured,1);
+  K         = eye(n_mured);
+else
+  mured_fix = pinv(U(ind_fix,:)) * dmu_fix(ind_fix);
+  K         = null(U(ind_fix,:));
+  if max(abs(U(ind_fix,:) * mured_fix - dmu_fix(ind_fix))) > tolerance
+    success_flag = 0;
+    return
+  end
+end
+
+M  = A * K;
+bb = b - A * mured_fix;
+
+% omit constraints that do not depend on y, and the formal bounds 10^10 (see above)
+is_constant = sqrt(sum(M.^2,2)) < tolerance;
+if sum(bb(is_constant) < -tolerance)
+  success_flag = 0;
+  return
+end
+keep = find(~is_constant .* (bb < 10^9));
+M    = M(keep,:);
+bb   = bb(keep);
+
+n_y = size(K,2);
+
+if n_y == 0
+  dmu = U * repmat(mured_fix,1,n_sample);
+  return
+end
+
+y_start = find_polytope_centre([],[],M,bb,[],[]);
+n_warm  = 1000 + 100 * n_y;
+n_pick  = 10 + n_y;
+y       = convex_sampling_hit_and_run(M,bb,[],[],[],[],n_sample,n_warm,n_pick,0,y_start,0);
+dmu     = U * (repmat(mured_fix,1,n_sample) + K * y);
