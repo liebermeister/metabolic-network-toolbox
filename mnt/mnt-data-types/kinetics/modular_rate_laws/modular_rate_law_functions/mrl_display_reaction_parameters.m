@@ -1,5 +1,9 @@
 function mrl_display_reaction_parameters(network, r, ind_r_list)
 
+% mrl_display_reaction_parameters(network, r, ind_r_list)
+%
+% Display the modular rate law parameters of the reactions in ind_r_list (default: all reactions)
+
 eval(default('ind_r_list','1:length(network.actions)'));
 
 for it_r = 1:length(ind_r_list)

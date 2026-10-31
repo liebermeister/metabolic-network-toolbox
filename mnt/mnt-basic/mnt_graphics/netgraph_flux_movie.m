@@ -12,9 +12,9 @@ function M = netgraph_flux_movie(network,S,J,text_flag,goptions);
 eval(default('text_flag','0','goptions','struct'));
 
 % scale flux data
-J = 1/nanmax(abs(J(:))) * J;
+J = 1/max(abs(J(:))) * J;
 if isfield(goptions,'arrowvalues')
-  goptions.arrowvalues = 1/nanmax(abs(goptions.arrowvalues(:))) * goptions.arrowvalues;
+  goptions.arrowvalues = 1/max(abs(goptions.arrowvalues(:))) * goptions.arrowvalues;
 else
   goptions.arrowvalues = J;
 end

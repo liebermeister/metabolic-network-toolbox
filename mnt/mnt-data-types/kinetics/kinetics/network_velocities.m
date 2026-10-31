@@ -37,12 +37,16 @@ else
     % -------------------------------------------------------------------------------
 
     case {'embedded_kinetic_models'}
+      if ~exist('embedded_kinetic_velocities','file')
+        error('mnt:missingPackage', 'Kinetics of type ''embedded_kinetic_models'' require the function embedded_kinetic_velocities, which is not part of this toolbox.');
+      end
       v = embedded_kinetic_velocities(s,network,kinetics);
 
     case {'cs','ms','ds','rp','fd'}
       ind_ext = find(network.external);
       p = kinetics;
       v = modular_velocities(kinetics.type,network.N, network.regulation_matrix,ind_ext,p.u,s,p.KA,p.KI,p.KM,p.KV,p.Keq,p.h);
+      v = v(indices,:);
 
     case 'convenience'
       scale_G = convert_G_scale;
@@ -110,6 +114,7 @@ else
       end
       v  = (  ( kinetics.k_fwd'  .* prod( repmat(s,1,nr) .^ Nf) ) ...
             - ( ( network.reversible' .* kinetics.k_bwd') .* prod( repmat(s,1,nr) .^ Nb) ) )';
+      v = v(indices,:);
 
     case 'standard'
       if ~split

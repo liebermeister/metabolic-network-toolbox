@@ -133,19 +133,19 @@ switch distribution.kinetics_type
                                cellstr([ repmat(['R' num2str(it) ':'], sum(r.sizes),1), char(r.parameters)] )];
           switch r.type
             case 'mass-action'
-              %	      dummy.parameters = {'k','km'}';
+              %       dummy.parameters = {'k','km'}';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case 'michaelis_menten_rev'
-              %	      dummy.parameters = {'Km_S','Km_P','Vm_S','Vm_P'}';
+              %       dummy.parameters = {'Km_S','Km_P','Vm_S','Vm_P'}';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case 'multiple_michaelis_menten_rev'
-              %	  parameters = {'Km_S','Km_P','Vm_S','Vm_P'}';
+              %   parameters = {'Km_S','Km_P','Vm_S','Vm_P'}';
               this_A = [0;0;1;1];
               this_B = [0;0;1/2;1/2];
               this_C = [distribution.logKm_sigma ,0, 0;...
@@ -154,61 +154,61 @@ switch distribution.kinetics_type
                         -0.5*distribution.logKm_sigma, 0.5*distribution.logKm_sigma, distribution.logVm_sigma];
               this_D = [distribution.logKm_mu; distribution.logKm_mu; distribution.logVm_mu; distribution.logVm_mu];
             case 'multiple_michaelis_menten_irrev'
-              %	      dummy.parameters = {'Km_S','Vm_S'}';
+              %       dummy.parameters = {'Km_S','Vm_S'}';
               this_A = [0;1];
               this_B = [0;0];
               this_C = [distribution.logKm_sigma ,0; 0, distribution.logVm_sigma];
               this_D = [distribution.logKm_mu; distribution.logVm_mu ];
             case 'influx'
-              %	      dummy.parameters = {'v_in'}';
+              %       dummy.parameters = {'v_in'}';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case 'efflux'
-              %	      dummy.parameters = {'k_out'}';
+              %       dummy.parameters = {'k_out'}';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'rev_uni_uni'}
-              %	      dummy.parameters = {'k','km','Pk','Pkm'}';	      dummy.sizes = [2 2 1 1]';
+              %       dummy.parameters = {'k','km','Pk','Pkm'}';              dummy.sizes = [2 2 1 1]';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'rev_uni_bi'}
-              %	      dummy.parameters = {'k','km','Pk','Pkm'}';	      dummy.sizes = [3 3 1 1]';
+              %       dummy.parameters = {'k','km','Pk','Pkm'}';              dummy.sizes = [3 3 1 1]';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'rev_bi_uni'}
-              %	      dummy.parameters = {'k','km','Pk','Pkm'}';	      dummy.sizes = [3 3 1 1]';
+              %       dummy.parameters = {'k','km','Pk','Pkm'}';              dummy.sizes = [3 3 1 1]';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'rev_bi_bi'}
-              %	      dummy.parameters = {'k','km','Pk','Pkm'}';	      dummy.sizes = [4 4 1 1]';
+              %       dummy.parameters = {'k','km','Pk','Pkm'}';              dummy.sizes = [4 4 1 1]';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'rev_multiple'}
-              %	      dummy.parameters = {'k','km','Pk','Pkm'}';	      dummy.sizes = [2 2 1 1]';
+              %       dummy.parameters = {'k','km','Pk','Pkm'}';              dummy.sizes = [2 2 1 1]';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'irrev_uni'}
-              %	      dummy.parameters = {'k','Pk'}';	      dummy.sizes = [2 1]';
+              %       dummy.parameters = {'k','Pk'}';         dummy.sizes = [2 1]';
               this_A = [];
               this_B = [];
               this_C = [];
               this_D = [];
             case {'irrev_bi'}
-              %	      dummy.parameters = {'k','Pk'}';	      dummy.sizes = [3 1]';
+              %       dummy.parameters = {'k','Pk'}';         dummy.sizes = [3 1]';
               this_A = [];
               this_B = [];
               this_C = [];

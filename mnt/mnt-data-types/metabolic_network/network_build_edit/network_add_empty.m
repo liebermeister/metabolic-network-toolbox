@@ -15,7 +15,7 @@ for it = 1:length(fnames)
 
   if isnumeric(ff), empty = zeros(newsize);
   elseif iscell(ff)
-    if isstr(ff{1,1})
+    if ischar(ff{1,1})
       empty = repmat({''},newsize(1),newsize(2));
     else
       empty = repmat({nan},newsize(1),newsize(2));

@@ -11,7 +11,11 @@ function [delta_mu, delta_mu_ind_score] = optimise_delta_mu_given_signs(N,parame
 [nm,nr] = size(N);
 n_exp   = size(v,2);
 
-is isfield(data,'delta_mu'), delta_mu_data = data.dmu; end
+if isfield(data,'delta_mu')
+  delta_mu_data = data.delta_mu;
+else
+  delta_mu_data = struct('mean',nan(nr,n_exp),'std',nan(nr,n_exp));
+end
 
 
 %------------------------------------------------------------------

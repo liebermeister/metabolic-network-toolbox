@@ -1,5 +1,9 @@
 function display_periodic_quantities_on_network(network_CoSplit, network, c_osc, v_osc, c_ss, v_ss, squaresize, circle_size, fontsize, fignum, metabolite_color, reaction_color);
 
+% display_periodic_quantities_on_network(network_CoSplit, network, c_osc, v_osc, c_ss, v_ss, ...)
+%
+% Show periodic metabolite levels and fluxes on a network graph, with a clock symbol showing the phase
+
 eval(default('metabolite_color','[]','reaction_color','[0.6 0.6 1]'));
 if isempty(metabolite_color), metabolite_color = [0 0 1]; end
 if isempty(reaction_color), reaction_color = [0.7 0.4 0.1]; end

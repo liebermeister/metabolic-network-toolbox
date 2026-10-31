@@ -14,18 +14,18 @@ if exist('seed','var'), rng(seed); end
 eval(default('ind_ignore','[]'));
 
 ind_missing_std        = find(isfinite(v_mean) .*(1-isfinite(v_std)));
-v_std(ind_missing_std) = nanmean(nanmean(v_std)');
+v_std(ind_missing_std) = mean(mean(v_std,'omitnan')','omitnan');
 
 % replace unknown flux data by broad distribution around 0
 % to prevent unrealisitically high estimates for non-measured fluxes
 
-v_std(isnan(v_mean))  = 5 * nanstd(v_mean(:));
+v_std(isnan(v_mean))  = 5 * std(v_mean(:),'omitnan');
 v_mean(isnan(v_mean)) = 0;
 
 % make sure that reference fluxes respect zero flux and sign constraints
 
 v_mean(v_sign == 0 ) = 0;
-v_std( v_sign == 0 ) = 0.01 * nanstd(v_mean(:));
+v_std( v_sign == 0 ) = 0.01 * std(v_mean(:),'omitnan');
 v_std( find(v_mean.*v_sign)<0) = nan;
 v_mean(find(v_mean.*v_sign)<0) = nan;
 

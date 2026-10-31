@@ -23,7 +23,7 @@ ind_reaction_gene   = nan*ones(length(network.actions),1);
 
 for it3 = 1:length(network.genes)
   for it2 = 1:length(data_genenames)
-    if findstr(data_genenames{it2},network.genes{it3})
+    if ~isempty(strfind(data_genenames{it2},network.genes{it3})) || ~isempty(strfind(network.genes{it3},data_genenames{it2}))
       if isnan(ind_reaction_gene(it3))
         ind_reaction_gene(it3)       = it2;
       end

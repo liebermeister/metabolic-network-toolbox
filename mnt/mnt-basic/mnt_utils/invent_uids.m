@@ -1,5 +1,9 @@
 function network = invent_uids(network);
 
+% network = invent_uids(network)
+%
+% If metabolite or reaction IDs are missing, build them from metabolite names and reaction formulae
+
 
 if ~isfield(network,'metabolite_id')
   disp('Attention: no metabolite IDs found. Using metabolite names as IDs');

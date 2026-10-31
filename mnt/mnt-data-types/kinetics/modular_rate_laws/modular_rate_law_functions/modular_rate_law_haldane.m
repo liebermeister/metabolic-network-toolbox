@@ -1,12 +1,15 @@
 function modular_rate_law_haldane(network,kinetics,fignum)
 
+% modular_rate_law_haldane(network,kinetics,fignum)
+%
+% Check the Haldane relationships of modular rate laws (default kinetics: network.kinetics)
+
 eval(default('kinetics','[]','fignum','9999'));
 
 if isempty(kinetics), kinetics = network.kinetics; end
 
 network.kinetics = kinetics;
 
-% modular_rate_law_haldane(network)
 
 [~,~,Keq_from_Haldane] = modular_kcat_to_KV_Keq(network.N, network.kinetics);
 

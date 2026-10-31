@@ -30,7 +30,7 @@ epsilon = sparse(zeros(n_A,length(internal)));
 for i=1:length(internal)
   s_pert = s; s_pert(internal(i)) = s(internal(i))*(1+delta);
   if s_pert(internal(i))==0, s_pert(internal(i))=10^-6; end
-  relevant_reactions = find( network.N(internal(i),:)~=0 + network.regulation_matrix(:,internal(i))'~=0);
+  relevant_reactions = find( network.N(internal(i),:)~=0 | network.regulation_matrix(:,internal(i))'~=0);
   v_pert = network_velocities(s_pert,network,network.kinetics,0,relevant_reactions);
   epsilon(relevant_reactions,i) = (v_pert-v(relevant_reactions))/(s_pert(internal(i))-s(internal(i)));
 end

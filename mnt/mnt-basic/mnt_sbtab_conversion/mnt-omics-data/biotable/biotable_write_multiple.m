@@ -1,5 +1,9 @@
 function biotable_write_multiple(data, filename, options)
 
+% biotable_write_multiple(data, filename, options)
+%
+% Write the metabolite, flux, protein and transcript tables to separate files
+
 biotable_write(data.metabolite_data, [filename '_metabolite_data'],options);
 biotable_write(data.flux_data,       [filename '_flux_data'],options);
 biotable_write(data.protein_data,    [filename '_protein_data'],options);

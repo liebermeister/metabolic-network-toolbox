@@ -1,5 +1,9 @@
 function kin_data = kin_data_construct(network)
 
+% kin_data = kin_data_construct(network)
+%
+% Construct an empty kin_data structure (mean and std values are nan) for a network
+
 [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network);
 
 empty_met = nan * ones(nm,1);

@@ -17,12 +17,12 @@ u = sbtab_load_quantity_data(protein_data_file, [], 'concentration of enzyme', '
 
 % load metabolite levels
 
-if isstr(metabolite_data_files)
+if ischar(metabolite_data_files)
   c = sbtab_load_quantity_data(metabolite_data_files, [], 'concentration', '!Compound:Identifiers:kegg.compound', network.metabolite_KEGGID, {'Value'},1);
 else
   % read data from several files and take the geometric mean for each metabolite
   for itt = 1:length(metabolite_data_files)
     c(:,itt) = sbtab_load_quantity_data(metabolite_data_files{itt}, [], 'concentration', '!Compound:Identifiers:kegg.compound', network.metabolite_KEGGID, {'Value'},1);
   end
-  c = exp(nanmean(log(c),2));
+  c = exp(mean(log(c),2,'omitnan'));
 end

@@ -5,7 +5,8 @@ function mnt_dependencies(only_required)
 % Check whether the packages used by the Metabolic Network Toolbox are installed
 % (see README.md for details)
 %
-% only_required: if true, check only matlab-utils and SBtab, and no optional packages (default: false)
+% only_required: if true, check only matlab-utils and SBtab for Matlab,
+%                and no optional packages (default: false)
 
 if nargin < 1
   only_required = false;

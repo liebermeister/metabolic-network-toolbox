@@ -1,8 +1,12 @@
 function display_variability(network,solution, fn)
 
+%
+% Show on network graphs the variability of metabolite levels and fluxes due to parameter uncertainty
+%
+% fn: figure numbers (default 1:3)
+
 if ~exist('fn','var'), fn=1:3; end
 
-% display_variability(network,solution,fn)
 
 S_std_logk = diag( solution.control_coefficients.R_S * solution.logk_cov *  solution.control_coefficients.R_S');
 J_std_logk = diag( solution.control_coefficients.R_J * solution.logk_cov *  solution.control_coefficients.R_J');

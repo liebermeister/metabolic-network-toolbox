@@ -26,7 +26,7 @@ p = network.graphics_par;
 
 % --- metlist -> list of metabolites
 
-if isstr(met_list), met_list = {met_list}; end
+if ischar(met_list), met_list = {met_list}; end
 if isnumeric(met_list)
   met_list = network.metabolites(find(sum(abs(network.N)~=0,2)>met_list));
 end
@@ -56,7 +56,7 @@ for it = 1:length(metabolites)
     NN=[NN; subN{find(it==met_index)}];
   else
     mult =1;
-    NN=[NN; 	N(it,:)];
+    NN=[NN;     N(it,:)];
   end
   split_mapping{it} = counter+(1:mult);
   back_mapping(split_mapping{it}) = it;

@@ -110,8 +110,8 @@ end
 jj = j;
 
 % scale actvalues matrices to maximum values of 1
-actvalues_1 = 1/nanmax(abs(actvalues_1(:))) * actvalues_1;
-actvalues_2 = 1/nanmax(abs(actvalues_2(:))) * actvalues_2;
+actvalues_1 = 1/max(abs(actvalues_1(:))) * actvalues_1;
+actvalues_2 = 1/max(abs(actvalues_2(:))) * actvalues_2;
 
 if length(metvalues_1), options.metvaluesmax = max(max(metvalues_1(:)),0.001); end
 if length(actvalues_1), options.actvaluesmax = max(max(actvalues_1(:)),0.001); end

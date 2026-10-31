@@ -19,7 +19,7 @@ if ~exist('strict','var'), strict = 0; end
 % update indm and indr
 
 if ~strict
-  if isstr(indr)
+  if ischar(indr)
     switch indr
       case 'add_all'
         disp('Adding all reactions connected to any of the metabolites');

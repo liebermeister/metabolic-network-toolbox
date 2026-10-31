@@ -5,7 +5,7 @@ function [parameter_prior, parameter_prior_filename] = parameter_balancing_prior
 % Data structure containing information about parameter priors (read from the Prior table file)
 %
 % parameter_prior_filename: prior table; by default, the table given by 'mnt_prior_file'
-  
+
 if ~exist('sbtab_version','file'),
   error('For this function, the SBtab toolbox must be installed');
 end
@@ -16,7 +16,7 @@ if isempty(parameter_prior_filename),
   parameter_prior_filename = mnt_prior_file;
 end
 
-if verbose, 
+if verbose,
   display(sprintf('o Using parameter prior file %s', parameter_prior_filename));
 end
 

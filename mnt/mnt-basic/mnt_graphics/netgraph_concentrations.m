@@ -52,7 +52,7 @@ end
 
 if options.scale_arrowvalues
   if length(options.arrowvalues)
-    options.arrowvalues = 1/nanmax(abs(options.arrowvalues(:))) * options.arrowvalues;
+    options.arrowvalues = 1/max(abs(options.arrowvalues(:))) * options.arrowvalues;
   end
 end
 

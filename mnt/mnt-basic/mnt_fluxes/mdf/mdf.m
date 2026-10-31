@@ -26,7 +26,7 @@ eval(default('verbose','1'));
 
 % if 0,
 %   % TEST EXAMPLE
-%   cd /home/wolfram/matlab/models/network_collection/data;
+%   % (from the folder containing the model file)
 %   load network_linear_2_reactions;
 %
 %   opt.c_min_default = 0.001; % mM

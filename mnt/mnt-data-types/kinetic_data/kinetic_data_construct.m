@@ -1,5 +1,9 @@
 function kinetic_data = kinetic_data_construct(network, data_quantities, options)
 
+% kinetic_data = kinetic_data_construct(network, data_quantities, options)
+%
+% Construct a kinetic data structure for a network (see 'help kinetic_data_load')
+
 eval(default('data_quantities', '[]', 'options','struct'));
 options_default.verbose = 0;
 options_default.values = struct;

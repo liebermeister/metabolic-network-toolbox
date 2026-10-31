@@ -6,7 +6,7 @@
 function re = network_find_reactions(network,metabolite)
 
 only_one=0;
-if isstr(metabolite), metabolite={metabolite}; only_one=1; end
+if ischar(metabolite), metabolite={metabolite}; only_one=1; end
 ind = label_names(metabolite,network.metabolites,'single');
 
 if only_one

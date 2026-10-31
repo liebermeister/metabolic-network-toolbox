@@ -24,9 +24,9 @@ eval(default('method','''internal''','ind_ignore','[]','zv','[]','omit_reverse_c
 % remove special characters from metabolite names (for efmtool)
 network.metabolites = network_adjust_names_for_sbml_export(network.metabolites);
 
-a = pwd;
-
-cd /home/wolfram/matlab_fixed/packages/efmtool/
+% efmtool must be called from its own folder; the old folder is restored also after errors
+old_folder     = cd(fileparts(which('CalculateFluxModes')));
+restore_folder = onCleanup(@() cd(old_folder));
 
 switch method
   case 'internal'
@@ -90,8 +90,6 @@ end
 
 opts = CreateFluxModeOpts('arithmetic', 'fractional', 'enforce', enforced_reactions_string );
 mnet = CalculateFluxModes(stru,opts);
-
-cd(a);
 
 if ~all(all(abs(mnet.stoich*mnet.efms) < 1e-10))
   error('Computed elementary modes violate stationarity condition');

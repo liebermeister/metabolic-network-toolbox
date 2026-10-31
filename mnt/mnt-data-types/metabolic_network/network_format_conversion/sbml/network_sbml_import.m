@@ -27,7 +27,7 @@ graphics_flag       = 0;   % SHOW GRAPHICS?
 import_names        = 1;   % import names from model
 import_compartments = 1;   % import compartments from model
 
-if isstr(s)
+if ischar(s)
   if exist('dirname','var'); cd(dirname); end
   [s,errors] = TranslateSBML(s,0,0); % no validation, no interactive prompts
 end

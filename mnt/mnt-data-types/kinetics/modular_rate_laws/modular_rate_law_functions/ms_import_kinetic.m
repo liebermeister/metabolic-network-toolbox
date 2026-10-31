@@ -10,6 +10,12 @@ function [kin_data, parameter_prior] = ms_import_kinetic(network,kinetic_balance
 %
 % Similar functions: 'sbtab_to_modular_rate_law'
 
+warning('mnt:deprecated', 'ms_import_kinetic is deprecated and will be removed in the next MAJOR version.');
+
+if ~exist('ncsp_kinetic_data_load_table','file')
+  error('mnt:missingFunction', 'ms_import_kinetic requires the function ncsp_kinetic_data_load_table, which is not part of this toolbox.');
+end
+
 eval(default('verbose','1'));
 
 % --------------------------------
@@ -75,17 +81,17 @@ parameter_prior.log_KI      = kin_data.log_KI;
 parameter_prior.log_KV.mean = nan * ones(nr,1);
 parameter_prior.log_KV.std  = nan * ones(nr,1);
 
-unknown_mu0_mean    = nanmean(parameter_prior.mu0.mean);
-unknown_mu0_std     = nanstd(parameter_prior.mu0.mean);
+unknown_mu0_mean    = mean(parameter_prior.mu0.mean,'omitnan');
+unknown_mu0_std     = std(parameter_prior.mu0.mean,'omitnan');
 
-unknown_log_KM_mean = nanmean(parameter_prior.log_KM.mean(KM_indices));
-unknown_log_KM_std  = nanstd(parameter_prior.log_KM.mean(KM_indices));
-unknown_log_KA_mean = nanmean(parameter_prior.log_KA.mean(KA_indices));
-unknown_log_KA_std  = nanstd(parameter_prior.log_KA.mean(KA_indices));
-unknown_log_KI_mean = nanmean(parameter_prior.log_KI.mean(KI_indices));
-unknown_log_KI_std  = nanstd(parameter_prior.log_KI.mean(KI_indices));
-unknown_log_KV_mean = nanmean(parameter_prior.log_KV.mean);
-unknown_log_KV_std  = nanstd(parameter_prior.log_KV.mean);
+unknown_log_KM_mean = mean(parameter_prior.log_KM.mean(KM_indices),'omitnan');
+unknown_log_KM_std  = std(parameter_prior.log_KM.mean(KM_indices),'omitnan');
+unknown_log_KA_mean = mean(parameter_prior.log_KA.mean(KA_indices),'omitnan');
+unknown_log_KA_std  = std(parameter_prior.log_KA.mean(KA_indices),'omitnan');
+unknown_log_KI_mean = mean(parameter_prior.log_KI.mean(KI_indices),'omitnan');
+unknown_log_KI_std  = std(parameter_prior.log_KI.mean(KI_indices),'omitnan');
+unknown_log_KV_mean = mean(parameter_prior.log_KV.mean,'omitnan');
+unknown_log_KV_std  = std(parameter_prior.log_KV.mean,'omitnan');
 
 if isnan(unknown_log_KM_mean), unknown_log_KM_mean = 0;  unknown_log_KM_std = log(10^3); end
 if isnan(unknown_log_KA_mean), unknown_log_KA_mean = 0;  unknown_log_KA_std = log(10^3); end

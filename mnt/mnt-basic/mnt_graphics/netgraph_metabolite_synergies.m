@@ -37,7 +37,7 @@ if gp.normalise_values
     influence_values = influence_values/max(abs(influence_values(metmap)));
   end
   synergy_values = synergy_values - diag(diag(synergy_values));
-  synergy_values = synergy_values/nanmax(nanmax(abs(synergy_values(metmap,metmap))));
+  synergy_values = synergy_values/max(max(abs(synergy_values(metmap,metmap))));
 end
 
 if gp.relative_threshold

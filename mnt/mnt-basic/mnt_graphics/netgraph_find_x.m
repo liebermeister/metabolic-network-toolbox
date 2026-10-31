@@ -77,8 +77,8 @@ for itt=1:10
       f1 = sum(distances.^2)+10^-10;
       f1 = exp(-f1/(2*k2^2))./sqrt(f1);
       dummy = x(:,find(db(i,:)==1));
-      if length(dummy),	       xdum = mean(dummy,2);
-      else,                    xdum = x(:,i);	       end
+      if length(dummy),        xdum = mean(dummy,2);
+      else,                    xdum = x(:,i);          end
       xnew(:,i)= x(:,i) + k1 * sum(distances.*repmat(f1,2,1),2) ...
           + k3 * ( xdum - x(:,i) );
     end

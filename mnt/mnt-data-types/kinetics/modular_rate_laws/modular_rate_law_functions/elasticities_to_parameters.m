@@ -30,8 +30,8 @@ end
 
 for i = 1:nr
   %  if min([Mplus(i,:) - E_sc(i,:)])>=0,
-  zeta0(i) =  nanmax(abs(Mminus(i,:) - E_sc(i,:)) ./ [Mplus(i,:) - E_sc(i,:)]);
-  zeta1(i) =  nanmax(abs(Mplus(i,:) + E_sc(i,:)) ./ [Mminus(i,:) + E_sc(i,:)]);
+  zeta0(i) =  max(abs(Mminus(i,:) - E_sc(i,:)) ./ [Mplus(i,:) - E_sc(i,:)]);
+  zeta1(i) =  max(abs(Mplus(i,:) + E_sc(i,:)) ./ [Mminus(i,:) + E_sc(i,:)]);
   zeta(i,1)  = max(zeta0(i)+epsilon,zeta1(i)+epsilon);
   %  else
   %    error('Elasticity out of range');

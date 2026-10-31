@@ -1,5 +1,9 @@
 function data2 = biotable_time_interpolation(data,interpolation_time)
 
+% data2 = biotable_time_interpolation(data,interpolation_time)
+%
+% Interpolate a biotable to the time points interpolation_time, which must lie within the range of data.SampleTime
+
 if [min(interpolation_time)<min(data.SampleTime)] + ...
       [max(interpolation_time)>max(data.SampleTime)],
   error('Requested interpolation outside allowed range');
