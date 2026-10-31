@@ -81,7 +81,7 @@ if isempty(data_file)
   flag_construct_empty_data_structure = 1;
   verbose = 0;
   data_file       = [];
-elseif isstr(data_file)
+elseif ischar(data_file)
   if verbose
     display(sprintf('o Collecting data from file %s', data_file));
   end
@@ -101,7 +101,7 @@ if iscell(data_file)
   if prod(size(options.use_kegg_ids))==1,   options.use_kegg_ids = options.use_kegg_ids * ones(length(data_file),1); end
 
   my_opt = options;
-  if isstr(options.reaction_column_name)
+  if ischar(options.reaction_column_name)
     my_opt.reaction_column_name = options.reaction_column_name;
   else
     my_opt.reaction_column_name = options.reaction_column_name{1};
@@ -114,7 +114,7 @@ if iscell(data_file)
   for it = 2:length(data_file)
     my_opt = options;
     my_opt.use_kegg_ids = options.use_kegg_ids(2);
-    if isstr(options.reaction_column_name)
+    if ischar(options.reaction_column_name)
       my_opt.reaction_column_name = options.reaction_column_name;
     else
       my_opt.reaction_column_name = options.reaction_column_name{1};
@@ -157,7 +157,7 @@ end
 % at the end, such that they will be used!
 
 if length(data_file)
-  if isstr(data_file)
+  if ischar(data_file)
     kinetic_data_sbtab = sbtab_table_load(data_file,[],[],options.table_id);
   else
     kinetic_data_sbtab = data_file; data_file='[...]';
@@ -673,14 +673,14 @@ for it = 1:length(data_quantities)
       %% ALTERNATIVE: use only the last data value: my_ind=my_ind(end);
       new.rindices(it5,1)  = rindices(my_ind(1));
       new.cindices(it5,1)  = cindices(my_ind(1));
-      new.my_median(it5,1) = nanmean(my_median(my_ind));
-      new.my_mean(it5,1)   = nanmean(my_mean(my_ind));
-      new.my_std(it5,1)    = nanmean(my_std(my_ind));
-      new.my_geomstd(it5,1)    = nanmean(my_geomstd(my_ind));
-      new.my_mean_ln(it5,1)= nanmean(my_mean_ln(my_ind));
-      new.my_std_ln(it5,1) = nanmean(my_std_ln(my_ind));
-      new.my_upper(it5,1)  = nanmin(my_upper(my_ind));
-      new.my_lower(it5,1)  = nanmax(my_lower(my_ind));
+      new.my_median(it5,1) = mean(my_median(my_ind),'omitnan');
+      new.my_mean(it5,1)   = mean(my_mean(my_ind),'omitnan');
+      new.my_std(it5,1)    = mean(my_std(my_ind),'omitnan');
+      new.my_geomstd(it5,1)    = mean(my_geomstd(my_ind),'omitnan');
+      new.my_mean_ln(it5,1)= mean(my_mean_ln(my_ind),'omitnan');
+      new.my_std_ln(it5,1) = mean(my_std_ln(my_ind),'omitnan');
+      new.my_upper(it5,1)  = min(my_upper(my_ind));
+      new.my_lower(it5,1)  = max(my_lower(my_ind));
     end
     ind_ok = find([new.rindices .* new.cindices] ~=0);
     rindices  = new.rindices(ind_ok);

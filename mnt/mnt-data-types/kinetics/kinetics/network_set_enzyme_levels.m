@@ -1,5 +1,10 @@
 function network =  network_set_enzyme_levels(network,u,enzyme_parameter_names)
 
+% network = network_set_enzyme_levels(network,u,enzyme_parameter_names)
+%
+% Set the enzyme levels in network.kinetics
+% (for numeric kinetics, enzyme_parameter_names must be given)
+
 switch network.kinetics.type
   case 'numeric'
     if ~exist('enzyme_parameter_names','var')

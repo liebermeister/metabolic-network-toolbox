@@ -8,7 +8,7 @@ function d = sbtab_2_dynamic_data(filename)
 % For writing such files, see dynamic_data_2_sbtab.m
 % For the biotable format itself, see 'help biotable'
 
-if isstr(filename)
+if ischar(filename)
   SBtab_doc = sbtab_document_load_from_one(filename);
 else
   SBtab_doc = filename;

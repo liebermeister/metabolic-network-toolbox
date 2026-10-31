@@ -107,7 +107,7 @@ switch reaction.type
 
   otherwise
     formula = '';
-    warning('Reaction kinetics type %s is not supported by network2sbml\n',reaction.type );
+    warning('Reaction kinetics type %s is not supported by network2sbml',reaction.type );
 end
 
 switch reaction.type

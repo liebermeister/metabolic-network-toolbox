@@ -1,12 +1,16 @@
 function isStationary = flux_check_stationarity(network,v,chop_epsilon)
 
+% isStationary = flux_check_stationarity(network,v,chop_epsilon)
+%
+% Check whether a flux distribution v is stationary at the internal metabolites
+% (tolerance chop_epsilon, default 10^-10)
+
 if find(~isfinite(v))
   display('Flux contains NaN values');
 end
 
 eval(default('chop_epsilon','10^-10'));
 
-% flux_check_stationarity(network,v)
 
 ind_int  = find(network.external==0);
 mismatch = network.N(ind_int,:) * v;

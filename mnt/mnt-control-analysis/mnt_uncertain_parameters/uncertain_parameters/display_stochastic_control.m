@@ -62,7 +62,7 @@ switch  control_type
         title([ solution.name ', sensitivities to ' network.metabolites{dummy(ind)}]);
 
       case 'on reaction'
-        dummy=zeros(length(network.actions),1); 	  dummy2=dummy;
+        dummy=zeros(length(network.actions),1);           dummy2=dummy;
         dummy(solution.relevant)= solution.MonteCarlo.control_coefficients.R_J_mean(ind,:)';
         dummy2(solution.relevant)= solution.MonteCarlo.control_coefficients.R_J_std(ind,:)';
         netgraph_draw(network,struct('actvalues',dummy,'arrowvalues',dummy,'arrowstyle','directions',...
@@ -71,7 +71,7 @@ switch  control_type
         title([ solution.name ', sensitivities of ' network.graphics_par.actnames{ind}]);
 
       case 'on metabolite'
-        dummy=zeros(length(network.metabolites),1); 	  dummy2=dummy;
+        dummy=zeros(length(network.metabolites),1);       dummy2=dummy;
         dummy(solution.relevant)= solution.MonteCarlo.control_coefficients.R_S_mean(ind,:)';
         dummy2(solution.relevant)= solution.MonteCarlo.control_coefficients.R_S_std(ind,:)';
         netgraph_draw(network,struct('actvalues',dummy,'arrowvalues',dummy,'arrowstyle','directions',...

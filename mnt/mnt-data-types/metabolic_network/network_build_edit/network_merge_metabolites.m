@@ -1,5 +1,9 @@
 function network = network_merge_metabolites(network,m1_list,m2_list);
 
+% network = network_merge_metabolites(network,m1_list,m2_list)
+%
+% Merge each metabolite in m2_list into the corresponding metabolite in m1_list
+
 for it=1:length(m1_list)
   m1 = m1_list{it};
   m2 = m2_list{it};

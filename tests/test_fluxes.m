@@ -5,6 +5,12 @@ network = example_network;
 N = network.N;
 internal = find(network.external == 0);
 
+% flux signs, prior, and data for the tests of optimise_delta_mu_given_signs and optimise_mu_given_signs
+v_signs = [1; 1; 2; 1; 1];
+prior   = struct('mu0', struct('mean', zeros(6,1), 'cov', eye(6)));
+data    = struct('log_c', struct('mean', zeros(6,1), 'std', ones(6,1)));
+options = struct('epsilon_delta_mu', 0.1, 'max_delta_mu', 100);
+
 c = fba_default_options(network);
 c.zv    = [0 0 0 1 0]';
 c.v_min = -ones(5,1);
@@ -37,3 +43,12 @@ v = [1 1 2 1 1]';
 [dmu, success] = sample_feasible_dmu(N, [1 2 5 6], v, constraints, options);
 assert(success == 1);
 assert(all(all(dmu .* repmat(v, 1, size(dmu,2)) < 0)));
+
+%% optimise_delta_mu_given_signs: reaction Gibbs energies have the signs required by the fluxes
+delta_mu = optimise_delta_mu_given_signs(network.N, prior, data, v_signs, options);
+assert(all(sign(delta_mu) == -sign(v_signs)));
+
+%% optimise_mu_given_signs: reaction Gibbs energies have the signs required by the fluxes
+constraints = struct('dmu_limit', 100);
+delta_mu = optimise_mu_given_signs(network.N, prior, data, v_signs, options, constraints);
+assert(all(sign(delta_mu) == -sign(v_signs)));

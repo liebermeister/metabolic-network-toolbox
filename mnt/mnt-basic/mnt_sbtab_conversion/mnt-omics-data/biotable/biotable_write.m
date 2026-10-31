@@ -79,7 +79,7 @@ if pars.flag_openbis
     else
       my_time = [num2str(my_time)];
     end
-    if ~isstr(sample_name{it}), sample_name{it} = num2str(sample_name{it}); end
+    if ~ischar(sample_name{it}), sample_name{it} = num2str(sample_name{it}); end
 
     names{1,2*it-1}  = sprintf('%s%s%sMean%s',s1,my_time,s2,s3);
     names{1,2*it  }  = sprintf('%s%s%sStd%s',s1,my_time,s2,s3);
@@ -103,7 +103,7 @@ else
   for it=1:n_samples
     time{1,2*it-1} = num2str(sample_time(it));
     time{1,2*it}   = num2str(sample_time(it));
-    if ~isstr(sample_name{it}), sample_name{it} = num2str(sample_name{it}); end
+    if ~ischar(sample_name{it}), sample_name{it} = num2str(sample_name{it}); end
     names{1,2*it-1}  = [sample_name{it} ' Mean'];
     names{1,2*it  }  = [sample_name{it} ' Std'];
   end

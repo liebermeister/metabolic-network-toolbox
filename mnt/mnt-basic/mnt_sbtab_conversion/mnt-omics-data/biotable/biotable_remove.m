@@ -1,5 +1,9 @@
 function data2 = biotable_remove(data,ind)
 
+% data2 = biotable_remove(data,ind)
+%
+% Remove the rows with indices ind from a biotable
+
 data = biotable_clean(data);
 
 if length(ind)

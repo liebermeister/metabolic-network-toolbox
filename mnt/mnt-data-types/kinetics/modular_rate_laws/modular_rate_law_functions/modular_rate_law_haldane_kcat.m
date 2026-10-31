@@ -1,5 +1,9 @@
 function modular_rate_law_haldane_kcat(network,kinetics)
 
+% modular_rate_law_haldane_kcat(network,kinetics)
+%
+% Check consistency between the turnover rates and KV and Keq in modular rate laws
+
 eval(default('kinetics','network.kinetics'));
 
 % Double check consistency between kinetic constants

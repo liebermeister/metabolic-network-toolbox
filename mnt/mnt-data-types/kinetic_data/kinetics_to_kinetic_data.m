@@ -1,5 +1,9 @@
 function kinetic_data = kinetics_to_kinetic_data(network, kinetics, options)
 
+% kinetic_data = kinetics_to_kinetic_data(network, kinetics, options)
+%
+% Convert a kinetics structure (default: network.kinetics) to a kinetic data structure
+
 eval(default('kinetics', '[]', 'options', 'struct' ));
 
 options_default.verbose = 0;

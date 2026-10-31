@@ -23,7 +23,7 @@ invisible = zeros(1,length(network.metabolites)+length(network.actions));
 
 if exist('sbtab_version','file')
 
-  if isstr(layout_file)
+  if ischar(layout_file)
     sbtab_table = sbtab_table_load(layout_file);
   else
     % assume that 'layout_file' is a SBtab object
@@ -146,7 +146,7 @@ if length(A{5})
 end
 
 if fill_nans
-  x(:,find(sum(isnan(x)))) = repmat([nanmean(x(1,:)'); nanmean(x(2,:)')],1,length(find(sum(isnan(x)))));
+  x(:,find(sum(isnan(x)))) = repmat([mean(x(1,:)','omitnan'); mean(x(2,:)','omitnan')],1,length(find(sum(isnan(x)))));
   x(find(isnan(x))) = randn(size(x(find(isnan(x)))));
 end
 

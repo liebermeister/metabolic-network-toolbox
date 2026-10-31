@@ -22,7 +22,7 @@ function [network,N,metabolites] = network_build_from_sum_formulae(filename_reac
 eval(default('filename_compounds','[]','columns','[]','filename_regulation','[]'));
 
 if length(filename_reactions)
-  if isstr(filename_reactions)
+  if ischar(filename_reactions)
     reaction_table = sbtab_table_load(filename_reactions);
   else
     reaction_table = filename_reactions;
@@ -32,7 +32,7 @@ if length(filename_reactions)
 end
 
 if length(filename_reactions) * length(filename_compounds)
-  if isstr(filename_compounds)
+  if ischar(filename_compounds)
     compound_table = sbtab_table_load(filename_compounds);
   else
     compound_table = filename_compounds;
@@ -52,13 +52,13 @@ end
 
 for it = 1:length(columns.ReactionFormula)
   sum_formula              = columns.ReactionFormula{it};
-  if sum(findstr(sum_formula,','))
+  if sum(strfind(sum_formula,','))
     error(sprintf('Malformed formula "%s"',sum_formula));
   end
-  if sum(findstr(sum_formula,'-'))
+  if sum(strfind(sum_formula,'-'))
     warning(sprintf('Malformed formula "%s" (hyphens found)',sum_formula));
   end
-  pos                      = findstr(sum_formula,'<=>');
+  pos                      = strfind(sum_formula,'<=>');
   substrate_side           = [sum_formula(1:pos-2) ' + '];
   product_side             = [sum_formula(pos+4:end) ' + '];
   [sstoich{it},smetab{it}] = analyse_one_side(substrate_side);
@@ -273,7 +273,7 @@ if length(filename_regulation)
   is_ok = find(ind_compounds.*ind_reactions.*my_regulation_types_numeric);
   W = spconvert([ind_reactions(is_ok), ind_compounds(is_ok), my_regulation_types_numeric(is_ok)]);
   [nm, nr] = size(network.N);
-  if size(W,1)<nr + size(W,2)<nm
+  if size(W,1)<nr || size(W,2)<nm
     W(nr,nm) = 0;
   end
   network.regulation_matrix = W;
@@ -288,7 +288,7 @@ function [rstoic,rmetab] = analyse_regulation(regulation)
   dum = [' ' regulation];
   dum = strrep(dum,' + ',' | ');
   dum = strrep(dum,' - ',' | ');
-  signs = regulation(findstr(dum,'|')-1);
+  signs = regulation(strfind(dum,'|')-1);
   for it = 1:length(signs)
     if strcmp(signs(it),'+'), rstoic(it)  =  1; end
     if strcmp(signs(it),'-'), rstoic(it)  = -1; end
@@ -298,13 +298,13 @@ function [rstoic,rmetab] = analyse_regulation(regulation)
 
 function [sstoic,smetab] = analyse_one_side(substrate_side)
 
-  spos = findstr(substrate_side, ' + ');
+  spos = strfind(substrate_side, ' + ');
   it2 = 1;
   clear sterm
   while length(spos)
     try
       sterm{it2} = substrate_side(1:spos(1)-1);
-      wpos = findstr(sterm{it2},' ');
+      wpos = strfind(sterm{it2},' ');
       if wpos
         sstoic(it2) = eval(sterm{it2}(1:wpos(1)-1));
         smetab{it2} = sterm{it2}(wpos(1)+1:end);
@@ -313,7 +313,7 @@ function [sstoic,smetab] = analyse_one_side(substrate_side)
         smetab{it2} = sterm{it2};
       end
       substrate_side = substrate_side(spos(1)+3:end);
-      spos = findstr(substrate_side, ' + ');
+      spos = strfind(substrate_side, ' + ');
       it2 = it2+1;
     catch
       substrate_side(1:spos(1)-1)

@@ -1,7 +1,7 @@
 % f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)
 %
 % time derivatives of the internal metabolites
-% used for numerical integration 
+% used for numerical integration
 
 function f = network_derivative(t,s_int,network,internal,external,s_ext,N_int)
 

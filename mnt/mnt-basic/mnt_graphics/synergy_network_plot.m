@@ -43,7 +43,7 @@ if gp.normalise_values
     reaction_values = reaction_values/max(abs(reaction_values(actmap)));
   end
   reaction_pair_values = reaction_pair_values - diag(diag(reaction_pair_values));
-  reaction_pair_values = reaction_pair_values/nanmax(nanmax(abs(reaction_pair_values(actmap,actmap))));
+  reaction_pair_values = reaction_pair_values/max(max(abs(reaction_pair_values(actmap,actmap))));
 end
 
 if gp.relative_threshold

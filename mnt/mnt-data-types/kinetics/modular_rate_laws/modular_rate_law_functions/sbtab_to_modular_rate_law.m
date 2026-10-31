@@ -23,7 +23,7 @@ switch options.kinetic_law
   otherwise, error('Conversion is only possible for modular rate laws');
 end
 
-if isstr(file_kinetic_data)
+if ischar(file_kinetic_data)
   sbtab_table = sbtab_table_load(file_kinetic_data);
 else
   %% assume that file_kinetic_data contains already an sbtab data structure

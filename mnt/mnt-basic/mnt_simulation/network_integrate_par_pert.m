@@ -127,7 +127,7 @@ switch  network.kinetics.type
       if length(pp), p(:,it) = pp'; else p=[]; end
     end
   otherwise
-    warning('Parameter oscillations not supported for this kinetics type\n');
+    warning('Parameter oscillations not supported for this kinetics type');
     v = [];
     p = [];
 end

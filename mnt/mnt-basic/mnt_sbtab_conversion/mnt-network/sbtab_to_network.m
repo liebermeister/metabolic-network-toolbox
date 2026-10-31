@@ -83,14 +83,14 @@ if options.one_sbtab_file
 end
 
 if ~length(options.position_file)
-  if ~isstr(filename)
+  if ~ischar(filename)
     if ~isfield(filename.tables,'Position')
       options.read_positions = 0;
     end
   end
 end
 
-if isstr(filename)
+if ischar(filename)
   if options.only_reaction_table
     filename_reactions = filename;
     filename_compounds = [];
@@ -174,7 +174,7 @@ if options.load_quantity_table
 
   if length(options.quantity_table_file)
     quantity_table = options.quantity_table_file;
-  elseif isstr(filename)
+  elseif ischar(filename)
     quantity_table = [filename '_QuantityData' options.extension];
   else
     quantity_table = filename.tables.Parameter;

@@ -141,8 +141,8 @@ CJ(find(1-used),:) = 0;
 % see Hoefer + Heinrich paper
 %  rho_2 = diag(1./J) * Ec
 %  Gamma = tensor_product(tensor_product(Ec_2,CS),CS,2,1) ...
-%	   + tensor_product(rho_2,CS,2,1) ...
-%	   + permute(tensor_product(rho_2,CS,2,1),[1,3,2]);
+%          + tensor_product(rho_2,CS,2,1) ...
+%          + permute(tensor_product(rho_2,CS,2,1),[1,3,2]);
 %
 %  CS2 = tensor_product(CS,Gamma);
 %  CJ2 = tensor_product(CJ,Gamma);

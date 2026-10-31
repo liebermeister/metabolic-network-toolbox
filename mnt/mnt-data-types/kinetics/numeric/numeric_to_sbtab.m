@@ -1,5 +1,9 @@
 function quantity_table = numeric_to_sbtab(network,options)
 
+% quantity_table = numeric_to_sbtab(network,options)
+%
+% Store the numeric parameters from network.kinetics.parameters in an SBtab Quantity table
+
 pn = fieldnames(network.kinetics.parameters);
 parameter_values = [];
 parameter_names  = {};

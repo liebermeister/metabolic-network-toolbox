@@ -1,5 +1,9 @@
 function data = biotable_add_initial_time_point(data, tmin)
 
+% data = biotable_add_initial_time_point(data, tmin)
+%
+% Add a sample at time tmin that repeats the first sample of each data table
+
 data.metabolite_data.DataMean       = [data.metabolite_data.DataMean(:,1)  * [1 1], data.metabolite_data.DataMean];
 data.metabolite_data.DataStd        = [data.metabolite_data.DataStd(:,1)  * [1 1], data.metabolite_data.DataStd];
 data.metabolite_data.SampleTime     = [tmin; min(data.metabolite_data.SampleTime); data.metabolite_data.SampleTime];

@@ -1,5 +1,9 @@
 function network = network_execute_initialAssignment(network)
 
+% network = network_execute_initialAssignment(network)
+%
+% Execute network.kinetics.initialAssignment and update parameter values and compartment sizes
+
 if ~isfield(network.kinetics,'initialAssignment')
   error('Error');
 end

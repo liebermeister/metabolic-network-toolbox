@@ -956,8 +956,8 @@ function p = netgraph_draw_set_parameters(network,vararg)
   if isempty(p.metvaluesmax), p.metvaluesmax = max(p.metvalues); end
   if isempty(p.actvaluesmin), p.actvaluesmin = min(p.actvalues); end
   if isempty(p.actvaluesmax), p.actvaluesmax = max(p.actvalues); end
-  if isempty(p.edgevaluesmin), p.edgevaluesmin = nanmin(p.edgevalues(:)); end
-  if isempty(p.edgevaluesmax), p.edgevaluesmax = nanmax(p.edgevalues(:)); end
+  if isempty(p.edgevaluesmin), p.edgevaluesmin = min(p.edgevalues(:)); end
+  if isempty(p.edgevaluesmax), p.edgevaluesmax = max(p.edgevalues(:)); end
 
   p.metvalues( find(p.metvalues < p.metvaluesmin) ) = p.metvaluesmin;
   p.metvalues( find(p.metvalues > p.metvaluesmax) ) = p.metvaluesmax;

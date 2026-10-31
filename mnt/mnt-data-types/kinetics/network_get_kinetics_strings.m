@@ -1,5 +1,9 @@
 function [my_kinetics_strings,my_kinetic_laws] = network_get_kinetics_strings(network)
 
+% [my_kinetics_strings,my_kinetic_laws] = network_get_kinetics_strings(network)
+%
+% Get kinetics strings and names of the rate laws for a network with modular rate laws
+
 my_kinetics_strings = [];
 my_kinetic_laws     = [];
 

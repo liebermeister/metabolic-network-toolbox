@@ -27,3 +27,15 @@ try
 catch err
   assert(contains(err.message, 'cannot be set with set_kinetics'));
 end
+
+%% network_velocities: the argument indices selects reactions for all kinetics types
+for kinetics_type = {'cs', 'ms', 'ds', 'rp', 'fd', 'mass-action', 'convenience'}
+  network.kinetics = set_kinetics(network, kinetics_type{1});
+  v_all    = network_velocities(ones(6,1), network);
+  v_chosen = network_velocities(ones(6,1), network, network.kinetics, 0, [2 3]);
+  assert(isequal(v_chosen, v_all([2 3])));
+end
+
+%% kinetics of type 'standard' give finite rates
+network.kinetics = set_kinetics(network, 'standard');
+assert(all(isfinite(network_velocities(s, network))));

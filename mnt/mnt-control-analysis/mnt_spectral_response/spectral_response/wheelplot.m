@@ -1,5 +1,9 @@
 function wheelplot(network,RS,RJ,internal,scale_RS,scale_RJ)
 
+% wheelplot(network,RS,RJ,internal,scale_RS,scale_RJ)
+%
+% Draw complex response coefficients RS and RJ on a network graph
+
 if ~exist('parameter_index','var'), parameter_index = 1; end
 if ~exist('scale_RS','var'), scale_RS=1; end
 if ~exist('scale_RJ','var'), scale_RJ=1; end

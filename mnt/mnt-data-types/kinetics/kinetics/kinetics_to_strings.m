@@ -1,5 +1,9 @@
 function kinetics_strings = kinetics_to_strings(network,kinetics)
 
+% kinetics_strings = kinetics_to_strings(network,kinetics)
+%
+% Convert a kinetics structure to kinetics of type 'kinetic_strings'
+
 switch kinetics.type
   case 'kinetic_strings'
     kinetics_strings = kinetics;

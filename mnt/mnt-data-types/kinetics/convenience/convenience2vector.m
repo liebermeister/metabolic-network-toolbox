@@ -46,7 +46,7 @@ if nargout >= 2
 
   if nargout == 4
     for it =1:length(network.metabolites)
-      relevant_reactions_g{it,:}  = find( network.N(it,:)~=0 + network.regulation_matrix(:,it)'~=0 );
+      relevant_reactions_g{it,:}  = find( network.N(it,:)~=0 | network.regulation_matrix(:,it)'~=0 );
     end
     relevant_reactions_r  = num2cell(column(1:length(network.actions)));
 

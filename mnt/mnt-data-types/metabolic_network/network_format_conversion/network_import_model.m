@@ -1,5 +1,9 @@
 function network = network_import_model(model_file,options);
 
+% network = network_import_model(model_file,options)
+%
+% Load a network model from a file (see also network_import)
+
 eval(default('options','struct'));
 
 options_default = struct('kinetic_law','cs');

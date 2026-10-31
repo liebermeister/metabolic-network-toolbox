@@ -126,7 +126,7 @@ switch pars.method
 
     if pars.prior_for_unknown_fluxes
       %% use broad prior for unknown fluxes, centred around 0
-      v_std_inv(ind_isnan) = 1/nanmean(100 * v_std);
+      v_std_inv(ind_isnan) = 1/mean(100 * v_std,'omitnan');
     else
       v_std_inv(ind_isnan) = 0;
     end
