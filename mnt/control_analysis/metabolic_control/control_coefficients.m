@@ -101,10 +101,10 @@ end
 %% if this still doesn't help:
 eigmax = max(real(eig(M)));
 if eigmax > 0
-  display(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax));
+  error(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax));
   %% figure(1000); plot(sort(real(eig(full(M))))); xlabel('Sorted eigenvalues (real parts)');
-  display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax));
-  M_adj = M - [ eigmax + 10^-10] * eye(size(M));
+  %%display(sprintf('   Fixing the steady state by decreasing all eigenvalues by %f',eigmax));
+  %% M_adj = M - [ eigmax + 10^-10] * eye(size(M));
 else
   M_adj = M;
 end
