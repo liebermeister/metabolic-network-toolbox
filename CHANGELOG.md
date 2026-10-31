@@ -2,7 +2,7 @@
 
 Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing calls may stop working.
 
-## 1.3.0 (not released yet)
+## 1.3.0 (2026-10-31)
 
 First version with a release tag (the previous version number was 1.2).
 
@@ -18,5 +18,19 @@ First version with a release tag (the previous version number was 1.2).
 - `sbtab_load_network_model_and_data` uses `mnt_prior_file` as the default prior table (before: the prior table of Model balancing)
 - `biotable_combine_replicates` moved to Replicate regression
 - `es_default_options` renamed to `stm_default_options`; `es_check_feasibility`, `es_check_flux_constraints`, `es_check_velocities_ma_ratios`, `es_mu_simple_guess` and `es_make_fluxes_stationary` renamed to `mnt_...`; the structs `es_options` and `es_constraints` are now `stm_options` and `stm_constraints`
+- Bug fixes:
+  - `internal_elasticities` and `convenience2vector`: reactions in which a metabolite is both a reactant and a regulator, with equal values in `N` and `regulation_matrix`, were left out (because of a mistake in operator precedence), so `internal_elasticities` gave wrong results for convenience kinetics
+  - `network_velocities` now respects the argument `indices` also for modular and mass-action kinetics; before, it returned all reactions, so `internal_elasticities` stopped with an error for these kinetics
+  - `network_efmtool` no longer uses a fixed folder name and restores the current folder also after errors
+  - `optimise_delta_mu_given_signs` and `optimise_mu_given_signs` work again (syntax error, missing helper functions)
+  - `network_build_from_sum_formulae`: mistake in the check of the size of the regulation matrix
+- `netgraph_move2` removed (it contained a syntax error and could not be called); `netgraph_move` remains
+- The second copy of `EBA_orth` (in `eba_beard`) removed; the remaining copy is the one that was used before, with the usual Matlab path order
+- `nanmean`, `nanstd`, `nanmax`, `nanmin`, `isstr` and `findstr` replaced by the recommended functions
+- Functions that were not part of the toolbox moved here, so these features no longer depend on unpublished code: kinetics of type `standard` (`set_standard_kinetics` and related functions) and helper functions of `stochastic_simulations`, `display_MC_and_analytic`, `display_histograms` and `osc_resp_plot_timecourses`
+- Kinetics of type `embedded_kinetic_models` give a clear error if `embedded_kinetic_velocities` is missing
+- `ms_import_kinetic` deprecated; it gives a clear error if `ncsp_kinetic_data_load_table` is missing
+- HTML documentation removed from the repository (it can be regenerated with m2html)
+- Help texts added to functions that had none; `CITATION.cff` and policy for removing functions added
 
 The state before the cleanup of October 2026 is available under the git tag `v0.9-legacy`.

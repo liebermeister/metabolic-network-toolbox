@@ -26,19 +26,22 @@ To check which of the other packages are installed, run `mnt_dependencies`.
 
 - Matlab (tested with R2025b)
 - [Matlab utility functions](https://github.com/liebermeister/matlab-utils) (required)
+- [SBtab for Matlab](https://github.com/liebermeister/sbtab-matlab) (required for reading and writing
+  SBtab files: kinetic data, state data, network layouts, and conversion between SBtab and networks)
 - Optimization Toolbox (for linear and quadratic optimisation, used in many flux analysis functions).
   Optionally, Gurobi can be used instead of `linprog` and `quadprog` in the more demanding
   functions (see `help optim_solver` in matlab-utils).
+- Statistics and Machine Learning Toolbox (only for `prob_of_order_relation`)
 
 Some functions require further packages:
 
 | Package | Needed for |
 |---------|------------|
 | [libSBML](https://sbml.org/software/libsbml/) (Matlab interface) | SBML import and export (`network_sbml_import`, `network_sbml_export`) |
-| [SBtab for Matlab](https://github.com/liebermeister/sbtab-matlab) | reading and writing SBtab files (kinetic data, state data, network layouts) |
 | [Tensor Toolbox](https://www.tensortoolbox.org) | second-order elasticities and response coefficients |
 | [efmtool](https://csb.ethz.ch/tools/software/efmtool.html) | elementary flux modes (`network_efmtool`, `eba_feasible`) |
 | [COBRA Toolbox](https://opencobra.github.io/cobratoolbox/) | conversion from and to COBRA models |
+| [lasso.m](http://www.imm.dtu.dk/~hoe/files/lasso.m) | method `'lasso'` in `project_fluxes` (the function `lasso` of the Statistics Toolbox has a different form) |
 
 ## Contents
 
@@ -56,7 +59,6 @@ The functions are organised in three folders:
 Networks and their kinetics are represented by Matlab structs; for details, type
 `help metabolic_network` and `help kinetics`. Each folder contains a `Contents.m` file with an
 overview (type, e.g., `help mnt-basic`).
-HTML documentation is available in the folder `doc`.
 
 ## Tests
 
@@ -69,6 +71,11 @@ results = runtests('tests')
 ## Versions
 
 To see the installed version, type `mnt_version`. Older versions can be downloaded from the [releases page](https://github.com/liebermeister/metabolic-network-toolbox/releases) of this repository, and changes between versions are listed in `CHANGELOG.md`.
+
+Other packages depend on this toolbox, so functions are not simply renamed or removed: an old function
+name remains available for at least one MINOR version as a thin wrapper that calls the new function and
+gives a warning. The name is removed only in the next MAJOR version. Functions marked as unfinished in
+their help text are not covered by this rule.
 
 ## License
 This package is released under the [GNU General Public License](LICENSE), version 2 or later.
