@@ -112,5 +112,4 @@ switch method
 
 end
 
-%mu = pinv(full(N')) * all_dmu;
-mu = pinv(full(N')) * U * all_dmu;
+mu = pinv(full(N')) * all_dmu;

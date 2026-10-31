@@ -29,7 +29,7 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %   options.table_id (optional, table ID if the input file contains several tables)
 %
 % Other functions for kinetic data structure:
-%   Display data values:             parameter_balancing_kinetic_data_show.m
+%   Display data values:             pb_kinetic_data_show.m
 %   Save data to file  :             kinetic_data_save.m
 %   Insert bounds and pseudo values: kinetic_data_complete.m
 %   Select data for a submodel:      kinetic_data_subselect.m
