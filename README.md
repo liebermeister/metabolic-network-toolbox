@@ -22,6 +22,9 @@ demo_mnt
 
 To check which of the other packages are installed, run `mnt_dependencies`.
 
+For an overview of common tasks, see [GUIDE.md](GUIDE.md). The folder `mnt/demo` contains short examples
+for single topics (see `help demo`).
+
 ## Requirements
 
 - Matlab (tested with R2025b)
@@ -45,20 +48,24 @@ Some functions require further packages:
 
 ## Contents
 
-The functions are organised in three folders:
+The folder `mnt` contains:
 
-- **`mnt/mnt-data-types`**: data structures for metabolic networks, kinetics (mass-action,
-  convenience kinetics, modular rate laws, ...), kinetic data, and metabolic state data;
-  import and export (SBML, SBtab, COBRA)
-- **`mnt/mnt-basic`**: flux analysis (FBA, flux minimisation, flux sampling, energy balance
-  analysis, max-min driving force), thermodynamics, simulation and steady states, graphics,
-  conversion between SBtab and networks, omics data, SBML and COBRA (`mnt_sbtab_conversion`)
-- **`mnt/mnt-control-analysis`**: metabolic control analysis, spectral response coefficients,
-  models with uncertain parameters
+| Folder | Contents |
+|---|---|
+| `metabolic_network` | network structure: constructing, editing, inspecting |
+| `kinetics` | rate laws: mass-action, convenience kinetics, modular rate laws, ... |
+| `kinetic_data`, `state_data`, `omics_data` | kinetic data, metabolic states, omics data |
+| `fluxes` | flux balance analysis, flux minimisation, flux sampling, energy balance analysis, max-min driving force |
+| `thermodynamics` | driving forces and equilibrium constants |
+| `simulation` | steady states and dynamic simulation |
+| `control_analysis` | metabolic control analysis, spectral response coefficients, models with uncertain parameters |
+| `graphics` | network graphics |
+| `io` | import and export: SBML, SBtab, COBRA |
+| `utils`, `demo` | constants, version numbers, demo script |
 
 Networks, kinetics, and data are represented by Matlab structs; for details, type
-`help metabolic_network`, `help kinetics`, `help kinetic_data`, and `help state_data`. Each folder contains a `Contents.m` file with an
-overview (type, e.g., `help mnt-basic`).
+`help metabolic_network`, `help kinetics`, `help kinetic_data`, and `help state_data`. Most folders contain a `Contents.m` file with an
+overview (type, e.g., `help fluxes`).
 
 ## Tests
 

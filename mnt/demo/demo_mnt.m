@@ -148,7 +148,7 @@ pause
 clc
 %---------------------------------------------------------------------
 % Likewise, we can compute elasticity and control coefficients
-% (for information on metabolic control analysis, type 'help mnt_mca')
+% (for information on metabolic control analysis, type 'help metabolic_control')
 
 epsilon     = elasticities(network,S);
 
