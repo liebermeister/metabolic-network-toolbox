@@ -6,6 +6,7 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 - New folder structure, with fewer levels and one folder for import and export (see `README.md`). Function names do not change, so calls are not affected, as long as the toolbox is added to the path with its subfolders
 - `help fba`, `help eba`, and `help mdf` now show the functions: their folders were renamed
+- `GUIDE.md` with an overview of common tasks; short examples for single topics in the folder `demo`, which are run by the tests
 - `CONTRIBUTING.md` with conventions for code and help texts
 - Reference for the data structures (`help metabolic_network`, `help kinetics`, `help kinetic_data`, `help state_data`)
 - Help texts of the main functions now have a one-line description and links to related functions, some with examples

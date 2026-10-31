@@ -22,6 +22,9 @@ demo_mnt
 
 To check which of the other packages are installed, run `mnt_dependencies`.
 
+For an overview of common tasks, see [GUIDE.md](GUIDE.md). The folder `mnt/demo` contains short examples
+for single topics (see `help demo`).
+
 ## Requirements
 
 - Matlab (tested with R2025b)
