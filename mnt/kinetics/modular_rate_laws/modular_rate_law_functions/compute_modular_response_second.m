@@ -18,7 +18,7 @@ maxv = 10^20;
 
 [nm,nr] = size(N);
 if ~length(zc_scaled), zc_scaled = 0 * c; end
-if ~length(zc_scaled), zv_scaled = 0 * v; end
+if ~length(zv_scaled), zv_scaled = 0 * v; end
 
 zy = [c .* zc_scaled; v .* zv_scaled];
 
@@ -33,7 +33,7 @@ Eu_sc  = lim(Elasticities.sc_E_u, maxv);  % lim : dirty fix
 ext    = zeros(nm,1); ext(ind_ext) = 1;
 
 if ~exist('CS_un','var')
-  ext = zeros(size(N,1));
+  ext = zeros(size(N,1),1);
   ext(ind_ext) = 1;
   [CJ_un, CS_un] = control_coefficients(N, Elasticities.un_E_c, ext);
 end
@@ -68,15 +68,15 @@ Buu    = lim(Buu,maxv);
 RSu_sc = lim(RSu_sc,maxv);
 RJu_sc = lim(RJu_sc,maxv);
 
-Rtarget_sc_u = 1/z * column([zy' * [RSu_sc; RJu_sc] * diag(u)])';
+Rtarget_sc_u = 1/z * column([zy' * [RSu_sc; RJu_sc]])';
 
-Rtarget_sc_uu = 1/z * ...
+Rtarget_sc_uu = 1/z * ( ...
     RSu_sc' * [Bcc + Ec_sc' * diag(a) * Ec_sc - diag(bc)] * RSu_sc ...
     + RSu_sc' * [Bcu + Ec_sc' * diag(a) * Eu_sc] ...
     + [Buc + Eu_sc' * diag(a) * Ec_sc] * RSu_sc ...
     + [Buu + Eu_sc' * diag(a) * Eu_sc - diag(bu)] ...
     - [RSu_sc; RJu_sc]' * diag(zy) * [RSu_sc; RJu_sc] ...
-    + diag( zy' * [RSu_sc; RJu_sc] );
+    + diag( zy' * [RSu_sc; RJu_sc] ) );
 
 
 % ---------------------------------------------------

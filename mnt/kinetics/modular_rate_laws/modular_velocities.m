@@ -41,7 +41,7 @@ c(find(c<10^-14)) = 10^-14;
 [log_alpha_A, log_beta_A] = k_to_log_alpha(KA,c);
 [log_alpha_I            ] = k_to_log_alpha(KI,c);
 
-[Kcat_plus, Kcat_minus]   = ms_compute_Kcat(N,KM,KV,Keq);
+[Kcat_plus, Kcat_minus]   = ms_compute_Kcat(N,KM,KV,Keq,h);
 
 % KMones: KM matrix, with missing elements replaces by 1
 KMones           = ones(size(KM));

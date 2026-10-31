@@ -27,4 +27,4 @@ pars.KI_rel        = KI(pars.ind_KI);
 
 pars.Keq = Keq;
 
-[pars.Kplus,pars.Kminus] = ms_compute_Kcat(N,KM,KV,Keq);
+[pars.Kplus,pars.Kminus] = ms_compute_Kcat(N,KM,KV,Keq,h);

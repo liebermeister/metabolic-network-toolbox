@@ -39,6 +39,7 @@ function [stm_options, stm_constraints] = stm_default_options(N)
 % stm_constraints.dmu_min            nr x 1  Reaction Gibbs free energies lower bounds
 % stm_constraints.dmu_max            nr x 1  Reaction Gibbs free energies upper bounds
 % stm_constraints.dmu_limit           1 x 1  Reaction Gibbs free energies upper limit for absolute values
+%                                            (when raising it, raise dmu_min and dmu_max as well)
 % stm_constraints.dmu_limit_min       1 x 1  Reaction Gibbs free energies lower limit for absolute values
 % stm_constraints.log_u_mean         nr x 1  ln enzyme levels data
 % stm_constraints.log_u_std          nr x 1  ln enzyme levels data error bars
@@ -69,16 +70,16 @@ function [stm_options, stm_constraints] = stm_default_options(N)
 % stm_options.sampling_method                 Strategy for steady state sampling
 %                                              'v from data'
 %                                              'v and mu'
-%                                              'c0 and c'
-% stm_options.method_flux_sampling            Strategy for flux sampling
 %                                              'sample_and_discard'
-%                                              'convex_optimisation'
-%                                              'cycle_correction'
-% stm_options.n_flux_samples       1          Number of flux samples
+%                                              'accept_flux'
+% stm_options.mu_sampling_method   string     How to choose reaction Gibbs free energies (with 'v and mu'):
+%                                              'hit-and-run' (default): uniform sampling from the feasible polytope
+%                                              'extreme_points': vertices of the polytope along the coordinate axes
 % stm_options.flux_units                      'dimensionless', 'mM/s', 'mol/s'
 % stm_options.n_samples            1          Number of samples in multiple sampling (model ensemble)
+% stm_options.n_max_unstable       1          Maximal number of unsuccessful attempts to sample a stable model (then an error is thrown)
+% stm_options.flag_control         1          Compute control and response coefficients? (0: faster; result.control.stable is empty)
 % stm_options.n_dmu_samples        1          For each of these: number of reaction affinity samples
-% stm_options.n_saturation_samples 1          For each of these: number of elasticity samples
 % stm_options.kinetic_law          string     Type of modular rate law (see modular rate laws, e.g., 'cs', 'ms')
 % stm_options.h                    nr x 1     Predefined reaction cooperativities
 % stm_options.set_alpha_to_half    boolean    Set all saturation values to 0.5 instead of random sampling?
@@ -135,7 +136,7 @@ stm_constraints.mu0_fix     = nan * ones(nm,1);
 stm_constraints.mu0_min     = nan * ones(nm,1);
 stm_constraints.mu0_max     = nan * ones(nm,1);
 
-stm_constraints.dmu_limit   = 100;
+stm_constraints.dmu_limit   = 50;
 stm_constraints.dmu_limit_min = 0.099;
 stm_constraints.dmu_min     = -stm_constraints.dmu_limit*ones(nr,1);
 stm_constraints.dmu_max     =  stm_constraints.dmu_limit*ones(nr,1);
@@ -163,13 +164,11 @@ stm_constraints.rho             = 100;
 
 stm_options.seed                = nan;
 stm_options.sampling_method     = 'v and mu';
-stm_options.method_flux_sampling= 'sample_and_discard';
+stm_options.mu_sampling_method   = 'hit-and-run';
 stm_options.sampling_cycle_correction = 0;
-stm_options.n_flux_samples      = 1;
 stm_options.n_samples           = 10;
 stm_options.flux_units          = 'dimensionless';
 stm_options.n_dmu_samples       = 1;
-stm_options.n_saturation_samples= 1;
 stm_options.set_alpha_to_half   = 1;
 stm_options.set_alpha_nonuniform = 0;
 stm_options.kinetic_law          = 'cs';
@@ -183,6 +182,8 @@ stm_options.zc                   = []; % metabolite derivative of target functio
 stm_options.zv                   = []; % flux derivative of target function
 stm_options.limit_elasticities_in_multireactions = 1;
 stm_options.flag_second_order    = 1;
+stm_options.flag_control         = 1; % compute control and response coefficients
+stm_options.n_max_unstable       = 100; % maximal number of unsuccessful attempts in stm_sample_stable_model
 stm_options.no_equilibrium       = 1;
 stm_options.ind_ignore           = [];
 stm_options.graphics_flag        = 1;

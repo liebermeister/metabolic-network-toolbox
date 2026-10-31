@@ -18,7 +18,7 @@ function [kcatplus,kcatminus] = ms_compute_Kcat(N,KM,KV,Keq,h);
 % kcatminus nr x 1 column vector of reverse kcat values
 
 %
-if ~exist('h','var'), h = ones(size(KV)); end
+if ~exist('h','var') || isempty(h), h = ones(size(KV)); end
 
 [log_kcatplus,log_kcatminus] = ms_compute_log_Kcat(N,KM,KV,Keq,h);
 

@@ -48,8 +48,8 @@ else
     constraints.v_min = -constraints.v_max;
   end
 
-  constraints.v_min(constraints.v_sign== 1) = 0;
-  constraints.v_max(constraints.v_sign==-1) = 0;
+  constraints.v_min(constraints.v_sign== 1) = max(constraints.v_min(constraints.v_sign== 1),0);
+  constraints.v_max(constraints.v_sign==-1) = min(constraints.v_max(constraints.v_sign==-1),0);
 
   ind_v_min    = find(isfinite(constraints.v_min));
   ind_v_max    = find(isfinite(constraints.v_max));
@@ -61,9 +61,15 @@ else
   % analyse network structure
 
   N_int = N(setdiff(1:nm,ind_ext),:);
-  N_zerofluxes = eye(nr); N_zerofluxes = N_zerofluxes(find(constraints.v_fix==0),:);
+  ind_v_fix = find(isfinite(constraints.v_fix));
+  I_fix     = eye(nr); I_fix = I_fix(ind_v_fix,:);
 
-  K = null([N_int; N_zerofluxes],'r');
+  % stationary fluxes with the predefined values: v = v_offset + K * v_red
+  K        = null([full(N_int); I_fix],'r');
+  v_offset = pinv([full(N_int); I_fix]) * [zeros(size(N_int,1),1); constraints.v_fix(ind_v_fix)];
+  if max(abs([N_int; I_fix] * v_offset - [zeros(size(N_int,1),1); constraints.v_fix(ind_v_fix)])) > 10^-8
+    error('The predefined fluxes (constraints.v_fix) do not allow for a stationary flux distribution');
+  end
 
   if ~isfield(options,'cycles'), options.cycles = nan; end
 
@@ -88,13 +94,15 @@ else
   % satisfying v = K * v_red
 
   clear vred_lower vred_upper
+  vred_lower = zeros(0,1);
+  vred_upper = zeros(0,1);
 
   G = [-K(ind_v_min,:); ...
         K(ind_v_max,:); ...
        - diag(constraints.ext_signs(ind_extsign)) * N(ind_extsign,:) * K ];
-  h = [-constraints.v_min(ind_v_min);...
-       constraints.v_max(ind_v_max);
-       zeros(length(ind_extsign),1)];
+  h = [-constraints.v_min(ind_v_min) + v_offset(ind_v_min);...
+       constraints.v_max(ind_v_max) - v_offset(ind_v_max);
+       diag(constraints.ext_signs(ind_extsign)) * N(ind_extsign,:) * v_offset];
 
   for it =1:n_vred
     c                = zeros(n_vred,1);
@@ -123,7 +131,7 @@ else
 
     within_bounds = 0;
     while ~within_bounds
-      v = K * [vred_lower + rand(n_vred,1) .* [vred_upper-vred_lower] ];
+      v = v_offset + K * [vred_lower + rand(n_vred,1) .* [vred_upper-vred_lower] ];
       within_bounds = ...
           (sum(constraints.v_min > v) == 0) * ...
           (sum(constraints.v_max < v) == 0) * ...
