@@ -5,7 +5,7 @@
 %  eba                Energy balance analysis
 %  flux_minimisation  Principle of minimal fluxes
 %  flux_feasibility   Feasibility tests for flux modes
-%  flux_projections   Projection and correction of flux modes
+%  flux_projection    Projection and correction of flux modes
 %  flux_sampling      Sampling of flux modes
 %
 %

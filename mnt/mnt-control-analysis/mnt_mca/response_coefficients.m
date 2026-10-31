@@ -1,6 +1,10 @@
-%[RS, RJ, RS2, RJ2] = response_coefficients(CS, Ec, Ep, Ecc, Ecp, Epp)
+% RESPONSE_COEFFICIENTS Compute response coefficients (first and second order)
+%
+% [RS, RJ, RS2, RJ2] = response_coefficients(CS, Ec, Ep, Ecc, Ecp, Epp, split)
 %
 % Static response coefficients (first and second order)
+%
+% See also: control_coefficients, elasticities
 
 function [RS,RJ,RS2,RJ2] = response_coefficients(CS,Ec,Ep,Ecc,Ecp,Epp,split)
 

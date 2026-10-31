@@ -1,3 +1,5 @@
+% NETWORK_SBML_IMPORT Import a network from SBML
+%
 %[network,s] = network_sbml_import(s,dirname,verbose)
 %
 %Import a network from SBML format.
@@ -13,6 +15,8 @@
 %
 %This function requires the Matlab interface of libSBML
 %(TranslateSBML; see https://sbml.org/software/libsbml/)
+%
+% See also: network_sbml_export, sbtab_to_network
 
 function [network,s] = network_sbml_import(s,dirname,verbose)
 

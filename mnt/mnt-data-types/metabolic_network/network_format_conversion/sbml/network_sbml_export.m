@@ -1,3 +1,5 @@
+% NETWORK_SBML_EXPORT Export a network to SBML
+%
 % SBMLmodel = network_sbml_export(network, verbose, name, filename, notes, sbml_level, sbml_version)
 %
 % Export network (data type from mnt) to libSBML's SBMLModel data type
@@ -15,6 +17,8 @@
 %
 % This function requires the Matlab interface of libSBML
 % (TranslateSBML and OutputSBML; see https://sbml.org/software/libsbml/)
+%
+% See also: network_sbml_import, network_to_sbtab
 
 function SBMLmodel = network_sbml_export(network,verbose,name,filename,notes,sbml_level,sbml_version)
 

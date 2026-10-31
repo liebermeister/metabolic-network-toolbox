@@ -1,5 +1,7 @@
 function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)
 
+% EBA_FEASIBLE Test a flux vector for thermodynamic feasibility, using cycles
+%
 % [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_condition,cycle_method)
 %
 % wrapper function for Energy Balance Analysis:
@@ -8,6 +10,8 @@ function [feasible,C,ind_non_orthogonal] = eba_feasible(v,N,C,ind_ignore,eba_con
 % with stoichiometric matrix N (for all metabolites)
 %
 % ind_ignore: reactions to be ignored in the cycle constraints
+%
+% See also: eba_feasible_lp
 
 eval(default('C','nan','ind_ignore','[]','eba_condition','''loose''','cycle_method','''efmtool'''));
 

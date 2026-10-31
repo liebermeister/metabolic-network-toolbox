@@ -10,5 +10,5 @@
 %   cs_rate_law  - Common saturable rate law
 %   ds_rate_law  - Direct binding saturable rate law
 %   ms_rate_law  - Simultaneous binding saturable rate law
-%   rp_rate_law  - Poswer law / mass action rate law
+%   rp_rate_law  - Power law / mass action rate law
 %   fd_rate_law  - Force-dependent modular rate law

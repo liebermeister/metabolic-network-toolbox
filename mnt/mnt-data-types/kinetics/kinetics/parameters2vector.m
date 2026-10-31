@@ -1,4 +1,8 @@
+% PARAMETERS2VECTOR Convert kinetic parameters to a vector
+%
 % [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)
+%
+% See also: vector2parameters
 
 function [vector,names,relevant,relevant_reactions,types] = parameters2vector(kinetics,S_ext,S_ext_names,network,split,no_names)
 

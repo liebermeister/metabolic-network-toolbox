@@ -1,5 +1,7 @@
 function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)
 
+% SAMPLE_FEASIBLE_MU Compute chemical potentials that agree with a flux vector
+%
 % [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options,method,n_sample)
 %
 % Compute (this is no actual sampling!) a number of mu vectors that agree with a given flux vector v
@@ -10,6 +12,8 @@ function [mu, success_flag] = sample_feasible_mu(N,ind_ext,v,constraints,options
 % method: 'extreme_points': compute all extreme dmu vectors, covert back to mu vectors
 % method: 'sample':         sample n_sample dmu vectors, covert back to mu vectors
 % method: 'centre':         central dmu vector, covert back to mu vector
+%
+% See also: sample_feasible_v, sample_feasible_dmu
 
 eval(default('method','''extreme_points''','n_sample','1','options','struct'));
 

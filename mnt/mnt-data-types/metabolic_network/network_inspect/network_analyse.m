@@ -1,6 +1,6 @@
-% NETWORK_ANALYSE - Analyse a metabolic network structure
+% NETWORK_ANALYSE Kernel, link matrix, and other structural properties of a network
 %
-%   [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)
+% [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)
 %
 %   K        kernel matrix                   Def.   N * K  = 0
 %   L        link matrix                     Def.   L * NR = N_internal
@@ -10,6 +10,12 @@
 %   pinv_N_R pseudoinverse of NR
 %   indep    indices of independent metabolites
 %   N_1      stoiciometric matrix for dependent metabolites
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   K = network_analyse(network);
+%
+% See also: analyse_N, reduce_N
 
 function [K, L, N_R, G, pinv_N_R, indep, N_1] = network_analyse(network)
 

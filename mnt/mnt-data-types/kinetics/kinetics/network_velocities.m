@@ -1,3 +1,5 @@
+% NETWORK_VELOCITIES Compute reaction rates for given metabolite concentrations
+%
 % v = network_velocities(s,network,kinetics,split,indices,t)
 %
 % calculate flux velocities for a network, given a data structure
@@ -16,7 +18,14 @@
 % indices: indices of reaction velocities to be computed (default: all reactions)
 % t: (optional) time argument passed on to function that evaluates the rates
 %
-% Note: this function is slow. For integration steps, use 'integrate_network_der' instead.
+% Note: this function is slow, and is not meant to be called in time integration.
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   network.kinetics = set_kinetics(network, 'cs');
+%   v = network_velocities([2; 1; 1], network);
+%
+% See also: set_kinetics, network_steady_state
 
 function v = network_velocities(s, network, kinetics, split, indices,t)
 

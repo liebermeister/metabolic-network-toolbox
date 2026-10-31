@@ -1,3 +1,5 @@
+% NETWORK_PRINT_FORMULAE Convert a network structure into reaction formulae
+%
 % all_result = network_print_formulae(network,actions,metabolites,all_reversible )
 %
 % Convert a network structure into reaction formulae
@@ -6,6 +8,8 @@
 %
 % actions, metabolites (optional): names to be used in the formulae
 % (column lists of strings)
+%
+% See also: network_build_from_sum_formulae
 
 function all_result = network_print_formulae(network,actions,metabolites,all_reversible)
 

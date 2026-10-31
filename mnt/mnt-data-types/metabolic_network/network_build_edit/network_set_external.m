@@ -1,3 +1,5 @@
+% NETWORK_SET_EXTERNAL Set metabolites to be external
+%
 %network = network_set_external(network,strict,metabolite_list,internal_list )
 %
 %set certain metabolites (given in metabolite_list) external
@@ -9,6 +11,8 @@
 %strict           (optional, default 0) flag. 0: keep previous external metabolites as external
 %metabolite_list  (optional) list of metabolite names
 %internal_list (optional): in addition, set these internal
+%
+% See also: network_find_ext_metabolites
 
 function network = network_set_external(network,strict,metabolite_list,internal_list)
 

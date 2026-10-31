@@ -1,6 +1,8 @@
 function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 
-% [v,benefit] = fba(network,fba_constraints,solver)
+% FBA Flux balance analysis
+%
+% [v, value, lambda_ind_int] = fba(network, fba_constraints, solver)
 %
 % flux balance analysis; solves
 % max = z' * v  where N_internal * v = 0  and vmin <= v <= vmax
@@ -28,6 +30,14 @@ function [v,value,lambda_ind_int] = fba(network,fba_constraints,solver)
 % fba_constraints.zv = zeros(size(fba_constraints.zv));
 % fba_constraints.zv(#biomass_reaction) = 1;  % insert the right #biomass_reaction !!
 % [v,value] = fba(network,fba_constraints)
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   fba_constraints = fba_default_options(network);
+%   fba_constraints.zv = [0; 1];
+%   [v, value] = fba(network, fba_constraints);
+%
+% See also: fba_default_options, pmf
 
 %fprintf('FBA: ');
 

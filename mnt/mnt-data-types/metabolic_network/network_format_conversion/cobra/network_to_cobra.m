@@ -1,6 +1,6 @@
 function model = network_to_cobra(network,description,vz)
 
-% model = network_translate_to_cobra(network,description,vz)
+% model = network_to_cobra(network,description,vz)
 
 [nm,nr] = size(network.N);
 

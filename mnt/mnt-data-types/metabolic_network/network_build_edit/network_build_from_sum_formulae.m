@@ -1,6 +1,6 @@
 function [network,N,metabolites] = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns,filename_regulation)
 
-% network = network_build_from_sum_formulas(filename_reactions,filename_compounds,columns,filename_regulation)
+% network = network_build_from_sum_formulae(filename_reactions,filename_compounds,columns,filename_regulation)
 %
 % Build matlab network structure from reactions contained in SBtab file
 % (to build a network structure directly from a reaction list, use network_build_from_sum_formulae_list

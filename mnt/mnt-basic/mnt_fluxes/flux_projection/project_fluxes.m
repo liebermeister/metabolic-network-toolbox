@@ -1,6 +1,8 @@
 function [v_projected, ind_non_orthogonal, v_projected_std] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix);
 
-% v_projected = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);
+% PROJECT_FLUXES Project fluxes to the stationary subspace
+%
+% [v_projected, ind_non_orthogonal, v_projected_std] = project_fluxes(N, ind_ext, v_mean, v_std, v_sign, pars, v_fix)
 %
 % project fluxes to stationary subspace (different methods)
 %
@@ -14,6 +16,8 @@ function [v_projected, ind_non_orthogonal, v_projected_std] = project_fluxes(N, 
 %                         must not yield 0, but this dilution flux; in models with moiety conservation,
 %                         a stationary flux will be impossible
 % option 'thermo_correct' requires par.network
+%
+% See also: fba, eba_feasible
 
 if sum(isfinite(v_mean))==0
   error('Flux vector does not contain any finite values');

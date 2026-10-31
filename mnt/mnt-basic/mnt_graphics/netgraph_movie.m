@@ -1,3 +1,5 @@
+% NETGRAPH_MOVIE Create a movie of a network with changing values
+%
 % [M,T] = netgraph_movie(network, t, s_t, data_type, n_frames, text_flag, options);
 %
 % s_t must be #variables x #timepoints !!!
@@ -24,6 +26,8 @@
 %   prefix
 %
 % to save a movie as an animated gif, use movie_save(filename,M)
+%
+% See also: netgraph_flux_movie, netgraph_draw
 
 function [M,T] = netgraph_movie(network,t,s_t,data_type,n_frames,text_flag,options);
 

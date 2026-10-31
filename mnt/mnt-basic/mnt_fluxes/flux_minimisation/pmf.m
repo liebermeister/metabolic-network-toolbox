@@ -1,5 +1,7 @@
 function v = pmf(network,fba_constraints,benefit,v_start)
 
+% PMF Minimise the sum of absolute fluxes at a given benefit
+%
 % v = pmf(network,fba_constraints,benefit,v_start)
 %
 % Principle of minimal sum of absolute fluxes, solves
@@ -20,6 +22,8 @@ function v = pmf(network,fba_constraints,benefit,v_start)
 %
 % benefit: predefined value of the objective
 % v_start: (optional) initial flux vector to be optimised
+%
+% See also: fba, fba_default_options
 
 fba_constraints = fba_update_constraints(fba_constraints,network);
 

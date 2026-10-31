@@ -1,6 +1,10 @@
+% NETGRAPH_CONCENTRATIONS Draw a network with metabolite levels and fluxes
+%
 % netgraph_concentrations(network,S,J,flag_text,options)
 %
 % display concentrations and (optionally) fluxes
+%
+% See also: netgraph_draw
 
 function netgraph_concentrations(network,S,J,flag_text,options)
 

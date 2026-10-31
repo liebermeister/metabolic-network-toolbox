@@ -56,8 +56,8 @@ The functions are organised in three folders:
 - **`mnt/mnt-control-analysis`**: metabolic control analysis, spectral response coefficients,
   models with uncertain parameters
 
-Networks and their kinetics are represented by Matlab structs; for details, type
-`help metabolic_network` and `help kinetics`. Each folder contains a `Contents.m` file with an
+Networks, kinetics, and data are represented by Matlab structs; for details, type
+`help metabolic_network`, `help kinetics`, `help kinetic_data`, and `help state_data`. Each folder contains a `Contents.m` file with an
 overview (type, e.g., `help mnt-basic`).
 
 ## Tests
@@ -76,6 +76,10 @@ Other packages depend on this toolbox, so functions are not simply renamed or re
 name remains available for at least one MINOR version as a thin wrapper that calls the new function and
 gives a warning. The name is removed only in the next MAJOR version. Functions marked as unfinished in
 their help text are not covered by this rule.
+
+## Contributing
+
+Conventions for code and help texts are described in `CONTRIBUTING.md`.
 
 ## License
 This package is released under the [GNU General Public License](LICENSE), version 2 or later.

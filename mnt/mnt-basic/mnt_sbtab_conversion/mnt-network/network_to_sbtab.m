@@ -1,5 +1,7 @@
 function sbtab_document = network_to_sbtab(network, options)
 
+% NETWORK_TO_SBTAB Convert a network structure to SBtab
+%
 % sbtab_document = network_to_sbtab(network, options)
 %
 % Convert 'network' data structure into 'sbtab' data structure
@@ -29,6 +31,8 @@ function sbtab_document = network_to_sbtab(network, options)
 % adjust_metabolite_ids : flag: adjust IDs for SBML syntax; default = 1
 %
 % To convert sbtab -> network, use 'sbtab_to_network'
+%
+% See also: sbtab_to_network, network_sbml_export
 
 try
   sbtab_version;

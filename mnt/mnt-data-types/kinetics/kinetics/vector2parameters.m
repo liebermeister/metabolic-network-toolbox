@@ -1,6 +1,10 @@
+% VECTOR2PARAMETERS Convert a parameter vector to a kinetics structure
+%
 % [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)
 %
 %Construct kinetics structure from a parameter vector
+%
+% See also: parameters2vector
 
 function [kinetics,S_ext] = vector2parameters(kinetics,vector,external_ind,network)
 

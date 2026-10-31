@@ -1,4 +1,8 @@
+% NETWORK_NUMBERS Numbers of reactions, metabolites, and allosteric parameters
+%
 %[nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)
+%
+% See also: network_analyse
 
 function [nr,nm,nx,KM_indices,KA_indices,KI_indices,nKM,nKA,nKI] = network_numbers(network)
 

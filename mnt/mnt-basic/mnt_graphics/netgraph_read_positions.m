@@ -1,5 +1,7 @@
 function network = netgraph_read_positions(network, layout_file, offsets, fill_nans, flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)
 
+% NETGRAPH_READ_POSITIONS Read a network layout from a file
+%
 % network = netgraph_read_positions(network,layout_file,offsets,fill_nans,flag_KEGG_ids, reaction_KEGG_IDs, flag_fixed)
 %
 % Arguments:
@@ -11,6 +13,8 @@ function network = netgraph_read_positions(network, layout_file, offsets, fill_n
 % If flag_KEGG_ids is set:
 % use field 'network.metabolite_KEGGID' (or 'network.Identifiers_kegg_compound') for matching metabolites
 % use argument list 'reaction_KEGG_IDs' or field 'network.reaction_KEGGID' for matching reactions
+%
+% See also: netgraph_print_positions, netgraph_edit_positions
 
 eval(default('offsets','[]','fill_nans','1','flag_KEGG_ids','0','reaction_KEGG_IDs','[]','flag_fixed','1'));
 

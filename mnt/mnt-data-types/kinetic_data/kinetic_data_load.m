@@ -1,5 +1,7 @@
 function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, network, data_file, options)
 
+% KINETIC_DATA_LOAD Read kinetic data from an SBtab file and map them to a network
+%
 % kinetic_data = kinetic_data_load(data_quantities, parameter_prior, network, data_file, options)
 %
 % Read biochemical (kinetic or thermodynamic) data from SBtab file and map them to network model
@@ -31,6 +33,8 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %   Save data to file  :             kinetic_data_save.m
 %   Insert bounds and pseudo values: kinetic_data_complete.m
 %   Select data for a submodel:      kinetic_data_subselect.m
+%
+% See also: kinetic_data_save, kinetic_data_complete
 
 % values are NOT averaged but OVERWRITTEN!
 % fill in values from "kinetic_data_table"

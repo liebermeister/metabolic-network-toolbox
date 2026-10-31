@@ -1,3 +1,5 @@
+% NETWORK_CONSTRUCT Build a network structure from a stoichiometric matrix
+%
 %network = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)
 %
 %Construct network data structures from stoichiometric matrix
@@ -17,6 +19,12 @@
 %                      default: all internal
 % no_graphics          flag: 1: do not construct field 'graphics_par'
 % flag_kinetics        flag: 0: construct field 'kinetics' with cs kinetics as default
+%
+% Example:
+%   N = [-1 0; 1 -1; 0 1];
+%   network = network_construct(N, [1; 1], [1 3]);
+%
+% See also: set_kinetics, network_check, netgraph_make_graph
 
 function n = network_construct(N,reversible,ind_external,metabolites,actions,no_graphics,regulation_matrix,flag_kinetics)
 
