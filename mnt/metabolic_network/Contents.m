@@ -42,5 +42,5 @@
 %   kinetic_data  measured or estimated parameter values ('help kinetic_data')
 %   state_data    metabolite levels, fluxes, and enzyme levels ('help state_data')
 %
-% Functions: see the folders network_build_edit, network_inspect, and network_format_conversion
+% Functions: see the folders network_build_edit and network_inspect, and 'help io'
 % To check a network structure, use network_check and network_check_consistency.

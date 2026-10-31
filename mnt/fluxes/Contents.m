@@ -1,8 +1,10 @@
 % Methods for computing and checking flux distributions in metabolic networks
 %
 % Subdirectories
-%  fba                Flux balance analysis
-%  eba                Energy balance analysis
+%  flux_balance_analysis    Flux balance analysis
+%  energy_balance_analysis  Energy balance analysis
+%  max_min_driving_force    Max-min driving force
+%  elementary_modes         Elementary flux modes
 %  flux_minimisation  Principle of minimal fluxes
 %  flux_feasibility   Feasibility tests for flux modes
 %  flux_projection    Projection and correction of flux modes
