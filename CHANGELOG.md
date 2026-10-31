@@ -2,6 +2,12 @@
 
 Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing calls may stop working.
 
+## Not released yet
+
+- `CONTRIBUTING.md` with conventions for code and help texts
+- Reference for the data structures (`help metabolic_network`, `help kinetics`, `help kinetic_data`, `help state_data`)
+- Help texts of the main functions now have a one-line description and links to related functions, some with examples
+
 ## 1.3.0 (2026-10-31)
 
 First version with a release tag (the previous version number was 1.2).

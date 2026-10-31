@@ -1,8 +1,12 @@
-%network=network_remove(network,ind)
+% NETWORK_REMOVE Remove metabolites from a network
+%
+% [network1, keep, keep_actions] = network_remove(network, ind)
 %
 %INPUTS
 %network  a network structure
 %ind      indices of metabolites to be removed
+%
+% See also: network_remove_action, network_choose
 
 function [network1,keep,keep_actions] = network_remove(network,ind)
 

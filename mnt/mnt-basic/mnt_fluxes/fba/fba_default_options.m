@@ -1,5 +1,7 @@
 function fba_constraints = fba_default_options(network)
 
+% FBA_DEFAULT_OPTIONS Default constraints for flux balance analysis
+%
 % fba_constraints = fba_default_options(network);
 %
 % fba_constraints.zv             = nan*ones(nr,1);   % benefit weights
@@ -12,6 +14,8 @@ function fba_constraints = fba_default_options(network)
 %                                                      will replace the zeros in the stationarity condition)
 % fba_constraints.concentrations = nan*ones(nm,1);       % metabolite concentrations (not used by standard FBA)
 % fba_constraints.cost_weights   = ones(nr,1); % flux cost weights (for minimising a weighted sum of fluxes)
+%
+% See also: fba, pmf
 
 [nm,nr] = size(network.N);
 

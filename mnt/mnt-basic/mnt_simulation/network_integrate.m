@@ -1,3 +1,5 @@
+% NETWORK_INTEGRATE Simulate the dynamics of a network
+%
 %[t, s, s_int, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag,Tmax,dilution_rate,ode_opt)
 %
 %solve differential equations for metabolic network with field 'kinetics'
@@ -20,6 +22,13 @@
 % i=1;  % (number of time point)
 % netgraph_draw(network,'metvalues',s_t(:,i),'actvalues',...
 %               network_velocities(s_t(:,i),network,network.kinetics));
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   network.kinetics = set_kinetics(network, 'cs');
+%   [t, s] = network_integrate(network, [2; 0; 1], 10);
+%
+% See also: network_steady_state, network_integrate_kin
 
 function [t, s_t, s_int_t, met_int,v,x_assign] = network_integrate(network, s_init, T, graphics_flag, verbose_flag, Tmax,dilution_rate,ode_opt)
 

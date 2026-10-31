@@ -1,6 +1,10 @@
 function [network, ind_keepm, ind_keepr] = cobra_to_network(model,options)
 
+% COBRA_TO_NETWORK Convert a COBRA model to a network structure
+%
 % [network, ind_keepm, ind_keepr] = cobra_to_network(model,options)
+%
+% See also: network_to_cobra
 
 options_default = struct('flag_restrict',0,'flag_set_external',0);
 options_default.rem = {};

@@ -1,5 +1,7 @@
 function [network, kinetic_data] = sbtab_to_network(filename,options)
 
+% SBTAB_TO_NETWORK Read a network structure and kinetic data from SBtab
+%
 % [network, parameter_table] = sbtab_to_network(filename,options)
 %
 % Read network structure and kinetic data from SBtab files
@@ -41,6 +43,8 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %  options_default.only_reaction_table = 0;     % read only reaction table (no compounds and parameters)
 %                                               % assume full filename to be given
 %  options_default.one_sbtab_file      = 1;     % all data from one SBtab file (several tables)
+%
+% See also: network_to_sbtab, network_sbml_import
 
 try
   sbtab_version;

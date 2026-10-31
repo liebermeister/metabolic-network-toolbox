@@ -1,3 +1,5 @@
+% ELASTICITIES Compute reaction elasticities numerically
+%
 %[Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);
 %
 % Numerical calculation of reaction elasticities
@@ -25,6 +27,8 @@
 % Note that therefore, they appear in both the epsilon and pi matrices!
 %
 % See also: 'numerical_elasticities'
+%
+% See also: control_coefficients, response_coefficients
 
 
 function [Ec,Ep,parameters,Ecc,Ecp,Epp,p] = elasticities(network,s,options);

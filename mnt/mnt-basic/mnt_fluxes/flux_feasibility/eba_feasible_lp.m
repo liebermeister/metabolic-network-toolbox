@@ -1,5 +1,7 @@
 function [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)
 
+% EBA_FEASIBLE_LP Test a flux vector for thermodynamic feasibility, using linear programming
+%
 % [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_abs_min,epsilon,dmu_abs_max)
 %
 % Test a flux vector v for EBA feasibility
@@ -15,6 +17,8 @@ function [eba_feasible, dmu, dmu_abs_max] = eba_feasible_lp(v,Ntot,dmu_fix,dmu_a
 % dmu_abs_max: maximal (absolute) Gibbs free energy of reaction allowed in the solution
 % dmu_abs_min:       minimal (absolute) Gibbs free energy of reaction required to drive a non-zero flux
 % epsilon:   numerical tolerance for Wegscheider condition (only used if dmu is predefined)
+%
+% See also: eba_feasible
 
 % test:
 % Ntot = [-1 1; 1 -1]; v = [1 1]';  [eba_feasible, dmu] = eba_feasible_lp(v,Ntot,[],0.1)

@@ -1,3 +1,5 @@
+% NETGRAPH_MOVE Move the elements of a network graph with the mouse
+%
 %network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)
 %
 %Move nodes of metabolic network graph with the mouse
@@ -15,6 +17,8 @@
 %
 % options.initial_relax  = n leads to n initial relaxation_steps
 % options.manual         = 0 leads to only automatic relaxation
+%
+% See also: netgraph_draw, netgraph_edit_positions
 
 function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)
 

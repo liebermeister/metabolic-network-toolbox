@@ -1,3 +1,5 @@
+% NETWORK_INTEGRATE_KIN Simulate a network with one oscillating parameter
+%
 %[t,x,v,t_pre,x_pre,p_p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external,volumes,verbose_flag)
 %
 % Time integration for metabolic systems with one oscillatory parameter
@@ -20,6 +22,8 @@
 % value            amplitude of oscillation
 %
 %For extracting a single oscillation period, see 'choose_period'
+%
+% See also: network_integrate
 
 function [t,x,v,t_pre,x_pre,p,p_pre] = network_integrate_kin(x0,pp,T1,T2,N,velocity_function,delta_par,external,volumes,verbose_flag)
 

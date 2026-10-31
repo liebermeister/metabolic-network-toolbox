@@ -1,6 +1,10 @@
+% NETGRAPH_MAKE_GRAPH Construct the field 'graphics_par' of a network
+%
 % network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);
 %
 % create or modify structure describing the graphical appearance of a metabolic network
+%
+% See also: netgraph_draw, netgraph_read_positions
 
 function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);
 

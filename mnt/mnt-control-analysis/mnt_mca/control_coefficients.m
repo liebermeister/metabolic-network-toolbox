@@ -1,3 +1,5 @@
+% CONTROL_COEFFICIENTS Compute control coefficients (unscaled, first order)
+%
 %[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal,dilution_rate)
 %
 %Metabolic control coefficients (unnormalised, first order)
@@ -19,6 +21,8 @@
 % CJ, CS      matrices of unscaled flux and concentration control coefficients (first order)
 % L_int       link matrix  of internal metabolites (see 'reduce_N')
 % NR_int      reduced stoichiometric matrix of internal metabolites
+%
+% See also: elasticities, response_coefficients, basic_control_analysis
 
 % CJ2, CS2  arrays of unscaled second order control coefficients
 

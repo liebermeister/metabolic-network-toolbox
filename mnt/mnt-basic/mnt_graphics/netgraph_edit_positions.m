@@ -1,11 +1,15 @@
 function network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,gp,reaction_KEGG_IDs,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)
 
+% NETGRAPH_EDIT_POSITIONS Edit a network layout and save it to a file
+%
 % network = netgraph_edit_positions(network,layout_file,flag_KEGG_ids,flag_element_names,flag_fixed,flag_save_metabolites_as_fixed)
 %
 % The new positions will be saved to the positions file (filename layout_file)
 %
 % flag_KEGG_ids  compare network and layout file by KEGG IDs (rather than element names)
 % flag_fixed     read and write information about fixed glyph positions
+%
+% See also: netgraph_read_positions, netgraph_print_positions
 
 eval(default('flag_KEGG_ids','0','gp','[]','reaction_KEGG_IDs','[]','flag_element_names','1','flag_fixed','1','flag_save_metabolites_as_fixed','0','hide_invisible','1'));
 

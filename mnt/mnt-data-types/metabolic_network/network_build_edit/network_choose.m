@@ -1,5 +1,7 @@
 function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)
 
+% NETWORK_CHOOSE Choose a subnetwork, including all metabolites of its reactions
+%
 % [subnetwork,indm,indr] = network_choose(network,indm,indr,strict)
 %
 % Choose subnetwork containing metabolites/reactions with the (old) indices
@@ -9,6 +11,8 @@ function [subnetwork, indm, indr] = network_choose(network,indm,indr,strict)
 % unless strict=0
 %
 % indr is normally a list of reaction indices; for automatic choices, set it to 'add_all' or 'add_double'
+%
+% See also: network_subnetwork, network_remove
 
 if ~exist('indr','var'),   indr = 'add_double'; end
 if ~exist('strict','var'), strict = 0; end

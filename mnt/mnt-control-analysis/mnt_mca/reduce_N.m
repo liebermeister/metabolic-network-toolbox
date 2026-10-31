@@ -1,7 +1,11 @@
+% REDUCE_N Compute a reduced stoichiometric matrix and a link matrix
+%
 % [L, NR,independent_metabolites, N1, dependent_metabolites ] = reduce_N(N)
 %
 % compute reduced stoichiometric matrix NR for independent metabolites
 % and link matrix L fulfilling L*NR = N
+%
+% See also: analyse_N
 
 function [L, NR, independent_metabolites, N1,dependent_metabolites] = reduce_N(N)
 

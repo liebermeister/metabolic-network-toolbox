@@ -1,6 +1,10 @@
 function [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm,ind_Mp,ind_Mm] = make_structure_matrices(N,W,ind_ext,h)
 
+% MAKE_STRUCTURE_MATRICES Compute the structure matrices of modular rate laws
+%
 % [Mplus, Mminus, Wplus, Wminus, nm, nr, N_int,ind_M,ind_Wp,ind_Wm] = make_structure_matrices(N,W,ind_ext,h)
+%
+% See also: modular_velocities
 
 % nm       # metabolites
 % nr       # reactions

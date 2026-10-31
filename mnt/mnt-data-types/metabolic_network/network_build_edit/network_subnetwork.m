@@ -1,6 +1,10 @@
+% NETWORK_SUBNETWORK Choose a subnetwork with given metabolites and reactions
+%
 % [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)
 %
 % ind_m, ind_r row vectors with indices of metabolites and reactions to choose
+%
+% See also: network_choose
 
 function [subnetwork, ind_m, ind_r] = network_subnetwork(network,ind_m,ind_r,omit_isolated_metabolites)
 

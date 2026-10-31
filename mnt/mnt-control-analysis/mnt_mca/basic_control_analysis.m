@@ -1,3 +1,5 @@
+% BASIC_CONTROL_ANALYSIS Compute fluxes, elasticities, control and response coefficients
+%
 % R = basic_control_analysis(network,s,options)
 %
 % compute some standard control properties (in fields of R)
@@ -11,6 +13,13 @@
 % options.split (Boolean) split reactions into forward and backward part?
 %
 % parameter values and names are listed in 'parameter_values' and 'parameters'
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   network.kinetics = set_kinetics(network, 'cs');
+%   R = basic_control_analysis(network, [2; 1; 1]);
+%
+% See also: control_coefficients, elasticities
 
 function R = basic_control_analysis(network,s,options)
 

@@ -1,3 +1,5 @@
+% SET_KINETICS Construct the field 'kinetics' of a network
+%
 % kinetics = set_kinetics(network,type,parameters)
 %
 % construct a 'kinetics' field for a metabolic network
@@ -11,6 +13,12 @@
 % parameters: structure containing parameters to be used for the kinetics
 % the subfields required depend on the kinetics type
 % (see the respective functions)
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   network.kinetics = set_kinetics(network, 'cs');
+%
+% See also: network_velocities, set_ms_kinetics
 
 function kinetics = set_kinetics(network,type,parameters)
 

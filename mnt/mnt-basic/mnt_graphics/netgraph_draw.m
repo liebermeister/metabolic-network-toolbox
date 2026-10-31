@@ -1,4 +1,6 @@
-%netgraph_draw(network,varargin)
+% NETGRAPH_DRAW Draw a network
+%
+% network = netgraph_draw(network, varargin)
 %
 %Draw a metabolic network according to settings in the field 'graphics_par'
 %These settings can be overridden by the contents of 'varargin'
@@ -96,6 +98,8 @@
 % subplot_position
 % YDir ('normal','reverse')
 % hold_on (flag)
+%
+% See also: netgraph_make_graph, netgraph_concentrations, netgraph_move
 
 function network = netgraph_draw(network,varargin)
 

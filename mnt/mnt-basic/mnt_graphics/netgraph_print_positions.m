@@ -1,8 +1,12 @@
 function [names, positions] = netgraph_print_positions(network, layout_file, offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 
+% NETGRAPH_PRINT_POSITIONS Save a network layout to a file
+%
 % [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 %
 % Argument 'policy': possible choices {'replace file', 'add nonexistent', 'replace elements'}
+%
+% See also: netgraph_read_positions
 
 eval(default('layout_file','[]','offsets','[]','policy','[]','flag_KEGG_ids','1','flag_element_names','1','flag_fixed','1','flag_invisible','1'));
 

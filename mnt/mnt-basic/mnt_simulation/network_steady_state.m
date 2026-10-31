@@ -1,7 +1,16 @@
-% [S, J, Sdot, error] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)
+% NETWORK_STEADY_STATE Compute a steady state by numerical integration
+%
+% [S, J, Sdot, error, L_int, NR_int, indep_met_int] = network_steady_state(network, s, integrate_time, L_int, NR_int, indep_met_int, dilution_rate)
 %
 % calculate steady state concentrations S, fluxes J, and elasticities epsilon
 % given network and parameters initial metabolite concentrations s (column vector)
+%
+% Example:
+%   network = network_construct([-1 0; 1 -1; 0 1], [1; 1], [1 3]);
+%   network.kinetics = set_kinetics(network, 'cs');
+%   [S, J] = network_steady_state(network, [2; 1; 1]);
+%
+% See also: network_integrate, network_velocities
 
 function  [S, J, Sdot, error,L_int,NR_int,indep_met_int] = network_steady_state(network,s,integrate_time,L_int,NR_int,indep_met_int,dilution_rate)
 

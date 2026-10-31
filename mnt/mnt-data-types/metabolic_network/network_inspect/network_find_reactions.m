@@ -1,7 +1,11 @@
+% NETWORK_FIND_REACTIONS Find the reactions in which metabolites participate
+%
 %indices = network_find_reactions(network,metabolites)
 %
 %find reactions in which a certain metabolite participates
 %metabolites: metabolite name or list of metabolite names
+%
+% See also: network_find_metabolites
 
 function re = network_find_reactions(network,metabolite)
 

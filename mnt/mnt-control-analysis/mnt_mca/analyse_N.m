@@ -1,3 +1,5 @@
+% ANALYSE_N Kernel, link matrix, and other properties of a stoichiometric matrix
+%
 %  [ K, L, NR, null_l, pinv_NR, independent_metabolites, N1, Nint] = analyse_N(N,external)
 %
 % Analyse a stoichiometric matrix N
@@ -11,6 +13,8 @@
 % pinv_N_R pseudoinverse of NR
 % indep    indices of independent metabolites
 % N_1      stoiciometric matrix for dependent metabolites
+%
+% See also: network_analyse, reduce_N
 
 function [K, L, NR, null_l, pinv_NR, independent_metabolites, N1, Nint] = analyse_N(N,external)
 
