@@ -4,6 +4,8 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 ## Not released yet
 
+- `mnt_BASEDIR` renamed to `mnt_basedir`; it now returns the main directory of the repository, without a final file separator. The old name cannot remain as a wrapper, because the file names differ only by case (it had no callers)
+- New function folders have a `Contents.m` file; `README.md` has a Quick start section
 - `sample_feasible_mu`: default method 'sample' now samples uniformly by hit-and-run (was: 'extreme_points'); methods 'sample' and 'centre' returned wrong vectors; works with rank-deficient stoichiometric matrices; method 'centre' can also be called 'central'
 - `stm_default_options`: new field `mu_sampling_method`; removed unused fields `n_flux_samples`, `n_saturation_samples`, `method_flux_sampling`
 - `modular_velocities`, `modular_KV_Keq_to_kcat` and `modular_fast_parameters` pass the cooperativity `h` to `ms_compute_Kcat`
