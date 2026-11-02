@@ -9,7 +9,7 @@ function sbml_object = sbtab_to_sbml(sbtab_object, filename)
 % This function requires the Metabolic Network Toolbox and libSBML (see network_sbml_export)
 %
 % usage example:
-% sbtab_object = sbtab_load_example('sbtab/ecoli/ecoli_noor_2016_model.tsv','sbtab');
+% sbtab_object = sbtab_load_example('sbtab/escherichia-coli/escherichia-coli_noor_2016_model.tsv','sbtab');
 % sbml_object = sbtab_to_sbml(sbtab_object);
 
 eval(default('filename','[]'));

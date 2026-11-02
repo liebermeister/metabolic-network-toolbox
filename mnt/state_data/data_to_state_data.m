@@ -1,6 +1,6 @@
 function state_data = data_to_state_data(data)
 
-% state_data = cmb_data_to_state_data(data)
+% state_data = data_to_state_data(data)
 
 [C_mean,C_std] = lognormal_log2normal(data.X.mean,data.X.std);
 [E_mean,E_std] = lognormal_log2normal(data.lnE.mean,data.lnE.std);

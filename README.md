@@ -5,6 +5,17 @@ The Metabolic Network Toolbox contains functions for constructing, simulating, a
 computational models of metabolism: stoichiometric network analysis, flux balance analysis,
 thermodynamics, kinetic rate laws, simulation, metabolic control analysis, and graphics.
 
+## Quick start
+
+After the installation (see below), try this in Matlab:
+
+```matlab
+N = [-1 0; 1 -1; 0 1];                                % stoichiometric matrix
+network = network_construct(N, [1; 1], [1 3]);        % all reversible; metabolites 1 and 3 external
+network.kinetics = set_kinetics(network, 'cs');       % choose rate laws
+[S, J] = network_steady_state(network, [2; 1; 1]);    % compute a steady state
+```
+
 ## Installation
 
 Download or clone the repository and add the `mnt` folder, with its subfolders, to your Matlab path:
@@ -93,3 +104,6 @@ This package is released under the [GNU General Public License](LICENSE), versio
 
 ## Contact
 Please contact [Wolfram Liebermeister](mailto:wolfram.liebermeister@gmail.com) with any questions or comments.
+
+## How to cite
+Citation information is provided in the file `CITATION.cff`.
