@@ -4,6 +4,11 @@
 % (created by netgraph_make_graph; see 'help metabolic_network').
 % For all display options, see 'help netgraph_draw'.
 %
+% Graphics options: all drawing functions take options in the same way, as a struct
+% (called 'gp' in the help texts) or as name-value pairs at the end of the argument list,
+% e.g. netgraph_concentrations(network, c, v, 1, 'colorbar', 1, 'FontSize', 10).
+% Unknown option names give a warning.
+%
 % Example:
 %   network = netgraph_make_graph(network);              % compute a layout
 %   netgraph_concentrations(network, c, v, 1);           % show concentrations c and fluxes v

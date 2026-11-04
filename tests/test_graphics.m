@@ -166,3 +166,27 @@ cleanup = onCleanup(@() delete(filename));
 netgraph_print_positions(network, filename, [0 0], 'replace file', 0);
 n = netgraph_make_graph(example_network, [], [], [], [], filename);
 assert(max(abs(n.graphics_par.x(:) - network.graphics_par.x(:))) < 10^-6);
+
+%% Graphics options: struct, name-value pairs, and options in place of text_flag give the same result
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+c = (1:nm)'; v = ones(nr,1);
+netgraph_concentrations(network, c, v, 1, struct('metprintnames',0,'actprintnames',1,'FontSize',12));
+n1 = numel(findobj(gca,'Type','text'));
+clf; netgraph_concentrations(network, c, v, 1, 'metprintnames', 0, 'actprintnames', 1, 'FontSize', 12);
+n2 = numel(findobj(gca,'Type','text'));
+clf; netgraph_concentrations(network, c, v, struct('colorbar',1));
+assert(n1 == n2 && n1 == nr);
+assert(~isempty(findobj(fig,'Type','ColorBar')));
+assert(isempty(findobj(gca,'Type','text')));
+clf; netgraph_concentrations(network, c, v, 'colorbar', 1);
+assert(~isempty(findobj(fig,'Type','ColorBar')));
+
+%% Graphics options: upper/lower case is corrected, 'Rotation' is accepted, unknown names give a warning
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+netgraph_draw(network, 'fontsize', 13, 'Rotation', 30, 'metprintnames', 1, 'actprintnames', 0);
+t = findobj(gca,'Type','text');
+assert(all(cell2mat(get(t,'FontSize')) == 13) && all(cell2mat(get(t,'Rotation')) == 30));
+lastwarn('');
+clf; netgraph_draw(network, 'no_such_option_for_testing', 1);
+[~, id] = lastwarn;
+assert(strcmp(id, 'mnt:netgraph:unknownOption'));

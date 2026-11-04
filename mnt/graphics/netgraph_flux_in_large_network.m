@@ -1,6 +1,6 @@
-function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
+function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,varargin)
 
-% [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
+% [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,gp)
 %
 % For a large network and a flux distribution v:
 %   - plot the sorted absolute fluxes (figure 1)
@@ -12,9 +12,9 @@ function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,tabl
 %
 % M is currently always empty (no movie is made)
 
-eval(default('perc_show','0.002','table_positions','''''','cofactors','[]','not_cofactors','[]','goptions_default','struct'));
+eval(default('perc_show','0.002','table_positions','''''','cofactors','[]','not_cofactors','[]'));
 
-goptions = join_struct(struct,goptions_default);
+gp = netgraph_options(varargin, network);
 network.formulae = network_print_formulae(network);
 
 % ------------------------------------------------------------------------------
@@ -63,5 +63,5 @@ nn.graphics_par.metnames = nn.metabolite_names;
 
 M=[];
 
-%M = netgraph_flux_movie(nn,zeros(nm,1),v,1,goptions);
+%M = netgraph_flux_movie(nn,zeros(nm,1),v,1,gp);
 %movie(M,10)

@@ -1,8 +1,16 @@
-function netgraph_fluxes(network,J,gp)
+function netgraph_fluxes(network,J,varargin)
 
-% netgraph_fluxes(network,J,gp)
+% NETGRAPH_FLUXES Draw a network with fluxes
+%
+% netgraph_fluxes(network, J, gp)
+% netgraph_fluxes(network, J, 'name1', value1, ...)
+%
+% J   fluxes: shown by arrows, and by reaction symbols (absolute values)
+% gp  graphics options (struct or name-value pairs; see 'help netgraph_draw')
+%
+% See also: netgraph_concentrations, netgraph_draw
 
-eval(default('gp','struct'));
+gp = netgraph_options(varargin, network);
 
 gp_default = struct('actvalues',abs(J),'arrowvalues',J,'arrowvaluesmax',max(abs(J)),'arrowstyle','fluxes');
 

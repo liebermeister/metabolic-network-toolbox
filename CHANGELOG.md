@@ -43,6 +43,10 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
   - `netgraph_read_positions`: elements missing in the layout file are placed near their neighbours in the network (before: all at the same point)
   - `netgraph_draw`: unknown fluxes (nan values in `arrowvalues`) are shown by grey diamonds (before: nothing was drawn)
   - `netgraph_make_graph`: the argument `table_positions` (layout file or SBtab object) is used; before, it was ignored
+- Network graphics: options
+  - All drawing functions take graphics options in the same way: as a struct (called `gp` in all help texts; before also `options`, `goptions`, `pars`) or as name-value pairs at the end of the argument list, e.g. `netgraph_concentrations(network, c, v, 1, 'colorbar', 1)`. In `netgraph_concentrations`, `netgraph_flux_movie`, and `netgraph_flux_arrows_movie`, options can also be given in place of `text_flag`. Existing calls work as before
+  - Option names are checked against one list: names that differ only in upper and lower case are corrected (e.g. 'fontsize' -> 'FontSize'), 'Rotation' is accepted for `fontangle` (as documented; before, it was ignored), and unknown names give a warning once per session (identifier `mnt:netgraph:unknownOption`)
+  - Colours: with matlab-utils from November 2026 on, the default colormap `rb_colors` goes from blue (negative values) to red (positive values)
 
 ## 1.3.0 (2026-10-31)
 

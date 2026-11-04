@@ -1,4 +1,4 @@
-function synergy_network_plot(network, reaction_values, reaction_pair_values, col, gp)
+function synergy_network_plot(network, reaction_values, reaction_pair_values, col, varargin)
 
 % synergy_network_plot(network, reaction_values, reaction_pair_values, col, gp)
 %
@@ -7,14 +7,15 @@ function synergy_network_plot(network, reaction_values, reaction_pair_values, co
 % reaction_pair_values  (matrix) values for pairs of reactions
 %                                  only upper triangle values are shown!
 % col                   colormap
-% gp                    graphics parameters for network, but with extra entries:
+% gp                    graphics options (struct or name-value pairs; see 'help netgraph_draw'), plus:
 %                          gp.show_diagonal_values
 %                          gp.normalise_values
 %                          gp.relative_threshold
 %
 % FOR METABOLITE SYNERGIES SEE netgraph_metabolite_synergies
 
-eval(default('col','[]','gp','struct'));
+eval(default('col','[]'));
+gp = netgraph_options(varargin, network);
 
 if isempty(col), col = rb_colors; end
 

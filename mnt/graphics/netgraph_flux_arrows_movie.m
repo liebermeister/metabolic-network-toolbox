@@ -1,18 +1,28 @@
-function M_time = netgraph_flux_arrows_movie(network, J_matrix, text_flag, gp)
+function M_time = netgraph_flux_arrows_movie(network, J_matrix, text_flag, varargin)
 
 % NETGRAPH_FLUX_ARROWS_MOVIE Movie of flux distributions shown by arrows
 %
 % M_time = netgraph_flux_arrows_movie(network, J_matrix, text_flag, gp)
+% M_time = netgraph_flux_arrows_movie(network, J_matrix, text_flag, 'name1', value1, ...)
+% M_time = netgraph_flux_arrows_movie(network, J_matrix, gp)          (text_flag = 0)
 %
 % J_matrix   matrix of fluxes (one column per frame)
-% text_flag  show element names (default 0)
-% gp         graphics options (see netgraph_draw), with extra fields
+% text_flag  show names of metabolites and reactions (default 0)
+% gp         graphics options (struct or name-value pairs; see 'help netgraph_draw'), plus
 %              timebar            (default 0)
 %              background_colors  (default []) RGB colours, interpolated over the frames
 %
 % See also: netgraph_flux_movie, netgraph_movie
 
-eval(default('text_flag','0','gp','struct'));
+if ~exist('text_flag','var'), text_flag = 0; end
+
+% options given in place of text_flag
+if isstruct(text_flag) || ischar(text_flag) || isstring(text_flag)
+  varargin  = [{text_flag}, varargin];
+  text_flag = 0;
+end
+
+gp = netgraph_options(varargin, network);
 
 gp = join_struct(struct('timebar',0,'background_colors',[]), gp);
 

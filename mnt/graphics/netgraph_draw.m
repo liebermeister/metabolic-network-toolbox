@@ -1,12 +1,19 @@
 % NETGRAPH_DRAW Draw a network
 %
-% network = netgraph_draw(network, varargin)
+% network = netgraph_draw(network, gp)
+% network = netgraph_draw(network, 'name1', value1, 'name2', value2, ...)
 %
-%Draw a metabolic network according to settings in the field 'graphics_par'
-%These settings can be overridden by the contents of 'varargin'
+% Draw a metabolic network according to settings in the field 'graphics_par'.
+% These settings can be overridden by graphics options, given as a struct gp
+% (e.g. struct('metvalues', c, 'colorbar', 1)), as name-value pairs, or as a struct
+% followed by name-value pairs. All graphics functions in this folder take options
+% in the same way and pass them on to netgraph_draw; the options are listed below.
 %
-%varargin is either a list of pairs 'fieldname','fieldvalue',...
-% or a structure (as 'graphics_par') struct('parname1', parvalue1, 'parname2', parvalue2, ...)
+% Option names are checked: names that differ only in upper and lower case are corrected
+% (e.g. 'fontsize' -> 'FontSize'); unknown names give a warning (once per Matlab session),
+% which can be switched off by warning('off','mnt:netgraph:unknownOption')
+%
+% Example: netgraph_draw(network, 'metvalues', c, 'arrowstyle', 'fluxes', 'arrowvalues', v)
 %
 %PARAMETER SETTINGS:
 %
@@ -76,7 +83,7 @@
 % chop_names     (length)
 % split_names (length)
 % FontSize
-% Rotation  (for all text items)
+% fontangle       rotation angle of all text items (can also be given as 'Rotation')
 % text_offset     [dx,dy] position of name labels relative to the nodes
 %                 (default: to the right of the symbols, vertically centred)
 % value_text_offset
@@ -807,25 +814,10 @@ function p = netgraph_draw_set_parameters(network,vararg)
   % -------------------------
   % use parameters in argument list
 
-  if length(vararg)
-    if length(vararg) == 1
-      input_arg = vararg{1};
-    else
-      input_arg = vararg;
-    end
-
-    switch length(input_arg)
-      case 0
-      case 1
-        if isstruct(input_arg)
-          fn = fieldnames(input_arg);
-          for i=1:length(fn), p=setfield( p, fn{i},getfield(input_arg,fn{i})); end
-        end
-      otherwise
-        for i=1:length(input_arg)/2
-          p = setfield( p, input_arg{2*(i-1)+1},input_arg{2*i});
-        end
-    end
+  input_arg = netgraph_options(vararg, network);
+  fn = fieldnames(input_arg);
+  for i = 1:length(fn)
+    p.(fn{i}) = input_arg.(fn{i});
   end
 
   % -------------------------

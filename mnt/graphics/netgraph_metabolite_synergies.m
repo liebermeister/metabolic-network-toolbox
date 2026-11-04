@@ -1,10 +1,20 @@
+% NETGRAPH_METABOLITE_SYNERGIES Draw values for pairs of metabolites as arcs
+%
 % netgraph_metabolite_synergies(network, influence_values, synergy_values, col, gp)
+% netgraph_metabolite_synergies(network, influence_values, synergy_values, col, 'name1', value1, ...)
+%
+% influence_values  (vector) values for single metabolites
+% synergy_values    (matrix) values for pairs of metabolites
+% col               colormap (default my_colors(250))
+% gp                graphics options (struct or name-value pairs; see 'help netgraph_draw'), plus
+%                     relative_threshold, normalise_values, show_diagonal_values (see synergy_network_plot)
 %
 % For reaction synergies, see 'synergy_network_plot'
 
-function netgraph_metabolite_synergies(network, influence_values, synergy_values, col, gp)
+function netgraph_metabolite_synergies(network, influence_values, synergy_values, col, varargin)
 
-eval(default('col','my_colors(250)','gp','struct','influence_values','[]'));
+eval(default('col','my_colors(250)','influence_values','[]'));
+gp = netgraph_options(varargin, network);
 
 gp = join_struct(struct('relative_threshold',0,'normalise_values',1,'show_diagonal_values',0,'linewidth',1),gp);
 
