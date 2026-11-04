@@ -53,15 +53,15 @@ rng(5); a = rand;
 rng(5); netgraph_make_graph(example_network); b = rand;
 assert(a == b);
 
-%% netgraph_find_x: fixed positions in networks with more than 255 nodes
+%% netgraph_make_graph: fixed positions in networks with more than 255 nodes
 N = zeros(150,149);
 for k = 1:149, N(k,k) = -1; N(k+1,k) = 1; end
-big = netgraph_make_graph(network_construct(N));
 n_nodes = 150 + 149;
 x_fixed = round(100*rand(2,n_nodes))/100;
 x_fixed(:,1) = [0;0]; x_fixed(:,2) = [1;1];
-x = netgraph_find_x(big, 0.01, 0.01, 0.1, 0.1, 0.5, [(1:n_nodes)', x_fixed']);
-assert(max(abs(x(:)-x_fixed(:))) < 10^-6);
+big = netgraph_make_graph(network_construct(N), [], [], (1:n_nodes)', x_fixed);
+% positions are only rounded to a fine grid (spacing 0.01/sqrt(150))
+assert(max(abs(big.graphics_par.x(:)-x_fixed(:))) < 10^-3);
 
 %% netgraph_print_positions and netgraph_read_positions: elements missing in model or file
 filename = [tempname '.tsv'];

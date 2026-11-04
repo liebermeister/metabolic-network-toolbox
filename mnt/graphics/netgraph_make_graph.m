@@ -10,7 +10,7 @@
 %                    If table_positions is given, set_positions and x_init are ignored
 %   set_positions    indices of nodes (metabolites, followed by reactions) with given positions
 %   x_init           (2 x (#metabolites + #reactions) matrix) positions of these nodes
-%   Otherwise, positions are computed by a force-directed layout (netgraph_calculate_positions)
+%   Otherwise, positions are computed by a force-directed layout
 %
 % See also: netgraph_draw, netgraph_read_positions
 

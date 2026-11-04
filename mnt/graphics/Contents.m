@@ -27,8 +27,6 @@
 %   netgraph_wheelplot             draw a network with a wheel chart on each reaction
 %   synergy_network_plot           draw values for pairs of reactions as arcs
 %   netgraph_metabolite_synergies  draw values for pairs of metabolites as arcs
-%   draw_reaction_arcs             draw arcs between reactions
-%   draw_metabolite_arcs           draw arcs between metabolites
 %   netgraph_mark_reaction         draw a circle around a reaction
 %   netgraph_flux_in_large_network show the reactions with the largest fluxes in a large network
 %
@@ -40,14 +38,11 @@
 %
 % Layout
 %   netgraph_make_graph            create the field 'graphics_par' and compute a layout
-%   netgraph_calculate_positions   compute node positions (force-directed layout)
-%   netgraph_find_x                compute node positions (used by netgraph_calculate_positions)
 %   netgraph_move                  move nodes with the mouse
 %   netgraph_edit_positions        read a layout file, move nodes with the mouse, and save the file
 %   netgraph_read_positions        read a layout file (SBtab table)
 %   netgraph_print_positions       save a layout file (SBtab table)
 %   netgraph_assign_positions      choose node positions on a picture with the mouse
-%   netgraph_save_positions        save positions in an older file format (deprecated)
 %   netgraph_clear                 reset display settings, keeping the layout
 %
 % Networks for display
@@ -62,3 +57,6 @@
 %   netgraph_reversible            mark reversible reactions
 %   netgraph_define_module         mark metabolites that form a module
 %   netgraph_remove                remove metabolites and reactions
+%
+% Internal helper functions (layout computation, option checks, drawing of arcs, etc.)
+% are in the subfolder 'private'; they can only be called by the functions in this folder.

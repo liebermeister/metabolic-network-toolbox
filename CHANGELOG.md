@@ -46,6 +46,7 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 - Network graphics: options
   - All drawing functions take graphics options in the same way: as a struct (called `gp` in all help texts; before also `options`, `goptions`, `pars`) or as name-value pairs at the end of the argument list, e.g. `netgraph_concentrations(network, c, v, 1, 'colorbar', 1)`. In `netgraph_concentrations`, `netgraph_flux_movie`, and `netgraph_flux_arrows_movie`, options can also be given in place of `text_flag`. Existing calls work as before
   - Option names are checked against one list: names that differ only in upper and lower case are corrected (e.g. 'fontsize' -> 'FontSize'), 'Rotation' is accepted for `fontangle` (as documented; before, it was ignored), and unknown names give a warning once per session (identifier `mnt:netgraph:unknownOption`)
+  - Internal helper functions moved to `graphics/private` (they can no longer be called from outside the folder): `draw_metabolite_arcs`, `draw_reaction_arcs`, `netgraph_find_x`, `netgraph_calculate_positions`, and the deprecated `netgraph_save_positions` (no callers outside the folder were found). To compute a layout, use `netgraph_make_graph`
   - Colours: with matlab-utils from November 2026 on, the default colormap `rb_colors` goes from blue (negative values) to red (positive values)
 
 ## 1.3.0 (2026-10-31)
