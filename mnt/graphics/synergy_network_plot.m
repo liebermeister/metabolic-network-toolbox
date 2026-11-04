@@ -30,8 +30,6 @@ else
   actmap = 1:nr;
 end
 
-%if size(reaction_pair_values,1) ~= max(actmap), error('Wrong matrix size'); end
-
 if gp.show_diagonal_values
   reaction_values = diag(reaction_pair_values);
   gp.actstyle = 'fixed';
@@ -39,7 +37,7 @@ end
 
 % normalise by maximal absolute value
 if gp.normalise_values
-  if length(isfinite(reaction_values))
+  if any(isfinite(reaction_values))
     reaction_values = reaction_values/max(abs(reaction_values(actmap)));
   end
   reaction_pair_values = reaction_pair_values - diag(diag(reaction_pair_values));
@@ -56,31 +54,7 @@ reaction_pair_values = reaction_pair_values';
 % replace nan by zeros for graphics
 reaction_pair_values(isnan(reaction_pair_values)) = 0;
 
-colors  = [];
-i1_list = [];
-i2_list = [];
-value_list = [];
-z = 1;
-
-for i1 = 1:nr
-  for i2 = i1+1:nr
-    this_value = reaction_pair_values(actmap(i1),actmap(i2));
-    if isfinite(this_value)
-      if sign(this_value)
-        i1_list(z) = i1;
-        i2_list(z) = i2;
-        value_list(z) = this_value;
-        colors = [colors; col(1+floor((size(col,1)-1)*(this_value+1)/2),:)];
-        z = z+1;
-      end
-    end
-  end;
-end
-
-[dum,order] = sort(abs(value_list));
-i1_list = i1_list(order);
-i2_list = i2_list(order);
-colors = colors(order,:);
+[i1_list, i2_list, colors] = netgraph_pair_colors(reaction_pair_values, actmap, col);
 
 if isfield(gp,'metvalues')
   c = gp.metvalues;

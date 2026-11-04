@@ -1,16 +1,24 @@
-% x = netgraph_find_x(network,fixed_positions)
+% x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions)
+%
+% Compute node positions for a network graph (force-directed layout)
+%
 % fixed_positions: indices (first column) and positions (2nd and 3rd column)
-% of metabolites with fixed positions
+% of nodes (metabolites and reactions) with fixed positions
+%
+% The layout is reproducible: a fixed random seed is used, and the state
+% of the random number generator is restored afterwards
 
 function x = netgraph_find_x(network,gridsize,k1,k2,k3,k4,fixed_positions)
 
-rng(0)
+rng_state = rng;
+rng(0);
+restore_rng = onCleanup(@() rng(rng_state));
 
 if ~exist('fixed_positions','var')
   indices_fixed = [];
   x_fixed       = [];
 else
-  indices_fixed = uint8(fixed_positions(:,1));
+  indices_fixed = round(fixed_positions(:,1));
   x_fixed       = fixed_positions(:,2:3)';
 end
 
@@ -68,8 +76,9 @@ Nj = Nj+n_met;
 edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
 fixed_ind = find(fixed);
 
+loose = find(1-fixed);
 for itt=1:10
-  x = x + 0.001*randn(size(x));
+  x(:,loose) = x(:,loose) + 0.001*randn(2,length(loose));
   for it=1:3
     edgecenters = 0.5*(x(:,Ni)+x(:,Nj));
     for i=1:size(x,2);
@@ -82,7 +91,6 @@ for itt=1:10
       xnew(:,i)= x(:,i) + k1 * sum(distances.*repmat(f1,2,1),2) ...
           + k3 * ( xdum - x(:,i) );
     end
-    loose=find(1-fixed);
     if length(loose)
       x(:,loose) = xnew(:,loose);
       x(:,loose) = x(:,loose)-repmat(min(x(:,loose)')',1,size(x(:,loose),2));

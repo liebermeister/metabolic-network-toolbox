@@ -21,6 +21,17 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 - `CONTRIBUTING.md` with conventions for code and help texts
 - Reference for the data structures (`help metabolic_network`, `help kinetics`, `help kinetic_data`, `help state_data`)
 - Help texts of the main functions now have a one-line description and links to related functions, some with examples
+- Network graphics (folder `graphics`):
+  - `netgraph_draw`: **figures may look different**: with `showsign = 1` (default), `metvaluesmax`/`metvaluesmin` (and the same for reactions, edges, and regulation) now set the scale of symbols and colours; before, values were always scaled by their own maximum, so frames of `netgraph_movie` did not share a scale. The default colorbar now shows the symmetric range of the colours, [-M, M]
+  - `netgraph_draw`: curved lines (`straightlines = 0`) work again; edges are drawn without arrows too, and arrows follow the curves
+  - `netgraph_draw`: `single_arrow = 1` also shows arrows for negative fluxes
+  - `netgraph_move` no longer stores `arrowstyle = 'none'` in the network (before, arrows disappeared from later drawings)
+  - `netgraph_print_positions`: policies 'replace elements' (default) and 'add nonexistent' work if model and file contain different elements; if the file does not exist yet, it is created
+  - `netgraph_find_x`: fixed positions work in networks with more than 255 nodes and stay exactly in place; the state of the random number generator is restored
+  - `netgraph_split_metabolites` works for networks without `regulation_matrix`
+  - Movie functions: time bar in `netgraph_flux_movie` fixed; background colours are used also if they contain zeros, and are interpolated in `netgraph_flux_movie`; `netgraph_flux_arrows_movie` has default options; EPS files show the current figure (before: figure 1)
+  - `netgraph_read_positions` without the SBtab package works again
+  - `help graphics` lists all functions; test file `tests/test_graphics.m`
 
 ## 1.3.0 (2026-10-31)
 

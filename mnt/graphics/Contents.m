@@ -1,53 +1,59 @@
 % Graphical display and manipulation of metabolic networks
 %
-% Graphics data about a network structure are stored in the field 'graphics_par'
+% Layout and display settings of a network are stored in the field 'graphics_par'
+% (created by netgraph_make_graph; see 'help metabolic_network').
+% For all display options, see 'help netgraph_draw'.
 %
+% Example:
+%   network = netgraph_make_graph(network);              % compute a layout
+%   netgraph_concentrations(network, c, v, 1);           % show concentrations c and fluxes v
+%   network = netgraph_move(network);                    % move nodes with the mouse
+%   netgraph_print_positions(network, 'layout.tsv');     % save the layout
+%   network = netgraph_read_positions(network, 'layout.tsv');  % read it again later
 %
-%-------------------------------------------------------
-%Functions
+% ---------------------------------------------------------------------------
+% Draw networks
+%   netgraph_draw                  draw a network (all display options are listed here)
+%   netgraph_concentrations        draw a network with metabolite levels and fluxes
+%   netgraph_fluxes                draw a network with fluxes
+%   netgraph_regulation            draw a network with regulation arrows (from network.kinetics)
+%   netgraph_draw_simple           draw nodes and lines only
+%   netgraph_draw_connections      draw lines between reactions (from a matrix of relations)
+%   netgraph_wheelplot             draw a network with a wheel chart on each reaction
+%   synergy_network_plot           draw values for pairs of reactions as arcs
+%   netgraph_metabolite_synergies  draw values for pairs of metabolites as arcs
+%   draw_reaction_arcs             draw arcs between reactions
+%   draw_metabolite_arcs           draw arcs between metabolites
+%   netgraph_mark_reaction         draw a circle around a reaction
+%   netgraph_flux_in_large_network show the reactions with the largest fluxes in a large network
 %
-% netgraph_make_graph       add graphics parameters to network
-% netgraph_clear            reset graphics parameters
-% netgraph_draw             display network
-% netgraph_mark_reactions   choose reactions by mouse click
-% netgraph_mark_metabolites choose metabolites by mouse click
-% netgraph_remove           remove metabolites and reactions
+% Movies
+%   netgraph_movie                 movie of metabolite levels or fluxes over time
+%   netgraph_double_movie          movie of two data sets at the same time
+%   netgraph_flux_movie            movie of one flux distribution (moving arrows)
+%   netgraph_flux_arrows_movie     movie of several flux distributions
 %
-% netgraph_regulation     display network with regulation
-% netgraph_movie          show timecourses as movie
-% netgraph_move           change network shape
-% netgraph_external       show and set external metabolites
-% netgraph_reversible     show and set reversible reactions
+% Layout
+%   netgraph_make_graph            create the field 'graphics_par' and compute a layout
+%   netgraph_calculate_positions   compute node positions (force-directed layout)
+%   netgraph_find_x                compute node positions (used by netgraph_calculate_positions)
+%   netgraph_move                  move nodes with the mouse
+%   netgraph_edit_positions        read a layout file, move nodes with the mouse, and save the file
+%   netgraph_read_positions        read a layout file (SBtab table)
+%   netgraph_print_positions       save a layout file (SBtab table)
+%   netgraph_assign_positions      choose node positions on a picture with the mouse
+%   netgraph_save_positions        save positions in an older file format (deprecated)
+%   netgraph_clear                 reset display settings, keeping the layout
 %
-%A network structure with a m x n stoichiometric matrix contains
-%a field 'graphics_par' to determine the graphics appearance.
+% Networks for display
+%   netgraph_simple_graph          network without some metabolites (e.g. cofactors)
+%   netgraph_split_metabolites     network in which some metabolites appear once per reaction
+%   netgraph_cofactor_graphs       both of the above, for cofactors
 %
-%For a list of all possible fields, see 'netgraph_draw'.
-%Here is a short example list:
-%
-%          metstyle: 'box'
-%       metcolstyle: 'values'
-%            metcol: color ('c')
-%     metprintnames: boolean
-%    metprintvalues: boolean
-%          metnames: {mx1 cell}
-%          actstyle: 'none'
-%       actcolstyle: 'values'
-%            actcol: color ('r')
-%     actprintnames: boolean
-%    actprintvalues: boolean
-%          actnames: {nx1 cell}
-%        arrowstyle: 'none'
-%        squaresize: float (1.)
-%         arrowsize: float (0.5000)
-%            lambda: float (1.)
-%         metvalues: [mx1 double]
-%     metvalues_std: [mx1 double]
-%      metvaluesmax: float
-%         actvalues: [nx1 double]
-%     actvalues_std: [nx1 double]
-%      actvaluesmax: float
-%       arrowvalues: [nx1 double]
-%                 m: [(m+n)x(m+n) double]
-%                db: [(m+n)x(m+n) double]
-%                 x: [2x(m+n) double]
+% Choose elements with the mouse
+%   netgraph_mark_metabolites      mark metabolites
+%   netgraph_mark_reactions        mark reactions
+%   netgraph_external              mark external metabolites
+%   netgraph_reversible            mark reversible reactions
+%   netgraph_define_module         mark metabolites that form a module
+%   netgraph_remove                remove metabolites and reactions

@@ -1,6 +1,16 @@
 function [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
 
-% [nn,M] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
+% [nn,M,n_show] = netgraph_flux_in_large_network(network,v,perc_show,table_positions,cofactors,not_cofactors,goptions_default)
+%
+% For a large network and a flux distribution v:
+%   - plot the sorted absolute fluxes (figure 1)
+%   - print the reactions with the largest fluxes (|v| >= perc_show * max |v|)
+%   - return a network nn without the cofactors, without metabolites that have more than 5 reactions,
+%     and without metabolites that are not involved in any of these reactions
+%     (positions are read from table_positions, if given).
+%     To draw it with the fluxes, use netgraph_concentrations(nn,[],v,1)
+%
+% M is currently always empty (no movie is made)
 
 eval(default('perc_show','0.002','table_positions','''''','cofactors','[]','not_cofactors','[]','goptions_default','struct'));
 

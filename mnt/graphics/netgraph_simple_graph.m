@@ -24,7 +24,6 @@ elseif isfield(n1,'graphics_par')
   [nm,nr] = size(n1.N);
   set_positions = network_find_metabolites(n1,n2.metabolites);
   x = [n1.graphics_par.x(:,set_positions), n1.graphics_par.x(:,nm+(1:nr))];
-  n2.graphics_par.fixed = n1.graphics_par.fixed([keep_met, length(n1.metabolites) + keep_react]);
   n2 = netgraph_make_graph(n2,[],[],[1:length(n2.metabolites)+length(n2.actions)]',x);
 else
   n2 = netgraph_make_graph(n2);

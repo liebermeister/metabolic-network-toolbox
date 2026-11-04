@@ -77,6 +77,8 @@ else
   fid = fopen(layout_file);
   A   = textscan(fid,'%s%f%f','delimiter','\t');
   fclose(fid);
+  A{4} = ones(size(A{2}));
+  A{5} = [];
 
 end
 

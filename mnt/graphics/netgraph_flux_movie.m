@@ -21,7 +21,7 @@ end
 
 arrow_shift = 0;
 
-goptions_default = struct('n_frames', 10,'timebar',0,'background_colors',[],'use_background_colors',0,'scale_arrovalues',0);
+goptions_default = struct('n_frames', 10,'timebar',0,'background_colors',[],'use_background_colors',0,'scale_arrowvalues',0);
 
 goptions                = join_struct(goptions_default,goptions);
 goptions.actstyle       ='none';
@@ -29,15 +29,7 @@ goptions.arrow_shift    = arrow_shift;
 goptions.show_metvalues = 0;
 % otherwise arrows may be below lines (matlab error)
 
-if goptions.use_background_colors
-  if goptions.background_colors
-    if size(goptions.background_colors,2) ~= 3
-      goptions.background_colors = goptions.background_colors';
-    end
-  end
-else
-  goptions.background_colors = [];
-end
+goptions.background_colors = netgraph_movie_background_colors(goptions.background_colors, goptions.use_background_colors, goptions.n_frames);
 
 subplot('Position', [0 0 1 1]);
 netgraph_concentrations(network,S,J,text_flag,goptions); a = axis;
@@ -50,16 +42,13 @@ for it = 1:goptions.n_frames
   subplot('Position', [0 0 1 1]);
   arrow_shift          = it/(goptions.n_frames+1);
   goptions.arrow_shift = arrow_shift;
-  if goptions.background_colors
+  if ~isempty(goptions.background_colors)
     goptions.canvas = goptions.background_colors(it,:);
   end
   netgraph_concentrations(network,S,J,text_flag,goptions);
   if goptions.timebar
-    hold on;
     ss = network.graphics_par.squaresize;
-    plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]);
-    circle( a(1) + ss + (j-0.9)/(it-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/2,[0 0 0]);
-    circle( a(1) + ss + (j-0.9)/(it-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/6,[1 1 1]);
+    netgraph_movie_timebar(a, ss, (it-1)/max(goptions.n_frames-1,1), ss/2);
   end
   axis(a); axis off;
   M(it+1) = getframe;

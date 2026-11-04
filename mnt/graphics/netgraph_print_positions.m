@@ -4,7 +4,10 @@ function [names, positions] = netgraph_print_positions(network, layout_file, off
 %
 % [names, positions] = netgraph_print_positions(network,layout_file,offsets,policy,flag_KEGG_ids,flag_element_names,flag_fixed,flag_invisible)
 %
-% Argument 'policy': possible choices {'replace file', 'add nonexistent', 'replace elements'}
+% Argument 'policy' (used if the file exists already):
+%   'replace elements' (default)  write all model elements; keep file elements that are not in the model
+%   'add nonexistent'             keep all file elements; add model elements that are not in the file
+%   'replace file'                write the model elements only
 %
 % See also: netgraph_read_positions
 
@@ -42,21 +45,25 @@ metpositions = network.graphics_par.x(:,1:nm) + repmat(offsets',1,nm);
 actpositions = network.graphics_par.x(:,nm+1:end) + repmat(offsets',1,nr);
 
 names         = [metnames; actnames];
-if flag_KEGG_ids
-  kegg_compound = [kegg_metnames; repmat({''},nr,1)];
-  kegg_reaction = [repmat({''},nm,1); kegg_actnames];
-end
+kegg_compound = [column(kegg_metnames); repmat({''},nr,1)];
+kegg_reaction = [repmat({''},nm,1); column(kegg_actnames)];
 positions     = [metpositions, actpositions];
-fixed         = column(network.graphics_par.fixed);
+if isfield(network.graphics_par,'fixed')
+  fixed       = column(network.graphics_par.fixed);
+else
+  fixed       = zeros(nm+nr,1);
+end
 if isfield(network.graphics_par,'metinvisible')
   invisible   = [column(network.graphics_par.metinvisible); column(network.graphics_par.actinvisible)];
 else
-  invisible = [];
+  invisible   = zeros(nm+nr,1);
 end
 
 % -------------------------------------------------
 
 if length(layout_file)
+
+  if ~exist(layout_file,'file'), policy = 'replace file'; end
 
   switch policy
 
@@ -87,43 +94,45 @@ if length(layout_file)
         end
       end
 
-      fixed_in  = repmat(0,length(elements),1);
+      fixed_in  = zeros(length(elements),1);
       if flag_fixed
         if sbtab_table_has_column(t,'IsFixed')
-          fixed_in = sbtab_table_get_column(t,'IsFixed',1);
+          fixed_in = column(sbtab_table_get_column(t,'IsFixed',1));
         end
       end
 
-      invisible_in  = repmat(0,length(elements),1);
+      invisible_in  = zeros(length(elements),1);
       if flag_invisible
         if  sbtab_table_has_column(t,'IsInvisible')
-          invisible_in = sbtab_table_get_column(t,'IsInvisible',1);
+          invisible_in = column(sbtab_table_get_column(t,'IsInvisible',1));
         end
       end
+
+      x = column(x); y = column(y);
 
       switch policy
 
         case 'add nonexistent'
+          % keep all elements from the file; add model elements that are missing in the file
           ll            = label_names(names,elements);
           ind_keep      = find(ll==0);
-          names         = [elements;      names(ind_keep)];
-          kegg_compound = [kegg_compound_in; kegg_metnames(ind_keep)];
-          kegg_reaction = [kegg_reaction_in; kegg_actnames(ind_keep)];
-          positions     = [[x';y'], positions(:,ind_keep) ];
-          fixed         = [fixed_in];%; fixed(ind_keep)];
-          invisible     = [invisible];%_in; invisible(ind_keep)];
+          names         = [elements;         names(ind_keep)];
+          kegg_compound = [kegg_compound_in; kegg_compound(ind_keep)];
+          kegg_reaction = [kegg_reaction_in; kegg_reaction(ind_keep)];
+          positions     = [[x';y'],          positions(:,ind_keep) ];
+          fixed         = [fixed_in;         fixed(ind_keep)];
+          invisible     = [invisible_in;     invisible(ind_keep)];
 
         case 'replace elements'
+          % keep file elements that are missing in the model; write all model elements
           ll            = label_names(elements,names);
           ind_keep      = find(ll==0);
-          names         = [elements(ind_keep);           names];
-          if flag_KEGG_ids
-            kegg_compound = [kegg_compound(ind_keep);      kegg_compound_in];
-            kegg_reaction = [kegg_reaction(ind_keep);      kegg_reaction_in];
-          end
-          positions     = [ [x(ind_keep)';y(ind_keep)'], positions];
-          fixed         = [ fixed_in ]; % fixed(ind_keep);
-          invisible     = [ invisible_in ]; % invisible(ind_keep);
+          names         = [elements(ind_keep);         names];
+          kegg_compound = [kegg_compound_in(ind_keep); kegg_compound];
+          kegg_reaction = [kegg_reaction_in(ind_keep); kegg_reaction];
+          positions     = [[x(ind_keep)';y(ind_keep)'], positions];
+          fixed         = [fixed_in(ind_keep);         fixed];
+          invisible     = [invisible_in(ind_keep);     invisible];
       end
 
   end

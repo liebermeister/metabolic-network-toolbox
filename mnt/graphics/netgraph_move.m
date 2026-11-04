@@ -61,7 +61,8 @@ if exist('filename_in','var')
   network.graphics_par.fixed(ll) = fixed;
 end
 
-options_default = struct('canvas',1,'metstyle','none','actstyle','none','manual',1,'initial_relax',0,'n_relaxation',5);
+% arrows are hidden while nodes are moved (this setting is not stored in the network)
+options_default = struct('canvas',1,'metstyle','none','actstyle','none','arrowstyle','none','manual',1,'initial_relax',0,'n_relaxation',5);
 
 switch flag_draw_details
   case 'none'
@@ -91,11 +92,12 @@ if ~isfield(options,'frame')
   p = network.graphics_par;
   if sum(sum(p.x ~= 0 )) == 0
     options.frame = [0 1 0 1];
+  else
+    options.frame = [ 1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
+                     -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) +  0.0000001,...
+                      1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
+                     -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) +  0.0000001];
   end
-  options.frame = [ 1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
-                   -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) +  0.0000001,...
-                    1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
-                   -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) +  0.0000001];
 end
 
 nm = length(network.graphics_par.metnames);
@@ -138,13 +140,11 @@ else
 end
 
 
+% show regulation arrows only if the network has regulation (this setting is not stored in the network)
 switch flag_draw_details
   case {'regulation','all'}
-    if ~isfield(p,'regulation_matrix'); flag_draw_details = 'none'; end
-    p.show_regulation = 1; network.graphics_par.show_regulation = 1;
+    options.show_regulation = isfield(network,'regulation_matrix');
 end
-
-p.arrowstyle='none';
 
 ind_hub_metabolites = find(sum(double(network.N~=0),2)>5);
 
@@ -192,15 +192,10 @@ while cont==1
       x(:,index) = [x_new;y_new];
       %% factors = exp(-db(index,:)/p.lambda);
       %% x(:,ind_non_fixed) = x(:,ind_non_fixed) + [x_new-x_old; y_new-y_old] * factors(:,ind_non_fixed);
-      if  button-1 ~= fixed(index)
-        fixed(index) = button-1;
-        ind_non_fixed = find(1-fixed);
-      end
+      fixed(index) = (button == 2);
 
     case 2
-      for it = 1:1  %options.n_relaxation,
-        x = netgraph_relaxation_step(x,fixed,m,k1,t1,k2,t2,gridsize,ind_hub_metabolites);
-      end
+      x = netgraph_relaxation_step(x,fixed,m,k1,t1,k2,t2,gridsize,ind_hub_metabolites);
 
     case 3
       cont = 0;
@@ -225,12 +220,12 @@ end
 if exist('filename_out','var'), netgraph_save_positions(network,filename_out); end
 if options.manual, title('New positions confirmed'); end
 
-p.x     = x;
-p.fixed = fixed;
-
 if splitted
   p.x_split     = x;
   p.fixed_split = fixed;
+else
+  p.x     = x;
+  p.fixed = fixed;
 end
 
 network.graphics_par = p;
@@ -244,9 +239,9 @@ function display_graphics(picture,network,p,options,x,fixed)
   if options.manual
     network.graphics_par   = p;
     network.graphics_par.x = x;
-    if exist('picture','var')
+    if ~isempty(picture)
       image(picture); hold on;
-    end;
+    end
     netgraph_draw(network,options); hold on;
     invisible = [column(network.graphics_par.metinvisible); column(network.graphics_par.actinvisible)];
     fixed_ind = find(column(fixed) .* [invisible==0] );

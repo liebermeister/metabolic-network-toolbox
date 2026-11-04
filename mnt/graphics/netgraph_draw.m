@@ -49,7 +49,7 @@
 % arrowsize
 % arrow_shift      [0..1]
 % arrowprintvalues (overrides actprintvalues);
-% straightlines
+% straightlines    (default 1) 0: draw curved lines that pass smoothly through each reaction
 % arrowcolor
 % flag_triangle_edges (default 0)
 % single_arrow     [0,1] Draw only one arrow per reaction, on top of the reaction symbol
@@ -87,7 +87,9 @@
 % linewidth
 % colormap        (default rb_colors)
 % black_and_white (default 0)
-% showsign
+% showsign        (default 1) 1: colours show values on a symmetric scale [-M,M], with
+%                 M = max(|valuesmin|,|valuesmax|); symbol sizes show absolute values
+%                 0: colours and sizes show values on the scale [valuesmin, valuesmax]
 % shade_long_lines  (value) if ~=0 : length above which  lines are shaded
 % shade_cofactor_lines  (bitstring denoting the cofactors)
 %
@@ -201,56 +203,54 @@ if p.straightlines  % straight lines
     x_arrowlistN(ind_met(k),ind_act(k),:) =  x_met + .5 * (x_act-x_met);
   end
 
-else  % curved lines
+else  % curved lines: each edge is a circular arc that continues towards the other side of the reaction
+      % (substrate edges bend towards the products, product edges towards the substrates)
 
-  for q1=1:n_act
-    if sum(q1==p.actindshow)
-      substrates       = find(p.N(:,q1)<0);
-      products         = find(p.N(:,q1)>0);
-      reactants        = find(p.N(:,q1)~=0);
-      x_act            = x(:,n_met+q1);
-      x_substrates     = x(:,substrates);
-      x_products       = x(:,products);
-      x_reactants      = x(:,reactants);
-      x_substrate_mean = mean(x_substrates,2);
-      x_product_mean   = mean(x_products,2);
+  for q1 = p.actindshow
+    substrates = find(p.N(:,q1)<0);
+    products   = find(p.N(:,q1)>0);
+    reactants  = intersect(find(p.N(:,q1)~=0), p.metindshow);
+    x_act      = x(:,n_met+q1);
 
-      if p.show_arrowvalues
-        for q2 = 1:length(reactants)
-          x_met = x_reactants(:,q2);
-          stoich_coeff = p.N(reactants(q2),q1);
-          forward = -sign(stoich_coeff)*sign(p.arrowvalues(q1));
-          %% forward can be 1 or -1
-          straight = 0;
-          if forward==1 & isempty(products),   straight = 1; end
-          if forward==-1 & isempty(substrates), straight = 1; end
-          arrow_shift = (forward==-1) * p.arrow_shift + (forward==+1) * (1-p.arrow_shift);
-          if straight
-            my_color = p.linecolor;
-            if p.shade_long_lines
-              if [x_met(1)-x_act(1)]^2 + [x_met(2)-x_act(2)]^2 > p.shade_long_lines^2
-                my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
-              end
-            end
-            if ~p.suppress_lines
-              line([x_met(1),x_act(1)],[x_met(2),x_act(2)],'color',my_color);
-            end
-            x_arr = x_met + arrow_shift * (x_act-x_met);
-          else
-            if ~p.suppress_lines
-              switch forward
-                case 1,    [x_arr(1),x_arr(2)] = tri_arc(x_met,x_act,  x_product_mean,p.linecolor,arrow_shift);
-                case -1,   [x_arr(1),x_arr(2)] = tri_arc(x_met,x_act,x_substrate_mean,p.linecolor,arrow_shift);
-              end
-            end
+    for q2 = 1:length(reactants)
+      x_met        = x(:,reactants(q2));
+      stoich_coeff = p.N(reactants(q2),q1);
+      if stoich_coeff < 0, other_side = products; else, other_side = substrates; end
+
+      % arc points, from the metabolite (first point) to the reaction (last point)
+      if isempty(other_side)
+        height = 0;
+      else
+        height = arc_height(x_met, x_act, mean(x(:,other_side),2));
+      end
+      x_line = fliplr(arc(x_met, x_act, height, 0.5));
+      x_line = [x_met, x_line];
+
+      if ~p.suppress_lines
+        my_color = p.linecolor;
+        if p.shade_long_lines
+          if sum((x_met-x_act).^2) > p.shade_long_lines^2
+            my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
           end
-          x_arrowlistN(ind_met(k),ind_act(k),:) =  x_arr;
-          switch p.arrowstyle
-            case {'fluxes','directions'}
-              phi   = angle( x_act(1)-x_met(1) + i *(x_act(2)-x_met(2)));
-              scale = p.arrowsize*sqrt(abs( p.norm_arrowvalues( q1 ) ));
-              plot_triangle(x_arr(1),x_arr(2),phi,scale, 'b', forward, p.triangle_flag_edges);
-          end
+        end
+        plot(x_line(1,:), x_line(2,:), 'color', my_color, 'Linewidth', p.linewidth);
+      end
+
+      % point halfway along the arc (position of edge symbols)
+      x_arrowlistN(reactants(q2),q1,:) = point_on_line(x_line, 0.5);
+
+      if p.show_arrowvalues * (1-p.single_arrow)
+        forward = -sign(stoich_coeff) * sign(p.arrowvalues(q1));
+        %% forward can be 1 or -1
+        arrow_shift = (forward==1) * p.arrow_shift + (forward==-1) * (1-p.arrow_shift);
+        if isnan(forward), arrow_shift = 0.5; end
+        [x_arr, direction] = point_on_line(x_line, arrow_shift);
+        switch p.arrowstyle
+          case {'fluxes','directions'}
+            phi   = angle(direction(1) + i * direction(2));
+            scale = p.arrowsize * sqrt(abs(p.norm_arrowvalues(q1)));
+            if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
+            plot_triangle(x_arr(1), x_arr(2), phi, scale, p.arrowcolor, forward, p.flag_triangle_edges);
         end
       end
     end
@@ -291,17 +291,10 @@ end
 % ---------------------------------------------------
 % regulation edges
 
-x_arrowlistW = zeros(n_act,n_met,2);
 if p.show_regulation
   [indr,indm] = find(network.regulation_matrix);
   for itt=1:length(indr)
-    %%-n_met
-    % p.actindshow
-    % p.metindshow
-    %    [sum(indr(itt) == p.actindshow),sum(indm(itt) == p.metindshow)]
     if sum(indr(itt) == p.actindshow) * sum(indm(itt) == p.metindshow)
-      %%network.actions{indr(itt)}
-      %%network.metabolites{indm(itt)}
       this_sign = sign(network.regulation_matrix(indr(itt),indm(itt)));
       if this_sign>0, linecolor = [0 0.7 1];
       else,           linecolor = [1 0 0];
@@ -354,7 +347,6 @@ if p.show_metvalues
 
   switch p.metstyle
     case 'box',    p.norm_metvalues_std = 0*p.norm_metvalues_std;
-    case 'none',   p.show_actvalues = 0;
     case 'fixed',  p.norm_metvalues(isfinite(p.norm_metvalues)) = 1;
   end
 
@@ -401,30 +393,29 @@ if p.show_actvalues
 end
 
 if p.show_arrowvalues * p.single_arrow
-  [ind_met,ind_act] = find(m(p.metindshow,end-n_act+p.actindshow));
-  ind_met = p.metindshow(ind_met);
-  ind_act = p.actindshow(ind_act);
-  my_N = p.N;
-  my_N(find(my_N>0)) = 0;
-  for k = 1:length(ind_met)
-    stoich_coeff = my_N(ind_met(k),ind_act(k));
-    if [stoich_coeff * p.norm_arrowvalues( ind_act(k) )] < 0
-      x_met = x(:,ind_met(k));
-      x_act = x(:,ind_act(k)+n_met);
-      scale   = p.arrowsize * sqrt(abs(p.norm_arrowvalues( ind_act(k) )));
-      if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
-      forward = -sign(stoich_coeff) * sign(p.arrowvalues( ind_act(k) ));
-      %% forward can be 1 or -1
-      arrow_shift = (forward==1) * p.arrow_shift + (forward==-1) * (1-p.arrow_shift);
-      if isnan(forward), arrow_shift = 0.5; end
-      x_arr = x_met + arrow_shift * (x_act-x_met);
-      switch p.arrowstyle
-        case {'fluxes','directions'}
-          phi  = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
-          plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward,p.flag_triangle_edges);
-      end
-      x_arrowlistN(ind_met(k),ind_act(k),:) = x_met + .5 * (x_act-x_met);
-      my_N(:,ind_act(k)) = 0;
+  % one arrow per reaction, on the edge from an incoming metabolite
+  % (a substrate for positive fluxes, a product for negative fluxes)
+  for ind_act = p.actindshow
+    flux = p.norm_arrowvalues(ind_act);
+    if ~(abs(flux) > 0), continue; end
+    if flux > 0
+      incoming = find(p.N(:,ind_act) < 0);
+    else
+      incoming = find(p.N(:,ind_act) > 0);
+    end
+    incoming = intersect(incoming, p.metindshow);
+    if isempty(incoming), continue; end
+    ind_met      = incoming(1);
+    stoich_coeff = p.N(ind_met,ind_act);
+    x_met = x(:,ind_met);
+    x_act = x(:,ind_act+n_met);
+    scale = p.arrowsize * sqrt(abs(flux));
+    if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
+    x_arr = x_met + p.arrow_shift * (x_act-x_met);
+    switch p.arrowstyle
+      case {'fluxes','directions'}
+        phi = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
+        plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, 1, p.flag_triangle_edges);
     end
   end
 end
@@ -436,7 +427,6 @@ if p.metprintnames
   tx = x(1,1:n_met) + p.text_offset(1);
   ty = x(2,1:n_met) + p.text_offset(2);
   text(tx(p.metindshow),ty(p.metindshow), p.metnames(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);
-  %  text(tx,ty, p.metnames,'FontSize',p.FontSize,'Rotation',p.fontangle);
 end
 
 if p.actprintnames
@@ -452,8 +442,7 @@ if p.metprintvalues
   else
     strings = num2str(p.metvalues,3);
   end
-  offset=0.5*p.squaresize * [1,1]+ p.value_text_offset;%*(0.5+p.metvalues_std');
-  % text(x(1,p.metindshow) + offset,x(2,p.metindshow)+offset,strings(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);
+  offset=0.5*p.squaresize * [1,1]+ p.value_text_offset;
   text(x(1,1:n_met) + offset(1),x(2,1:n_met)+offset(2),strings,'FontSize',p.FontSize,'Rotation',p.fontangle);
 end
 
@@ -465,7 +454,7 @@ if p.actprintvalues
   strings = cellstr(strings);
   for it = 1:length(strings), strings{it} = strrep(strings{it},'NaN',''); end
   ppos = x(:,n_met+1:end);
-  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;%*(0.5+p.actvalues_std(p.actindshow)');
+  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;
   text(ppos(1,p.actindshow) + offset(1), ppos(2,p.actindshow)+offset(2), strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle);
 end
 
@@ -477,7 +466,7 @@ if p.arrowprintvalues
   strings = cellstr(strings);
   for it = 1:length(strings), strings{it} = strrep(strings{it},'NaN',''); end
   ppos = x(:,n_met+1:end);
-  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;%*(0.5+p.arrowvalues_std(p.actindshow)');
+  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;
   text(ppos(1,p.actindshow) + offset(1), ppos(2,p.actindshow)+offset(2), strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle);
 end
 
@@ -489,16 +478,6 @@ set(gca,'YDir',p.YDir);
 
 noticks;
 
-% a = [1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
-%      -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) + 0.000000000001,...
-%      1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
-%      -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) + 0.000000000001];
-%
-% if ~isempty(p.figure_axis),
-%   a = p.figure_axis;
-% end
-
-%axis(a);
 axis tight;
 axis off;
 axis equal;
@@ -604,22 +583,6 @@ function plot_diamond(x,y,l,std,squaresize,col,flag_edges)
 
   % -----------------------------------------------------------------
 
-function plot_octagon(x,y,l,std,squaresize,col,flag_edges)
-
-  stdcol = .7+.3*col;
-  if isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; end
-  if isnan(std), std = .1; end
-  if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
-  if std
-    l_max = squaresize*(l+std);
-    fill(x + 0.5 * l_max * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_max*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],stdcol,'EdgeColor',secol)
-  end
-  l_min = squaresize*(max(0,l));
-  fill(x + 0.5 * l_min * 4/pi* [-1 -0.5 0.5 1 1 0.5 -0.5 -1], y + 0.5*l_min*4/pi*[-0.5 -1 -1 -0.5 0.5 1 1 0.5],col,'EdgeColor',ecol)
-
-
-  % -----------------------------------------------------------------
-
 function plot_triangle(x, y, phi, l, col, forward, flag_edges)
 
   if isnan(l), l = l*0.5; forward = 1; col = [.7 .7 .7];
@@ -650,18 +613,54 @@ function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);
 
   % -----------------------------------------------------------------
 
-function [arcx,arcy] = tri_arc(x1,x2,x3,linecolor,arrow_shift)
+function height = arc_height(x1,x2,x3)
 
-  % compute height:
+  % height parameter for 'arc' (bulge relative to half the chord length) such that
+  % the arc from x1 to x2 follows the circle through x1, x2, and x3 (in this order).
+  % This arc lies on the side of the chord opposite to x3.
+  % Returns 0 if the three points lie on a straight line; values are limited to [-1,1] (half circle)
 
-  R90 = [ 0 -1; 1 0];
-  lambda = 0.5* R90*[x2-x1, x3-x2] * (x1-x3);
-  f = 0.5*(x1+x2)+lambda(1)*R90*(x2-x1);
-  height = sqrt(sum((f - x1).^2)) - sqrt(sum ( (f - (0.5*(x1+x2))) .^2));
-  height = - height * sign ( (x3-x2)'*R90*(x2-x1));
+  R90 = [0 -1; 1 0];
+  d   = x2 - x1;
+  c   = x3 - 0.5*(x1+x2);
+  chord = sqrt(sum(d.^2));
+  side  = (R90*d)' * c;   % side of the chord on which x3 lies
+  if chord == 0 || abs(side) <= 10^-9 * chord * sqrt(sum(c.^2))
+    height = 0; return
+  end
+  % centre of the circle: (x1+x2)/2 + t * R90 * d
+  t = (sum(c.^2) - 0.25*chord^2) / (2*side);
+  radius = sqrt(0.25 + t^2) * chord;
+  if t * side > 0
+    % centre on the same side as x3: the arc is the shorter one
+    sagitta = radius - abs(t) * chord;
+  else
+    sagitta = radius + abs(t) * chord;
+  end
+  height = - sign(side) * 2 * sagitta / chord;
+  height = max(-1, min(1, height));
 
-  [x3,arcx,arcy] = arc(x1,x2, height,arrow_shift);
-  plot(x3(1,:),x3(2,:),'color',linecolor);
+
+  % -----------------------------------------------------------------
+
+function [x_point, direction] = point_on_line(x_line, fraction)
+
+  % point at a given fraction of the arc length along a polygonal line,
+  % and the direction of the line at this point
+
+  segments = diff(x_line,1,2);
+  lengths  = sqrt(sum(segments.^2,1));
+  total    = sum(lengths);
+  if total == 0
+    x_point = x_line(:,1); direction = [1;0]; return
+  end
+  cum = [0, cumsum(lengths)];
+  target = min(max(fraction,0),1) * total;
+  k = find(cum(2:end) >= target, 1);
+  if isempty(k), k = length(lengths); end
+  u = (target - cum(k)) / max(lengths(k),eps);
+  x_point   = x_line(:,k) + u * segments(:,k);
+  direction = segments(:,k);
 
 
   % -------------------------------------------------
@@ -699,12 +698,17 @@ function [normvalues, normvalues_std, valuesmax, valuesmin] = normalise(values,v
 
   if valuesmin == valuesmax,  valuesmax = 10^-10 + valuesmin; end
   if p.showsign
-    normvalues     = values / max(abs(values(:)));
+    % symmetric scale [-M, M], with M given by valuesmin and valuesmax (default: largest absolute value)
+    M = max(10^-10, max(abs([valuesmin, valuesmax])));
+    normvalues     = values / M;
+    normvalues_std = real(values_std / M);
+    valuesmax      = M;
+    valuesmin      = -M;
   else
     normvalues     = 2 * [(values - valuesmin)   / ( valuesmax - valuesmin)] - 1;
+    normvalues_std = real(values_std /  ( valuesmax- valuesmin));
   end
 
-  normvalues_std = real(values_std /  ( valuesmax- valuesmin));
   normvalues(find(normvalues>1)) = 1;
   normvalues(find(normvalues<-1))=-1;
 
@@ -727,7 +731,6 @@ function this_colorbar(num,colmap,location,colorbar_fontsize)
   h = colorbar('Location', location);
 
   min_scale  = round(min(num),2,'significant');
-  %-max(abs(num));
   max_scale  = round(max(num),2,'significant');
   if strcmp(location,'South')
     set(h,'Position',[0.05 0.05 0.90 0.03]);
@@ -1020,13 +1023,6 @@ function p = netgraph_draw_set_parameters(network,vararg)
   % omit metabolites and reactions that are tagged as invisible
   p.actindshow = p.actindshow(find(p.actinvisible(p.actindshow)==0));
   p.metindshow = p.metindshow(find(p.metinvisible(p.metindshow)==0));
-
-  % if isfield(network.graphics_par,'reaction_mapping'),
-  %   ii = setdiff(1:length(network.actions),label_names(p.omitreactions,network.actions));
-  %   p.actindshow = column(network.graphics_par.reaction_mapping(ii))';
-  %   ii = setdiff(1:length(network.metabolites),label_names(p.omitmetabolites,network.metabolites));
-  %   p.metindshow = column(network.graphics_par.metabolite_mapping(ii))';
-  % end
 
   % ----------
 

@@ -1,6 +1,6 @@
 % [M,T] = netgraph_double_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, options);
 %
-% Movie displaying data on network; two data sets are shown at teh same time
+% Movie displaying data on network; two data sets are shown at the same time
 % (for instance, to compare experimental and simulated time series)
 %
 % options and default values:
@@ -22,16 +22,6 @@ options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors'
 
 options = join_struct(options_default, options);
 options.canvas=[];
-
-if options.use_background_colors
-  if options.background_colors
-    if size(options.background_colors,2) ~= 3
-      options.background_colors = options.background_colors';
-    end
-  end
-else
-  options.background_colors = [];
-end
 
 if isempty(n_frames), n_frames = 10; end
 
@@ -85,11 +75,7 @@ actvalues_1 = zeros(nr,length(T));
 metvalues_2 = zeros(nm,length(T));
 actvalues_2 = zeros(nr,length(T));
 
-nb = size(options.background_colors,1);
-
-if length(options.background_colors)
-  options.background_colors = interp1(0:1/[nb-1]:1,options.background_colors,0:1/[length(T)-1]:1);
-end
+options.background_colors = netgraph_movie_background_colors(options.background_colors, options.use_background_colors, length(T));
 
 
 for j = 1:length(T)
@@ -157,7 +143,7 @@ for j=1:jj
   subplot('position',[0 0 1 1]);
   options.hold_on = 0; options.circle_shift=[0,0];
   if length(options.colormap_1), options.colormap = options.colormap_1; end
-  if options.background_colors
+  if ~isempty(options.background_colors)
     options.canvas = options.background_colors(j,:);
   end
   options.suppress_lines = 0;
@@ -169,13 +155,8 @@ for j=1:jj
   netgraph_concentrations(network,metvalues_2(:,j),actvalues_2(:,j),text_flag,options);
 
   if options.timebar
-    hold on;
     ss = network.graphics_par.squaresize;
-    amin = a(1) + 0.05 *[a(2)-a(1)];
-    amax = a(2) - 0.05 *[a(2)-a(1)];
-    plot([amin+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]);
-    circle( amin + ss + (j-0.9)/(jj-0.8) *(amax-amin-2*ss),ss+a(3),ss/2,[0 0 0]);
-    circle( amin + ss + (j-0.9)/(jj-0.8) *(amax-amin-2*ss),ss+a(3),ss/6,[1 1 1]);
+    netgraph_movie_timebar(a, ss, (j-1)/max(jj-1,1), ss/2);
   end
 
   axis(a);
@@ -183,8 +164,8 @@ for j=1:jj
   M(j) = getframe(gca);
 
   if isfield(options,'prefix')
-    if j ==1,             print([options.prefix '_start.eps'],'-f1','-depsc'); end
-    if j == ceil(0.8*jj), print([options.prefix '_end.eps'],'-f1','-depsc');   end
+    if j ==1,             print(gcf,[options.prefix '_start.eps'],'-depsc'); end
+    if j == ceil(0.8*jj), print(gcf,[options.prefix '_end.eps'],'-depsc');   end
   end
 
 end

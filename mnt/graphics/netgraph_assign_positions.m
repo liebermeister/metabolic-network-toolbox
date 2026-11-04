@@ -1,4 +1,13 @@
-% xpos = netgraph_assign_positions(network,picture,offsets,outfile)
+% NETGRAPH_ASSIGN_POSITIONS Choose metabolite positions on a picture with the mouse
+%
+% [names,xpos] = netgraph_assign_positions(network,picture,offsets,outfile)
+%
+% For each metabolite, the program asks (on the command line) whether to choose a position
+% (by a mouse click on the picture), go forward, go back, or finish.
+%
+% picture  image matrix (as for 'image')
+% offsets  [x,y] added to the positions (default [0,0])
+% outfile  file to which positions are written (optional)
 
 function [names,xpos] = netgraph_assign_positions(network,picture,offsets,outfile)
 
@@ -8,7 +17,7 @@ clf;
 subplot('position',[0 0 1 1]);
 image(picture);
 axis equal; axis tight;
-title('Left: set point, middle: clear last point, right: skip point');
+title('See command line');
 
 names = network.metabolites;
 ntot = length(names);

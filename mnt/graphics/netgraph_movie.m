@@ -97,12 +97,6 @@ end
 metvalues = zeros(nm,length(T));
 actvalues = zeros(nr,length(T));
 
-nb = size(options.background_colors,1);
-
-if length(options.background_colors)
-  options.background_colors = interp1(0:1/[nb-1]:1,options.background_colors,0:1/[length(T)-1]:1);
-end
-
 for j = 1:length(T)
   switch data_type
     case 'concentrations'
@@ -137,15 +131,7 @@ options_default.arrowstyle     = 'none';
 
 options = join_struct(options_default,options);
 
-if options.use_background_colors
-  if options.background_colors
-    if size(options.background_colors,2) ~= 3
-      options.background_colors = options.background_colors';
-    end
-  end
-else
-  options.background_colors = [];
-end
+options.background_colors = netgraph_movie_background_colors(options.background_colors, options.use_background_colors, length(T));
 
 a = axis;
 clf;
@@ -171,27 +157,24 @@ for j=1:jj
 
   clf;
   subplot('position',[0 0 1 1]);
-  if options.background_colors
+  if ~isempty(options.background_colors)
     options.canvas = options.background_colors(j,:);
   end
   netgraph_concentrations(network,metvalues(:,j),actvalues(:,j),text_flag,options);
   if options.timebar
-    hold on;
     ss = network.graphics_par.squaresize;
-    plot([a(1)+ss,a(2)-ss],ss+[a(3),a(3)],'-','Color',[0 0 0]);
+    netgraph_movie_timebar(a, ss, (j-1)/max(jj-1,1));
     if length(options.timebar_labels)
       text(0.9*a(1)+0.1*a(2), 0.05*a(3)+0.95*a(4), options.timebar_labels{1+floor(length(t)*j/[jj+1])},'FontSize',24);
     end
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/4,[0 0 0]);
-    circle( a(1) + ss + (j-0.9)/(jj-0.8) *(a(2)-a(1)-2*ss),ss+a(3),ss/6,[1 1 1]);
   end
   axis(a);
 
   M(j) = getframe(gca);
 
   if isfield(options,'prefix')
-    if j ==1,             print([options.prefix '_start.eps'],'-f1','-depsc'); end
-    if j == ceil(0.8*jj), print([options.prefix '_end.eps'],  '-f1','-depsc');   end
+    if j ==1,             print(gcf,[options.prefix '_start.eps'],'-depsc'); end
+    if j == ceil(0.8*jj), print(gcf,[options.prefix '_end.eps'],'-depsc');   end
   end
 
 end

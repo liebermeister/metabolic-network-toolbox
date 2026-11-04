@@ -35,7 +35,6 @@ p.actvaluesmax = 1;
 p.arrowstyle   ='directions';
 
 netgraph_concentrations(network,[],choice,1,struct('metprintnames',1,'actprintnames',1));
-%netgraph_draw(network,p);
 
 if ~exist('draw_only','var'), draw_only = 0; end
 if draw_only,  return; end
@@ -59,6 +58,5 @@ while cont==1
   p.actvalues=0.2*ones(size(reverse_mapping),1);
   p.actvalues(find(choice))=0.5;
   netgraph_concentrations(network,[],choice,1,struct('metprintnames',1,'actprintnames',1));
-  %netgraph_draw(network,p);
   title('Left button > mark, Right button > finish')
 end

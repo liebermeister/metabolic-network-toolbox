@@ -4,8 +4,6 @@
 
 function netgraph_metabolite_synergies(network, influence_values, synergy_values, col, gp)
 
-% to make this script nicer, update it according to synergy_network_plot
-
 eval(default('col','my_colors(250)','gp','struct','influence_values','[]'));
 
 gp = join_struct(struct('relative_threshold',0,'normalise_values',1,'show_diagonal_values',0,'linewidth',1),gp);
@@ -33,7 +31,7 @@ end
 
 % normalise by maximal absolute value
 if gp.normalise_values
-  if length(isfinite(influence_values))
+  if any(isfinite(influence_values))
     influence_values = influence_values/max(abs(influence_values(metmap)));
   end
   synergy_values = synergy_values - diag(diag(synergy_values));
@@ -50,31 +48,7 @@ synergy_values = synergy_values';
 % replace nan by zeros for graphics
 synergy_values(isnan(synergy_values)) = 0;
 
-colors  = [];
-i1_list = [];
-i2_list = [];
-value_list = [];
-z = 1;
-
-for i1 = 1:nm
-  for i2 = i1+1:nm
-    my_value = synergy_values(metmap(i1),metmap(i2));
-    if isfinite(my_value)
-      if sign(my_value)
-        i1_list(z) = i1;
-        i2_list(z) = i2;
-        value_list(z) = my_value;
-        colors = [colors; col(1+floor((size(col,1)-1)*(my_value+1)/2),:)];
-        z = z+1;
-      end
-    end
-  end;
-end
-
-[dum,order] = sort(abs(value_list));
-i1_list = i1_list(order);
-i2_list = i2_list(order);
-colors = colors(order,:);
+[i1_list, i2_list, colors] = netgraph_pair_colors(synergy_values, metmap, col);
 
 netgraph_concentrations(network,influence_values,[],1,plot_parameters); hold on;
 

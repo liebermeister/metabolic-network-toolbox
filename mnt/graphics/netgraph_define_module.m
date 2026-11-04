@@ -8,5 +8,5 @@ m = find(m);
 
 if nargout>1
   n = network_choose(network,m);
-  n.kinetics = set_kinetics(n,network.kinetics.type)
+  n.kinetics = set_kinetics(n,network.kinetics.type);
 end
