@@ -1,8 +1,19 @@
-% [network,p] = netgraph_external(network,draw_only,external)
+% NETGRAPH_EXTERNAL Mark external metabolites with the mouse
 %
-% arguments draw_only,external are optional
-% left/centre button: add/ remove external
-% right button quit
+% [network, p] = netgraph_external(network, draw_only, external)
+%
+% Mouse buttons: left/centre: mark/unmark a metabolite; right: finish
+%
+% Inputs:
+%   network    network structure; network.external contains the current choice
+%   draw_only  (optional, default 0) only show the current choice
+%   external   (optional) initial choice (replaces network.external)
+%
+% Outputs:
+%   network  network with the new field 'external'
+%   p        graphics settings used
+%
+% See also: netgraph_mark_metabolites
 
 function [network,p] = netgraph_external(network,draw_only,external)
 

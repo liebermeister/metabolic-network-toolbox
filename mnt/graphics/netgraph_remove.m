@@ -1,4 +1,15 @@
-% [network,keep_tot,keep_actions_tot] = netgraph_remove(network)
+% NETGRAPH_REMOVE Remove metabolites and reactions with the mouse
+%
+% [network, keep_tot, keep_actions_tot] = netgraph_remove(network)
+%
+% Mouse buttons: left: remove a metabolite or reaction; right: finish
+%
+% Outputs:
+%   network           network without the removed elements
+%   keep_tot          indices of the remaining metabolites (in the original network)
+%   keep_actions_tot  indices of the remaining reactions (in the original network)
+%
+% See also: network_remove, network_remove_action
 
 function [network,keep_tot,keep_actions_tot] = netgraph_remove(network)
 

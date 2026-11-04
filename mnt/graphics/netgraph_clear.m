@@ -1,10 +1,13 @@
-%network = netgraph_clear(network);
+% NETGRAPH_CLEAR Reset the display settings of a network, keeping the layout
 %
-%add a new 'graphics_par' field to the network
+% network = netgraph_clear(network)
 %
-%see 'netgraph'
+% Replaces network.graphics_par by default display settings; node positions (x) and
+% the adjacency matrices (m, db) are kept.
+%
+% See also: netgraph_make_graph, netgraph_draw
 
-function network = netgraph_clear(network);
+function network = netgraph_clear(network)
 
 p.metnames = network.metabolites;
 p.actnames = network.actions;

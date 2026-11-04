@@ -1,12 +1,19 @@
-% [network_split,met_list] = netgraph_split_metabolites(network,met_list);
+% NETGRAPH_SPLIT_METABOLITES Network in which some metabolites appear once per reaction
 %
-% produce a network in which some of the metabolites appear
-% separately for each reaction they participate in
+% [network_split, met_list] = netgraph_split_metabolites(network, met_list)
 %
-% metlist can be a metabolite name, a list of metabolite names
-% or a number indicating the maximal connectivity
+% Inputs:
+%   network   network structure
+%   met_list  metabolites to be split: a metabolite name, a list of names, or a number
+%             (all metabolites in more reactions than this number are split)
+%
+% Outputs:
+%   network_split  network for display; graphics_par.metabolite_mapping refers to the original metabolites
+%   met_list       list of the split metabolites
+%
+% See also: netgraph_simple_graph, netgraph_cofactor_graphs
 
-function  [network_split,met_list] = netgraph_split_metabolites(network,met_list);
+function [network_split,met_list] = netgraph_split_metabolites(network,met_list)
 
 if ~length(met_list)
   network_split = network;

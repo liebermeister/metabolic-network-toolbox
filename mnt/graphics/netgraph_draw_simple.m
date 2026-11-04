@@ -1,6 +1,10 @@
-%netgraph_draw_simple(network)
+% NETGRAPH_DRAW_SIMPLE Draw the nodes and lines of a network
 %
-%draw network in a simple manner: only nodes and lines
+% netgraph_draw_simple(network, regulation)
+%
+% regulation  (optional, default 0) also draw lines for regulation
+%
+% See also: netgraph_draw
 
 function netgraph_draw_simple(network,regulation)
 

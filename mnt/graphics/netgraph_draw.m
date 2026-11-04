@@ -4,7 +4,7 @@
 % network = netgraph_draw(network, 'name1', value1, 'name2', value2, ...)
 %
 % Draw a metabolic network according to settings in the field 'graphics_par'.
-% These settings can be overridden by graphics options, given as a struct gp
+% These settings can be overridden by graphics options, given as a struct options
 % (e.g. struct('metvalues', c, 'colorbar', 1)), as name-value pairs, or as a struct
 % followed by name-value pairs. All graphics functions in this folder take options
 % in the same way and pass them on to netgraph_draw; the options are listed below.
@@ -122,14 +122,13 @@
 function network = netgraph_draw(network,varargin)
 
 if sum(size(network.N)) > 10000
-  warning('Network too large for drawing'); return;
+  warning('mnt:netgraph:tooLarge', 'Network too large for drawing'); return
 end
 
 p = netgraph_draw_set_parameters(network,varargin);
 
 n_met = length(network.metabolites);
 n_act = length(network.actions);
-m     = p.m;
 x     = p.x;
 
 % sizes are given for a layout of size 1; scale them to the size of the actual layout
@@ -141,13 +140,16 @@ for it = 1:length(size_fields)
 end
 
 if ~isempty(p.figure_position), set(gcf,'Position',p.figure_position); end
-if ~isempty(p.subplot_position)
-  subplot('position',p.subplot_position);
-end
+if ~isempty(p.subplot_position), subplot('position',p.subplot_position); end
 
 ax = gca;
 had_content = p.hold_on==1 && ~isempty(get(ax,'Children'));
-if p.hold_on==1, hold(ax,'on'); else, cla(ax); colorbar(ax,'off'); end
+if p.hold_on==1
+  hold(ax,'on');
+else
+  cla(ax); colorbar(ax,'off');
+  set(ax, 'XScale', 'linear', 'YScale', 'linear');   % (e.g. after a plot with log scale)
+end
 
 % a new axes object (at the default position) is enlarged to fill the figure;
 % axes created by 'subplot' or placed by the user keep their position
@@ -157,280 +159,208 @@ end
 
 hold(ax,'on');
 
-if length(p.canvas)
-  if length(p.canvas) ~= 3
-    p.canvas = [.98 .98 .98];
-  end
+if ~isempty(p.canvas)
+  if length(p.canvas) ~= 3, p.canvas = [.98 .98 .98]; end
   set(gcf,'Color',p.canvas);
 else
   set(gcf,'Color',[1 1 1]);
 end
 
-x_arrowlistN = zeros(n_met,n_act,2);
+% Graphics elements of one kind are drawn as one graphics object (with tags such as
+% 'netgraph_edges' or 'netgraph_metabolites'), because single objects for each element
+% make drawing slow in large networks
+
+draw_arrows = p.show_arrowvalues && any(strcmp(p.arrowstyle, {'fluxes','directions'}));
+nan_size    = 0.4 * p.arrowsize;   % size of the symbols for unknown fluxes
 
 % ------------------------------------------------------------------------------
-% only lines
+% edges between metabolites and reactions: points along each edge, from the metabolite to the reaction
+
+[edge_met, edge_act] = find(p.m(p.metindshow, n_met + p.actindshow));
+edge_met = reshape(p.metindshow(edge_met), [], 1);
+edge_act = reshape(p.actindshow(edge_act), [], 1);
+n_edges  = length(edge_met);
+stoich   = full(p.N(sub2ind(size(p.N), edge_met, edge_act)));
+
+edge_lines = cell(n_edges,1);
+edge_mid   = zeros(2,n_edges);   % midpoints of the edges (positions of edge symbols)
+for k = 1:n_edges
+  x_met = x(:,edge_met(k));
+  x_act = x(:,n_met+edge_act(k));
+  if p.straightlines
+    edge_lines{k} = [x_met, x_act];
+  else
+    % curved lines: each edge is a circular arc that continues towards the other side of the reaction
+    % (substrate edges bend towards the products, product edges towards the substrates)
+    if stoich(k) < 0
+      other_side = find(p.N(:,edge_act(k)) > 0);
+    else
+      other_side = find(p.N(:,edge_act(k)) < 0);
+    end
+    height = 0;
+    if ~isempty(other_side)
+      height = arc_height(x_met, x_act, mean(x(:,other_side),2));
+    end
+    edge_lines{k} = fliplr(arc(x_met, x_act, height, 0.5));
+  end
+  edge_mid(:,k) = point_on_line(edge_lines{k}, 0.5);
+end
+
+% ------------------------------------------------------------------------------
+% lines (long lines and lines to cofactors can be shaded)
 
 if ~p.suppress_lines
-  if p.straightlines
-    %% draw straight lines
-    [i2,j2] = find(triu(m));
-    for itt = 1:length(i2)
-      my_color = p.linecolor;
-      my_linewidth = 1;
-      if sum(i2(itt)==p.metindshow) * sum(j2(itt)-n_met==p.actindshow)
-        my_color = p.linecolor;
-        my_linewidth = p.linewidth;
-        shade_this_line = 0;
-        if p.shade_long_lines
-          shade_this_line = [x(1,i2(itt))-x(1,j2(itt))]^2 + [x(2,i2(itt))-x(2,j2(itt))]^2 > p.shade_long_lines^2;
-        end
-        if length(p.shade_cofactor_lines)
-          shade_this_line = shade_this_line + p.shade_cofactor_lines(p.metabolite_mapping(i2(itt)));
-        end
-        if shade_this_line
-          my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
-          my_linewidth = 1;
-        end
-        line([x(1,i2(itt)); x(1,j2(itt))],[x(2,i2(itt)); x(2,j2(itt))],'color',my_color,'Linewidth',my_linewidth);
-      end
-    end
+  shaded = false(n_edges,1);
+  if p.shade_long_lines
+    shaded = sum((x(:,edge_met) - x(:,n_met+edge_act)).^2, 1)' > p.shade_long_lines^2;
   end
+  if ~isempty(p.shade_cofactor_lines)
+    shaded = shaded | reshape(p.shade_cofactor_lines(p.metabolite_mapping(edge_met)) ~= 0, [], 1);
+  end
+  draw_lines(ax, edge_lines(~shaded), p.linecolor, p.linewidth, 'netgraph_edges');
+  draw_lines(ax, edge_lines(shaded), 0.2 * p.linecolor + 0.8 * [1 1 1], 1, 'netgraph_shaded_edges');
 end
 
-% ---------------------------------------------------
 % little dots at all nodes
-
 if ~p.no_points
   dd = [p.metindshow, n_met + p.actindshow];
-  plot(x(1,dd),x(2,dd), '.', 'Color', p.linecolor, 'MarkerSize', 6);
+  plot(ax, x(1,dd), x(2,dd), '.', 'Color', p.linecolor, 'MarkerSize', 6, 'Tag', 'netgraph_nodes');
 end
-
 
 % ------------------------------------------------------------------------------
-% lines and triangles
+% arrows on the edges (forward = 1: from metabolite to reaction; -1: opposite direction)
 
-if p.straightlines  % straight lines
-  [ind_met,ind_act] = find(m(p.metindshow, end-n_act+p.actindshow));
-  ind_met = p.metindshow(ind_met);
-  ind_act = p.actindshow(ind_act);
-
-  for k = 1:length(ind_met)
-    stoich_coeff = p.N(ind_met(k),ind_act(k));
-    x_met = x(:,ind_met(k));
-    x_act = x(:,ind_act(k)+n_met);
-
-    if p.show_arrowvalues * (1-p.single_arrow)
-      scale = p.arrowsize * sqrt(abs(p.norm_arrowvalues( ind_act(k) )));
-      if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
-      forward = -sign(stoich_coeff) * sign(p.arrowvalues( ind_act(k) ));
-      %% forward can be 1 or -1
-      arrow_shift = (forward==1) * p.arrow_shift + (forward==-1) * (1-p.arrow_shift);
-      if isnan(forward), arrow_shift = 0.5; end
-      x_arr = x_met + arrow_shift * (x_act-x_met);
-      switch p.arrowstyle
-        case {'fluxes','directions'}
-          phi = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
-          plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward, p.flag_triangle_edges, 0.4*p.arrowsize);
-      end
-    end
-
-    x_arrowlistN(ind_met(k),ind_act(k),:) =  x_met + .5 * (x_act-x_met);
+if draw_arrows && ~p.single_arrow && n_edges
+  flux    = reshape(p.norm_arrowvalues(edge_act), [], 1);
+  forward = -sign(stoich) .* sign(reshape(p.arrowvalues(edge_act), [], 1));
+  len     = p.arrowsize * sqrt(abs(flux));
+  if p.arrow_stoichiometries, len = len .* abs(stoich); end
+  shift   = p.arrow_shift * (forward == 1) + (1 - p.arrow_shift) * (forward == -1) + 0.5 * isnan(forward);
+  pos = zeros(2,n_edges);
+  phi = zeros(n_edges,1);
+  for k = 1:n_edges
+    [pos(:,k), direction] = point_on_line(edge_lines{k}, shift(k));
+    phi(k) = atan2(direction(2), direction(1));
   end
-
-else  % curved lines: each edge is a circular arc that continues towards the other side of the reaction
-      % (substrate edges bend towards the products, product edges towards the substrates)
-
-  for q1 = p.actindshow
-    substrates = find(p.N(:,q1)<0);
-    products   = find(p.N(:,q1)>0);
-    reactants  = intersect(find(p.N(:,q1)~=0), p.metindshow);
-    x_act      = x(:,n_met+q1);
-
-    for q2 = 1:length(reactants)
-      x_met        = x(:,reactants(q2));
-      stoich_coeff = p.N(reactants(q2),q1);
-      if stoich_coeff < 0, other_side = products; else, other_side = substrates; end
-
-      % arc points, from the metabolite (first point) to the reaction (last point)
-      if isempty(other_side)
-        height = 0;
-      else
-        height = arc_height(x_met, x_act, mean(x(:,other_side),2));
-      end
-      x_line = fliplr(arc(x_met, x_act, height, 0.5));
-      x_line = [x_met, x_line];
-
-      if ~p.suppress_lines
-        my_color = p.linecolor;
-        if p.shade_long_lines
-          if sum((x_met-x_act).^2) > p.shade_long_lines^2
-            my_color = 0.2 * p.linecolor + 0.8 * [1 1 1];
-          end
-        end
-        plot(x_line(1,:), x_line(2,:), 'color', my_color, 'Linewidth', p.linewidth);
-      end
-
-      % point halfway along the arc (position of edge symbols)
-      x_arrowlistN(reactants(q2),q1,:) = point_on_line(x_line, 0.5);
-
-      if p.show_arrowvalues * (1-p.single_arrow)
-        forward = -sign(stoich_coeff) * sign(p.arrowvalues(q1));
-        %% forward can be 1 or -1
-        arrow_shift = (forward==1) * p.arrow_shift + (forward==-1) * (1-p.arrow_shift);
-        if isnan(forward), arrow_shift = 0.5; end
-        [x_arr, direction] = point_on_line(x_line, arrow_shift);
-        switch p.arrowstyle
-          case {'fluxes','directions'}
-            phi   = angle(direction(1) + i * direction(2));
-            scale = p.arrowsize * sqrt(abs(p.norm_arrowvalues(q1)));
-            if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
-            plot_triangle(x_arr(1), x_arr(2), phi, scale, p.arrowcolor, forward, p.flag_triangle_edges, 0.4*p.arrowsize);
-        end
-      end
-    end
-  end
-
+  draw_arrow_symbols(ax, pos, phi, len, forward, p.arrowcolor, p.flag_triangle_edges, nan_size);
 end
-
 
 % ---------------------------------------------------
 % edge values
 
-if p.show_edgevalues
-  for ind_m = p.metindshow
-    for r = 1:length(p.actindshow)
-      ind_r = p.actindshow(r);
-      if network.N(ind_m,ind_r) ~=0
-        x_pos  = squeeze(x_arrowlistN(ind_m,ind_r,:));
-        value  = p.norm_edgevalues(ind_m,ind_r);
-        stddev = p.norm_edgevalues_std(ind_m,ind_r);
-        c      = get_color(value,-1,1,p.colormap);
-        switch p.edgestyle
-          case 'fixed', if isfinite(value),  value = 1; end;
-        end
-        plot_diamond(x_pos(1),x_pos(2),abs(value), stddev,p.squaresize,c, p.flag_edges);
-        if p.edgeprintvalues
-          if isnan(p.edgevalues(ind_m,ind_r))
-            my_ss = ''; else, my_ss = num2str(p.edgevalues(ind_m,ind_r),3);
-          end
-          offset = 0.5*p.squaresize;
-          text(x_pos(1)+ offset, x_pos(2)+offset, my_ss,'FontSize',p.FontSize,'Rotation',p.fontangle);
-        end
-      end
-    end
+if p.show_edgevalues && n_edges
+  has_value = full(network.N(sub2ind(size(network.N), edge_met, edge_act))) ~= 0;
+  ind       = sub2ind(size(p.norm_edgevalues), edge_met(has_value), edge_act(has_value));
+  values    = full(p.norm_edgevalues(ind));
+  colors    = get_color(values, -1, 1, p.colormap);
+  if strcmp(p.edgestyle, 'fixed'), values(isfinite(values)) = 1; end
+  draw_symbols(ax, 'diamond', edge_mid(:,has_value), abs(values), full(p.norm_edgevalues_std(ind)), ...
+               p.squaresize, colors, p.flag_edges, 'netgraph_edge_symbols');
+  if p.edgeprintvalues
+    offset = 0.5 * p.squaresize;
+    text(ax, edge_mid(1,has_value) + offset, edge_mid(2,has_value) + offset, value_strings(full(p.edgevalues(ind))), ...
+         'FontSize', p.FontSize, 'Rotation', p.fontangle);
   end
 end
-
 
 % ---------------------------------------------------
-% regulation edges
+% regulation arrows (arcs from the metabolite to the reaction)
 
 if p.show_regulation
-  [indr,indm] = find(network.regulation_matrix);
-  for itt=1:length(indr)
-    if sum(indr(itt) == p.actindshow) * sum(indm(itt) == p.metindshow)
-      this_sign = sign(network.regulation_matrix(indr(itt),indm(itt)));
-      if this_sign>0, linecolor = [0 0.7 1];
-      else,           linecolor = [1 0 0];
-      end
-      [x3,arcx,arcy] = arc(x(:,indr(itt)+n_met),x(:,indm(itt)),0.2,0.5);
-      if ~p.suppress_lines
-        plot(x3(1,:),x3(2,:),'color',linecolor);
-      end
-
-      if p.show_regulationvalues
-        val    = p.norm_regulationvalues(indr(itt),indm(itt));
-        stddev = p.norm_regulationvalues_std(indr(itt),indm(itt));
-        c      = get_color(val,-1,1,p.colormap);
-        switch p.regulationstyle,  case 'fixed', if isfinite(val), val = 1;  end; end
-        plot_diamond( arcx,arcy, abs(val),stddev,p.squaresize,c, p.flag_edges);
-      end
-
-      if p.regulationprintvalues
-        ddd = p.regulationvalues(indr(itt),indm(itt));
-        if isnan(ddd), my_ss = ''; else,  my_ss = num2str(ddd,3); end
-        offset=0.5*p.squaresize;
-        text(arcx+ offset, arcy+offset, my_ss,'FontSize',p.FontSize,'Rotation',p.fontangle);
-      end
-
-    end
+  [ind_r, ind_m] = find(network.regulation_matrix);
+  keep  = ismember(ind_r, p.actindshow) & ismember(ind_m, p.metindshow);
+  ind_r = ind_r(keep);
+  ind_m = ind_m(keep);
+  n_reg = length(ind_r);
+  reg_lines = cell(n_reg,1);
+  reg_pos   = zeros(2,n_reg);
+  for k = 1:n_reg
+    [reg_lines{k}, reg_pos(1,k), reg_pos(2,k)] = arc(x(:,n_met+ind_r(k)), x(:,ind_m(k)), 0.2, 0.5);
+  end
+  ind = sub2ind(size(network.regulation_matrix), ind_r, ind_m);
+  activation = full(network.regulation_matrix(ind)) > 0;
+  if ~p.suppress_lines
+    draw_lines(ax, reg_lines(activation),  [0 0.7 1], 0.5, 'netgraph_activation');
+    draw_lines(ax, reg_lines(~activation), [1 0 0],   0.5, 'netgraph_inhibition');
+  end
+  if p.show_regulationvalues
+    ind    = sub2ind(size(p.norm_regulationvalues), ind_r, ind_m);
+    values = full(p.norm_regulationvalues(ind));
+    colors = get_color(values, -1, 1, p.colormap);
+    if strcmp(p.regulationstyle, 'fixed'), values(isfinite(values)) = 1; end
+    draw_symbols(ax, 'diamond', reg_pos, abs(values), full(p.norm_regulationvalues_std(ind)), ...
+                 p.squaresize, colors, p.flag_edges, 'netgraph_regulation_symbols');
+  end
+  if p.regulationprintvalues
+    offset = 0.5 * p.squaresize;
+    text(ax, reg_pos(1,:) + offset, reg_pos(2,:) + offset, value_strings(full(p.regulationvalues(ind))), ...
+         'FontSize', p.FontSize, 'Rotation', p.fontangle);
   end
 end
-
 
 % ---------------------------------------------------
 % metabolites
 
 if p.show_metvalues
-
   switch p.metcolstyle
     case 'fixed',  c = repmat(p.metcol,n_met,1);
     case 'values', c = get_color(p.norm_metvalues,-1,1,p.colormap);
   end
-
-  if length(p.metcolors)
+  if ~isempty(p.metcolors)
     c = p.metcolors(p.metabolite_mapping,:);
   end
-
-  if p.showsign==0
-    p.norm_metvalues      = [p.norm_metvalues + 1]/2;
-    p.norm_metvalues_std  = 0.5 * p.norm_metvalues_std;
+  values = p.norm_metvalues(:);
+  stds   = p.norm_metvalues_std(:);
+  if p.showsign == 0
+    values = (values + 1) / 2;
+    stds   = 0.5 * stds;
   end
-
-  p.norm_metvalues = abs(p.norm_metvalues);
-
+  values = abs(values);
   switch p.metstyle
-    case 'box',    p.norm_metvalues_std = 0*p.norm_metvalues_std;
-    case 'fixed',  p.norm_metvalues(isfinite(p.norm_metvalues)) = 1;
+    case 'box',   stds = 0 * stds;
+    case 'fixed', values(isfinite(values)) = 1;
   end
-
-  for it = p.metindshow
-    if isnan(p.norm_metvalues(it)); % do not shift nan values
-      if ~p.suppress_lines
-        plot_circle(x(1,it), x(2,it), p.norm_metvalues(it), p.norm_metvalues_std(it), p.squaresize, c(it,:), p.flag_edges);
-      end
-    else
-      plot_circle(x(1,it)+p.circle_shift(1), x(2,it)+p.circle_shift(2), p.norm_metvalues(it), p.norm_metvalues_std(it), p.squaresize, c(it,:), p.flag_edges);
-    end
-  end;
-
+  ind   = p.metindshow;
+  known = isfinite(values(ind))';
+  if p.suppress_lines, ind = ind(known); known = known(known); end
+  pos = x(:,ind);
+  pos(:,known) = pos(:,known) + p.circle_shift(:);   % symbols for unknown values are not shifted
+  draw_symbols(ax, 'circle', pos, values(ind), stds(ind), p.squaresize, c(ind,:), p.flag_edges, 'netgraph_metabolites');
 end
-
 
 % ---------------------------------------------------
 % reactions
 
 if p.show_actvalues
-
   switch p.actcolstyle
     case 'fixed',  c = repmat(p.actcol,n_act,1);
     case 'values', c = get_color(p.norm_actvalues,-1,1,p.colormap);
   end
-
-  if length(p.actcolors)
+  if ~isempty(p.actcolors)
     c = p.actcolors(p.reaction_mapping,:);
   end
-
+  values = abs(p.norm_actvalues(:));
+  stds   = p.norm_actvalues_std(:);
   switch p.actstyle
-    case 'box',    p.norm_actvalues_std = 0*p.norm_actvalues_std;
-    case 'fixed',  p.norm_actvalues(isfinite(p.norm_actvalues)) = 1;
+    case 'box',   stds = 0 * stds;
+    case 'fixed', values(isfinite(values)) = 1;
   end
-
-  for r=1:length(p.actindshow)
-    it = p.actindshow(r);
-    if isnan(p.norm_actvalues(it)); % do not shift nan values
-      plot_square(x(1,it+n_met),x(2,it+n_met),abs(p.norm_actvalues(it)),p.norm_actvalues_std(it),p.squaresize,c(it,:),p.flag_edges);
-    else
-      plot_square(x(1,it+n_met)+p.circle_shift(1),x(2,it+n_met)+p.circle_shift(2),abs(p.norm_actvalues(it)),p.norm_actvalues_std(it),p.squaresize,c(it,:),p.flag_edges);
-    end
-  end
+  ind   = p.actindshow;
+  known = isfinite(values(ind))';
+  pos   = x(:,n_met+ind);
+  pos(:,known) = pos(:,known) + p.circle_shift(:);
+  draw_symbols(ax, 'square', pos, values(ind), stds(ind), p.squaresize, c(ind,:), p.flag_edges, 'netgraph_reactions');
 end
 
-if p.show_arrowvalues * p.single_arrow
-  % one arrow per reaction, on the edge from an incoming metabolite
-  % (a substrate for positive fluxes, a product for negative fluxes);
-  % for unknown fluxes (nan), a grey diamond is shown on the reaction
+% ---------------------------------------------------
+% single arrows: one arrow per reaction, on the edge from an incoming metabolite
+% (a substrate for positive fluxes, a product for negative fluxes);
+% for unknown fluxes (nan), a grey diamond is shown on the reaction
+
+if draw_arrows && p.single_arrow
+  pos = zeros(2,0);
+  phi = zeros(1,0);
+  len = zeros(1,0);
   for ind_act = p.actindshow
     flux = p.norm_arrowvalues(ind_act);
     if flux == 0, continue; end
@@ -441,75 +371,57 @@ if p.show_arrowvalues * p.single_arrow
     end
     incoming = intersect(incoming, p.metindshow);
     if isempty(incoming), continue; end
-    ind_met      = incoming(1);
-    stoich_coeff = p.N(ind_met,ind_act);
-    x_met = x(:,ind_met);
-    x_act = x(:,ind_act+n_met);
-    scale = p.arrowsize * sqrt(abs(flux));
-    if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
-    x_arr = x_met + p.arrow_shift * (x_act-x_met);
-    switch p.arrowstyle
-      case {'fluxes','directions'}
-        phi = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
-        plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, 1, p.flag_triangle_edges, 0.4*p.arrowsize);
-    end
+    x_met = x(:,incoming(1));
+    x_act = x(:,n_met+ind_act);
+    l = p.arrowsize * sqrt(abs(flux));
+    if p.arrow_stoichiometries, l = l * abs(p.N(incoming(1),ind_act)); end
+    pos(:,end+1) = x_met + p.arrow_shift * (x_act - x_met);
+    phi(end+1)   = atan2(x_act(2) - x_met(2), x_act(1) - x_met(1));
+    len(end+1)   = l;
   end
+  draw_arrow_symbols(ax, pos, phi, len, ones(size(len)), p.arrowcolor, p.flag_triangle_edges, nan_size);
 end
 
 % ---------------------------------------------------
 % text
 
+text_style = {'FontSize', p.FontSize, 'Rotation', p.fontangle};
+
 if p.metprintnames
-  tx = x(1,1:n_met) + p.text_offset(1);
-  ty = x(2,1:n_met) + p.text_offset(2);
-  text(tx(p.metindshow),ty(p.metindshow), p.metnames(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);
+  ind = p.metindshow;
+  text(ax, x(1,ind) + p.text_offset(1), x(2,ind) + p.text_offset(2), p.metnames(ind), text_style{:});
 end
 
 if p.actprintnames
-  tx = x(1,n_met+1:end) + p.text_offset(1);
-  ty = x(2,n_met+1:end) + p.text_offset(2);
-  text(tx(p.actindshow),ty(p.actindshow), p.actnames(p.actindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);
+  ind = p.actindshow;
+  text(ax, x(1,n_met+ind) + p.text_offset(1), x(2,n_met+ind) + p.text_offset(2), p.actnames(ind), text_style{:});
 end
 
+offset = 0.5 * p.squaresize * [1,1] + p.value_text_offset;
+
 if p.metprintvalues
-  if ~length(p.metvalues), error('No metabolite values given'); end
-  if find(p.metvalues_std~=0)
-    strings = [num2str(p.metvalues,3) repmat(' \pm ',n_met,1) num2str(p.metvalues_std,2)];
-  else
-    strings = num2str(p.metvalues,3);
-  end
-  strings = cellstr(strings);
-  offset=0.5*p.squaresize * [1,1]+ p.value_text_offset;
-  text(x(1,p.metindshow) + offset(1),x(2,p.metindshow)+offset(2),strings(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);
+  if isempty(p.metvalues), error('mnt:netgraph:missingValues', 'No metabolite values given'); end
+  strings = value_strings(p.metvalues, p.metvalues_std);
+  ind = p.metindshow;
+  text(ax, x(1,ind) + offset(1), x(2,ind) + offset(2), strings(ind), text_style{:});
 end
 
 if p.actprintvalues
-  if ~length(p.actvalues), error('No reaction values given'); end
-  if find(p.actvalues_std~=0)
-    strings = [num2str(p.actvalues,3) repmat(' \pm ',n_act,1) num2str(p.actvalues_std,2)];
-  else strings = num2str(p.actvalues,3); end
-  strings = cellstr(strings);
-  for it = 1:length(strings), strings{it} = strrep(strings{it},'NaN',''); end
-  ppos = x(:,n_met+1:end);
-  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;
-  text(ppos(1,p.actindshow) + offset(1), ppos(2,p.actindshow)+offset(2), strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle);
+  if isempty(p.actvalues), error('mnt:netgraph:missingValues', 'No reaction values given'); end
+  strings = value_strings(p.actvalues, p.actvalues_std);
+  ind = p.actindshow;
+  text(ax, x(1,n_met+ind) + offset(1), x(2,n_met+ind) + offset(2), strings(ind), text_style{:});
 end
 
 if p.arrowprintvalues
-  if ~length(p.arrowvalues), error('No arrow values given'); end
-  if find(p.arrowvalues_std~=0)
-    strings = [num2str(p.arrowvalues,3) repmat(' \pm ',n_act,1) num2str(p.arrowvalues_std,2)];
-  else strings = num2str(p.arrowvalues,3); end
-  strings = cellstr(strings);
-  for it = 1:length(strings), strings{it} = strrep(strings{it},'NaN',''); end
-  ppos = x(:,n_met+1:end);
-  offset=0.5*p.squaresize * [1,1] + p.value_text_offset;
-  text(ppos(1,p.actindshow) + offset(1), ppos(2,p.actindshow)+offset(2), strings(p.actindshow)','FontSize',p.FontSize,'Rotation',p.fontangle);
+  if isempty(p.arrowvalues), error('mnt:netgraph:missingValues', 'No arrow values given'); end
+  strings = value_strings(p.arrowvalues, p.arrowvalues_std);
+  ind = p.actindshow;
+  text(ax, x(1,n_met+ind) + offset(1), x(2,n_met+ind) + offset(2), strings(ind), text_style{:});
 end
 
 % ---------------------------------------------------
-
-% figure general layout
+% general layout
 
 set(ax,'YDir',p.YDir);
 axis(ax,'off');
@@ -521,18 +433,17 @@ else
   set_axis_limits(ax, x(:,[p.metindshow, n_met+p.actindshow]), p.squaresize, had_content);
 end
 
-% add colorbar
 if p.colorbar
   if isempty(p.colorbar_numbers)
-    if length(p.metvaluesmax)
+    if ~isempty(p.metvaluesmax)
       p.colorbar_numbers = [p.metvaluesmin,p.metvaluesmax];
-    elseif length(p.actvaluesmax)
+    elseif ~isempty(p.actvaluesmax)
       p.colorbar_numbers = [p.actvaluesmin,p.actvaluesmax];
     elseif p.edgevaluesmax
       p.colorbar_numbers = [p.edgevaluesmin,p.edgevaluesmax];
     end
   end
-  if max(p.colorbar_numbers)>min(p.colorbar_numbers)
+  if max(p.colorbar_numbers) > min(p.colorbar_numbers)
     this_colorbar(ax, p.colorbar_numbers, p.colormap, p.colorbar_location, p.colorbar_fontsize);
   end
 end
@@ -544,96 +455,130 @@ end
 
 network.graphics_par = p;
 
-% -----------------------------------------------------
-
-if length(network.graphics_par.canvas_position)
-  set(gcf,'Position',network.graphics_par.canvas_position);
+if ~isempty(p.canvas_position)
+  set(gcf,'Position',p.canvas_position);
 end
 
-% -----------------------------------------------------
-% END OF MAIN PROGRAM
-% -----------------------------------------------------
 
-% -----------------------------------------------------------------
+% =================================================================
+% Drawing functions
 
-function plot_square(x,y,l,std,squaresize,col,flag_edges)
+function draw_lines(ax, lines, color, width, tag)
 
-  stdcol = .7+.3*col;
-  if isnan(l),     l = 0.2; col = [.7 .7 .7]; stdcol = [0 0 0]; end
-  if isnan(std), std = .1; end
-  if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
-  if std
-    l_max = squaresize*(l+std);
-    fill(x + 0.5 * l_max*[-1 1 1 -1], y + 0.5*l_max*[-1 -1 1 1],stdcol,'EdgeColor',secol)
-  end
-  l_min = squaresize*(max(0,l));
-  fill(x + 0.5 * l_min*[-1 1 1 -1], y + 0.5*l_min*[-1 -1 1 1],col,'EdgeColor',ecol)
+  % polygonal lines (cell array of 2 x n matrices), drawn as one line object
+
+  if isempty(lines), return; end
+  xy = cellfun(@(l) [l, nan(2,1)], lines(:)', 'UniformOutput', false);
+  xy = [xy{:}];
+  line(ax, xy(1,:), xy(2,:), 'Color', color, 'LineWidth', width, 'Tag', tag);
 
 
   % -----------------------------------------------------------------
 
-function plot_circle(x,y,l,std,squaresize,col,flag_edges)
+function draw_polygons(ax, outline, pos, sizes, colors, edge_color, tag)
 
-  stdcol = .7 + .3 * col;
+  % copies of a polygon (outline: 2 x k vertices, for size 1) at positions pos (2 x n),
+  % scaled by sizes (n values), with face colors (n x 3), drawn as one patch object
 
-  if isnan(l), l = 0.2 ; col = [.7 .7 .7]; stdcol = [0 0 0]; end
+  if isempty(sizes), return; end
+  X = pos(1,:) + outline(1,:)' * sizes(:)';
+  Y = pos(2,:) + outline(2,:)' * sizes(:)';
+  patch(ax, 'XData', X, 'YData', Y, 'FaceVertexCData', colors, 'FaceColor', 'flat', ...
+        'EdgeColor', edge_color, 'Tag', tag);
 
-  if isnan(std), std = .1; end
 
-  if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
+  % -----------------------------------------------------------------
 
-  if std
-    l_max = squaresize*(l+std);
-    fill(x + 0.5 * l_max * cos(0:0.1:2*pi), y + 0.5*l_max * sin(0:0.1:2*pi),stdcol,'EdgeColor',secol)
+function draw_symbols(ax, shape, pos, values, stds, squaresize, colors, flag_edges, tag)
+
+  % symbols ('circle', 'square', or 'diamond') at positions pos (2 x n), with sizes given by
+  % values (between 0 and 1) and colours (n x 3); standard deviations (stds) are shown by a
+  % lighter ring around the symbols. Unknown values (nan) are shown by small grey symbols
+
+  switch shape
+    case 'circle'
+      t = linspace(0, 2*pi, 41); t(end) = [];
+      outline = 0.5 * [cos(t); sin(t)];        nan_value = 0.2;
+    case 'square'
+      outline = 0.5 * [-1 1 1 -1; -1 -1 1 1];  nan_value = 0.2;
+    case 'diamond'
+      outline = 2/pi * [-1 0 1 0; 0 -1 0 1];   nan_value = 0.5;
   end
 
-  l_min = squaresize * (max(0,l));
+  values = values(:);
+  stds   = stds(:);
+  if isempty(stds), stds = zeros(size(values)); end
+  std_colors = 0.7 + 0.3 * colors;
 
-  if l_min
-    fill(x + 0.5 * l_min * cos(0:0.1:2*pi), y + 0.5*l_min * sin(0:0.1:2*pi),col,'EdgeColor',ecol)
+  unknown = isnan(values);
+  values(unknown)       = nan_value;
+  colors(unknown,:)     = repmat([.7 .7 .7], sum(unknown), 1);
+  std_colors(unknown,:) = 0;
+  stds(isnan(stds))     = 0.1;
+
+  if flag_edges, edge_color = [.4 .4 .4]; else, edge_color = 'none'; end
+
+  ring = stds ~= 0;
+  draw_polygons(ax, outline, pos(:,ring), squaresize * (values(ring) + stds(ring)), std_colors(ring,:), edge_color, [tag '_std']);
+  sizes = squaresize * max(0, values);
+  shown = sizes > 0;
+  draw_polygons(ax, outline, pos(:,shown), sizes(shown), colors(shown,:), edge_color, tag);
+
+
+  % -----------------------------------------------------------------
+
+function draw_arrow_symbols(ax, pos, phi, len, forward, color, flag_edges, nan_size)
+
+  % arrows (triangles) at positions pos (2 x n) with lengths len, pointing in direction phi
+  % (angle; forward = 1) or in the opposite direction (forward = -1);
+  % unknown values (nan) are shown by grey diamonds of width 2 * nan_size
+
+  len     = len(:)';
+  forward = forward(:)';
+  phi     = phi(:)';
+  if flag_edges, edge_color = [0 0 0]; else, edge_color = 'none'; end
+
+  unknown = isnan(len) | isnan(forward);
+  known   = ~unknown & len > 0 & forward ~= 0;
+
+  if any(known)
+    triangle = [-0.5 0.5 -0.5; -0.3 0 0.3];   % pointing in x direction, length 1
+    s = forward(known) .* len(known);
+    c = cos(phi(known));
+    d = sin(phi(known));
+    X = pos(1,known) + triangle(1,:)' * (s .* c) - triangle(2,:)' * (s .* d);
+    Y = pos(2,known) + triangle(1,:)' * (s .* d) + triangle(2,:)' * (s .* c);
+    patch(ax, 'XData', X, 'YData', Y, 'FaceColor', color, 'EdgeColor', edge_color, 'Tag', 'netgraph_arrows');
+  end
+
+  if any(unknown)
+    diamond = nan_size * [-1 0 1 0; 0 -1 0 1];
+    X = pos(1,unknown) + diamond(1,:)';
+    Y = pos(2,unknown) + diamond(2,:)';
+    patch(ax, 'XData', X, 'YData', Y, 'FaceColor', [.7 .7 .7], 'EdgeColor', edge_color, 'Tag', 'netgraph_unknown_fluxes');
   end
 
 
   % -----------------------------------------------------------------
 
-function plot_diamond(x,y,l,std,squaresize,col,flag_edges)
+function strings = value_strings(values, values_std)
 
-  stdcol = .7+.3*col;
-  if isnan(l),     l = 0.5; col = [.7 .7 .7]; stdcol = [0 0 0]; end
-  if isnan(std), std = .1; end
-  if  flag_edges, ecol = [.4 .4 .4]; secol = [.4 .4 .4]; else, ecol = col; secol =  stdcol; end
-  if std
-    l_max = squaresize*(l+std);
-    fill(x + 0.5 * l_max * 4/pi* [-1 0 1 0 -1], y + 0.5*l_max*4/pi*[0 -1 0 1 0],stdcol,'EdgeColor',secol)
+  % numbers as text labels (empty labels for nan values), with standard deviations if given
+
+  values = full(values(:));
+  strings = arrayfun(@(v) num2str(v,3), values, 'UniformOutput', false);
+  if nargin > 1 && any(values_std(:) ~= 0)
+    stds    = arrayfun(@(v) num2str(v,2), full(values_std(:)), 'UniformOutput', false);
+    strings = strcat(strings, {' \pm '}, stds);
   end
-  l_min = squaresize*(max(0,l));
-  fill(x + 0.5 * l_min * 4/pi* [-1 0 1 0 -1], y + 0.5*l_min*4/pi*[0 -1 0 1 0],col,'EdgeColor',ecol)
+  strings(isnan(values)) = {''};
 
-
-  % -----------------------------------------------------------------
-
-function plot_triangle(x, y, phi, l, col, forward, flag_edges, nan_size)
-
-  % arrow (triangle) of length l; for unknown values (l is nan), a grey diamond of width 2 * nan_size
-
-  if isnan(l)
-    col = [.7 .7 .7];
-    points = repmat([x; y],1,4) +  nan_size * [-1 0 1 0; 0 -1 0 1];
-  else
-    points = repmat([x; y],1,3) + forward * [cos(phi) -sin(phi); sin(phi) cos(phi)] * l * [-0.5 .5 -0.5; -0.3 0 0.3];
-  end
-
-  if flag_edges
-    fill(points(1,:),points(2,:),col);
-  else
-    fill(points(1,:),points(2,:),col,'EdgeColor','none');
-  end
 
   % -------------------------
   % compute positions on an arc: x3 all points for drawing;
   % arcx,arcy: positions of one point (used for arrow)
 
-function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift);
+function [x3,arcx,arcy] = arc(x1,x2,height,arrow_shift)
 
   s = 0:0.1:pi;
   x3 = repmat(mean([x1,x2],2),1,length(s)) ...
@@ -711,7 +656,7 @@ function name2 = split_name(name,l)
 
   % -------------------------------------------------
 
-function [normvalues, normvalues_std, valuesmax, valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p);
+function [normvalues, normvalues_std, valuesmax, valuesmin] = normalise(values,values_std,valuesmax,valuesmin,p)
 
   % convert values to fit into the range [-1,1]
 
@@ -782,21 +727,75 @@ function set_axis_limits(ax, x, squaresize, keep_old_limits)
     box = [min(box(1),a(1)), max(box(2),a(2)), min(box(3),a(3)), max(box(4),a(4))];
   end
   axis(ax, box);
-  % enlarge the limits to include the text labels (two passes, because the size of
-  % the labels in data units changes with the limits)
+
   labels = findobj(ax, 'Type', 'text');
-  labels = labels(~cellfun(@isempty, get(labels, {'String'})));
   if isempty(labels), return; end
-  for pass = 1:2
-    extents = get(labels, {'Extent'});
-    extents = vertcat(extents{:});
-    a = [min([box(1); extents(:,1)]), max([box(2); extents(:,1)+extents(:,3)]), ...
-         min([box(3); extents(:,2)]), max([box(4); extents(:,2)+extents(:,4)])];
+  [anchor, cx, cy] = label_boxes(labels);
+  if isempty(anchor), return; end
+
+  % size of the plot box in points
+  units = get(ax, 'Units');
+  set(ax, 'Units', 'points');
+  plot_box = get(ax, 'Position');
+  set(ax, 'Units', units);
+  plot_box = max(plot_box(3:4), 1);
+
+  % enlarge the limits to include the labels (iterated, because the size of
+  % the labels in data units changes with the limits)
+  a = box;
+  for pass = 1:3
+    scale = max((a(2)-a(1)) / plot_box(1), (a(4)-a(3)) / plot_box(2));   % data units per point
+    ex = anchor(1,:) + scale * cx;
+    ey = anchor(2,:) + scale * cy;
+    a = [min([box(1), ex(:)']), max([box(2), ex(:)']), min([box(3), ey(:)']), max([box(4), ey(:)'])];
     a = a + 0.01 * max(a(2)-a(1), a(4)-a(3)) * [-1 1 -1 1];
-    axis(ax, a);
+  end
+  axis(ax, a);
+
+
+  % -------------------------------------------------
+
+function [anchor, cx, cy] = label_boxes(labels)
+
+  % positions of text labels (2 x n, data units) and corners of the label boxes relative to
+  % these positions (4 x n, in points). The size of a label is estimated from its font size and
+  % number of characters, which is much faster than asking Matlab for the 'Extent' of each label
+
+  props = get(labels(:), {'Position','String','FontSize','Rotation','HorizontalAlignment','VerticalAlignment','Units'});
+  keep  = strcmp(props(:,7), 'data') & ~cellfun(@isempty, props(:,2));
+  props = props(keep,:);
+  n = size(props,1);
+  anchor = zeros(2,n);
+  cx = zeros(4,n);
+  cy = zeros(4,n);
+  for k = 1:n
+    [position, str, font_size, rotation, h_align, v_align] = props{k,1:6};
+    lines = cellstr(str);
+    lines = regexp(strjoin(lines(:)', newline), '\n', 'split');
+    lines = regexprep(lines, '\\[a-zA-Z]+', 'x');   % TeX symbols such as \pm count as one character
+    lines = regexprep(lines, '[_^{}]', '');
+    w = 0.6 * font_size * max(cellfun(@length, lines));
+    h = 1.2 * font_size * numel(lines);
+    switch h_align
+      case 'center', x0 = -w/2;
+      case 'right',  x0 = -w;
+      otherwise,     x0 = 0;
+    end
+    switch v_align
+      case {'top','cap'},          y0 = -h;
+      case {'bottom','baseline'},  y0 = 0;
+      otherwise,                   y0 = -h/2;
+    end
+    corners = [x0, x0+w, x0+w, x0; y0, y0, y0+h, y0+h];
+    rot = [cosd(rotation), -sind(rotation); sind(rotation), cosd(rotation)];
+    corners = rot * corners;
+    anchor(:,k) = position(1:2)';
+    cx(:,k) = corners(1,:)';
+    cy(:,k) = corners(2,:)';
   end
 
   % -------------------------------------------------
+
 
 function p = netgraph_draw_set_parameters(network,vararg)
 
@@ -1094,7 +1093,7 @@ function p = netgraph_draw_set_parameters(network,vararg)
     end
   end
 
-  if size(p.x,2) == 0, error('No point positions found'); end
+  if size(p.x,2) == 0, error('mnt:netgraph:noPositions', 'No node positions found'); end
 
   % text labels to the right of the symbols (offsets for a layout of size 1)
   if isempty(p.text_offset)

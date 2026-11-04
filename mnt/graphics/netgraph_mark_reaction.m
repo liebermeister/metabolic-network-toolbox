@@ -1,8 +1,13 @@
-function netgraph_mark_reaction(network,ind_reaction,r)
-
-% netgraph_mark_reaction(network,ind_reaction,r)
+% NETGRAPH_MARK_REACTION Draw a circle around a reaction
 %
-% mark a reaction (put a circle on top of an already existing drawing)
+% netgraph_mark_reaction(network, ind_reaction, r)
+%
+% Adds a red circle of radius r around reaction number ind_reaction to the current axes
+% (e.g. after netgraph_draw).
+%
+% See also: netgraph_draw
+
+function netgraph_mark_reaction(network,ind_reaction,r)
 
 if isfield(network.graphics_par,'reaction_mapping')
   ind_reaction = find(network.graphics_par.reaction_mapping==ind_reaction);

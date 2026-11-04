@@ -44,10 +44,18 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
   - `netgraph_draw`: unknown fluxes (nan values in `arrowvalues`) are shown by grey diamonds (before: nothing was drawn)
   - `netgraph_make_graph`: the argument `table_positions` (layout file or SBtab object) is used; before, it was ignored
 - Network graphics: options
-  - All drawing functions take graphics options in the same way: as a struct (called `gp` in all help texts; before also `options`, `goptions`, `pars`) or as name-value pairs at the end of the argument list, e.g. `netgraph_concentrations(network, c, v, 1, 'colorbar', 1)`. In `netgraph_concentrations`, `netgraph_flux_movie`, and `netgraph_flux_arrows_movie`, options can also be given in place of `text_flag`. Existing calls work as before
+  - All drawing functions take graphics options in the same way: as a struct (called `options` in all help texts, as in the rest of the toolbox; before also `gp`, `goptions`, `pars`) or as name-value pairs at the end of the argument list, e.g. `netgraph_concentrations(network, c, v, 1, 'colorbar', 1)`. In `netgraph_concentrations`, `netgraph_flux_movie`, and `netgraph_flux_arrows_movie`, options can also be given in place of `text_flag`. Existing calls work as before
   - Option names are checked against one list: names that differ only in upper and lower case are corrected (e.g. 'fontsize' -> 'FontSize'), 'Rotation' is accepted for `fontangle` (as documented; before, it was ignored), and unknown names give a warning once per session (identifier `mnt:netgraph:unknownOption`)
   - Internal helper functions moved to `graphics/private` (they can no longer be called from outside the folder): `draw_metabolite_arcs`, `draw_reaction_arcs`, `netgraph_find_x`, `netgraph_calculate_positions`, and the deprecated `netgraph_save_positions` (no callers outside the folder were found). To compute a layout, use `netgraph_make_graph`
   - Colours: with matlab-utils from November 2026 on, the default colormap `rb_colors` goes from blue (negative values) to red (positive values)
+- Network graphics: code
+  - `netgraph_draw` is much faster for large networks (e.g. 3 s instead of 21 s for 900 nodes): lines, arrows, and symbols of one kind are drawn as one graphics object each, and the axis limits are computed from estimated label sizes. **Graphics objects change**: code that looks for single patches or lines (e.g. with `findobj`) must use the tags `netgraph_edges`, `netgraph_arrows`, `netgraph_unknown_fluxes`, `netgraph_metabolites`, `netgraph_reactions`, `netgraph_edge_symbols`, etc.; each column of `XData` is one symbol. No such code was found in ~/matlab
+  - `netgraph_draw`: the axes get linear scales (before, a log scale from an earlier plot was kept); edges to cofactors are shaded (`shade_cofactor_lines`) also with curved lines; value labels of unknown (nan) values are empty
+  - `netgraph_flux_in_large_network` draws into the current axes instead of figures 1 and 2; the plot and the printed table can be switched off by the option `verbose = 0`
+  - `netgraph_draw_connections`: blue lines for negative and red lines for positive values (were red and green)
+  - `netgraph_move`: the position file `filename_in` is read with `textscan` (before: `eval` of each number)
+  - `netgraph_read_positions`: the error for non-unique metabolite names lists these names (before, all names were printed)
+  - All errors and warnings in the folder have identifiers (`mnt:netgraph:...`); all public functions have a help text in the standard form
 
 ## 1.3.0 (2026-10-31)
 

@@ -12,10 +12,11 @@ assert(~isempty(findobj(gca,'Type','line')));
 %% netgraph_draw: curved lines, with and without arrows
 fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
 netgraph_draw(network, struct('straightlines',0,'arrowstyle','directions'));
-assert(numel(findobj(gca,'Type','patch')) == nnz(network.N));
+assert(size(tagged_xdata('netgraph_arrows'),2) == nnz(network.N));
 clf; netgraph_draw(network, struct('straightlines',0,'arrowstyle','none'));
-% one line per edge, plus the dots at the nodes
-assert(numel(findobj(gca,'Type','line')) == nnz(network.N) + 1);
+% one line per edge (lines are separated by nan values), no arrows
+assert(sum(isnan(tagged_xdata('netgraph_edges'))) == nnz(network.N));
+assert(isempty(tagged_xdata('netgraph_arrows')));
 
 %% netgraph_draw: metvaluesmax sets the scale of the symbols
 fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
@@ -24,8 +25,7 @@ gp = struct('metvalues',(1:6)'/10,'metstyle','box','metvaluesmin',0,'arrowstyle'
 width = zeros(1,2); maxvalues = [0.6, 1.2];
 for it = 1:2
   clf; netgraph_draw(network, join_struct(gp, struct('metvaluesmax',maxvalues(it))));
-  w = cellfun(@(z) max(z)-min(z), get(findobj(gca,'Type','patch'),'XData'));
-  width(it) = max(w);
+  width(it) = max(symbol_widths('netgraph_metabolites'));
 end
 assert(abs(width(2)/width(1) - 0.5) < 0.05);
 
@@ -40,7 +40,7 @@ fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
 for flux_sign = [1, -1]
   clf; netgraph_draw(network, struct('arrowstyle','fluxes','arrowvalues',flux_sign*ones(nr,1), ...
                                      'single_arrow',1,'actstyle','none','metprintnames',0,'actprintnames',0));
-  assert(numel(findobj(gca,'Type','patch')) == nr);
+  assert(size(tagged_xdata('netgraph_arrows'),2) == nr);
 end
 
 %% netgraph_move: display settings are not stored in the network
@@ -112,10 +112,10 @@ assert(numel(findobj(fig,'Type','axes')) == 2);
 fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
 gp = struct('metvalues',ones(nm,1),'arrowstyle','none','actstyle','none','metprintnames',0,'actprintnames',0);
 netgraph_draw(network, gp);
-w1 = max(cellfun(@(z) max(z)-min(z), get(findobj(gca,'Type','patch'),'XData')));
+w1 = max(symbol_widths('netgraph_metabolites'));
 big = network; big.graphics_par.x = 500 * big.graphics_par.x;
 clf; netgraph_draw(big, gp);
-w2 = max(cellfun(@(z) max(z)-min(z), get(findobj(gca,'Type','patch'),'XData')));
+w2 = max(symbol_widths('netgraph_metabolites'));
 assert(abs(w2/w1 - 500) < 1);
 
 %% netgraph_draw: all labels lie within the axis limits
@@ -152,11 +152,10 @@ for single_arrow = [0 1]
   for straightlines = [1 0]
     clf; netgraph_draw(network, struct('arrowstyle','fluxes','arrowvalues',v,'single_arrow',single_arrow, ...
                                        'straightlines',straightlines,'actstyle','none'));
-    patches = findobj(gca,'Type','patch');
-    grey = cellfun(@(c) isequal(c,[.7 .7 .7]), get(patches,'FaceColor'));
-    n_vertices = cellfun(@numel, get(patches,'XData'));
     % one diamond per edge of reaction 2 (S2-E2, E2-S3), or one diamond with single_arrow
-    assert(sum(grey & n_vertices == 4) == (single_arrow == 0) * nnz(network.N(:,2)) + (single_arrow == 1));
+    assert(size(tagged_xdata('netgraph_unknown_fluxes'),2) == (single_arrow == 0) * nnz(network.N(:,2)) + (single_arrow == 1));
+    % arrows for the other reactions
+    assert(size(tagged_xdata('netgraph_arrows'),2) == (single_arrow == 0) * (nnz(network.N) - nnz(network.N(:,2))) + (single_arrow == 1) * (nr-1));
   end
 end
 
@@ -190,3 +189,34 @@ lastwarn('');
 clf; netgraph_draw(network, 'no_such_option_for_testing', 1);
 [~, id] = lastwarn;
 assert(strcmp(id, 'mnt:netgraph:unknownOption'));
+
+%% netgraph_draw: values, standard deviations, edge and regulation symbols
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+netgraph_draw(network, struct('metvalues',[1 2 nan 4 5 6]','metvalues_std',0.1*ones(nm,1),'metstyle','box_std', ...
+                              'actvalues',(1:nr)','actstyle','box','actprintvalues',1, ...
+                              'edgevalues',sparse(double(network.N~=0)),'arrowstyle','none'));
+assert(size(tagged_xdata('netgraph_metabolites'),2) == nm);
+assert(size(tagged_xdata('netgraph_metabolites_std'),2) == nm);
+assert(size(tagged_xdata('netgraph_reactions'),2) == nr);
+assert(size(tagged_xdata('netgraph_edge_symbols'),2) == nnz(network.N));
+assert(numel(findobj(gca,'Type','text')) >= nr);
+reg = network;
+reg.regulation_matrix = sparse(nr,nm); reg.regulation_matrix(1,3) = 1; reg.regulation_matrix(2,5) = -1;
+clf; netgraph_draw(reg, 'show_regulation', 1, 'regulationvalues', reg.regulation_matrix);
+assert(~isempty(tagged_xdata('netgraph_activation')) && ~isempty(tagged_xdata('netgraph_inhibition')));
+assert(size(tagged_xdata('netgraph_regulation_symbols'),2) == 2);
+
+% ------------------------------------------------------------------
+% Graphics elements of one kind are drawn as one object (with a tag);
+% each column of XData is one symbol
+
+function X = tagged_xdata(tag)
+  h = findobj(gca,'Tag',tag);
+  X = [];
+  if ~isempty(h), X = get(h,'XData'); end
+end
+
+function w = symbol_widths(tag)
+  X = tagged_xdata(tag);
+  w = max(X,[],1) - min(X,[],1);
+end

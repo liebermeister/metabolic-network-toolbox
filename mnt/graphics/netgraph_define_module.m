@@ -1,7 +1,16 @@
-function [m,n] = netgraph_define_module(network)
+% NETGRAPH_DEFINE_MODULE Choose the metabolites of a network module with the mouse
+%
+% [m, n] = netgraph_define_module(network)
+%
+% Mouse buttons: left/centre: mark/unmark a metabolite; right: finish
+%
+% Outputs:
+%   m  indices of the chosen metabolites
+%   n  (optional) subnetwork containing these metabolites (see network_choose)
+%
+% See also: netgraph_mark_metabolites
 
-% m = netgraph_define_module(network)
-% choose the members of a network module
+function [m,n] = netgraph_define_module(network)
 
 [m,p] = netgraph_mark_metabolites(network);
 m = find(m);

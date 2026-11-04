@@ -1,12 +1,12 @@
 % NETGRAPH_DOUBLE_MOVIE Movie of two data sets on a network
 %
-% [M,T] = netgraph_double_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, gp)
+% [M,T] = netgraph_double_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, options)
 % [M,T] = netgraph_double_movie(network, t, s_t_1, s_t_2, data_type, n_frames, text_flag, 'name1', value1, ...)
 %
 % Movie displaying data on network; two data sets are shown at the same time
 % (for instance, to compare experimental and simulated time series)
 %
-% gp: graphics gp (struct or name-value pairs; see 'help netgraph_draw' and 'help netgraph_movie'),
+% options: graphics options (struct or name-value pairs; see 'help netgraph_draw' and 'help netgraph_movie'),
 % plus these fields (with default values):
 % flux_moves         - 0
 % metabolite_colors  - []
@@ -19,12 +19,12 @@ function [M,T] = netgraph_double_movie(network,t,s_t_1,s_t_2,data_type,n_frames,
 
 eval(default('data_type','''concentrations''','n_frames','[]','text_flag','0'));
 
-gp = netgraph_options(varargin, network);
+options = netgraph_options(varargin, network);
 
-gp_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0,'colormap_1',[],'colormap_2',[],'set_circle_shift',[0.01,0.01]);
+options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0,'colormap_1',[],'colormap_2',[],'set_circle_shift',[0.01,0.01]);
 
-gp = join_struct(gp_default, gp);
-gp.canvas=[];
+options = join_struct(options_default, options);
+options.canvas=[];
 
 if isempty(n_frames), n_frames = 10; end
 
@@ -44,16 +44,16 @@ s_t_2            = interp1(t,s_t_2',T,'pchip')';
 s_t_2(nandata,:) = nan;
 if size(s_t_2,2)==1, s_t_2 = s_t_2'; end
 
-if length(gp.metabolite_colors)
-  gp.metabolite_colors = interp1(t,gp.metabolite_colors,T,'pchip');
-  gp.metabolite_colors(gp.metabolite_colors<0) = 0;
-  gp.metabolite_colors(gp.metabolite_colors>1) = 1;
+if length(options.metabolite_colors)
+  options.metabolite_colors = interp1(t,options.metabolite_colors,T,'pchip');
+  options.metabolite_colors(options.metabolite_colors<0) = 0;
+  options.metabolite_colors(options.metabolite_colors>1) = 1;
 end
 
-if length(gp.reaction_colors)
-  gp.reaction_colors = interp1(t,gp.reaction_colors,T,'pchip');
-  gp.reaction_colors(gp.reaction_colors<0) = 0;
-  gp.reaction_colors(gp.reaction_colors>1) = 1;
+if length(options.reaction_colors)
+  options.reaction_colors = interp1(t,options.reaction_colors,T,'pchip');
+  options.reaction_colors(options.reaction_colors<0) = 0;
+  options.reaction_colors(options.reaction_colors>1) = 1;
 end
 
 switch data_type
@@ -78,7 +78,7 @@ actvalues_1 = zeros(nr,length(T));
 metvalues_2 = zeros(nm,length(T));
 actvalues_2 = zeros(nr,length(T));
 
-gp.background_colors = netgraph_movie_background_colors(gp.background_colors, gp.use_background_colors, length(T));
+options.background_colors = netgraph_movie_background_colors(options.background_colors, options.use_background_colors, length(T));
 
 
 for j = 1:length(T)
@@ -86,13 +86,13 @@ for j = 1:length(T)
     case 'concentrations'
       metvalues_1(:,j) = s_t_1_c(:,j);
       metvalues_2(:,j) = s_t_2_c(:,j);
-      gp.actstyle   = 'none';
-      gp.arrowstyle = 'none';
+      options.actstyle   = 'none';
+      options.arrowstyle = 'none';
     case 'reactions'
       actvalues_1(:,j) =  s_t_1_v(:,j);
       actvalues_2(:,j) =  s_t_2_v(:,j);
-      gp.metstyle = 'none';
-    otherwise, error('Unknown function option');
+      options.metstyle = 'none';
+    otherwise, error('mnt:netgraph:unknownDataType', 'Unknown data type');
   end
 end
 
@@ -102,23 +102,23 @@ jj = j;
 actvalues_1 = 1/max(abs(actvalues_1(:))) * actvalues_1;
 actvalues_2 = 1/max(abs(actvalues_2(:))) * actvalues_2;
 
-if length(metvalues_1), gp.metvaluesmax = max(max(metvalues_1(:)),0.001); end
-if length(actvalues_1), gp.actvaluesmax = max(max(actvalues_1(:)),0.001); end
+if length(metvalues_1), options.metvaluesmax = max(max(metvalues_1(:)),0.001); end
+if length(actvalues_1), options.actvaluesmax = max(max(actvalues_1(:)),0.001); end
 
 clf;
 subplot('position',[0 0 1 1]);
-gp.hold_on=0; gp.circle_shift = [0,0];
-netgraph_concentrations(network,metvalues_1(:,1),actvalues_1(:,1),0,gp); hold on;
+options.hold_on=0; options.circle_shift = [0,0];
+netgraph_concentrations(network,metvalues_1(:,1),actvalues_1(:,1),0,options); hold on;
 
-gp.hold_on=1; gp.circle_shift = gp.set_circle_shift;
-netgraph_concentrations(network,metvalues_2(:,1),actvalues_2(:,1),0,gp);
+options.hold_on=1; options.circle_shift = options.set_circle_shift;
+netgraph_concentrations(network,metvalues_2(:,1),actvalues_2(:,1),0,options);
 
-gp_default.figure_axis    = axis;
-gp_default.actprintvalues = 0;
-gp_default.metprintvalues = 0;
-gp_default.arrowstyle     = 'none';
+options_default.figure_axis    = axis;
+options_default.actprintvalues = 0;
+options_default.metprintvalues = 0;
+options_default.arrowstyle     = 'none';
 
-gp = join_struct(gp_default,gp);
+options = join_struct(options_default,options);
 
 a = axis;
 clf;
@@ -127,37 +127,37 @@ for j=1:jj
 
   set(gcf,'Color',[1 1 1]);
 
-  if gp.flux_moves
-    arrow_shift         = mod(gp.flux_moves*j,jj)/jj;
-    gp.arrow_shift = arrow_shift;
+  if options.flux_moves
+    arrow_shift         = mod(options.flux_moves*j,jj)/jj;
+    options.arrow_shift = arrow_shift;
   end
 
-  if length(gp.metabolite_colors)
-    gp.metcolors = squeeze(gp.metabolite_colors(j,:,:));
-    if size( gp.metcolors,2) == 1, gp.metcolors = gp.metcolors'; end
+  if length(options.metabolite_colors)
+    options.metcolors = squeeze(options.metabolite_colors(j,:,:));
+    if size( options.metcolors,2) == 1, options.metcolors = options.metcolors'; end
   end
 
-  if length(gp.reaction_colors)
-    gp.actcolors = squeeze(gp.reaction_colors(j,:,:));
-    if size( gp.actcolors,2) == 1, gp.actcolors = gp.actcolors'; end
+  if length(options.reaction_colors)
+    options.actcolors = squeeze(options.reaction_colors(j,:,:));
+    if size( options.actcolors,2) == 1, options.actcolors = options.actcolors'; end
   end
 
   clf;
   subplot('position',[0 0 1 1]);
-  gp.hold_on = 0; gp.circle_shift=[0,0];
-  if length(gp.colormap_1), gp.colormap = gp.colormap_1; end
-  if ~isempty(gp.background_colors)
-    gp.canvas = gp.background_colors(j,:);
+  options.hold_on = 0; options.circle_shift=[0,0];
+  if length(options.colormap_1), options.colormap = options.colormap_1; end
+  if ~isempty(options.background_colors)
+    options.canvas = options.background_colors(j,:);
   end
-  gp.suppress_lines = 0;
-  netgraph_concentrations(network,metvalues_1(:,j),actvalues_1(:,j),text_flag,gp); hold on;
-  gp.hold_on=1; gp.circle_shift=gp.set_circle_shift;
-  if length(gp.colormap_2), gp.colormap = gp.colormap_2; end
-  %gp.canvas = [];
-  gp.suppress_lines = 1;
-  netgraph_concentrations(network,metvalues_2(:,j),actvalues_2(:,j),text_flag,gp);
+  options.suppress_lines = 0;
+  netgraph_concentrations(network,metvalues_1(:,j),actvalues_1(:,j),text_flag,options); hold on;
+  options.hold_on=1; options.circle_shift=options.set_circle_shift;
+  if length(options.colormap_2), options.colormap = options.colormap_2; end
+  %options.canvas = [];
+  options.suppress_lines = 1;
+  netgraph_concentrations(network,metvalues_2(:,j),actvalues_2(:,j),text_flag,options);
 
-  if gp.timebar
+  if options.timebar
     ss = network.graphics_par.squaresize;
     netgraph_movie_timebar(a, ss, (j-1)/max(jj-1,1), ss/2);
   end
@@ -166,13 +166,13 @@ for j=1:jj
 
   M(j) = getframe(gca);
 
-  if isfield(gp,'prefix')
-    if j ==1,             print(gcf,[gp.prefix '_start.eps'],'-depsc'); end
-    if j == ceil(0.8*jj), print(gcf,[gp.prefix '_end.eps'],'-depsc');   end
+  if isfield(options,'prefix')
+    if j ==1,             print(gcf,[options.prefix '_start.eps'],'-depsc'); end
+    if j == ceil(0.8*jj), print(gcf,[options.prefix '_end.eps'],'-depsc');   end
   end
 
 end
 
-if isfield(gp,'rest_frames')
-  M = [ repmat(M(1),1,gp.rest_frames), M, repmat(M(end),1,gp.rest_frames)];
+if isfield(options,'rest_frames')
+  M = [ repmat(M(1),1,options.rest_frames), M, repmat(M(end),1,options.rest_frames)];
 end

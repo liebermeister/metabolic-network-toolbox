@@ -2,7 +2,7 @@ function [names, aliases] = netgraph_option_names()
 
 % [names, aliases] = netgraph_option_names()
 %
-% Names of all graphics options (fields of 'gp' and of network.graphics_par)
+% Names of all graphics options (fields of 'options' and of network.graphics_par)
 % used by the functions in the folder 'graphics'
 %
 % names    cell array of option names
@@ -50,7 +50,8 @@ if isempty(stored_names)
             'colormap_1','colormap_2','set_circle_shift', ...                     % movies
             'manual','initial_relax','n_relaxation','frame', ...                  % netgraph_move
             'hide_invisible', ...                                                 % netgraph_edit_positions
-            'show_diagonal_values','normalise_values','relative_threshold'};       % synergy plots
+            'show_diagonal_values','normalise_values','relative_threshold', ...   % synergy plots
+            'verbose'};                                                           % netgraph_flux_in_large_network
 
   stored_names   = unique([draw, graphics_par, computed, others]);
   stored_aliases = {'Rotation', 'fontangle'};

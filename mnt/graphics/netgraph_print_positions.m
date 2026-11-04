@@ -13,11 +13,9 @@ function [names, positions] = netgraph_print_positions(network, layout_file, off
 
 eval(default('layout_file','[]','offsets','[]','policy','[]','flag_KEGG_ids','1','flag_element_names','1','flag_fixed','1','flag_invisible','1'));
 
-if flag_KEGG_ids
-  if ~[isfield(network,'metabolite_KEGGID') * isfield(network,'reaction_KEGGID')]
-    %warning('KEGG IDs missing in model - using model element IDs in position file');
-    flag_KEGG_ids=0;
-  end
+% without KEGG IDs in the model, element names are used
+if flag_KEGG_ids && ~(isfield(network,'metabolite_KEGGID') && isfield(network,'reaction_KEGGID'))
+  flag_KEGG_ids = 0;
 end
 
 
@@ -31,9 +29,6 @@ metnames = network.metabolites;
 actnames = network.actions;
 
 if flag_KEGG_ids
-  if ~[isfield(network,'metabolite_KEGGID') * isfield(network,'reaction_KEGGID')]
-    error('KEGG IDs missing in model');
-  end
   kegg_metnames = network.metabolite_KEGGID;
   kegg_actnames = network.reaction_KEGGID;
 else

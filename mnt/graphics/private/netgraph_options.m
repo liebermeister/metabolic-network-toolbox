@@ -1,15 +1,15 @@
-function gp = netgraph_options(args, network)
+function options = netgraph_options(args, network)
 
-% gp = netgraph_options(args, network)
+% options = netgraph_options(args, network)
 %
 % Graphics options given to a function in the folder 'graphics', as a struct
 %
 % args     cell array (e.g. varargin) containing one of
 %            {}                            no options
 %            {[]}                          no options
-%            {gp}                          struct of options
+%            {options}                          struct of options
 %            {'name1', value1, ...}        name-value pairs
-%            {gp, 'name1', value1, ...}    struct, followed by name-value pairs (these override the struct)
+%            {options, 'name1', value1, ...}    struct, followed by name-value pairs (these override the struct)
 % network  (optional) network; fields of network.graphics_par count as known options
 %
 % Option names are checked:
@@ -24,11 +24,11 @@ if numel(args) == 1 && iscell(args{1})
   args = args{1};
 end
 
-gp = struct;
+options = struct;
 k  = 1;
 if ~isempty(args)
   if isstruct(args{1})
-    gp = args{1};
+    options = args{1};
     k  = 2;
   elseif isempty(args{1}) && ~ischar(args{1})
     k  = 2;
@@ -45,20 +45,20 @@ for it = 1:2:numel(pairs)
   if ~ischar(name)
     error('mnt:netgraph:options', 'Graphics options must be given as a struct or as name-value pairs');
   end
-  gp.(name) = pairs{it+1};
+  options.(name) = pairs{it+1};
 end
 
-if numel(gp) ~= 1
+if numel(options) ~= 1
   % struct arrays (e.g. from struct('omitreactions', {...})) are left to the calling function
   return
 end
 
-gp = check_option_names(gp, network);
+options = check_option_names(options, network);
 
 
 % ------------------------------------------------------------------
 
-function gp = check_option_names(gp, network)
+function options = check_option_names(options, network)
 
 persistent warned
 
@@ -69,7 +69,7 @@ if isstruct(network) && isfield(network,'graphics_par') && isstruct(network.grap
   known = [known, fieldnames(network.graphics_par)'];
 end
 
-fn = fieldnames(gp);
+fn = fieldnames(options);
 unknown = fn(~ismember(fn, known));
 
 for it = 1:length(unknown)
@@ -84,10 +84,10 @@ for it = 1:length(unknown)
   end
   if ~isempty(canonical)
     % an option given under its correct name takes precedence
-    if ~isfield(gp, canonical)
-      gp.(canonical) = gp.(name);
+    if ~isfield(options, canonical)
+      options.(canonical) = options.(name);
     end
-    gp = rmfield(gp, name);
+    options = rmfield(options, name);
   else
     if isempty(warned), warned = {}; end
     if ~ismember(name, warned)

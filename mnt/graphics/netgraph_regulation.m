@@ -1,9 +1,13 @@
-%netgraph_regulation(network)
+% NETGRAPH_REGULATION Draw a network with regulation arrows from its kinetics
 %
-%draw a network including the regulatory interactions
-%as given in the matrix 'network.kinetics.inh'
+% netgraph_regulation(network)
+%
+% Draws lines for the inhibitions (red) and activations (black) given in
+% network.kinetics.inh and network.kinetics.act (matrices of size reactions x metabolites).
+%
+% See also: netgraph_draw (option 'show_regulation')
 
-function   netgraph_regulation(network)
+function netgraph_regulation(network)
 
 x = network.graphics_par.x;
 

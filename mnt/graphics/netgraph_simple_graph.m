@@ -1,10 +1,20 @@
-% [n2,keep_met,keep_react] = netgraph_simple_graph(n1,names_met_hide,met_fixed,met_fixed_positions,ind_react_hide)
-
-% Make a new network structure in which
-%  - some metabolites are removed (metablite names given in list names_met_hide)
-%  - some metabolites may have prescribed positions (indices given in met_fixed,
-%        positions given in met_fixed_positions
-%  - some reactions are removed (indices given in list ind_react_hide)
+% NETGRAPH_SIMPLE_GRAPH Network for display without some metabolites (e.g. cofactors)
+%
+% [n2, keep_met, keep_react] = netgraph_simple_graph(n1, names_met_hide, met_fixed, met_fixed_positions, ind_react_hide)
+%
+% Inputs:
+%   n1                   network structure
+%   names_met_hide       list of metabolite names to be removed
+%   met_fixed            (optional) indices of metabolites with given positions
+%   met_fixed_positions  (optional) positions of these metabolites (2 x n matrix)
+%   ind_react_hide       (optional) indices of reactions to be removed
+%
+% Outputs:
+%   n2          network without these metabolites and reactions, with a layout
+%   keep_met    indices of the remaining metabolites (in n1)
+%   keep_react  indices of the remaining reactions (in n1)
+%
+% See also: netgraph_split_metabolites, netgraph_cofactor_graphs
 
 function [n2,keep_met,keep_react] = netgraph_simple_graph(n1,names_met_hide,met_fixed,met_fixed_positions,ind_react_hide)
 

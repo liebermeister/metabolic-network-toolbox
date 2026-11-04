@@ -1,11 +1,21 @@
-% [choice,p] = netgraph_mark_reactions(network,choice,draw_only)
+% NETGRAPH_MARK_REACTIONS Mark reactions with the mouse
+%
+% [choice, p] = netgraph_mark_reactions(network, choice, draw_only)
+%
+% Mouse buttons: left/centre: mark/unmark a reaction; right: finish
+%
+% Inputs:
+%   network    network structure
+%   choice     (optional) initial choice (vector of 0 and 1, one entry per reaction)
+%   draw_only  (optional, default 0) only show the current choice
+%
+% Outputs:
+%   choice  marked reactions (vector of 0 and 1)
+%   p       graphics settings used
+%
+% See also: netgraph_mark_metabolites, netgraph_reversible
 
 function [choice,p] = netgraph_mark_reactions(network,choice,draw_only)
-
-% interactively mark reactions and return a bit vector indicating the marked reactions
-%
-% left/centre mouse button: add/remove mark
-%       right mouse button: finish
 
 eval(default('choice','[]'));
 

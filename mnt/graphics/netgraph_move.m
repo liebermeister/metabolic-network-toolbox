@@ -1,6 +1,6 @@
 % NETGRAPH_MOVE Move the elements of a network graph with the mouse
 %
-%network = netgraph_move(network,flag_draw_details,gp,picture,filename_in,filename_out)
+%network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)
 %
 %Move nodes of metabolic network graph with the mouse
 %
@@ -15,13 +15,13 @@
 %  'text': also node names
 %  'all':  also regulation lines + node names
 %
-% gp: graphics options (struct; see 'help netgraph_draw'), plus
+% options: graphics options (struct; see 'help netgraph_draw'), plus
 %   initial_relax  = n leads to n initial relaxation_steps
 %   manual         = 0 leads to only automatic relaxation
 %
 % See also: netgraph_draw, netgraph_edit_positions
 
-function network = netgraph_move(network,flag_draw_details,gp,picture,filename_in,filename_out)
+function network = netgraph_move(network,flag_draw_details,options,picture,filename_in,filename_out)
 
 set(gca,'Position',[0.02 0 0.96 0.96]);
 if ~isfield(network.graphics_par,'metinvisible')
@@ -31,57 +31,49 @@ end
 
 
 if sum(size(network.N))==0
-  error('Empty network');
+  error('mnt:netgraph:emptyNetwork', 'Empty network');
 end
 
 if ~exist('flag_draw_details','var'), flag_draw_details = 'text';  end;
 if ~exist('picture','var'), picture = []; end
 
-if ~exist('gp','var'), gp = []; end
-gp = netgraph_options({gp}, network);
+if ~exist('options','var'), options = []; end
+options = netgraph_options({options}, network);
 
 if isempty(flag_draw_details), flag_draw_details = 'none';  end;
 
-if exist('filename_in','var')
+if exist('filename_in','var') && ~isempty(filename_in)
+  % text file with columns: metabolite name, x position, y position, fixed (0 or 1)
   file = fopen(filename_in);
-  it = 1;
-  clear x names
-  while ~feof(file)
-    lin   = fgetl(file);
-    start = regexp(lin,'[^\s]+');
-    stop  = regexp(lin,'[\s]+');
-    names{it} = lin(start(1):stop(1)-1);
-    x(1,it)   = eval(lin(start(2):stop(2)-1));
-    x(2,it)   = eval(lin(start(3):stop(3)-1));
-    fixed(it) = eval(lin(start(4):end));
-    it = it+1;
+  if file < 0
+    error('mnt:netgraph:fileNotFound', 'File %s cannot be opened', filename_in);
   end
+  columns = textscan(file, '%s %f %f %f');
   fclose(file);
-  names= names';
-  ll = label_names(names,network.metabolites);
-  network.graphics_par.x(:,ll) = x;
-  network.graphics_par.fixed(ll) = fixed;
+  ll = label_names(columns{1}, network.metabolites);
+  network.graphics_par.x(:,ll)   = [columns{2}, columns{3}]';
+  network.graphics_par.fixed(ll) = columns{4};
 end
 
 % arrows are hidden while nodes are moved (this setting is not stored in the network)
-gp_default = struct('canvas',1,'metstyle','none','actstyle','none','arrowstyle','none','manual',1,'initial_relax',0,'n_relaxation',5);
+options_default = struct('canvas',1,'metstyle','none','actstyle','none','arrowstyle','none','manual',1,'initial_relax',0,'n_relaxation',5);
 
 switch flag_draw_details
   case 'none'
-    gp_default.metprintnames  = 0;
-    gp_default.actprintnames  = 0;
-    gp_default.metprintvalues = 0;
-    gp_default.actprintvalues = 0;
+    options_default.metprintnames  = 0;
+    options_default.actprintnames  = 0;
+    options_default.metprintvalues = 0;
+    options_default.actprintvalues = 0;
   case 'regulation'
-    gp_default.metprintnames  = 0;
-    gp_default.actprintnames  = 0;
-    gp_default.metprintvalues = 0;
-    gp_default.actprintvalues = 0;
-    gp_default.show_regulation = 1;
+    options_default.metprintnames  = 0;
+    options_default.actprintnames  = 0;
+    options_default.metprintvalues = 0;
+    options_default.actprintvalues = 0;
+    options_default.show_regulation = 1;
   case {'text','all'}
 end
 
-gp = join_struct(gp_default,gp);
+options = join_struct(options_default,options);
 
 if ~isfield(network,'graphics_par'),  network=netgraph_make_graph(network); end
 
@@ -90,12 +82,12 @@ if ~isfield(network,'graphics_par'),  network=netgraph_make_graph(network); end
 
 % frame of the model
 
-if ~isfield(gp,'frame')
+if ~isfield(options,'frame')
   p = network.graphics_par;
   if sum(sum(p.x ~= 0 )) == 0
-    gp.frame = [0 1 0 1];
+    options.frame = [0 1 0 1];
   else
-    gp.frame = [ 1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
+    options.frame = [ 1.1 * min(p.x(1,:))-0.1* max(p.x(1,:)),...
                      -0.1 * min(p.x(1,:))+1.1* max(p.x(1,:)) +  0.0000001,...
                       1.1 * min(p.x(2,:))-0.1* max(p.x(2,:)),...
                      -0.1 * min(p.x(2,:))+1.1* max(p.x(2,:)) +  0.0000001];
@@ -105,7 +97,7 @@ end
 nm = length(network.graphics_par.metnames);
 
 % typical distance between dots (if they were equally spaced)
-a          = gp.frame;
+a          = options.frame;
 size_unit  = sqrt((a(2)-a(1))*(a(4)-a(3))) * sqrt(1/nm);
 force_unit = 0.02;
 gridsize   = 0.01  * size_unit;   % distance between discrete x values
@@ -145,7 +137,7 @@ end
 % show regulation arrows only if the network has regulation (this setting is not stored in the network)
 switch flag_draw_details
   case {'regulation','all'}
-    gp.show_regulation = isfield(network,'regulation_matrix');
+    options.show_regulation = isfield(network,'regulation_matrix');
 end
 
 ind_hub_metabolites = find(sum(double(network.N~=0),2)>5);
@@ -156,17 +148,17 @@ ind_hub_metabolites = find(sum(double(network.N~=0),2)>5);
 
 names     = [p.metnames; p.actnames];
 
-for it = 1:gp.initial_relax
+for it = 1:options.initial_relax
   x = netgraph_relaxation_step(x,fixed,m,k1,t1,k2,t2,gridsize,ind_hub_metabolites);
 end
 
-display_graphics(picture,network,p,gp,x,fixed);
+display_graphics(picture,network,p,options,x,fixed);
 
 
 % -----------------------------------------------------------------
 % manual relaxation
 
-if gp.manual ~=0, cont = 1; else, cont = 0; end
+if options.manual ~=0, cont = 1; else, cont = 0; end
 
 [Ni,Nj] = ind2sub(size(N),find((N~=0)));
 Nj      = Nj + n_met;
@@ -212,7 +204,7 @@ while cont==1
 
   network.graphics_par=p;
 
-  display_graphics(picture,network,p,gp,x,fixed);
+  display_graphics(picture,network,p,options,x,fixed);
 
 end
 
@@ -220,7 +212,7 @@ end
 % -------
 
 if exist('filename_out','var'), netgraph_save_positions(network,filename_out); end
-if gp.manual, title('New positions confirmed'); end
+if options.manual, title('New positions confirmed'); end
 
 if splitted
   p.x_split     = x;
@@ -236,20 +228,20 @@ network.graphics_par = p;
 % =========================================================
 
 
-function display_graphics(picture,network,p,gp,x,fixed)
+function display_graphics(picture,network,p,options,x,fixed)
 
-  if gp.manual
+  if options.manual
     network.graphics_par   = p;
     network.graphics_par.x = x;
     if ~isempty(picture)
       image(picture); hold on;
     end
-    netgraph_draw(network,gp); hold on;
+    netgraph_draw(network,options); hold on;
     invisible = [column(network.graphics_par.metinvisible); column(network.graphics_par.actinvisible)];
     fixed_ind = find(column(fixed) .* [invisible==0] );
     plot(x(1,fixed_ind),x(2,fixed_ind),'r.');
     hold off;
-    axis(gp.frame);
+    axis(options.frame);
     title('Left > move node. Center > relax network. Right > finish');
     drawnow;
   end

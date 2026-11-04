@@ -1,9 +1,21 @@
-function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)
-
-% [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)
+% NETGRAPH_COFACTOR_GRAPHS Networks for display without cofactors, or with split cofactors
 %
-% metabolites_to_be_omitted:    list of metabolites_to_be_omitted (to be omitted)
-% metabolites_to_be_kept: list of metabolites NOT to be omitted
+% [network_CoHid, network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree, metabolites_to_be_kept)
+%
+% Inputs:
+%   network                    network structure (see 'help metabolic_network')
+%   metabolites_to_be_omitted  (optional) list of cofactors (metabolite names)
+%   layout_file                (optional) layout file; positions are read from it
+%   max_met_degree             (optional, default 5) metabolites in more reactions are treated as cofactors
+%   metabolites_to_be_kept     (optional) list of metabolites that are never treated as cofactors
+%
+% Outputs:
+%   network_CoHid    network without the cofactors (see netgraph_simple_graph)
+%   network_CoSplit  network in which each cofactor appears once per reaction (see netgraph_split_metabolites)
+%
+% See also: netgraph_simple_graph, netgraph_split_metabolites
+
+function [network_CoHid,network_CoSplit] = netgraph_cofactor_graphs(network, metabolites_to_be_omitted, layout_file, max_met_degree,metabolites_to_be_kept)
 
 eval(default('metabolites_to_be_omitted','[]','layout_file','[]','max_met_degree','5','metabolites_to_be_kept','[]'));
 

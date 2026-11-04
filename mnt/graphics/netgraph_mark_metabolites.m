@@ -1,16 +1,24 @@
-% [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)
+% NETGRAPH_MARK_METABOLITES Mark metabolites with the mouse
 %
-% left/centre button: add/ remove external
-% right button quit
-% if draw_only (optional argument) = 1, then the choice is only displayed
+% [choice, p] = netgraph_mark_metabolites(network, choice, draw_only)
 %
-% choice: bit string denoting marked metabolites
-% p: graphics structure
+% Mouse buttons: left/centre: mark/unmark a metabolite; right: finish
+%
+% Inputs:
+%   network    network structure
+%   choice     (optional) initial choice (vector of 0 and 1, one entry per metabolite)
+%   draw_only  (optional, default 0) only show the current choice
+%
+% Outputs:
+%   choice  marked metabolites (vector of 0 and 1)
+%   p       graphics settings used
+%
+% See also: netgraph_mark_reactions, netgraph_external
 
 function [choice,p] = netgraph_mark_metabolites(network,choice,draw_only)
 
 if ~exist('choice','var'), choice = zeros(size(network.metabolites)); end
-if length(choice)~=length(network.metabolites), error('Wrong size of input argument'); end
+if length(choice)~=length(network.metabolites), error('mnt:netgraph:wrongSize', 'Wrong size of input argument'); end
 
 p = network.graphics_par;
 

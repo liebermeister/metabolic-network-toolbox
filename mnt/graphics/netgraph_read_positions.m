@@ -74,7 +74,7 @@ if exist('sbtab_version','file')
   end
 
 else
-  warning('SBtab package is not installed; please install it!');
+  warning('mnt:netgraph:noSBtab', 'SBtab package is not installed; please install it');
   fid = fopen(layout_file);
   A   = textscan(fid,'%s%f%f','delimiter','\t');
   fclose(fid);
@@ -111,18 +111,19 @@ end
 
 if length(unique(model_metabolite_names)) < length(model_metabolite_names)
   if flag_KEGG_ids
-    warning('non-unique metabolite names');
+    warning('mnt:netgraph:nonUniqueNames', 'Non-unique metabolite names');
   else
-    sort(model_metabolite_names)
-    error('non-unique metabolite names');
+    [names, ~, j] = unique(model_metabolite_names);
+    duplicates = names(accumarray(j(:),1) > 1);
+    error('mnt:netgraph:nonUniqueNames', 'Non-unique metabolite names: %s', strjoin(duplicates(:)', ', '));
   end
 end
 
 if length(unique(model_reaction_names)) < length(model_reaction_names)
   if flag_KEGG_ids
-    warning('non-unique reaction names');
+    warning('mnt:netgraph:nonUniqueNames', 'Non-unique reaction names');
   else
-    error('non-unique reaction names');
+    error('mnt:netgraph:nonUniqueNames', 'Non-unique reaction names');
   end
 
 end
