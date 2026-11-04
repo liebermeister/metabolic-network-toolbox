@@ -23,6 +23,7 @@
 % metinvisible    (bit vector)
 % omitmetabolites (list of metabolite names) metabolites to be omitted in graphics
 % squaresize ( also holds for reaction symbols)
+%                (all sizes and offsets refer to a layout of size 1; see 'scale_sizes')
 % no_points ( also holds for reaction symbols)
 % flag_edges (holds also for reaction and regulation symbols)
 % circle_shift [0,0] additional shift of circle symbols
@@ -75,14 +76,15 @@
 % split_names (length)
 % FontSize
 % Rotation  (for all text items)
-% text_offset
+% text_offset     [dx,dy] position of name labels relative to the nodes
+%                 (default: to the right of the symbols, vertically centred)
 % value_text_offset
 %
 %COLORSCALE AND LINES
 % colorbar (0/1)
 % colorbar_numbers
 % colorbar_fontsize
-% colorbar_location (string, e.g. 'West' or 'South')
+% colorbar_location (string, e.g. 'South' (default), 'East', 'West'); colorbars are placed outside the network
 % linecolor
 % linewidth
 % colormap        (default rb_colors)
@@ -95,11 +97,17 @@
 %
 % canvas_position [xmin ymin xsize ysize] values for figure "Position" property
 % canvas (flag, default []): show light grey background; or rgb vector with background color
-% figure_axis: coordinate vector for figure axis
+% figure_axis: axis limits [xmin xmax ymin ymax] (default: limits that contain all nodes and labels)
 % figure_position
 % subplot_position
 % YDir ('normal','reverse')
 % hold_on (flag)
+% keep_subplot (flag, default 0): do not change the position of the axes.
+%     Without this flag, a new axes object (e.g. after 'figure' or 'clf') is enlarged to fill the figure;
+%     axes created by 'subplot' or placed by the user keep their position in any case
+% scale_sizes (flag, default 1): sizes (squaresize, arrowsize, text offsets, circle_shift, shade_long_lines)
+%     are multiplied by the size of the layout (largest extent of the node positions), so the
+%     graphics look similar for layouts in any units. Set to 0 to use sizes in layout units
 %
 % See also: netgraph_make_graph, netgraph_concentrations, netgraph_move
 
@@ -116,19 +124,38 @@ n_act = length(network.actions);
 m     = p.m;
 x     = p.x;
 
-if p.hold_on==1, hold on; else, cla;  end
+% sizes are given for a layout of size 1; scale them to the size of the actual layout
+size_fields = {'squaresize','arrowsize','text_offset','value_text_offset','circle_shift','shade_long_lines'};
+unscaled = struct;
+for it = 1:length(size_fields)
+  unscaled.(size_fields{it}) = p.(size_fields{it});
+  p.(size_fields{it})        = p.layout_size * p.(size_fields{it});
+end
+
 if ~isempty(p.figure_position), set(gcf,'Position',p.figure_position); end
 if ~isempty(p.subplot_position)
   subplot('position',p.subplot_position);
 end
 
-hold on;
+ax = gca;
+had_content = p.hold_on==1 && ~isempty(get(ax,'Children'));
+if p.hold_on==1, hold(ax,'on'); else, cla(ax); colorbar(ax,'off'); end
+
+% a new axes object (at the default position) is enlarged to fill the figure;
+% axes created by 'subplot' or placed by the user keep their position
+if ~p.keep_subplot && ~had_content && isequal(round(get(ax,'Position'),4), round(get(gcf,'DefaultAxesPosition'),4))
+  set(ax,'Position',[0.02 0.03 0.96 0.9]);
+end
+
+hold(ax,'on');
 
 if length(p.canvas)
   if length(p.canvas) ~= 3
     p.canvas = [.98 .98 .98];
   end
   set(gcf,'Color',p.canvas);
+else
+  set(gcf,'Color',[1 1 1]);
 end
 
 x_arrowlistN = zeros(n_met,n_act,2);
@@ -168,7 +195,7 @@ end
 
 if ~p.no_points
   dd = [p.metindshow, n_met + p.actindshow];
-  plot(x(1,dd),x(2,dd), 'b.');
+  plot(x(1,dd),x(2,dd), '.', 'Color', p.linecolor, 'MarkerSize', 6);
 end
 
 
@@ -442,8 +469,9 @@ if p.metprintvalues
   else
     strings = num2str(p.metvalues,3);
   end
+  strings = cellstr(strings);
   offset=0.5*p.squaresize * [1,1]+ p.value_text_offset;
-  text(x(1,1:n_met) + offset(1),x(2,1:n_met)+offset(2),strings,'FontSize',p.FontSize,'Rotation',p.fontangle);
+  text(x(1,p.metindshow) + offset(1),x(2,p.metindshow)+offset(2),strings(p.metindshow),'FontSize',p.FontSize,'Rotation',p.fontangle);
 end
 
 if p.actprintvalues
@@ -474,13 +502,15 @@ end
 
 % figure general layout
 
-set(gca,'YDir',p.YDir);
+set(ax,'YDir',p.YDir);
+axis(ax,'off');
+daspect(ax,[1 1 1]);
 
-noticks;
-
-axis tight;
-axis off;
-axis equal;
+if ~isempty(p.figure_axis)
+  axis(ax,p.figure_axis);
+else
+  set_axis_limits(ax, x(:,[p.metindshow, n_met+p.actindshow]), p.squaresize, had_content);
+end
 
 % add colorbar
 if p.colorbar
@@ -494,23 +524,13 @@ if p.colorbar
     end
   end
   if max(p.colorbar_numbers)>min(p.colorbar_numbers)
-    this_colorbar(p.colorbar_numbers, p.colormap, p.colorbar_location, p.colorbar_fontsize);
+    this_colorbar(ax, p.colorbar_numbers, p.colormap, p.colorbar_location, p.colorbar_fontsize);
   end
 end
 
-if p.keep_subplot ==0
-  % increase figure size to fill space
-  ax = gca;
-  outerpos = ax.OuterPosition;
-  ax.Position = [0.05, 0.05, 0.9, 0.9];
-  if p.colorbar
-    switch p.colorbar_location
-      case 'South'
-        ax.Position = [0, 0.1 1 0.85];
-      case 'West'
-        ax.Position = [0.1, 0,  0.85,  1];
-    end
-  end
+% return the size parameters as given (not scaled)
+for it = 1:length(size_fields)
+  p.(size_fields{it}) = unscaled.(size_fields{it});
 end
 
 network.graphics_par = p;
@@ -723,20 +743,46 @@ function [normvalues, normvalues_std, valuesmax, valuesmin] = normalise(values,v
 
   % ----------------------------------------
 
-function this_colorbar(num,colmap,location,colorbar_fontsize)
+function this_colorbar(ax,num,colmap,location,colorbar_fontsize)
 
-  colorbar('off');
-  colormap(colmap);
+  % colorbar outside the axes (location 'South' means 'southoutside', etc.)
+  colormap(ax, colmap);
+  location = lower(location);
+  if isempty(strfind(location,'outside')), location = [location 'outside']; end
+  h = colorbar(ax, 'Location', location);
+  limits = [min(num), max(num)];
+  caxis(ax, limits);
+  set(h, 'Limits', limits, 'FontSize', colorbar_fontsize);
 
-  h = colorbar('Location', location);
+  % ----------------------------------------
 
-  min_scale  = round(min(num),2,'significant');
-  max_scale  = round(max(num),2,'significant');
-  if strcmp(location,'South')
-    set(h,'Position',[0.05 0.05 0.90 0.03]);
+function set_axis_limits(ax, x, squaresize, keep_old_limits)
+
+  % axis limits that contain all nodes, symbols, and text labels (with a small margin)
+
+  x = x(:, all(isfinite(x),1));
+  if isempty(x), return; end
+  margin = max(squaresize, 0.02 * max(max(x,[],2) - min(x,[],2)));
+  if margin == 0, margin = 1; end
+  box = [min(x(1,:))-margin, max(x(1,:))+margin, min(x(2,:))-margin, max(x(2,:))+margin];
+  if keep_old_limits
+    a = axis(ax);
+    box = [min(box(1),a(1)), max(box(2),a(2)), min(box(3),a(3)), max(box(4),a(4))];
   end
-  set(h,'YLim',[min_scale, max_scale],'YTick',[min_scale:(max_scale-min_scale)/5:max_scale],'YTickLabel',[min_scale:(max_scale-min_scale)/5:max_scale],'FontSize',colorbar_fontsize);
-  caxis([min_scale, max_scale]);
+  axis(ax, box);
+  % enlarge the limits to include the text labels (two passes, because the size of
+  % the labels in data units changes with the limits)
+  labels = findobj(ax, 'Type', 'text');
+  labels = labels(~cellfun(@isempty, get(labels, {'String'})));
+  if isempty(labels), return; end
+  for pass = 1:2
+    extents = get(labels, {'Extent'});
+    extents = vertcat(extents{:});
+    a = [min([box(1); extents(:,1)]), max([box(2); extents(:,1)+extents(:,3)]), ...
+         min([box(3); extents(:,2)]), max([box(4); extents(:,2)+extents(:,4)])];
+    a = a + 0.01 * max(a(2)-a(1), a(4)-a(3)) * [-1 1 -1 1];
+    axis(ax, a);
+  end
 
   % -------------------------------------------------
 
@@ -814,8 +860,8 @@ function p = netgraph_draw_set_parameters(network,vararg)
       'arrow_stoichiometries', 0, ...
       'arrowvalues_std',     zeros(size(p.arrowvalues)), ...
       'arrow_shift',     0.7,  ...
-      'arrowcolor',      [0.7 0.7 0.7],  ...
-      'colorbar_fontsize', 14, ...
+      'arrowcolor',      [0.55 0.55 0.55],  ...
+      'colorbar_fontsize', 10, ...
       'linewidth',       1, ...
       'single_arrow',    0, ...
       'edgevalues',      [],  ...
@@ -841,9 +887,9 @@ function p = netgraph_draw_set_parameters(network,vararg)
       'colorbar_location', 'South', ...
       'canvas_position', [], ...
       'keep_subplot', 0, ...
-      'linecolor',       [0 0 1], ...
+      'linecolor',       [0.3 0.3 0.3], ...
       'rlinecolor',      [1 .3 0.], ...
-      'text_offset',     [0.01,-0.01], ...
+      'text_offset',     [], ...
       'value_text_offset',     [0.01,-0.01], ...
       'straightlines',   1,       ...
       'arrowsize',       0.03,        ...
@@ -855,6 +901,7 @@ function p = netgraph_draw_set_parameters(network,vararg)
       'flag_edges', 1, ...
       'flag_triangle_edges', 0, ...
       'canvas', [],...
+      'scale_sizes', 1, ...
       'shade_long_lines', [], ...
       'shade_cofactor_lines', []);
 
@@ -1051,3 +1098,19 @@ function p = netgraph_draw_set_parameters(network,vararg)
   end
 
   if size(p.x,2) == 0, error('No point positions found'); end
+
+  % text labels to the right of the symbols (offsets for a layout of size 1)
+  if isempty(p.text_offset)
+    p.text_offset = [0.5 * p.squaresize + 0.008, 0];
+  end
+
+  % size of the layout (largest extent of the shown nodes); symbol sizes are scaled by this number
+  p.layout_size = 1;
+  if p.scale_sizes
+    x_shown = p.x(:, [p.metindshow, nm + p.actindshow]);
+    x_shown = x_shown(:, all(isfinite(x_shown),1));
+    if size(x_shown,2) > 1
+      extent = max(max(x_shown,[],2) - min(x_shown,[],2));
+      if extent > 0, p.layout_size = extent; end
+    end
+  end

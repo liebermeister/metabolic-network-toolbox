@@ -101,3 +101,46 @@ fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
 pair_values = [0 1 0 0 0; 1 0 -1 0 0; 0 -1 0 2 0; 0 0 2 0 0; 0 0 0 0 0];
 synergy_network_plot(network, ones(nr,1), pair_values);
 assert(numel(findobj(gca,'Type','line')) >= 3);
+
+%% netgraph_concentrations in subplots: both subplots are kept
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+subplot(1,2,1); netgraph_concentrations(network, rand(nm,1), [], 1);
+subplot(1,2,2); netgraph_concentrations(network, [], rand(nr,1), 1);
+assert(numel(findobj(fig,'Type','axes')) == 2);
+
+%% netgraph_draw: symbol sizes scale with the size of the layout
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+gp = struct('metvalues',ones(nm,1),'arrowstyle','none','actstyle','none','metprintnames',0,'actprintnames',0);
+netgraph_draw(network, gp);
+w1 = max(cellfun(@(z) max(z)-min(z), get(findobj(gca,'Type','patch'),'XData')));
+big = network; big.graphics_par.x = 500 * big.graphics_par.x;
+clf; netgraph_draw(big, gp);
+w2 = max(cellfun(@(z) max(z)-min(z), get(findobj(gca,'Type','patch'),'XData')));
+assert(abs(w2/w1 - 500) < 1);
+
+%% netgraph_draw: all labels lie within the axis limits
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+netgraph_draw(network);
+a = axis;
+e = get(findobj(gca,'Type','text'), {'Extent'}); e = vertcat(e{:});
+assert(all(e(:,1) >= a(1)) && all(e(:,1)+e(:,3) <= a(2)) && all(e(:,2) >= a(3)) && all(e(:,2)+e(:,4) <= a(4)));
+
+%% netgraph_read_positions: elements missing in the file are placed near their neighbours
+filename = [tempname '.tsv'];
+cleanup = onCleanup(@() delete(filename));
+netgraph_print_positions(network, filename, [0 0], 'replace file', 0);
+other = network;
+other.metabolites{3} = 'new_metabolite';
+other.actions{3}     = 'new_reaction';
+other = netgraph_read_positions(other, filename, [0 0], 1, 0);
+x = other.graphics_par.x;
+assert(all(isfinite(x(:))));
+assert(norm(x(:,3) - x(:,nm+3)) > 0);
+% the new reaction lies near its metabolite S4
+assert(norm(x(:,nm+3) - x(:,4)) < norm(network.graphics_par.x(:,1) - network.graphics_par.x(:,6)));
+
+%% netgraph_make_graph: names shown in graphics
+n = network_construct([-1; 1]);
+n.metabolites = {'Acetyl-CoA'; 'UDP-D-glucose'};
+n = netgraph_make_graph(n);
+assert(isequal(n.graphics_par.metnames, {'Acetyl-CoA'; 'UDP-glucose'}));

@@ -21,11 +21,8 @@ metnames = strrep(metnames,'PseudoBioObj ','');
 metnames = strrep(metnames,'  ',' ');
 
 metnames = strrep(metnames,'(2R)-2-Hydroxy-3-(phosphonooxy)-propanal','Glyceraldehyde 3-phosphate');
-metnames = strrep(metnames,'-D-','-');
-metnames = strrep(metnames,'D-','');
-metnames = strrep(metnames,'L-','');
-metnames = strrep(metnames,'S-','');
-metnames = strrep(metnames,'(S)-','');
+% omit the stereo prefixes D-, L-, (R)-, (S)- at the beginning of words (e.g. 'UDP-D-glucose' -> 'UDP-glucose')
+metnames = regexprep(metnames,'(^|(?<=[\s\-]))(D|L|\(R\)|\(S\))-','');
 metnames = strrep(metnames,'alpha','\alpha');
 metnames = strrep(metnames,'beta','\beta');
 
@@ -55,7 +52,7 @@ graphics_object.actnames       = actnames;
 graphics_object.arrowstyle     = 'directions';  % 'fluxes', 'none'
 
 graphics_object.squaresize     = 0.2/sqrt(length(metnames));
-graphics_object.arrowsize      = 0.03;% 0.08/sqrt(length(metnames));
+graphics_object.arrowsize      = min(0.03, 0.15/sqrt(length(metnames)));
 graphics_object.lambda         = 1;
 graphics_object.N              = network.N;
 

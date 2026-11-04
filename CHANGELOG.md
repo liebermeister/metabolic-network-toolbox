@@ -32,6 +32,15 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
   - Movie functions: time bar in `netgraph_flux_movie` fixed; background colours are used also if they contain zeros, and are interpolated in `netgraph_flux_movie`; `netgraph_flux_arrows_movie` has default options; EPS files show the current figure (before: figure 1)
   - `netgraph_read_positions` without the SBtab package works again
   - `help graphics` lists all functions; test file `tests/test_graphics.m`
+- Network graphics: layout (**figures look different**):
+  - `netgraph_draw` and `netgraph_concentrations` work in subplots: axes created by `subplot` (or placed by the user) keep their position; before, they were moved to fill the figure, and `netgraph_concentrations` deleted the other subplots. A new axes object is still enlarged to fill the figure
+  - Axis limits contain all nodes, symbols, and labels (before: `axis tight`, which cut off labels); the option `figure_axis` now sets the limits
+  - Name labels are placed to the right of the symbols, vertically centred (option `text_offset`, default now depends on `squaresize`)
+  - Sizes (`squaresize`, `arrowsize`, text offsets, `circle_shift`, `shade_long_lines`) refer to a layout of size 1 and are scaled to the actual layout size, so layouts in other units (e.g. pixels) look the same; new option `scale_sizes` (default 1)
+  - Colorbar outside the network, below the axes it belongs to, with automatic ticks; colormaps are set per axes; default `colorbar_fontsize` 10 (was 14)
+  - Default colours: dark grey lines and node dots (were blue), grey direction arrows in `netgraph_draw`, red flux arrows in `netgraph_concentrations`; white figure background
+  - `netgraph_make_graph`: default `arrowsize` is smaller in larger networks; metabolite names keep 'S-' and letters before hyphens (e.g. 'ACETYL-COA' was shown as 'ACETYCOA'); the stereo prefixes D-, L-, (R)-, (S)- are still omitted
+  - `netgraph_read_positions`: elements missing in the layout file are placed near their neighbours in the network (before: all at the same point)
 
 ## 1.3.0 (2026-10-31)
 

@@ -54,16 +54,13 @@ if options.scale_arrowvalues
   end
 end
 
-opt = struct('metstyle','fixed','metvalues',S,'actvalues',J,'arrowcolor',[1 0 0],'linecolor',[0 0 0]);
+opt = struct('metstyle','fixed','metvalues',S,'actvalues',J,'arrowcolor',[0.85 0.1 0.1],'linecolor',[0.3 0.3 0.3]);
 if ~isempty(J)
   if length(J)==1, J=J*ones(size(network.actions)); end
   opt = join_struct(opt,struct('arrowvalues',J,'arrowstyle','fluxes'));
 end
 
 opt = join_struct(opt,options);
-if opt.keep_subplot==0
-  subplot('Position', [0 0 1 0.90]);
-end
 
 netgraph_draw(network, opt);
 

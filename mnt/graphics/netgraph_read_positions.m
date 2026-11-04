@@ -6,7 +6,8 @@ function network = netgraph_read_positions(network, layout_file, offsets, fill_n
 %
 % Arguments:
 %   'layout_file'   may either refer to a filename or to an SBtab data object
-%   'fill_nans',    replace undetermined positions by random values
+%   'fill_nans',    place elements missing in the layout file near their neighbours in the network
+%                   (reactions between their metabolites, metabolites next to their reactions)
 %   'flag_KEGG_ids' match elements (between model and layout file) by KEGG ids (default: 0)
 %   'flag_fixed'    read information about fixed glyph positions from file
 %
@@ -152,8 +153,7 @@ if length(A{5})
 end
 
 if fill_nans
-  x(:,find(sum(isnan(x)))) = repmat([mean(x(1,:)','omitnan'); mean(x(2,:)','omitnan')],1,length(find(sum(isnan(x)))));
-  x(find(isnan(x))) = randn(size(x(find(isnan(x)))));
+  x = place_missing_elements(x, network.N);
 end
 
 x = x - repmat(offsets',1,size(x,2));
@@ -166,3 +166,49 @@ network.graphics_par.x = x;
 network.graphics_par.fixed     = fixed;
 network.graphics_par.metinvisible = double(invisible(1:length(model_metabolite_names))==1);
 network.graphics_par.actinvisible = double(invisible(length(model_metabolite_names)+1:end)==1);
+
+
+% ------------------------------------------------------------------
+
+function x = place_missing_elements(x, N)
+
+% Place nodes with unknown (nan) positions: in each round, every missing node that has
+% placed neighbours (metabolites and reactions connected by the stoichiometric matrix)
+% is put at the mean position of these neighbours, plus a small random shift.
+% Nodes without placed neighbours are put around the centre of the layout.
+
+[nm,nr] = size(N);
+missing = find(any(isnan(x),1));
+if isempty(missing), return; end
+
+placed = all(isfinite(x),1);
+adjacency = [sparse(nm,nm), sparse(N~=0); sparse(N'~=0), sparse(nr,nr)];
+if any(placed)
+  extent = max(max(x(:,placed),[],2) - min(x(:,placed),[],2));
+  centre = mean(x(:,placed),2);
+else
+  extent = 0; centre = [0.5; 0.5];
+end
+if extent == 0, extent = 1; end
+
+% random numbers from a separate stream (the global random number generator is not changed)
+stream = RandStream('mt19937ar','Seed',0);
+
+while ~isempty(missing)
+  new_positions = nan(2,length(missing));
+  for it = 1:length(missing)
+    neighbours = find(adjacency(missing(it),:) & placed);
+    if ~isempty(neighbours)
+      new_positions(:,it) = mean(x(:,neighbours),2) + 0.04 * extent * randn(stream,2,1);
+    end
+  end
+  done = all(isfinite(new_positions),1);
+  if ~any(done), break; end
+  x(:,missing(done)) = new_positions(:,done);
+  placed(missing(done)) = true;
+  missing = missing(~done);
+end
+
+if ~isempty(missing)
+  x(:,missing) = repmat(centre,1,length(missing)) + 0.1 * extent * randn(stream,2,length(missing));
+end
