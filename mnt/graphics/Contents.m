@@ -42,6 +42,7 @@
 %   netgraph_edit_positions        read a layout file, move nodes with the mouse, and save the file
 %   netgraph_read_positions        read a layout file (SBtab table)
 %   netgraph_print_positions       save a layout file (SBtab table)
+%   netgraph_read_escher_map       layout from an Escher map (matched by IDs or names); saves a layout file
 %   netgraph_assign_positions      choose node positions on a picture with the mouse
 %   netgraph_clear                 reset display settings, keeping the layout
 %
