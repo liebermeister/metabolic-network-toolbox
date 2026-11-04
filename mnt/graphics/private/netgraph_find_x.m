@@ -22,15 +22,8 @@ else
   x_fixed       = fixed_positions(:,2:3)';
 end
 
-%gridsize = 0.01; % distance between discrete x values
-%k1 = 0.005;  % overall repulsion strength
-%k2 = 0.5  *sqrt(1/length(network.graphics_par.metnames));  % overall repulsion scale
-%k3 = 0.2;  % neighbour attraction strength
-
 % first guess
-
-
-x = netgraph_find_x_old(network.graphics_par,gridsize,k1,k2,k3,network.graphics_par.db,indices_fixed,x_fixed);
+x = netgraph_initial_positions(network.graphics_par, indices_fixed, x_fixed);
 network.graphics_par.x = x;
 
 if ~isfield(network.graphics_par,'fixed')

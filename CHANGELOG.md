@@ -55,6 +55,7 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
   - `netgraph_draw_connections`: blue lines for negative and red lines for positive values (were red and green)
   - `netgraph_move`: the position file `filename_in` is read with `textscan` (before: `eval` of each number)
   - `netgraph_read_positions`: the error for non-unique metabolite names lists these names (before, all names were printed)
+  - The first guess of a layout (formerly `netgraph_find_x_old` in matlab-utils) is now part of mnt (`graphics/private/netgraph_initial_positions`); layouts do not change. matlab-utils without `netgraph_find_x_old` therefore needs this version of mnt
   - All errors and warnings in the folder have identifiers (`mnt:netgraph:...`); all public functions have a help text in the standard form
 
 ## 1.3.0 (2026-10-31)
