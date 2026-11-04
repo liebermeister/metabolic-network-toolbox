@@ -4,6 +4,14 @@
 %
 % create or modify structure describing the graphical appearance of a metabolic network
 %
+% Node positions:
+%   table_positions  layout file (SBtab table, file name or SBtab object), read with netgraph_read_positions;
+%                    elements missing in the file are placed near their neighbours.
+%                    If table_positions is given, set_positions and x_init are ignored
+%   set_positions    indices of nodes (metabolites, followed by reactions) with given positions
+%   x_init           (2 x (#metabolites + #reactions) matrix) positions of these nodes
+%   Otherwise, positions are computed by a force-directed layout (netgraph_calculate_positions)
+%
 % See also: netgraph_draw, netgraph_read_positions
 
 function network = netgraph_make_graph(network,metvalues,actvalues,set_positions,x_init,table_positions);
@@ -82,6 +90,11 @@ graphics_object.m  = m;
 graphics_object.db = db;
 
 network.graphics_par = graphics_object;
+
+if ~isempty(table_positions)
+  network = netgraph_read_positions(network, table_positions);
+  return
+end
 
 if ~exist('x_init','var'), x_init = []; end
 

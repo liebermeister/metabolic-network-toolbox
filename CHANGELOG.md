@@ -41,6 +41,8 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
   - Default colours: dark grey lines and node dots (were blue), grey direction arrows in `netgraph_draw`, red flux arrows in `netgraph_concentrations`; white figure background
   - `netgraph_make_graph`: default `arrowsize` is smaller in larger networks; metabolite names keep 'S-' and letters before hyphens (e.g. 'ACETYL-COA' was shown as 'ACETYCOA'); the stereo prefixes D-, L-, (R)-, (S)- are still omitted
   - `netgraph_read_positions`: elements missing in the layout file are placed near their neighbours in the network (before: all at the same point)
+  - `netgraph_draw`: unknown fluxes (nan values in `arrowvalues`) are shown by grey diamonds (before: nothing was drawn)
+  - `netgraph_make_graph`: the argument `table_positions` (layout file or SBtab object) is used; before, it was ignored
 
 ## 1.3.0 (2026-10-31)
 

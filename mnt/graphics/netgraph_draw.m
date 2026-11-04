@@ -43,7 +43,8 @@
 %
 %STYLE OF ARROWS
 % arrowstyle       {'fluxes','directions','none'}
-% arrowvalues      a value of 1 will be shown in standard size (given by arrowsize)
+% arrowvalues      a value of 1 will be shown in standard size (given by arrowsize);
+%                  unknown values (nan) are shown by grey diamonds
 % arrowvaluesmax   threshold value; any larger values will be replaced by this value
 % arrowvaluesmin   threshold value; any smaller (or more negative) values will be replaced by this value
 % arrow_stoichiometries [0,1] scale arrows with stoichiometric coefficients? (default 0)
@@ -223,7 +224,7 @@ if p.straightlines  % straight lines
       switch p.arrowstyle
         case {'fluxes','directions'}
           phi = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
-          plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward, p.flag_triangle_edges);
+          plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, forward, p.flag_triangle_edges, 0.4*p.arrowsize);
       end
     end
 
@@ -277,7 +278,7 @@ else  % curved lines: each edge is a circular arc that continues towards the oth
             phi   = angle(direction(1) + i * direction(2));
             scale = p.arrowsize * sqrt(abs(p.norm_arrowvalues(q1)));
             if p.arrow_stoichiometries, scale = scale * abs(stoich_coeff); end
-            plot_triangle(x_arr(1), x_arr(2), phi, scale, p.arrowcolor, forward, p.flag_triangle_edges);
+            plot_triangle(x_arr(1), x_arr(2), phi, scale, p.arrowcolor, forward, p.flag_triangle_edges, 0.4*p.arrowsize);
         end
       end
     end
@@ -421,11 +422,12 @@ end
 
 if p.show_arrowvalues * p.single_arrow
   % one arrow per reaction, on the edge from an incoming metabolite
-  % (a substrate for positive fluxes, a product for negative fluxes)
+  % (a substrate for positive fluxes, a product for negative fluxes);
+  % for unknown fluxes (nan), a grey diamond is shown on the reaction
   for ind_act = p.actindshow
     flux = p.norm_arrowvalues(ind_act);
-    if ~(abs(flux) > 0), continue; end
-    if flux > 0
+    if flux == 0, continue; end
+    if flux > 0 || isnan(flux)
       incoming = find(p.N(:,ind_act) < 0);
     else
       incoming = find(p.N(:,ind_act) > 0);
@@ -442,7 +444,7 @@ if p.show_arrowvalues * p.single_arrow
     switch p.arrowstyle
       case {'fluxes','directions'}
         phi = angle( x_act(1) - x_met(1) + i *(x_act(2) - x_met(2)));
-        plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, 1, p.flag_triangle_edges);
+        plot_triangle(x_arr(1),x_arr(2),phi,scale, p.arrowcolor, 1, p.flag_triangle_edges, 0.4*p.arrowsize);
     end
   end
 end
@@ -603,10 +605,13 @@ function plot_diamond(x,y,l,std,squaresize,col,flag_edges)
 
   % -----------------------------------------------------------------
 
-function plot_triangle(x, y, phi, l, col, forward, flag_edges)
+function plot_triangle(x, y, phi, l, col, forward, flag_edges, nan_size)
 
-  if isnan(l), l = l*0.5; forward = 1; col = [.7 .7 .7];
-    points = repmat([x; y],1,4) +  l * [-1 0 1 0; 0 -1 0 1];
+  % arrow (triangle) of length l; for unknown values (l is nan), a grey diamond of width 2 * nan_size
+
+  if isnan(l)
+    col = [.7 .7 .7];
+    points = repmat([x; y],1,4) +  nan_size * [-1 0 1 0; 0 -1 0 1];
   else
     points = repmat([x; y],1,3) + forward * [cos(phi) -sin(phi); sin(phi) cos(phi)] * l * [-0.5 .5 -0.5; -0.3 0 0.3];
   end

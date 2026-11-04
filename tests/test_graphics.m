@@ -144,3 +144,25 @@ n = network_construct([-1; 1]);
 n.metabolites = {'Acetyl-CoA'; 'UDP-D-glucose'};
 n = netgraph_make_graph(n);
 assert(isequal(n.graphics_par.metnames, {'Acetyl-CoA'; 'UDP-glucose'}));
+
+%% netgraph_draw: unknown fluxes (nan) are shown by grey diamonds
+fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));
+v = [1 nan 1 1 1]';
+for single_arrow = [0 1]
+  for straightlines = [1 0]
+    clf; netgraph_draw(network, struct('arrowstyle','fluxes','arrowvalues',v,'single_arrow',single_arrow, ...
+                                       'straightlines',straightlines,'actstyle','none'));
+    patches = findobj(gca,'Type','patch');
+    grey = cellfun(@(c) isequal(c,[.7 .7 .7]), get(patches,'FaceColor'));
+    n_vertices = cellfun(@numel, get(patches,'XData'));
+    % one diamond per edge of reaction 2 (S2-E2, E2-S3), or one diamond with single_arrow
+    assert(sum(grey & n_vertices == 4) == (single_arrow == 0) * nnz(network.N(:,2)) + (single_arrow == 1));
+  end
+end
+
+%% netgraph_make_graph: positions from a layout file
+filename = [tempname '.tsv'];
+cleanup = onCleanup(@() delete(filename));
+netgraph_print_positions(network, filename, [0 0], 'replace file', 0);
+n = netgraph_make_graph(example_network, [], [], [], [], filename);
+assert(max(abs(n.graphics_par.x(:) - network.graphics_par.x(:))) < 10^-6);
