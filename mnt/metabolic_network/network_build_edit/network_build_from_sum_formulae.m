@@ -262,6 +262,15 @@ network = join_struct(network,columns);
 % -------------------------------------------
 % Regulation (optional)
 
+if ischar(filename_regulation) && length(filename_regulation)
+  if exist(filename_regulation,'file')
+    filename_regulation = sbtab_table_load(filename_regulation);
+  else
+    warning('Regulation file %s not found; ignoring it', filename_regulation);
+    filename_regulation = [];
+  end
+end
+
 if length(filename_regulation)
   my_compounds = sbtab_table_get_column(filename_regulation,'Compound');
   my_reactions = sbtab_table_get_column(filename_regulation,'Reaction');

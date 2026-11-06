@@ -11,6 +11,8 @@
 % -     normalised response coefficients: RS_norm RJ_norm
 %
 % options.split (Boolean) split reactions into forward and backward part?
+% options.mu    growth rate (dilution rate of internal metabolites, default 0);
+%               see control_coefficients. (options.dilution_rate is accepted as an alias)
 %
 % parameter values and names are listed in 'parameter_values' and 'parameters'
 %
@@ -25,8 +27,11 @@ function R = basic_control_analysis(network,s,options)
 
 eval(default('options','struct'));
 
-options_default = struct('split',0,'only_enzyme_levels',0,'dilution_rate',[]);
+options_default = struct('split',0,'only_enzyme_levels',0,'mu',0);
 options         = join_struct(options_default,options);
+if isfield(options,'dilution_rate') && length(options.dilution_rate), options.mu = options.dilution_rate; end
+if isempty(options.mu), options.mu = 0; end
+if options.mu ~= 0, dilution_rate = options.mu; else, dilution_rate = []; end
 
 if isfield(options,'used')
   used = options.used;
@@ -37,7 +42,7 @@ else
   end
 end
 
-[R.s,R.j] = network_steady_state(network,s,10000,[],[],[], options.dilution_rate);
+[R.s,R.j] = network_steady_state(network,s,10000,[],[],[], dilution_rate);
 
 R.s = real(R.s);
 if find(R.s<0)
@@ -46,7 +51,7 @@ end
 
 [R.parameter_values,R.parameters,R.parameter_types] = network_get_parameter_values(network,s,options.only_enzyme_levels);
 [R.epsilon_1,R.pi_1]           = elasticities(network,R.s,options);
-[R.CJ, R.CS, L, NR , R.M]      = control_coefficients(network.N, R.epsilon_1,network.external,used);
+[R.CJ, R.CS, L, NR , R.M]      = control_coefficients(network.N, R.epsilon_1,network.external,used,[],[],[],options.mu);
 [R.RS,R.RJ]                    = response_coefficients(R.CS,R.epsilon_1,R.pi_1);
 %size(R.pi_1)
 %size(R.RS)
@@ -77,7 +82,7 @@ end
 if options.split
   R.j_split                        = network_velocities(s,network,network.kinetics, 1);
   [R.epsilon_1_split,R.pi_1_split] = elasticities(network,s,1);
-  [R.CJ_split, R.CS_split ]        = control_coefficients([network.N, -network.N], R.epsilon_1_split,network.external);
+  [R.CJ_split, R.CS_split ]        = control_coefficients([network.N, -network.N], R.epsilon_1_split,network.external,[],[],[],[],options.mu);
   [dummy,R.RJ_split]               = response_coefficients(R.CS_split,R.epsilon_1_split,R.pi_1_split);
   R.RJ_split_norm                  = diag(1./R.j_split)*R.RJ_split*diag(R.parameter_values);
 end

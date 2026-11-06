@@ -27,6 +27,8 @@
 % control_coefficients            control coefficients
 % response_coefficients           response coefficients,            1st and 2nd order
 % norm_response_coefficients      normalised response coefficients, 1st and 2nd order
-% spectral_response_coefficients  spectral response coefficients,   1st and 2nd order
+% spectral_response_coefficients  spectral (= frequency) response coefficients, 1st and 2nd order
 % expand_by_R                     2nd-order expansion w.r.t. parameters
 % time_response_coefficients      time-dependent response coefficients, 1st order
+% temporal_control_coefficients   time-dependent control coefficients after a step change of
+%                                 enzyme activities (linear approximation)

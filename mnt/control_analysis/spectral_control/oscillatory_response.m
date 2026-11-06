@@ -3,6 +3,8 @@ function rr = oscillatory_response(network,x_ss,v_ss,M0,delta_par,E,ind_int,par,
 % this is an updated version of osc_resp_plot_timecourse
 % arguments: E structure of elasticity matrices, Ec, Ep, Ecc, Epc, Epp
 % Ea: elasticities for assignment functions
+% par.mu (optional, default 0): growth rate, i.e. dilution rate of internal metabolites
+%        (the Jacobian M0 - mu * eye(..) is used; see spectral_response_coefficients)
 
 pp = network.kinetics.parameters;
 
@@ -11,13 +13,14 @@ pp = network.kinetics.parameters;
 eval(default('ind_int','1:nm'));
 
 t     = par.t_appr;
+if isfield(par,'mu'), mu = par.mu; else, mu = 0; end
 omega = delta_par.omega;
 
 % ----------------------------------------
 % compute response coefficients
 
 [RS_omega,RV_omega,RS_2_2omega,RV_2_2omega,RS_2_2omega0,RV_2_2omega0] = ...
-    spectral_response_coefficients(network.NR,network.L,M0,delta_par,E.Ec(:,ind_int),E.Ep,E.Ecc(:,ind_int,ind_int),E.Ecp(:,ind_int,:),E.Epp);
+    spectral_response_coefficients(network.NR,network.L,M0,delta_par,E.Ec(:,ind_int),E.Ep,E.Ecc(:,ind_int,ind_int),E.Ecp(:,ind_int,:),E.Epp,mu);
 
 % --------------------------------------------------------------------------
 

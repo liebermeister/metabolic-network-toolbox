@@ -1,4 +1,4 @@
-%[RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv)
+%[RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv,mu)
 %
 % Unscaled response coefficients for a target function z (first and second order)
 %
@@ -8,11 +8,13 @@
 % network    : network with kinetic information in field 'kinetics'
 % c          : starting point for computing steady-state concnetrations
 % ind_rel_par: indices of parameters to be considered
+% mu         : growth rate, i.e. dilution rate of internal metabolites (optional, default 0);
+%              the steady states are computed with dilution of all internal metabolites
 % zc,zv      : vectors defining the target function z as a linear function of c and v (stationary)
 %
 % The calculation is done like in response_coefficients_numerical
 
-function [RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv)
+function [RZp,RZpp] = response_coefficients_target_numerical(network,c,ind_rel_par,zc,zv,mu)
 
 zc = column(zc);
 zv = column(zv);
@@ -25,7 +27,10 @@ delta        = 10^-5;
 T            = 10000;
 
 %v = network_velocities(c,network);
-[s,v,dum1,dum2,L_int,NR_int,indep_met_int] = network_steady_state(network,c,T);
+if ~exist('mu','var') || isempty(mu), mu = 0; end
+if mu ~= 0, dilution_rate = mu; else, dilution_rate = []; end
+
+[s,v,dum1,dum2,L_int,NR_int,indep_met_int] = network_steady_state(network,c,T,[],[],[],dilution_rate);
 c           = s;
 
 S_ext       = c(ind_ext);
@@ -71,8 +76,8 @@ for itt=1:np
   s_pert2(ind_ext) = Sext_pert2;
   network1.kinetics = nkinetics1;
   network2.kinetics = nkinetics2;
-  [s_pert1, v_pert1] = network_steady_state(network1,s_pert1,T,L_int,NR_int,indep_met_int);
-  [s_pert2, v_pert2] = network_steady_state(network2,s_pert2,T,L_int,NR_int,indep_met_int);
+  [s_pert1, v_pert1] = network_steady_state(network1,s_pert1,T,L_int,NR_int,indep_met_int,dilution_rate);
+  [s_pert2, v_pert2] = network_steady_state(network2,s_pert2,T,L_int,NR_int,indep_met_int,dilution_rate);
 
   delta_par_pert1 = par_pert1(it) - par(it);
   delta_par_pert2 = par_pert2(it )- par(it);
@@ -138,7 +143,7 @@ for itt=1:np
     s_pert1            = c + RS * delta_par1(ind_rel_par) + 0. * RS2diag(:,it) * delta_par1(it)^2 + 0. * RS2diag(:,k) * delta_par1(k)^2;
     s_pert1(ind_ext)   = Sext_pert;
     network1.kinetics = nkinetics;
-    [s_pert1,v_pert1]   = network_steady_state(network1,s_pert1,T,L_int,NR_int,indep_met_int);
+    [s_pert1,v_pert1]   = network_steady_state(network1,s_pert1,T,L_int,NR_int,indep_met_int,dilution_rate);
 
     my_RJ2_1 = [v_pert1 - v - RJ * delta_par1(ind_rel_par) ...
                 - 1/2 * RJ2diag(:,[it,k]) *  delta_par1([it,k]).^2] ...
@@ -161,7 +166,7 @@ for itt=1:np
     s_pert2            = c + RS * delta_par2(ind_rel_par) + 0. * RS2diag(:,it) * delta_par2(it)^2 + 0. * RS2diag(:,k) * delta_par2(k)^2;
     s_pert2(ind_ext)   = Sext_pert;
     network1.kinetics  = nkinetics;
-    [s_pert2,v_pert2]  = network_steady_state(network1,s_pert2,T,L_int,NR_int,indep_met_int);
+    [s_pert2,v_pert2]  = network_steady_state(network1,s_pert2,T,L_int,NR_int,indep_met_int,dilution_rate);
 
     my_RS2_2 = [s_pert1 - c - RS * delta_par1(ind_rel_par) ...
                 - 1/2 * RS2diag(:,[it,k]) *  delta_par2([it,k]).^2] ...

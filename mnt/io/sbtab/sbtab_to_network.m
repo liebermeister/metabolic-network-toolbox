@@ -23,7 +23,7 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %
 % Further optional input tables:
 %  [filename]_Regulation.tsv
-%  [filename]_Position.tsv
+%  [filename]_Position.tsv (or [filename]_Layout.tsv)
 %
 % OR: instead of a filename, an SBtab data structure can given directly!!
 %
@@ -39,7 +39,7 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %  options_default.use_sbml_ids        = 0;     % use sbml_ids from input files
 %  options_default.extension           ='.tsv'; % default extension of input files
 %  options_default.read_positions      = 1;     % expect SBtab table to contain position information
-%  options_default.position_file       = [];    % filename for position information
+%  options_default.position_file       = [];    % filename for position information (overrides the default file name)
 %  options_default.only_reaction_table = 0;     % read only reaction table (no compounds and parameters)
 %                                               % assume full filename to be given
 %  options_default.one_sbtab_file      = 1;     % all data from one SBtab file (several tables)
@@ -105,8 +105,20 @@ if ischar(filename)
     filename_reactions = [filename '_Reaction' options.extension];
     filename_compounds = [filename '_Compound' options.extension];
     filename_regulation = [filename '_Regulation' options.extension];
+    if exist(filename_regulation,'file')
+      filename_regulation = sbtab_table_load(filename_regulation);
+    else
+      filename_regulation = [];
+    end
     if options.read_positions
+      % layout table: file [filename]_Position or (newer name) [filename]_Layout
       filename_position = [filename '_Position' options.extension];
+      if ~exist(filename_position,'file')
+        filename_position = [filename '_Layout' options.extension];
+      end
+      if ~exist(filename_position,'file')
+        filename_position = [];
+      end
     else
       filename_position = [];
     end
@@ -126,9 +138,16 @@ else
   end
   if isfield(filename.tables,'Position')
     filename_position = filename.tables.Position;
+  elseif isfield(filename.tables,'Layout')
+    filename_position = filename.tables.Layout;
   else
     filename_position = [];
   end
+end
+
+% a layout file given in options.position_file has priority
+if length(options.position_file)
+  filename_position = options.position_file;
 end
 
 % If thermodynamic parameters are in an extra table, copy them into table "Parameters"

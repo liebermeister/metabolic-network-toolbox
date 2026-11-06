@@ -69,7 +69,7 @@ The folder `mnt` contains:
 | `fluxes` | flux balance analysis, flux minimisation, flux sampling, energy balance analysis, max-min driving force |
 | `thermodynamics` | driving forces and equilibrium constants |
 | `simulation` | steady states and dynamic simulation |
-| `control_analysis` | metabolic control analysis, spectral response coefficients, models with uncertain parameters |
+| `control_analysis` | metabolic control analysis, spectral response coefficients (= frequency response coefficients; see below), models with uncertain parameters |
 | `graphics` | network graphics |
 | `io` | import and export: SBML, SBtab, COBRA |
 | `utils`, `demo` | constants, version numbers, demo script |
@@ -77,6 +77,11 @@ The folder `mnt` contains:
 Networks, kinetics, and data are represented by Matlab structs; for details, type
 `help metabolic_network`, `help kinetics`, `help kinetic_data`, and `help state_data`. Most folders contain a `Contents.m` file with an
 overview (type, e.g., `help fluxes`).
+
+Terminology: in function names and older help texts, "spectral response" and "spectral response
+coefficients" mean frequency response and frequency response coefficients: the complex-valued
+responses to sine-wave parameter perturbations, as functions of the frequency. The function
+names keep the older term.
 
 ## Tests
 

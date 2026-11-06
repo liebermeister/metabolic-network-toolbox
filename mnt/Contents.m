@@ -16,7 +16,7 @@
 %   fluxes              - flux balance analysis, thermodynamic constraints, flux sampling
 %   thermodynamics      - driving forces and equilibrium constants
 %   simulation          - steady states and dynamic simulation
-%   control_analysis    - metabolic control analysis, spectral response, uncertain parameters
+%   control_analysis    - metabolic control analysis, spectral (= frequency) response, uncertain parameters
 %
 % Other
 %   graphics            - network graphics ('help netgraph_draw')

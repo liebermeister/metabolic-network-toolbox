@@ -87,7 +87,7 @@ Example: `mnt_example_control_analysis`
 | Compute elasticities | `elasticities` |
 | Compute control coefficients | `control_coefficients` |
 | Compute response coefficients | `response_coefficients` |
-| Compute spectral response coefficients | `spectral_response` |
+| Compute spectral response coefficients (= frequency response coefficients) | `spectral_response` |
 
 ## Graphics
 

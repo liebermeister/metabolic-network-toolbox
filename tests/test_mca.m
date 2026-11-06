@@ -62,3 +62,34 @@ N1  = [-1 0; 1 -1; 0 1];
 Ec1 = [0 1e-12 0; 0 0 0];
 [~, ~, ~, ~, M, M_adj, ~, stable] = control_coefficients(N1, Ec1, [1 0 1]');
 assert(stable == 1 && max(real(eig(M))) > 0 && max(real(eig(M_adj))) < 0);
+
+%% control_coefficients: growth rate mu (dilution term - mu * eye in the Jacobian)
+% one internal metabolite with Jacobian eigenvalue 0.01 (unstable without dilution)
+N1  = [-1 0; 1 -1; 0 1];
+Ec1 = [0 0.01 0; 0 0 0];
+failed = 0;
+try
+  control_coefficients(N1, Ec1, [1 0 1]');
+catch
+  failed = 1;
+end
+assert(failed == 1);
+% with mu = 0.1 > 0.01, the state is stable; Jacobian 0.01 - 0.1
+[CJ, CS, ~, ~, M, ~, ~, stable] = control_coefficients(N1, Ec1, [1 0 1]', [], [], [], [], 0.1);
+assert(stable == 1 && max(real(eig(M))) < 0);
+assert(max(abs(CS(2,:) - [1 -1] / 0.09)) < 1e-10);
+assert(max(max(abs(CJ - (eye(2) + Ec1(:,2) * CS(2,:))))) < 1e-10);
+% mu = 0 and mu = [] give the same result as no mu
+[CJa, CSa] = control_coefficients(N, Ec, network.external);
+[CJb, CSb] = control_coefficients(N, Ec, network.external, [], [], [], [], 0);
+[CJc, CSc] = control_coefficients(N, Ec, network.external, [], [], [], [], []);
+assert(isequal(CJa, CJb, CJc) && isequal(CSa, CSb, CSc));
+
+%% flux_control_coefficients_split and spectral_response_coefficients: growth rate mu
+N1  = [-1 0; 1 -1; 0 1];
+Ec1 = [0 0.01 0; 0 0 0];
+[CJ_s, CS_s] = flux_control_coefficients_split(N1, Ec1, [1 0 1]', [], [], [], [], 0.1);
+assert(max(abs(CS_s(2,:) - [1 -1] / 0.09)) < 1e-10);
+% with Ep = I, the response coefficients RS_omega equal the control coefficients CS_omega
+CS_omega = spectral_response_coefficients([1 -1], 1, [], struct('omega', 0), Ec1(:,2), eye(2), [], [], [], 0.1);
+assert(max(abs(CS_omega - [1 -1] / 0.09)) < 1e-10);

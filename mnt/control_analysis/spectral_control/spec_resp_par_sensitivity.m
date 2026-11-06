@@ -1,8 +1,14 @@
-function rr = spec_resp_par_sensitivity(network,M0,omega_mean,E,ind_int,osc_in,osc_out,plot_parameters2,plot_parameters1)
+function rr = spec_resp_par_sensitivity(network,M0,omega_mean,E,ind_int,osc_in,osc_out,plot_parameters2,plot_parameters1,mu)
 
 % this is an updated version of osc_resp_plot_timecourse
+% Terminology: 'spectral' response coefficients are frequency response coefficients, i.e. the
+% complex-valued responses to sine-wave parameter perturbations as functions of the frequency
+% (the frequency response, or transfer function at s = i*omega, of the linearised system).
+% The function names keep the older term 'spectral'.
 % arguments: E structure of elasticity matrices, Ec, Ep, Ecc, Epc, Epp
 % Ea: elasticities for assignment functions
+% mu (optional, default 0): growth rate, i.e. dilution rate of internal metabolites
+%    (the Jacobian M0 - mu * eye(..) is used; M0 without dilution term)
 
 
 pp = network.kinetics.parameters;
@@ -32,7 +38,9 @@ L         = network.L;
 n_react = size(N0,2);
 n_indep = size(N0,1);
 
-if ~exist('M0','var'), M0 = N0 * epsilon_1 * L;  end
+if ~exist('M0','var') || isempty(M0), M0 = N0 * epsilon_1 * L;  end
+if ~exist('mu','var') || isempty(mu), mu = 0; end
+M0 = M0 - mu * eye(size(M0));
 
 if rank(full(M0))<size(M0,1), warning('Jacobian of lin. independent variables is rank-deficient! Using pinv instead of inv'); end
 

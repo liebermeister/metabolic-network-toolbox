@@ -1,5 +1,5 @@
 % Control analysis of metabolic networks
 %
 % Metabolic control analysis       - see 'help metabolic_control'
-% Spectral response coefficients   - see 'help spectral_control'
+% Spectral response coefficients   - see 'help spectral_control' (spectral = frequency response)
 % Models with uncertain parameters - see 'help uncertain_parameters'

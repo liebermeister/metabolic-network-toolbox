@@ -1,4 +1,4 @@
-%[C_J, C_S, L, NR ] = control_coefficients(N, epsilon, ext, used, NR, L, J)
+%[C_J, C_S, L, NR ] = flux_control_coefficients_split(N, epsilon, ext, used, NR, L, J, mu)
 %
 %Metabolic control coefficients (unnormalised, first order)
 %
@@ -13,6 +13,8 @@
 % L           link matrix  of internal metabolites (see 'reduce_N')
 % NR          reduced stoichiometric matrix of internal metabolites
 % 'used' can be set [].
+% mu          growth rate, i.e. dilution rate of internal metabolites (default 0: no dilution);
+%             the Jacobian then contains a dilution term - mu * eye(..) (see control_coefficients)
 %
 %OUTPUTS
 % C_J, C_S    matrices of flux and concentration control coefficients (first order)
@@ -21,9 +23,26 @@
 
 % C_J2, C_S2  arrays of flux and concentration control coefficients (second order)
 
-function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = flux_control_coefficients_split(N,epsilon,external,used,NR_int,L_int,J)
+function [C_J,C_S,L_int,NR_int,C_J2,C_S2] = flux_control_coefficients_split(N,epsilon,external,used,NR_int,L_int,J,mu)
 
 if ~exist('used','var'), used=[]; end
+if ~exist('mu','var') || isempty(mu), mu = 0; end
+
+if mu ~= 0
+  %% build explicit model with dilution reactions (see control_coefficients)
+  [nm,nr]  = size(N);
+  ind_int  = find(external==0);
+  n_int    = length(ind_int);
+  my_N     = [N, zeros(nm,n_int)];
+  my_N(ind_int, nr+(1:n_int)) = -eye(n_int);
+  my_eps   = [epsilon; zeros(n_int,nm)];
+  my_eps(nr+(1:n_int),ind_int) = mu * eye(n_int);
+  if length(used), used = [used(:); ones(n_int,1)]; end
+  [C_J,C_S,L_int,NR_int] = flux_control_coefficients_split(my_N,my_eps,external,used);
+  C_J = C_J(1:nr,1:nr);
+  C_S = C_S(:,1:nr);
+  return
+end
 
 external     = find(external);
 internal     = setdiff(1:size(N,1)',external);

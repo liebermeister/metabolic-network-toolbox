@@ -1,6 +1,6 @@
 % CONTROL_COEFFICIENTS Compute control coefficients (unscaled, first order)
 %
-%[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal, stable] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal, dilution_rate, on_unstable)
+%[CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal, stable] = control_coefficients(N, Ec, external, used, NR_int, L_int, indp_among_internal, mu, on_unstable)
 %
 %Metabolic control coefficients (unnormalised, first order)
 %
@@ -15,7 +15,11 @@
 % L_int       link matrix of internal metabolites (see 'reduce_N')
 % NR_int      reduced stoichiometric matrix of internal metabolites
 % 'used'      can be set to [].
-% dilution_rate  (scalar) dilution rate of internal metabolites (default []: no dilution)
+% mu             (scalar) growth rate, i.e. dilution rate of internal metabolites (default 0: no dilution)
+%                With mu > 0, all internal metabolites are diluted, and the Jacobian
+%                contains a dilution term - mu * eye(..). States with Jacobian eigenvalues
+%                (of the system without dilution) smaller than mu are therefore stable.
+%                mu must be given in the time unit of the rates (typically 1/s)
 % on_unstable    what to do in unstable states: 'error' (default) or 'nan' (CJ and CS are nan)
 %
 %Outputs
@@ -28,11 +32,13 @@
 
 % CJ2, CS2  arrays of unscaled second order control coefficients
 
-function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal, stable] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal,dilution_rate,on_unstable)
+function [CJ,CS,L_int,NR_int,M, M_adj, indp_among_internal, stable] = control_coefficients(N,Ec,external,used,NR_int,L_int,indp_among_internal,mu,on_unstable)
 
 if find(isfinite(Ec)==0), error('Elasticity matrix contains non-finite values'); end
 
-eval(default('used','[]','NR_int','[]','L_int','[]','dilution_rate','[]','on_unstable','''error'''));
+eval(default('used','[]','NR_int','[]','L_int','[]','mu','0','on_unstable','''error'''));
+
+if isempty(mu), mu = 0; end
 
 stable = 1;
 
@@ -48,9 +54,10 @@ if sum(external==0)==0
   return
 end
 
-if length(dilution_rate)
+if mu ~= 0
   %% build explicit model with dilution reactions (because dilution
-  %% changes the conservation relations!)
+  %% changes the conservation relations!); the Jacobian of this model
+  %% (for all internal metabolites) is N_int * Ec_int - mu * eye(n_int)
   %% L_int, NR_int, M, M_adj, and indp_among_internal refer to this extended model
   [nm,nr]  = size(N);
   ind_int  = find(external==0);
@@ -58,9 +65,9 @@ if length(dilution_rate)
   my_N     = [N, zeros(nm,n_int)];
   my_N(ind_int, nr+(1:n_int)) = -eye(n_int);
   my_Ec    = [Ec; zeros(n_int,nm)];
-  my_Ec(nr+(1:n_int),ind_int) = dilution_rate * eye(n_int);
+  my_Ec(nr+(1:n_int),ind_int) = mu * eye(n_int);
   if length(used), used = [used(:); ones(n_int,1)]; end
-  [CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal, stable] = control_coefficients(my_N, my_Ec, external, used, [], [], [], [], on_unstable);
+  [CJ, CS, L_int, NR_int, M, M_adj, indp_among_internal, stable] = control_coefficients(my_N, my_Ec, external, used, [], [], [], 0, on_unstable);
   CJ = CJ(1:nr,1:nr);
   CS = CS(:,1:nr);
   return
@@ -109,7 +116,7 @@ if eigmax > eig_tolerance
       CJ = nan * ones(size(N,2));
       return
     otherwise
-      error(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %f',eigmax));
+      error(sprintf(' * control_coefficients.m: The steady state is unstable; maximal eigenvalue %g (including dilution term)',eigmax));
   end
 elseif eigmax > 0
   display(sprintf(' * Maximal real part of eigenvalues %g < numerical error, correcting M',eigmax));

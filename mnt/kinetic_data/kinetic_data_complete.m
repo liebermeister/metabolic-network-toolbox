@@ -28,6 +28,9 @@ for it = 1:length(fn)
 
     case 'Multiplicative'
 
+      % complete logarithmic bounds from given non-logarithmic bounds
+      kinetic_data.(fn{it}) = complete_log_bounds(kinetic_data.(fn{it}));
+
       my_mean_ln   = log(eval(parameter_prior.PriorMedian{parameter_prior.symbol_index.(fn{it})}));
       my_std_ln    = log(10) * eval(parameter_prior.PriorStd{parameter_prior.symbol_index.(fn{it})});
       [my_mean, my_std] = lognormal_log2normal(my_mean_ln,my_std_ln);
@@ -87,9 +90,29 @@ if ~isempty(network)
     kinetic_data.KA.upper(network.regulation_matrix <=0) = nan;
   end
 
-  if isfield(kinetic_data,'KM')
+  if isfield(kinetic_data,'KI')
     kinetic_data.KI.lower(network.regulation_matrix >=0) = nan;
     kinetic_data.KI.upper(network.regulation_matrix >=0) = nan;
   end
 
+end
+
+
+% -----------------------------------------------------------------
+
+function q = complete_log_bounds(q)
+
+% Where a bound is given only on non-logarithmic scale (lower, upper),
+% insert the corresponding value on logarithmic scale (lower_ln, upper_ln)
+
+for bound = {'lower','upper'}
+  b    = bound{1};
+  b_ln = [b '_ln'];
+  if isfield(q,b)
+    if ~isfield(q,b_ln) || isempty(q.(b_ln)),
+      q.(b_ln) = nan * q.(b);
+    end
+    ind = find(isfinite(q.(b)) & ~isfinite(q.(b_ln)) & q.(b) > 0);
+    q.(b_ln)(ind) = log(q.(b)(ind));
+  end
 end

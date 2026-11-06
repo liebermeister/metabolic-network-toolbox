@@ -4,6 +4,9 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 ## Not released yet
 
+- Documentation: "spectral response coefficients" are now also called by their more common name, frequency response coefficients (notes in `README.md`, `GUIDE.md`, the `Contents.m` files, and the help texts of `spectral_response`, `spectral_response_coefficients`, and `spec_resp_par_sensitivity`); function names are unchanged
+- `netgraph_movie`: new option `frame_capture` ('axes', default, or 'figure'); with 'figure', labels outside the axes are not cut off
+- New function `temporal_control_coefficients`: time-dependent control coefficients (concentrations and fluxes, unscaled and scaled) after a step change of enzyme activities, in the linear approximation; optional dilution rate `mu` as in `control_coefficients` (taken from the IMF package, `imf_temporal_control_coefficients`)
 - `mnt_BASEDIR` renamed to `mnt_basedir`; it now returns the main directory of the repository, without a final file separator. The old name cannot remain as a wrapper, because the file names differ only by case (it had no callers)
 - New function folders have a `Contents.m` file; `README.md` has a Quick start section
 - `sample_feasible_mu`: default method 'sample' now samples uniformly by hit-and-run (was: 'extreme_points'); methods 'sample' and 'centre' returned wrong vectors; works with rank-deficient stoichiometric matrices; method 'centre' can also be called 'central'

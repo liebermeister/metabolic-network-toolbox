@@ -26,6 +26,8 @@
 %   use_background_colors 0
 %   rest_frames
 %   prefix
+%   frame_capture         'axes'   'axes': frames show the axes only (labels outside the axes are cut off);
+%                                  'figure': frames show the whole figure
 %
 % to save a movie as an animated gif, use movie_save(filename,M)
 %
@@ -37,7 +39,7 @@ eval(default('data_type','''concentrations''','n_frames','[]','text_flag','0'));
 
 options = netgraph_options(varargin, network);
 
-options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0);
+options_default = struct('flux_moves',0,'metabolite_colors',[],'reaction_colors',[],'metvaluesmin',0,'timebar',1,'background_colors',[],'use_background_colors',0,'frame_capture','axes');
 options_default.timebar_labels = {};
 
 options = join_struct(options_default, options);
@@ -172,7 +174,10 @@ for j=1:jj
   end
   axis(a);
 
-  M(j) = getframe(gca);
+  switch options.frame_capture
+    case 'figure', M(j) = getframe(gcf);
+    otherwise,     M(j) = getframe(gca);
+  end
 
   if isfield(options,'prefix')
     if j ==1,             print(gcf,[options.prefix '_start.eps'],'-depsc'); end

@@ -3,6 +3,8 @@ function rr = oscillatory_response_rectangular(network,x_ss,v_ss,M0,delta_par,E,
 % this is an updated version of osc_resp_plot_timecourse
 % arguments: E structure of elasticity matrices, Ec, Ep, Ecc, Epc, Epp
 % Ea: elasticities for assignment functions
+% par.mu (optional, default 0): growth rate, i.e. dilution rate of internal metabolites
+%        (dilution term - mu * eye(..) in the Jacobian)
 
 pp       = network.kinetics.parameters;
 [nm,nr]  = size(network.N);
@@ -12,6 +14,7 @@ pp       = network.kinetics.parameters;
 eval(default('ind_int','1:nm'));
 
 t       = par.t_appr;
+if isfield(par,'mu'), mu = par.mu; else, mu = 0; end
 omega   = delta_par.omega;
 ind_osc = find(strcmp(delta_par.name,E.parameters));
 
@@ -51,7 +54,7 @@ for it_mode = 1:par.max_mode
   % this_rect_coeff = double(it_mode==1); % TEST ->  cosine profile
   a = 1;
   this_rect_coeff = - i * 4*a/pi * [mod(it_mode,2)] / it_mode * exp(i * pi/2*it_mode);  % rectangular profile
-  this_R_spectral = -C * inv(A-i*this_omega*eye(size(A)))*B;%+D;
+  this_R_spectral = -C * inv(A-(mu+i*this_omega)*eye(size(A)))*B;%+D;
   this_delta_x(:,it_mode) = this_R_spectral(:,ind_osc) *  this_rect_coeff * u_ampl;
   this_delta_p(it_mode)   =                               this_rect_coeff * u_ampl;
 end

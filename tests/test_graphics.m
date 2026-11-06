@@ -95,6 +95,9 @@ assert(isempty(lastwarn));
 M = netgraph_movie(network, [0 1 2], rand(nm,3), 'concentrations', 4, 0, ...
                    struct('use_background_colors',1,'background_colors',[1 1 1; 1 0 0]));
 assert(numel(M) == 4);
+M = netgraph_movie(network, [0 1 2], rand(nm,3), 'concentrations', 2, 1, struct('frame_capture','figure'));
+F = getframe(gcf);
+assert(numel(M) == 2 && isequal(size(M(1).cdata), size(F.cdata)));
 
 %% synergy_network_plot: values for pairs of reactions
 fig = figure('Visible','off'); cleanup = onCleanup(@() close(fig));

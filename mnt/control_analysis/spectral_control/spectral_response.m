@@ -1,8 +1,16 @@
-function [c_osc, v_osc, u_osc, RS_omega, RV_omega] = spectral_response(network, network_CoHid, c_ss, v_ss, elasticities_ss, delta_par, M0, fignum,squaresize,network_CoSplit,fontsize,ind_met_ext_osc,x_osc, metabolite_color, flux_color)
+function [c_osc, v_osc, u_osc, RS_omega, RV_omega] = spectral_response(network, network_CoHid, c_ss, v_ss, elasticities_ss, delta_par, M0, fignum,squaresize,network_CoSplit,fontsize,ind_met_ext_osc,x_osc, metabolite_color, flux_color, mu)
 
 % SPECTRAL_RESPONSE - Compute response of kinetic model to parameter oscillation
 %
-% [c_osc,v_osc,u_osc,RS_omega, RV_omega] = spectral_response(network, network_CoHid, c_ss, v_ss, elasticities_ss, delta_par, M0, fignum,squaresize,network_CoSplit,fontsize)
+% Terminology: 'spectral' response coefficients are frequency response coefficients, i.e. the
+% complex-valued responses to sine-wave parameter perturbations as functions of the frequency
+% (the frequency response, or transfer function at s = i*omega, of the linearised system).
+% The function names keep the older term 'spectral'.
+%
+% [c_osc,v_osc,u_osc,RS_omega, RV_omega] = spectral_response(network, network_CoHid, c_ss, v_ss, elasticities_ss, delta_par, M0, fignum,squaresize,network_CoSplit,fontsize,ind_met_ext_osc,x_osc, metabolite_color, flux_color, mu)
+%
+% mu: growth rate, i.e. dilution rate of internal metabolites (optional, default 0);
+%     the Jacobian M0 - mu * eye(..) is used (M0 without dilution term)
 %
 % Compute response of steady-state kinetic model to parameter oscillation
 %
@@ -26,7 +34,8 @@ function [c_osc, v_osc, u_osc, RS_omega, RV_omega] = spectral_response(network, 
 %metabolite_color = [0.7 0.4 0.1];
 %flux_color       = [0.3 0.3 0.5];
 
-eval(default('delta_par','[]', 'M0','[]','network_CoSplit','network','fontsize','8'));
+eval(default('delta_par','[]', 'M0','[]','network_CoSplit','network','fontsize','8','mu','0'));
+if isempty(mu), mu = 0; end
 
 
 % -----------------------------------------
@@ -39,6 +48,11 @@ if isempty(M0)
   Ec_int  = elasticities_ss.un_E_c(:,ind_int);
   [L_int, NR_int] = reduce_N(N_int);
   M0 = full(NR_int * Ec_int * L_int);
+end
+
+% dilution term
+if mu ~= 0 && prod(size(M0))
+  M0 = M0 - mu * eye(size(M0));
 end
 
 % -----------------------------------------
