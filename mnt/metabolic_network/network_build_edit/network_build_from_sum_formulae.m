@@ -350,7 +350,7 @@ function [W, n] = regulation_table_to_matrix(regulation_table, metabolites, reac
 %   !RegulatorType, !TargetType  (optional) entity types; rows with types other than
 %                   'metabolite' (regulator) and 'enzyme' (target), e.g. regulation of
 %                   gene expression, are skipped
-%   !RegulationType          'activation', 'inhibition', or 'dual'
+%   !RegulationType          'activation', 'inhibition', 'dual', or 'unknown'
 %   !RegulationType:SBO      SBO term, e.g. SBO:0000459 (stimulator), SBO:0000020 (inhibitor)
 %   !RegulatoryCoefficient   signed Hill coefficient (+ activation, - inhibition; NaN: unknown or dual)
 % The sign is taken from the first of these three columns that has an entry;
@@ -441,7 +441,7 @@ function s = regulation_type_sign(entry)
 
 activator_sbo = [459, 21, 461, 462, 170, 171, 656];
 inhibitor_sbo = [20, 206, 207, 536, 537, 169];
-dual_sbo      = [595];
+dual_sbo      = [595, 596];  % dual-activity modifier, modifier of unknown activity
 
 s = nan;
 if ~ischar(entry) || isempty(strtrim(entry)), return; end
@@ -458,7 +458,7 @@ end
 switch entry
   case {'activation','activator','+'},  s = 1;
   case {'inhibition','inhibitor','-'},  s = -1;
-  case {'dual','+-'},                   s = 0;
+  case {'dual','+-','unknown','?'},    s = 0;
 end
 
 % -------------------------------------
