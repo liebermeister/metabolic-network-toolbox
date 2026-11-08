@@ -18,7 +18,6 @@ prod_P = [prod_P ')'];
 
 switch reaction.type
 
-
   case {'convenience'}
 
     formula = convenience_get_formula(rnum,s,p,act,inh);

@@ -14,12 +14,12 @@ function v = sample_feasible_v(N, ind_ext, constraints, options)
 %  options.epsilon_stationary
 %  options.cycles
 %
-% for information about 'constraints' and 'options', see stm_default_options
+% for information about 'constraints' and 'options', see flux_constraints_default_options
 
 [nm,nr] = size(N);
 
 if ~exist('constraints','var')
-  [options, constraints] = stm_default_options(N);
+  [options, constraints] = flux_constraints_default_options(N);
 end
 
 if ~isnan(options.seed)

@@ -1,0 +1,18 @@
+!!SBtab TableID='ConfigureDataMapping' TableType='Config' SBtabVersion='1.2' Method='data-mapping' TableName='Default options of Data mapping (including eQuilibrator) (Matlab)'
+% Default options of the Matlab implementation, assembled from the options of kinetic_data_load.m (Metabolic Network Toolbox).
+% Empty values: option is empty by default ([] in Matlab); vector-valued options are
+% described in the column !Description. Flags: 1 (true) or 0 (false).
+% These options control how kinetic data (SBtab Quantity tables) are read and mapped to a model.
+!ID	!Value	!Description
+use_sbml_ids	0	Map data to the model by SBML IDs
+use_kegg_ids	0	Map data to the model by KEGG IDs
+flag_invent_std	1	Invent missing standard deviations (from default geometric standard deviations)
+verbose	0	Verbose output
+filter_column		Column used for filtering data rows
+filter_entry		Value in filter_column of the data rows to be used
+reaction_column_name		Name of the reaction column in the data file (default: chosen from the mapping options)
+compound_column_name		Name of the compound column in the data file (default: chosen from the mapping options)
+use_python_version_defaults	0	Use the same default settings as the Python version of parameter balancing
+expected_unit		Expected unit of the data values (default: unit from the prior table)
+enforce_ranges	1	Enforce feasible ranges (bounds from the prior table)
+table_id		TableID of the data table (needed only if the data file contains several tables)

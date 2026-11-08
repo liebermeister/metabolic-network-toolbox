@@ -179,7 +179,7 @@ switch pars.method
     if pars.verbose, display('Thermodynamically correct projection');end
     dd.v.mean = v_mean;
     dd.v.std  = v_std;
-    [options,stm_constraints]  = stm_default_options(pars.network);
+    [options,stm_constraints]  = flux_constraints_default_options(pars.network);
     stm_constraints.ext_sign   = nan * ones(length(ind_ext),1);
     stm_constraints.v_sign     = v_sign;
     stm_constraints.ind_ignore = pars.ind_ignore;

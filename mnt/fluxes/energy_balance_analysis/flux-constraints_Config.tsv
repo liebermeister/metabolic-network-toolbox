@@ -1,0 +1,40 @@
+!!SBtab TableID='ConfigureFluxConstraints' TableType='Config' SBtabVersion='1.2' Method='metabolic-network-toolbox' TableName='Default flux and thermodynamic constraints (Metabolic Network Toolbox, Matlab)'
+% Default options of the Matlab function flux_constraints_default_options.m (Metabolic Network Toolbox),
+% used by flux sampling and thermodynamic functions of the Metabolic Network Toolbox and by STM (stm_default_options).
+% Empty values: option is empty by default ([] in Matlab). Flags: 1 (true) or 0 (false).
+% The options are stored in two Matlab structs, 'options' and 'constraints' (prefixes of the IDs).
+% For vectors (nr: number of reactions; nm: number of metabolites), the value given is used for all elements.
+!ID	!Value	!Description
+options.seed	NaN	Random seed (NaN: no seed)
+options.verbose	0	Verbose output
+options.epsilon_stationary	0.0001	Tolerance for stationarity
+options.cycles	NaN	Thermodynamic cycles (NaN: computed when needed)
+options.n_dmu_samples	1	Number of reaction Gibbs free energy samples (sample_feasible_dmu)
+options.ind_ignore		Indices of reactions ignored when computing thermodynamic loops
+constraints.v_min	-Inf	Lower bounds for fluxes (vector, nr x 1)
+constraints.v_max	Inf	Upper bounds for fluxes (vector, nr x 1)
+constraints.v_sign	NaN	Flux signs (vector, nr x 1; overrides v_min and v_max)
+constraints.v_fix	NaN	Predefined fluxes (vector, nr x 1; overrides v_min and v_max)
+constraints.v_mean	NaN	Flux data (vector, nr x 1)
+constraints.v_std	NaN	Flux data error bars (vector, nr x 1)
+constraints.ext_signs	NaN	Signs of production rates of external metabolites (vector, nm x 1)
+constraints.log_c_mean	0	Natural logarithm of metabolite level data (vector, nm x 1)
+constraints.log_c_std	0	Error bars of ln metabolite level data (vector, nm x 1)
+constraints.log_c_fix	NaN	Predefined ln metabolite levels (vector, nm x 1)
+constraints.log_c_min	NaN	Lower bounds for ln metabolite levels (vector, nm x 1)
+constraints.log_c_max	NaN	Upper bounds for ln metabolite levels (vector, nm x 1)
+constraints.mu0_fix	NaN	Predefined standard chemical potentials (vector, nm x 1)
+constraints.mu0_min	NaN	Lower bounds for standard chemical potentials (vector, nm x 1)
+constraints.mu0_max	NaN	Upper bounds for standard chemical potentials (vector, nm x 1)
+constraints.dmu_limit	50	Upper limit for absolute reaction Gibbs free energies (kJ/mol; when raising it, raise dmu_min and dmu_max as well)
+constraints.dmu_limit_min	0.099	Lower limit for absolute reaction Gibbs free energies (kJ/mol)
+constraints.dmu_min		Lower bounds for reaction Gibbs free energies (vector, nr x 1; empty: -dmu_limit)
+constraints.dmu_max		Upper bounds for reaction Gibbs free energies (vector, nr x 1; empty: dmu_limit)
+constraints.dmu_fix	NaN	Predefined reaction Gibbs free energies (vector, nr x 1)
+constraints.dmu_eqconstraint		Equality constraints for reaction Gibbs free energies (struct with fields matrix, vector)
+constraints.mu_min	-Inf	Lower bounds for chemical potentials (vector, nm x 1)
+constraints.mu_max	Inf	Upper bounds for chemical potentials (vector, nm x 1)
+constraints.mu_fix	NaN	Predefined chemical potentials (vector, nm x 1)
+constraints.mu_eqconstraint		Equality constraints for chemical potentials (struct with fields matrix, vector)
+constraints.Keq_fix	NaN	Predefined equilibrium constants (vector, nr x 1)
+constraints.rho	100	Upper bound on v+/v or v-/v

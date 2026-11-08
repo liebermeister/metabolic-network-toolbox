@@ -22,7 +22,7 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 % also see network_to_sbtab.m
 %
 % Further optional input tables:
-%  [filename]_Regulation.tsv
+%  [filename]_Regulation.tsv  (table type Regulation; in an SBtab document: TableID 'Regulation')
 %  [filename]_Position.tsv (or [filename]_Layout.tsv)
 %
 % OR: instead of a filename, an SBtab data structure can given directly!!
@@ -131,10 +131,22 @@ else
   else
     filename_compounds = [];
   end
-  if isfield(filename.tables,'EnzymeRegulation')
+  % Regulation table (kinetic regulation of enzymes): TableID 'Regulation'
+  % (older files: 'EnzymeRegulation'), or another table of TableType 'Regulation'
+  filename_regulation = [];
+  if isfield(filename.tables,'Regulation')
+    filename_regulation = filename.tables.Regulation;
+  elseif isfield(filename.tables,'EnzymeRegulation')
     filename_regulation = filename.tables.EnzymeRegulation;
   else
-    filename_regulation = [];
+    table_ids = fieldnames(filename.tables);
+    for it = 1:length(table_ids)
+      my_table = filename.tables.(table_ids{it});
+      if isfield(my_table,'attributes') && isfield(my_table.attributes,'TableType') && strcmp(my_table.attributes.TableType,'Regulation')
+        filename_regulation = my_table;
+        break
+      end
+    end
   end
   if isfield(filename.tables,'Position')
     filename_position = filename.tables.Position;

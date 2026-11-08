@@ -5,7 +5,7 @@ function [C, mnet] = network_efmtool(network, method, ind_ignore, zv, omit_rever
 % Compute elementary flux modes by calling the efmtool function "CalculateFluxModes"
 %
 % Function arguments:
-%   method: 'internal': (default) require only internal metabolites to be stationary
+%   method: 'internal': require only internal metabolites to be stationary
 %                       (-> all stationary modes)
 %           'total':    require also external metabolites to be stationary
 %                       (-> all stationary, eba-unfeasible modes)
@@ -14,12 +14,22 @@ function [C, mnet] = network_efmtool(network, method, ind_ignore, zv, omit_rever
 %      if zv is given, only modes without a flux benefit are given back
 %   omit_reverse_copies: (flag) if there are pairs of EFMs that are identical
 %                        except for a prefactor -1, omit one of them
+%   enforce_reactions: reactions that must be active in the modes
+%
+% Default values of the arguments: see the SBtab Config file 'efm-enumeration_Config.tsv'
+% (in the same folder as this function; TableID 'ConfigureEFM').
 
 if ~exist('CalculateFluxModes','file')
   error('Please install the efmtool Toolbox (http://www.csb.ethz.ch/tools/efmtool) - Otherwise certain flux analysis functions will not work.');
 end
 
-eval(default('method','''internal''','ind_ignore','[]','zv','[]','omit_reverse_copies','0','enforce_reactions','[]'));
+% default values of the arguments from the SBtab Config file 'efm-enumeration_Config.tsv' (in the same folder as this function)
+defaults = load_config_table(fullfile(fileparts(mfilename('fullpath')), 'efm-enumeration_Config.tsv'));
+if ~exist('method','var'),              method              = defaults.method;              end
+if ~exist('ind_ignore','var'),          ind_ignore          = defaults.ind_ignore;          end
+if ~exist('zv','var'),                  zv                  = defaults.zv;                  end
+if ~exist('omit_reverse_copies','var'), omit_reverse_copies = defaults.omit_reverse_copies; end
+if ~exist('enforce_reactions','var'),   enforce_reactions   = defaults.enforce_reactions;   end
 
 % remove special characters from metabolite names (for efmtool)
 network.metabolites = network_adjust_names_for_sbml_export(network.metabolites);

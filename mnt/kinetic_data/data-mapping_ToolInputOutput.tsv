@@ -1,0 +1,9 @@
+!!SBtab TableID='ToolInputOutput' TableType='ToolInputOutput' SBtabVersion='1.2' Method='data-mapping' TableName='Input and output tables of Data mapping (including eQuilibrator)'
+% Matlab: kinetic_data_load (Metabolic Network Toolbox) reads kinetic data and maps them to a model;
+% kinetic_data_save writes them.
+!RequiredIn	!RequiredTable	!TableID	!File	!IsOptional	!RequiredColumns	!Comment
+Input	Reaction	Reaction	model file	False	ID, ReactionFormula, Identifiers:kegg.reaction	Model (alternatively given as SBML file)
+Input	Compound	Compound	model file	False	ID, Identifiers:kegg.compound	Model (alternatively given as SBML file)
+Input	Quantity		data file	False	QuantityType, Reaction, Compound, Mean, Std, Unit	Kinetic and thermodynamic data; elements mapped by IDs, SBML IDs or KEGG IDs; several data files possible
+Input	QuantityInfo	PriorTable	prior file	True	QuantityType, Symbol, Unit, LowerBound, UpperBound, DataGeometricStd	Default: mnt_prior.tsv
+Output	Quantity	ParameterData	output data file	False	QuantityType, Reaction, Compound, Mean, Std, Unit	Data mapped to the model (written by kinetic_data_save)

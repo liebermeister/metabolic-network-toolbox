@@ -145,7 +145,10 @@ end
 
 [nm,nr] = size(network.N);
 
-% metabolic regulation of enzymes
+% kinetic regulation of enzymes (column KineticRegulation, e.g. '+ ADP - PEP'),
+% written from network.regulation_matrix; without a regulation matrix, a column
+% KineticRegulation (or MetabolicRegulation, Regulator) read from an SBtab file is kept
+kinetic_regulation = {};
 if isfield(network,'regulation_matrix') && norm(full(network.regulation_matrix))>0
   for it = 1:nr
     my_line = '';
@@ -158,7 +161,14 @@ if isfield(network,'regulation_matrix') && norm(full(network.regulation_matrix))
       my_line = [my_line '- ' network.metabolites{ind_neg(itt)} ' '];
     end
     if length(my_line) , my_line = my_line(1:end-1); end
-    network.MetabolicRegulation{it,1} = my_line;
+    kinetic_regulation{it,1} = my_line;
+  end
+elseif ~isfield(network,'regulation_matrix') || nnz(network.regulation_matrix) == 0
+  for my_column = {'KineticRegulation', 'MetabolicRegulation', 'Regulator'}
+    if isfield(network, my_column{1}) && length(network.(my_column{1})) == nr
+      kinetic_regulation = column(network.(my_column{1}));
+      break
+    end
   end
 end
 
@@ -174,8 +184,8 @@ if isfield(network, 'sbml_id_reaction')
   reaction_table = sbtab_table_add_column(reaction_table,'SBML:reaction:id',network.sbml_id_reaction);
 end
 
-if isfield(network,'MetabolicRegulation')
-  reaction_table = sbtab_table_add_column(reaction_table,'MetabolicRegulation',network.MetabolicRegulation);
+if length(kinetic_regulation)
+  reaction_table = sbtab_table_add_column(reaction_table,'KineticRegulation',kinetic_regulation);
 end
 
 if options.modular_rate_law_kinetics

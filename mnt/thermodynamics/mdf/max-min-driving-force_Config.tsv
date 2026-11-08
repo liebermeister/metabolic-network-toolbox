@@ -1,0 +1,10 @@
+!!SBtab TableID='ConfigureMDF' TableType='Config' SBtabVersion='1.2' Method='max-min-driving-force' TableName='Default options of Max-min Driving-Force (MDF) (Matlab)'
+% Default options of the Matlab implementation, assembled from mdf_default_options.m and mdf.m (Metabolic Network Toolbox).
+% Empty values: option is empty by default ([] in Matlab); vector-valued options are
+% described in the column !Description. Flags: 1 (true) or 0 (false).
+!ID	!Value	!Description
+c_min_default	NaN	Default lower bound for metabolite concentrations (mM; NaN: not specified); can be changed by the argument opt
+c_max_default	NaN	Default upper bound for metabolite concentrations (mM; NaN: not specified); can be changed by the argument opt
+c_fix	NaN	Fixed metabolite concentrations (vector, nm x 1, mM; NaN: not fixed; set by opt.fixed_met)
+weight_by_fluxes	0	During optimization, weight the driving forces by flux values
+ind_ignore_reactions		Indices of reactions to be ignored (can be set by opt.ind_ignore_reactions)

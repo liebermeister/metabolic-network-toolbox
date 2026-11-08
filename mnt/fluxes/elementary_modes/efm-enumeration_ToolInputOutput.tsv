@@ -1,0 +1,6 @@
+!!SBtab TableID='ToolInputOutput' TableType='ToolInputOutput' SBtabVersion='1.2' Method='efm-enumeration' TableName='Input and output tables of EFM enumeration'
+% Matlab: network_efmtool(network, ...) works on a Matlab network struct (SBtab input and output not implemented).
+% A network struct can be read from SBtab files with sbtab_to_network (tables Reaction and Compound).
+!RequiredIn	!RequiredTable	!TableID	!File	!IsOptional	!RequiredColumns	!Comment
+Input	Reaction	Reaction	model file	False	ID, ReactionFormula	Network model, read by sbtab_to_network (alternatively given as SBML file)
+Input	Compound	Compound	model file	False	ID, IsConstant	External metabolites: IsConstant

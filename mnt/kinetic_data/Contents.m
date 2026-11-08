@@ -14,6 +14,7 @@
 % Functions:
 %   kinetic_data_load         read data from an SBtab file
 %   kinetic_data_save         save data to an SBtab file
+%   kinetic_data_to_sbtab     convert data into an SBtab table object
 %   kinetic_data_print        display data
 %   kinetic_data_complete     insert bounds and pseudo values
 %   kinetic_data_subselect    select data for a submodel

@@ -12,6 +12,12 @@
 %
 %
 % ---------------------------------------------------------------------------
+% Default constraints and options
+%
+% [options, constraints] = flux_constraints_default_options(N)
+%  Default flux and thermodynamic constraints (used by sample_feasible_v, feasible_fluxes, etc.)
+%
+% ---------------------------------------------------------------------------
 % Adjust given flux distribution v
 %
 % v = project_fluxes(N,ind_ext, v_mean, v_std, v_sign, pars);

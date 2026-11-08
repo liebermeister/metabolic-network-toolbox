@@ -66,10 +66,20 @@ for it = 1:length(columns.ReactionFormula)
   metab_collect            = [metab_collect; column(smetab{it}); column(pmetab{it})];
 end
 
-if isfield(columns,'MetabolicRegulation')
-  for it = 1:length(columns.MetabolicRegulation)
-    regulation_formula           = columns.MetabolicRegulation{it};
-    [rstoich{it,1},rmetab{it,1}] = analyse_regulation(regulation_formula);
+% Kinetic regulation of enzymes (column KineticRegulation; older names of the
+% column: MetabolicRegulation, Regulator), e.g. '+ ADP - PEP' or '-PEP|+ADP'
+
+regulation_column = '';
+for my_column = {'KineticRegulation', 'MetabolicRegulation', 'Regulator'}
+  if isfield(columns, my_column{1})
+    regulation_column = my_column{1};
+    break
+  end
+end
+
+if length(regulation_column)
+  for it = 1:length(columns.(regulation_column))
+    [rstoich{it,1},rmetab{it,1}] = analyse_regulation(columns.(regulation_column){it});
   end
 end
 
@@ -96,13 +106,19 @@ for it = 1:length(columns.ReactionFormula)
 end
 
 regulation_matrix = sparse(zeros(length(columns.ReactionFormula),length(metabolites)));
+kinetic_regulation_found = length(regulation_column) && any(~cellfun(@isempty, rmetab));
 
-if isfield(columns,'MetabolicRegulation')
+if length(regulation_column)
   for it = 1:length(columns.ReactionFormula)
+    if isempty(rmetab{it}), continue; end
     l = label_names(rmetab{it},metabolites);
-    if length(l)
-      regulation_matrix(it,l) = rstoich{it};
+    if any(l==0)
+      error('Unknown compound(s) %s in column %s (reaction %d: "%s")', strjoin(rmetab{it}(l==0)',', '), regulation_column, it, columns.(regulation_column){it});
     end
+    if any(rstoich{it}==0)
+      warning('Column %s, reaction %d ("%s"): regulators with dual or unspecified effect are ignored', regulation_column, it, columns.(regulation_column){it});
+    end
+    regulation_matrix(it,l(rstoich{it}~=0)) = rstoich{it}(rstoich{it}~=0);
   end
 end
 
@@ -272,18 +288,21 @@ if ischar(filename_regulation) && length(filename_regulation)
 end
 
 if length(filename_regulation)
-  my_compounds = sbtab_table_get_column(filename_regulation,'Compound');
-  my_reactions = sbtab_table_get_column(filename_regulation,'Reaction');
-  my_regulation_types = sbtab_table_get_column(filename_regulation,'RegulationType');
-  % compare by compound names: das allgemeiner machen, ueber kegg IDs - generische funktion!
-  ind_compounds = label_names(my_compounds,network.metabolites);
-  ind_reactions = label_names(my_reactions,network.actions);
-  my_regulation_types_numeric = strcmp(my_regulation_types,'activation') - strcmp(my_regulation_types,'inhibition');
-  is_ok = find(ind_compounds.*ind_reactions.*my_regulation_types_numeric);
-  W = spconvert([ind_reactions(is_ok), ind_compounds(is_ok), my_regulation_types_numeric(is_ok)]);
-  [nm, nr] = size(network.N);
-  if size(W,1)<nr || size(W,2)<nm
-    W(nr,nm) = 0;
+  % Regulation table (SBtab 1.2, TableType 'Regulation'): its regulation arrows are
+  % added to the kinetic regulation from the Reaction column KineticRegulation
+  [W_table, n_regulation_rows] = regulation_table_to_matrix(filename_regulation, network.metabolites, network.actions);
+  W = network.regulation_matrix;
+  if kinetic_regulation_found && n_regulation_rows > 0
+    warning('Kinetic regulation is given both in the Reaction column %s and in a Regulation table; the information from both is combined', regulation_column);
+  end
+  [ind_r, ind_m] = find(W_table);
+  for it = 1:length(ind_r)
+    w_old = W(ind_r(it),ind_m(it));
+    w_new = W_table(ind_r(it),ind_m(it));
+    if w_old ~= 0 && w_old ~= w_new
+      warning('Regulation of reaction %s by %s: the Regulation table and the column %s disagree; the Regulation table is used', network.actions{ind_r(it)}, network.metabolites{ind_m(it)}, regulation_column);
+    end
+    W(ind_r(it),ind_m(it)) = w_new;
   end
   network.regulation_matrix = W;
 end
@@ -292,18 +311,36 @@ end
 
 function [rstoic,rmetab] = analyse_regulation(regulation)
 
-  rstoic = [];
-  rmetab = [];
-  dum = [' ' regulation];
-  dum = strrep(dum,' + ',' | ');
-  dum = strrep(dum,' - ',' | ');
-  signs = regulation(strfind(dum,'|')-1);
-  for it = 1:length(signs)
-    if strcmp(signs(it),'+'), rstoic(it)  =  1; end
-    if strcmp(signs(it),'-'), rstoic(it)  = -1; end
-  end
+% Parse a kinetic regulation formula: compounds with signs '+' (activation),
+% '-' (inhibition), '+-' (dual effect; rstoic = 0) or no sign (effect not
+% specified; rstoic = 0), e.g. '+ ADP - PEP'; the older notation '-PEP|+ADP'
+% (regulators separated by '|', signs directly before the names) is also accepted
 
-  A = Strsplit(' | ',dum); rmetab = A(2:end)';
+  rstoic = [];
+  rmetab = {};
+  if ~ischar(regulation), return; end
+  tokens = strsplit(strtrim(strrep(regulation,'|',' ')));
+  my_sign = '';
+  for it = 1:length(tokens)
+    token = tokens{it};
+    if isempty(token), continue; end
+    if any(strcmp(token,{'+','-','+-'}))
+      my_sign = token;
+      continue
+    end
+    if strncmp(token,'+-',2) && length(token) > 2
+      my_sign = '+-'; token = token(3:end);
+    elseif any(token(1) == '+-') && length(token) > 1
+      my_sign = token(1); token = token(2:end);
+    end
+    switch my_sign
+      case '+', rstoic(1,end+1) = 1;
+      case '-', rstoic(1,end+1) = -1;
+      otherwise, rstoic(1,end+1) = 0;
+    end
+    rmetab{end+1,1} = token;
+    my_sign = '';
+  end
 
 function [sstoic,smetab] = analyse_one_side(substrate_side)
 
@@ -333,3 +370,118 @@ function [sstoic,smetab] = analyse_one_side(substrate_side)
   if length(smetab{1})==0
     smetab=[];
   end
+
+
+% -------------------------------------
+
+function [W, n] = regulation_table_to_matrix(regulation_table, metabolites, reactions)
+
+% Regulation matrix (reactions x compounds; +1 activation, -1 inhibition) from an
+% SBtab Regulation table with columns
+%   !TargetReaction (older name: !Reaction)    regulated reaction
+%   !Regulator      (older name: !Compound)    regulating compound
+%   !RegulationType          'activation', 'inhibition', or 'dual'
+%   !RegulationType:SBO      SBO term, e.g. SBO:0000459 (stimulator), SBO:0000020 (inhibitor)
+%   !RegulatoryCoefficient   signed Hill coefficient (+ activation, - inhibition)
+% The sign is taken from the first of these three columns that has an entry;
+% if the columns disagree, a warning is given. Regulators with dual or unspecified
+% effect, and unknown reactions or compounds, are ignored with a warning.
+% (The magnitudes of regulatory coefficients are not stored yet.)
+
+nr = length(reactions);
+nm = length(metabolites);
+W  = sparse(nr,nm);
+n  = 0;
+
+reaction_column  = first_existing_column(regulation_table, {'TargetReaction','Reaction'});
+regulator_column = first_existing_column(regulation_table, {'Regulator','Compound'});
+if isempty(reaction_column) || isempty(regulator_column)
+  warning('Regulation table without columns TargetReaction and Regulator; ignoring it');
+  return
+end
+my_reactions  = sbtab_table_get_column(regulation_table, reaction_column);
+my_regulators = sbtab_table_get_column(regulation_table, regulator_column);
+n = length(my_reactions);
+
+sign_type = nan(n,1);
+sign_sbo  = nan(n,1);
+sign_coef = nan(n,1);
+if sbtab_table_has_column(regulation_table,'RegulationType')
+  my_types = sbtab_table_get_column(regulation_table,'RegulationType');
+  for it = 1:n
+    sign_type(it) = regulation_type_sign(my_types{it});
+  end
+end
+if sbtab_table_has_column(regulation_table,'RegulationType:SBO')
+  my_sbo = sbtab_table_get_column(regulation_table,'RegulationType:SBO');
+  for it = 1:n
+    sign_sbo(it) = regulation_type_sign(my_sbo{it});
+  end
+end
+if sbtab_table_has_column(regulation_table,'RegulatoryCoefficient')
+  my_coef = sbtab_table_get_column(regulation_table,'RegulatoryCoefficient',1);
+  sign_coef = sign(my_coef(:));
+  sign_coef(sign_coef == 0) = nan;
+end
+
+ind_reactions  = label_names(my_reactions, reactions);
+ind_regulators = label_names(my_regulators, metabolites);
+
+for it = 1:n
+  signs = [sign_type(it), sign_sbo(it), sign_coef(it)];
+  given = signs(~isnan(signs));
+  if isempty(given) || given(1) == 0
+    warning('Regulation table, row %d (%s, %s): dual or unspecified effect; ignored', it, my_reactions{it}, my_regulators{it});
+    continue
+  end
+  if any(given ~= given(1))
+    warning('Regulation table, row %d (%s, %s): RegulationType, RegulationType:SBO and RegulatoryCoefficient disagree; using the first given', it, my_reactions{it}, my_regulators{it});
+  end
+  if ind_reactions(it) == 0 || ind_regulators(it) == 0
+    warning('Regulation table, row %d: unknown reaction %s or compound %s; ignored', it, my_reactions{it}, my_regulators{it});
+    continue
+  end
+  W(ind_reactions(it), ind_regulators(it)) = given(1);
+end
+
+% -------------------------------------
+
+function s = regulation_type_sign(entry)
+
+% +1 (activation), -1 (inhibition), 0 (dual) or nan (empty or unknown) for an entry of
+% the column RegulationType ('activation', 'inhibition', 'dual'; older files may contain
+% 'activator', 'inhibitor' or entries like 'SBO:0000020 - inhibitor') or RegulationType:SBO
+
+activator_sbo = [459, 21, 461, 462, 170, 171, 656];
+inhibitor_sbo = [20, 206, 207, 536, 537, 169];
+dual_sbo      = [595];
+
+s = nan;
+if ~ischar(entry) || isempty(strtrim(entry)), return; end
+entry = lower(strtrim(entry));
+sbo = regexp(entry, 'sbo:0*(\d+)', 'tokens', 'once');
+if ~isempty(sbo)
+  sbo = str2double(sbo{1});
+  if any(sbo == activator_sbo), s = 1;
+  elseif any(sbo == inhibitor_sbo), s = -1;
+  elseif any(sbo == dual_sbo), s = 0;
+  end
+  return
+end
+switch entry
+  case {'activation','activator','+'},  s = 1;
+  case {'inhibition','inhibitor','-'},  s = -1;
+  case {'dual','+-'},                   s = 0;
+end
+
+% -------------------------------------
+
+function column_name = first_existing_column(table, names)
+
+column_name = '';
+for it = 1:length(names)
+  if sbtab_table_has_column(table, names{it})
+    column_name = names{it};
+    return
+  end
+end

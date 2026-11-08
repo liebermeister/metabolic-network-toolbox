@@ -7,8 +7,10 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 % Read biochemical (kinetic or thermodynamic) data from SBtab file and map them to network model
 %
 % Data are read from file 'data_file'
+%  - 'data_file' can also be an SBtab table object, or an SBtab document object (table chosen
+%    by options.table_id, otherwise the first table of type 'Quantity')
 %  - if no filename is provided, an empty data structure is generated)
-%  - if 'data_file' contains a list of files, they are all used
+%  - if 'data_file' contains a list of files (or SBtab objects), they are all used
 %
 % Output:
 %   Data structure 'kinetic_data' of kinetic quantities (to be used in a model)
@@ -28,6 +30,9 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %   options.enforce_ranges
 %   options.table_id (optional, table ID if the input file contains several tables)
 %
+%   The default values of the options are read from the SBtab Config file 'data-mapping_Config.tsv'
+%   (in the same folder as this function; TableID 'ConfigureDataMapping'). To change the defaults, edit this file.
+%
 % Other functions for kinetic data structure:
 %   Display data values:             pb_kinetic_data_show.m
 %   Save data to file  :             kinetic_data_save.m
@@ -44,18 +49,8 @@ if ~exist('sbtab_version','file'), error('For this function, the SBtab toolbox m
 
 eval(default('data_quantities', '[]', 'parameter_prior','[]', 'data_file', '[]', 'options','struct'));
 
-options_default = struct('use_sbml_ids',0, ...
-                         'use_kegg_ids',0, ...
-                         'flag_invent_std',1, ...
-                         'verbose',0, ...
-                         'filter_column',[], ...
-                         'filter_entry',[], ...
-                         'reaction_column_name', [], ...
-                         'compound_column_name', [], ...
-                         'use_python_version_defaults', 0, ...
-                         'expected_unit',[],...
-                         'enforce_ranges',1,...
-                         'table_id',[]);
+% default options from the SBtab Config file 'data-mapping_Config.tsv' (in the same folder as this function)
+options_default = load_config_table(fullfile(fileparts(mfilename('fullpath')), 'data-mapping_Config.tsv'));
 
 options = join_struct(options_default,options);
 
@@ -164,7 +159,9 @@ if length(data_file)
   if ischar(data_file)
     kinetic_data_sbtab = sbtab_table_load(data_file,[],[],options.table_id);
   else
-    kinetic_data_sbtab = data_file; data_file='[...]';
+    %% SBtab table object, or SBtab document object (table selected by options.table_id,
+    %% otherwise the first table of type 'Quantity')
+    [kinetic_data_sbtab, data_file] = sbtab_table_from_input(data_file, options.table_id, 'Quantity');
   end
   kinetic_data_table = sbtab_table_get_all_columns(kinetic_data_sbtab);
 

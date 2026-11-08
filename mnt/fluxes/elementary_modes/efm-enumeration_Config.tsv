@@ -1,0 +1,11 @@
+!!SBtab TableID='ConfigureEFM' TableType='Config' SBtabVersion='1.2' Method='efm-enumeration' TableName='Default options of EFM enumeration (Matlab)'
+% Default options of the Matlab implementation, assembled from the arguments of network_efmtool.m (Metabolic Network Toolbox).
+% Empty values: option is empty by default ([] in Matlab); vector-valued options are
+% described in the column !Description. Flags: 1 (true) or 0 (false).
+% These settings are function arguments of network_efmtool (no options struct).
+!ID	!Value	!Description
+method	internal	'internal': only internal metabolites must be stationary (all stationary modes); 'total': external metabolites must be stationary as well
+ind_ignore		Indices of reactions (e.g. biomass production) to be neglected
+zv		Vector of flux benefit values; if given, only modes without flux benefit are returned
+omit_reverse_copies	0	Omit one of two modes that differ only by a factor -1
+enforce_reactions		Reactions that must be active in the modes
