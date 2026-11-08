@@ -79,7 +79,7 @@ end
 
 if length(regulation_column)
   for it = 1:length(columns.(regulation_column))
-    [rstoich{it,1},rmetab{it,1}] = analyse_regulation(columns.(regulation_column){it});
+    [rstoich{it,1},rmetab{it,1}] = network_parse_regulation_formula(columns.(regulation_column){it});
   end
 end
 
@@ -309,39 +309,6 @@ end
 
 % -------------------------------------
 
-function [rstoic,rmetab] = analyse_regulation(regulation)
-
-% Parse a kinetic regulation formula: compounds with signs '+' (activation),
-% '-' (inhibition), '+-' (dual effect; rstoic = 0) or no sign (effect not
-% specified; rstoic = 0), e.g. '+ ADP - PEP'; the older notation '-PEP|+ADP'
-% (regulators separated by '|', signs directly before the names) is also accepted
-
-  rstoic = [];
-  rmetab = {};
-  if ~ischar(regulation), return; end
-  tokens = strsplit(strtrim(strrep(regulation,'|',' ')));
-  my_sign = '';
-  for it = 1:length(tokens)
-    token = tokens{it};
-    if isempty(token), continue; end
-    if any(strcmp(token,{'+','-','+-'}))
-      my_sign = token;
-      continue
-    end
-    if strncmp(token,'+-',2) && length(token) > 2
-      my_sign = '+-'; token = token(3:end);
-    elseif any(token(1) == '+-') && length(token) > 1
-      my_sign = token(1); token = token(2:end);
-    end
-    switch my_sign
-      case '+', rstoic(1,end+1) = 1;
-      case '-', rstoic(1,end+1) = -1;
-      otherwise, rstoic(1,end+1) = 0;
-    end
-    rmetab{end+1,1} = token;
-    my_sign = '';
-  end
-
 function [sstoic,smetab] = analyse_one_side(substrate_side)
 
   spos = strfind(substrate_side, ' + ');
@@ -378,7 +345,7 @@ function [W, n] = regulation_table_to_matrix(regulation_table, metabolites, reac
 
 % Regulation matrix (reactions x compounds; +1 activation, -1 inhibition) from an
 % SBtab Regulation table with columns
-%   !TargetReaction (older name: !Reaction)    regulated reaction
+%   !Target         (older names: !TargetReaction, !Reaction)   regulated reaction
 %   !Regulator      (older name: !Compound)    regulating compound
 %   !RegulationType          'activation', 'inhibition', or 'dual'
 %   !RegulationType:SBO      SBO term, e.g. SBO:0000459 (stimulator), SBO:0000020 (inhibitor)
@@ -393,10 +360,10 @@ nm = length(metabolites);
 W  = sparse(nr,nm);
 n  = 0;
 
-reaction_column  = first_existing_column(regulation_table, {'TargetReaction','Reaction'});
+reaction_column  = first_existing_column(regulation_table, {'Target','TargetReaction','Reaction'});
 regulator_column = first_existing_column(regulation_table, {'Regulator','Compound'});
 if isempty(reaction_column) || isempty(regulator_column)
-  warning('Regulation table without columns TargetReaction and Regulator; ignoring it');
+  warning('Regulation table without columns Target and Regulator; ignoring it');
   return
 end
 my_reactions  = sbtab_table_get_column(regulation_table, reaction_column);

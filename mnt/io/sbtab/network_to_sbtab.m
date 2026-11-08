@@ -10,6 +10,7 @@ function sbtab_document = network_to_sbtab(network, options)
 % If options.filename is given -> write output files:
 %  [filename]_Reaction.tsv
 %  [filename]_Compound.tsv
+%  [filename]_Regulator.tsv (only if network.regulators is given)
 %  [filename]_QuantityData.tsv (only if options.modular_rate_law_table==1)
 %
 % Options are given in the structure 'options' with fields:
@@ -237,6 +238,34 @@ if ~options.only_reaction_table
   end
 
   sbtab_document = sbtab_document_add_table(sbtab_document,'Compound',compound_table);
+
+  % Regulator table (regulators of gene expression; column ActivityCondition, e.g. '+ FBP'),
+  % written from network.regulator_activity_matrix or, without this matrix, from
+  % network.regulator_activity_condition (see sbtab_regulator_table_to_network)
+  if isfield(network,'regulators') && length(network.regulators)
+    regulator_table = sbtab_table_construct(struct('TableID','Regulator','TableType','Regulator','TableName','Regulator'),{'ID'},{column(network.regulators)});
+    activity_condition = {};
+    if isfield(network,'regulator_activity_matrix') && nnz(network.regulator_activity_matrix)
+      for it = 1:length(network.regulators)
+        my_line = '';
+        ind_pos = find(network.regulator_activity_matrix(it,:)>0);
+        ind_neg = find(network.regulator_activity_matrix(it,:)<0);
+        for itt = 1:length(ind_pos)
+          my_line = [my_line '+ ' network.metabolites{ind_pos(itt)} ' '];
+        end
+        for itt = 1:length(ind_neg)
+          my_line = [my_line '- ' network.metabolites{ind_neg(itt)} ' '];
+        end
+        activity_condition{it,1} = strtrim(my_line);
+      end
+    elseif isfield(network,'regulator_activity_condition')
+      activity_condition = column(network.regulator_activity_condition);
+    end
+    if length(activity_condition)
+      regulator_table = sbtab_table_add_column(regulator_table,'ActivityCondition',activity_condition);
+    end
+    sbtab_document = sbtab_document_add_table(sbtab_document,'Regulator',regulator_table);
+  end
 end
 
 if options.graphics_positions

@@ -86,7 +86,7 @@ if has_mnt
     % new columns; RegulationType, RegulationType:SBO and RegulatoryCoefficient
     {{sprintf('\t!KineticRegulation'), sprintf('R1\tA <=> B\t+ C\nR2\tB <=> C\t')}, ...
      sprintf(['!!SBtab TableID=''Regulation'' TableType=''Regulation''\n' ...
-              '!ID\t!TargetReaction\t!Regulator\t!RegulationType\t!RegulationType:SBO\t!RegulatoryCoefficient\n' ...
+              '!ID\t!Target\t!Regulator\t!RegulationType\t!RegulationType:SBO\t!RegulatoryCoefficient\n' ...
               'Reg1\tR2\tA\tinhibition\tSBO:0000020\t-2\n']), [0 0 1; -1 0 0], 1}, ...
     % sign from the SBO term or from the coefficient only
     {{'', sprintf('R1\tA <=> B\nR2\tB <=> C')}, ...
@@ -110,4 +110,36 @@ if has_mnt
       assert(contains(lastwarn, 'both in the Reaction column'), sprintf('case %d: no warning', it));
     end
   end
+end
+
+%% regulation formulae (columns KineticRegulation and ActivityCondition)
+if has_mnt
+  [s, c] = network_parse_regulation_formula('+ ADP - PEP +- ATP');
+  assert(isequal(s, [1 -1 0]) && isequal(c, {'ADP';'PEP';'ATP'}));
+  [s, c] = network_parse_regulation_formula('-PEP|+ADP');
+  assert(isequal(s, [-1 1]) && isequal(c, {'PEP';'ADP'}));
+  [s, c] = network_parse_regulation_formula('');
+  assert(isempty(s) && isempty(c));
+end
+
+%% Regulator table with column ActivityCondition: SBtab -> network -> SBtab
+if has_mnt
+  text = sprintf(['!!!SBtab Document=''reg'' SBtabVersion=''1.1''\n' ...
+      '!!SBtab TableID=''Compound'' TableType=''Compound''\n!ID\nA\nB\nC\n\n' ...
+      '!!SBtab TableID=''Reaction'' TableType=''Reaction''\n!ID\t!ReactionFormula\nR1\tA <=> B\nR2\tB <=> C\n\n' ...
+      '!!SBtab TableID=''Regulator'' TableType=''Regulator''\n!ID\t!ActivityCondition\nTF1\t+ A\nTF2\t- C + B\nTF3\t\n']);
+  filename = [tempname '.tsv'];
+  fid = fopen(filename,'w'); fprintf(fid, '%s', text); fclose(fid);
+  d = sbtab_document_load_from_one(filename);
+  delete(filename);
+  [~, network8] = evalc('sbtab_to_network(d, struct(''load_quantity_table'',0))');
+  assert(isequal(network8.regulators, {'TF1';'TF2';'TF3'}));
+  assert(isequal(full(network8.regulator_activity_matrix), [1 0 0; 0 1 -1; 0 0 0]));
+  [~, d2] = evalc('network_to_sbtab(network8)');
+  assert(isfield(d2.tables, 'Regulator'));
+  assert(isequal(sbtab_table_get_column(d2.tables.Regulator,'ActivityCondition'), {'+ A';'+ B - C';''}));
+  % unknown compounds are ignored with a warning
+  network9 = sbtab_regulator_table_to_network(network8, sbtab_table_construct(struct('TableID','Regulator','TableType','Regulator'), {'ID','ActivityCondition'}, {{'TF1'},{'+ X'}}));
+  assert(nnz(network9.regulator_activity_matrix) == 0);
+  assert(contains(lastwarn, 'unknown compound'));
 end

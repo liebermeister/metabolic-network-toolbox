@@ -23,6 +23,9 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %
 % Further optional input tables:
 %  [filename]_Regulation.tsv  (table type Regulation; in an SBtab document: TableID 'Regulation')
+%  [filename]_Regulator.tsv   (table type Regulator, regulators of gene expression with column
+%                              ActivityCondition; in an SBtab document: TableID 'Regulator';
+%                              see sbtab_regulator_table_to_network)
 %  [filename]_Position.tsv (or [filename]_Layout.tsv)
 %
 % OR: instead of a filename, an SBtab data structure can given directly!!
@@ -99,6 +102,7 @@ if ischar(filename)
     filename_reactions = filename;
     filename_compounds = [];
     filename_regulation = [];
+    filename_regulator = [];
     filename_position  = [];
   else
     % Assume that "filename" is an actual filename
@@ -109,6 +113,10 @@ if ischar(filename)
       filename_regulation = sbtab_table_load(filename_regulation);
     else
       filename_regulation = [];
+    end
+    filename_regulator = [filename '_Regulator' options.extension];
+    if ~exist(filename_regulator,'file')
+      filename_regulator = [];
     end
     if options.read_positions
       % layout table: file [filename]_Position or (newer name) [filename]_Layout
@@ -148,6 +156,21 @@ else
       end
     end
   end
+  % Regulator table (regulators of gene expression): TableID 'Regulator',
+  % or another table of TableType 'Regulator'
+  filename_regulator = [];
+  if isfield(filename.tables,'Regulator')
+    filename_regulator = filename.tables.Regulator;
+  else
+    table_ids = fieldnames(filename.tables);
+    for it = 1:length(table_ids)
+      my_table = filename.tables.(table_ids{it});
+      if isfield(my_table,'attributes') && isfield(my_table.attributes,'TableType') && strcmp(my_table.attributes.TableType,'Regulator')
+        filename_regulator = my_table;
+        break
+      end
+    end
+  end
   if isfield(filename.tables,'Position')
     filename_position = filename.tables.Position;
   elseif isfield(filename.tables,'Layout')
@@ -175,6 +198,10 @@ if options.use_compound_table ==0
 end
 
 network = network_build_from_sum_formulae(filename_reactions, filename_compounds, [], filename_regulation);
+
+if length(filename_regulator)
+  network = sbtab_regulator_table_to_network(network, filename_regulator);
+end
 
 if isfield(network,'IsReversible')
   network.reversible(find(strcmpi('True',network.IsReversible))) = 1;
