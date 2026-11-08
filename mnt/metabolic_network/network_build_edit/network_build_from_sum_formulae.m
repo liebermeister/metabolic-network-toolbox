@@ -345,11 +345,14 @@ function [W, n] = regulation_table_to_matrix(regulation_table, metabolites, reac
 
 % Regulation matrix (reactions x compounds; +1 activation, -1 inhibition) from an
 % SBtab Regulation table with columns
-%   !Target         (older names: !TargetReaction, !Reaction)   regulated reaction
 %   !Regulator      (older name: !Compound)    regulating compound
+%   !Target         (older names: !TargetReaction, !Reaction)   regulated reaction
+%   !RegulatorType, !TargetType  (optional) entity types; rows with types other than
+%                   'metabolite' (regulator) and 'enzyme' (target), e.g. regulation of
+%                   gene expression, are skipped
 %   !RegulationType          'activation', 'inhibition', or 'dual'
 %   !RegulationType:SBO      SBO term, e.g. SBO:0000459 (stimulator), SBO:0000020 (inhibitor)
-%   !RegulatoryCoefficient   signed Hill coefficient (+ activation, - inhibition)
+%   !RegulatoryCoefficient   signed Hill coefficient (+ activation, - inhibition; NaN: unknown or dual)
 % The sign is taken from the first of these three columns that has an entry;
 % if the columns disagree, a warning is given. Regulators with dual or unspecified
 % effect, and unknown reactions or compounds, are ignored with a warning.
@@ -394,7 +397,24 @@ end
 ind_reactions  = label_names(my_reactions, reactions);
 ind_regulators = label_names(my_regulators, metabolites);
 
+% rows that describe no kinetic regulation of an enzyme by a compound
+is_kinetic = true(n,1);
+type_columns = {'RegulatorType', 'TargetType'};
+kinetic_types = {'metabolite', 'enzyme'};
+for ic = 1:2
+  if sbtab_table_has_column(regulation_table, type_columns{ic})
+    my_entity_types = sbtab_table_get_column(regulation_table, type_columns{ic});
+    for it = 1:n
+      t = my_entity_types{it};
+      if ischar(t) && ~isempty(strtrim(t)) && ~strcmpi(strtrim(t), kinetic_types{ic})
+        is_kinetic(it) = false;
+      end
+    end
+  end
+end
+
 for it = 1:n
+  if ~is_kinetic(it), continue; end
   signs = [sign_type(it), sign_sbo(it), sign_coef(it)];
   given = signs(~isnan(signs));
   if isempty(given) || given(1) == 0
