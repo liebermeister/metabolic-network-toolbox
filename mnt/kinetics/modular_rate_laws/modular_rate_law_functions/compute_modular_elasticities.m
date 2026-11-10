@@ -16,7 +16,15 @@ function E = compute_modular_elasticities(kinetic_law, N, W, ind_ext, alpha_A, a
 % (second-order elasticities of reactions with v==0 are set to zero)
 %
 % Only essential activation and non-competitive inhibition are supported
-% THIS SCRIPT HAS NOT BEEN CAREFULLY TESTED YET!!!!!
+%
+% Kinetic laws (Liebermeister et al., Bioinformatics 2010): 'cs' (CM), 'ms' (SM), 'ds' (DM), 'rp' (PM), 'fd' (FM)
+% Second-order elasticities are computed for 'cs', 'ms', 'ds'; for 'rp' and 'fd', the second-order
+% denominator term vanishes (ln D is constant or linear in ln c)
+%
+% Changes 2026-11-09: 'ds' and 'fd' work (before, they stopped with an error); D has the right size for 'rp'.
+% The formulae for 'cs', 'ms', and for all thermodynamic and regulation terms were checked against the
+% paper (Eqs. D.13-D.23 in its supplement) and against numerical derivatives of modular_velocities
+% (test file tests/test_modular_elasticities.m).
 
 eval(default('h','ones(size(A))','flag_second_order','0','v_plus_fallback','1', 'v_minus_fallback','1'));
 
@@ -62,12 +70,17 @@ switch kinetic_law
     psi_minus = exp(sum(d_minus, 2));
 
   case {'ds','fd'}
+    % theta_plus = prod_i (c_i/K_i)^m_i over substrates (theta_minus: over products),
+    % with c_i/K_i = 1/alpha_i - 1 (since alpha = K/(c+K))
+    % (Changed 2026-11-09: before, theta_plus and theta_minus were not defined, so the 'ds' and 'fd'
+    %  branches stopped with an error, and the logarithm was computed as log(1/(alpha-1)) instead of
+    %  log(1/alpha-1).)
     d_plus  = sparse(nr,nm);
     d_minus = sparse(nr,nm);
-    d_plus(find(Mplus))   = log(1./(alpha_M(find(Mplus ))-1)) .* Mplus( find(Mplus ));
-    d_minus(find(Mminus)) = log(1./(alpha_M(find(Mminus))-1)) .* Mminus(find(Mminus));
-    psi_plus  = exp(sum(d_plus, 2));
-    psi_minus = exp(sum(d_minus, 2));
+    d_plus(find(Mplus))   = log(1./alpha_M(find(Mplus )) - 1) .* Mplus( find(Mplus ));
+    d_minus(find(Mminus)) = log(1./alpha_M(find(Mminus)) - 1) .* Mminus(find(Mminus));
+    theta_plus  = exp(sum(d_plus, 2));
+    theta_minus = exp(sum(d_minus, 2));
 
 end
 
@@ -86,7 +99,7 @@ switch kinetic_law
     D               = theta_plus + theta_minus + 1;
     E_sc_Dc_kinetic = diag(1./D) * [ diag(theta_plus) * Mplus + diag(theta_minus) * Mminus ];
   case 'rp'
-    D               = ones(nm,1);
+    D               = ones(nr,1); % (before 2026-11-09: ones(nm,1))
     E_sc_Dc_kinetic = zeros(nr,nm);
   case 'fd'
     D               = sqrt(theta_plus .* theta_minus);

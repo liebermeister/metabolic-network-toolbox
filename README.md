@@ -83,6 +83,25 @@ coefficients" mean frequency response and frequency response coefficients: the c
 responses to sine-wave parameter perturbations, as functions of the frequency. The function
 names keep the older term.
 
+## Corrections (November 2026)
+
+A check of the modular rate law formulae (Liebermeister et al., Bioinformatics 2010) against the code
+led to these corrections (details in `CHANGELOG.md` and in the help texts of the functions):
+
+- `compute_modular_elasticities`: the rate laws `'ds'` (DM) and `'fd'` (FM) stopped with an error (undefined
+  variables `theta_plus`, `theta_minus`, and a wrong logarithm, log(1/(alpha-1)) instead of log(1/alpha-1)).
+  The other rate laws (`'cs'`, `'ms'`, `'rp'`) were correct and are unchanged.
+- `compute_modular_response_second`: second-order response coefficients of a target function were correct only if
+  the target is a single concentration or flux (the usual case). For linear combinations of concentrations and fluxes,
+  the term -R^z R^z was replaced by a weighted sum of -R^y R^y. The new argument `target_type` ('linear', default, or
+  'loglinear') states how the target is defined.
+- The first- and second-order elasticities of all five rate laws, and the second-order response coefficients, are now
+  tested against numerical derivatives (`tests/test_modular_elasticities.m`).
+
+The functions for control and response coefficients (`control_coefficients`, `response_coefficients`,
+`response_coefficients_sparse`, `norm_response_coefficients`) and the conversion between scaled and unscaled
+second-order elasticities were checked and found to be correct.
+
 ## Tests
 
 From the repository folder, run
