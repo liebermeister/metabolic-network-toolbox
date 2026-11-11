@@ -11,7 +11,7 @@ if ~exist('TranslateSBML', 'file')
   disp('libSBML not installed; skipping SBML test');
   return
 end
-for level_version = [2 2; 2 4; 3 1]'
+for level_version = [2 2; 2 4; 3 1; 3 2]'
   sbml_model = network_sbml_export(network, 0, 'test model', [], '', level_version(1), level_version(2));
   assert(numel(sbml_model.species) == 6 && numel(sbml_model.reaction) == 5);
   network2 = network_sbml_import(sbml_model);

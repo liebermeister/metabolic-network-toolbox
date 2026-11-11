@@ -10,6 +10,9 @@
 %   kinetics            - rate laws ('help kinetics')
 %   kinetic_data        - kinetic and thermodynamic data ('help kinetic_data')
 %   state_data          - metabolite levels, fluxes, and enzyme levels ('help state_data')
+%   model_and_state     - models with a reference state: load, map data ('help model_and_state')
+%   annotation          - conversion between BiGG and KEGG identifiers ('help annotation')
+%   data_orientation    - convert data tables to the reaction orientation of a model ('help data_orientation')
 %   omics_data          - omics data ('help biotable')
 %
 % Analysis

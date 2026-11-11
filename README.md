@@ -71,7 +71,10 @@ The folder `mnt` contains:
 | `simulation` | steady states and dynamic simulation |
 | `control_analysis` | metabolic control analysis, spectral response coefficients (= frequency response coefficients; see below), models with uncertain parameters |
 | `graphics` | network graphics |
-| `io` | import and export: SBML, SBtab, COBRA |
+| `io` | import and export: SBML, SBtab, COBRA (also models with a metabolic state, see below) |
+| `model_and_state` | models with a reference state: loading, mapping data to a model |
+| `annotation` | conversion between BiGG and KEGG identifiers (with a mapping table) |
+| `data_orientation` | conversion of data tables to the reaction orientation of a model |
 | `utils`, `demo` | constants, version numbers, demo script |
 
 Networks, kinetics, and data are represented by Matlab structs; for details, type
@@ -82,6 +85,28 @@ Terminology: in function names and older help texts, "spectral response" and "sp
 coefficients" mean frequency response and frequency response coefficients: the complex-valued
 responses to sine-wave parameter perturbations, as functions of the frequency. The function
 names keep the older term.
+
+## Models with a metabolic state in SBML
+
+SBML has no elements for flux data or equilibrium constants. To store a model together with a
+metabolic state, MNT uses a customised use of standard SBML elements (SBML Level 3 Version 2,
+functions `sbml_network_state_save` and `sbml_network_state_load`; the files are valid SBML and
+can be read by any SBML tool):
+
+- concentrations: initial concentrations of the species (default unit mM);
+- fluxes, equilibrium constants and reaction Gibbs free energies: local parameters `reference_flux`
+  (SBO:0000612, default mM/s), `equilibrium_constant` (SBO:0000281, mM to the power of the sum of
+  the stoichiometric coefficients) and `reaction_gibbs_free_energy` (SBO:0000617, kJ/mol) in the
+  kinetic law of each reaction, with unit definitions and notes explaining their meaning;
+- for networks without kinetics, the kinetic law is the constant rate
+  `reference_flux * flux_reference_volume` (1 litre), so a simulation stays in the reference state.
+
+Compartments, database identifiers (KEGG, BiGG, ChEBI, as identifiers.org annotations) and the
+original metabolite and reaction ids are kept. The same states are stored in SBtab files by
+`sbtab_network_state_save` (tables `MetaboliteConcentration`, `Flux`, `EquilibriumConstant`,
+`ReactionGibbsFreeEnergy`); `sbtab_to_sbml` and `sbml_to_sbtab` convert between the two formats,
+and `mnt_load_model_and_state` loads a model with its state from a .mat, SBtab or SBML file.
+Details: `help sbml`.
 
 ## Corrections (November 2026)
 

@@ -13,6 +13,11 @@ switch kinetics.type
     kinetics.KV  =     kinetics.KV(indr)    ;
     kinetics.Keq =     kinetics.Keq(indr)   ;
     kinetics.h   =     kinetics.h(indr)   ;
+    for fn = {'Kcatf','Kcatr','KVratio'}    % optional fields (one value per reaction)
+      if isfield(kinetics,fn{1}) && ~isempty(kinetics.(fn{1}))
+        kinetics.(fn{1}) = kinetics.(fn{1})(indr);
+      end
+    end
 
   otherwise, error('unknown kinetics type');
 end

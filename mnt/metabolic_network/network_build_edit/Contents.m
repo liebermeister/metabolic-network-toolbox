@@ -1,6 +1,7 @@
 % Build and edit metabolic networks
 %
 %   network_add_empty
+%   network_add_kinetic_regulation       - Add kinetic regulation arrows from an SBtab Reaction table (!ID, !KineticRegulation)
 %   network_add_metabolites              - Add metabolites to a network
 %   network_add_reaction                 - Add a reaction to a network
 %   network_add_transport
@@ -17,6 +18,7 @@
 %   network_reduce_to_active_subnetwork  - Reduce a network to the reactions that carry flux
 %   network_remove                       - Remove metabolites from a network
 %   network_remove_action                - Remove reactions from a network
+%   network_remove_zero_fluxes           - Remove reactions with zero flux from a network and a flux vector (kinetics reduced or removed)
 %   network_set_all_external
 %   network_set_external                 - Set metabolites to be external
 %   network_subnetwork                   - Choose a subnetwork with given metabolites and reactions

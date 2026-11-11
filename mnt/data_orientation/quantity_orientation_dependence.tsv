@@ -1,0 +1,33 @@
+!!SBtab TableID='QuantityOrientationDependence' TableType='QuantityInfo' TableName='Dependence of quantities on the orientation of reactions' SBtabVersion='1.1'
+% How the value of a quantity changes if a reaction is written in the opposite direction (substrates and products exchanged).
+% Used to convert data tables into the reaction orientation of a model (sbtab_orient_data_table.m, Metabolic Network Toolbox).
+%   none:    the value does not change
+%   sign:    the value changes its sign (x -> -x; Min and Max are exchanged)
+%   inverse: the value is inverted (x -> 1/x; Min and Max are exchanged; GeometricStd does not change)
+%   swap:    the value becomes the value of another quantity (column !SwapWith)
+!QuantityType	!ReactionOrientationDependence	!SwapWith
+rate of reaction	sign
+Gibbs free energy of reaction	sign
+standard Gibbs free energy of reaction	sign
+reaction affinity	sign
+equilibrium constant	inverse
+catalytic constant ratio	inverse
+substrate catalytic rate constant	swap	product catalytic rate constant
+product catalytic rate constant	swap	substrate catalytic rate constant
+forward maximal velocity	swap	reverse maximal velocity
+reverse maximal velocity	swap	forward maximal velocity
+forward mass action term	swap	reverse mass action term
+reverse mass action term	swap	forward mass action term
+forward enzyme mass action term	swap	reverse enzyme mass action term
+reverse enzyme mass action term	swap	forward enzyme mass action term
+catalytic rate constant geometric mean	none
+Michaelis constant	none
+activation constant	none
+inhibitory constant	none
+concentration of enzyme	none
+concentration	none
+chemical potential	none
+standard chemical potential	none
+molecular mass	none
+protein molecular mass	none
+pH	none

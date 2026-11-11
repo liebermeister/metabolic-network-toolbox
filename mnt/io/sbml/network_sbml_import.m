@@ -70,7 +70,7 @@ reversible = [];
 for it=1:length(s.reaction)
   reaction_id{it,:} = s.reaction(it).id;
   reaction_name{it,:} = s.reaction(it).name;
-  reaction_fast{it,:} = s.reaction(it).fast;
+  if isfield(s.reaction(it),'fast'), reaction_fast{it,:} = s.reaction(it).fast; else, reaction_fast{it,:} = 0; end % no attribute 'fast' in SBML L3V2
   reversible(it,:) = s.reaction(it).reversible;
   reaction_annotation{it,:} = s.reaction(it).annotation;
   if isempty(s.reaction(it).kineticLaw)
