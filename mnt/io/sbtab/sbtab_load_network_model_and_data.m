@@ -19,9 +19,6 @@ function result = sbtab_load_network_model_and_data(data_file, file_options)
 %      file_options.network             network model (needed if the input files do not contain the network model)
 %      file_options.load_quantity_table generate field "network.kinetics" from Parameter table (if it exists) (default 0)
 %      file_options.prior_file          prior file for parameter_table (optional, default value = []; then mnt_prior_file is used)
-%      file_options.default_data_standard_concentration
-%                                       standard concentration ('1 mM' or '1 M') assumed for kinetic data
-%                                       that do not declare one (default '1 mM'; see kinetic_data_load)
 %
 % Output
 %   result.network
@@ -42,7 +39,6 @@ file_options_default.columns_std         = {'Std'};
 file_options_default.match_data_by       = 'ModelElementId'; % 'KeggId'; % 'BiggId'
 file_options_default.load_quantity_table = 0;
 file_options_default.prior_file          = [];
-file_options_default.default_data_standard_concentration = '1 mM';
 file_options = join_struct(file_options_default, file_options);
 
 % load SBtab document from one or several files
@@ -75,9 +71,9 @@ end
 parameter_prior = parameter_balancing_prior([], file_options.prior_file, 0);
 
 if label_names('ParameterData', sbtab_document_get_table_names(s))
-  result.kinetic_data = kinetic_data_load([],parameter_prior, result.network, sbtab_document_get_table(s,'ParameterData'), struct('enforce_ranges',0,'default_data_standard_concentration',file_options.default_data_standard_concentration));
+  result.kinetic_data = kinetic_data_load([],parameter_prior, result.network, sbtab_document_get_table(s,'ParameterData'), struct('enforce_ranges',0));
 elseif label_names('Parameter', sbtab_document_get_table_names(s))
-  result.kinetic_data = kinetic_data_load([],parameter_prior, result.network, sbtab_document_get_table(s,'Parameter'), struct('enforce_ranges',0,'default_data_standard_concentration',file_options.default_data_standard_concentration));
+  result.kinetic_data = kinetic_data_load([],parameter_prior, result.network, sbtab_document_get_table(s,'Parameter'), struct('enforce_ranges',0));
 else
   warning('No kinetic data table (ID "Parameter") found');
 end

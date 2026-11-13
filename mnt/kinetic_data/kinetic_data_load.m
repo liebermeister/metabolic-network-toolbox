@@ -32,11 +32,11 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %                    after their conversion to 1 mM, against the prior bounds converted from the
 %                    standard concentration of the prior table to 1 mM (reaction by reaction)
 %   options.table_id (optional, table ID if the input file contains several tables)
-%   options.default_data_standard_concentration
-%                    standard concentration ('1 mM' or '1 M') assumed for equilibrium constants, standard
-%                    chemical potentials and standard Gibbs free energies of reaction in a data file that does not declare one
-%                    (table attribute StandardConcentration); default '1 mM'. Data are converted from the
-%                    standard concentration of the data file to 1 mM, which kinetic_data always uses.
+%
+% Standard concentration: a data table that contains equilibrium constants, standard chemical
+% potentials or standard Gibbs free energies of reaction must declare its standard concentration
+% (table attribute StandardConcentration='1M' or '1mM'); otherwise, an error is raised. The values
+% are converted to 1 mM, the standard concentration that kinetic_data always uses.
 %
 %   The default values of the options are read from the SBtab Config file 'data-mapping_Config.tsv'
 %   (in the same folder as this function; TableID 'ConfigureDataMapping'). To change the defaults, edit this file.
@@ -774,9 +774,8 @@ end
 % make sure important fields in kinetic_data are considered
 
 % convert Keq, dmu0 and mu0 values from the standard concentration of the data file to 1 mM
-% (the standard concentration used in kinetic_data); a data file that does not declare its
-% standard concentration (table attribute StandardConcentration) is read with
-% options.default_data_standard_concentration
+% (the standard concentration used in kinetic_data); a data file that contains such values must
+% declare its standard concentration (table attribute StandardConcentration)
 
 standard_concentration = '';
 
@@ -787,9 +786,20 @@ if length(kinetic_data_sbtab)
   end
 end
 
-declared = length(standard_concentration) > 0;
-if ~declared
-  standard_concentration = options.default_data_standard_concentration;
+has_thermodynamic_data = 0;
+for my_symbol = {'Keq','dmu0','mu0'}
+  if isfield(kinetic_data, my_symbol{1})
+    has_thermodynamic_data = has_thermodynamic_data | any(isfinite(kinetic_data.(my_symbol{1}).median(:))) | any(isfinite(kinetic_data.(my_symbol{1}).mean(:)));
+  end
+end
+
+if isempty(standard_concentration)
+  if has_thermodynamic_data
+    file_name = '';
+    if ischar(data_file), file_name = [' ' data_file]; end
+    error(sprintf('The data table%s contains equilibrium constants, standard chemical potentials or standard Gibbs free energies of reaction, but does not declare a standard concentration.\nPlease add the table attribute StandardConcentration=''1M'' or ''1mM'' to its !!SBtab line.', file_name));
+  end
+  standard_concentration = '1 mM'; % no thermodynamic data: no conversion needed
 end
 c_data_in_mM = standard_concentration_in_mM(standard_concentration);
 
@@ -873,9 +883,6 @@ if options.enforce_ranges
   end
 end
 
-if ~declared & verbose & (isfield(kinetic_data,'Keq') | isfield(kinetic_data,'dmu0') | isfield(kinetic_data,'mu0'))
-  display(sprintf('- (kinetic_data_load.m):\n  The data file does not declare a standard concentration; thermodynamic quantities are assumed to refer to %s.\n  (To change this, please add the attribute StandardConcentration=''1M'' or ''1mM'' to your data file.)', standard_concentration));
-end
 
 
 % --------------------------------------------------------------------------------------

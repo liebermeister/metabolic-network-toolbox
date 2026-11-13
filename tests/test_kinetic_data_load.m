@@ -42,3 +42,20 @@ assert(abs(kinetic_data.KM.mean_ln(1,2) - log(0.2)) < 1e-12);
 assert(abs(kinetic_data.Keq.median(1) / (keq_min / 100) - 1) < 1e-10);   % not clipped
 assert(abs(kinetic_data.Keq.median(2) / keq_max - 1) < 1e-10);           % clipped
 assert(abs(kinetic_data.Keq.mean_ln(2) - log(keq_max)) < 1e-10);
+
+%% a table with Keq data but without StandardConcentration is rejected; without Keq data it is accepted
+lines_keq = {"!!SBtab TableID='ParameterData' TableType='Quantity'", ...
+             sprintf('!QuantityType\t!Reaction\t!Compound\t!Unit\t!Median'), ...
+             sprintf('equilibrium constant\tR1\t\t%s\t2', unit_keq)};
+lines_km  = {"!!SBtab TableID='ParameterData' TableType='Quantity'", ...
+             sprintf('!QuantityType\t!Reaction\t!Compound\t!Unit\t!Median'), ...
+             sprintf('Michaelis constant\tR1\tA\t%s\t0.3', unit_km)};
+filename = [tempname '.tsv'];
+fid = fopen(filename, 'w'); fprintf(fid, '%s\n', lines_keq{:}); fclose(fid);
+failed = 0;
+try, evalc('kinetic_data_load({''equilibrium constant''}, parameter_prior, network, filename, opt)'); catch, failed = 1; end
+assert(failed);
+fid = fopen(filename, 'w'); fprintf(fid, '%s\n', lines_km{:}); fclose(fid);
+[~, kinetic_data] = evalc('kinetic_data_load({''equilibrium constant'',''Michaelis constant''}, parameter_prior, network, filename, opt)');
+delete(filename);
+assert(abs(kinetic_data.KM.median(1,1) - 0.3) < 1e-12);

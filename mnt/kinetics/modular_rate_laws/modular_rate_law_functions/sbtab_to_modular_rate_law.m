@@ -6,7 +6,8 @@ function [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(n
 %
 % Please note:
 %   The standard concentration of the Keq values is read from the table attribute StandardConcentration
-%   ('1M' or '1mM'; if missing, 1 mM is assumed). The values are converted to 1 mM, the standard
+%   ('1M' or '1mM'); a table with equilibrium constants that does not declare it is rejected with an
+%   error. The values are converted to 1 mM, the standard
 %   concentration used in 'kinetics'.
 %
 % Similar functions: 'ms_import_kinetic'
@@ -33,7 +34,7 @@ table_attributes = sbtab_table_get_attributes(sbtab_table);
 if isfield(table_attributes,'StandardConcentration')
   standard_concentration = table_attributes.StandardConcentration;
 else
-  standard_concentration = 'mM';
+  standard_concentration = '';
 end
 
 QuantityType = sbtab_table_get_column(sbtab_table,'QuantityType');
@@ -60,6 +61,9 @@ ind_Keq = ind_Keq(label_names(Reaction(ind_Keq),network.actions));
 kinetics.Keq = Value(ind_Keq);
 
 if length(ind_Keq)
+  if isempty(standard_concentration)
+    error('The table of kinetic constants contains equilibrium constants, but does not declare a standard concentration. Please add the table attribute StandardConcentration=''1M'' or ''1mM'' to its !!SBtab line.');
+  end
   % convert equilibrium constants from the standard concentration of the file to 1 mM
   if standard_concentration_in_mM(standard_concentration) ~= 1
     kinetics.Keq = standard_concentration_convert(kinetics.Keq, 'Keq', network, standard_concentration, '1 mM');

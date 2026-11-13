@@ -10,7 +10,7 @@ function [parameter_prior, parameter_prior_filename] = parameter_balancing_prior
 % The standard concentration of the prior table (table attribute StandardConcentration, '1 mM' or '1 M')
 % is stored in parameter_prior.standard_concentration. It refers to the prior values of equilibrium
 % constants, standard chemical potentials and standard reaction Gibbs free energies. A prior table that
-% does not declare it is read as '1 mM' (with a warning). Functions that use the prior values for a
+% does not declare it is rejected with an error. Functions that use the prior values for a
 % network (pb_task, kinetic_data_complete, model balancing) convert them to 1 mM, the standard concentration
 % used internally in MNT (see prior_standard_concentration_shift).
 
@@ -66,7 +66,6 @@ table_attributes = sbtab_table_get_attributes(parameter_prior_sbtab);
 if isfield(table_attributes,'StandardConcentration')
   parameter_prior.standard_concentration = table_attributes.StandardConcentration;
 else
-  parameter_prior.standard_concentration = '1 mM';
-  warning('The prior table does not declare a standard concentration (table attribute StandardConcentration); I assume 1 mM');
+  error('The prior table does not declare a standard concentration. Please add the table attribute StandardConcentration=''1M'' or ''1mM'' to its !!SBtab line.');
 end
 standard_concentration_in_mM(parameter_prior.standard_concentration); % check the value

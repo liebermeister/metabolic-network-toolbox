@@ -9,7 +9,7 @@ function [network,c,v,dmu,keq,theta] = sbtab_network_state_load(filename)
 % Tables: MetaboliteConcentration, Flux, ReactionGibbsFreeEnergy, EquilibriumConstant (TableIDs).
 % If the table MetaboliteConcentration or Flux is missing, c or v is a vector of NaN values (with a warning).
 % Equilibrium constants are converted to the standard concentration 1 mM, from the standard concentration
-% declared in the table EquilibriumConstant (table attribute StandardConcentration; if missing, 1 mM is assumed).
+% declared in the table EquilibriumConstant (table attribute StandardConcentration; if missing, an error is raised).
 
 sbtab = sbtab_get(filename);
 
@@ -54,9 +54,10 @@ if nargout > 4
     ll = label_names(network.actions,sbtab_keq.Reaction);
     keq  = cell_string2num(sbtab_keq.Value(ll));
     keq_attributes = sbtab_table_get_attributes(keq_table);
-    if isfield(keq_attributes,'StandardConcentration')
-      keq = standard_concentration_convert(keq, 'Keq', network, keq_attributes.StandardConcentration, '1 mM');
+    if ~isfield(keq_attributes,'StandardConcentration')
+      error('The table EquilibriumConstant does not declare a standard concentration. Please add the table attribute StandardConcentration=''1M'' or ''1mM'' to its !!SBtab line.');
     end
+    keq = standard_concentration_convert(keq, 'Keq', network, keq_attributes.StandardConcentration, '1 mM');
   else
     warning('No equilibrium constant values found in file');
   end

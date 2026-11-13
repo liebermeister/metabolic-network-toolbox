@@ -6,7 +6,7 @@ function shift = prior_standard_concentration_shift(parameter_prior, symbol, net
 % concentration of the prior table to 1 mM, the standard concentration used internally in MNT
 %
 % parameter_prior  prior structure (see parameter_balancing_prior), with field .standard_concentration
-%                  (if the field is missing, 1 mM is assumed)
+%                  (if the field is missing, an error is raised)
 % symbol           symbol of the quantity in the prior table (e.g. 'Keq', 'dmu0', 'mu0', 'KM')
 % network          network structure (needed only if the prior table does not use 1 mM)
 %
@@ -19,6 +19,10 @@ function shift = prior_standard_concentration_shift(parameter_prior, symbol, net
 shift = 0;
 
 if ~isfield(parameter_prior, 'standard_concentration')
+  switch symbol
+    case {'Keq', 'dmu0', 'mu0'}
+      error('The prior has no field standard_concentration (load prior tables with parameter_balancing_prior)');
+  end
   return
 end
 
