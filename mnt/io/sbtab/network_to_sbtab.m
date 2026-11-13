@@ -26,7 +26,13 @@ function sbtab_document = network_to_sbtab(network, options)
 % c_max                 : maximal concentration vector to be saved
 % c                     : concentration vector to be saved
 % v                     : flux vector to be saved
-% dmu                   : dmu vector to be saved
+% dmu                   : vector of reaction Gibbs free energies (kJ/mol) to be saved
+% keq                   : vector of equilibrium constants to be saved (standard concentration 1 mM)
+% standard_concentration: standard concentration ('1 mM' (default) or '1 M') for the equilibrium constants
+%                         and standard chemical potentials in the output tables (converted from 1 mM, the
+%                         standard concentration used in 'network' and in options.keq), declared in the
+%                         table attribute StandardConcentration of the tables EquilibriumConstant, Parameter
+%                         and ReactionGibbsFreeEnergy (reaction Gibbs free energies are not converted)
 % document_name         : (for SBtab attribute Document)
 % graphics_positions    : flag: add table with x and y coordinates
 % adjust_metabolite_ids : flag: adjust IDs for SBML syntax; default = 1
@@ -42,7 +48,7 @@ catch err
 end
 
 eval(default('options','struct'));
-options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',0,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 0, 'modular_rate_law_parameter_id', 0, 'c', [], 'c_min', [], 'c_max', [], 'v', [], 'dmu', [], 'document_name','Model', 'graphics_positions', 1, 'omit_kegg_ids',0,'adjust_metabolite_ids', 1, 'keq',[]);
+options_default = struct('filename',[],'only_reaction_table',0,'modular_rate_law_table',0,'use_sbml_ids',0,'verbose',1,'write_concentrations',1,'write_enzyme_concentrations',1,'save_in_one_file',1, 'modular_rate_law_kinetics', 0, 'modular_rate_law_parameter_id', 0, 'c', [], 'c_min', [], 'c_max', [], 'v', [], 'dmu', [], 'document_name','Model', 'graphics_positions', 1, 'omit_kegg_ids',0,'adjust_metabolite_ids', 1, 'keq',[], 'standard_concentration', '1 mM');
 
 options = join_struct(options_default,options);
 
@@ -282,7 +288,7 @@ if options.modular_rate_law_table
     case 'numeric'
       quantity_table = numeric_to_sbtab(network,options);
     otherwise
-      quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations,'write_enzyme_concentrations',options.write_enzyme_concentrations,'document_name',options.document_name,'modular_rate_law_parameter_id',options.modular_rate_law_parameter_id,'flag_minimal_output',0,'omit_kegg_ids',options.omit_kegg_ids));
+      quantity_table = modular_rate_law_to_sbtab(network,[],struct('use_sbml_ids',options.use_sbml_ids,'write_concentrations',options.write_concentrations,'write_enzyme_concentrations',options.write_enzyme_concentrations,'document_name',options.document_name,'modular_rate_law_parameter_id',options.modular_rate_law_parameter_id,'flag_minimal_output',0,'omit_kegg_ids',options.omit_kegg_ids,'standard_concentration',options.standard_concentration));
   end
   sbtab_document = sbtab_document_add_table(sbtab_document,'Parameter',quantity_table);
 end
@@ -302,13 +308,16 @@ if length(options.v)
   sbtab_document = sbtab_document_add_table(sbtab_document,'Flux',flux_table);
 end
 
+[~, standard_concentration_label] = standard_concentration_in_mM(options.standard_concentration);
+
 if length(options.dmu)
-  delta_g_table = sbtab_table_construct(struct('TableID','ReactionGibbsFreeEnergy','TableType','Quantity','TableName','Reaction Gibbs free Energy'),{'QuantityType','Reaction','Value'},{repmat({'Gibbs free energy of reaction'},length(options.dmu),1),network.actions,options.dmu,});
+  delta_g_table = sbtab_table_construct(struct('TableID','ReactionGibbsFreeEnergy','TableType','Quantity','TableName','Reaction Gibbs free Energy','StandardConcentration',standard_concentration_label),{'QuantityType','Reaction','Value'},{repmat({'Gibbs free energy of reaction'},length(options.dmu),1),network.actions,options.dmu,});
   sbtab_document = sbtab_document_add_table(sbtab_document,'ReactionDeltaG',delta_g_table);
 end
 
 if length(options.keq)
-  keq_table = sbtab_table_construct(struct('TableID','EquilibriumConstant','TableType','Quantity','TableName','Equilibrium constant'),{'QuantityType','Reaction','Value'},{repmat({'equilibrium constant'},length(options.keq),1),network.actions,options.keq,});
+  keq_out = standard_concentration_convert(column(options.keq), 'Keq', network, '1 mM', options.standard_concentration);
+  keq_table = sbtab_table_construct(struct('TableID','EquilibriumConstant','TableType','Quantity','TableName','Equilibrium constant','StandardConcentration',standard_concentration_label),{'QuantityType','Reaction','Value'},{repmat({'equilibrium constant'},length(keq_out),1),network.actions,keq_out,});
   sbtab_document = sbtab_document_add_table(sbtab_document,'EquilibriumConstant',keq_table);
 end
 

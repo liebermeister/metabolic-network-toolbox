@@ -40,7 +40,8 @@ reactionID   = network.MiriamID__urn_miriam_kegg_reaction;
 
 % --------------------------------------------------
 
-s = {sprintf('!!SBtab TableType="QuantityData"\n!QuantityType\t!SBMLReactionID\t!SBMLSpeciesID\t!Reaction MiriamID::urn:miriam:kegg.reaction\t!Compound MiriamID::urn:miriam:kegg.compound\t!Mean\t!Std\t!Unit')};
+% (equilibrium constants in 'kinetics' refer to the standard concentration 1 mM)
+s = {sprintf('!!SBtab TableType="QuantityData" StandardConcentration="1mM"\n!QuantityType\t!SBMLReactionID\t!SBMLSpeciesID\t!Reaction MiriamID::urn:miriam:kegg.reaction\t!Compound MiriamID::urn:miriam:kegg.compound\t!Mean\t!Std\t!Unit')};
 
 for itt = 1:length(save_quantities)
 

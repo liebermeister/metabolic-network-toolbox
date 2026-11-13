@@ -16,3 +16,4 @@ use_python_version_defaults	0	Use the same default settings as the Python versio
 expected_unit		Expected unit of the data values (default: unit from the prior table)
 enforce_ranges	1	Enforce feasible ranges (bounds from the prior table)
 table_id		TableID of the data table (needed only if the data file contains several tables)
+default_data_standard_concentration	1 mM	Standard concentration ('1 mM' or '1 M') assumed for equilibrium constants and standard Gibbs free energies of reaction in a data file that does not declare one (table attribute StandardConcentration). Data are converted to 1 mM, the standard concentration used in kinetic data structures

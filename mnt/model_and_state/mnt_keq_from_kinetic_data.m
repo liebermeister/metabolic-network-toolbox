@@ -26,7 +26,9 @@ function [keq, info] = mnt_keq_from_kinetic_data(network, kinetic_data_file, opt
 %   info  struct with fields .balanced_parameters (SBtab table), .kinetic_data (balanced parameters, as
 %         returned by kinetic_data_load), .orientation_report
 %
-% The standard concentration of the equilibrium constants is the one of the data and prior files.
+% The equilibrium constants keq refer to the standard concentration 1 mM (data files are converted
+% from the standard concentration they declare). The SBtab table info.balanced_parameters and the
+% output file declare their standard concentration (table attribute StandardConcentration).
 
 eval(default('options','struct'));
 

@@ -19,12 +19,20 @@ function quantity_table = modular_rate_law_to_sbtab(network,filename,options)
 %   options.value_column_name ='Mode';
 %   options.modular_rate_law_parameter_id = 0;
 %   options.document_name = '';
+%   options.standard_concentration = '1 mM';
+%
+% The kinetic constants in 'network.kinetics' (and in options.kinetics_mode and options.more_column_data)
+% refer to the standard concentration 1 mM. Equilibrium constants, standard chemical potentials and
+% standard reaction Gibbs free energies are written for the standard concentration
+% options.standard_concentration ('1 mM' or '1 M'), which is declared in the table attribute
+% StandardConcentration. In extra columns whose name contains 'Std', standard chemical potentials are
+% not converted; equilibrium constants are not converted in columns whose name contains 'GeometricStd'.
 %
 % Requires the SBtab toolbox
 
 eval(default('options','struct','filename','[]'));
 
-options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_std',1, 'write_concentrations',1,'write_enzyme_concentrations',1,'write_all_quantities', 'no', 'write_standard_chemical_potential', 1, 'write_chemical_potential', 0, 'write_std_GFE_of_reaction', 0, 'write_reaction_affinity', 0, 'modular_rate_law_parameter_id',0,'document_name','','kinetics_mode', [], 'flag_minimal_output', 0, 'omit_kegg_ids',0);
+options_default = struct('use_sbml_ids',1,'write_individual_kcat',1,'write_std',1, 'write_concentrations',1,'write_enzyme_concentrations',1,'write_all_quantities', 'no', 'write_standard_chemical_potential', 1, 'write_chemical_potential', 0, 'write_std_GFE_of_reaction', 0, 'write_reaction_affinity', 0, 'modular_rate_law_parameter_id',0,'document_name','','kinetics_mode', [], 'flag_minimal_output', 0, 'omit_kegg_ids',0, 'standard_concentration', '1 mM');
 
 options_default.more_column_names = {};
 options_default.more_column_data  = {};
@@ -115,6 +123,27 @@ elseif isempty(kinetics_mode.A)
 end
 
 [nm,nr] = size(network.N);
+
+% convert thermodynamic quantities from 1 mM to the standard concentration of the output table
+[~, standard_concentration_label] = standard_concentration_in_mM(options.standard_concentration);
+if ~strcmp(standard_concentration_label, '1mM')
+  sc_out = options.standard_concentration;
+  kinetics_mode.Keq = standard_concentration_convert(kinetics_mode.Keq, 'Keq', network, '1 mM', sc_out);
+  if options.write_standard_chemical_potential
+    kinetics_mode.mu0 = standard_concentration_convert(column(kinetics_mode.mu0), 'mu0', network, '1 mM', sc_out);
+  end
+  for itt = 1:length(more_column_names)
+    cn = more_column_names{itt};
+    is_std = ~isempty(regexpi(cn, 'std'));
+    is_geometric_std = ~isempty(regexpi(cn, 'geometricstd'));
+    if isfield(kinetics_more.(cn), 'Keq') && isnumeric(kinetics_more.(cn).Keq) && ~is_geometric_std
+      kinetics_more.(cn).Keq = standard_concentration_convert(kinetics_more.(cn).Keq, 'Keq', network, '1 mM', sc_out);
+    end
+    if isfield(kinetics_more.(cn), 'mu0') && isnumeric(kinetics_more.(cn).mu0) && ~isempty(kinetics_more.(cn).mu0) && ~is_std
+      kinetics_more.(cn).mu0 = standard_concentration_convert(column(kinetics_more.(cn).mu0), 'mu0', network, '1 mM', sc_out);
+    end
+  end
+end
 
 if options.use_sbml_ids
   metabolites = network.sbml_id_species;
@@ -344,7 +373,7 @@ if isfield(network,'metabolite_mass')
   end
 end
 
-sbtab_attributes = struct('TableID', 'Parameter', 'TableType','Quantity', 'TableName','Parameter', 'StandardConcentration', 'mM');
+sbtab_attributes = struct('TableID', 'Parameter', 'TableType','Quantity', 'TableName','Parameter', 'StandardConcentration', standard_concentration_label);
 
 quantity_table = sbtab_table_construct(sbtab_attributes, {'QuantityType','Reaction','Compound',options.value_column_name,'Unit'}, ...
                                        {column_quantity,column_reaction,column_compound,column_mode,column_unit});

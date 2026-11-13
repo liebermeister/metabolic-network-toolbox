@@ -29,6 +29,11 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %   options.expected_unit
 %   options.enforce_ranges
 %   options.table_id (optional, table ID if the input file contains several tables)
+%   options.default_data_standard_concentration
+%                    standard concentration ('1 mM' or '1 M') assumed for equilibrium constants, standard
+%                    chemical potentials and standard Gibbs free energies of reaction in a data file that does not declare one
+%                    (table attribute StandardConcentration); default '1 mM'. Data are converted from the
+%                    standard concentration of the data file to 1 mM, which kinetic_data always uses.
 %
 %   The default values of the options are read from the SBtab Config file 'data-mapping_Config.tsv'
 %   (in the same folder as this function; TableID 'ConfigureDataMapping'). To change the defaults, edit this file.
@@ -760,9 +765,12 @@ end
 % --------------------------------------------------------------------------------------
 % make sure important fields in kinetic_data are considered
 
-% convert Keq values from standard concentration M to standard concentration mM if necessary
+% convert Keq, dmu0 and mu0 values from the standard concentration of the data file to 1 mM
+% (the standard concentration used in kinetic_data); a data file that does not declare its
+% standard concentration (table attribute StandardConcentration) is read with
+% options.default_data_standard_concentration
 
-standard_concentration = 'undefined';
+standard_concentration = '';
 
 if length(kinetic_data_sbtab)
   table_attributes = sbtab_table_get_attributes(kinetic_data_sbtab);
@@ -771,54 +779,51 @@ if length(kinetic_data_sbtab)
   end
 end
 
-switch standard_concentration
-  case {'M','1M','1 M'}
-    ind_water = network_find_water(network);
-    N_for_dissolved_compounds = network.N;
-    N_for_dissolved_compounds(ind_water,:) = 0;
-    molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
+declared = length(standard_concentration) > 0;
+if ~declared
+  standard_concentration = options.default_data_standard_concentration;
 end
+c_data_in_mM = standard_concentration_in_mM(standard_concentration);
 
-if isfield(kinetic_data,'Keq')
-  switch standard_concentration
-    case {'M','1M','1 M'}
-      %% convert equilibrium constants: standard concentration M -> standard concentration mM
-      kinetic_data.Keq.median   = kinetic_data.Keq.median   .* 1000.^column(molecularity_mismatch);
-      kinetic_data.Keq.mean     = kinetic_data.Keq.mean     .* 1000.^column(molecularity_mismatch);
-      kinetic_data.Keq.std      = kinetic_data.Keq.std      .* 1000.^column(molecularity_mismatch);
-      kinetic_data.Keq.lower    = kinetic_data.Keq.lower    .* 1000.^column(molecularity_mismatch);
-      kinetic_data.Keq.upper    = kinetic_data.Keq.upper    .* 1000.^column(molecularity_mismatch);
-      kinetic_data.Keq.mean_ln  = kinetic_data.Keq.mean_ln   + log(1000.^column(molecularity_mismatch));
-      kinetic_data.Keq.lower_ln = kinetic_data.Keq.lower_ln  + log(1000.^column(molecularity_mismatch));
-      kinetic_data.Keq.upper_ln = kinetic_data.Keq.upper_ln  + log(1000.^column(molecularity_mismatch));
-      if verbose
-        display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
-      end
-    case {'mM','1mM','1 mM'}
-    case 'undefined'
-      if verbose
-        display(sprintf('- (kinetic_data_load.m):\n  Thermodynamic quantities in the data file are assumed to refer to a standard concentration of mM.\n  (To change this, please add the attribute StandardConcentration=''M'' to your data file.)'));
-      end
+if c_data_in_mM ~= 1 & (isfield(kinetic_data,'Keq') | isfield(kinetic_data,'dmu0') | isfield(kinetic_data,'mu0'))
+  ind_water = network_find_water(network);
+  N_for_dissolved_compounds = network.N;
+  N_for_dissolved_compounds(ind_water,:) = 0;
+  molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
+  % Keq (standard concentration 1 mM) = Keq (data file) * (c_data / 1 mM) ^ molecularity_mismatch
+  keq_factor = c_data_in_mM.^column(molecularity_mismatch);
+  if isfield(kinetic_data,'Keq')
+    kinetic_data.Keq.median   = kinetic_data.Keq.median   .* keq_factor;
+    kinetic_data.Keq.mean     = kinetic_data.Keq.mean     .* keq_factor;
+    kinetic_data.Keq.std      = kinetic_data.Keq.std      .* keq_factor;
+    kinetic_data.Keq.lower    = kinetic_data.Keq.lower    .* keq_factor;
+    kinetic_data.Keq.upper    = kinetic_data.Keq.upper    .* keq_factor;
+    kinetic_data.Keq.mean_ln  = kinetic_data.Keq.mean_ln   + log(keq_factor);
+    kinetic_data.Keq.lower_ln = kinetic_data.Keq.lower_ln  + log(keq_factor);
+    kinetic_data.Keq.upper_ln = kinetic_data.Keq.upper_ln  + log(keq_factor);
+  end
+  if isfield(kinetic_data,'dmu0')
+    kinetic_data.dmu0.median   = kinetic_data.dmu0.median   - RT * log(keq_factor);
+    kinetic_data.dmu0.mean     = kinetic_data.dmu0.mean     - RT * log(keq_factor);
+    kinetic_data.dmu0.lower    = kinetic_data.dmu0.lower    - RT * log(keq_factor);
+    kinetic_data.dmu0.upper    = kinetic_data.dmu0.upper    - RT * log(keq_factor);
+  end
+  if isfield(kinetic_data,'mu0')
+    % mu0 (1 mM) = mu0 (data file) - RT * ln(c_data / 1 mM); water is not converted
+    mu0_shift = - RT * log(c_data_in_mM) * ones(length(network.metabolites),1);
+    mu0_shift(ind_water) = 0;
+    kinetic_data.mu0.median   = kinetic_data.mu0.median   + mu0_shift;
+    kinetic_data.mu0.mean     = kinetic_data.mu0.mean     + mu0_shift;
+    kinetic_data.mu0.lower    = kinetic_data.mu0.lower    + mu0_shift;
+    kinetic_data.mu0.upper    = kinetic_data.mu0.upper    + mu0_shift;
+  end
+  if verbose
+    display(sprintf('- (kinetic_data_load.m): converting equilibrium constants, standard chemical potentials and standard reaction GFE from standard concentration %s to 1 mM.', standard_concentration));
   end
 end
 
-if isfield(kinetic_data,'dmu0')
-  switch standard_concentration
-    case {'M','1M','1 M'}
-      %% convert equilibrium constants: standard concentration M -> standard concentration mM
-      kinetic_data.dmu0.median   = kinetic_data.dmu0.median   - RT * log(1000.^column(molecularity_mismatch));
-      kinetic_data.dmu0.mean     = kinetic_data.dmu0.mean     - RT * log(1000.^column(molecularity_mismatch));
-      kinetic_data.dmu0.lower    = kinetic_data.dmu0.lower    - RT * log(1000.^column(molecularity_mismatch));
-      kinetic_data.dmu0.upper    = kinetic_data.dmu0.upper    - RT * log(1000.^column(molecularity_mismatch));
-      if verbose
-        display('Converting standard reaction GFE from a convention with standard concentration M -> standard concentration mM.');
-      end
-    case {'mM','1mM','1 mM'}
-    case 'undefined'
-      if verbose
-        display(sprintf('- (kinetic_data_load.m):\n  Thermodynamic quantities in the data file are assumed to refer to a standard concentration of mM.\n  (To change this, please add the attribute StandardConcentration=''M'' to your data file.)'));
-      end
-  end
+if ~declared & verbose & (isfield(kinetic_data,'Keq') | isfield(kinetic_data,'dmu0') | isfield(kinetic_data,'mu0'))
+  display(sprintf('- (kinetic_data_load.m):\n  The data file does not declare a standard concentration; thermodynamic quantities are assumed to refer to %s.\n  (To change this, please add the attribute StandardConcentration=''1M'' or ''1mM'' to your data file.)', standard_concentration));
 end
 
 

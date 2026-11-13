@@ -5,6 +5,10 @@ function kinetic_data = kinetic_data_complete(kinetic_data,parameter_prior,inser
 % Complete missing entries in 'kinetic_data' data structure:
 %  - complete missing logarithmic data values based on known non-logarithmic ones (and vice versa)
 %  - if desired, replace unknown data values by pseudo values
+%
+% Prior values of equilibrium constants, standard chemical potentials and standard reaction Gibbs free
+% energies are converted from the standard concentration of the prior table to 1 mM (the standard
+% concentration used in kinetic_data); if the prior table does not use 1 mM, 'network' is required
 
 eval(default('insert_pseudo_values','0','verbose','1','network','[]'));
 
@@ -24,6 +28,12 @@ for it = 1:length(fn)
   ind_upper  = find(~isfinite(kinetic_data.(fn{it}).upper));
   my_scaling =  parameter_prior.MathematicalType{parameter_prior.symbol_index.(fn{it})};
 
+  % shift from the standard concentration of the prior table to 1 mM (zero for most quantities)
+  my_shift   = prior_standard_concentration_shift(parameter_prior, fn{it}, network);
+  if isscalar(my_shift)
+    my_shift = my_shift * ones(size(kinetic_data.(fn{it}).lower));
+  end
+
   switch my_scaling
 
     case 'Multiplicative'
@@ -40,10 +50,10 @@ for it = 1:length(fn)
       my_lower_ln  = log(my_lower);
       my_upper_ln  = log(my_upper);
 
-      kinetic_data.(fn{it}).lower(ind_lower)    = my_lower;
-      kinetic_data.(fn{it}).upper(ind_upper)    = my_upper;
-      kinetic_data.(fn{it}).lower_ln(ind_lower) = my_lower_ln;
-      kinetic_data.(fn{it}).upper_ln(ind_upper) = my_upper_ln;
+      kinetic_data.(fn{it}).lower(ind_lower)    = my_lower * exp(my_shift(ind_lower));
+      kinetic_data.(fn{it}).upper(ind_upper)    = my_upper * exp(my_shift(ind_upper));
+      kinetic_data.(fn{it}).lower_ln(ind_lower) = my_lower_ln + my_shift(ind_lower);
+      kinetic_data.(fn{it}).upper_ln(ind_upper) = my_upper_ln + my_shift(ind_upper);
 
     case 'Additive'
 
@@ -52,23 +62,26 @@ for it = 1:length(fn)
 
       my_lower     = eval(parameter_prior.LowerBound{parameter_prior.symbol_index.(fn{it})});
       my_upper     = eval(parameter_prior.UpperBound{parameter_prior.symbol_index.(fn{it})});
-      kinetic_data.(fn{it}).lower(ind_lower) = my_lower;
-      kinetic_data.(fn{it}).upper(ind_upper) = my_upper;
+      kinetic_data.(fn{it}).lower(ind_lower) = my_lower + my_shift(ind_lower);
+      kinetic_data.(fn{it}).upper(ind_upper) = my_upper + my_shift(ind_upper);
   end
 
   if insert_pseudo_values
 
     if strcmp('Derived',parameter_prior.Dependence{parameter_prior.symbol_index.(fn{it})})
       ind_mean  = find(~isfinite(kinetic_data.(fn{it}).mean));
-      kinetic_data.(fn{it}).mean(ind_mean) = my_mean;
       kinetic_data.(fn{it}).std(ind_mean)  = my_std;
 
       switch my_scaling
         case 'Additive'
+          kinetic_data.(fn{it}).mean(ind_mean) = my_mean + my_shift(ind_mean);
           kinetic_data.(fn{it}).median = kinetic_data.(fn{it}).mean;
         case 'Multiplicative'
-          kinetic_data.(fn{it}).median(ind_mean)  = exp(my_mean_ln);
-          kinetic_data.(fn{it}).mean_ln(ind_mean) = my_mean_ln;
+          % (mean and std of a log-normal distribution scale with exp(shift))
+          kinetic_data.(fn{it}).mean(ind_mean)    = my_mean * exp(my_shift(ind_mean));
+          kinetic_data.(fn{it}).std(ind_mean)     = my_std  * exp(my_shift(ind_mean));
+          kinetic_data.(fn{it}).median(ind_mean)  = exp(my_mean_ln + my_shift(ind_mean));
+          kinetic_data.(fn{it}).mean_ln(ind_mean) = my_mean_ln + my_shift(ind_mean);
           kinetic_data.(fn{it}).std_ln(ind_mean)  = my_std_ln;
       end
 

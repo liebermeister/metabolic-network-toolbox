@@ -176,7 +176,9 @@ end
 
 if length(A_forward)
 
-  A_forward_table = sbtab_table_construct(struct('TableName','Gibbs free energies of reaction','TableID','ReactionGibbsFreeEnergyData', 'TableType','QuantityMatrix','Unit','kJ/mol'),{'QuantityType','Reaction'},{repmat({'Gibbs energy of reaction'},nr,1),network.actions});
+  % (reaction Gibbs free energies do not depend on the standard concentration; it is declared, as in all
+  %  tables with thermodynamic quantities, to state the convention of the data)
+  A_forward_table = sbtab_table_construct(struct('TableName','Gibbs free energies of reaction','TableID','ReactionGibbsFreeEnergyData', 'TableType','QuantityMatrix','Unit','kJ/mol','StandardConcentration','1mM'),{'QuantityType','Reaction'},{repmat({'Gibbs energy of reaction'},nr,1),network.actions});
 
   if options.consistent
     A_forward_table.TableID = 'ReactionGibbsFreeEnergy';

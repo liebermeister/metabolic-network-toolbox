@@ -5,10 +5,9 @@ function [kinetics, sbtab_table, other_parameters] = sbtab_to_modular_rate_law(n
 % Build 'kinetics' data structure from kinetic data (in SBtab file)
 %
 % Please note:
-%   Keq values are assumed to refer to a standard concentration of mM.
-%   If in the data file, Keq values refer to a standard concentration of M,
-%   this needs to be indicated by the table attribute StandardConcentration='M' (in the Parameter table)
-%   The values will then be converted by this function.
+%   The standard concentration of the Keq values is read from the table attribute StandardConcentration
+%   ('1M' or '1mM'; if missing, 1 mM is assumed). The values are converted to 1 mM, the standard
+%   concentration used in 'kinetics'.
 %
 % Similar functions: 'ms_import_kinetic'
 
@@ -61,18 +60,10 @@ ind_Keq = ind_Keq(label_names(Reaction(ind_Keq),network.actions));
 kinetics.Keq = Value(ind_Keq);
 
 if length(ind_Keq)
-  switch standard_concentration
-    case {'M','1M','1 M'}
-      %% convert equilibrium constants: standard concentration M -> standard concentration mM
-      ind_water = network_find_water(network);
-      N_for_dissolved_compounds = network.N;
-      N_for_dissolved_compounds(ind_water,:) = 0;
-      molecularity_mismatch = full(sum(N_for_dissolved_compounds,1));
-      kinetics.Keq = kinetics.Keq .* 1000.^column(molecularity_mismatch);
-      display('Converting equilibrium constants from a convention with standard concentration M -> standard concentration mM.');
-    case {'mM','1mM','1 mM'}
-    otherwise
-      warning('I assume that equilibrium constants given in the data file refer to a standard concentration of mM. If this is not the case, please indicate this by adding the table attribute StandardConcentration=''M'' to your data file');
+  % convert equilibrium constants from the standard concentration of the file to 1 mM
+  if standard_concentration_in_mM(standard_concentration) ~= 1
+    kinetics.Keq = standard_concentration_convert(kinetics.Keq, 'Keq', network, standard_concentration, '1 mM');
+    display(sprintf('Converting equilibrium constants from standard concentration %s to 1 mM.', standard_concentration));
   end
 end
 
