@@ -459,10 +459,12 @@ for it = 1:length(data_quantities)
     ind_median_too_high = find(my_median > allowed_max);
 
     if length(ind_mean_too_low) + length(ind_mean_too_high) + length(ind_median_too_low) + length(ind_median_too_high)
-      if verbose
-        display(sprintf('- (kinetic_data_load.m): %s data values outside allowed range in file %s. \n  I replace these values by the minimal or maximal allowed values %f and %f', symbol, data_file,allowed_min, allowed_max));
-        display([my_mean(ind_mean_too_low); my_mean(ind_mean_too_high); my_median(ind_median_too_low); my_median(ind_median_too_high)])
-      end
+      % always reported: values outside the prior bounds often point to errors in the data file
+      % (e.g. wrong units, wrong standard concentration, numbers damaged by a spreadsheet program)
+      file_name = '';
+      if ischar(data_file), file_name = [' in file ' data_file]; end
+      clipped_values = [my_mean(ind_mean_too_low); my_mean(ind_mean_too_high); my_median(ind_median_too_low); my_median(ind_median_too_high)];
+      warning('kinetic_data_load:clipped', '%d %s data values%s are outside the allowed range [%g, %g] of the prior table and are replaced by the bounds (values: %s)', length(clipped_values), symbol, file_name, allowed_min, allowed_max, mat2str(column(clipped_values)', 4));
       my_mean(ind_mean_too_low)      = allowed_min;
       my_mean(ind_mean_too_high)     = allowed_max;
       my_median(ind_median_too_low)  = allowed_min;
@@ -874,10 +876,11 @@ if options.enforce_ranges
       v = max(min(v, log(ub)), log(lb));
       entry.mean_ln(isfinite(v)) = v(isfinite(v));
     end
-    if n_clipped & verbose
+    if n_clipped
+      % always reported (see above)
       prior_sc = '1 mM';
       if isfield(parameter_prior,'standard_concentration'), prior_sc = parameter_prior.standard_concentration; end
-      display(sprintf('- (kinetic_data_load.m): %d %s data values outside the allowed range in the data file. I replace them by the minimal or maximal allowed values (prior bounds %f and %f, standard concentration %s, converted to 1 mM)', n_clipped, my_symbol, allowed_min, allowed_max, prior_sc));
+      warning('kinetic_data_load:clipped', '%d %s data values are outside the allowed range and are replaced by the bounds (prior bounds %g and %g for standard concentration %s, converted to 1 mM)', n_clipped, my_symbol, allowed_min, allowed_max, prior_sc);
     end
     kinetic_data.(my_symbol) = entry;
   end
