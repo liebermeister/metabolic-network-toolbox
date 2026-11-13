@@ -4,6 +4,7 @@ Version numbers have the form MAJOR.MINOR.PATCH. MAJOR changes when existing cal
 
 ## Not released yet
 
+- `kinetic_data_to_sbtab`, `kinetic_data_save`, `save_kinetic_and_state_data`: new optional argument `standard_concentration` (default `1 mM`, as before): Keq, dmu0 and mu0 are written in this convention, which the table declares
 - Standard concentration of thermodynamic quantities (equilibrium constants, standard chemical potentials, standard reaction Gibbs free energies): every SBtab table read or written by MNT states its convention in the table attribute `StandardConcentration` (`1M` or `1mM`); internally, MNT uses 1 mM as before.
   - New functions `standard_concentration_in_mM` and `standard_concentration_convert` (folder `thermodynamics`; Keq, ln Keq, dmu0, mu0; water is not counted)
   - Reading: `kinetic_data_load` converts Keq, dmu0 and mu0 from the convention of the file to 1 mM; files without the attribute are read with the new option `default_data_standard_concentration` (default `1 mM`, as before; also a file option of `sbtab_load_network_model_and_data` and an entry in `data-mapping_Config.tsv`). `sbtab_network_state_load` converts the table EquilibriumConstant; `sbtab_to_modular_rate_law` uses the new functions (unknown values now give an error instead of a warning)

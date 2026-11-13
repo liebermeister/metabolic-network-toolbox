@@ -89,3 +89,21 @@ if has_sbtab
   assert(max(abs(kd.Keq.lower ./ (lower * [1/1000; 1]) - 1)) < 1e-10);
   assert(max(abs(kd.Keq.mean_ln - (log(eval(parameter_prior.PriorMedian{parameter_prior.symbol_index.Keq})) + [-L; 0]))) < 1e-10);
 end
+
+%% kinetic data file: written in 1 M, read back in 1 mM
+if has_sbtab
+  parameter_prior = parameter_balancing_prior;
+  kd = kinetic_data_load({'equilibrium constant'}, parameter_prior, network, [], struct('use_sbml_ids', 0, 'use_kegg_ids', 0, 'verbose', 0));
+  kd.Keq.median = keq_mM; kd.Keq.mean = keq_mM; kd.Keq.std = 0.1 * keq_mM; kd.Keq.geomstd = [1.2; 1.2];
+  kd.Keq.lower = keq_mM / 10; kd.Keq.upper = keq_mM * 10;
+  kd.Keq.mean_ln = log(keq_mM); kd.Keq.std_ln = log([1.2; 1.2]); kd.Keq.lower_ln = log(kd.Keq.lower); kd.Keq.upper_ln = log(kd.Keq.upper);
+  [t, M] = kinetic_data_to_sbtab(kd, network, [], '1 M');
+  assert(strcmp(t.attributes.StandardConcentration, '1M') && strcmp(t.attributes.TableID, 'ParameterData'));
+  filename = [tempname '.tsv'];
+  mytable(M, 0, filename);
+  kd2 = kinetic_data_load({'equilibrium constant'}, parameter_prior, network, filename, struct('use_sbml_ids', 0, 'use_kegg_ids', 0, 'verbose', 0));
+  delete(filename);
+  assert(max(abs(kd2.Keq.mean ./ keq_mM - 1)) < 1e-4);   % (the median is recomputed from mean and std)
+  [t, ~] = kinetic_data_to_sbtab(kd, network);
+  assert(strcmp(t.attributes.StandardConcentration, '1mM'));
+end
