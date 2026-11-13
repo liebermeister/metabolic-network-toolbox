@@ -28,6 +28,9 @@ function kinetic_data = kinetic_data_load(data_quantities, parameter_prior, netw
 %   options.use_python_version_defaults
 %   options.expected_unit
 %   options.enforce_ranges
+%                    clip data values to the bounds of the prior table. Keq, dmu0 and mu0 are clipped
+%                    after their conversion to 1 mM, against the prior bounds converted from the
+%                    standard concentration of the prior table to 1 mM (reaction by reaction)
 %   options.table_id (optional, table ID if the input file contains several tables)
 %   options.default_data_standard_concentration
 %                    standard concentration ('1 mM' or '1 M') assumed for equilibrium constants, standard
@@ -439,14 +442,16 @@ for it = 1:length(data_quantities)
   end
 
   if isfield(kinetic_data_table,'Mean')
-    flag_mean_is_given = 1;
     my_mean = cell_string2num(kinetic_data_table.Mean(ind));
-    if prod(isnan(my_mean))
-      flag_mean_is_given = 0;
-    end
   end
+  % each row is read from what it gives: rows with a Mean use the Mean, the other rows
+  % use the Median (or Value, or Mode)
+  has_mean = column(isfinite(my_mean));
+  flag_mean_is_given = any(has_mean);
 
-  if options.enforce_ranges
+  % Keq, dmu0 and mu0 depend on the standard concentration; they are clipped further below,
+  % after their conversion to 1 mM
+  if options.enforce_ranges & ~any(strcmp(symbol, {'Keq','dmu0','mu0'}))
 
     ind_mean_too_low    = find(my_mean   < allowed_min);
     ind_mean_too_high   = find(my_mean   > allowed_max);
@@ -505,11 +510,8 @@ for it = 1:length(data_quantities)
       case 'Additive'
         my_std_guess = errstd * ones(size(my_median));
       case 'Multiplicative'
-        if flag_mean_is_given
-          my_std_guess = my_mean * sqrt(exp(log(errgeomstd).^2)-1); % formula assuming log-normal distribution
-        else
-          [~,my_std_guess] = lognormal_log2normal(log(my_median),log(errgeomstd) * ones(size(my_median)));
-        end
+        [~,my_std_guess] = lognormal_log2normal(log(my_median),log(errgeomstd) * ones(size(my_median)));
+        my_std_guess(has_mean) = my_mean(has_mean) * sqrt(exp(log(errgeomstd).^2)-1); % formula assuming log-normal distribution
     end
     %else
     %  %% Possibility 2: complete missing data error by default standard deviation
@@ -520,23 +522,27 @@ for it = 1:length(data_quantities)
 
   switch scaling
     case 'Additive'
-      if flag_mean_is_given, my_median = my_mean;
-      else,                  my_mean = my_median;
-      end
+      my_median(has_mean)  = my_mean(has_mean);
+      my_mean(~has_mean)   = my_median(~has_mean);
       my_geomstd = nan * my_mean;
     case 'Multiplicative'
       my_geomstd = nan * my_mean;
+      %% rows without a Mean: median and predefined geometric standard deviation (THIS IS A FIX!)
+      my_mean_ln = log(my_median);
+      my_std_ln  = log(errgeomstd) * ones(size(my_mean_ln));
+      [my_mean_from_median, my_std_from_median] = lognormal_log2normal(my_mean_ln,my_std_ln);
+      my_mean(~has_mean) = my_mean_from_median(~has_mean);
+      my_std(~has_mean)  = my_std_from_median(~has_mean);
+      %% rows with a Mean
       if flag_mean_is_given
-        [my_mean_ln,my_std_ln] = lognormal_normal2log(my_mean,my_std);
-        my_median(isfinite(my_mean_ln)) = exp(my_mean_ln(isfinite(my_mean_ln)));
-        my_geomstd(isfinite(my_std_ln)) = exp(my_std_ln(isfinite(my_std_ln)));
-      else
-        %% THIS IS A FIX! Use predefined geometric standard deviation
-        my_mean_ln = log(my_median);
-        my_std_ln  = log(errgeomstd) * ones(size(my_mean_ln));
-        [my_mean,my_std] = lognormal_log2normal(my_mean_ln,my_std_ln);
-        my_geomstd(isfinite(my_std_ln)) = exp(my_std_ln(isfinite(my_std_ln)));
+        [mean_ln_from_mean, std_ln_from_mean] = lognormal_normal2log(my_mean(has_mean), my_std(has_mean));
+        my_mean_ln(has_mean) = mean_ln_from_mean;
+        my_std_ln(has_mean)  = std_ln_from_mean;
+        ii = find(has_mean);
+        ii = ii(isfinite(mean_ln_from_mean));
+        my_median(ii) = exp(my_mean_ln(ii));
       end
+      my_geomstd(isfinite(my_std_ln)) = exp(my_std_ln(isfinite(my_std_ln)));
   end
 
   if isfield(kinetic_data_table,'Min')
@@ -739,8 +745,10 @@ for it = 1:length(data_quantities)
   switch scaling
     case 'Multiplicative'
       if flag_mean_is_given
-        [quantity_entry.mean_ln, quantity_entry.std_ln] = lognormal_normal2log(quantity_entry.mean, quantity_entry.std);
-        quantity_entry.median = exp(quantity_entry.mean_ln);
+        % entries without a usable mean and std keep the values computed from their median
+        ii = find(isfinite(quantity_entry.mean) & isfinite(quantity_entry.std));
+        [quantity_entry.mean_ln(ii), quantity_entry.std_ln(ii)] = lognormal_normal2log(quantity_entry.mean(ii), quantity_entry.std(ii));
+        quantity_entry.median(ii) = exp(quantity_entry.mean_ln(ii));
       else
         quantity_entry.mean_ln = log(quantity_entry.median);
         ii = find(isfinite(quantity_entry.std_ln));
@@ -819,6 +827,49 @@ if c_data_in_mM ~= 1 & (isfield(kinetic_data,'Keq') | isfield(kinetic_data,'dmu0
   end
   if verbose
     display(sprintf('- (kinetic_data_load.m): converting equilibrium constants, standard chemical potentials and standard reaction GFE from standard concentration %s to 1 mM.', standard_concentration));
+  end
+end
+
+% clip Keq, dmu0 and mu0 to the prior bounds; the bounds refer to the standard concentration of
+% the prior table and are converted to 1 mM (the data were converted above)
+if options.enforce_ranges
+  for my_symbol = {'Keq','dmu0','mu0'}
+    my_symbol = my_symbol{1};
+    if ~isfield(kinetic_data, my_symbol), continue; end
+    ind_prior   = find(strcmp(parameter_prior.Symbol, my_symbol));
+    if isempty(ind_prior), continue; end
+    allowed_min = eval(parameter_prior.LowerBound{ind_prior});
+    allowed_max = eval(parameter_prior.UpperBound{ind_prior});
+    % shift of ln Keq, dmu0 or mu0 from the prior's standard concentration to 1 mM
+    shift = column(prior_standard_concentration_shift(parameter_prior, my_symbol, network));
+    entry = kinetic_data.(my_symbol);
+    switch my_symbol
+      case 'Keq', lb = allowed_min * exp(shift); ub = allowed_max * exp(shift);
+      otherwise,  lb = allowed_min + shift;      ub = allowed_max + shift;
+    end
+    lb = lb .* ones(size(entry.median));
+    ub = ub .* ones(size(entry.median));
+    n_clipped = 0;
+    for fn = {'median','mean'}
+      v = entry.(fn{1});
+      too_low  = v < lb;
+      too_high = v > ub;
+      n_clipped = n_clipped + sum(too_low(:)) + sum(too_high(:));
+      v(too_low)  = lb(too_low);
+      v(too_high) = ub(too_high);
+      entry.(fn{1}) = v;
+    end
+    if strcmp(my_symbol,'Keq')
+      v = entry.mean_ln;
+      v = max(min(v, log(ub)), log(lb));
+      entry.mean_ln(isfinite(v)) = v(isfinite(v));
+    end
+    if n_clipped & verbose
+      prior_sc = '1 mM';
+      if isfield(parameter_prior,'standard_concentration'), prior_sc = parameter_prior.standard_concentration; end
+      display(sprintf('- (kinetic_data_load.m): %d %s data values outside the allowed range in the data file. I replace them by the minimal or maximal allowed values (prior bounds %f and %f, standard concentration %s, converted to 1 mM)', n_clipped, my_symbol, allowed_min, allowed_max, prior_sc));
+    end
+    kinetic_data.(my_symbol) = entry;
   end
 end
 
