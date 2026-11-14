@@ -10,6 +10,8 @@ function [network,c,v,dmu,keq,theta] = sbtab_network_state_load(filename)
 % If the table MetaboliteConcentration or Flux is missing, c or v is a vector of NaN values (with a warning).
 % Equilibrium constants are converted to the standard concentration 1 mM, from the standard concentration
 % declared in the table EquilibriumConstant (table attribute StandardConcentration; if missing, an error is raised).
+% Concentrations are converted to mM, from the unit given by the table attribute Unit or the column Unit of the
+% table MetaboliteConcentration (if neither is given, mM is assumed).
 
 sbtab = sbtab_get(filename);
 
@@ -21,6 +23,20 @@ if any(strcmp('MetaboliteConcentration', table_names))
   sbtab_c = sbtab_to_struct(sbtab_document_get_table(sbtab,'MetaboliteConcentration'),'column');
   ll = label_names(network.metabolites,sbtab_c.Metabolite);
   c(ll~=0) = cell_string2num(sbtab_c.Value(ll(ll~=0)));
+  % concentration unit: table attribute Unit or column Unit (default, if neither is given: mM);
+  % values are converted to mM
+  c_table_attributes = sbtab_table_get_attributes(sbtab_document_get_table(sbtab,'MetaboliteConcentration'));
+  c_unit = '';
+  if isfield(c_table_attributes,'Unit'),
+    c_unit = c_table_attributes.Unit;
+  elseif isfield(sbtab_c,'Unit')
+    units = unique(sbtab_c.Unit(ll(ll~=0)));
+    if length(units) > 1, error('Different concentration units in table MetaboliteConcentration: %s', strjoin(column(units)', ', ')); end
+    if length(units), c_unit = units{1}; end
+  end
+  if ~isempty(c_unit)
+    c = concentration_unit_in_mM(c_unit, 'table MetaboliteConcentration') * c;
+  end
 else
   warning('No metabolite concentrations found in file');
 end

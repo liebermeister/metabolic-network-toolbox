@@ -400,19 +400,31 @@ for it = 1:length(data_quantities)
   %kinetic_data_table.QuantityType
   ind = find(strcmp(kinetic_data_table.QuantityType,data_quantities{it}));
 
+  unit_factor = ones(length(ind),1);
   if ~isempty(data_file)
-    %% omit data with non-standard units
-    my_units = kinetic_data_table.Unit(ind);
-    is_ok = double(strcmp(my_units,default_unit));
-    if sum(is_ok==0)
-      if verbose
-        display(sprintf('- (kinetic_data_load.m): The data file contains "%s" values with unknown units. I ignore these values.',quantitytype));
+    %% units: values in other concentration units (M, uM, nM, mol/l, ...) are converted to the
+    %% unit of the prior table (mM); values in other, unknown units are ignored (with a warning)
+    my_units = column(strrep(kinetic_data_table.Unit(ind), ' ', ''));
+    is_ok = strcmp(my_units, strrep(default_unit, ' ', ''));
+    if strcmp(default_unit, 'mM')
+      for iu = find(~is_ok)'
+        try
+          unit_factor(iu) = concentration_unit_in_mM(my_units{iu});
+          is_ok(iu) = true;
+        catch
+        end
       end
-      data_file
-      default_unit
-      units_found = my_units
+      if any(unit_factor ~= 1)
+        display(sprintf('- (kinetic_data_load.m): converting %d "%s" values to mM (units found: %s)', sum(unit_factor ~= 1), quantitytype, strjoin(unique(my_units(unit_factor ~= 1))', ', ')));
+      end
+    end
+    if any(~is_ok)
+      file_name = '';
+      if ischar(data_file), file_name = [' in file ' data_file]; end
+      warning('kinetic_data_load:unit', '%d "%s" values%s have units other than %s (%s) and are ignored', sum(~is_ok), quantitytype, file_name, default_unit, strjoin(unique(my_units(~is_ok))', ', '));
     end
     ind = ind(find(is_ok));
+    unit_factor = unit_factor(find(is_ok));
   end
 
   my_median  = nan * ones(length(ind),1);
@@ -444,6 +456,8 @@ for it = 1:length(data_quantities)
   if isfield(kinetic_data_table,'Mean')
     my_mean = cell_string2num(kinetic_data_table.Mean(ind));
   end
+  my_median = column(my_median) .* unit_factor;
+  my_mean   = column(my_mean)   .* unit_factor;
   % each row is read from what it gives: rows with a Mean use the Mean, the other rows
   % use the Median (or Value, or Mode)
   has_mean = column(isfinite(my_mean));
@@ -486,7 +500,7 @@ for it = 1:length(data_quantities)
   end
 
   if isfield(kinetic_data_table,'Std')
-    my_std = cell_string2num(kinetic_data_table.Std(ind));
+    my_std = column(cell_string2num(kinetic_data_table.Std(ind))) .* unit_factor;
   end
   ind_zero_values = find(my_std==0);
   if length(ind_zero_values)
@@ -548,11 +562,11 @@ for it = 1:length(data_quantities)
   end
 
   if isfield(kinetic_data_table,'Min')
-    my_lower = cell_string2num(kinetic_data_table.Min(ind));
+    my_lower = column(cell_string2num(kinetic_data_table.Min(ind))) .* unit_factor;
   end
 
   if isfield(kinetic_data_table,'Max')
-    my_upper = cell_string2num(kinetic_data_table.Max(ind));
+    my_upper = column(cell_string2num(kinetic_data_table.Max(ind))) .* unit_factor;
   end
 
   %% Determine reaction and species indices in the model

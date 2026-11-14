@@ -294,12 +294,12 @@ if options.modular_rate_law_table
 end
 
 if length(options.c)
-  concentration_table = sbtab_table_construct(struct('TableID','MetaboliteConcentration','TableType','Quantity','TableName','Metabolite concentration'),{'QuantityType','Metabolite','Value'},{repmat({'concentration'},length(options.c),1),network.metabolites,options.c,});
+  concentration_table = sbtab_table_construct(struct('TableID','MetaboliteConcentration','TableType','Quantity','TableName','Metabolite concentration','Unit','mM'),{'QuantityType','Metabolite','Value'},{repmat({'concentration'},length(options.c),1),network.metabolites,options.c,});
   sbtab_document = sbtab_document_add_table(sbtab_document,'MetaboliteConcentration',concentration_table);
 end
 
 if length(options.c_min)
-  concentration_constraint_table = sbtab_table_construct(struct('TableID','ConcentrationConstraint','TableType','Quantity','TableName','Metabolite concentration constraints'),{'QuantityType','Compound','Min','Max'},{repmat({'concentration'},length(options.c_min),1),network.metabolites,options.c_min,options.c_max});
+  concentration_constraint_table = sbtab_table_construct(struct('TableID','ConcentrationConstraint','TableType','Quantity','TableName','Metabolite concentration constraints','Unit','mM'),{'QuantityType','Compound','Min','Max'},{repmat({'concentration'},length(options.c_min),1),network.metabolites,options.c_min,options.c_max});
   sbtab_document = sbtab_document_add_table(sbtab_document,'ConcentrationConstraint',concentration_constraint_table);
 end
 

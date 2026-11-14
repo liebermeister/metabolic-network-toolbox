@@ -124,6 +124,30 @@ end
 
 M.ids = ids;
 
+% units: concentrations (metabolites, enzymes) are converted to mM and Gibbs free energies to kJ/mol,
+% the units used in MNT; unknown units give an error
+if ~isempty(M.Unit)
+  f = 1; unit_out = M.Unit;
+  switch quantity_type
+    case {'concentration', 'concentration of enzyme'}
+      f = concentration_unit_in_mM(M.Unit, sprintf('quantity "%s", table %s', quantity_type, table_name));
+      unit_out = 'mM';
+    case 'Gibbs energy of reaction'
+      switch strrep(M.Unit, ' ', '')
+        case 'kJ/mol', f = 1;
+        case 'J/mol',  f = 0.001;
+        otherwise, error('Unknown unit ''%s'' for quantity "%s" (allowed: kJ/mol, J/mol)', M.Unit, quantity_type);
+      end
+      unit_out = 'kJ/mol';
+  end
+  if f ~= 1
+    M.Mean = f * M.Mean;
+    if ~isempty(M.Std), M.Std = f * M.Std; end
+    display(sprintf('- (load_state_data_for_network.m): converting %s data from %s to %s', quantity_type, M.Unit, unit_out));
+  end
+  M.Unit = unit_out;
+end
+
 if prod(isnan(M.Mean))
   warning(sprintf('No data for data type "%s" found in data file',quantity_type))
 end
