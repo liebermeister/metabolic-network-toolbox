@@ -44,7 +44,14 @@ assert(max(abs(theta2 - (log(keq) - network.N' * log(c)))) < 1e-12);
 sbml = sbml_network_state_save(network, c, v, [], [], struct('concentration_unit', 'uM', 'time_unit', 'min', 'verbose', 0));
 warning('off'); [~, c3, v3, dmu3, keq3] = sbml_network_state_load(sbml); warning('on');
 assert(isempty(dmu3) && isempty(keq3));
-assert(max(abs(c3 - c)) < 1e-12 && max(abs(v3 - v)) < 1e-12);
+assert(max(abs(c3 - 0.001 * c)) < 1e-15 && max(abs(v3 - v)) < 1e-12);   % values written as uM, returned in mM
+
+%% file in M: concentrations returned in mM, equilibrium constants converted to 1 mM
+sbml = sbml_network_state_save(network, c, v, [], [], struct('concentration_unit', 'M', 'verbose', 0), keq);
+[~, c5, ~, ~, keq5] = sbml_network_state_load(sbml);
+Nw = network.N; Nw(network_find_water(network),:) = 0;
+assert(max(abs(c5 - 1000 * c)) < 1e-9);
+assert(max(abs(keq5 ./ (keq .* 1000 .^ full(sum(Nw,1))') - 1)) < 1e-12);
 
 %% network with kinetics: rate laws kept, state parameters removed from the kinetics
 network.kinetics = set_kinetics(network, 'cs');

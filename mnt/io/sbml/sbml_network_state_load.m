@@ -22,8 +22,10 @@ function [network, c, v, dmu, keq, theta] = sbml_network_state_load(filename)
 % Database identifiers in MIRIAM annotations (identifiers.org: kegg.compound, bigg.metabolite,
 % chebi, kegg.reaction, bigg.reaction) are stored in the network fields metabolite_KEGGID,
 % metabolite_BIGGID, metabolite_CHEBIID, reaction_KEGGID, reaction_BIGGID.
-% Missing values are NaN. The values are returned as they are stored in the file, in the units
-% given in the file (default: mM, mM/s, kJ/mol); units are not converted.
+% Missing values are NaN. Concentrations and equilibrium constants are converted to mM (Keq: standard
+% concentration 1 mM) from the substance unit declared in the file (unit definition of the model's
+% substanceUnits, kind 'mole'); without such a declaration, mM is assumed (with a warning). Fluxes and
+% Gibbs free energies are returned as stored (default: mM/s, kJ/mol).
 %
 % If the kinetic laws are only the constant rates 'reference_flux * flux_reference_volume' (files written for networks
 % without kinetics), the network has no field 'kinetics'. Otherwise, the kinetics are read by
@@ -123,6 +125,22 @@ if all(isnan(dmu))
   if nargout > 3, warning('No reaction Gibbs free energy values found in file'); end
 end
 
+% -------------------------------------------------------------
+% Units: concentrations and equilibrium constants are converted to mM (Keq: to the standard
+% concentration 1 mM) if the model declares its substance unit (unit definition with kind 'mole')
+% and the volume unit litre; otherwise the values are returned as stored (mM assumed)
+
+[conc_factor, unit_found] = sbml_concentration_factor(s);
+if unit_found && conc_factor ~= 1
+  c   = conc_factor * c;
+  N = network.N; N(network_find_water(network),:) = 0;   % water: activity 1, not converted
+  m   = full(sum(N, 1))';
+  keq = keq .* conc_factor .^ m;
+  display(sprintf('- (sbml_network_state_load.m): converting concentrations and equilibrium constants from the substance unit of the file to mM (factor %g)', conc_factor));
+elseif ~unit_found && (any(isfinite(c)) || any(isfinite(keq)))
+  warning('sbml_network_state_load:units', 'SBML file without substance unit definition: concentrations and equilibrium constants are assumed to be in mM (standard concentration 1 mM)');
+end
+
 if all(isnan(keq))
   keq = [];
   if nargout > 4, warning('No equilibrium constant values found in file'); end
@@ -184,3 +202,20 @@ for it = 1:length(tok)
   out = [out char(hex2dec(tok{it}{1})) split{it+1}];
 end
 s = out;
+
+
+% -------------------------------------------------------------
+
+function [f, found] = sbml_concentration_factor(s)
+% factor from the model's substance unit (per litre) to mM; found = 0 if no such unit definition
+f = 1; found = 0;
+if ~isfield(s,'substanceUnits') || isempty(s.substanceUnits) || ~isfield(s,'unitDefinition'), return; end
+ud = s.unitDefinition;
+k = find(strcmp({ud.id}, s.substanceUnits));
+if isempty(k), return; end
+u = ud(k(1)).unit;
+im = find(strcmp({u.kind}, 'mole'));
+if length(u) ~= 1 || length(im) ~= 1 || u(im).exponent ~= 1, return; end
+mult = 1; if isfield(u(im),'multiplier') && ~isempty(u(im).multiplier), mult = u(im).multiplier; end
+f = mult * 10^(u(im).scale + 3);
+found = 1;
