@@ -37,6 +37,20 @@ if has_mnt
   assert(isequal(network3.actions, network.actions));
 end
 
+%% save and load network state with water: water stays in N, so that the forces match the file
+if has_mnt
+  Nw = [-1; 1; 1];   % A -> B + H2O
+  netw = network_construct(Nw, [0], [1;1;1], {'A';'B';'h2o_c'}, {'R1'});
+  netw.metabolite_names = {'A';'B';'H2O'};
+  cw = [2; 1; 0.5]; vw = 1; dmuw = -3;
+  filename = tempname;
+  evalc('sbtab_network_state_save(netw, cw, vw, filename, dmuw, struct(''verbose'',0))');
+  [~, netw2, cw2, ~, dmuw2] = evalc('sbtab_network_state_load([filename ''.tsv''])');
+  delete([filename '.tsv']);
+  assert(isequal(full(netw2.N), Nw));
+  assert(abs(dmuw2 - dmuw) < 1e-9 && isequal(cw2, cw));
+end
+
 %% kinetic regulation: network -> SBtab (column KineticRegulation) -> network
 if has_mnt
   network.regulation_matrix = sparse([0 0 1; -1 0 0]);

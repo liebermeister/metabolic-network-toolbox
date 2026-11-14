@@ -14,10 +14,13 @@ function [network,c,v,dmu,keq,theta] = sbtab_network_state_load(filename)
 % table MetaboliteConcentration (if neither is given, mM is assumed). Fluxes are converted to mM/s,
 % from the unit given by the table attribute Unit or the column Unit of the table Flux (e.g. 'uM/min';
 % if neither is given, mM/s is assumed).
+% Water is kept in the stoichiometric matrix (unlike in sbtab_to_network, whose default is to
+% remove it), since the state (concentrations, Gibbs free energies, equilibrium constants) refers
+% to the reaction formulas as written in the file.
 
 sbtab = sbtab_get(filename);
 
-network = sbtab_to_network(sbtab);
+network = sbtab_to_network(sbtab, struct('omit_water',0));
 table_names = sbtab_document_get_table_names(sbtab);
 
 c = nan(length(network.metabolites),1);
