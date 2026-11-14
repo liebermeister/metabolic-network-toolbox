@@ -46,7 +46,7 @@ assert(c == 1000 && strcmp(label, '1M'));
 if has_sbtab
   [~, d] = evalc('network_to_sbtab(network, struct(''keq'', keq_mM, ''dmu'', [-1; -2], ''standard_concentration'', ''1 M''))');
   assert(strcmp(d.tables.EquilibriumConstant.attributes.StandardConcentration, '1M'));
-  assert(strcmp(d.tables.ReactionDeltaG.attributes.StandardConcentration, '1M'));
+  assert(strcmp(d.tables.ReactionGibbsFreeEnergy.attributes.StandardConcentration, '1M'));
   values = cell_string2num(sbtab_table_get_column(d.tables.EquilibriumConstant, 'Value'));
   assert(max(abs(values ./ [2000; 3] - 1)) < 1e-6);
   filename = tempname;

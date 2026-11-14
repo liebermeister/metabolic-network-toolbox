@@ -312,7 +312,7 @@ end
 
 if length(options.dmu)
   delta_g_table = sbtab_table_construct(struct('TableID','ReactionGibbsFreeEnergy','TableType','Quantity','TableName','Reaction Gibbs free Energy','StandardConcentration',standard_concentration_label),{'QuantityType','Reaction','Value'},{repmat({'Gibbs free energy of reaction'},length(options.dmu),1),network.actions,options.dmu,});
-  sbtab_document = sbtab_document_add_table(sbtab_document,'ReactionDeltaG',delta_g_table);
+  sbtab_document = sbtab_document_add_table(sbtab_document,'ReactionGibbsFreeEnergy',delta_g_table);
 end
 
 if length(options.keq)

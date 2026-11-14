@@ -13,11 +13,17 @@ function sbml_object = sbtab_to_sbml(sbtab_object, filename, options)
 % constants and reaction Gibbs free energies as local parameters 'reference_flux',
 % 'equilibrium_constant', 'reaction_gibbs_free_energy' of the reactions (with units, SBO terms
 % and notes; see sbml_network_state_save). Otherwise, the network is written with network_sbml_export.
+% The same format is written by the Python converter (sbtab2sbml --metabolite-state).
+%
+% The values in the SBtab tables are converted (from the units given in the tables, see
+% sbtab_network_state_load) to the units of the SBML file (options concentration_unit, time_unit).
 %
 % options (optional struct)
-%   .state   'auto' (default: write the state if the document contains state tables),
-%            1 (always write the state format), 0 (never)
-%   other fields are passed to sbml_network_state_save (e.g. .name, .concentration_unit, .time_unit)
+%   .metabolite_state   'auto' (default: write the state if the document contains state tables),
+%                       1 (always write the state format), 0 (never); older name: .state
+%   .concentration_unit concentration unit in the SBML file: 'M', 'mM' (default), 'uM', 'nM'
+%   .time_unit          time unit of the fluxes in the SBML file: 's' (default), 'min', 'h'
+%   other fields are passed to sbml_network_state_save (e.g. .name)
 %
 % This function requires the Metabolic Network Toolbox and libSBML (see network_sbml_export)
 %
@@ -29,21 +35,35 @@ function sbml_object = sbtab_to_sbml(sbtab_object, filename, options)
 
 eval(default('filename','[]','options','struct'));
 if isempty(options), options = struct; end
-options = join_struct(struct('state','auto','verbose',0), options);
+if isfield(options, 'state')
+  if ~isfield(options, 'metabolite_state'), options.metabolite_state = options.state; end
+  options = rmfield(options, 'state');
+end
+options = join_struct(struct('metabolite_state','auto','concentration_unit','mM','time_unit','s','verbose',0), options);
 
 sbtab_object = sbtab_get(sbtab_object);
 
 state_tables = {'MetaboliteConcentration', 'Flux', 'ReactionGibbsFreeEnergy', 'EquilibriumConstant'};
-switch options.state
-  case 'auto', write_state = any(ismember(state_tables, sbtab_document_get_table_names(sbtab_object)));
-  otherwise,   write_state = options.state;
+if ischar(options.metabolite_state) && strcmp(options.metabolite_state, 'auto')
+  write_state = any(ismember(state_tables, sbtab_document_get_table_names(sbtab_object)));
+else
+  write_state = options.metabolite_state;
 end
 
 if write_state
   warning_state = warning('off', 'all');   % missing state tables are fine here
   [network, c, v, dmu, keq] = sbtab_network_state_load(sbtab_object);
   warning(warning_state);
-  save_options = rmfield(options, 'state');
+  % values from sbtab_network_state_load (mM, mM/s, Keq for 1 mM) -> units of the SBML file
+  f_c = concentration_unit_in_mM(options.concentration_unit, 'option concentration_unit');
+  f_v = flux_unit_in_mM_per_s([options.concentration_unit '/' options.time_unit], 'options concentration_unit, time_unit');
+  c   = c / f_c;
+  v   = v / f_v;
+  if ~isempty(keq) && f_c ~= 1
+    N = network.N; N(network_find_water(network),:) = 0;   % water: activity 1, not converted
+    keq = keq(:) .* f_c .^ (- full(sum(N, 1))');
+  end
+  save_options = rmfield(options, 'metabolite_state');
   sbml_object = sbml_network_state_save(network, c, v, filename, dmu, save_options, keq);
 else
   sbml_object = network_sbml_export(sbtab_to_network(sbtab_object), 0, 'Model', filename);

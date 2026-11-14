@@ -11,7 +11,9 @@ function [network,c,v,dmu,keq,theta] = sbtab_network_state_load(filename)
 % Equilibrium constants are converted to the standard concentration 1 mM, from the standard concentration
 % declared in the table EquilibriumConstant (table attribute StandardConcentration; if missing, an error is raised).
 % Concentrations are converted to mM, from the unit given by the table attribute Unit or the column Unit of the
-% table MetaboliteConcentration (if neither is given, mM is assumed).
+% table MetaboliteConcentration (if neither is given, mM is assumed). Fluxes are converted to mM/s,
+% from the unit given by the table attribute Unit or the column Unit of the table Flux (e.g. 'uM/min';
+% if neither is given, mM/s is assumed).
 
 sbtab = sbtab_get(filename);
 
@@ -46,6 +48,20 @@ if any(strcmp('Flux', table_names))
   sbtab_v = sbtab_to_struct(sbtab_document_get_table(sbtab,'Flux'), 'column');
   ll = label_names(network.actions,sbtab_v.Reaction);
   v(ll~=0) = cell_string2num(sbtab_v.Value(ll(ll~=0)));
+  % flux unit: table attribute Unit or column Unit (default, if neither is given: mM/s);
+  % values are converted to mM/s
+  v_table_attributes = sbtab_table_get_attributes(sbtab_document_get_table(sbtab,'Flux'));
+  v_unit = '';
+  if isfield(v_table_attributes,'Unit'),
+    v_unit = v_table_attributes.Unit;
+  elseif isfield(sbtab_v,'Unit')
+    units = setdiff(unique(sbtab_v.Unit(ll(ll~=0))), {''});
+    if length(units) > 1, error('Different flux units in table Flux: %s', strjoin(column(units)', ', ')); end
+    if length(units), v_unit = units{1}; end
+  end
+  if ~isempty(v_unit)
+    v = flux_unit_in_mM_per_s(v_unit, 'table Flux') * v;
+  end
 else
   warning('No fluxes found in file');
 end
