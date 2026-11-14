@@ -133,51 +133,20 @@ if ischar(filename)
   end
 else
   % Assume that "filename" is an SBtab data structure!
-  filename_reactions  = filename.tables.Reaction;
-  if isfield(filename.tables,'Compound')
-    filename_compounds  = filename.tables.Compound;
-  else
-    filename_compounds = [];
+  % Tables are found by their TableType (TableIDs may differ, e.g. 'reaction' in files written by
+  % the Python converter sbml2sbtab); if several tables have the type, the one with the usual
+  % TableID is used. Files without a table of the type: tables with the usual TableIDs
+  filename_reactions  = sbtab_table_of_type(filename, 'Reaction',   {'Reaction'});
+  if isempty(filename_reactions)
+    error('The SBtab document contains no table of TableType ''Reaction''');
   end
-  % Regulation table (kinetic regulation of enzymes): TableID 'Regulation'
-  % (older files: 'EnzymeRegulation'), or another table of TableType 'Regulation'
-  filename_regulation = [];
-  if isfield(filename.tables,'Regulation')
-    filename_regulation = filename.tables.Regulation;
-  elseif isfield(filename.tables,'EnzymeRegulation')
-    filename_regulation = filename.tables.EnzymeRegulation;
-  else
-    table_ids = fieldnames(filename.tables);
-    for it = 1:length(table_ids)
-      my_table = filename.tables.(table_ids{it});
-      if isfield(my_table,'attributes') && isfield(my_table.attributes,'TableType') && strcmp(my_table.attributes.TableType,'Regulation')
-        filename_regulation = my_table;
-        break
-      end
-    end
-  end
-  % Regulator table (regulators of gene expression): TableID 'Regulator',
-  % or another table of TableType 'Regulator'
-  filename_regulator = [];
-  if isfield(filename.tables,'Regulator')
-    filename_regulator = filename.tables.Regulator;
-  else
-    table_ids = fieldnames(filename.tables);
-    for it = 1:length(table_ids)
-      my_table = filename.tables.(table_ids{it});
-      if isfield(my_table,'attributes') && isfield(my_table.attributes,'TableType') && strcmp(my_table.attributes.TableType,'Regulator')
-        filename_regulator = my_table;
-        break
-      end
-    end
-  end
-  if isfield(filename.tables,'Position')
-    filename_position = filename.tables.Position;
-  elseif isfield(filename.tables,'Layout')
-    filename_position = filename.tables.Layout;
-  else
-    filename_position = [];
-  end
+  filename_compounds  = sbtab_table_of_type(filename, 'Compound',   {'Compound'});
+  % Regulation table (kinetic regulation of enzymes; older files: TableID 'EnzymeRegulation')
+  filename_regulation = sbtab_table_of_type(filename, 'Regulation', {'Regulation', 'EnzymeRegulation'});
+  % Regulator table (regulators of gene expression)
+  filename_regulator  = sbtab_table_of_type(filename, 'Regulator',  {'Regulator'});
+  % Layout table
+  filename_position   = sbtab_table_of_type(filename, 'Position',   {'Position', 'Layout'});
 end
 
 % a layout file given in options.position_file has priority
@@ -251,4 +220,33 @@ if options.load_quantity_table
     network.enzyme_mass = other_parameters.enzyme_mass;
   end
 
+end
+
+
+% -------------------------------------------------------------------
+
+function table = sbtab_table_of_type(sbtab_document, table_type, table_ids)
+
+% Table of a given TableType in an SBtab document ([] if there is none). If several tables have
+% this type, the first one with one of the TableIDs 'table_ids' (otherwise the first one) is used.
+% If no table has this type, the first table with one of the TableIDs is used.
+
+table = [];
+ids = fieldnames(sbtab_document.tables);
+matching = {};
+for it = 1:length(ids)
+  my_table = sbtab_document.tables.(ids{it});
+  if isfield(my_table,'attributes') && isfield(my_table.attributes,'TableType') && strcmp(my_table.attributes.TableType, table_type)
+    matching{end+1} = ids{it};
+  end
+end
+if isempty(matching)
+  matching = ids(ismember(ids, table_ids));
+  if isempty(matching), return; end
+end
+preferred = matching(ismember(matching, table_ids));
+if length(preferred)
+  table = sbtab_document.tables.(preferred{1});
+else
+  table = sbtab_document.tables.(matching{1});
 end

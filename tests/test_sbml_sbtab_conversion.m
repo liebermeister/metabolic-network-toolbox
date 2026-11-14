@@ -57,3 +57,13 @@ sbtab6.tables.Flux = sbtab_table_add_attribute(sbtab6.tables.Flux, 'Unit', 'uM/m
 warning('off'); [~, ~, v6] = sbtab_network_state_load(sbtab6); warning('on');
 assert(max(abs(v6 - v)) < 1e-12);
 assert(abs(flux_unit_in_mM_per_s('uM/min') - 1/60000) < 1e-20);
+
+%% tables are found by their TableType (e.g. TableIDs 'reaction', 'compound' in files written by Python sbml2sbtab)
+sbtab7 = sbtab;
+sbtab7.tables.reaction = sbtab7.tables.Reaction;  sbtab7.tables = rmfield(sbtab7.tables, 'Reaction');
+sbtab7.tables.compound = sbtab7.tables.Compound;  sbtab7.tables = rmfield(sbtab7.tables, 'Compound');
+sbtab7.table_names = fieldnames(sbtab7.tables);
+network7 = sbtab_to_network(sbtab7, struct('verbose', 0, 'omit_water', 0));
+assert(isequal(network7.actions(:), network.actions(:)));
+assert(isequal(network7.metabolites(:), network.metabolites(:)));
+assert(isequal(full(network7.N), full(network.N)));
