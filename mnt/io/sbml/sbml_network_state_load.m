@@ -216,6 +216,6 @@ if isempty(k), return; end
 u = ud(k(1)).unit;
 im = find(strcmp({u.kind}, 'mole'));
 if length(u) ~= 1 || length(im) ~= 1 || u(im).exponent ~= 1, return; end
-mult = 1; if isfield(u(im),'multiplier') && ~isempty(u(im).multiplier), mult = u(im).multiplier; end
-f = mult * 10^(u(im).scale + 3);
+mult = 1; if isfield(u(im),'multiplier') && ~isempty(u(im).multiplier), mult = double(u(im).multiplier); end
+f = mult * 10^(double(u(im).scale) + 3);   % TranslateSBML returns integer scales
 found = 1;
