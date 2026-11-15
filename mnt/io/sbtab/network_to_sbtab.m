@@ -122,7 +122,12 @@ end
 
 network.formulae = network_print_formulae(network,network.actions,network.metabolites);
 
-reaction_table = sbtab_table_construct(struct('TableID','Reaction','TableType','Reaction','TableName','Reaction'),{'ID','ReactionFormula'},{network.actions,network.formulae});
+reaction_table_attributes = struct('TableID','Reaction','TableType','Reaction','TableName','Reaction');
+% biomass reactions: table attribute BiomassReactionID (comma-separated list of reaction IDs)
+if isfield(network, 'biomass_reactions') && ~isempty(network.biomass_reactions)
+  reaction_table_attributes.BiomassReactionID = strjoin(cellstr(network.biomass_reactions), ', ');
+end
+reaction_table = sbtab_table_construct(reaction_table_attributes,{'ID','ReactionFormula'},{network.actions,network.formulae});
 
 if isfield(network, 'reaction_names')
   reaction_table = sbtab_table_add_column(reaction_table,'Name', network.reaction_names);

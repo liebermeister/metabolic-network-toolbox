@@ -4,6 +4,7 @@
 %   make_structure_matrices              - Compute the structure matrices of modular rate laws
 %   network_analyse                      - Kernel, link matrix, and other structural properties of a network
 %   network_check                        - Check if dimensions of network fields match the number of reactions and metabolites
+%   network_biomass_reactions            - Biomass reactions of a network (field biomass_reactions, or default names)
 %   network_check_consistency            - Check the consistency of a network
 %   network_choose_reactions_from_list   - Define a subnetwork by choosing reactions from a list
 %   network_enzyme_subsets               - Determine enzyme subsets and equilibrium reactions

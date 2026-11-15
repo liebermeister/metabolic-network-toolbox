@@ -23,6 +23,9 @@
 %   EC                 (n x 1 cell)    EC numbers
 %   metabolite_KEGGID  (m x 1 cell)    KEGG compound identifiers
 %   reaction_KEGGID    (n x 1 cell)    KEGG reaction identifiers
+%   biomass_reactions  (cell)          IDs (entries of 'actions') of biomass reactions; SBtab: attribute
+%                                      BiomassReactionID of the Reaction table, a comma-separated list
+%                                      (see network_biomass_reactions)
 %   metabolite_id      (m x 1 cell)    unique identifiers of metabolites
 %   action_id          (n x 1 cell)    unique identifiers of reactions
 %   parameter_id       (cell)          unique identifiers of parameters

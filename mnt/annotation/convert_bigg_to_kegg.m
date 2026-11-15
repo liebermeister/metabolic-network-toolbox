@@ -4,9 +4,9 @@ function [metabolite_kegg_ids, reaction_kegg_ids] = convert_bigg_to_kegg(metabol
 %
 % [metabolite_kegg_ids, reaction_kegg_ids] = convert_bigg_to_kegg(metabolite_bigg_ids, reaction_bigg_ids, id_mapping_file)
 %
-% metabolite_bigg_ids  BiGG metabolite ids without compartment suffix, e.g. 'glc' or 'glc[e]' ('[c]' and '[e]'
-%                      are ignored); they are compared with the ids of the table without the suffixes
-%                      '_c', '_e', ..., '__L', '__D' (see bigg_kegg_strip_metabolite_ids)
+% metabolite_bigg_ids  BiGG metabolite ids, e.g. 'glc', 'glc[e]', 'glc__D_e'; compartments ('[c]', '_c', ...) and
+%                      the suffixes '__L', '__D' are removed from these ids and from the ids of the table
+%                      before they are compared (see bigg_kegg_strip_metabolite_ids)
 % reaction_bigg_ids    (optional) BiGG reaction ids
 % id_mapping_file      (optional) mapping table with the columns !Identifiers:bigg.reaction,
 %                      !Identifiers:bigg.metabolite, !Identifiers:kegg.reaction, !Identifiers:kegg.compound
@@ -22,7 +22,7 @@ end
 
 M = bigg_kegg_mapping_load(id_mapping_file);
 
-metabolite_bigg_ids = strrep(strrep(metabolite_bigg_ids, '[c]', ''), '[e]', '');
+metabolite_bigg_ids = bigg_kegg_strip_metabolite_ids(metabolite_bigg_ids);
 metabolite_kegg_ids = map_ids(metabolite_bigg_ids, bigg_kegg_strip_metabolite_ids(M.bigg_metabolite), M.kegg_compound);
 reaction_kegg_ids   = map_ids(reaction_bigg_ids, M.bigg_reaction, M.kegg_reaction);
 

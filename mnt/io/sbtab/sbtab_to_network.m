@@ -28,6 +28,10 @@ function [network, kinetic_data] = sbtab_to_network(filename,options)
 %                              see sbtab_regulator_table_to_network)
 %  [filename]_Position.tsv (or [filename]_Layout.tsv)
 %
+% Biomass reactions: the optional attribute BiomassReactionID of the Reaction table (a comma-separated
+% list of reaction IDs, e.g. BiomassReactionID='Biomass_Ecoli_core_w_GAM') is read into the field
+% network.biomass_reactions (cell array of strings; empty if the attribute is missing)
+%
 % OR: instead of a filename, an SBtab data structure can given directly!!
 %
 % OR: if options.one_sbtab_file = 1 has been set, all data are read from one SBtab file (several tables)
@@ -172,6 +176,8 @@ if length(filename_regulator)
   network = sbtab_regulator_table_to_network(network, filename_regulator);
 end
 
+network.biomass_reactions = sbtab_biomass_reactions(network, filename_reactions);
+
 if isfield(network,'IsReversible')
   network.reversible(find(strcmpi('True',network.IsReversible))) = 1;
   network.reversible(find(strcmpi('False',network.IsReversible))) = 0;
@@ -220,6 +226,29 @@ if options.load_quantity_table
     network.enzyme_mass = other_parameters.enzyme_mass;
   end
 
+end
+
+
+% -------------------------------------------------------------------
+
+function biomass_reactions = sbtab_biomass_reactions(network, reaction_table)
+
+% Reaction IDs from the attribute BiomassReactionID of the Reaction table (cell array, {} if missing)
+
+biomass_reactions = {};
+if ischar(reaction_table)
+  if ~exist(reaction_table, 'file'), return; end
+  reaction_table = sbtab_table_load(reaction_table);
+end
+if ~isstruct(reaction_table) || ~isfield(reaction_table, 'attributes') || ~isfield(reaction_table.attributes, 'BiomassReactionID')
+  return
+end
+value = strtrim(strsplit(reaction_table.attributes.BiomassReactionID, ','));
+biomass_reactions = value(~cellfun(@isempty, value));
+biomass_reactions = biomass_reactions(:);
+unknown = setdiff(biomass_reactions, network.actions);
+if ~isempty(unknown)
+  warning('sbtab_to_network: biomass reaction(s) %s (table attribute BiomassReactionID) not found in the network', strjoin(unknown, ', '));
 end
 
 

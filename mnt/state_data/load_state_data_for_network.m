@@ -11,6 +11,14 @@ function [M, ids, states] = load_state_data_for_network(network, data_file, quan
 %   file_options.columns_std            = [];
 %   file_options.replace_ids_in_network = [];
 %   file_options.match_data_by          = 'ModelElementId'; % KeggId; 'BiggId'
+%   file_options.verbose                = 0;
+%
+% Metabolite data matched by 'BiggId': the BiGG ids of the data (column Compound:Identifiers:bigg.compound)
+% are matched to network.metabolite_BIGGID by bigg_match_metabolite_ids, so compartments may be written
+% differently ('glc__D', 'glc__D_c', 'glc__D[c]'; '' and 'c' count as the same compartment). The mapping
+% is printed if file_options.verbose = 1 or if there are problems (data ids not found, ambiguous, or
+% mapped with a different compartment). (Until 2026-11-15, BiGG ids had to be identical.)
+% In all other cases, the data ids must be identical to the ids in the network.
 %
 % To load a model (with kinetic data) and state data, use sbtab_load_network_model_and_data
 
@@ -24,6 +32,7 @@ file_options_default.columns_mean = [];
 file_options_default.columns_std = [];
 file_options_default.replace_ids_in_network = [];
 file_options_default.match_data_by = 'ModelElementId'; % 'KeggId'; ; 'BiggId'%
+file_options_default.verbose = 0;
 file_options = join_struct(file_options_default,file_options);
 
 if isempty(file_options.columns_mean)
@@ -114,7 +123,21 @@ end
 
 if length(table_id), table_name = table_id; end
 
-[M.Mean, ids, states, M.Unit] = sbtab_load_quantity_data(data_file, table_name, quantity_type, id_column, element_IDs, mean_columns,1);
+% metabolite BiGG ids: match data ids to model ids (compartment notations may differ)
+model_IDs = element_IDs;
+if strcmp(quantity_type, 'concentration') && strcmp(file_options.match_data_by, 'BiggId')
+  if ischar(data_file), data_file = sbtab_document_load(data_file); end
+  [~, data_IDs] = sbtab_load_quantity_data(data_file, table_name, quantity_type, id_column, [], mean_columns(1), 0);
+  [ind_match, match_report] = bigg_match_metabolite_ids(element_IDs, data_IDs, network.external);
+  element_IDs = repmat({''}, size(element_IDs));
+  element_IDs(ind_match > 0) = data_IDs(ind_match(ind_match > 0));
+  if file_options.verbose || match_report.has_problems
+    bigg_match_metabolite_ids_display(match_report, 'Metabolite data (BiGG ids) mapped to the model');
+  end
+end
+
+[M.Mean, ~, states, M.Unit] = sbtab_load_quantity_data(data_file, table_name, quantity_type, id_column, element_IDs, mean_columns,1);
+ids = model_IDs;
 
 if length(std_columns)
   M.Std = sbtab_load_quantity_data(data_file, [], quantity_type, id_column, element_IDs, std_columns,1);

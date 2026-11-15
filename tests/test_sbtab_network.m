@@ -163,3 +163,45 @@ if has_mnt
   assert(nnz(network9.regulator_activity_matrix) == 0);
   assert(contains(lastwarn, 'unknown compound'));
 end
+
+%% biomass reactions: network.biomass_reactions <-> table attribute BiomassReactionID
+if has_mnt
+  networkB = network;
+  networkB.biomass_reactions = {'R1'; 'R2'};
+  [~, d] = evalc('network_to_sbtab(networkB)');
+  assert(strcmp(d.tables.Reaction.attributes.BiomassReactionID, 'R1, R2'));
+  [~, networkB2] = evalc('sbtab_to_network(d)');
+  assert(isequal(networkB2.biomass_reactions, {'R1'; 'R2'}));
+  % no attribute: empty field; via files (sbtab_network_state_save/_load)
+  [~, d] = evalc('network_to_sbtab(network)');
+  assert(~isfield(d.tables.Reaction.attributes, 'BiomassReactionID'));
+  [~, networkB3] = evalc('sbtab_to_network(d)');
+  assert(isempty(networkB3.biomass_reactions));
+  filename = tempname;
+  evalc('sbtab_network_state_save(networkB, [1;0;2], [1;1], filename, [], struct(''verbose'',0))');
+  [~, networkB4] = evalc('sbtab_network_state_load([filename ''.tsv''])');
+  delete([filename '.tsv']);
+  assert(isequal(networkB4.biomass_reactions, {'R1'; 'R2'}));
+  % network_biomass_reactions: field, or default names present in the network
+  assert(isequal(network_biomass_reactions(networkB), {'R1'; 'R2'}));
+  assert(isequal(network_biomass_reactions(network, {'R2', 'Biomass production'}), {'R2'}));
+  assert(isempty(network_biomass_reactions(networkB3, {'R2'})));
+end
+
+%% metabolite data matched by BiGG ids (compartment notations may differ)
+if has_mnt
+  networkM = network;
+  networkM.metabolite_BIGGID = {'glc__D_e'; 'g6p_c'; 'mal__L'};
+  f = [tempname '.tsv'];
+  fid = fopen(f, 'w');
+  fprintf(fid, '!!SBtab TableID=''MetaboliteConcentration'' TableType=''Quantity'' Unit=''mM''\n');
+  fprintf(fid, '!QuantityType\t!Compound:Identifiers:bigg.compound\t!Value\n');
+  fprintf(fid, 'concentration\tg6p\t2\nconcentration\tglc__D[e]\t1\nconcentration\tmal\t3\nconcentration\txyz\t4\n');
+  fclose(fid);
+  opt = struct('columns_mean', {{'Value'}}, 'match_data_by', 'BiggId');
+  [out, M, ids] = evalc('load_state_data_for_network(networkM, f, ''metabolite_concentration'', opt)');
+  delete(f);
+  assert(isequal(M.Mean(1:2), [1; 2]) && isnan(M.Mean(3)));
+  assert(isequal(ids, networkM.metabolite_BIGGID));
+  assert(contains(out, 'xyz') && contains(out, 'mal'));   % report: not found
+end

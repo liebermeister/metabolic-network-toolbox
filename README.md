@@ -73,7 +73,7 @@ The folder `mnt` contains:
 | `graphics` | network graphics |
 | `io` | import and export: SBML, SBtab, COBRA (also models with a metabolic state, see below) |
 | `model_and_state` | models with a reference state: loading, mapping data to a model |
-| `annotation` | conversion between BiGG and KEGG identifiers (with a mapping table) |
+| `annotation` | conversion between BiGG and KEGG identifiers (with a mapping table); matching metabolite ids of data and models (`bigg_match_metabolite_ids`) |
 | `data_orientation` | conversion of data tables to the reaction orientation of a model |
 | `utils`, `demo` | constants, version numbers, demo script |
 

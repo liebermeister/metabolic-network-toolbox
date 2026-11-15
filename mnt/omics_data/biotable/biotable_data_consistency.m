@@ -67,7 +67,7 @@ if pars.graphics_flag
     figure(it);
     pars = struct('arrowstyle','fluxes','arrowvalues',V(:,it),'actstyle','fixed','metstyle','fixed');
     pars.arrowvaluesmax = 5*median(abs(V(:,it)),'omitnan');
-    pars.omitreactions = {'Biomass production'};
+    pars.omitreactions = network_biomass_reactions(network, {'Biomass production'});
     netgraph_concentrations(network_CoHid,C(:,it),U(:,it),1,pars);
     title(exp_names{it});
   end

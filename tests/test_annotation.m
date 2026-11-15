@@ -33,3 +33,28 @@ m = convert_kegg_to_bigg({'C00002'; 'C99999'; 'C00022'}, {}, struct('extra_mappi
 verifyEqual(testCase, m, {'my_atp'; 'new'; 'pyr'});
 m = convert_kegg_to_bigg({'C00002'; 'C00022'}, {}, struct('extra_mapping_files', {{filename}}, 'metabolites_from_main_table', 0));
 verifyEqual(testCase, m, {'my_atp'; ''});
+
+
+function test_strip_metabolite_ids(testCase)
+
+% only suffixes are removed (until 2026-11-15, substrings were removed anywhere)
+s = bigg_kegg_strip_metabolite_ids({'glc__D_e'; '13dpg_h'; 'glc[e]'; '13_cis_retn_c'; 'mal__L'; 'acon_C'; 'my_atp'});
+verifyEqual(testCase, s, {'glc'; '13dpg'; 'glc'; '13_cis_retn'; 'mal'; 'acon_C'; 'my_atp'});
+[b, c] = bigg_metabolite_id_base({'icit[c]'; 'glc__D_e'; 'mal__L'; '13dpg_h'; 'pyr'});
+verifyEqual(testCase, b, {'icit'; 'glc__D'; 'mal__L'; '13dpg'; 'pyr'});
+verifyEqual(testCase, c, {'c'; 'e'; ''; 'h'; ''});
+verifyEqual(testCase, convert_bigg_to_kegg({'13dpg_h'; '13dpg[c]'}), {'C00236'; 'C00236'});
+
+
+function test_match_metabolite_ids(testCase)
+
+model_ids = {'icit[c]'; 'glc[c]'; 'glc[e]'; '13dpg[c]'; 'mal__L[c]'; 'pi[e]'};
+external  = [0; 0; 1; 0; 0; 1];
+data_ids  = {'icit'; 'glc'; 'glc_e'; '13dpg_h'; 'mal'; 'pi'; 'xyz'; 'icit_c'};
+[ind, report] = bigg_match_metabolite_ids(model_ids, data_ids, external);
+verifyEqual(testCase, ind, [1; 2; 3; 4; 0; 6]);
+verifyEqual(testCase, report.not_found, {'mal'; 'xyz'});
+verifyEqual(testCase, report.compartment_ignored, {'13dpg_h'; 'pi'});   % pi -> pi[e]: no internal pi
+verifyEqual(testCase, report.duplicate, {'icit_c'});
+verifyEqual(testCase, report.external_data_ids, {'glc_e'; 'pi'});
+verifyTrue(testCase, report.has_problems);

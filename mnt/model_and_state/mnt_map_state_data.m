@@ -66,7 +66,7 @@ else
 end
 table_names = sbtab_document_get_table_names(document);
 
-file_options = struct('match_data_by', options.match_data_by, 'columns_mean', {options.columns_mean}, 'columns_std', {options.columns_std});
+file_options = struct('match_data_by', options.match_data_by, 'columns_mean', {options.columns_mean}, 'columns_std', {options.columns_std}, 'verbose', options.verbose);
 
 [data.v_data, data.v_std, data.v_unit] = load_table(network, document, table_names, options.flux_table_id,       'reaction_rate',            file_options);
 [data.c_data, data.c_std, data.c_unit] = load_table(network, document, table_names, options.metabolite_table_id, 'metabolite_concentration', file_options);
