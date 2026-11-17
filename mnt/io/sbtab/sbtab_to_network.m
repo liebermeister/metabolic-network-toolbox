@@ -151,6 +151,8 @@ else
   filename_regulator  = sbtab_table_of_type(filename, 'Regulator',  {'Regulator'});
   % Layout table
   filename_position   = sbtab_table_of_type(filename, 'Position',   {'Position', 'Layout'});
+  % Compartment table (optional; columns ID, Size)
+  filename_compartment = sbtab_table_of_type(filename, 'Compartment', {'Compartment'});
 end
 
 % a layout file given in options.position_file has priority
@@ -177,6 +179,15 @@ if length(filename_regulator)
 end
 
 network.biomass_reactions = sbtab_biomass_reactions(network, filename_reactions);
+
+% compartments (since 2026-11-17): Compound!Location (read by network_build_from_sum_formulae) and table Compartment
+if exist('filename_compartment','var') && ~isempty(filename_compartment)
+  network = sbtab_compartments_to_network(network, filename_compartment);
+elseif isfield(network, 'metabolite_compartments')
+  locations = network.metabolite_compartments(~cellfun(@isempty, network.metabolite_compartments));
+  network.compartments      = unique(locations, 'stable');
+  network.compartment_sizes = ones(length(network.compartments),1);
+end
 
 if isfield(network,'IsReversible')
   network.reversible(find(strcmpi('True',network.IsReversible))) = 1;
@@ -226,6 +237,27 @@ if options.load_quantity_table
     network.enzyme_mass = other_parameters.enzyme_mass;
   end
 
+end
+
+
+% -------------------------------------------------------------------
+
+function network = sbtab_compartments_to_network(network, compartment_table)
+
+% Compartments and their sizes from an SBtab table of type Compartment (columns ID, Size)
+
+ids   = column(sbtab_table_get_column(compartment_table, 'ID'));
+sizes = ones(length(ids),1);
+if sbtab_table_has_column(compartment_table, 'Size')
+  sizes = column(sbtab_table_get_column(compartment_table, 'Size', 1));
+end
+network.compartments      = ids;
+network.compartment_sizes = sizes;
+if isfield(network, 'metabolite_compartments')
+  unknown = setdiff(network.metabolite_compartments(~cellfun(@isempty, network.metabolite_compartments)), ids);
+  if ~isempty(unknown)
+    warning('sbtab_to_network: compartment(s) %s (column Compound!Location) not in the Compartment table', strjoin(unknown, ', '));
+  end
 end
 
 

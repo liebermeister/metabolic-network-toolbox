@@ -54,6 +54,14 @@ reaction_bigg_ids   = map_ids(reaction_kegg_ids, [M.kegg_reaction; extra_kegg_re
 
 function out = map_ids(ids, from, to)
 
-ind  = label_names(ids, from);
-out  = repmat({''}, length(ids), 1);
-out(ind ~= 0) = to(ind(ind ~= 0));
+% empty ids are not mapped (until 2026-11-17, an empty KEGG id got the BiGG id of the first table row
+% without KEGG id, e.g. '10FTHF5GLUtl' for reactions)
+ids = column(ids);
+out = repmat({''}, length(ids), 1);
+is_id = cellfun(@(x) ischar(x) && ~isempty(x), ids);
+if ~any(is_id), return; end
+from(~cellfun(@(x) ischar(x) && ~isempty(x), from)) = {char(0)};
+ind = label_names(ids(is_id), from);
+out_id = repmat({''}, sum(is_id), 1);
+out_id(ind ~= 0) = to(ind(ind ~= 0));
+out(is_id) = out_id;

@@ -155,6 +155,11 @@ if isfield(network, 'genes')
   reaction_table = sbtab_table_add_column(reaction_table,'Gene',network.genes);
 end
 
+% compartment of reactions (optional field network.reaction_compartments, e.g. '' for transport reactions)
+if isfield(network, 'reaction_compartments') && numel(network.reaction_compartments) == length(network.actions)
+  reaction_table = sbtab_table_add_column(reaction_table,'Location',column(network.reaction_compartments));
+end
+
 [nm,nr] = size(network.N);
 
 % kinetic regulation of enzymes (column KineticRegulation, e.g. '+ ADP - PEP'),
@@ -240,6 +245,12 @@ if ~options.only_reaction_table
 
   compound_table = sbtab_table_add_column(compound_table,'IsConstant', int_to_boolean(network.external));
 
+  % compartments (since 2026-11-17): column Location (from network.metabolite_compartments) and table
+  % Compartment (columns ID, Size; from network.compartments, network.compartment_sizes)
+  if isfield(network, 'metabolite_compartments') && numel(network.metabolite_compartments) == length(network.metabolites)
+    compound_table = sbtab_table_add_column(compound_table,'Location', column(network.metabolite_compartments));
+  end
+
   if isfield(network, 'is_cofactor')
     compound_table = sbtab_table_add_column(compound_table,'IsCofactor',network.is_cofactor);
   end
@@ -249,6 +260,16 @@ if ~options.only_reaction_table
   end
 
   sbtab_document = sbtab_document_add_table(sbtab_document,'Compound',compound_table);
+
+  if isfield(network, 'compartments') && length(network.compartments)
+    compartment_sizes = nan(length(network.compartments),1);
+    if isfield(network, 'compartment_sizes') && numel(network.compartment_sizes) == length(network.compartments)
+      compartment_sizes = column(network.compartment_sizes);
+    end
+    compartment_table = sbtab_table_construct(struct('TableID','Compartment','TableType','Compartment','TableName','Compartment'), ...
+                                              {'ID','Size'}, {column(network.compartments), compartment_sizes});
+    sbtab_document = sbtab_document_add_table(sbtab_document,'Compartment',compartment_table);
+  end
 
   % Regulator table (regulators of gene expression; column ActivityCondition, e.g. '+ FBP'),
   % written from network.regulator_activity_matrix or, without this matrix, from

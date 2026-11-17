@@ -42,6 +42,9 @@
 %   netgraph_edit_positions        read a layout file, move nodes with the mouse, and save the file
 %   netgraph_read_positions        read a layout file (SBtab table)
 %   netgraph_print_positions       save a layout file (SBtab table)
+%   netgraph_make_layout_network   network for graphics: layout from a file, hidden metabolites (e.g. cofactors) and reactions
+%   netgraph_layout_table          SBtab table 'NetworkLayout' with the layout of a network for graphics (for model files)
+%   netgraph_layout_from_table     network for graphics from a network and a 'NetworkLayout' table
 %   netgraph_read_escher_map       layout from an Escher map (matched by IDs or names); saves a layout file
 %   netgraph_assign_positions      choose node positions on a picture with the mouse
 %   netgraph_clear                 reset display settings, keeping the layout

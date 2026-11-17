@@ -209,6 +209,12 @@ if exist('compound_columns','var')
     compound_columns = rmfield(compound_columns,'IsCofactor');
   end
 
+  % compartments of metabolites (column Location; compartment sizes: table Compartment, read in sbtab_to_network)
+  if isfield(compound_columns,'Location')
+    network.metabolite_compartments = column(compound_columns.Location(ll));
+    compound_columns = rmfield(compound_columns,'Location');
+  end
+
 end
 
 if isfield(columns,'Name')
@@ -224,6 +230,11 @@ end
 if isfield(columns,'Gene')
   network.genes  = columns.Gene;
   columns = rmfield(columns,'Gene');
+end
+
+if isfield(columns,'Location')
+  network.reaction_compartments = column(columns.Location);
+  columns = rmfield(columns,'Location');
 end
 
 if isfield(columns,'SBML__reaction__ID')

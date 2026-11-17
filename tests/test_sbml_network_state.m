@@ -40,6 +40,27 @@ assert(max(abs(c2 - c)) < 1e-12 && max(abs(v2 - v)) < 1e-12);
 assert(max(abs(keq2 - keq)) < 1e-12 && max(abs(dmu2 - dmu)) < 1e-10);
 assert(max(abs(theta2 - (log(keq) - network.N' * log(c)))) < 1e-12);
 
+%% network without state (c = [], v = []): no concentrations, no kinetic laws
+filename = [tempname '.xml'];
+warning('off');
+sbml = sbml_network_state_save(network, [], [], filename, [], struct('verbose', 0));
+[network2, c2, v2] = sbml_network_state_load(filename);
+warning('on');
+[~, err] = TranslateSBML(filename, 1, 0);
+delete(filename);
+assert(all(contains({err.message}, 'initial value')));   % only the best-practice warning on missing initial values
+assert(isequal(full(network2.N), full(network.N)));
+assert(isequal(network2.external(:), network.external(:)));
+assert(all(isnan(c2)) && all(isnan(v2)));
+assert(all(arrayfun(@(r) isempty(r.kineticLaw), sbml.reaction)));
+assert(isempty(sbml.parameter));
+try
+  sbml_network_state_save(network, [], [], [], [], struct('verbose', 0), keq); ok = 0;
+catch
+  ok = 1;
+end
+assert(ok);                                            % keq without fluxes and kinetics: error
+
 %% in memory, without keq and dmu, other units
 sbml = sbml_network_state_save(network, c, v, [], [], struct('concentration_unit', 'uM', 'time_unit', 'min', 'verbose', 0));
 warning('off'); [~, c3, v3, dmu3, keq3] = sbml_network_state_load(sbml); warning('on');

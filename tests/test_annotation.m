@@ -58,3 +58,8 @@ verifyEqual(testCase, report.compartment_ignored, {'13dpg_h'; 'pi'});   % pi -> 
 verifyEqual(testCase, report.duplicate, {'icit_c'});
 verifyEqual(testCase, report.external_data_ids, {'glc_e'; 'pi'});
 verifyTrue(testCase, report.has_problems);
+
+%% convert_kegg_to_bigg: empty KEGG ids give empty BiGG ids
+[m, r] = convert_kegg_to_bigg({'C00022'; ''}, {''; 'R00200'});
+assert(isempty(m{2}) && isempty(r{1}));
+assert(strcmp(m{1}, 'pyr') && ~isempty(r{2}));

@@ -19,7 +19,15 @@ function [network, v, c, keq, theta, networkG] = mnt_load_model_and_state(model_
 %             computed from the reaction Gibbs free energies
 %   theta     thermodynamic forces -dG/RT: theta = log(keq) - network.N' * log(c)
 %             (fluxes v must be conformal with theta)
-%   networkG  network struct with graphics information (only in .mat files; otherwise [])
+%   networkG  network struct with graphics information: variable networkG of a .mat file, or rebuilt
+%             from the table NetworkLayout of an SBtab file (netgraph_layout_from_table; since 2026-11-17);
+%             otherwise []
+%
+% Files without state (e.g. basic network models written by mnt_save_model_and_state with empty v, c,
+% keq): v, c (NaN or empty), keq and theta are returned as written in the file; keq and theta are empty
+% if the file contains neither equilibrium constants nor reaction Gibbs free energies.
+%
+% See also: mnt_save_model_and_state
 
 eval(default('filetype','[]'));
 
@@ -47,18 +55,23 @@ switch filetype
     if isfield(X,'networkG'), networkG = X.networkG; end
   case 'sbtab'
     [network, c, v, dmu, keq] = sbtab_network_state_load(model_state_file);
+    sbtab_doc = sbtab_document_load(model_state_file);
+    if any(strcmp('NetworkLayout', sbtab_document_get_table_names(sbtab_doc)))
+      networkG = netgraph_layout_from_table(network, sbtab_document_get_table(sbtab_doc, 'NetworkLayout'));
+    end
   case 'sbml'
     [network, c, v, dmu, keq] = sbml_network_state_load(model_state_file);
   otherwise
     error('Unknown file type "%s" (allowed: ''matlab'', ''sbtab'', ''sbml'')', filetype);
 end
 
-if isempty(keq)
-  if isempty(dmu)
-    error('The file contains neither equilibrium constants nor reaction Gibbs free energies');
-  end
+if isempty(keq) && ~isempty(dmu) && ~all(isnan(dmu))
   dmu0 = dmu - RT * network.N' * log(c);
   keq  = exp(-dmu0/RT);
 end
 
-theta = log(keq) - network.N' * log(c);
+if isempty(keq) || isempty(c)
+  theta = [];
+else
+  theta = log(keq) - network.N' * log(c);
+end

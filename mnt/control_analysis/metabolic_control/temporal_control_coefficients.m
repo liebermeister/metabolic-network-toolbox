@@ -21,7 +21,12 @@
 %  c, v       (optional) concentrations and fluxes in the steady state, for the scaled coefficients
 %  mu         (optional) growth rate, i.e. dilution rate of internal metabolites (default 0), as in
 %             control_coefficients: with mu > 0, all internal metabolites are diluted (Jacobian
-%             N_int * Ec_int - mu * I), and there are no conservation relations
+%             N_int * Ec_int - mu * I), including conserved moieties (decision of 2026-11-18), and
+%             there are no conservation relations. If N_int has conservation relations, a warning
+%             is printed (always; warning ID 'mnt:temporal_control_coefficients:dilution_conservation').
+%             In the linear response, this gives the same coefficients as dilution of the independent
+%             metabolites only (Jacobian NR * Ec_int * L - mu * I): the deviations of conserved totals
+%             G * c obey d(G dc)/dt = -mu * G dc with G dc(0) = 0 (since G * N_int = 0), so they remain zero.
 %
 % Outputs
 %  CS_t        unscaled concentration control coefficients, array (metabolites x reactions x time points);
@@ -50,7 +55,12 @@ if mu == 0
   [L, NR] = reduce_N(N_int);
   M       = NR * Ec_int * L;
 else
-  % with dilution, all internal metabolites are independent
+  % with dilution, all internal metabolites are independent (also conserved moieties)
+  n_conserved = length(ind_int) - rank(full(N_int));
+  if n_conserved > 0
+    warning('mnt:temporal_control_coefficients:dilution_conservation', ...
+            'temporal_control_coefficients: dilution (mu = %g) applied to all internal metabolites, although the model has %d conservation relation(s); conserved moieties are diluted as well', mu, n_conserved);
+  end
   L  = eye(length(ind_int));
   NR = N_int;
   M  = N_int * Ec_int - mu * eye(length(ind_int));

@@ -27,3 +27,11 @@ assert(isequal(size(data4.DataMean), [1 6]));
 data5 = biotable_construct_timeseries('MetaboliteName', {'A'}, 0:5, [1 1 1 100 1 1]);
 data5 = biotable_omit_outliers(data5, 0.2, 0);
 assert(isnan(data5.DataMean(4)));
+
+%% combine_replicates_log: weighted mean with error bars; mean and standard error without
+x = cat(3, [1; 2], [3; NaN]);
+s = cat(3, [1; 1], [1; NaN]);
+[m, e] = combine_replicates_log(x, s, 0.5);
+assert(max(abs(m - [2; 2])) < 1e-12 && max(abs(e - [1/sqrt(2); 1])) < 1e-12);
+[m, e] = combine_replicates_log(x, [], 0.5);
+assert(max(abs(m - [2; 2])) < 1e-12 && abs(e(1) - std([1 3])/sqrt(2)) < 1e-12 && e(2) == 0.5);

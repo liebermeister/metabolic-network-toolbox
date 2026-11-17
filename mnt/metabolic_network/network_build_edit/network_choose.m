@@ -83,6 +83,17 @@ end
 
 
 % ------------------------------------------------------------
+% fields that do not refer to single metabolites or reactions (since 2026-11-17; before, compartments
+% and compartment_sizes were dropped): compartments are kept; biomass reactions are restricted to the
+% chosen reactions
+
+if isfield(network,'compartments'),      subnetwork.compartments      = network.compartments;      end
+if isfield(network,'compartment_sizes'), subnetwork.compartment_sizes = network.compartment_sizes; end
+if isfield(network,'biomass_reactions')
+  subnetwork.biomass_reactions = network.biomass_reactions(ismember(network.biomass_reactions, subnetwork.actions));
+end
+
+% ------------------------------------------------------------
 % graphics fields
 
 if isfield(network,'graphics_par')

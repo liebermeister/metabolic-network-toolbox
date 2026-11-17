@@ -42,3 +42,23 @@ mu = 0.01;
 [CS_t, CJ_t] = temporal_control_coefficients(N, Ec, network.external, 1e4, [], [], mu);
 assert(max(max(abs(CS_t - CS))) < 1e-8);
 assert(max(max(abs(CJ_t - CJ))) < 1e-8);
+
+%% dilution with a conservation relation: warning; same coefficients as dilution of the independent metabolites only
+% X (external) + B -> A + C ;  A + C -> Y (external) + B   (B + C conserved)
+N2  = [-1 0; 1 -1; -1 1; 1 -1; 0 1];            % metabolites X, A, B, C, Y
+ext2 = [1 0 0 0 1]';
+Ec2 = [1 -0.5 1 -0.5 0; 0 1 -0.2 1 -0.3];         % substrates positive, products negative
+mu = 0.05; t2 = [0.5 5 50];
+lastwarn('');
+CS2 = temporal_control_coefficients(N2, Ec2, ext2, t2, [], [], mu);
+[~, wid] = lastwarn;
+assert(strcmp(wid, 'mnt:temporal_control_coefficients:dilution_conservation'));
+ii = find(~ext2); [L2, NR2] = reduce_N(N2(ii,:));
+M2 = NR2 * Ec2(:,ii) * L2 - mu * eye(size(NR2,1));
+for k = 1:numel(t2)
+  C_red = L2 * (expm(M2 * t2(k)) - eye(size(M2))) * (M2 \ NR2);
+  assert(max(max(abs(CS2(ii,:,k) - C_red))) < 1e-10);
+end
+lastwarn('');
+temporal_control_coefficients(N2, Ec2, ext2, t2, [], [], 0);
+[~, wid] = lastwarn; assert(~strcmp(wid, 'mnt:temporal_control_coefficients:dilution_conservation'));

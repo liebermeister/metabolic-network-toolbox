@@ -1,7 +1,8 @@
 % Models with a reference state (network struct, fluxes v, concentrations c, equilibrium constants keq)
 %
-% Loading
+% Loading and saving
 %   mnt_load_model_and_state    - Load model and reference state from a .mat, SBtab or SBML file (type from the extension)
+%   mnt_save_model_and_state    - Save model and reference state (or a network without state) as .mat, SBtab and SBML files
 %
 % Data mapping
 %   mnt_map_state_data          - Read flux, concentration and enzyme data from SBtab files and map them to a model

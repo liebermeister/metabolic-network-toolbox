@@ -11,8 +11,11 @@ function SBMLmodel = sbml_network_state_save(network, c, v, filename, dmu, optio
 %
 % ARGUMENTS
 %   network   network struct
-%   c         metabolite concentrations (vector, one value per metabolite)
-%   v         fluxes (vector, one value per reaction)
+%   c         metabolite concentrations (vector, one value per metabolite); [] for none
+%   v         fluxes (vector, one value per reaction); [] for none
+%             (with c = [] and v = [], the file contains the network without a state: no initial
+%             concentrations and, unless network.kinetics is written, no kinetic laws; dmu and keq
+%             then require fluxes or kinetics and must be empty)
 %   filename  name of the SBML (.xml) file; if empty, no file is written
 %   dmu       (optional) reaction Gibbs free energies in kJ/mol (empty: not written)
 %   options   (optional) struct with fields
@@ -73,12 +76,18 @@ options = join_struct(struct('name','Model','concentration_unit','mM','time_unit
 
 nm = length(network.metabolites);
 nr = length(network.actions);
+has_c = ~isempty(c);
+has_v = ~isempty(v);
+if ~has_c, c = nan(nm,1); end
 c  = c(:);
 v  = v(:);
 if length(c) ~= nm, error('Length of concentration vector does not match the number of metabolites'); end
-if length(v) ~= nr, error('Length of flux vector does not match the number of reactions'); end
+if has_v && length(v) ~= nr, error('Length of flux vector does not match the number of reactions'); end
 if ~isempty(dmu), dmu = dmu(:); if length(dmu) ~= nr, error('Length of dmu vector does not match the number of reactions'); end; end
 if ~isempty(keq), keq = keq(:); if length(keq) ~= nr, error('Length of keq vector does not match the number of reactions'); end; end
+if ~has_v && (~isempty(dmu) || ~isempty(keq)) && ~(isfield(network,'kinetics') && options.kinetics)
+  error('Without fluxes (v = []) and without kinetics, dmu and keq cannot be written (they are stored as local parameters of the kinetic laws)');
+end
 
 [conc_scale, time_multiplier] = sbml_state_units(options.concentration_unit, options.time_unit);
 conc_unit_string = options.concentration_unit;
@@ -186,7 +195,9 @@ flux_volume.isSetValue = 1;
 flux_volume.units      = 'litre';
 flux_volume.constant   = 1;
 flux_volume.notes      = xhtml_notes({sprintf('Volume to which the fluxes refer (1 litre): a flux of 1 %s corresponds to a reaction rate of 1 %s per %s.', flux_unit_string, strrep(conc_unit_string,'M','mol'), options.time_unit)});
-SBMLmodel.parameter = flux_volume;
+if has_v
+  SBMLmodel.parameter = flux_volume;
+end
 
 % -------------------------------------------------------------
 % Species: names and concentrations
@@ -219,6 +230,9 @@ for it = 1:nr
   end
 
   kl = SBMLmodel.reaction(it).kineticLaw;
+  if isempty(kl) && ~has_v
+    continue   % network without state: no kinetic law
+  end
   if isempty(kl)
     kl         = t.kineticLaw;
     kl.math    = 'reference_flux * flux_reference_volume';
@@ -228,8 +242,10 @@ for it = 1:nr
   lp = kl.localParameter;
   if isempty(lp), lp = t.localParameter([]); end
 
+  if has_v
   lp(end+1) = make_local_parameter(t, 'reference_flux', v(it), 'flux_unit', 612, ...
                  sprintf('Flux (rate of reaction) in the reference state, in %s. Positive values: flux in the direction of the reaction formula (from reactants to products).', flux_unit_string));
+  end
   if ~isempty(keq)
     if isempty(keq_unit_id{it})
       unit_text = sprintf('%s to the power of the sum of the stoichiometric coefficients (products positive, reactants negative)', conc_unit_string);
@@ -254,9 +270,17 @@ end
 % -------------------------------------------------------------
 % Model notes
 
-notes_text = {sprintf('Model %s with a metabolic reference state, written by sbml_network_state_save (Metabolic Network Toolbox, https://github.com/liebermeister/mnt).', options.name), ...
-              sprintf('Metabolite concentrations: initial concentrations of the species, in %s (compartment sizes in litres).', conc_unit_string), ...
-              sprintf('Fluxes: local parameter "reference_flux" of each reaction (SBO:0000612 rate of reaction), in %s.', flux_unit_string)};
+if has_c || has_v
+  notes_text = {sprintf('Model %s with a metabolic reference state, written by sbml_network_state_save (Metabolic Network Toolbox, https://github.com/liebermeister/mnt).', options.name)};
+else
+  notes_text = {sprintf('Network model %s without a metabolic state, written by sbml_network_state_save (Metabolic Network Toolbox, https://github.com/liebermeister/mnt).', options.name)};
+end
+if has_c
+  notes_text{end+1} = sprintf('Metabolite concentrations: initial concentrations of the species, in %s (compartment sizes in litres).', conc_unit_string);
+end
+if has_v
+  notes_text{end+1} = sprintf('Fluxes: local parameter "reference_flux" of each reaction (SBO:0000612 rate of reaction), in %s.', flux_unit_string);
+end
 if ~isempty(keq)
   notes_text{end+1} = sprintf('Equilibrium constants: local parameter "equilibrium_constant" of each reaction (SBO:0000281), concentration-based with concentrations in %s.', conc_unit_string);
 end
@@ -266,8 +290,10 @@ end
 notes_text{end+1} = 'All reaction quantities refer to the direction of the reaction formula (reactants to products). External metabolites have boundaryCondition = true.';
 if isfield(network,'kinetics')
   notes_text{end+1} = 'The kinetic laws describe the model kinetics; the local parameters reference_flux, equilibrium_constant and reaction_gibbs_free_energy are not used in them.';
-else
+elseif has_v
   notes_text{end+1} = 'Kinetic laws: constant rates, reference flux times flux_reference_volume (1 litre); the model contains no other kinetic information.';
+else
+  notes_text{end+1} = 'The reactions have no kinetic laws.';
 end
 if length(options.notes)
   notes_text{end+1} = options.notes;
